@@ -84,7 +84,7 @@
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="format_jadwal_rencana.length > 0">
             <tr v-for="item in format_jadwal_rencana" :key="item.id">
               <td>{{ item.title }}</td>
               <td>{{ item.jumlah }}</td>
@@ -100,6 +100,11 @@
                       : '',
                 }"
               ></td>
+            </tr>
+          </tbody>
+          <tbody v-else>
+            <tr>
+              <td :colspan="last_date + 3">Tidak ada data</td>
             </tr>
           </tbody>
         </table>
@@ -146,7 +151,7 @@
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="format_events.length > 0">
           <tr v-for="item in format_events" :key="item.id">
             <td>{{ item.title }}</td>
             <td>{{ item.jumlah }}</td>
@@ -181,6 +186,11 @@
                     : '',
               }"
             ></td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr>
+            <td :colspan="last_date + 3">Tidak ada data</td>
           </tr>
         </tbody>
       </table>
@@ -625,6 +635,7 @@ export default {
       })
       .then((response) => {
         this.data_produk = response.data;
+        this.$store.commit("setIsLoading", false);
       });
 
     this.getDataKomentar();
