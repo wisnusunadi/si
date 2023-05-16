@@ -54,12 +54,29 @@ class AlatujiController extends Controller
 
     public function dashboard()
     {
-        $total = AlatSN::count();
-        $ter = AlatSN::where('status_pinjam_id', 16)->count();
-        $req = AlatSN::where('status_pinjam_id', 17)->count();
-        $not = AlatSN::where('kondisi_id', 10)->count();
-        $use = AlatSN::where('status_pinjam_id', 15)->count();
-        $ext = AlatSN::where('status_pinjam_id', 14)->count();
+        // $total = AlatSN::count();
+        // $ter = AlatSN::where('status_pinjam_id', 16)->count();
+        // $req = AlatSN::where('status_pinjam_id', 17)->count();
+        // $not = AlatSN::where('kondisi_id', 10)->count();
+        // $use = AlatSN::where('status_pinjam_id', 15)->count();
+        // $ext = AlatSN::where('status_pinjam_id', 14)->count();
+
+
+        // $totalPeminjaman = array();
+        // for ($i = 1; $i <= 12; $i++) {
+        //     $a = Peminjaman::whereMonth('tgl_kembali', date($i))->whereYear('tgl_kembali', date('Y'))->count();
+        //     array_push($totalPeminjaman, $a);
+        // }
+
+        $alat_sn = collect(DB::select("select count(*) as total,
+        count(if(status_pinjam_id='16',1,null)) as ter,
+        count(if(status_pinjam_id='17',1,null)) as req,
+        count(if(status_pinjam_id='10',1,null)) as nots,
+        count(if(status_pinjam_id='15',1,null)) as uses,
+        count(if(status_pinjam_id='14',1,null)) as ext
+        from erp_kalibrasi.alatuji_sn as2  "))->first();
+
+        // $mel = DB::select("select count(*) FROM erp_kalibrasi.peminjaman p  WHERE  p.status_id = 15 and p.tgl_batas > current_date()");
         $mel = DB::table('erp_kalibrasi.peminjaman')->where('tgl_batas', '>', Carbon::now()->format('Y-m-d', 'Asia/Jakarta'))->where('status_id', '15')->count();
         $ve1 = DB::table('erp_kalibrasi.verifikasi')->select(DB::raw('count(DISTINCT serial_number_id) as total'))->whereMonth('jadwal_perawatan', Carbon::now()->month)->whereYear('jadwal_perawatan', Carbon::now()->year)->get();
         $pe1 = DB::table('erp_kalibrasi.perawatan')->select(DB::raw('count(DISTINCT serial_number_id) as total'))->whereMonth('jadwal_perawatan', Carbon::now()->month)->whereYear('jadwal_perawatan', Carbon::now()->year)->get();
@@ -68,11 +85,28 @@ class AlatujiController extends Controller
         $ve3 = DB::table('erp_kalibrasi.verifikasi')->select(DB::raw('count(DISTINCT serial_number_id) as total'))->where('jadwal_perawatan', '>=', Carbon::now()->addMonth(1)->format('Y-m'))->where('jadwal_perawatan', '<=', Carbon::now()->addMonth(2)->format('Y-m'))->get();
         $pe3 = DB::table('erp_kalibrasi.perawatan')->select(DB::raw('count(DISTINCT serial_number_id) as total'))->where('jadwal_perawatan', '>=', Carbon::now()->addMonth(1)->format('Y-m'))->where('jadwal_perawatan', '<=', Carbon::now()->addMonth(2)->format('Y-m'))->get();
 
-        $totalPeminjaman = array();
-        for ($i = 1; $i <= 12; $i++) {
-            $a = Peminjaman::whereMonth('tgl_kembali', date($i))->whereYear('tgl_kembali', date('Y'))->count();
-            array_push($totalPeminjaman, $a);
-        }
+        $month = collect(DB::select("
+                select
+            @tahun := curdate() ,
+            (  SELECT COUNT(*) FROM erp_kalibrasi.peminjaman p2  WHERE month (tgl_kembali) = 01 and  year (tgl_kembali) = @tahun ) as jan,
+            (  SELECT COUNT(*) FROM erp_kalibrasi.peminjaman p2  WHERE month (tgl_kembali) = 02 and  year (tgl_kembali) = @tahun ) as feb,
+            (  SELECT COUNT(*) FROM erp_kalibrasi.peminjaman p2  WHERE month (tgl_kembali) = 03 and  year (tgl_kembali) = @tahun ) as mar,
+            (  SELECT COUNT(*) FROM erp_kalibrasi.peminjaman p2  WHERE month (tgl_kembali) = 04 and  year (tgl_kembali) = @tahun ) as apr,
+            (  SELECT COUNT(*) FROM erp_kalibrasi.peminjaman p2  WHERE month (tgl_kembali) = 05 and  year (tgl_kembali) = @tahun ) as mei,
+            (  SELECT COUNT(*) FROM erp_kalibrasi.peminjaman p2  WHERE month (tgl_kembali) = 06 and  year (tgl_kembali) = @tahun ) as jun,
+            (  SELECT COUNT(*) FROM erp_kalibrasi.peminjaman p2  WHERE month (tgl_kembali) = 07 and  year (tgl_kembali) = @tahun ) as jul,
+            (  SELECT COUNT(*) FROM erp_kalibrasi.peminjaman p2  WHERE month (tgl_kembali) = 08 and  year (tgl_kembali) = @tahun ) as agu,
+            (  SELECT COUNT(*) FROM erp_kalibrasi.peminjaman p2  WHERE month (tgl_kembali) = 09 and  year (tgl_kembali) = @tahun ) as sep,
+            (  SELECT COUNT(*) FROM erp_kalibrasi.peminjaman p2  WHERE month (tgl_kembali) = 10 and  year (tgl_kembali) = @tahun ) as okt,
+            (  SELECT COUNT(*) FROM erp_kalibrasi.peminjaman p2  WHERE month (tgl_kembali) = 11 and  year (tgl_kembali) = @tahun ) as nov,
+            (  SELECT COUNT(*) FROM erp_kalibrasi.peminjaman p2  WHERE month (tgl_kembali) = 12 and  year (tgl_kembali) = @tahun ) as des
+            from erp_kalibrasi.peminjaman p
+            limit 1
+        "))->first();
+
+        $totalPeminjaman = [$month->jan, $month->feb, $month->mar, $month->apr, $month->mei, $month->jun, $month->jul, $month->agu, $month->sep, $month->okt, $month->nov, $month->des];
+
+
 
         //target
         // $target =
@@ -161,12 +195,12 @@ class AlatujiController extends Controller
         //target end
 
         $data = [
-            'total' => $total,
-            'tersedia' => $ter,
-            'permintaan' => $req,
-            'not' => $not,
-            'dipinjam' => $use,
-            'external' => $ext,
+            'total' => $alat_sn->total,
+            'tersedia' => $alat_sn->ter,
+            'permintaan' => $alat_sn->req,
+            'not' =>  $alat_sn->nots,
+            'dipinjam' => $alat_sn->uses,
+            'external' => $alat_sn->ext,
             'batasPinjam' => $mel,
             'verifikasiNow' => $ve1[0]->total,
             'perawatanNow' => $pe1[0]->total,
@@ -512,7 +546,6 @@ class AlatujiController extends Controller
 
     function store_pinjam(Request $request)
     {
-
         $request->validate([
             'serial_number_id' => 'required',
             'tgl_peminjaman' => 'required',

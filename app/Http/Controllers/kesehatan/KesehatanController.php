@@ -2144,9 +2144,9 @@ class KesehatanController extends Controller
 
     public function chart_absen()
     {
-        $now = Carbon::now();
-        $tgl_awal = 2022 . "-01-01";
-        $tgl_akhir = 2022 . "-12-31";
+        $tahun = Carbon::now()->format('Y');
+        $tgl_awal = $tahun . "-01-01";
+        $tgl_akhir = $tahun . "-12-31";
 
         $ijin_data = Karyawan_masuk::whereBetween('tgl_cek', [$tgl_awal, $tgl_akhir])
             ->where('alasan', 'Ijin')
@@ -2209,12 +2209,12 @@ class KesehatanController extends Controller
     public function penyakit_top($id)
     {
 
-        $now = Carbon::now();
+        $tahun = Carbon::now()->format('Y');
         $data =   Karyawan_sakit::select('diagnosa', DB::raw('count(*) as jumlah'))
             ->groupBy('diagnosa')
             ->where('diagnosa', '!=', 'null')
             ->whereMonth('tgl_cek', $id)
-            ->whereYear('tgl_cek',  $now->year)
+            ->whereYear('tgl_cek',  $tahun)
             ->orderBy('jumlah', 'DESC')
             ->get();
 
@@ -2235,10 +2235,10 @@ class KesehatanController extends Controller
 
     public function obat_top_detail($month, $year, $data_obat)
     {
-
-        $detail_obat = Detail_obat::whereHas('Karyawan_sakit', function ($q) use ($month, $year) {
+        $tahun = Carbon::now()->format('Y');
+        $detail_obat = Detail_obat::whereHas('Karyawan_sakit', function ($q) use ($month, $tahun) {
             $q->whereMonth('tgl_cek', $month);
-            $q->whereYear('tgl_cek',  $year);
+            $q->whereYear('tgl_cek',  $tahun);
         })
             ->where('obat_id', $data_obat)
             ->get();
@@ -2263,13 +2263,13 @@ class KesehatanController extends Controller
     }
     public function obat_top($id)
     {
-        $now = Carbon::now();
+        $tahun = Carbon::now()->format('Y');
         $data =   Detail_obat::select('obats.id as obat_id', 'obats.nama', DB::raw('count(*) as jumlah'))
             ->leftJoin('obats', 'obats.id', '=', 'detail_obats.obat_id')
             ->leftJoin('karyawan_sakits', 'karyawan_sakits.id', '=', 'detail_obats.karyawan_sakit_id')
             ->groupBy('obat_id')
             ->whereMonth('tgl_cek', $id)
-            ->whereYear('tgl_cek',  $now->year)
+            ->whereYear('tgl_cek',  $tahun)
             ->orderBy('jumlah', 'DESC')
             ->get();
 
@@ -2294,14 +2294,14 @@ class KesehatanController extends Controller
 
     public function penyakit_top_detail($month, $year, $data_sakit)
     {
-        $now = Carbon::now();
+        $tahun = Carbon::now()->format('Y');
         $karyawan_sakit =   Karyawan_sakit::with(['Detail_obat.Obat', 'Karyawan'])
             // ->leftJoin('karyawans', 'karyawans.id', '=', 'karyawan_sakits.karyawan_id')
             // ->leftJoin('detail_obats', 'detail_obats.karyawan_sakit_id', '=', 'karyawan_sakits.id')
             // ->leftJoin('obats', 'obats.id', '=', 'detail_obats.obat_id')
             ->where('diagnosa', $data_sakit)
             ->whereMonth('tgl_cek', $month)
-            ->whereYear('tgl_cek',  $year)
+            ->whereYear('tgl_cek',  $tahun)
             //  ->groupBy('detail_obats.karyawan_sakit_id')
             ->get();
 
@@ -2331,10 +2331,11 @@ class KesehatanController extends Controller
     }
     public function person_top_detail($month, $year, $data_sakit)
     {
+        $tahun = Carbon::now()->format('Y');
         $karyawan_sakit = Karyawan_sakit::with(['Detail_obat.Obat'])
             ->where('karyawan_id', $data_sakit)
             ->whereMonth('tgl_cek', $month)
-            ->whereYear('tgl_cek',  $year)
+            ->whereYear('tgl_cek',  $tahun)
             ->get();
         $karyawan = Karyawan::find($data_sakit);
 
@@ -2366,13 +2367,12 @@ class KesehatanController extends Controller
     }
     public function person_top($id)
     {
-        $now = Carbon::now();
-
+        $tahun = Carbon::now()->format('Y');
         $data =   Karyawan_sakit::select('karyawans.id as karyawan_id', 'karyawans.nama', DB::raw('count(*) as jumlah'))
             ->leftJoin('karyawans', 'karyawans.id', '=', 'karyawan_sakits.karyawan_id')
             ->groupBy('karyawan_id')
             ->whereMonth('tgl_cek', $id)
-            ->whereYear('tgl_cek', $now->year)
+            ->whereYear('tgl_cek', $tahun)
             ->orderBy('jumlah', 'DESC')
             ->get();
 

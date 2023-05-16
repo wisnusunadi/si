@@ -136,12 +136,12 @@
                 <div class="col-12">
                     <div class="card" style="box-shadow:none;">
                         @if (Session::has('error') || count($errors) > 0)
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>{{ Session::get('error') }}</strong>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>{{ Session::get('error') }}</strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                         @elseif(Session::has('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 <strong>{{ Session::get('success') }}</strong>,
@@ -151,7 +151,7 @@
                                 </button>
                             </div>
                         @endif
-                        <form method="POST" action="{{ route('as.retur.update', ['id' => $id]) }}" id="formtambahretur">
+                        <form action="{{ route('as.retur.update', ['id' => $id]) }}" id="formtambahretur">
                             @method('PUT')
                             @csrf
                             <div class="card-body">
@@ -171,7 +171,8 @@
                                                     class="col-lg-5 col-md-12 col-form-label labelket">Tanggal Retur</label>
                                                 <div class="col-lg-2 col-md-6">
                                                     <input type="date" name="tgl_retur" id="tgl_retur"
-                                                        class="form-control col-form-label tgl_retur  @error('tgl_retur') is-invalid @enderror" value="{{$data->tgl_retur}}">
+                                                        class="form-control col-form-label tgl_retur  @error('tgl_retur') is-invalid @enderror"
+                                                        value="{{ $data->tgl_retur }}">
                                                     <div class="invalid-feedback" id="msgtgl_retur"></div>
                                                 </div>
                                             </div>
@@ -182,30 +183,32 @@
                                                     <div class="form-check form-check-inline col-form-label">
                                                         <input class="form-check-input" type="radio"
                                                             name="pilih_jenis_retur" id="pilih_jenis_retur1"
-                                                            value="peminjaman" @if($data->jenis == "peminjaman") checked @endif/>
+                                                            value="peminjaman"
+                                                            @if ($data->jenis == 'peminjaman') checked @endif />
                                                         <label class="form-check-label"
                                                             for="pilih_jenis_retur1">Peminjaman</label>
                                                     </div>
                                                     <div class="form-check form-check-inline col-form-label">
                                                         <input class="form-check-input" type="radio"
                                                             name="pilih_jenis_retur" id="pilih_jenis_retur2"
-                                                            value="komplain" @if($data->jenis == "komplain") checked @endif/>
+                                                            value="komplain"
+                                                            @if ($data->jenis == 'komplain') checked @endif />
                                                         <label class="form-check-label"
                                                             for="pilih_jenis_retur2">Komplain</label>
                                                     </div>
                                                     <div class="form-check form-check-inline col-form-label">
                                                         <input class="form-check-input" type="radio"
-                                                            name="pilih_jenis_retur" id="pilih_jenis_retur3"
-                                                            value="service" @if($data->jenis == "service") checked @endif/>
+                                                            name="pilih_jenis_retur" id="pilih_jenis_retur3" value="service"
+                                                            @if ($data->jenis == 'service') checked @endif />
                                                         <label class="form-check-label"
                                                             for="pilih_jenis_retur3">Service</label>
                                                     </div>
                                                     <div class="form-check form-check-inline col-form-label">
                                                         <input class="form-check-input" type="radio"
-                                                            name="pilih_jenis_retur" id="pilih_jenis_retur4"
-                                                            value="none" @if($data->jenis == "none") checked @endif/>
-                                                        <label class="form-check-label"
-                                                            for="pilih_jenis_retur4">Tanpa Status</label>
+                                                            name="pilih_jenis_retur" id="pilih_jenis_retur4" value="none"
+                                                            @if ($data->jenis == 'none') checked @endif />
+                                                        <label class="form-check-label" for="pilih_jenis_retur4">Tanpa
+                                                            Status</label>
                                                     </div>
                                                     <div class="invalid-feedback" id="msgpilih_jenis_retur"></div>
                                                 </div>
@@ -216,7 +219,8 @@
                                                     Retur</label>
                                                 <div class="col-lg-4 col-md-12">
                                                     <textarea name="keterangan" id="keterangan"
-                                                        class="form-control col-form-label keterangan  @error('keterangan') is-invalid @enderror">{{$data->keterangan}}</textarea>
+                                                        class="form-control col-form-label keterangan
+                                                        @error('keterangan') is-invalid @enderror">{{ $data->keterangan }}</textarea>
                                                     <div class="invalid-feedback" id="msgketerangan"></div>
                                                 </div>
                                             </div>
@@ -238,54 +242,67 @@
                                                     class="col-lg-5 col-md-12 col-form-label labelket">Penanggung
                                                     Jawab</label>
                                                 <div class="col-lg-3 col-md-6">
-                                                        <input type="text" name="pic_peminjaman" id="pic_peminjaman"
-                                                            class="form-control col-form-label pic_peminjaman  @error('pic_peminjaman') is-invalid @enderror"
-                                                            width="60%" value="@if($data->karyawan_id != NULL) {{$data->Karyawan->nama}} @elseif($data->pic != NULL) {{$data->pic}} @endif"/>
-                                                    <small class="text-success mt-1" id="infono_transaksi">* Pilih Penanggung Jawab</small>
+                                                    <input type="text" name="pic_peminjaman" id="pic_peminjaman"
+                                                        class="form-control col-form-label pic_peminjaman  @error('pic_peminjaman') is-invalid @enderror"
+                                                        width="60%"
+                                                        value="@if ($data->karyawan_id != null) {{ $data->Karyawan->nama }} @elseif($data->pic != null) {{ $data->pic }} @endif" />
+                                                    <small class="text-success mt-1" id="infono_transaksi">* Pilih
+                                                        Penanggung Jawab</small>
                                                     <div class="invalid-feedback" id="msgpic_peminjaman"></div>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label for="telp_pic" class="col-lg-5 col-md-12 col-form-label labelket">Telepon PIC</label>
+                                                <label for="telp_pic"
+                                                    class="col-lg-5 col-md-12 col-form-label labelket">Telepon PIC</label>
                                                 <div class="col-lg-2 col-md-6">
-                                                    <input type="text" name="telp_pic" id="telp_pic" value="{{$data->telp_pic}}" class="form-control col-form-label telp_pic @error('telp_pic') is-invalid @enderror"/>
+                                                    <input type="text" name="telp_pic" id="telp_pic"
+                                                        value="{{ $data->telp_pic }}"
+                                                        class="form-control col-form-label telp_pic @error('telp_pic') is-invalid @enderror" />
                                                     <div class="invalid-feedback" id="msgtelp_pic"></div>
                                                 </div>
                                             </div>
                                             <div class="form-group row hide">
-                                                <input type="text" name="karyawan_id" id="karyawan_id" value="@if($data->karyawan_id != NULL) {{$data->karyawan_id}} @endif"
-                                                            class="form-control col-form-label karyawan_id @error('karyawan_id') is-invalid @enderror"
-                                                            width="60%"/>
+                                                <input type="text" name="karyawan_id" id="karyawan_id"
+                                                    value="@if ($data->karyawan_id != null) {{ $data->karyawan_id }} @endif"
+                                                    class="form-control col-form-label karyawan_id @error('karyawan_id') is-invalid @enderror"
+                                                    width="60%" />
                                             </div>
                                             <div class="form-group row" id="no_transaksi_input">
                                                 <label for="no_transaksi"
                                                     class="col-lg-5 col-md-12 col-form-label labelket">No Transaksi
-                                                    </label>
+                                                </label>
                                                 <div class="col-lg-3 col-md-6">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <select
-                                                                    class="form-control custom-select select2 no_transaksi_ref"
-                                                                    id="no_transaksi_ref" name="no_transaksi_ref">
-                                                                    <option value="po" @if($data->pesanan_id != NULL) selected @endif>No PO</option>
-                                                                    <option value="so">No SO</option>
-                                                                    <option value="no_akn">No AKN</option>
-                                                                    <option value="no_retur" @if($data->retur_penjualan_id != NULL) selected @endif>No Retur</option>
-                                                                    <option value="no_sj">No SJ</option>
-                                                                    <option value="sj_retur">No SJ (Retur)</option>
-                                                                </select>
-                                                            </div>
-                                                            <input type="text" name="no_transaksi" id="no_transaksi"
-                                                                class="form-control col-form-label no_transaksi  @error('no_transaksi') is-invalid @enderror" value="@if($data->pesanan_id != NULL) {{$data->pesanan->no_po}} @elseif($data->retur_penjualan_id != NULL) {{$data->ReturPenjualanChild->no_retur}} @else {{$data->no_pesanan}} @endif"/>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <select
+                                                                class="form-control custom-select select2 no_transaksi_ref"
+                                                                id="no_transaksi_ref" name="no_transaksi_ref">
+                                                                <option value="po"
+                                                                    @if ($data->pesanan_id != null) selected @endif>No PO
+                                                                </option>
+                                                                <option value="so">No SO</option>
+                                                                <option value="no_akn">No AKN</option>
+                                                                <option value="no_retur"
+                                                                    @if ($data->retur_penjualan_id != null) selected @endif>No
+                                                                    Retur</option>
+                                                                <option value="no_sj">No SJ</option>
+                                                                <option value="sj_retur">No SJ (Retur)</option>
+                                                            </select>
                                                         </div>
-                                                        <small class="text-success mt-1" id="infono_transaksi">* Pilih Nomor Referensi yang akan dipakai</small>
-                                                        <div class="invalid-feedback mt-1" id="msgno_transaksi"></div>
+                                                        <input type="text" name="no_transaksi" id="no_transaksi"
+                                                            class="form-control col-form-label no_transaksi  @error('no_transaksi') is-invalid @enderror"
+                                                            value="@if ($data->pesanan_id != null) {{ $data->pesanan->no_po }} @elseif($data->retur_penjualan_id != null) {{ $data->ReturPenjualanChild->no_retur }} @else {{ $data->no_pesanan }} @endif" />
                                                     </div>
+                                                    <small class="text-success mt-1" id="infono_transaksi">* Pilih Nomor
+                                                        Referensi yang akan dipakai</small>
+                                                    <div class="invalid-feedback mt-1" id="msgno_transaksi"></div>
+                                                </div>
                                             </div>
                                             <div class="form-group row hide">
                                                 <input type="text" name="pesanan_id" id="pesanan_id"
-                                                            class="form-control col-form-label pesanan_id  @error('pesanan_id') is-invalid @enderror"
-                                                            width="60%" value="@if($data->pesanan_id != NULL){{$data->pesanan_id}}@elseif($data->retur_penjualan_id != NULL){{$data->retur_penjualan_id}}@endif"/>
+                                                    class="form-control col-form-label pesanan_id  @error('pesanan_id') is-invalid @enderror"
+                                                    width="60%"
+                                                    value="@if ($data->pesanan_id != null) {{ $data->pesanan_id }}@elseif($data->retur_penjualan_id != null){{ $data->retur_penjualan_id }} @endif" />
                                             </div>
 
                                             <div class="form-group row" id="customer_nama_input">
@@ -294,14 +311,16 @@
                                                     id="label_cust">Nama Customer</label>
                                                 <div class="col-lg-4 col-md-8">
                                                     <input name="customer_nama" id="customer_nama"
-                                                        class="form-control col-form-label customer_nama  @error('customer_nama') is-invalid @enderror" value="{{$data->Customer->nama}}"/>
+                                                        class="form-control col-form-label customer_nama  @error('customer_nama') is-invalid @enderror"
+                                                        value="{{ $data->Customer->nama }}" />
                                                     <div class="invalid-feedback" id="msgcustomer_nama"></div>
                                                 </div>
                                             </div>
                                             <div class="form-group row hide">
                                                 <div class="col-lg-4 col-md-8">
                                                     <input name="customer_id" id="customer_id"
-                                                        class="form-control col-form-label customer_id  @error('customer_id') is-invalid @enderror" value="{{$data->customer_id}}"/>
+                                                        class="form-control col-form-label customer_id  @error('customer_id') is-invalid @enderror"
+                                                        value="{{ $data->customer_id }}" />
                                                     <div class="invalid-feedback" id="msgcustomer_id"></div>
                                                 </div>
                                             </div>
@@ -310,15 +329,18 @@
                                                 <label for="alamat"
                                                     class="col-lg-5 col-md-12 col-form-label labelket">Alamat</label>
                                                 <div class="col-lg-4 col-md-8">
-                                                    <textarea name="alamat" id="alamat" readonly="true" class="form-control col-form-label alamat  @error('alamat') is-invalid @enderror">{{$data->Customer->alamat}}</textarea>
+                                                    <textarea name="alamat" id="alamat" readonly="true"
+                                                        class="form-control col-form-label alamat  @error('alamat') is-invalid @enderror">{{ $data->Customer->alamat }}</textarea>
                                                     <div class="invalid-feedback" id="msgalamat"></div>
                                                 </div>
                                             </div>
                                             <div class="form-group row" id="tgl_retur_input">
-                                                <label for="tgl_retur" class="col-lg-5 col-md-12 col-form-label labelket">Telepon</label>
+                                                <label for="tgl_retur"
+                                                    class="col-lg-5 col-md-12 col-form-label labelket">Telepon</label>
                                                 <div class="col-lg-2 col-md-6">
                                                     <input name="telepon" id="telepon"
-                                                        class="form-control col-form-label telepon  @error('telepon') is-invalid @enderror" value="{{$data->Customer->telp}}" readonly="true"/>
+                                                        class="form-control col-form-label telepon  @error('telepon') is-invalid @enderror"
+                                                        value="{{ $data->Customer->telp }}" readonly="true" />
                                                     <div class="invalid-feedback" id="msgtelepon"></div>
                                                 </div>
                                             </div>
@@ -336,14 +358,13 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="form-group row align-items-start">
-                                                <div id="card_produk"
-                                                    class="card card-outline card-success col mx-2 ">
+                                                <div id="card_produk" class="card card-outline card-success col mx-2 ">
                                                     <div class="card-header">
                                                         <div
                                                             class="form-check form-check-inline col-form-label card-title">
                                                             <input class="form-check-input" type="checkbox"
                                                                 name="pilih_jenis_barang[]" id="pilih_jenis_barang1"
-                                                                value="produk"/>
+                                                                value="produk" />
                                                             <h6 class="form-check-label" for="pilih_jenis_barang1">Produk
                                                             </h6>
                                                         </div>
@@ -376,18 +397,20 @@
                                                     </div>
                                                 </div>
                                                 <div id="card_part"
-                                                    class="card card-outline card-success col mx-2 @if(count($part) <= 0) collapsed-card @endif">
+                                                    class="card card-outline card-success col mx-2 @if (count($part) <= 0) collapsed-card @endif">
                                                     <div class="card-header">
                                                         <div
                                                             class="form-check form-check-inline col-form-label card-title">
                                                             <input class="form-check-input" type="checkbox"
                                                                 name="pilih_jenis_barang[]" id="pilih_jenis_barang2"
-                                                                value="part" @if(count($part) > 0) checked @endif/>
+                                                                value="part"
+                                                                @if (count($part) > 0) checked @endif />
                                                             <h6 class="form-check-label" for="pilih_jenis_barang2">Part
                                                             </h6>
                                                         </div>
                                                         <div class="card-tools col-form-label">
-                                                            <button type="button" class="btn btn-tool" @if(count($part) <= 0) disabled="true" @endif
+                                                            <button type="button" class="btn btn-tool"
+                                                                @if (count($part) <= 0) disabled="true" @endif
                                                                 data-card-widget="collapse" id="collapse-part">
                                                                 <i class="fas fa-minus"></i>
                                                             </button>
@@ -407,37 +430,51 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        @if(count($part) > 0)
-                                                                        @foreach ($part as $key => $i)
-                                                                        <td>{{($key + 1)}}</td>
-                                                                        <td><select name="part_id[{{$key}}]" id="part_id{{$key}}" class="form-control custom-select part_id  @error('part_id') is-invalid @enderror">
-                                                                            <option value="{{$i->m_sparepart_id}}" selected>{{$i->Sparepart->nama}}</option>
-                                                                        </select>
-                                                                        </td>
-                                                                        <td><input type="number"
-                                                                                class="form-control part_jumlah"
-                                                                                name="part_jumlah[{{$key}}]" id="part_jumlah{{$key}}" value="{{$i->jumlah}}"/>
-                                                                        </td>
-                                                                        <td>
-                                                                            @if($key > 0)
-                                                                            <a id="remove_part"><i class="fas fa-minus" style="color: red"></i></a>
-                                                                            @else
-                                                                            <a href="#" id="tambah_part"><i class="fas fa-plus text-success"></i></a>
-                                                                            @endif
-                                                                        </td>
-                                                                        @endforeach
+                                                                        @if (count($part) > 0)
+                                                                            @foreach ($part as $key => $i)
+                                                                                <td>{{ $key + 1 }}</td>
+                                                                                <td><select
+                                                                                        name="part_id[{{ $key }}]"
+                                                                                        id="part_id{{ $key }}"
+                                                                                        class="form-control custom-select part_id  @error('part_id') is-invalid @enderror">
+                                                                                        <option
+                                                                                            value="{{ $i->m_sparepart_id }}"
+                                                                                            selected>
+                                                                                            {{ $i->Sparepart->nama }}
+                                                                                        </option>
+                                                                                    </select>
+                                                                                </td>
+                                                                                <td><input type="number"
+                                                                                        class="form-control part_jumlah"
+                                                                                        name="part_jumlah[{{ $key }}]"
+                                                                                        id="part_jumlah{{ $key }}"
+                                                                                        value="{{ $i->jumlah }}" />
+                                                                                </td>
+                                                                                <td>
+                                                                                    @if ($key > 0)
+                                                                                        <a id="remove_part"><i
+                                                                                                class="fas fa-minus"
+                                                                                                style="color: red"></i></a>
+                                                                                    @else
+                                                                                        <a href="#"
+                                                                                            id="tambah_part"><i
+                                                                                                class="fas fa-plus text-success"></i></a>
+                                                                                    @endif
+                                                                                </td>
+                                                                            @endforeach
                                                                         @else
-                                                                        <td>1</td>
-                                                                        <td><select name="part_id[0]" id="part_id0"
-                                                                                class="form-control custom-select part_id  @error('part_id') is-invalid @enderror"></select>
-                                                                        </td>
-                                                                        <td><input type="number"
-                                                                                class="form-control part_jumlah"
-                                                                                name="part_jumlah[0]" id="part_jumlah0" />
-                                                                        </td>
-                                                                        <td><a href="#" id="tambah_part"><i
-                                                                                    class="fas fa-plus text-success"></i></a>
-                                                                        </td>
+                                                                            <td>1</td>
+                                                                            <td><select name="part_id[0]" id="part_id0"
+                                                                                    class="form-control custom-select part_id  @error('part_id') is-invalid @enderror"></select>
+                                                                            </td>
+                                                                            <td><input type="number"
+                                                                                    class="form-control part_jumlah"
+                                                                                    name="part_jumlah[0]"
+                                                                                    id="part_jumlah0" />
+                                                                            </td>
+                                                                            <td><a href="#" id="tambah_part"><i
+                                                                                        class="fas fa-plus text-success"></i></a>
+                                                                            </td>
                                                                         @endif
                                                                     </tr>
                                                                 </tbody>
@@ -456,7 +493,8 @@
                                     disabled="true">Simpan</button>
                             </div>
                         </form>
-                        <div class="modal fade" id="detail_modal" role="dialog" aria-labelledby="detail_modal" aria-hidden="true">
+                        <div class="modal fade" id="detail_modal" role="dialog" aria-labelledby="detail_modal"
+                            aria-hidden="true">
                             <div class="modal-dialog modal-xl" role="document">
                                 <div class="modal-content" style="margin: 10px">
                                     <div class="modal-header">
@@ -468,7 +506,8 @@
                                     <div class="modal-body" id="detail">
                                         <div class="row">
                                             <div class="col-12">
-                                                <input type="hidden" class="form-control index_table" id="index_table" name="index_table">
+                                                <input type="hidden" class="form-control index_table" id="index_table"
+                                                    name="index_table">
                                                 <div class="table-responsive">
                                                     <table id="seri_table" class="table table-hover">
                                                         <thead>
@@ -478,7 +517,12 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr>
-                                                                <td><select class="form-control no_seri" name="no_seri[]" id="no_seri0"></select></td>
+                                                                <td>
+                                                                    {{-- <select class="form-control no_seri" name="no_seri[]"
+                                                                        id="no_seri0"></select> --}}
+                                                                    <input type="text" class="form-control no_seri"
+                                                                        name="no_seri[]" id="noseri0">
+                                                                </td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -488,7 +532,8 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
-                                        <button type="button" class="btn btn-info float-right" id="btntambahseri">Tambah</button>
+                                        <button type="button" class="btn btn-info float-right"
+                                            id="btntambahseri">Tambah</button>
                                     </div>
                                 </div>
                             </div>
@@ -502,12 +547,42 @@
 
 @section('adminlte_js')
     <script>
-
         $(function() {
-            function get_jenis_trans(){
-                if($('#no_transaksi_ref').val() == "no_retur" || $('#no_transaksi_ref').val() == "sj_retur"){
+            $(document).on('submit', '#formtambahretur', function(event) {
+                event.preventDefault();
+                var action = $(this).attr('action');
+                $.ajax({
+                    url: action,
+                    type: 'POST',
+                    data: $('#formtambahretur').serialize(),
+                    success: function(result) {
+                        if (result.status === 'duplicate') {
+                            swal.fire(
+                                'Noseri Sama',
+                                result.messages,
+                                'error'
+                            );
+                        } else if (result.status === 'success') {
+                            swal.fire(
+                                'Berhasil',
+                                result.messages,
+                                'success'
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.reload();
+                                }
+                            })
+                        } else {
+
+                        }
+                    }
+                });
+            })
+
+            function get_jenis_trans() {
+                if ($('#no_transaksi_ref').val() == "no_retur" || $('#no_transaksi_ref').val() == "sj_retur") {
                     return "retur";
-                }else{
+                } else {
                     return "jual";
                 }
             }
@@ -548,7 +623,7 @@
                         theme: "bootstrap",
                         delay: 250,
                         type: 'GET',
-                        url: '/api/as/list/so_selesai_paket/' + id+'/'+jenis,
+                        url: '/api/as/list/so_selesai_paket/' + id + '/' + jenis,
                         data: function(params) {
                             return {
                                 term: params.term
@@ -569,7 +644,7 @@
                 })
             }
 
-            function part_tersedia(id){
+            function part_tersedia(id) {
                 var jenis = get_jenis_trans();
                 $('.part_id').select2({
                     placeholder: "Pilih Part",
@@ -579,7 +654,7 @@
                         theme: "bootstrap",
                         delay: 250,
                         type: 'GET',
-                        url: '/api/as/list/so_selesai_paket/' + id+'/'+jenis,
+                        url: '/api/as/list/so_selesai_paket/' + id + '/' + jenis,
                         data: function(params) {
                             return {
                                 term: params.term
@@ -630,7 +705,7 @@
                 });
             }
 
-            function part_tidak_tersedia(){
+            function part_tidak_tersedia() {
                 $('.part_id').select2({
                     placeholder: "Pilih Part",
                     minimumResultsForSearch: 2,
@@ -662,11 +737,11 @@
             function produk(table) {
                 $('.no_seri').select2();
                 var pesanan_id = $('#pesanan_id').val();
-                if(pesanan_id != ""){
+                if (pesanan_id != "") {
                     $('#produktable .no_seri_input').addClass('hide');
                     produk_penjualan_tersedia(pesanan_id, table);
                     part_tersedia(pesanan_id);
-                }else{
+                } else {
                     $('#produktable .no_seri_input').removeClass('hide');
                     produk_penjualan_tidak_tersedia(table);
                     part_tidak_tersedia();
@@ -726,68 +801,80 @@
                     inputjumpart = true;
                 }
 
-                if ($('#tgl_retur').val() != "" && $('input[name="pilih_jenis_retur"]:checked').length > 0 && $('#customer_nama').val() != "" && $('#alamat').val() && $('input[name="pilih_jenis_barang[]"]:checked').length > 0 &&
+                if ($('#tgl_retur').val() != "" && $('input[name="pilih_jenis_retur"]:checked').length > 0 && $(
+                        '#customer_nama').val() != "" && $('#alamat').val()) {
+                    $('#btnsubmit').attr('disabled', false);
+                } else {
+                    $('#btnsubmit').attr('disabled', true);
+                }
+
+                if ($('#tgl_retur').val() != "" && $('input[name="pilih_jenis_retur"]:checked').length > 0 && $(
+                        '#customer_nama').val() != "" && $('#alamat').val() && $(
+                        'input[name="pilih_jenis_barang[]"]:checked').length > 0 &&
                     inputproduk == true && inputno_seri == true && inputpart == true && inputjumpart == true) {
                     $('#btnsubmit').attr('disabled', false);
                 } else {
                     $('#btnsubmit').attr('disabled', true);
                 }
+                // $('#btnsubmit').attr('disabled', false);
             }
 
-            function on_load_produk(){
-                var produk = "{{$produk}}";
-                var prd = JSON.parse(produk.replace(/&quot;/g,'"'));
+            function on_load_produk() {
+                var produk = "{{ $produk }}";
+                var prd = JSON.parse(produk.replace(/&quot;/g, '"'));
                 $('#produktable tbody').empty();
-                if(Object.keys(prd).length > 0){
-                    $('#pilih_jenis_barang1').attr('checked',true);
+                if (Object.keys(prd).length > 0) {
+                    $('#pilih_jenis_barang1').attr('checked', true);
                     var count = 0;
                     prd.forEach(object => {
                         var noseri_arr = [];
                         var noseri_all = [];
 
-                        object['seri'].forEach(seri =>{
-                            var obj = {};
-                            obj.id = seri['id'];
-                            obj.text = seri['text'];
-                            noseri_arr.push(obj);
+                        object['seri'].forEach(seri => {
+                            noseri_arr.push(seri['text']);
                         });
 
-                        if(object['allseri'].length > 0){
-                            object['allseri'].forEach(noseri =>{
-                                var obj = {};
-                                obj.id = noseri['id'];
-                                obj.text = noseri['noseri'];
-                                noseri_all.push(obj);
+                        if (object['allseri'].length > 0) {
+                            object['allseri'].forEach(noseri => {
+                                noseri_all.push(noseri['noseri']);
                             });
                         }
                         var datatable = `<tr>
-                        <td>`+(count+1)+`</td>
-                        <td><select name="produk_id[`+count+`]" id="produk_id`+count+`" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror">
+                        <td>` + (count + 1) + `</td>
+                        <td><select name="produk_id[` + count + `]" id="produk_id` + count + `" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror">
 
                             </select>
                         </td>
                         <td>
-                            <input type="number" class="form-control jumlah_produk" name="jumlah_produk[`+count+`]" id="jumlah_produk`+count+`" value="`+object['jumlah']+`"/>
+                            <input type="number" class="form-control jumlah_produk" name="jumlah_produk[` + count +
+                            `]" id="jumlah_produk` + count + `" value="` + object['jumlah'] +
+                            `"/>
                             <small class="text-danger" id="msg_jumlah_produk"></small>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-outline btn-warning btn_seri" id="btn_seri" name="btn_seri[`+count+`]"><i class="fas fa-pencil"></i> Edit</button>
+                            <button type="button" class="btn btn-sm btn-outline btn-warning btn_seri" id="btn_seri" name="btn_seri[` +
+                            count + `]"><i class="fas fa-pencil"></i> Edit</button>
                         </td>
-                        <td hidden="true"><input type="text" name="no_seri_select[`+count+`]" id="no_seri_select`+count+`" class="form-control no_seri_select" value='`+ JSON.stringify(noseri_arr) +`'>
+                        <td hidden="true"><input type="text" name="no_seri_select[` + count + `]" id="no_seri_select` +
+                            count + `" class="form-control no_seri_select" value='` + JSON.stringify(
+                                noseri_arr) + `'>
                         </td>
                         <td>`;
-                            if(count > 0){
-                                datatable += `<a id="remove_paket_produk"><i class="fas fa-minus" style="color: red"></i></a>`;
-                            }
-                            else{
-                                datatable += `<a href="#" id="tambah_paket_produk"><i class="fa fa-plus text-success"></i></a>`;
-                            }
-                            datatable += `</td>
+                        if (count > 0) {
+                            datatable +=
+                                `<a id="remove_paket_produk"><i class="fas fa-minus" style="color: red"></i></a>`;
+                        } else {
+                            datatable +=
+                                `<a href="#" id="tambah_paket_produk"><i class="fa fa-plus text-success"></i></a>`;
+                        }
+                        datatable += `</td>
                         </tr>`;
                         $('#produktable tbody').append(datatable);
-                        var option = "<option value='" + object['id'] + "' selected='true'>"+object['produk']+"</option>";
-                        $(`#produk_id`+count).append(option).trigger('change');
-                        $("#produk_id"+count+" option[value='" + object['id'] + "']").attr('data-noseri', JSON.stringify(noseri_all)).trigger('change');
+                        var option = "<option value='" + object['id'] + "' selected='true'>" + object[
+                            'produk'] + "</option>";
+                        $(`#produk_id` + count).append(option).trigger('change');
+                        $("#produk_id" + count + " option[value='" + object['id'] + "']").attr(
+                            'data-noseri', JSON.stringify(noseri_all)).trigger('change');
                         count++;
                     });
                 }
@@ -797,6 +884,9 @@
             produk($('.produk_id'));
 
             $(document).on('change keyup', '#tgl_retur', function() {
+                validasi();
+            })
+            $(document).on('change keyup', '#keterangan', function() {
                 validasi();
             })
 
@@ -864,7 +954,8 @@
                 if (produktr > 0) {
                     data += `<a id="remove_paket_produk"><i class="fas fa-minus" style="color: red"></i></a>`;
                 } else {
-                    data += `<a href="#" id="tambah_paket_produk"><i class="fa-solid fa-plus text-success"></i></a>`;
+                    data +=
+                        `<a href="#" id="tambah_paket_produk"><i class="fa-solid fa-plus text-success"></i></a>`;
                 }
                 data += `</td>
                 </tr>`;
@@ -893,21 +984,47 @@
             function trseriproduk(i, obj) {
                 var seritr = ``;
 
-                if(obj != undefined){
+                // if (obj != undefined) {
+                //     var idx = 0;
+                //     obj.forEach(object => {
+                //         seritr += `<tr><td><select class="form-control no_seri" name="no_seri[` + idx +
+                //             `]" id="no_seri` + idx + `">
+            //              <option value="` + object['id'] + `" selected="true">` + object['text'] + `</option>
+            //         </select></td></tr>`;
+                //         idx++;
+                //     });
+
+                // } else {
+                //     for (var j = 0; j < i; j++) {
+                //         seritr += `<tr><td><select class="form-control no_seri" name="no_seri[` + j +
+                //             `]" id="no_seri` + j + `"></select></td></tr>`;
+                //     }
+                // }
+                if (obj != undefined) {
                     var idx = 0;
                     obj.forEach(object => {
-                        seritr += `<tr><td><select class="form-control no_seri" name="no_seri[`+idx+`]" id="no_seri`+idx+`">
-                             <option value="`+object['id']+`" selected="true">`+object['text']+`</option>
-                        </select></td></tr>`;
+                        seritr +=
+                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri"
+                                name="no_seri[` + idx + `]" id="no_seri` + idx + `"
+                                id="no_seri` + idx + `" value="` + object + `"
+                                >
+                                <div class="suggestion-box"></div>
+                                </td></tr>`;
                         idx++;
                     });
-
                 } else {
-                    for(var j=0; j < i; j++){
-                        seritr += `<tr><td><select class="form-control no_seri" name="no_seri[`+j+`]" id="no_seri`+j+`"></select></td></tr>`;
+                    for (var j = 0; j < i; j++) {
+                        seritr +=
+                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri"
+                                name="no_seri[` + j + `]" id="no_seri` + j + `"
+                                id="no_seri` + j + `">
+                                <div class="suggestion-box"></div>
+                                </td></tr>`;
                     }
                 }
+
                 return seritr;
+
             }
 
             $('.no_ref_penjualan').select2();
@@ -944,52 +1061,81 @@
             //     }
             // });
 
-            function no_seri_arr(no_seri){
-                $('.no_seri').select2({
-                    placeholder: "Pilih No Seri",
-                    allowClear: true,
-                    data: no_seri
-                });
-            }
+            // function no_seri_arr(no_seri) {
+            //     $('.no_seri').select2({
+            //         placeholder: "Pilih No Seri",
+            //         allowClear: true,
+            //         data: no_seri
+            //     });
+            // }
 
-            function no_seri_lama(){
-                $('.no_seri').select2({
-                    placeholder: "Pilih No Seri",
-                    language: {
-                        inputTooShort: function (args) {
-                            return "Minimal 10 karakter atau lebih";
-                        },
-                        noResults: function () {
-                            return "Not Found.";
-                        },
-                        searching: function () {
-                            return "Searching...";
-                        }
-                    },
-                    minimumInputLength: 10,
-                    ajax: {
-                        dataType: 'json',
-                        theme: "bootstrap",
-                        delay: 250,
-                        type: 'POST',
-                        url: '/api/as/list/no_seri_lama',
-                        data: function(params) {
-                            return {
-                                term: params.term
-                            }
-                        },
-                        processResults: function(data) {
-                            return {
-                                results: $.map(data, function(obj) {
+            function no_seri_lama() {
+                // $('.no_seri').select2({
+                //     placeholder: "Pilih No Seri",
+                //     language: {
+                //         inputTooShort: function(args) {
+                //             return "Minimal 10 karakter atau lebih";
+                //         },
+                //         noResults: function() {
+                //             return "Not Found.";
+                //         },
+                //         searching: function() {
+                //             return "Searching...";
+                //         }
+                //     },
+                //     minimumInputLength: 10,
+                //     ajax: {
+                //         dataType: 'json',
+                //         theme: "bootstrap",
+                //         delay: 250,
+                //         type: 'POST',
+                //         url: '/api/as/list/no_seri_lama',
+                //         data: function(params) {
+                //             return {
+                //                 term: params.term
+                //             }
+                //         },
+                //         processResults: function(data) {
+                //             return {
+                //                 results: $.map(data, function(obj) {
+                //                     return {
+                //                         id: obj.noseri,
+                //                         text: obj.noseri
+                //                     };
+                //                 })
+                //             };
+                //         },
+                //     }
+                // })
+                $(".no_seri").autocomplete({
+                    appendTo: ".suggestion-box",
+                    source: function(request, response) {
+                        $.ajax({
+                            dataType: 'json',
+                            url: '/api/as/list/no_seri_lama',
+                            method: 'POST',
+                            data: {
+                                term: request.term
+                            },
+                            success: function(data) {
+                                var transformed = $.map(data, function(obj) {
                                     return {
-                                        id: obj.noseri,
-                                        text: obj.noseri
-                                    };
-                                })
-                            };
-                        },
-                    }
-                })
+                                        label: obj.noseri,
+                                        value: obj.noseri
+                                    }
+                                });
+                                response(transformed.slice(0, 10));
+                            },
+                            error: function() {
+                                response([]);
+                            }
+                        });
+                    },
+                    // focus: function(event, ui) {
+                    //     $(this).val(ui.item.label);
+                    //     return false;
+                    // }
+                });
             }
 
             $(document).on('change', '#produktable .produk_id', function() {
@@ -999,27 +1145,26 @@
                 var msg = $(this).closest('tr').find('#msg_jumlah_produk');
                 no_seri_select.val('');
 
-                if($(this).val() != ""){
-                    if(jumlah_produk.val() != ""){
+                if ($(this).val() != "") {
+                    if (jumlah_produk.val() != "") {
                         no_seri_select.val('');
                         btn_seri.removeClass('btn-warning');
                         btn_seri.addClass('btn-info');
                         btn_seri.html('<i class="fas fa-plus"></i> Tambah');
-                        if($(this).select2('data')[0]['noseri'] != undefined){
+                        if ($(this).select2('data')[0]['noseri'] != undefined) {
                             var seri_prd = Object.keys($(this).select2('data')[0]['noseri']).length;
-                            if(seri_prd >= jumlah_produk.val()){
+                            if (seri_prd >= jumlah_produk.val()) {
                                 btn_seri.attr('disabled', false);
                                 msg.html('');
-                            }else{
+                            } else {
                                 btn_seri.attr('disabled', true);
-                                msg.html('Jumlah No Seri hanya ada '+seri_prd);
+                                msg.html('Jumlah No Seri hanya ada ' + seri_prd);
                             }
-                        }else{
+                        } else {
                             btn_seri.attr('disabled', false);
                         }
                     }
-                }
-                else{
+                } else {
                     btn_seri.attr('disabled', true);
                 }
                 validasi();
@@ -1031,30 +1176,29 @@
                 var no_seri_select = $(this).closest('tr').find('.no_seri_select');
                 var msg = $(this).closest('tr').find('#msg_jumlah_produk');
 
-                if(no_seri_select.val() != ""){
+                if (no_seri_select.val() != "") {
                     no_seri_select.val('');
                     btn_seri.removeClass('btn-warning');
                     btn_seri.addClass('btn-info');
                     btn_seri.html('<i class="fas fa-plus"></i> Tambah');
                 }
 
-                if($(this).val() != ""){
-                    if(produk_id.val() != ""){
-                        if(produk_id.select2('data')[0]['noseri'] != undefined){
+                if ($(this).val() != "") {
+                    if (produk_id.val() != "") {
+                        if (produk_id.select2('data')[0]['noseri'] != undefined) {
                             var seri_prd = Object.keys(produk_id.select2('data')[0]['noseri']).length;
-                            if(seri_prd >= $(this).val()){
+                            if (seri_prd >= $(this).val()) {
                                 btn_seri.attr('disabled', false);
                                 msg.html('');
-                            }else{
+                            } else {
                                 btn_seri.attr('disabled', true);
-                                msg.html('Jumlah No Seri hanya ada '+seri_prd);
+                                msg.html('Jumlah No Seri hanya ada ' + seri_prd);
                             }
-                        }else{
+                        } else {
                             btn_seri.attr('disabled', false);
                         }
                     }
-                }
-                else{
+                } else {
                     btn_seri.attr('disabled', true);
                 }
                 validasi();
@@ -1065,31 +1209,39 @@
                 var jumlah = $(this).closest('tr').find('.jumlah_produk');
                 var no_seri_select = $(this).closest('tr').find('.no_seri_select');
                 var number = $(this).closest('tr').find("td:eq(0)").html() - 1;
+
                 $('#detail_modal').modal("show");
-                if(no_seri_select.val() != ""){
+                if (no_seri_select.val() != "") {
                     var obj = JSON.parse(no_seri_select.val());
                     $('#seri_table tbody').empty();
                     $('#seri_table tbody').append(trseriproduk(jumlah.val(), obj));
+
                     $('#index_table').val(number);
-                    if(produk_id.select2('data')[0]['noseri'] != undefined){
-                        no_seri_arr(produk_id.select2('data')[0]['noseri']);
-                    }
-                    else{
-                        if($('#pesanan_id') != ""){
-                            var noseri_res = JSON.parse(produk_id.find('option:selected').attr('data-noseri'));
-                            no_seri_arr(noseri_res);
-                        }else{
+                    if (produk_id.select2('data')[0]['noseri'] != undefined) {
+                        // no_seri_arr(produk_id.select2('data')[0]['noseri']);
+                        no_seri_lama();
+
+                    } else {
+                        if ($('#pesanan_id') != "") {
+
+                            // var noseri_res = JSON.parse(produk_id.find('option:selected').attr(
+                            //     'data-noseri'));
+                            // no_seri_arr(noseri_res)
+                            no_seri_lama();
+                        } else {
                             no_seri_lama();
                         }
                     }
-                }else{
+                } else {
                     $('#seri_table tbody').empty();
                     $('#seri_table tbody').append(trseriproduk(jumlah.val(), undefined));
                     $('#index_table').val(number);
-                    if(produk_id.select2('data')[0]['noseri'] != undefined){
-                        no_seri_arr(produk_id.select2('data')[0]['noseri']);
-                    }
-                    else{
+                    if (produk_id.select2('data')[0]['noseri'] != undefined) {
+                        // no_seri_arr(produk_id.select2('data')[0]['noseri']);
+                        no_seri_lama();
+
+                    } else {
+
                         no_seri_lama();
                     }
                 }
@@ -1101,41 +1253,42 @@
                 var idx = $('#index_table').val();
                 var inputseri = false;
                 $('#seri_table').find('.no_seri').each(function() {
-                    if($(this).val() != null){
+                    if ($(this).val() != '') {
                         inputseri = true;
-                        var obj = {};
-                        obj.id = $(this).val();
-                        obj.text = $(this).select2('data')[0]['text'];
+                        let obj = $(this).val();
+                        // remove spacing
+                        obj = obj.replace(/\s/g, '');
                         noseri_arr.push(obj);
-                    }else{
+                    } else {
                         inputseri = false;
                         return false;
                     }
                 });
 
-                if(inputseri == true){
+                if (inputseri == true) {
                     $('#detail_modal').modal("hide");
-                    $('#no_seri_select'+idx).val(JSON.stringify(noseri_arr));
+                    $('#no_seri_select' + idx).val(JSON.stringify(noseri_arr));
 
-                    $('#produktable').find('button[name="btn_seri['+idx+']"]').removeClass('btn-info');
-                    $('#produktable').find('button[name="btn_seri['+idx+']"]').addClass('btn-warning');
+                    $('#produktable').find('button[name="btn_seri[' + idx + ']"]').removeClass('btn-info');
+                    $('#produktable').find('button[name="btn_seri[' + idx + ']"]').addClass('btn-warning');
 
-                    $('#produktable').find('button[name="btn_seri['+idx+']"]').html('<i class="fas fa-pencil-alt"></i> Edit');
-                }
-                else{
+                    $('#produktable').find('button[name="btn_seri[' + idx + ']"]').html(
+                        '<i class="fas fa-pencil-alt"></i> Edit');
+                } else {
                     swal.fire(
                         'Form Kosong',
                         'Ada Form yang belum diinput, Silahkan input ulang',
                         'error'
                     );
                 }
+
                 validasi();
 
             })
 
             $(document).on('change', '#parttable .part_id', function() {
-                if(typeof($(this).select2('data')[0]['jumlah']) != 'undefined'){
-                    $(this).closest('tr').find('.part_jumlah').val($(this).select2('data')[0]['jumlah'] );
+                if (typeof($(this).select2('data')[0]['jumlah']) != 'undefined') {
+                    $(this).closest('tr').find('.part_jumlah').val($(this).select2('data')[0]['jumlah']);
                 }
                 validasi();
             });
@@ -1252,17 +1405,17 @@
                     $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
                     $(el).find('.produk_id').attr('id', 'produk_id' + j);
 
-                    $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
-                    $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
+                    $(el).find('.jumlah_produk').attr('name', 'jumlah_produk[' + j + ']');
+                    $(el).find('.jumlah_produk').attr('id', 'jumlah_produk' + j);
 
                     $(el).find('.no_seri_select').attr('name', 'no_seri_select[' + j + ']');
                     $(el).find('.no_seri_select').attr('id', 'no_seri_select' + j);
 
-                    $(el).find('.btn_seri').attr('name', 'btn_seri['+j+']');
-                    if($(el).find('.produk_id').val() == null){
-                        if($('#pesanan_id').val() != ''){
+                    $(el).find('.btn_seri').attr('name', 'btn_seri[' + j + ']');
+                    if ($(el).find('.produk_id').val() == null) {
+                        if ($('#pesanan_id').val() != '') {
                             produk_penjualan_tersedia($('#pesanan_id').val(), $(el).find('.produk_id'));
-                        }else{
+                        } else {
                             produk_penjualan_tidak_tersedia($(el).find('.produk_id'));
                         }
                     }
@@ -1295,10 +1448,10 @@
                     $(el).find('.part_jumlah').attr('name', 'part_jumlah[' + j + ']');
                     $(el).find('.part_jumlah').attr('id', 'part_jumlah' + j);
 
-                    if($(el).find('.part_id').val() == null){
-                        if($('#pesanan_id').val() != ''){
+                    if ($(el).find('.part_id').val() == null) {
+                        if ($('#pesanan_id').val() != '') {
                             part_tersedia($('#pesanan_id').val());
-                        }else{
+                        } else {
                             part_tidak_tersedia();
                         }
                     }
@@ -1485,8 +1638,8 @@
                     validasi();
                     return false;
                 },
-                change: function(event, ui){
-                    if(ui.item == null){
+                change: function(event, ui) {
+                    if (ui.item == null) {
                         $('#customer_id').val('');
                         $('#alamat').val("");
                         $('#telepon').val("");
@@ -1542,7 +1695,7 @@
                         produk_penjualan_tersedia(id, $('.produk_id'));
                         part_tersedia(id);
                         $.ajax({
-                            url: '/api/as/detail/so_retur/' + id+'/'+jenis,
+                            url: '/api/as/detail/so_retur/' + id + '/' + jenis,
                             type: 'GET',
                             dataType: 'json',
                             success: function(data) {
@@ -1557,8 +1710,9 @@
                     }
                     validasi();
                     return false;
-                }, change: function (event, ui) {
-                    if(ui.item == null){
+                },
+                change: function(event, ui) {
+                    if (ui.item == null) {
                         $('.no_seri_select').val('');
                         $('.btn_seri').attr('disabled', true);
                         $('.jumlah_produk').val('');
@@ -1589,58 +1743,58 @@
             //     get_karyawan(divisi_id);
             // });
 
-            $(document).on('keyup change', '.no_seri', function(){
-                validasi();
-            })
+            // $(document).on('keyup change', '.no_seri', function() {
+            //     validasi();
+            // })
 
             // function get_karyawan(divisi_id){
-                $("#pic_peminjaman").autocomplete({
-                    source: function(request, response) {
-                        // var div_id = divisi_id;
-                        $.ajax({
-                            dataType: 'json',
-                            type: 'GET',
-                            url: '/api/karyawan_all',
-                            data: {
-                                term: request.term
-                            },
-                            beforeSend : function(xhr){
-                                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
-                            },
-                            success: function(data) {
-                                var transformed = $.map(data, function(el) {
-                                    return {
-                                        label: el.nama,
-                                        value: el.id
-                                    };
-                                });
-                                response(transformed.slice(0, 10));
-                            },
-                            error: function() {
-                                response([]);
-                            }
-                        });
-                    },
-                    focus: function(event, ui) {
-                        $(this).val(ui.item.label);
-                        return false;
-                    },
-                    select: function(event, ui) {
-                        var id = ui.item.value;
-                        $(this).val(ui.item.label);
+            $("#pic_peminjaman").autocomplete({
+                source: function(request, response) {
+                    // var div_id = divisi_id;
+                    $.ajax({
+                        dataType: 'json',
+                        type: 'GET',
+                        url: '/api/karyawan_all',
+                        data: {
+                            term: request.term
+                        },
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                        },
+                        success: function(data) {
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.nama,
+                                    value: el.id
+                                };
+                            });
+                            response(transformed.slice(0, 10));
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                },
+                focus: function(event, ui) {
+                    $(this).val(ui.item.label);
+                    return false;
+                },
+                select: function(event, ui) {
+                    var id = ui.item.value;
+                    $(this).val(ui.item.label);
 
-                        if (id != "") {
-                            $('#karyawan_id').val(id);
-                        }
-                        return false;
-                    },
-                    change: function(event, ui) {
-                        if(ui.item == null){
-                            $('#karyawan_id').val('');
-                        }
-                        return false;
-                    },
-                });
+                    if (id != "") {
+                        $('#karyawan_id').val(id);
+                    }
+                    return false;
+                },
+                change: function(event, ui) {
+                    if (ui.item == null) {
+                        $('#karyawan_id').val('');
+                    }
+                    return false;
+                },
+            });
             // }
 
 

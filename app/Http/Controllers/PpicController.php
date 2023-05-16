@@ -82,31 +82,55 @@ class PpicController extends Controller
         $this->update_perakitan_status();
         $status = $this->change_status($status);
         if ($status == $this->change_status('penyusunan')) {
-            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
+            $data = JadwalPerakitan::with('Produk.produk')->addSelect([
+                'noseri_count' => function ($q) {
+                    $q->selectRaw('count(id)')
+                        ->from('jadwal_rakit_noseri as e')
+                        ->whereColumn('e.jadwal_id', 'jadwal_perakitan.id')
+                        ->limit(1);
+                }
+            ])->where('status', $status)->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         } else if ($status == $this->change_status("pelaksanaan")) {
-            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orwhereNotIn('status', [6])
-                // ->havingRaw('MONTH(tanggal_mulai) = ?',[$bulan])
+            $data = JadwalPerakitan::with('Produk.produk')->addSelect([
+                'noseri_count' => function ($q) {
+                    $q->selectRaw('count(id)')
+                        ->from('jadwal_rakit_noseri as e')
+                        ->whereColumn('e.jadwal_id', 'jadwal_perakitan.id')
+                        ->limit(1);
+                }
+            ])->where('status', $status)->orwhereNotIn('status', [6])
                 ->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         } else {
-            $data = JadwalPerakitan::with('Produk.produk')->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
+            $data = JadwalPerakitan::with('Produk.produk')->addSelect([
+                'noseri_count' => function ($q) {
+                    $q->selectRaw('count(id)')
+                        ->from('jadwal_rakit_noseri as e')
+                        ->whereColumn('e.jadwal_id', 'jadwal_perakitan.id')
+                        ->limit(1);
+                }
+            ])->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         }
 
-        foreach ($data as $item) {
-            $noseri_count = count($item->noseri);
-            $item->noseri_count = $noseri_count;
-        }
+        // foreach ($data as $item) {
+        //     $noseri_count = count($item->noseri);
+        //     $item->noseri_count = $noseri_count;
+        // }
 
-        if (count($data) != 0) {
-            return response()->json([
-                'error' => 'false',
-                'data' => $data,
-            ], 200);
-        } else {
-            return response()->json([
-                'error' => 'true',
-                'data' => 'Data Not Found',
-            ], 404);
-        }
+        // if (count($data) != 0) {
+        //     return response()->json([
+        //         'error' => 'false',
+        //         'data' => $data,
+        //     ], 200);
+        // } else {
+        //     return response()->json([
+        //         'error' => 'true',
+        //         'data' => 'Data Not Found',
+        //     ], 404);
+        // }
+        return response()->json([
+            'error' => 'false',
+            'data' => $data,
+        ], 200);
     }
 
     /**

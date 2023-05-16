@@ -125,13 +125,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                            .row {
-                                                                font-size: 12px;
-                                                            }
+                                                                    .row {
+                                                                        font-size: 12px;
+                                                                    }
 
-                                                            h4 {
-                                                                font-size: 20px;
-                                                            } */
+                                                                    h4 {
+                                                                        font-size: 20px;
+                                                                    } */
             body {
                 font-size: 12px;
             }
@@ -148,13 +148,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                            .row {
-                                                                font-size: 12px;
-                                                            }
+                                                                    .row {
+                                                                        font-size: 12px;
+                                                                    }
 
-                                                            h4 {
-                                                                font-size: 20px;
-                                                            } */
+                                                                    h4 {
+                                                                        font-size: 20px;
+                                                                    } */
             section {
                 font-size: 12px;
             }
@@ -409,8 +409,8 @@
                                                                 aria-selected="true">Deskripsi Ekatalog</a>
                                                         </li>
                                                         <li class="nav-item" role="presentation">
-                                                            <a class="nav-link" id="pills-po-ekat-tab"
-                                                                data-toggle="pill" href="#pills-po-ekat" role="tab"
+                                                            <a class="nav-link" id="pills-po-ekat-tab" data-toggle="pill"
+                                                                href="#pills-po-ekat" role="tab"
                                                                 aria-controls="pills-po-ekat"
                                                                 aria-selected="false">Purchase Order</a>
                                                         </li>
@@ -428,7 +428,8 @@
                                                         </li>
                                                     </ul>
                                                     <div class="tab-content" id="pills-tabContent">
-                                                        <div class="tab-pane fade show active" id="pills-penjualan" role="tabpanel" aria-labelledby="pills-penjualan-tab">
+                                                        <div class="tab-pane fade show active" id="pills-penjualan"
+                                                            role="tabpanel" aria-labelledby="pills-penjualan-tab">
                                                             <div class="card removeshadow">
                                                                 <div class="card-header">
                                                                     <h6>Deskripsi Ekatalog</h6>
@@ -460,6 +461,7 @@
                                                                                     <option value="AK1-" selected>AK1-
                                                                                     </option>
                                                                                     <option value="FKS-">FKS-</option>
+                                                                                    <option value="KLK-">KLK-</option>
                                                                                 </select>
                                                                                 {{-- <span class="input-group-text" id="ket_no_paket">AK1-</span> --}}
                                                                             </div>
@@ -599,7 +601,8 @@
                                                             </div> --}}
                                                             </div>
                                                         </div>
-                                                        <div class="tab-pane fade show" id="pills-po-ekat" role="tabpanel" aria-labelledby="pills-po-ekat-tab">
+                                                        <div class="tab-pane fade show" id="pills-po-ekat"
+                                                            role="tabpanel" aria-labelledby="pills-po-ekat-tab">
                                                             <div class="card removeshadow">
                                                                 <div class="card-header">
                                                                     <h6>Purchase Order</h6>
@@ -615,7 +618,8 @@
                                                                                 value=""
                                                                                 placeholder="Masukkan Nomor Purchase Order"
                                                                                 id="no_po_ekat" name="no_po_ekat" />
-                                                                            <div class="invalid-feedback" id="msgno_po_ekat">
+                                                                            <div class="invalid-feedback"
+                                                                                id="msgno_po_ekat">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -628,8 +632,10 @@
                                                                                 class="form-control @error('tanggal_po_ekat') is-invalid @enderror"
                                                                                 value=""
                                                                                 placeholder="Masukkan Tanggal Purchase Order"
-                                                                                id="tanggal_po_ekat" name="tanggal_po_ekat" />
-                                                                            <div class="invalid-feedback" id="msgtanggal_po_ekat">
+                                                                                id="tanggal_po_ekat"
+                                                                                name="tanggal_po_ekat" />
+                                                                            <div class="invalid-feedback"
+                                                                                id="msgtanggal_po_ekat">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -639,20 +645,24 @@
                                                                             Order</label>
                                                                         <div class="col-lg-5 col-md-12 col-form-label">
                                                                             <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio"
-                                                                                    name="do_ekat" id="yes" value="yes" />
+                                                                                <input class="form-check-input"
+                                                                                    type="radio" name="do_ekat"
+                                                                                    id="yes" value="yes" />
                                                                                 <label class="form-check-label"
                                                                                     for="yes">Tersedia</label>
                                                                             </div>
                                                                             <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio"
-                                                                                    name="do_ekat" id="no" value="no" />
-                                                                                <label class="form-check-label" for="no">Tidak
+                                                                                <input class="form-check-input"
+                                                                                    type="radio" name="do_ekat"
+                                                                                    id="no" value="no" />
+                                                                                <label class="form-check-label"
+                                                                                    for="no">Tidak
                                                                                     tersedia</label>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group row hide" id="do_detail_no_ekat">
+                                                                    <div class="form-group row hide"
+                                                                        id="do_detail_no_ekat">
                                                                         <label for=""
                                                                             class="col-form-label col-lg-5 col-md-12 labelket">Nomor
                                                                             DO</label>
@@ -660,19 +670,23 @@
                                                                             <input type="text"
                                                                                 class="form-control col-form-label @error('no_do_ekat') is-invalid @enderror"
                                                                                 id="no_do_ekat" name="no_do_ekat" />
-                                                                            <div class="invalid-feedback" id="msgno_do_ekat">
+                                                                            <div class="invalid-feedback"
+                                                                                id="msgno_do_ekat">
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group row hide" id="do_detail_tgl_ekat">
+                                                                    <div class="form-group row hide"
+                                                                        id="do_detail_tgl_ekat">
                                                                         <label for=""
                                                                             class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
                                                                             DO</label>
                                                                         <div class="col-lg-5 col-md-12">
                                                                             <input type="date"
                                                                                 class="form-control col-form-label @error('tanggal_do_ekat') is-invalid @enderror"
-                                                                                id="tanggal_do_ekat" name="tanggal_do_ekat" />
-                                                                            <div class="invalid-feedback" id="msgtanggal_do_ekat">
+                                                                                id="tanggal_do_ekat"
+                                                                                name="tanggal_do_ekat" />
+                                                                            <div class="invalid-feedback"
+                                                                                id="msgtanggal_do_ekat">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -686,7 +700,8 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="tab-pane fade" id="pills-instansi" role="tabpanel" aria-labelledby="pills-instansi-tab">
+                                                        <div class="tab-pane fade" id="pills-instansi" role="tabpanel"
+                                                            aria-labelledby="pills-instansi-tab">
                                                             <div class="card removeshadow">
                                                                 <div class="card-header">
                                                                     <h6>Instansi</h6>
@@ -783,7 +798,8 @@
                                                             </div> --}}
                                                             </div>
                                                         </div>
-                                                        <div class="tab-pane fade" id="pills-produk" role="tabpanel" aria-labelledby="pills-produk-tab">
+                                                        <div class="tab-pane fade" id="pills-produk" role="tabpanel"
+                                                            aria-labelledby="pills-produk-tab">
                                                             <div class="card removeshadow">
                                                                 <div class="card-header">
                                                                     <h6>Rencana Penjualan</h6>
@@ -1537,7 +1553,8 @@
                 } else if (($('input[type="radio"][name="status"]:checked').val() == "draft") || ($(
                         'input[type="radio"][name="status"]:checked').val() == "batal")) {
                     if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi")
-                        .val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "" && ((!$("#no_urut").hasClass('is-invalid')) && !$("#no_paket")
+                        .val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "" && ((!$(
+                                "#no_urut").hasClass('is-invalid')) && !$("#no_paket")
                             .hasClass('is-invalid'))) {
                         if (($('#no_paket').val() != "" && $('input[type="checkbox"][name="isi_nopaket"]:checked')
                                 .length > 0) || ($('#no_paket').val() == "" && $(

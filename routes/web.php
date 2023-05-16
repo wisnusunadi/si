@@ -48,6 +48,7 @@ Route::view('/modul_dashboard/show', 'auth.dashboard');
 Route::group(['middleware' => 'auth', 'middleware' => ['auth', 'divisi:jual,kes,prd,dc,gbj,qc,log,gk,mtc,mgrgdg,dirut,it']], function () {
     Route::view('/edit_pwd', 'page.setting.edit_pwd');
     Route::post('/edit_pwd', [App\Http\Controllers\Auth\ResetPasswordController::class, 'update_pwd'])->name('penjualan.produk.store');
+    Route::post('/edit_profile_photo', [App\Http\Controllers\Auth\ResetPasswordController::class, 'edit_profile_photo']);
 });
 Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function () {
     Route::view('/dashboard', 'page.administrator.dashboard');

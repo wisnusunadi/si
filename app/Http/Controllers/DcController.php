@@ -395,6 +395,7 @@ class DcController extends Controller
                     </a>';
                 }
             })
+
             ->rawColumns(['button', 'status', 'tgl_order', 'tgl_kontrak', 'no_paket'])
             ->setRowClass(function ($data) {
                 if ($data->Ekatalog) {
@@ -530,17 +531,17 @@ class DcController extends Controller
             ->addColumn('nama_customer', function ($data) {
                 $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->ekatalog->customer->nama;
+                    return $data->Ekatalog->Customer->nama;
                 } else if ($name[1] == 'SPA') {
-                    return $data->spa->customer->nama;
+                    return $data->Spa->Customer->nama;
                 } else if ($name[1] == 'SPB') {
-                    return $data->spb->customer->nama;
+                    return $data->Spb->Customer->nama;
                 }
             })
             ->addColumn('instansi', function ($data) {
                 $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->ekatalog->instansi;
+                    return $data->Ekatalog->instansi;
                 } else {
                     return '-';
                 }
@@ -711,49 +712,49 @@ class DcController extends Controller
                         left join produk on produk.id = gdg_barang_jadi.produk_id
                         left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
                         where detail_pesanan.pesanan_id = pesanan.id AND produk.coo = 1) ');
-        })->addSelect(['ccoo' => function ($q) {
-            $q->selectRaw('count(noseri_coo.id)')
-                ->from('noseri_coo')
-                ->leftJoin('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
-                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-                ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
-                ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-                ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-                ->where('produk.coo', '=', '1');
-        }, 'cseri' => function ($q) {
-            $q->selectRaw('count(noseri_logistik.id)')
-                ->from('noseri_logistik')
-                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-                ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
-                ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-                ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-                ->where('produk.coo', '=', '1');
-        }])->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->get();
+        })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi', 'Ekatalog.Provinsi'])
+            ->addSelect(['ccoo' => function ($q) {
+                $q->selectRaw('count(noseri_coo.id)')
+                    ->from('noseri_coo')
+                    ->leftJoin('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
+                    ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                    ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                    ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+                    ->where('produk.coo', '=', '1');
+            }, 'cseri' => function ($q) {
+                $q->selectRaw('count(noseri_logistik.id)')
+                    ->from('noseri_logistik')
+                    ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                    ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                    ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+                    ->where('produk.coo', '=', '1');
+            }])->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('no_paket', function ($data) {
                 $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->ekatalog->no_paket;
+                    return $data->Ekatalog->no_paket;
                 } else {
                     return '-';
                 }
             })
             ->addColumn('batas_paket', function ($data) {
-
-                if (isset($data->ekatalog->tgl_kontrak)) {
+                if (isset($data->Ekatalog->tgl_kontrak)) {
                     $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                    $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
+                    $tgl_parameter = $this->getHariBatasKontrak($data->Ekatalog->tgl_kontrak, $data->Ekatalog->Provinsi->status)->format('Y-m-d');
 
                     if (isset($data->so)) {
                         if ($tgl_sekarang <= $tgl_parameter) {
                             $to = Carbon::now();
-                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                            $from = $this->getHariBatasKontrak($data->Ekatalog->tgl_kontrak, $data->Ekatalog->Provinsi->status);
                             $hari = $to->diffInDays($from);
                             if ($hari > 7) {
                                 return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
@@ -767,7 +768,7 @@ class DcController extends Controller
                             }
                         } else {
                             $to = Carbon::now();
-                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                            $from = $this->getHariBatasKontrak($data->Ekatalog->tgl_kontrak, $data->Ekatalog->Provinsi->status);
                             $hari = $to->diffInDays($from);
                             return '<div class="text-danger"><b>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
                             <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
@@ -780,17 +781,17 @@ class DcController extends Controller
             ->addColumn('nama_customer', function ($data) {
                 $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->ekatalog->customer->nama;
+                    return $data->Ekatalog->Customer->nama;
                 } else if ($name[1] == 'SPA') {
-                    return $data->spa->customer->nama;
+                    return $data->Spa->Customer->nama;
                 } else if ($name[1] == 'SPB') {
-                    return $data->spb->customer->nama;
+                    return $data->Spb->Customer->nama;
                 }
             })
             ->addColumn('instansi', function ($data) {
                 $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->ekatalog->instansi;
+                    return $data->Ekatalog->instansi;
                 } else {
                     return '-';
                 }

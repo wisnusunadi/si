@@ -505,6 +505,7 @@ class GudangController extends Controller
                 'is_delete' => 0
             ])->get();
 
+
             $layout = Layout::where('jenis_id', 1)->get();
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -1497,7 +1498,7 @@ class GudangController extends Controller
             return datatables()->of($datax)
                 ->addIndexColumn()
                 ->addColumn('bppb', function ($d) {
-                    // return '-';
+
                     $seri_done = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
                         $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
                         $q->whereHas('header', function ($a) use ($d) {
@@ -1506,7 +1507,12 @@ class GudangController extends Controller
                     })->where('jenis', 'masuk')->first();
 
                     $nobppb = JadwalRakitNoseri::with('header')->where('noseri', $seri_done->seri->noseri)->first();
-                    return $nobppb->header->no_bppb == '-' ? '-' : $nobppb->header->no_bppb;
+                    if ($nobppb == '-' || $nobppb == NULL) {
+                        return '-';
+                    } else {
+                        return  $nobppb->header->no_bppb;
+                    }
+                    //     return $nobppb->header->no_bppb == '-' ? '-' : $nobppb->header->no_bppb;
                 })
                 ->addColumn('tgl_masuk', function ($d) {
                     if (isset($d->tgl_masuk)) {
@@ -2364,6 +2370,7 @@ class GudangController extends Controller
             $no_seri = [];
             $sheet1 = $sheet->toArray(null, true, true, true);
             $numrow = 1;
+            $haserror = false;
             $html = "<input type='hidden' name='namafile' value='" . $filename . "'>";
             $html .= "<table class='table table-bordered table-striped table-hover tableImport'>
                     <thead>
@@ -2384,6 +2391,7 @@ class GudangController extends Controller
                 $e = $row['E'];
                 if ($numrow > 1) {
                     $nis_td = (!empty($c)) ? "" : " style='background: #E07171;'";
+                    $nis_td = (!empty($d)) ? "" : " style='background: #E07171;'" . $haserror = true;
                     $html .= "<tr>";
                     $html .= "<td" . $nis_td . ">" . $a . "</td>";
                     $html .= "<td" . $nis_td . ">" . $b . "</td>";
@@ -2395,6 +2403,10 @@ class GudangController extends Controller
                 $numrow++;
             }
             $html .= "</tbody></table>";
+
+            if ($haserror) {
+                return response()->json(['msg' => 'Ada data yang kosong, Silahkan lengkapi data', 'error' => true, 'data' => $html]);
+            }
 
             $a = Pesanan::where('id', $request->soid1)->first();
             if ($a->so == implode("", array_unique($so))) {

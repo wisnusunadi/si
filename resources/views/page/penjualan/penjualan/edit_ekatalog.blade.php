@@ -94,13 +94,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                .row {
-                                                                                                                                                                                                                                                                                    font-size: 12px;
-                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                .row {
+                                                                                                                                                                                                                                                                                                    font-size: 12px;
+                                                                                                                                                                                                                                                                                                }
 
-                                                                                                                                                                                                                                                                                h4 {
-                                                                                                                                                                                                                                                                                    font-size: 20px;
-                                                                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                h4 {
+                                                                                                                                                                                                                                                                                                    font-size: 20px;
+                                                                                                                                                                                                                                                                                                } */
             body {
                 font-size: 12px;
             }
@@ -121,13 +121,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                .row {
-                                                                                                                                                                                                                                                                                    font-size: 12px;
-                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                .row {
+                                                                                                                                                                                                                                                                                                    font-size: 12px;
+                                                                                                                                                                                                                                                                                                }
 
-                                                                                                                                                                                                                                                                                h4 {
-                                                                                                                                                                                                                                                                                    font-size: 20px;
-                                                                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                h4 {
+                                                                                                                                                                                                                                                                                                    font-size: 20px;
+                                                                                                                                                                                                                                                                                                } */
             body {
                 font-size: 12px;
             }
@@ -445,8 +445,8 @@
                                                                 aria-selected="true">Deskripsi Ekatalog</a>
                                                         </li>
                                                         <li class="nav-item" role="presentation">
-                                                            <a class="nav-link" id="pills-po-ekat-tab"
-                                                                data-toggle="pill" href="#pills-po-ekat" role="tab"
+                                                            <a class="nav-link" id="pills-po-ekat-tab" data-toggle="pill"
+                                                                href="#pills-po-ekat" role="tab"
                                                                 aria-controls="pills-po-ekat"
                                                                 aria-selected="false">Purchase Order</a>
                                                         </li>
@@ -490,6 +490,9 @@
                                                                                         <option value="FKS-"
                                                                                             @if (strpos($e->no_paket, 'FKS-') !== false) selected @endif>
                                                                                             FKS-</option>
+                                                                                        <option value="KLK-"
+                                                                                            @if (strpos($e->no_paket, 'KLK-') !== false) selected @endif>
+                                                                                            KLK-</option>
                                                                                     </select>
                                                                                 </div>
                                                                                 <input type="text"
@@ -500,7 +503,7 @@
                                                                                     readonly @endif
                                                                                 @elseif ($e->status == 'sepakat' || $e->status == 'negosiasi')
                                                                                 readonly @else readonly @endif
-                                                                                @if ($e->no_paket != '') value="{{ str_replace(['AK1-', 'FKS-'], '', $e->no_paket) }}" @endif
+                                                                                @if ($e->no_paket != '') value="{{ str_replace(['AK1-', 'FKS-', 'KLK-'], '', $e->no_paket) }}" @endif
                                                                                 />
                                                                                 <div class="input-group-append
                                                                                     @if ($e->status == 'sepakat' || $e->status == 'negosiasi') hide @endif "
@@ -551,9 +554,9 @@
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
                                                                             <div class="col-lg-5 col-md-12 col-form-label">
                                                                                 <!-- <div class="form-check form-check-inline">
-                                                                                                                                                                                                                                                                                                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
-                                                                                                                                                                                                                                                                                                                                                        <label class="form-check-label" for="status_akn4">Draft</label>
-                                                                                                                                                                                                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                                                                                                                                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
+                                                                                                                                                                                                                                                                                                                                                                        <label class="form-check-label" for="status_akn4">Draft</label>
+                                                                                                                                                                                                                                                                                                                                                                    </div> -->
                                                                                 <div class="form-check form-check-inline">
                                                                                     <input class="form-check-input"
                                                                                         type="radio" name="status_akn"
@@ -664,7 +667,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="tab-pane fade show" id="pills-po-ekat" role="tabpanel" aria-labelledby="pills-po-ekat-tab">
+                                                            <div class="tab-pane fade show" id="pills-po-ekat"
+                                                                role="tabpanel" aria-labelledby="pills-po-ekat-tab">
                                                                 <div class="card removeshadow">
                                                                     <div class="card-header">
                                                                         <h6>Purchase Order</h6>
@@ -677,10 +681,11 @@
                                                                             <div class="col-lg-5 col-md-12">
                                                                                 <input type="text"
                                                                                     class="form-control @error('no_po_ekat') is-invalid @enderror"
-                                                                                    value="{{$e->Pesanan->no_po}}"
+                                                                                    value="{{ $e->Pesanan->no_po }}"
                                                                                     placeholder="Masukkan Nomor Purchase Order"
                                                                                     id="no_po_ekat" name="no_po_ekat" />
-                                                                                <div class="invalid-feedback" id="msgno_po_ekat">
+                                                                                <div class="invalid-feedback"
+                                                                                    id="msgno_po_ekat">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -691,10 +696,12 @@
                                                                             <div class="col-lg-5 col-md-12">
                                                                                 <input type="date"
                                                                                     class="form-control @error('tanggal_po_ekat') is-invalid @enderror"
-                                                                                    value="{{$e->Pesanan->tgl_po}}"
+                                                                                    value="{{ $e->Pesanan->tgl_po }}"
                                                                                     placeholder="Masukkan Tanggal Purchase Order"
-                                                                                    id="tanggal_po_ekat" name="tanggal_po_ekat" />
-                                                                                <div class="invalid-feedback" id="msgtanggal_po_ekat">
+                                                                                    id="tanggal_po_ekat"
+                                                                                    name="tanggal_po_ekat" />
+                                                                                <div class="invalid-feedback"
+                                                                                    id="msgtanggal_po_ekat">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -704,40 +711,52 @@
                                                                                 Order</label>
                                                                             <div class="col-lg-5 col-md-12 col-form-label">
                                                                                 <div class="form-check form-check-inline">
-                                                                                    <input class="form-check-input" type="radio"
-                                                                                        name="do_ekat" id="yes" value="yes" @if($e->Pesanan->no_do != null) checked @endif/>
+                                                                                    <input class="form-check-input"
+                                                                                        type="radio" name="do_ekat"
+                                                                                        id="yes" value="yes"
+                                                                                        @if ($e->Pesanan->no_do != null) checked @endif />
                                                                                     <label class="form-check-label"
                                                                                         for="yes">Tersedia</label>
                                                                                 </div>
                                                                                 <div class="form-check form-check-inline">
-                                                                                    <input class="form-check-input" type="radio"
-                                                                                        name="do_ekat" id="no" value="no" @if($e->Pesanan->no_do == null) checked @endif/>
-                                                                                    <label class="form-check-label" for="no">Tidak
+                                                                                    <input class="form-check-input"
+                                                                                        type="radio" name="do_ekat"
+                                                                                        id="no" value="no"
+                                                                                        @if ($e->Pesanan->no_do == null) checked @endif />
+                                                                                    <label class="form-check-label"
+                                                                                        for="no">Tidak
                                                                                         tersedia</label>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="form-group row @if($e->Pesanan->no_do == null) hide @endif" id="do_detail_no_ekat">
+                                                                        <div class="form-group row @if ($e->Pesanan->no_do == null) hide @endif"
+                                                                            id="do_detail_no_ekat">
                                                                             <label for=""
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">Nomor
                                                                                 DO</label>
                                                                             <div class="col-lg-5 col-md-12">
                                                                                 <input type="text"
                                                                                     class="form-control col-form-label @error('no_do_ekat') is-invalid @enderror"
-                                                                                    id="no_do_ekat" name="no_do_ekat" value="{{$e->Pesanan->no_do}}"/>
-                                                                                <div class="invalid-feedback" id="msgno_do_ekat">
+                                                                                    id="no_do_ekat" name="no_do_ekat"
+                                                                                    value="{{ $e->Pesanan->no_do }}" />
+                                                                                <div class="invalid-feedback"
+                                                                                    id="msgno_do_ekat">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="form-group row @if($e->Pesanan->tgl_do == null) checked @endif" id="do_detail_tgl_ekat">
+                                                                        <div class="form-group row @if ($e->Pesanan->tgl_do == null) checked @endif"
+                                                                            id="do_detail_tgl_ekat">
                                                                             <label for=""
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
                                                                                 DO</label>
                                                                             <div class="col-lg-5 col-md-12">
                                                                                 <input type="date"
                                                                                     class="form-control col-form-label @error('tanggal_do_ekat') is-invalid @enderror"
-                                                                                    id="tanggal_do_ekat" name="tanggal_do_ekat" value="{{$e->Pesanan->tgl_do}}"/>
-                                                                                <div class="invalid-feedback" id="msgtanggal_do_ekat">
+                                                                                    id="tanggal_do_ekat"
+                                                                                    name="tanggal_do_ekat"
+                                                                                    value="{{ $e->Pesanan->tgl_do }}" />
+                                                                                <div class="invalid-feedback"
+                                                                                    id="msgtanggal_do_ekat">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -745,7 +764,7 @@
                                                                             <label for="keterangan_ekat"
                                                                                 class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
                                                                             <div class="col-lg-5 col-md-12">
-                                                                                <textarea class="form-control" placeholder="Masukkan Keterangan" id="keterangan_ekat" name="keterangan_ekat">{{$e->Pesanan->ket}}</textarea>
+                                                                                <textarea class="form-control" placeholder="Masukkan Keterangan" id="keterangan_ekat" name="keterangan_ekat">{{ $e->Pesanan->ket }}</textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1296,7 +1315,7 @@
     <script>
         $(function() {
             $('#jenis_paket').select2();
-            var nopaketdb = "{{ str_replace(['AK1-', 'FKS-'], '', $e->no_paket) }}";
+            var nopaketdb = "{{ str_replace(['AK1-', 'FKS-', 'KLK-'], '', $e->no_paket) }}";
             var nopaketubah = false;
             var status_akn = '{{ $e->status }}';
             var jum_produk = '{{ count($e->Pesanan->DetailPesanan) }}';
@@ -1364,7 +1383,8 @@
                         true) {
                         if ($('#no_paket').val() != "" && $('#provinsi').val() != null && $('#tgl_buat').val() !=
                             "" && $('#tgl_edit').val() != "" && $('#batas_kontrak').val() != "" && !$('#no_urut')
-                            .hasClass('is-invalid') && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $(
+                            .hasClass('is-invalid') && $('#instansi').val() != "" && $('#satuan_kerja').val() !=
+                            "" && $(
                                 '#alamatinstansi').val() != "" && $('#deskripsi').val() != "") {
                             $("#btnsimpan").attr('disabled', false);
                         } else {
@@ -1377,7 +1397,8 @@
                     if (penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga ==
                         true) {
                         if ($('#no_paket').val() != "" && $('#tgl_buat').val() != "" && $('#tgl_edit').val() !=
-                            "" && !$('#no_urut').hasClass('is-invalid') && $('#instansi').val() != "" && $('#satuan_kerja')
+                            "" && !$('#no_urut').hasClass('is-invalid') && $('#instansi').val() != "" && $(
+                                '#satuan_kerja')
                             .val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi').val() != "") {
                             $("#btnsimpan").attr('disabled', false);
                         } else {
@@ -1391,7 +1412,8 @@
                     if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
                         if (penjualan_produk_id == true && variasi == true && produk_jumlah == true &&
                             produk_harga == true) {
-                            if ($('#tgl_buat').val() != "" && !$('#no_urut').hasClass('is-invalid') && $('#instansi').val() !=
+                            if ($('#tgl_buat').val() != "" && !$('#no_urut').hasClass('is-invalid') && $(
+                                    '#instansi').val() !=
                                 "" && $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $(
                                     '#deskripsi').val() != "") {
                                 $("#btnsimpan").attr('disabled', false);
@@ -1402,7 +1424,8 @@
                             $("#btnsimpan").attr('disabled', true);
                         }
                     } else {
-                        if ($('#tgl_buat').val() != "" && !$('#no_urut').hasClass('is-invalid') && $('#instansi').val() != "" &&
+                        if ($('#tgl_buat').val() != "" && !$('#no_urut').hasClass('is-invalid') && $('#instansi')
+                            .val() != "" &&
                             $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi')
                             .val() != "") {
                             $("#btnsimpan").attr('disabled', false);
