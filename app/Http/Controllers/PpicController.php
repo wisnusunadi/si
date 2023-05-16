@@ -116,17 +116,21 @@ class PpicController extends Controller
         //     $item->noseri_count = $noseri_count;
         // }
 
-        if (count($data) != 0) {
-            return response()->json([
-                'error' => 'false',
-                'data' => $data,
-            ], 200);
-        } else {
-            return response()->json([
-                'error' => 'true',
-                'data' => 'Data Not Found',
-            ], 404);
-        }
+        // if (count($data) != 0) {
+        //     return response()->json([
+        //         'error' => 'false',
+        //         'data' => $data,
+        //     ], 200);
+        // } else {
+        //     return response()->json([
+        //         'error' => 'true',
+        //         'data' => 'Data Not Found',
+        //     ], 404);
+        // }
+        return response()->json([
+            'error' => 'false',
+            'data' => $data,
+        ], 200);
     }
 
     /**
