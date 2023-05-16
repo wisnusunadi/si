@@ -395,6 +395,7 @@ class DcController extends Controller
                     </a>';
                 }
             })
+
             ->rawColumns(['button', 'status', 'tgl_order', 'tgl_kontrak', 'no_paket'])
             ->setRowClass(function ($data) {
                 if ($data->Ekatalog) {

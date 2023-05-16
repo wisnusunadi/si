@@ -48,21 +48,22 @@
     {{-- Custom Stylesheets (post AdminLTE) --}}
     @yield('master_css')
     <style>
+        #user-panel-profil:hover .overlay {
+
+            height: 30%;
+            cursor: pointer;
+        }
+
         .overlay {
             position: absolute;
             bottom: 10px;
             left: 0;
             right: 0;
-            background-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.938);
             overflow: hidden;
             height: 0;
             transition: .5s ease;
             width: 100%;
-        }
-
-        .image_area:hover .overlay {
-            height: 50%;
-            cursor: pointer;
         }
     </style>
     <link rel="stylesheet" href="{{ asset('assets/css/font.css') }}">

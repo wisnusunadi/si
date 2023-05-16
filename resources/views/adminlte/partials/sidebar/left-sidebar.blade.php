@@ -18,9 +18,6 @@
                             <label for="upload_image">
                                 <img src="{{ url('assets/image/user') }}/{{ Auth::user()->foto }}"
                                     class="karyawan-img-sm-md circle-button">
-                                <div class="overlay">
-                                    <div class="text">Click to Change Profile Image</div>
-                                </div>
                                 <input type="file" name="image" class="image" id="upload_image"
                                     style="display:none" />
                             </label>
@@ -43,7 +40,6 @@
                         </p>
                     </div>
                 </div>
-                <div class="hide">I am shown when someone hovers over the div above.</div>
             </div>
         </div>
 
