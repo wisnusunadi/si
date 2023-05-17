@@ -3246,10 +3246,20 @@ class ProduksiController extends Controller
     function h_pengiriman()
     {
         try {
-            $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'), 'jadwal_perakitan.no_bppb')
+            $d = JadwalRakitNoseri::select(
+                DB::raw('CONCAT(produk.nama," ",gdg_barang_jadi.nama) as produk'),
+                'jadwal_rakit_noseri.jadwal_id',
+                'jadwal_rakit_noseri.date_in',
+                'jadwal_rakit_noseri.created_at',
+                'jadwal_rakit_noseri.waktu_tf',
+                'jadwal_perakitan.produk_id',
+                DB::raw('count(jadwal_id) as jml'),
+                'jadwal_perakitan.no_bppb'
+            )
                 ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
                 ->groupBy('jadwal_rakit_noseri.jadwal_id')
-                // ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
+                ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+                ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
                 ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
                 ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
                 ->get()->sortByDesc('waktu_tf');
@@ -3278,10 +3288,6 @@ class ProduksiController extends Controller
                 })
                 ->addColumn('bppb', function ($d) {
                     return $d->no_bppb == null ? '-' : $d->no_bppb;
-                })
-                ->addColumn('produk', function ($d) {
-                    $a = GudangBarangJadi::find($d->produk_id);
-                    return $a->produk->nama . ' ' . $a->nama;
                 })
                 ->addColumn('jml', function ($d) {
                     return $d->jml . ' Unit';

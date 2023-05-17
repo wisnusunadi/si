@@ -1416,7 +1416,7 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('status', function ($d) {
-                return $d->log->nama;
+                return $d->Log->nama;
             })
             ->addColumn('customer', function ($data) {
                 if ($data->Ekatalog) {
