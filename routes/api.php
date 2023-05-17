@@ -432,7 +432,7 @@ Route::prefix('/gk')->group(function () {
     });
 
     Route::prefix('/dashboard')->group(function () {
-        Route::post('/tingkat', [SparepartController::class, 'byTingkat'])->middleware('jwt.verify');
+        Route::post('/tingkat', [SparepartController::class, 'byTingkat']);
         Route::post('/layout', [SparepartController::class, 'byLayout'])->middleware('jwt.verify');
 
         // stok

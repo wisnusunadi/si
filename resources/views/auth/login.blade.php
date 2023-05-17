@@ -62,6 +62,15 @@
                                             </button>
                                         </div>
                                     </div>
+                                    <div class="d-flex justify-content-start">
+                                        <div>
+                                            <a href="https://forms.gle/fGiRwPTz4TB8dBFs6" class="nav-link"
+                                                target="_blank">
+                                                <i class="fa fa-phone" aria-hidden="true"></i>
+                                                Lapor Kendala Teknis
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

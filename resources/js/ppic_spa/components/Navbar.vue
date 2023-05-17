@@ -39,8 +39,13 @@
           </a>
 
           <div class="navbar-dropdown is-right">
-            <a class="navbar-item"> Pengaturan </a>
-            <a class="navbar-item"> Bantuan </a>
+            <a
+              class="navbar-item"
+              href="https://forms.gle/fGiRwPTz4TB8dBFs6"
+              target="_blank"
+            >
+              Bantuan
+            </a>
             <hr class="navbar-divider" />
             <a class="navbar-item" @click="logout"> Keluar </a>
           </div>
