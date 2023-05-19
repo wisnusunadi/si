@@ -81,4 +81,33 @@ class ResetPasswordController extends Controller
             return response()->json(['data' => 'success']);
         }
     }
+
+    public function updatePwd(Request $request)
+    {
+        $validator = Validator::make($request->all(),  [
+            'pwd_lama' => 'required|string',
+            'password' => 'required|confirmed|min:8|string'
+        ]);
+        $auth = User::find($request->user_id);
+        
+        if ($validator->fails()) {
+            return response()->json(['data' => 'cek']);
+        } else {
+        $auth = Auth::user();
+        if (!Hash::check($request->get('pwd_lama'), $auth->password)) {
+            return response()->json(['data' => 'invalid']);
+        }
+
+
+        if (strcmp($request->get('pwd_lama'), $request->password) == 0) {
+            return response()->json(['data' => 'same']);
+        }
+
+
+        $user =  User::find($auth->id);
+        $user->password =  Hash::make($request->password);
+        $user->save();
+        return response()->json(['data' => 'success']);
+        }
+    }
 }

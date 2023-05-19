@@ -12,6 +12,7 @@ import LaporanPenjualan from "../views/LaporanPenjualan.vue"
 import ProsesPesanan from "../views/ProsesPesanan.vue"
 import JadwalPerencanaan from "../views/JadwalPerencanaan.vue"
 import JadwalPelaksanaan from "../views/JadwalPelaksanaan.vue"
+import ChangePassword from "../views/ChangePassword.vue"
 
 // Detail
 import PenjualanDetail from "../views/details/PenjualanDetail.vue"
@@ -87,6 +88,11 @@ const routes = [
         name: 'ProsesPesanan',
         component: ProsesPesanan,
     },
+    {
+        path: '/ppic/change_password',
+        name: 'ChangePassword',
+        component: ChangePassword,
+    }
 ]
 
 /**
