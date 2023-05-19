@@ -26,7 +26,7 @@
         <!-- sparepart -->
         <div :class="{ 'is-hidden': tabs }">
           <table
-            class="table is-fullwidth has-text-centered"
+            class="table is-fullwidth"
             id="table-sparepart"
           >
             <thead>
@@ -50,7 +50,7 @@
 
         <!-- unit -->
         <div :class="{ 'is-hidden': !tabs }">
-          <table class="table is-fullwidth has-text-centered" id="table-unit">
+          <table class="table is-fullwidth" id="table-unit">
             <thead>
               <tr>
                 <th>Kode Unit</th>
@@ -60,9 +60,9 @@
             </thead>
             <tbody>
               <tr v-for="item in data_unit" :key="item.id">
-                <td>{{ item.kode }}</td>
-                <td>{{ item.nama }}</td>
-                <td>{{ item.jml }}</td>
+                <td>{{ item.kode_produk }}</td>
+                <td>{{ item.nama_produk }}</td>
+                <td>{{ item.jumlah }}</td>
               </tr>
             </tbody>
           </table>

@@ -46,6 +46,14 @@
           </li>
         </ul>
       </div>
+      <ul class="menu-list">
+        <li>
+            <a href="https://docs.google.com/spreadsheets/d/1OxZY8JTqDBrIm89A9cTcTnRndRBOUCtnblY0f0F76p4/edit?usp=sharing">
+              <span class="icon"><i class="fas fa-chart-line"></i></span>
+              <span class="menu-item-label">Monitoring Lap. Teknis</span>
+            </a>
+          </li>
+      </ul>
     </div>
   </aside>
 </template>

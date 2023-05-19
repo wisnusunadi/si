@@ -41,8 +41,8 @@
         }
 
         /* .dataTables_filter{
-                    display: none;
-                } */
+                        display: none;
+                    } */
         #DataTables_Table_1_filter {
             display: none;
         }

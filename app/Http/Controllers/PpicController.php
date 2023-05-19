@@ -140,7 +140,14 @@ class PpicController extends Controller
      */
     public function get_datatables_data_perakitan()
     {
-        $data = JadwalPerakitan::where('status', '!=', $this->change_status('penyusunan'))->orderBy('tanggal_mulai', 'desc')->get();
+        $data = JadwalPerakitan::with(['Produk.produk'])->addSelect([
+            'noseri_count' => function ($q) {
+                $q->selectRaw('count(id)')
+                    ->from('jadwal_rakit_noseri as e')
+                    ->whereColumn('e.jadwal_id', 'jadwal_perakitan.id')
+                    ->limit(1);
+            }
+        ])->where('status', '!=', $this->change_status('penyusunan'))->orderBy('tanggal_mulai', 'desc')->get();
         return datatables($data)
             ->addIndexColumn()
             ->addColumn('periode', function ($d) {
@@ -189,7 +196,7 @@ class PpicController extends Controller
             })
             ->addColumn('progres', function ($data) {
                 $max_value = $data->jumlah;
-                $progres = count($data->noseri);
+                $progres =  $data->noseri_count;
                 $percentage = $progres * 100 / $max_value;
                 $color = $data->status == $this->change_status('pelaksanaan') ? 'is-warning' : 'is-success';
                 return
@@ -659,25 +666,23 @@ class PpicController extends Controller
      */
     public function get_data_unit_gk(Request $request)
     {
-        $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
+        $data = GudangKarantinaDetail::select(
+            DB::raw('CONCAT(produk.nama," ",gdg_barang_jadi.nama) as nama_produk'),
+            DB::raw('CONCAT(m_produk.kode," ",produk.kode) as kode_produk'),
+
+            'm_produk.kode as kode_produk',
+            DB::raw('sum(qty_unit) as jumlah'),
+        )
             ->whereNotNull('t_gk_detail.gbj_id')
             ->where('is_draft', 0)
             ->where('is_keluar', 0)
             ->groupBy('t_gk_detail.gbj_id')
             ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
             ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
+            ->join('m_produk', 'm_produk.id', 'produk.produk_id')
             ->get();
         return datatables()->of($data)
             ->addIndexColumn()
-            ->addColumn('nama_produk', function ($data) {
-                return $data->units->produk->nama . ' ' . $data->units->nama;
-            })
-            ->addColumn('kode_produk', function ($data) {
-                return $data->units->produk->product->kode . '' . $data->units->produk->kode;
-            })
-            ->addColumn('jumlah', function ($data) {
-                return $data->jml . ' ' . $data->units->satuan->nama;
-            })
             ->make(true);
     }
 
@@ -1411,7 +1416,7 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('status', function ($d) {
-                return $d->log->nama;
+                return $d->Log->nama;
             })
             ->addColumn('customer', function ($data) {
                 if ($data->Ekatalog) {
