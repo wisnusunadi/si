@@ -174,7 +174,7 @@
             border-radius: 50%;
         }
     </style>
-    </style>
+
 @stop
 @section('content')
     <section class="content">

@@ -36,34 +36,38 @@ class KaryawanController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('x', function ($data) {
-                if($data->Divisi){
+                if ($data->Divisi) {
                     return $data->Divisi->nama;
                 }
             })
             ->addColumn('jabatans', function ($data) {
-                if($data->jabatan){
+                if ($data->jabatan) {
                     return ucfirst($data->jabatan);
                 }
             })
             ->addColumn('umur', function ($data) {
-                if($data->tgllahir){
+                if ($data->tgllahir) {
                     $tgl  = $data->tgllahir;
                     $age = Carbon::parse($tgl)->diff(Carbon::now())->y;
                     return $age . " Thn";
                 }
-
             })
-            ->editColumn('tgl_kerja', function($data){
-                if($data->tgl_kerja){
+            ->editColumn('tgl_kerja', function ($data) {
+                if ($data->tgl_kerja) {
                     return Carbon::createFromFormat('Y-m-d', $data->tgl_kerja)->format('d-m-Y');
                 }
             })
             ->addColumn('button', function ($data) {
-                $btn = '<button type="button" id="edit" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Ubah</button>
-                <button type="button" id="delete" class="btn btn-sm btn-danger" data-id="'.$data->id.'"><i class="fas fa-trash"></i> Hapus</button>';
+                $btn = ' <button type="button" id="edit" class="btn btn-sm btn-warning edit_karyawan" data-karyawan ="' . $data->is_aktif . '"  ><i class="fas fa-edit"></i> Ubah</button>
+                <button type="button" id="delete" class="btn btn-sm btn-danger" data-id="' . $data->id . '"><i class="fas fa-trash"></i> Hapus</button>';
                 return $btn;
             })
             ->rawColumns(['button'])
+            ->setRowClass(function ($data) {
+                if ($data->is_aktif == 0) {
+                    return 'text-danger font-weight-bold line-through';
+                }
+            })
             ->make(true);
     }
 
@@ -75,7 +79,7 @@ class KaryawanController extends Controller
 
     public function get_karyawan_all(Request $r)
     {
-        $data = Karyawan::where('nama', 'LIKE', '%'.$r->input('term', '').'%')->get();
+        $data = Karyawan::where('nama', 'LIKE', '%' . $r->input('term', '') . '%')->get();
         return response()->json($data);
     }
 
@@ -122,6 +126,7 @@ class KaryawanController extends Controller
         $karyawan->tgllahir = $request->tgllahir;
         $karyawan->divisi_id = $request->divisi;
         $karyawan->jabatan = $request->jabatan;
+        $karyawan->is_aktif = $request->status_karyawan;
         $karyawan->kelamin = $request->jenis;
         $karyawan->pemeriksa_rapid = $request->pemeriksa_rapid;
         $karyawan->save();
@@ -142,6 +147,4 @@ class KaryawanController extends Controller
             return response()->json(['data' => 'error', 'msg' => 'Hapus Gagal, periksa kembali']);
         }
     }
-
-
 }
