@@ -213,6 +213,7 @@
                                                     <tr>
                                                         <th width="5%">No</th>
                                                         <th width="25%">Obat</th>
+                                                        <th width="2%"></th>
                                                         {{-- <th width="20%">Aturan</th> --}}
                                                         <th width="50%">Aturan</th>
                                                         <th width="15%">Jumlah</th>
@@ -226,6 +227,9 @@
                                                             <select class="form-control  obat_data " name="obat[]"
                                                                 id="0">
                                                             </select>
+                                                        </td>
+                                                        <td>
+                                                            <input class="jumlah_obat_db" id="jumlah_obat_db0">
                                                         </td>
                                                         {{-- <td>
                                                     <div class="form-check form-check-inline">
@@ -340,17 +344,17 @@
                                         </div>
                                     </div>
                                     <!-- <div class="form-group row">
-                                        <label for="kondisi" class="col-sm-4 col-form-label" style="text-align:right;"></label>
-                                        <div class="col-sm-8" style="margin-top:7px;">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                                <label class="" for=" flexCheckDefault">
-                                                    Surat Keterangan Istirahat
-                                                </label>
-                                            </div>
-                                            <span class="invalid-feedback" role="alert" id="kondisi-msg"></span>
-                                        </div>
-                                    </div> -->
+                                                                                                                                                                                                                                                        <label for="kondisi" class="col-sm-4 col-form-label" style="text-align:right;"></label>
+                                                                                                                                                                                                                                                        <div class="col-sm-8" style="margin-top:7px;">
+                                                                                                                                                                                                                                                            <div class="form-check">
+                                                                                                                                                                                                                                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                                                                                                                                                                                                                                <label class="" for=" flexCheckDefault">
+                                                                                                                                                                                                                                                                    Surat Keterangan Istirahat
+                                                                                                                                                                                                                                                                </label>
+                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                            <span class="invalid-feedback" role="alert" id="kondisi-msg"></span>
+                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -398,6 +402,7 @@
                     $(el).find('.jumlah').attr('name', 'jumlah[' + j + ']');
                     $(el).find('.dosis_obat_custom_obat').attr('name', 'dosis_obat_custom_obat[' + j + ']');
                     $(el).find('.dosis_obat_custom_hari').attr('name', 'dosis_obat_custom_hari[' + j + ']');
+                    $(el).find('.jumlah_obat_db').attr('id', 'jumlah_obat_db' + j + '');
                     $(el).find('.jumlah').attr('id', 'jumlah' + j + '');
                     $(el).find('.stok').attr('id', 'stok' + j + '');
                     $(el).find('.obat').attr('name', 'obat[' + j + ']');
@@ -414,12 +419,13 @@
                 if (index == 0) {
                     where.splice(1, 1);
                 }
-                console.log(where);
+                // console.log(where);
                 $.ajax({
                     url: '/obat/data/' + id,
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
+                        $("#jumlah_obat_db" + index).val(data[0].stok);
                         $("#stok" + index).text('Stok : ' + data[0].stok);
                         $("#jumlah" + index).prop('max', data[0].stok);
                         $("#jumlah" + index).prop('min', 1);
@@ -435,6 +441,9 @@
                                                                 <td>
                                                                     <select class="form-control  obat_data " id="0" name="obat[]">
                                                                     </select>
+                                                                </td>
+                                                                <td>
+                                                                <input type="text" class="jumlah_obat_db" id="jumlah_obat_db0">
                                                                 </td>
                                                                 {{-- <td>
                                                                     <div class="form-check form-check-inline">
@@ -528,7 +537,7 @@
                             }
                         },
                         processResults: function(data) {
-                            console.log(data);
+                            // console.log(data);
                             return {
                                 results: $.map(data, function(obj) {
                                     return {
@@ -625,7 +634,18 @@
                     });
                 }
             });
-
+            $("#obat").on('keyup change', '.jumlah', function() {
+                var jumlah_stok_obat = $(this).closest('tr').find('.jumlah_obat_db').val();
+                // console.log($(this).val() + '%' + jumlah_stok_obat)
+                // console.log(jumlah_stok_obat)
+                if ($(this).val() > jumlah_stok_obat) {
+                    swal.fire(
+                        'Jumlah Tidak Tersedia',
+                        'Jumlah lebih dari Stok',
+                        'warning'
+                    );
+                }
+            });
 
             $("#analisa").autocomplete({
                 source: function(request, response) {

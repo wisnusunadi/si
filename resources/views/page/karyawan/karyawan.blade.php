@@ -36,7 +36,7 @@
             align-items: center !important;
         }
 
-        tr.line-through td:not(:nth-last-child(-n+2)):before {
+        tr.line-through td:not(:nth-last-child(-n+1)):before {
             content: " ";
             position: absolute;
             left: 0;
