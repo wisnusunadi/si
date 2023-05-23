@@ -771,7 +771,7 @@ class KesehatanController extends Controller
     }
     public function obat_detail_data($id)
     {
-        $data = Detail_obat::where('obat_id', $id);
+        $data = Detail_obat::where('obat_id', $id)->orderby('id', 'DESC');
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl', function ($data) {
@@ -1035,6 +1035,7 @@ class KesehatanController extends Controller
                 'karyawan_id' => 'required',
                 'tgl' => 'required',
                 'pemeriksa_id' => 'required',
+                'obat.*' => 'required',
             ],
             [
                 'pemeriksa_id.required' => 'Pemeriksa harus di pilih',
@@ -1193,7 +1194,7 @@ class KesehatanController extends Controller
         }
         if ($request->hasil_1 == 'Pengobatan') {
             for ($i = 0; $i < count($request->obat); $i++) {
-                //   $obat = obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
+                $obat = obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
 
                 if ($request->dosis_obat_custom_obat[$i] != null) {
                     $detail_obat = detail_obat::create([

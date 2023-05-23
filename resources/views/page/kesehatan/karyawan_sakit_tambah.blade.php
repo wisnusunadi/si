@@ -290,7 +290,8 @@
                                                                     <span class="input-group-text">Pcs</span>
                                                                 </div>
                                                             </div>
-                                                            {{-- <small id="stok0" class="stok text-muted">Stok : - </small> --}}
+                                                            <small id="stok0" class="stok text-muted">Stok : -
+                                                            </small>
 
                                                         </td>
 
@@ -344,17 +345,17 @@
                                         </div>
                                     </div>
                                     <!-- <div class="form-group row">
-                                                                                                                                                                                                                                                                                                                                                    <label for="kondisi" class="col-sm-4 col-form-label" style="text-align:right;"></label>
-                                                                                                                                                                                                                                                                                                                                                    <div class="col-sm-8" style="margin-top:7px;">
-                                                                                                                                                                                                                                                                                                                                                        <div class="form-check">
-                                                                                                                                                                                                                                                                                                                                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                                                                                                                                                                                                                                                                                                                                            <label class="" for=" flexCheckDefault">
-                                                                                                                                                                                                                                                                                                                                                                Surat Keterangan Istirahat
-                                                                                                                                                                                                                                                                                                                                                            </label>
-                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                        <span class="invalid-feedback" role="alert" id="kondisi-msg"></span>
-                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                        <label for="kondisi" class="col-sm-4 col-form-label" style="text-align:right;"></label>
+                                                                                                                                                                                                                                                                                                                                                                                        <div class="col-sm-8" style="margin-top:7px;">
+                                                                                                                                                                                                                                                                                                                                                                                            <div class="form-check">
+                                                                                                                                                                                                                                                                                                                                                                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                                                                                                                                                                                                                                                                                                                                                                <label class="" for=" flexCheckDefault">
+                                                                                                                                                                                                                                                                                                                                                                                                    Surat Keterangan Istirahat
+                                                                                                                                                                                                                                                                                                                                                                                                </label>
+                                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                                            <span class="invalid-feedback" role="alert" id="kondisi-msg"></span>
+                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                                                                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -430,6 +431,13 @@
                         $("#jumlah" + index).prop('max', data[0].stok);
                         $("#jumlah" + index).prop('min', 1);
                         $("#jumlah" + index).val(1);
+                        // stok 0 disabled jumlah
+                        if (data[0].stok == 0) {
+                            $("#jumlah" + index).prop('disabled', true);
+                            $("#jumlah" + index).val('');
+                        } else {
+                            $("#jumlah" + index).prop('disabled', false);
+                        }
                     },
                     error: function(error) {
                         console.log(error);
@@ -501,7 +509,7 @@
                                                                             <span class="input-group-text">Pcs</span>
                                                                         </div>
                                                                     </div>
-                                                                    {{-- <small id="stok0" class="stok text-muted">Stok : - </small> - --}}
+                                                                    <small id="stok0" class="stok text-muted">Stok : - </small>
                                                                 </td>
                                                                 <td style="text-align: right;">
                                                                 <button type="button" class="btn btn-danger karyawan-img-small" style="border-radius:50%;" id="closetable"><i class="fas fa-times-circle"></i></button>
@@ -643,7 +651,7 @@
                         'Jumlah lebih dari Stok',
                         'warning'
                     );
-                    $(this).val(jumlah_stok_obat)
+                    $(this).val(1)
                 }
             });
 

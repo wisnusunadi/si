@@ -245,6 +245,7 @@
                                                                     <tr>
                                                                         <th width="3%">No</th>
                                                                         <th width="19%">Obat</th>
+                                                                        <th width="2%" hidden></th>
                                                                         <th width="44%"></th>
                                                                         <th width="15%">Jumlah</th>
                                                                         <th width="3%"></th>
@@ -258,6 +259,10 @@
                                                                                 name="obat[]" id="0"
                                                                                 style="width:100%">
                                                                             </select>
+                                                                        </td>
+                                                                        <td hidden>
+                                                                            <input class="jumlah_obat_db"
+                                                                                id="jumlah_obat_db0">
                                                                         </td>
                                                                         {{-- <td>
                                                                         <div class="form-check form-check-inline">
@@ -448,6 +453,7 @@
                     $(el).find('.jumlah').attr('name', 'jumlah[' + j + ']');
                     $(el).find('.dosis_obat_custom_obat').attr('name', 'dosis_obat_custom_obat[' + j + ']');
                     $(el).find('.dosis_obat_custom_hari').attr('name', 'dosis_obat_custom_hari[' + j + ']');
+                    $(el).find('.jumlah_obat_db').attr('id', 'jumlah_obat_db' + j + '');
                     $(el).find('.jumlah').attr('id', 'jumlah' + j + '');
                     $(el).find('.stok').attr('id', 'stok' + j + '');
                     $(el).find('.obat').attr('name', 'obat[' + j + ']');
@@ -457,6 +463,17 @@
                 });
             }
 
+            $("#obat").on('keyup change', '.jumlah', function() {
+                var jumlah_stok_obat = $(this).closest('tr').find('.jumlah_obat_db').val();
+                if (parseInt($(this).val()) > jumlah_stok_obat) {
+                    swal.fire(
+                        'Jumlah Tidak Tersedia',
+                        'Jumlah lebih dari Stok',
+                        'warning'
+                    );
+                    $(this).val(1)
+                }
+            });
 
             $('#obat').on("change", ".obat_data", function(i) {
                 var id = jQuery(this).val();
@@ -472,9 +489,19 @@
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
+                        $("#jumlah_obat_db" + index).val(data[0].stok);
                         $("#stok" + index).text('Stok : ' + data[0].stok);
                         $("#jumlah" + index).prop('max', data[0].stok);
                         $("#jumlah" + index).prop('min', 1);
+                        $("#jumlah" + index).val(1);
+
+                        // stok 0 disabled jumlah
+                        if (data[0].stok == 0) {
+                            $("#jumlah" + index).prop('disabled', true);
+                            $("#jumlah" + index).val('');
+                        } else {
+                            $("#jumlah" + index).prop('disabled', false);
+                        }
                     },
                     error: function(error) {
                         console.log(error);
@@ -488,6 +515,9 @@
                                                                 <td>
                                                                     <select class="form-control  obat_data " id="0" name="obat[]"   style="width:100%">
                                                                     </select>
+                                                                </td>
+                                                                <td hidden>
+                                                                <input type="text" class="jumlah_obat_db" id="jumlah_obat_db0">
                                                                 </td>
                                                                 <td>
                                                             <div class="form-check form-check-inline" style="width:20%">
