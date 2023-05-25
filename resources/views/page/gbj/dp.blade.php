@@ -14,14 +14,16 @@
     </div>
     <div class="card">
         <div class="card-header">
-            <label for="">
-                Tampilkan Produk dari Perakitan
-            </label>
-            <select name="" id="tahun" class="form-control">
-                @for ($i = 0; $i < 5; $i++)
-                    <option value="{{ date('Y') - $i }}">{{ date('Y') - $i }}</option>
-                @endfor
-            </select>
+            <div class="d-flex justify-content-end row">
+                <label for="" class="col-sm-3 col-form-label text-right">
+                    Tahun
+                </label>
+                <select name="" id="tahun" class="form-control col-sm-1">
+                    @for ($i = 0; $i < 5; $i++)
+                        <option value="{{ date('Y') - $i }}">{{ date('Y') - $i }}</option>
+                    @endfor
+                </select>
+            </div>
         </div>
         <div class="card-body">
             <table class="table table-bordered dalam-perakitan">
