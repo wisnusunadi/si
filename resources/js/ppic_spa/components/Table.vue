@@ -929,11 +929,10 @@ export default {
         </nav>
       </template>
 
-      <div class="columns">
+      <div class="columns" v-if="status === 'pelaksanaan' && format_jadwal_rencana.length > 0">
         <div class="column">
           <h1
             class="subtitle"
-            v-if="status === 'pelaksanaan' && format_jadwal_rencana.length > 0"
           >
             Pelaksanaan
           </h1>
