@@ -1,192 +1,3 @@
-<template>
-  <div>
-    <h1 class="title">Dashboard</h1>
-    <div class="columns is-multiline">
-      <div class="column is-6">
-        <article class="message is-primary">
-          <div class="message-header">
-            <p>Permintaan</p>
-          </div>
-          <div class="message-body has-text-centered">
-            <p class="subtitle is-1">{{ jumlah_permintaan }}</p>
-          </div>
-        </article>
-      </div>
-      <div class="column is-6">
-        <article class="message is-warning">
-          <div class="message-header">
-            <p>Proses</p>
-          </div>
-          <div class="message-body has-text-centered">
-            <p class="subtitle is-1">{{ jumlah_proses }}</p>
-          </div>
-        </article>
-      </div>
-      <div class="column is-6">
-        <div class="box">
-          <table
-            class="table is-fullwidth has-text-centered"
-            id="table_so_detail"
-          >
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Nomor SO</th>
-                <th>Nomor PO</th>
-                <th>Tanggal Order</th>
-                <th>Customer</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in salesOrder" :key="'so' + item.DT_RowIndex">
-                <td v-html="item.DT_RowIndex"></td>
-                <td v-html="item.so"></td>
-                <td v-html="item.no_po"></td>
-                <td v-html="item.tgl_po"></td>
-                <td v-html="item.nama_customer"></td>
-                <td v-html="item.status_prd"></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="column is-6">
-        <div class="box">
-          <table class="table is-fullwidth has-text-centered" id="table_so">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Nama Produk</th>
-                <th>Stok</th>
-                <th>Pesanan</th>
-                <th>Jumlah Terkirim</th>
-                <th>Selisih stok dengan pesanan</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in data_so" :key="'table_so' + item.id">
-                <td>{{ item.DT_RowIndex }}</td>
-                <td v-html="item.nama_produk"></td>
-                <td>{{ item.stok }}</td>
-                <td>{{ item.jumlah }}</td>
-                <td>{{ item.jumlah_pengiriman }}</td>
-                <td>{{ item.stok - item.jumlah }}</td>
-                <!-- <td>{{ item.DT_RowIndex }}</td>
-                <td v-html="item.nama_produk"></td>
-                <td>{{ item.stok }}</td>
-                <td>{{ item.total }}</td>
-                <td v-text="item.jumlah_kirim"></td>
-                <td><span :class="{ 'has-text-danger' : item.penjualan < 0 }">{{ item.penjualan }}</span></td> -->
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="column is-6">
-        <div class="box">
-          <table class="table is-fullwidth has-text-centered" id="table_gbj">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Kode Produk</th>
-                <th>Nama Produk</th>
-                <th>Stok</th>
-                <th>Kelompok</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(d, index) in data_gbj" :key="'table_gbj' + d.id">
-                <td>{{ index + 1 }}</td>
-                <td>{{ d.produk.product.kode }}</td>
-                <td>{{ d.produk.nama + " " + d.nama }}</td>
-                <td>{{ d.stok }}</td>
-                <td>{{ d.produk.kelompok_produk.nama }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="column is-6">
-        <div class="box">
-          <div class="tabs is-centered">
-            <ul>
-              <li :class="{ 'is-active': !tabs }" @click="tabs = false">
-                <a>
-                  <span class="icon is-small"
-                    ><i class="fab fa-whmcs" aria-hidden="true"></i
-                  ></span>
-                  <span>Sparepart</span>
-                </a>
-              </li>
-              <li :class="{ 'is-active': tabs }" @click="tabs = true">
-                <a>
-                  <span class="icon is-small"
-                    ><i class="fas fa-tools" aria-hidden="true"></i
-                  ></span>
-                  <span>Unit</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <!-- sparepart -->
-          <div :class="{ 'is-hidden': tabs }">
-            <table
-              class="table is-fullwidth has-text-centered"
-              id="table_sparepart"
-            >
-              <thead>
-                <tr>
-                  <th>Kode Sparepart</th>
-                  <th>Nama</th>
-                  <th>Unit</th>
-                  <th>Jumlah</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="item in data_sparepart"
-                  :key="'table_sparepart' + item.id"
-                >
-                  <td>{{ item.kode }}</td>
-                  <td>{{ item.nama }}</td>
-                  <td>{{ item.unit }}</td>
-                  <td>{{ item.jml }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- unit -->
-          <div :class="{ 'is-hidden': !tabs }">
-            <table class="table is-fullwidth has-text-centered" id="table_unit">
-              <thead>
-                <tr>
-                  <th>Kode Unit</th>
-                  <th>Nama</th>
-                  <th>Jumlah</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(item, index) in data_unit" :key="index">
-                  <td>
-                    <span v-if="item.kode_produk == null">-</span>
-                    <span v-else>{{ item.kode_produk }}</span>
-                  </td>
-                  <td v-html="item.nama_produk"></td>
-                  <td>
-                    <span v-if="item.jml == null">0</span>
-                    <span v-else>{{ item.jml }}</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
 
 <script>
 import VueApexCharts from "vue-apexcharts";
@@ -336,3 +147,218 @@ export default {
   },
 };
 </script>
+<template>
+  <div>
+    <h1 class="title">Dashboard</h1>
+    <div class="columns is-multiline">
+      <div class="column is-6">
+        <article class="message is-primary">
+          <div class="message-header">
+            <p>Permintaan</p>
+          </div>
+          <div class="message-body has-text-centered">
+            <p class="subtitle is-1">{{ jumlah_permintaan }}</p>
+          </div>
+        </article>
+      </div>
+      <div class="column is-6">
+        <article class="message is-warning">
+          <div class="message-header">
+            <p>Proses</p>
+          </div>
+          <div class="message-body has-text-centered">
+            <p class="subtitle is-1">{{ jumlah_proses }}</p>
+          </div>
+        </article>
+      </div>
+      <div class="fparent">
+        <div class="column is-6">
+        <div class="box">
+          <table
+            class="table is-fullwidth has-text-centered"
+            id="table_so_detail"
+          >
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nomor SO</th>
+                <th>Nomor PO</th>
+                <th>Tanggal Order</th>
+                <th>Customer</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in salesOrder" :key="'so' + item.DT_RowIndex">
+                <td v-html="item.DT_RowIndex"></td>
+                <td v-html="item.so"></td>
+                <td v-html="item.no_po"></td>
+                <td v-html="item.tgl_po"></td>
+                <td v-html="item.nama_customer"></td>
+                <td v-html="item.status_prd"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="column is-6">
+        <div class="box">
+          <table class="table is-fullwidth has-text-centered" id="table_so">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama Produk</th>
+                <th>Stok</th>
+                <th>Pesanan</th>
+                <th>Jumlah Terkirim</th>
+                <th>Selisih stok dengan pesanan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in data_so" :key="'table_so' + item.id">
+                <td>{{ item.DT_RowIndex }}</td>
+                <td v-html="item.nama_produk"></td>
+                <td>{{ item.stok }}</td>
+                <td>{{ item.jumlah }}</td>
+                <td>{{ item.jumlah_pengiriman }}</td>
+                <td>{{ item.stok - item.jumlah }}</td>
+                <!-- <td>{{ item.DT_RowIndex }}</td>
+                <td v-html="item.nama_produk"></td>
+                <td>{{ item.stok }}</td>
+                <td>{{ item.total }}</td>
+                <td v-text="item.jumlah_kirim"></td>
+                <td><span :class="{ 'has-text-danger' : item.penjualan < 0 }">{{ item.penjualan }}</span></td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      </div>
+      <div class="column is-6">
+        <div class="box">
+          <table class="table is-fullwidth has-text-centered" id="table_gbj">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Kode Produk</th>
+                <th>Nama Produk</th>
+                <th>Stok</th>
+                <th>Kelompok</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(d, index) in data_gbj" :key="'table_gbj' + d.id">
+                <td>{{ index + 1 }}</td>
+                <td>{{ d.produk.product.kode }}</td>
+                <td>{{ d.produk.nama + " " + d.nama }}</td>
+                <td>{{ d.stok }}</td>
+                <td>{{ d.produk.kelompok_produk.nama }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="column is-6">
+        <div class="box">
+          <div class="tabs is-centered">
+            <ul>
+              <li :class="{ 'is-active': !tabs }" @click="tabs = false">
+                <a>
+                  <span class="icon is-small"
+                    ><i class="fab fa-whmcs" aria-hidden="true"></i
+                  ></span>
+                  <span>Sparepart</span>
+                </a>
+              </li>
+              <li :class="{ 'is-active': tabs }" @click="tabs = true">
+                <a>
+                  <span class="icon is-small"
+                    ><i class="fas fa-tools" aria-hidden="true"></i
+                  ></span>
+                  <span>Unit</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- sparepart -->
+          <div :class="{ 'is-hidden': tabs }">
+            <table
+              class="table is-fullwidth has-text-centered"
+              id="table_sparepart"
+            >
+              <thead>
+                <tr>
+                  <th>Kode Sparepart</th>
+                  <th>Nama</th>
+                  <th>Unit</th>
+                  <th>Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="item in data_sparepart"
+                  :key="'table_sparepart' + item.id"
+                >
+                  <td>{{ item.kode }}</td>
+                  <td>{{ item.nama }}</td>
+                  <td>{{ item.unit }}</td>
+                  <td>{{ item.jml }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- unit -->
+          <div :class="{ 'is-hidden': !tabs }">
+            <table class="table is-fullwidth has-text-centered" id="table_unit">
+              <thead>
+                <tr>
+                  <th>Kode Unit</th>
+                  <th>Nama</th>
+                  <th>Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in data_unit" :key="index">
+                  <td>
+                    <span v-if="item.kode_produk == null">-</span>
+                    <span v-else>{{ item.kode_produk }}</span>
+                  </td>
+                  <td v-html="item.nama_produk"></td>
+                  <td>
+                    <span v-if="item.jml == null">0</span>
+                    <span v-else>{{ item.jml }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<style scoped>
+.fparent {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start
+}
+
+.fparent>div {
+  flex: 1;
+}
+.column {
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* Stack elements vertically within each box */
+}
+
+.box {
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* Stack elements vertically within each box */
+  height: auto; /* Adjust the height automatically based on content */
+  margin: 10px; /* Add some spacing between boxes */
+}
+</style>
