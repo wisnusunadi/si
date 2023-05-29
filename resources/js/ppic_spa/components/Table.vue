@@ -920,7 +920,7 @@ export default {
                             @click="nextPage">Next page</a>
           <ul class="pagination-list">
             <li>
-              <a class="pagination-link" :classs="paginate == currentPage ? 'is-current' : ''" 
+              <a class="pagination-link" :class="paginate == currentPage ? 'is-current' : ''" 
               v-for="paginate in pages" :key="paginate" 
               @click="nowPage(paginate)">
                 {{ paginate }}
