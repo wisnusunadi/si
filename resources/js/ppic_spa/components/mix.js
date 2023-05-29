@@ -24,7 +24,15 @@ export default {
     computed: {
         renderPaginate() {
             if(this.searchPerencanaan != ''){
-                return this.format_jadwal_rencana
+                return this.format_jadwal_rencana.filter((item) => {
+                    return Object.keys(item).some((key) => {
+                        return String(item[key]).toLowerCase().includes(this.searchPerencanaan.toLowerCase())
+                    }
+                    )
+                }).slice(
+                    this.perPage * (this.currentPage - 1),
+                    this.perPage * this.currentPage
+                    );
             } else {
                 return this.format_jadwal_rencana.slice(
                 this.perPage * (this.currentPage - 1),
@@ -55,6 +63,11 @@ export default {
             }
 
             return pages
+        }
+    },
+    watch: {
+        searchPerencanaan(){
+            this.currentPage = 1
         }
     }
 }

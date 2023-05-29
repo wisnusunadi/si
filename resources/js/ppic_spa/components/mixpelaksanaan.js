@@ -24,8 +24,16 @@ export default {
     computed: {
         renderPaginatePelaksanaan() {
             if(this.searchPelaksanaan != ''){
-                return this.format_events
-            } else {
+                return this.format_events.filter((item) => {
+                    return Object.keys(item).some((key) => {
+                        return String(item[key]).toLowerCase().includes(this.searchPelaksanaan.toLowerCase())
+                    }
+                    )
+                }).slice(
+                    this.perPagePelaksanaan * (this.currentPagePelaksanaan - 1),
+                    this.perPagePelaksanaan * this.currentPagePelaksanaan
+                    );
+            }else{
                 return this.format_events.slice(
                     this.perPagePelaksanaan * (this.currentPagePelaksanaan - 1),
                     this.perPagePelaksanaan * this.currentPagePelaksanaan
@@ -56,5 +64,11 @@ export default {
 
             return pagesPelaksanaan
         }
+    },
+    watch: {
+        searchPelaksanaan(){
+            this.currentPagePelaksanaan = 1
+        }
     }
+
 }
