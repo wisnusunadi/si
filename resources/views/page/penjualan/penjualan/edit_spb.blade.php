@@ -510,6 +510,10 @@
 
                                                                                     <th width="20%">Harga</th>
                                                                                     <th width="20%">Subtotal</th>
+                                                                                    <th width="10%">
+                                                                                        Stok Distributor <br>
+                                                                                        <input type="checkbox" class="checkAllDistributor">
+                                                                                    </th>
                                                                                     <th width="2%">Aksi</th>
                                                                                 </tr>
                                                                             </thead>
@@ -647,6 +651,20 @@
                                                                                                 </div>
                                                                                             </td>
                                                                                             <td>
+                                                                                                <div
+                                                                                                    class="form-group d-flex align-items-center">
+                                                                                                    <input type="checkbox"
+                                                                                                        class="stok_distributor"
+                                                                                                        name="stok_distributor[{{ $produkpenjualan }}]"
+                                                                                                        id="stok_distributor[{{ $produkpenjualan }}]"
+                                                                                                        {{-- checked if 1 --}}
+                                                                                                        @if ($f->stok_distributor == 1)
+                                                                                                            checked
+                                                                                                        @endif
+                                                                                                        style="width:100%;" />
+                                                                                                </div>
+                                                                                            </td>
+                                                                                            <td>
                                                                                                 <a id="removerowproduk"><i
                                                                                                         class="fas fa-minus"
                                                                                                         style="color: red"></i></a>
@@ -735,6 +753,17 @@
                                                                                                     readonly />
                                                                                             </div>
                                                                                         </td>
+                                                                                        {{-- checkbox distributor --}}
+                                                                                    <td>
+                                                                                        <div
+                                                                                            class="form-group d-flex align-items-center">
+                                                                                            <input type="checkbox"
+                                                                                                class="stok_distributor"
+                                                                                                name="stok_distributor[]"
+                                                                                                id="stok_distributor0"
+                                                                                                style="width:100%;" />
+                                                                                        </div>
+                                                                                    </td>
                                                                                         <td>
                                                                                             <a id="removerowproduk"><i
                                                                                                     class="fas fa-minus"
@@ -1496,6 +1525,8 @@
                     $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
                     $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
                     $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
+                    $(el).find('.stok_distributor').attr('id', 'stok_distributor' + j);
+                    $(el).find('.stok_distributor').attr('name', 'stok_distributor[' + j + ']');
                     $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
                     select_data($(el).find('.penjualan_produk_id').attr('id'));
                 });
@@ -1640,6 +1671,16 @@
                         <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
                     </div>
                 </td>
+                <td>
+                        <div
+                            class="form-group d-flex align-items-center">
+                            <input type="checkbox"
+                                class="stok_distributor"
+                                name="stok_distributor[]"
+                                id="stok_distributor0"
+                                style="width:100%;" />
+                        </div>
+                    </td>
                 <td>
                     <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
                 </td>
@@ -2031,6 +2072,14 @@
                 }
                 checkvalidasi();
             });
+        });
+
+        $('.checkAllDistributor').click(function() {
+            if ($(this).is(':checked')) {
+                $('.stok_distributor').prop('checked', true);
+            } else {
+                $('.stok_distributor').prop('checked', false);
+            }
         });
     </script>
 @stop

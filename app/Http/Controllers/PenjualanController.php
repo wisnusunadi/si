@@ -3465,7 +3465,7 @@ class PenjualanController extends Controller
     // Create
     public function create_penjualan(Request $request)
     {
-        //  dd($request);
+        //  dd($request->all());
         if ($request->jenis_penjualan == 'ekatalog') {
             //dd($request);
             // $this->validate(
