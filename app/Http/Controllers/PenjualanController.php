@@ -3465,7 +3465,7 @@ class PenjualanController extends Controller
     // Create
     public function create_penjualan(Request $request)
     {
-        //  dd($request->all());
+         dd($request->all());
         if ($request->jenis_penjualan == 'ekatalog') {
             //dd($request);
             // $this->validate(
@@ -3855,7 +3855,7 @@ class PenjualanController extends Controller
     }
     public function update_ekatalog(Request $request, $id)
     {
-        //dd($request->no_urut);
+        dd($request->all());
 
         echo json_encode($request->all());
         if ($request->namadistributor == 'belum') {

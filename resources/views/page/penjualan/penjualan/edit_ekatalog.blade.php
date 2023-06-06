@@ -1078,6 +1078,7 @@
                                                                                                     @if ($f->stok_distributor == 1)
                                                                                                         checked
                                                                                                     @endif
+                                                                                                    value="{{ $produkpenjualan }}"
                                                                                                     style="width:100%;" />
                                                                                             </div>
                                                                                         </td>
@@ -1184,6 +1185,7 @@
                                                                                                 class="stok_distributor"
                                                                                                 name="stok_distributor[]"
                                                                                                 id="stok_distributor0"
+                                                                                                value="0"
                                                                                                 style="width:100%;" />
                                                                                         </div>
                                                                                     </td>
@@ -1972,6 +1974,7 @@
                     $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
                     $(el).find('.stok_distributor').attr('id', 'stok_distributor' + j);
                     $(el).find('.stok_distributor').attr('name', 'stok_distributor[' + j + ']');
+                    $(el).find('.stok_distributor').attr('value', j);
                     $(el).find('.rencana_id').attr('id', 'rencana_id' + j);
                     $(el).find('.rencana_id').attr('name', 'rencana_id[' + j + ']');
                     $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
@@ -2155,6 +2158,7 @@
                                 class="stok_distributor"
                                 name="stok_distributor[]"
                                 id="stok_distributor0"
+                                value="0"
                                 style="width:100%;" />
                         </div>
                     </td>
