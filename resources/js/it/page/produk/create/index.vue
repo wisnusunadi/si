@@ -19,6 +19,7 @@ export default {
             indexProduk: 0,
             dialogDetail: false,
             valid: true,
+            search: '',
         }
     },
     methods: {
@@ -115,9 +116,17 @@ export default {
                 </v-toolbar>
 
                 <v-card-text class="mt-5">
-                    <div class="d-flex flex-row-reverse">
+                    <div class="d-flex">
+                        <v-card flat class="ml-5">
+                            <v-text-field
+                            v-model="search"
+                            placeholder="Cari Produk"
+                            ></v-text-field>
+                        </v-card>
+
                         <v-btn
                         color="primary"
+                        class="ml-auto"
                         @click="addProduk"
                         >
                             Tambah Produk
@@ -131,6 +140,7 @@ export default {
                     <v-data-table
                         :headers="headers"
                         :items="form"
+                        :search="search"
                         fixed-header
                         height="500px"
                     >

@@ -25,6 +25,7 @@ export default {
                 required: value => !!value || 'Required.',
                 mustBeNumber: value => !isNaN(value) || 'Must be a number',
             },
+            search: '',
         }
     },
     methods: {
@@ -98,9 +99,17 @@ export default {
                     >Simpan</v-btn>
                 </v-toolbar>
                 <v-card-text class="mt-5">
-                    <div class="d-flex flex-row-reverse">
+                    <div class="d-flex">
+                        <v-card flat class="ml-5">
+                            <v-text-field
+                            v-model="search"
+                            placeholder="Cari Produk"
+                            ></v-text-field>
+                        </v-card>
+
                         <v-btn
                         color="primary"
+                        class="ml-auto"
                         @click="addProduk"
                         >
                             Tambah Sub Produk
@@ -114,6 +123,7 @@ export default {
                     <v-data-table
                         :headers="headers"
                         :items="form"
+                        :search="search"
                         fixed-header
                         height="500px"
                     >
