@@ -166,7 +166,7 @@ export default {
                                 class="mt-5 mx-1"
                                     v-model.number="item.no_akd"
                                     type="number"
-                                    :rules="[rules.required, rules.mustBeNumber]"
+                                    :rules="[rules.mustBeNumber]"
                                     outlined
                                     dense
                                 ></v-text-field>
