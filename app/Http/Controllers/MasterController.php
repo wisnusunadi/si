@@ -1904,7 +1904,7 @@ class MasterController extends Controller
                             'merk' => $subproduk['merk'],
                             'nama' => $subproduk['nama'],
                             'nama_coo' => isset($subproduk['nama_coo']) ? $subproduk['nama_coo'] : null,
-                            'coo' => isset($subproduk['coo']) ? $subproduk['coo'] : 0,
+                            'coo' => isset($subproduk['coo']) ? $subproduk['coo'] : 1,
                             'no_akd' => $subproduk['no_akd'],
                             'status' => $subproduk['status'],
                         ]
@@ -1916,7 +1916,10 @@ class MasterController extends Controller
                                 ],
                                 [
                                     'produk_id' => $subProduk->id,
+                                    'nama' => isset($gudang['nama']) ? $gudang['nama'] : ' ',
                                     'stok' => $gudang['stok'],
+                                    'stok_siap' => $gudang['stok_siap'],
+                                    'satuan_id' => $gudang['satuan_id'],
                                 ]
                                 );
                         }

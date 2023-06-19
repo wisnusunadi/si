@@ -35,10 +35,12 @@ export default {
                 merk: '',
                 nama: '',
                 no_akd: '',
-                status: '',
+                status: '1',
                 gudang_barang_jadi: [
                     {
-                        stok: 0
+                        stok: 0,
+                        stok_siap: 0,
+                        satuan_id: 1,
                     }
                 ]
             })
