@@ -11,6 +11,7 @@ export default {
     data() {
         return {
             form: [],
+            selected: [],
             headers: [
                 { text: 'Nama Produk', value: 'nama'},
                 { text: 'Aksi', value: 'action'},
@@ -72,6 +73,12 @@ export default {
                     const { response } = error
                     this.$swal('Gagal', `${response.data.message}`, 'error')
                 }
+            }
+        },
+        removeProduk(item) {
+            const index = this.form.indexOf(item)
+            if (index > -1) {
+                this.form.splice(index, 1)
             }
         }
     },
@@ -142,6 +149,7 @@ export default {
                         :items="form"
                         :search="search"
                         fixed-header
+                        v-model="selected"
                         height="500px"
                     >
                         <template #item.nama = "{item}">
@@ -164,7 +172,7 @@ export default {
                                 <v-btn
                                 icon
                                 v-if="item.id == undefined"
-                                @click="form.splice(index, 1)"
+                                @click="removeProduk(item)"
                                 >
                                     <v-icon>mdi-delete</v-icon>
                                 </v-btn>
