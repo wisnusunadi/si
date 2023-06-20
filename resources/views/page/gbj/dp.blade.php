@@ -13,7 +13,18 @@
         </div><!-- /.container-fluid -->
     </div>
     <div class="card">
-        <!-- /.card-header -->
+        <div class="card-header">
+            <div class="d-flex justify-content-end row">
+                <label for="" class="col-sm-3 col-form-label text-right">
+                    Tahun
+                </label>
+                <select name="" id="tahun" class="form-control col-sm-1">
+                    @for ($i = 0; $i < 5; $i++)
+                        <option value="{{ date('Y') - $i }}">{{ date('Y') - $i }}</option>
+                    @endfor
+                </select>
+            </div>
+        </div>
         <div class="card-body">
             <table class="table table-bordered dalam-perakitan">
                 <thead>
@@ -146,7 +157,9 @@
             })
         }
 
-        $('.dalam-perakitan').DataTable({
+        const getDalamPerakitan = () => {
+            const tahun = $('#tahun').val();
+            $('.dalam-perakitan').DataTable({
             processing: false,
             serverSide: false,
             destroy: true,
@@ -154,6 +167,9 @@
                 url: '/api/tfp/rakit',
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
+                data: {
+                    tahun: tahun
                 }
             },
             columns: [{
@@ -184,6 +200,11 @@
                                                 </span>&emsp;Mohon Tunggu ...",
             }
         });
+        }
+
+        $('#tahun').change(function() {
+            getDalamPerakitan();
+        })
 
 
         $(document).ready(function() {
@@ -202,6 +223,7 @@
                     .find('input[type=checkbox]')
                     .prop('checked', isChecked);
             });
+            getDalamPerakitan();
         });
 
         function ubahData() {

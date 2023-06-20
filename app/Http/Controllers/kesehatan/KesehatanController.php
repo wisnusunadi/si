@@ -25,6 +25,16 @@ use Illuminate\Support\Facades\DB;
 
 class KesehatanController extends Controller
 {
+    public function get_data_karyawan_pemeriksa()
+    {
+        return  Karyawan::orderby('nama')->where('is_aktif', 1)->where('divisi_id', '28')->get();
+    }
+
+    public function get_data_karyawan_aktif()
+    {
+        return  Karyawan::orderby('nama')->where('is_aktif', 1)->get();
+    }
+
     public function kesehatan()
     {
         $karyawan = Karyawan::orderBy('nama', 'ASC')
@@ -121,9 +131,8 @@ class KesehatanController extends Controller
     }
     public function kesehatan_tambah()
     {
-        $karyawan = Karyawan::doesnthave('Kesehatan_awal')->orderBy('nama', 'ASC')->get();
-        $pengecek = Karyawan::where('divisi_id', '28')
-            ->get();
+        $karyawan = Karyawan::doesnthave('Kesehatan_awal')->where('is_aktif', 1)->orderBy('nama', 'ASC')->get();
+        $pengecek = $this->get_data_karyawan_pemeriksa();
         return view('page.kesehatan.kesehatan_tambah', ['karyawan' => $karyawan, 'pengecek' => $pengecek]);
     }
     public function kesehatan_aksi_tambah(Request $request)
@@ -508,9 +517,8 @@ class KesehatanController extends Controller
 
     public function kesehatan_mingguan_tambah()
     {
-        $pengecek = Karyawan::where('divisi_id', '28')
-            ->get();
-        $karyawan = Karyawan::all();
+        $pengecek = $this->get_data_karyawan_pemeriksa();
+        $karyawan =  $this->get_data_karyawan_aktif();
         $divisi = Divisi::all();
         return view('page.kesehatan.kesehatan_mingguan_tambah', ['divisi' => $divisi, 'pengecek' => $pengecek, 'karyawan' => $karyawan]);
     }
@@ -537,16 +545,15 @@ class KesehatanController extends Controller
 
     public function kesehatan_mingguan_tensi_tambah()
     {
-        $pengecek = Karyawan::where('divisi_id', '28')->get();
-        $karyawan = Karyawan::all();
+        $pengecek = $this->get_data_karyawan_pemeriksa();
+        $karyawan = $this->get_data_karyawan_aktif();
         $divisi = Divisi::all();
         return view('page.kesehatan.kesehatan_mingguan_tensi_tambah', ['divisi' => $divisi, 'pengecek' => $pengecek, 'karyawan' => $karyawan]);
     }
     public function kesehatan_mingguan_rapid_tambah()
     {
-        $pengecek = Karyawan::where('pemeriksa_rapid', '1')
-            ->get();
-        $karyawan = Karyawan::all();
+        $pengecek = $this->get_data_karyawan_pemeriksa();
+        $karyawan = $this->get_data_karyawan_aktif();
         $divisi = Divisi::all();
         return view('page.kesehatan.kesehatan_mingguan_rapid_tambah', ['divisi' => $divisi, 'pengecek' => $pengecek, 'karyawan' => $karyawan]);
     }
@@ -727,7 +734,7 @@ class KesehatanController extends Controller
             ->addColumn('button', function ($data) {
                 $btn = '<div class="btn-toolbar d-flex justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
                 <button type="button" id="riwayat"  class="btn btn-sm btn-outline-primary btn-sm m-1"><i class="fas fa-eye"></i> Riwayat Pakai</button>
-                <button type="button" id="edit" class="btn btn-sm btn-warning btn-sm m-1"><i class="fas fa-edit"></i> Ubah</button>
+                <button type="button" id="edit" class="btn btn-sm btn-warning btn-sm m-1" data-obat-status="' . $data->is_aktif . '"><i class="fas fa-edit"></i> Ubah</button>
                 <button type="button" id="delete" class="btn btn-sm btn-danger btn-sm m-1" data-id="' . $data->id . '"><i class="fas fa-trash"></i> Hapus</button>
                 </div>';
 
@@ -736,6 +743,11 @@ class KesehatanController extends Controller
                 return $btn;
             })
             ->rawColumns(['button', 'detail_button', 'a'])
+            ->setRowClass(function ($data) {
+                if ($data->is_aktif == 0) {
+                    return 'text-danger font-weight-bold line-through';
+                }
+            })
             ->make(true);
     }
     public function obat_stok_data($id)
@@ -759,7 +771,7 @@ class KesehatanController extends Controller
     }
     public function obat_detail_data($id)
     {
-        $data = Detail_obat::where('obat_id', $id);
+        $data = Detail_obat::where('obat_id', $id)->orderby('id', 'DESC');
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl', function ($data) {
@@ -854,6 +866,7 @@ class KesehatanController extends Controller
         $obat->nama = $request->nama;
         $obat->keterangan = $request->keterangan;
         $obat->aturan = $request->aturan_obat;
+        $obat->is_aktif = $request->status_obat;
         $obat->save();
         if ($obat) {
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
@@ -864,7 +877,7 @@ class KesehatanController extends Controller
     public function obat_data_select(Request $request, $where)
     {
         $x = explode(',', $where);
-        $data = Obat::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')->whereNotIN('id', $x)->get();
+        $data = Obat::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')->where('is_aktif', 1)->whereNotIN('id', $x)->get();
         echo json_encode($data);
     }
     public function obat_data_id(Request $request, $id)
@@ -965,11 +978,9 @@ class KesehatanController extends Controller
     }
     public function karyawan_sakit_tambah()
     {
-        $karyawan = Karyawan::orderBy('nama', 'ASC')
-            ->get();
+        $karyawan = $this->get_data_karyawan_aktif();
         $obat = Obat::where('stok', '!=', 0)->get();
-        $pengecek = Karyawan::where('divisi_id', '28')
-            ->get();
+        $pengecek = $this->get_data_karyawan_pemeriksa();
         return view('page.kesehatan.karyawan_sakit_tambah', ['karyawan' => $karyawan, 'pengecek' => $pengecek, 'obat' => $obat]);
     }
     public function karyawan_sakit_aksi_delete($id)
@@ -1024,6 +1035,7 @@ class KesehatanController extends Controller
                 'karyawan_id' => 'required',
                 'tgl' => 'required',
                 'pemeriksa_id' => 'required',
+                'obat.*' => 'required',
             ],
             [
                 'pemeriksa_id.required' => 'Pemeriksa harus di pilih',
@@ -1043,12 +1055,9 @@ class KesehatanController extends Controller
         ]);
 
         if ($request->hasil_1 == 'Pengobatan') {
-            // $id = $request->obat_id;
-            // $jumlah = $request->jumlah;
-            // $obat = Obat::find($id)->decrement('stok', $jumlah);
 
             for ($i = 0; $i < count($request->obat); $i++) {
-                //   $obat = obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
+                $obat = Obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
 
                 if ($request->dosis_obat_custom_obat[$i] != null) {
                     $detail_obat = detail_obat::create([
@@ -1133,10 +1142,8 @@ class KesehatanController extends Controller
     public function karyawan_masuk_tambah()
     {
         $obat = Obat::where('stok', '!=', 0)->get();
-        $karyawan = Karyawan::orderBy('nama', 'ASC')
-            ->get();
-        $pengecek = Karyawan::where('divisi_id', '28')
-            ->get();
+        $karyawan = $this->get_data_karyawan_aktif();
+        $pengecek = $this->get_data_karyawan_pemeriksa();
         return view('page.kesehatan.karyawan_masuk_tambah', ['karyawan' => $karyawan, 'pengecek' => $pengecek, 'obat' => $obat]);
     }
     public function karyawan_masuk_aksi_tambah(Request $request)
@@ -1187,7 +1194,7 @@ class KesehatanController extends Controller
         }
         if ($request->hasil_1 == 'Pengobatan') {
             for ($i = 0; $i < count($request->obat); $i++) {
-                //   $obat = obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
+                $obat = obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
 
                 if ($request->dosis_obat_custom_obat[$i] != null) {
                     $detail_obat = detail_obat::create([
@@ -1233,9 +1240,7 @@ class KesehatanController extends Controller
     }
     public function kesehatan_bulanan()
     {
-        $karyawan = Karyawan::orderBy('nama', 'ASC')
-            ->has('Kesehatan_awal')
-            ->get();
+        $karyawan = $this->get_data_karyawan_aktif();
         return view('page.kesehatan.kesehatan_bulanan', ['karyawan' => $karyawan]);
     }
 
@@ -1381,12 +1386,14 @@ class KesehatanController extends Controller
     }
     public function kesehatan_bulanan_gcu_tambah()
     {
-        $karyawan = Karyawan::orderby('nama')->get();
+        $karyawan =  $this->get_data_karyawan_aktif();
         return view('page.kesehatan.kesehatan_bulanan_gcu_tambah', ['karyawan' => $karyawan]);
     }
+
+
     public function kesehatan_bulanan_berat_tambah()
     {
-        $karyawan = Karyawan::orderby('nama')->get();
+        $karyawan = $this->get_data_karyawan_aktif();
         return view('page.kesehatan.kesehatan_bulanan_berat_tambah', ['karyawan' => $karyawan]);
     }
 

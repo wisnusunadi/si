@@ -6,12 +6,10 @@ use App\Models\Customer;
 use App\Models\DetailEkatalog;
 use App\Models\DetailPenjualanProduk;
 use App\Models\Ekatalog;
-use App\Models\GudangBarangJadi;
 use App\Models\KelompokProduk;
 use App\Models\PenjualanProduk;
 use App\Models\RencanaPenjualan;
 use App\Models\Pesanan;
-use App\Models\Produk;
 use App\Models\Provinsi;
 use App\Models\Spa;
 use App\Models\Spb;
@@ -46,6 +44,11 @@ use App\Models\UserLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+
+// produk
+use App\Models\Mproduk;
+use App\Models\Produk;
+use App\Models\GudangBarangJadi;
 
 use function PHPUnit\Framework\returnValueMap;
 
@@ -1838,6 +1841,103 @@ class MasterController extends Controller
             $data['log'] = intval($detail_pesanan_part->count_qc_ok - $detail_pesanan_part->count_log + $detail_pesanan_part->count_belum_kirim);
             $data['kir'] =   intval($detail_pesanan_part->count_kirim);
             echo json_encode($data);
+        }
+    }
+
+    public function indexProduk() {
+        try {
+            $produk = MProduk::whereDoesntHave('detailproduk')
+            ->orWhereHas('detailproduk', function ($query) {
+                $query->whereHas('GudangBarangJadi');
+            })
+            ->with(['detailproduk' => function ($query) {
+                $query->with('GudangBarangJadi');
+            }])
+            ->get();
+
+            return response()->json([
+                'success' => true,
+                'produk' => $produk
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function postOrEditProduk(Request $request) {
+        try {
+            $produk = collect($request->json())->map(function ($item) {
+                // check validasi nama tidak boleh sama di produk
+                if (isset($item['id'])) {
+                    $checkNama = MProduk::where('nama', $item['nama'])->where('id', '!=', $item['id'])->first();
+                } else {
+                    $checkNama = MProduk::where('nama', $item['nama'])->first();
+                }
+                if ($checkNama) {
+                    throw new \Exception("Nama Produk tidak boleh sama");
+                }
+                $produkMaster = MProduk::updateOrCreate(
+                    [
+                        'id' => isset($item['id']) ? $item['id'] : null
+                    ],
+                    [
+                        'nama' => $item['nama'],
+                    ]
+                );
+                foreach ($item['detailproduk'] as $subproduk) {
+                    // check validasi nama tidak boleh sama di produk
+                    if (isset($subproduk['id'])) {
+                        $checkNama = Produk::where('nama', $subproduk['nama'])->where('id', '!=', $subproduk['id'])->first();
+                    } else {
+                        $checkNama = Produk::where('nama', $subproduk['nama'])->first();
+                    }
+                    if ($checkNama) {
+                        throw new \Exception("Nama Produk tidak boleh sama");
+                    }
+                    $subProduk = Produk::updateOrCreate(
+                        [
+                            'id' => isset($subproduk['id']) ? $subproduk['id'] : null
+                        ],
+                        [
+                            'produk_id' => $produkMaster->id,
+                            'kelompok_produk_id' => $subproduk['kelompok_produk_id'],
+                            'merk' => $subproduk['merk'],
+                            'nama' => $subproduk['nama'],
+                            'nama_coo' => isset($subproduk['nama_coo']) ? $subproduk['nama_coo'] : null,
+                            'coo' => isset($subproduk['coo']) ? $subproduk['coo'] : 1,
+                            'no_akd' => $subproduk['no_akd'],
+                            'status' => $subproduk['status'],
+                        ]
+                        );
+                        foreach ($subproduk['gudang_barang_jadi'] as $gudang) {
+                            $gbj = GudangBarangJadi::updateOrCreate(
+                                [
+                                    'id' => isset($gudang['id']) ? $gudang['id'] : null
+                                ],
+                                [
+                                    'produk_id' => $subProduk->id,
+                                    'nama' => isset($gudang['nama']) ? $gudang['nama'] : ' ',
+                                    'stok' => $gudang['stok'],
+                                    'stok_siap' => $gudang['stok_siap'],
+                                    'satuan_id' => $gudang['satuan_id'],
+                                ]
+                                );
+                        }
+                }
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $produk
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
         }
     }
 }

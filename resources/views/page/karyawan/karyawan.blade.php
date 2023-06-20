@@ -36,7 +36,7 @@
             align-items: center !important;
         }
 
-        tr.line-through td:not(:nth-last-child(-n+2)):before {
+        tr.line-through td:not(:nth-last-child(-n+1)):before {
             content: " ";
             position: absolute;
             left: 0;
@@ -195,6 +195,28 @@
                                                                 <input type="radio" name="jenis" value="P">
                                                                 <label for="sample">
                                                                     Perempuan
+                                                                </label>
+                                                            </div>
+                                                            <span class="invalid-feedback" role="alert"
+                                                                id="kondisi-msg"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="kondisi" class="col-sm-5 col-form-label"
+                                                            style="text-align:right;">Status Karyawan</label>
+                                                        <div class="col-sm-7" style="margin-top:7px;">
+                                                            <div class="icheck-success d-inline col-sm-6">
+                                                                <input type="radio" name="status_karyawan"
+                                                                    id="status_karyawan" value="1">
+                                                                <label for="no">
+                                                                    Aktif
+                                                                </label>
+                                                            </div>
+                                                            <div class="icheck-warning d-inline col-sm-6">
+                                                                <input type="radio" name="status_karyawan"
+                                                                    id="status_karyawan" value="0">
+                                                                <label for="sample">
+                                                                    Tidak Aktif
                                                                 </label>
                                                             </div>
                                                             <span class="invalid-feedback" role="alert"
@@ -404,8 +426,9 @@
                         }
                     });
             });
-
-            $('#tabel > tbody').on('click', '#edit', function() {
+            $(document).on('click', '.edit_karyawan', function(event) {
+                // $('#tabel > tbody').on('click', '.edit', function() {
+                event.preventDefault();
                 var rows = tabel.rows($(this).parents('tr')).data();
                 $('.data_detail_head').html(
                     rows[0]['nama']
@@ -413,6 +436,8 @@
                 var optionDivisi = rows[0]['divisi_id'];
                 var optionJabatan = rows[0]['jabatan'];
                 var optionPemeriksa = rows[0]['pemeriksa_rapid'];
+                var statusKaryawan = $(this).attr("data-karyawan");
+
 
                 $("#divisi").val(optionDivisi).trigger('change');
                 $("#jabatan").val(optionJabatan).trigger('change');
@@ -422,6 +447,11 @@
                     $('input[name="pemeriksa_rapid"][value="1"]').attr('checked', 'checked');
                 } else {
                     $('input[name="pemeriksa_rapid"][value="0"]').attr('checked', 'checked');
+                }
+                if (statusKaryawan == 1) {
+                    $('input[name="status_karyawan"][value="1"]').attr('checked', 'checked');
+                } else {
+                    $('input[name="status_karyawan"][value="0"]').attr('checked', 'checked');
                 }
 
                 $('input[id="id"]').val(rows[0]['id']);

@@ -1,518 +1,10 @@
-<template>
-  <div>
-    <h1 class="subtitle">{{ getMonthYear() }}</h1>
-    <div class="buttons">
-      <template v-if="$store.state.user.divisi_id === 24">
-        <button
-          v-if="
-            this.$store.state.state_ppic === 'pembuatan' ||
-            this.$store.state.state_ppic === 'revisi'
-          "
-          class="button is-success"
-          @click="showAddProdukModal"
-        >
-          <span>Tambah <i class="fas fa-plus"></i></span>
-        </button>
-        <button
-          v-if="
-            this.$store.state.state_ppic === 'pembuatan' ||
-            this.$store.state.state_ppic === 'revisi'
-          "
-          class="button"
-          :class="{
-            'is-loading': this.$store.state.isLoading,
-            'is-primary': this.$store.state.state_ppic === 'pembuatan',
-            'is-danger': this.$store.state.state_ppic === 'revisi',
-          }"
-          :disabled="events.length === 0"
-          @click="sendEvent('persetujuan')"
-        >
-          Kirim
-        </button>
-        <button
-          v-if="
-            this.$store.state.state_ppic === 'menunggu' &&
-            this.$store.state.state === 'persetujuan'
-          "
-          class="button is-warning"
-          @click="sendEvent('pembatalan')"
-        >
-          Batal
-        </button>
-        <button
-          v-if="this.$store.state.state_ppic === 'disetujui'"
-          class="button is-success"
-          :class="{ 'is-loading': this.$store.state.isLoading }"
-          @click="sendEvent('perubahan')"
-        >
-          Minta Perubahan
-        </button>
-      </template>
-      <button
-        class="button is-info"
-        :disabled="events.length === 0"
-        @click="convertToExcel('export_table', 'W3C Example Table')"
-      >
-        Export
-      </button>
-      <button
-        v-if="data_komentar.length > 0 && $store.state.user.divisi_id === 24"
-        class="button is-circle"
-        @click="komentarModal = true"
-      >
-        <i class="fas fa-envelope"></i>
-      </button>
-    </div>
-    <div class="table-container">
-      <template
-        v-if="status === 'pelaksanaan' && format_jadwal_rencana.length > 0"
-      >
-        <h1 class="subtitle">Perencanaan</h1>
-        <table
-          class="table has-text-centered is-bordered"
-          style="white-space: nowrap"
-        >
-          <thead>
-            <tr>
-              <th rowspan="2">Nama Produk</th>
-              <th rowspan="2">Jumlah</th>
-              <th :colspan="last_date">Tanggal</th>
-            </tr>
-            <tr>
-              <th v-for="i in Array.from(Array(last_date).keys())" :key="i">
-                {{ i + 1 }}
-              </th>
-            </tr>
-          </thead>
-          <tbody v-if="format_jadwal_rencana.length > 0">
-            <tr v-for="item in format_jadwal_rencana" :key="item.id">
-              <td>{{ item.title }}</td>
-              <td>{{ item.jumlah }}</td>
-              <td
-                v-for="i in Array.from(Array(last_date).keys())"
-                :key="i"
-                :style="{
-                  backgroundColor:
-                    weekend_date.indexOf(i + 1) !== -1
-                      ? 'black'
-                      : isDate(item.events, i + 1)
-                      ? 'yellow'
-                      : '',
-                }"
-              ></td>
-            </tr>
-          </tbody>
-          <tbody v-else>
-            <tr>
-              <td :colspan="last_date + 3">Tidak ada data</td>
-            </tr>
-          </tbody>
-        </table>
-      </template>
-
-      <h1
-        class="subtitle"
-        v-if="status === 'pelaksanaan' && format_jadwal_rencana.length > 0"
-      >
-        Pelaksanaan
-      </h1>
-      <table
-        class="table has-text-centered is-bordered"
-        style="white-space: nowrap"
-        id="export_table"
-        v-if="status !== 'perencanaan'"
-      >
-        <thead>
-          <tr class="is-hidden">
-            <th :colspan="table_header_length" :style="{ fontSize: '2rem' }">
-              {{ table_header_title }}
-            </th>
-          </tr>
-          <tr>
-            <th rowspan="2">Nama Produk</th>
-            <th rowspan="2">Jumlah</th>
-            <th rowspan="2" v-if="status === 'pelaksanaan'">Progres</th>
-            <th
-              v-if="
-                $store.state.user.divisi_id === 24 &&
-                ($store.state.state_ppic === 'pembuatan' ||
-                  $store.state.state_ppic === 'revisi') &&
-                !hiddenAction
-              "
-              rowspan="2"
-            >
-              Aksi
-            </th>
-            <th :colspan="last_date">Tanggal</th>
-          </tr>
-          <tr>
-            <th v-for="i in Array.from(Array(last_date).keys())" :key="i">
-              {{ i + 1 }}
-            </th>
-          </tr>
-        </thead>
-        <tbody v-if="format_events.length > 0">
-          <tr v-for="item in format_events" :key="item.id">
-            <td>{{ item.title }}</td>
-            <td>{{ item.jumlah }}</td>
-            <td v-if="status === 'pelaksanaan'">{{ item.progres }}</td>
-            <td
-              v-if="
-                $store.state.user.divisi_id === 24 &&
-                ($store.state.state_ppic === 'pembuatan' ||
-                  $store.state.state_ppic === 'revisi') &&
-                !hiddenAction
-              "
-            >
-              <div>
-                <span class="is-clickable" @click="updateEvent(item)">
-                  <i class="fas fa-edit"></i>
-                </span>
-                &nbsp;&nbsp;&nbsp;
-                <span class="is-clickable" @click="deleteEvent(item.events)">
-                  <i class="fas fa-trash"></i>
-                </span>
-              </div>
-            </td>
-            <td
-              v-for="i in Array.from(Array(last_date).keys())"
-              :key="i"
-              :style="{
-                backgroundColor:
-                  weekend_date.indexOf(i + 1) !== -1
-                    ? 'black'
-                    : isDate(item.events, i + 1)
-                    ? 'yellow'
-                    : '',
-              }"
-            ></td>
-          </tr>
-        </tbody>
-        <tbody v-else>
-          <tr>
-            <td :colspan="last_date + 3">Tidak ada data</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="modal" :class="{ 'is-active': addProdukModal }">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">
-            {{ this.action === "add" ? "Pilih Produk" : "Ubah Jadwal" }}
-          </p>
-          <button
-            class="delete"
-            @click="addProdukModal = !addProdukModal"
-          ></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="columns">
-            <div class="column is-6">
-              <div class="field">
-                <label class="label">Tanggal Mulai</label>
-                <div class="control">
-                  <input
-                    type="date"
-                    :min="dateFormatter(year, month, 1)"
-                    :max="dateFormatter(year, month, last_date)"
-                    class="input"
-                    v-model="start_date"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="column is-6">
-              <div class="field">
-                <label class="label">Tanggal Selesai</label>
-                <div class="control">
-                  <input
-                    type="date"
-                    :min="dateFormatter(year, month, 1)"
-                    :max="dateFormatter(year, month, last_date)"
-                    class="input"
-                    v-model="end_date"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- <div class="field is-horizontal">
-                        <div class="field-label is-normal">
-                            <label class="label">No BPPB</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input" type="text" v-model="no_bppb" />
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-          <div class="field is-horizontal">
-            <div class="field-label is-normal">
-              <label class="label">Produk</label>
-            </div>
-            <div class="field-body">
-              <div class="field">
-                <div class="control">
-                  <v-select
-                    :options="options"
-                    v-model="produk"
-                    @input="changeProduk"
-                  >
-                    <template v-slot:option="option">
-                      <b>{{ option.merk }}</b> - {{ option.produk }}
-                    </template>
-                  </v-select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="field is-horizontal">
-            <div class="field-label is-normal">
-              <label class="label">Jumlah</label>
-            </div>
-            <div class="field-body">
-              <div class="field">
-                <div class="control">
-                  <input class="input" type="number" min="1" v-model="jumlah" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="field is-horizontal">
-            <div class="field-label is-normal">
-              <label class="label">Stok</label>
-            </div>
-            <div class="field-body">
-              <div class="field">
-                <div class="control">
-                  <div>GBJ: {{ gbj_stok }}</div>
-                  <div>GK : {{ gk_stok }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <button
-            v-if="action === 'add'"
-            class="button is-success"
-            :class="{ 'is-loading': this.$store.state.isLoading }"
-            @click="handleSubmit"
-          >
-            Tambah
-          </button>
-          <button
-            v-else-if="action"
-            class="button is-info"
-            :class="{ 'is-loading': this.$store.state.isLoading }"
-            @click="handleSubmit"
-          >
-            Ubah
-          </button>
-        </footer>
-      </div>
-    </div>
-
-    <div class="modal" :class="{ 'is-active': deleteProdukModal }">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Hapus Produk</p>
-          <button class="delete" @click="deleteProdukModal = false"></button>
-        </header>
-        <section class="modal-card-body">
-          <p>
-            Apakah anda yakin ingin menghapus produk ini dari daftar jadwal?
-          </p>
-        </section>
-        <footer class="modal-card-foot">
-          <div class="buttons is-justify-content-space-between">
-            <button class="button is-success" @click="handleSubmit">Ok</button>
-            <button class="button is-danger" @click="deleteProdukModal = false">
-              Batal
-            </button>
-          </div>
-        </footer>
-      </div>
-    </div>
-
-    <div class="modal" :class="{ 'is-active': editProdukModal }">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">
-            Edit Jadwal ({{ updated_events.title }})
-          </p>
-          <button class="delete" @click="editProdukModal = false"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="columns">
-            <div class="column is-3">
-              <div class="field">
-                <label class="label">Tanggal Mulai</label>
-                <div
-                  v-for="(item, index) in updated_events.events"
-                  :key="'start' + index"
-                  class="control"
-                >
-                  <input
-                    type="date"
-                    :min="dateFormatter(year, month, 1)"
-                    :max="dateFormatter(year, month, last_date)"
-                    class="input"
-                    v-model="item.start"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="column is-3">
-              <div class="field">
-                <label class="label">Tanggal Selesai</label>
-                <div
-                  v-for="(item, index) in updated_events.events"
-                  :key="'end' + index"
-                  class="control"
-                >
-                  <input
-                    type="date"
-                    :min="dateFormatter(year, month, 1)"
-                    :max="dateFormatter(year, month, last_date)"
-                    class="input"
-                    v-model="item.end"
-                  />
-                </div>
-              </div>
-            </div>
-            <!-- <div class="column is-2">
-                            <div class="field">
-                                <label class="label">No BPPB</label>
-                                <div v-for="(item, index) in updated_events.events" :key="'nobppb'+index"
-                                    class="control">
-                                    <input class="input" type="text" v-model="item.no_bppb"/>
-                                </div>
-                            </div>
-                        </div> -->
-            <div class="column is-2">
-              <div class="field">
-                <label class="label">Jumlah</label>
-                <div
-                  v-for="(item, index) in updated_events.events"
-                  :key="'jumlah' + index"
-                  class="control"
-                >
-                  <input
-                    class="input"
-                    type="number"
-                    :min="item.progres > 0 ? item.progres : 1"
-                    v-model="item.jumlah"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="column is-2">
-              <div class="field">
-                <label class="label">Progres</label>
-                <div
-                  v-for="(item, index) in updated_events.events"
-                  :key="'progress' + index"
-                  class="control"
-                >
-                  <input
-                    class="input"
-                    type="number"
-                    v-model="item.progres"
-                    disabled
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="column is-2">
-              <div class="field">
-                <label class="label">Aksi</label>
-                <div
-                  v-for="(item, index) in updated_events.events"
-                  :key="'aksi' + index"
-                  class="control"
-                >
-                  <button
-                    class="button is-light"
-                    @click="deleteSingleEvent(index)"
-                  >
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="field is-horizontal">
-            <div class="field-label is-normal">
-              <label class="label">Stok</label>
-            </div>
-            <div class="field-body">
-              <div class="field">
-                <div class="control">
-                  <div>GBJ: {{ gbj_stok }}</div>
-                  <div>GK : {{ gk_stok }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <div class="buttons is-justify-content-space-between">
-            <button class="button is-success" @click="handleSubmit">Ok</button>
-            <button class="button is-danger" @click="editProdukModal = false">
-              Batal
-            </button>
-          </div>
-        </footer>
-      </div>
-    </div>
-
-    <!-- modal -->
-    <div class="modal" :class="{ 'is-active': komentarModal }">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Komentar</p>
-          <button
-            class="delete"
-            aria-label="close"
-            @click="komentarModal = !komentarModal"
-          ></button>
-        </header>
-        <section class="modal-card-body">
-          <table class="table is-fullwidth has-text-centered">
-            <thead>
-              <tr>
-                <th>hasil</th>
-                <th>komentar</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in data_komentar" :key="item.id">
-                <td>{{ item.hasil ? "disetujui" : "ditolak" }}</td>
-                <td>{{ item.komentar }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-        <footer class="modal-card-foot"></footer>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import axios from "axios";
 
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
+import mixins from "./mix";
+import mixpelaksanaan from "./mixpelaksanaan";
 
 /**
  * @vue-prop {Array} events - array of schedule data
@@ -570,6 +62,7 @@ import "vue-select/dist/vue-select.css";
 export default {
   name: "table-component",
 
+  mixins: [mixins, mixpelaksanaan],
   props: {
     events: {
       type: Array,
@@ -591,6 +84,8 @@ export default {
       month: 0,
       year: 0,
       weekend_date: [],
+      searchPerencanaan: '',
+      searchPelaksanaan: '',
 
       addProdukModal: false,
       deleteProdukModal: false,
@@ -1236,7 +731,14 @@ export default {
 
       this.table_header_title = `(${this.status.toUpperCase()}) ${this.getMonthYear()}`;
 
-      return data;
+      return data.filter((item) => {
+        return Object.keys(item).some((key) =>
+          item[key]
+            .toString()
+            .toLowerCase()
+            .includes(this.searchPelaksanaan.toLowerCase())
+        );
+      })
     },
 
     format_jadwal_rencana() {
@@ -1272,7 +774,14 @@ export default {
         }
       }
 
-      return data;
+      return data.filter((item) => {
+        return Object.keys(item).some((key) =>
+          item[key]
+            .toString()
+            .toLowerCase()
+            .includes(this.searchPerencanaan.toLowerCase())
+        );
+      })
     },
 
     notif() {
@@ -1287,6 +796,557 @@ export default {
   },
 };
 </script>
+<template>
+  <div>
+    <h1 class="subtitle">{{ getMonthYear() }}</h1>
+    <div class="columns">
+      <div class="column">
+        <div class="buttons">
+      <template v-if="$store.state.user.divisi_id === 24">
+        <button
+          v-if="
+            this.$store.state.state_ppic === 'pembuatan' ||
+            this.$store.state.state_ppic === 'revisi'
+          "
+          class="button is-success"
+          @click="showAddProdukModal"
+        >
+          <span>Tambah <i class="fas fa-plus"></i></span>
+        </button>
+        <button
+          v-if="
+            this.$store.state.state_ppic === 'pembuatan' ||
+            this.$store.state.state_ppic === 'revisi'
+          "
+          class="button"
+          :class="{
+            'is-loading': this.$store.state.isLoading,
+            'is-primary': this.$store.state.state_ppic === 'pembuatan',
+            'is-danger': this.$store.state.state_ppic === 'revisi',
+          }"
+          :disabled="events.length === 0"
+          @click="sendEvent('persetujuan')"
+        >
+          Kirim
+        </button>
+        <button
+          v-if="
+            this.$store.state.state_ppic === 'menunggu' &&
+            this.$store.state.state === 'persetujuan'
+          "
+          class="button is-warning"
+          @click="sendEvent('pembatalan')"
+        >
+          Batal
+        </button>
+        <button
+          v-if="this.$store.state.state_ppic === 'disetujui'"
+          class="button is-success"
+          :class="{ 'is-loading': this.$store.state.isLoading }"
+          @click="sendEvent('perubahan')"
+        >
+          Minta Perubahan
+        </button>
+      </template>
+      <button
+        class="button is-info"
+        :disabled="events.length === 0"
+        @click="convertToExcel('export_table', 'W3C Example Table')"
+      >
+        Export
+      </button>
+      <button
+        v-if="data_komentar.length > 0 && $store.state.user.divisi_id === 24"
+        class="button is-circle"
+        @click="komentarModal = true"
+      >
+        <i class="fas fa-envelope"></i>
+      </button>
+    </div>
+        </div>
+        <div class="column is-flex-shrink-1">
+          <input class="input" type="text" placeholder="Cari" v-model="searchPerencanaan"/>
+        </div>
+    </div>
+
+    <div class="table-container">
+      <template
+        v-if="status === 'pelaksanaan'"
+      >
+        <h1 class="subtitle">Perencanaan</h1>
+        <table
+          class="table has-text-centered is-bordered"
+          style="white-space: nowrap"
+        >
+          <thead>
+            <tr>
+              <th rowspan="2">Nama Produk</th>
+              <th rowspan="2">Jumlah</th>
+              <th :colspan="last_date">Tanggal</th>
+            </tr>
+            <tr>
+              <th v-for="i in Array.from(Array(last_date).keys())" :key="i">
+                {{ i + 1 }}
+              </th>
+            </tr>
+          </thead>
+          <tbody v-if="format_jadwal_rencana.length > 0">
+            <tr v-for="item in renderPaginate" :key="item.id">
+              <td>{{ item.title }}</td>
+              <td>{{ item.jumlah }}</td>
+              <td
+                v-for="i in Array.from(Array(last_date).keys())"
+                :key="i"
+                :style="{
+                  backgroundColor:
+                    weekend_date.indexOf(i + 1) !== -1
+                      ? 'black'
+                      : isDate(item.events, i + 1)
+                      ? 'yellow'
+                      : '',
+                }"
+              ></td>
+            </tr>
+          </tbody>
+          <tbody v-else>
+            <tr>
+              <td :colspan="last_date + 3">Tidak ada data</td>
+            </tr>
+          </tbody>
+        </table>
+        <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+          <a class="pagination-previous" :disabled="currentPage == 1" @click="previousPage">Previous</a>
+          <a class="pagination-next"  :disabled="currentPage == pages[pages.length - 1]"
+                            @click="nextPage">Next page</a>
+          <ul class="pagination-list">
+            <li>
+              <a class="pagination-link" :class="paginate == currentPage ? 'is-current' : ''" 
+              v-for="paginate in pages" :key="paginate" 
+              @click="nowPage(paginate)">
+                {{ paginate }}
+              </a></li>
+          </ul>
+        </nav>
+      </template>
+
+      <div class="columns" v-if="status === 'pelaksanaan'">
+        <div class="column">
+          <h1
+            class="subtitle"
+          >
+            Pelaksanaan
+          </h1>
+        </div>
+        <div class="column is-flex-shrink-1">
+          <input class="input" type="text" placeholder="Cari" v-model="searchPelaksanaan"/>
+        </div>
+      </div>
+      <table
+        class="table has-text-centered is-bordered"
+        style="white-space: nowrap"
+        id="export_table"
+        v-if="status !== 'perencanaan'"
+      >
+        <thead>
+          <tr class="is-hidden">
+            <th :colspan="table_header_length" :style="{ fontSize: '2rem' }">
+              {{ table_header_title }}
+            </th>
+          </tr>
+          <tr>
+            <th rowspan="2">Nama Produk</th>
+            <th rowspan="2">Jumlah</th>
+            <th rowspan="2" v-if="status === 'pelaksanaan'">Progres</th>
+            <th
+              v-if="
+                $store.state.user.divisi_id === 24 &&
+                ($store.state.state_ppic === 'pembuatan' ||
+                  $store.state.state_ppic === 'revisi') &&
+                !hiddenAction
+              "
+              rowspan="2"
+            >
+              Aksi
+            </th>
+            <th :colspan="last_date">Tanggal</th>
+          </tr>
+          <tr>
+            <th v-for="i in Array.from(Array(last_date).keys())" :key="i">
+              {{ i + 1 }}
+            </th>
+          </tr>
+        </thead>
+        <tbody v-if="format_events.length > 0">
+          <tr v-for="item in renderPaginatePelaksanaan" :key="item.id">
+            <td>{{ item.title }}</td>
+            <td>{{ item.jumlah }}</td>
+            <td v-if="status === 'pelaksanaan'">{{ item.progres }}</td>
+            <td
+              v-if="
+                $store.state.user.divisi_id === 24 &&
+                ($store.state.state_ppic === 'pembuatan' ||
+                  $store.state.state_ppic === 'revisi') &&
+                !hiddenAction
+              "
+            >
+              <div>
+                <span class="is-clickable" @click="updateEvent(item)">
+                  <i class="fas fa-edit"></i>
+                </span>
+                &nbsp;&nbsp;&nbsp;
+                <span class="is-clickable" @click="deleteEvent(item.events)">
+                  <i class="fas fa-trash"></i>
+                </span>
+              </div>
+            </td>
+            <td
+              v-for="i in Array.from(Array(last_date).keys())"
+              :key="i"
+              :style="{
+                backgroundColor:
+                  weekend_date.indexOf(i + 1) !== -1
+                    ? 'black'
+                    : isDate(item.events, i + 1)
+                    ? 'yellow'
+                    : '',
+              }"
+            ></td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr>
+            <td :colspan="last_date + 3">Tidak ada data</td>
+          </tr>
+        </tbody>
+      </table>
+      <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+          <a class="pagination-previous" :disabled="currentPagePelaksanaan == 1" @click="previousPagePelaksanaan">Previous</a>
+          <a class="pagination-next"  :disabled="currentPagePelaksanaan == pagesPelaksanaan[pagesPelaksanaan.length - 1]"
+                            @click="nextPagePelaksanaan">Next page</a>
+          <ul class="pagination-list">
+            <li>
+              <a class="pagination-link" :class="paginate == currentPagePelaksanaan ? 'is-current' : ''" 
+              v-for="paginate in pagesPelaksanaan" :key="paginate" 
+              @click="nowPagePelaksanaan(paginate)">
+                {{ paginate }}
+              </a></li>
+          </ul>
+        </nav>
+    </div>
+
+    <div class="modal" :class="{ 'is-active': addProdukModal }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">
+            {{ this.action === "add" ? "Pilih Produk" : "Ubah Jadwal" }}
+          </p>
+          <button
+            class="delete"
+            @click="addProdukModal = !addProdukModal"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="columns">
+            <div class="column is-6">
+              <div class="field">
+                <label class="label">Tanggal Mulai</label>
+                <div class="control">
+                  <input
+                    type="date"
+                    :min="dateFormatter(year, month, 1)"
+                    :max="dateFormatter(year, month, last_date)"
+                    class="input"
+                    v-model="start_date"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column is-6">
+              <div class="field">
+                <label class="label">Tanggal Selesai</label>
+                <div class="control">
+                  <input
+                    type="date"
+                    :min="dateFormatter(year, month, 1)"
+                    :max="dateFormatter(year, month, last_date)"
+                    class="input"
+                    v-model="end_date"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">No BPPB</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" type="text" v-model="no_bppb" />
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Produk</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <v-select
+                    :options="options"
+                    v-model="produk"
+                    @input="changeProduk"
+                  >
+                    <template v-slot:option="option">
+                      <b>{{ option.merk }}</b> - {{ option.produk }}
+                    </template>
+                  </v-select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Jumlah</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input class="input" type="number" min="1" v-model="jumlah" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Stok</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <div>GBJ: {{ gbj_stok }}</div>
+                  <div>GK : {{ gk_stok }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button
+            v-if="action === 'add'"
+            class="button is-success"
+            :class="{ 'is-loading': this.$store.state.isLoading }"
+            @click="handleSubmit"
+          >
+            Tambah
+          </button>
+          <button
+            v-else-if="action"
+            class="button is-info"
+            :class="{ 'is-loading': this.$store.state.isLoading }"
+            @click="handleSubmit"
+          >
+            Ubah
+          </button>
+        </footer>
+      </div>
+    </div>
+
+    <div class="modal" :class="{ 'is-active': deleteProdukModal }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Hapus Produk</p>
+          <button class="delete" @click="deleteProdukModal = false"></button>
+        </header>
+        <section class="modal-card-body">
+          <p>
+            Apakah anda yakin ingin menghapus produk ini dari daftar jadwal?
+          </p>
+        </section>
+        <footer class="modal-card-foot">
+          <div class="buttons is-justify-content-space-between">
+            <button class="button is-success" @click="handleSubmit">Ok</button>
+            <button class="button is-danger" @click="deleteProdukModal = false">
+              Batal
+            </button>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <div class="modal" :class="{ 'is-active': editProdukModal }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">
+            Edit Jadwal ({{ updated_events.title }})
+          </p>
+          <button class="delete" @click="editProdukModal = false"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="columns">
+            <div class="column is-3">
+              <div class="field">
+                <label class="label">Tanggal Mulai</label>
+                <div
+                  v-for="(item, index) in updated_events.events"
+                  :key="'start' + index"
+                  class="control"
+                >
+                  <input
+                    type="date"
+                    :min="dateFormatter(year, month, 1)"
+                    :max="dateFormatter(year, month, last_date)"
+                    class="input"
+                    v-model="item.start"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column is-3">
+              <div class="field">
+                <label class="label">Tanggal Selesai</label>
+                <div
+                  v-for="(item, index) in updated_events.events"
+                  :key="'end' + index"
+                  class="control"
+                >
+                  <input
+                    type="date"
+                    :min="dateFormatter(year, month, 1)"
+                    :max="dateFormatter(year, month, last_date)"
+                    class="input"
+                    v-model="item.end"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- <div class="column is-2">
+                            <div class="field">
+                                <label class="label">No BPPB</label>
+                                <div v-for="(item, index) in updated_events.events" :key="'nobppb'+index"
+                                    class="control">
+                                    <input class="input" type="text" v-model="item.no_bppb"/>
+                                </div>
+                            </div>
+                        </div> -->
+            <div class="column is-2">
+              <div class="field">
+                <label class="label">Jumlah</label>
+                <div
+                  v-for="(item, index) in updated_events.events"
+                  :key="'jumlah' + index"
+                  class="control"
+                >
+                  <input
+                    class="input"
+                    type="number"
+                    :min="item.progres > 0 ? item.progres : 1"
+                    v-model="item.jumlah"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column is-2">
+              <div class="field">
+                <label class="label">Progres</label>
+                <div
+                  v-for="(item, index) in updated_events.events"
+                  :key="'progress' + index"
+                  class="control"
+                >
+                  <input
+                    class="input"
+                    type="number"
+                    v-model="item.progres"
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column is-2">
+              <div class="field">
+                <label class="label">Aksi</label>
+                <div
+                  v-for="(item, index) in updated_events.events"
+                  :key="'aksi' + index"
+                  class="control"
+                >
+                  <button
+                    class="button is-light"
+                    @click="deleteSingleEvent(index)"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Stok</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <div>GBJ: {{ gbj_stok }}</div>
+                  <div>GK : {{ gk_stok }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <div class="buttons is-justify-content-space-between">
+            <button class="button is-success" @click="handleSubmit">Ok</button>
+            <button class="button is-danger" @click="editProdukModal = false">
+              Batal
+            </button>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" :class="{ 'is-active': komentarModal }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Komentar</p>
+          <button
+            class="delete"
+            aria-label="close"
+            @click="komentarModal = !komentarModal"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <table class="table is-fullwidth has-text-centered">
+            <thead>
+              <tr>
+                <th>hasil</th>
+                <th>komentar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in data_komentar" :key="item.id">
+                <td>{{ item.hasil ? "disetujui" : "ditolak" }}</td>
+                <td>{{ item.komentar }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <footer class="modal-card-foot"></footer>
+      </div>
+    </div>
+  </div>
+</template>
+
+
 
 <style scoped>
 .background_yellow {

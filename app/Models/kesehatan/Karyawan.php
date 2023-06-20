@@ -12,7 +12,7 @@ class Karyawan extends Model
 
     protected $table = 'karyawans';
     protected $connection = 'kesehatan';
-    protected $fillable = ['nama', 'kode_karyawan', 'divisi_id', 'jabatan', 'foto', 'tgllahir', 'tgl_kerja', 'kelamin'];
+    protected $fillable = ['nama', 'kode_karyawan', 'divisi_id', 'jabatan', 'foto', 'tgllahir', 'tgl_kerja', 'kelamin', 'is_aktif'];
 
     public function User()
     {
