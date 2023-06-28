@@ -5024,9 +5024,8 @@ class GudangController extends Controller
     }
 
     function TfbySOBatal($id) {
-        return response()->json([
-            'data' => $id
-        ]);
+        // make error
+
     }
 
     function get_so_batal()

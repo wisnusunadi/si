@@ -1182,6 +1182,16 @@
                             ).then(function() {
                                 location.reload();
                             })
+                        },
+                        error: function(err) {
+                            console.log(err);
+                            Swal.fire(
+                                'Error!',
+                                'Data Gagal Dibatalkan',
+                                'error'
+                            ).then(function() {
+                                location.reload();
+                            })
                         }
                     })
                 }
