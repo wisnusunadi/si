@@ -231,6 +231,33 @@
                 }).draw();
             }
 
+            const checkDateMoreThanSevenDays = (date) => {
+                const today = new Date();
+                const dateToCheck = new Date(date);
+                const timeDiff = Math.abs(today.getTime() - dateToCheck.getTime());
+                const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                const countDays = diffDays - 7;
+
+                const dateIndo = moment(date).format('DD MMMM YYYY');
+                
+                // more than 7 days
+                if (diffDays > 7) {
+                    return `
+                    <div  class="text-danger">${dateIndo}</div>
+                    <div class="invalid-feedback d-block"><small><i class="fas fa-exclamation-circle" id="info"></i> Lebih Dari ${countDays} Hari</small></div>
+                    `
+                }else if (diffDays > 0 && diffDays <= 7) {
+                    return `
+                    <div >${dateIndo}</div>
+                    <div><small><i class="fas fa-exclamation-circle" id="info"></i> Kurang Dari ${countDays * -1} Hari</small></div>
+                    `
+                }else{
+                    return `
+                    <div>${dateIndo}</div>
+                    `
+                }
+            }
+
             var showtable = $('#showtable').DataTable({
                     destroy: true,
                     processing: true,
@@ -257,7 +284,8 @@
                             data: null,
                             className: 'nowraps align-center',
                             render: function(data, type, row) {
-                                return moment(new Date(row.tanggal).toString()).format('DD-MM-YYYY');
+                                const date = moment(new Date(row.tanggal).toString()).format('YYYY-MM-DD');
+                                return checkDateMoreThanSevenDays(date)
                             }
                         },
                         {
