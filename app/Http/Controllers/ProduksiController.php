@@ -1073,7 +1073,7 @@ class ProduksiController extends Controller
                     if ($data->status_cek == 4) {
                         return $x;
                     } else {
-                        return '<input type="text" class="form-control jumlah" name="qty[]" id="qty" value="' . $x . '">';
+                        return '<input type="text" disabled class="form-control jumlah" name="qty[]" id="qty" value="' . $x . '">';
                     }
                 })
                 ->addColumn('jumlah', function ($data) {
