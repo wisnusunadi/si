@@ -5023,6 +5023,12 @@ class GudangController extends Controller
         }
     }
 
+    function TfbySOBatal($id) {
+        return response()->json([
+            'data' => $id
+        ]);
+    }
+
     function get_so_batal()
     {
         try {

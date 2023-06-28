@@ -151,8 +151,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" id="okk">Transfer</button>
-                    {{-- <button type="button" class="btn btn-info" id="rancang">Rancang</button> --}}
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-info" id="batal">Batalkan Persiapan</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
@@ -1156,6 +1156,38 @@
                 }
             });
         });
+        $(document).on('click', '#batal', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Apakah Anda Yakin?',
+                text: "Anda akan membatalkan pesanan ini!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya Batalkan'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (result.isConfirmed) {
+                    $(this).attr('disabled', true);
+                    $.ajax({
+                        url: `/api/tfp/byso-batal/${id}`,
+                        type: "post",
+                        success: function(res) {
+                            console.log(res);
+                            Swal.fire(
+                                'Success!',
+                                'Data Terkirim ke QC',
+                                'success'
+                            ).then(function() {
+                                location.reload();
+                            })
+                        }
+                    })
+                }
+                }
+            });
+        })
         $(document).on('click', '.cb-child-prd', function() {
             if ($(this).is(":checked")) {
                 $(this).parent().next().next().next().next().children().find('button').removeClass('disabled').attr(
