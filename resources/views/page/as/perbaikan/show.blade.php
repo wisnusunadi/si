@@ -231,6 +231,41 @@
                 }).draw();
             }
 
+            const checkDateMoreThanSevenDays = (date) => {
+                const today = new Date();
+                const dateInput = new Date(date);
+                dateInput.setDate(dateInput.getDate() + 7);
+                const diffTime = Math.abs(dateInput - today);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                const dateIndo = moment(date).format('DD MMMM YYYY');
+
+                if (dateInput > today) {
+                    if (diffDays > 7) {
+                        return `
+                        <div >${dateIndo}</div>
+                        <div><small><i class="fas fa-exclamation-circle" id="info"></i> Masih Kurang ${diffDays} Hari</small></div>
+                        `
+                    }else if (diffDays > 0 && diffDays <= 7) {  
+                        return `
+                        <div >${dateIndo}</div>
+                        <div><small><i class="fas fa-exclamation-circle" id="info"></i> Kurang Dari ${diffDays} Hari</small></div>
+                        `
+                    }else{
+                        return `
+                        <div>${dateIndo}</div>
+                        `
+                    }
+                } else {
+                    return `
+                    <div  class="text-danger">${dateIndo}</div>
+                    <div class="invalid-feedback d-block"><small><i class="fas fa-exclamation-circle" id="info"></i> Lebih Dari ${diffDays} Hari</small></div>
+                    `
+                }
+
+                
+            }
+
             var showtable = $('#showtable').DataTable({
                     destroy: true,
                     processing: true,
@@ -257,7 +292,8 @@
                             data: null,
                             className: 'nowraps align-center',
                             render: function(data, type, row) {
-                                return moment(new Date(row.tanggal).toString()).format('DD-MM-YYYY');
+                                const date = moment(new Date(row.tanggal).toString()).format('YYYY-MM-DD');
+                                return checkDateMoreThanSevenDays(date)
                             }
                         },
                         {
