@@ -5023,10 +5023,39 @@ class GudangController extends Controller
         }
     }
 
-    function TfbySOBatal($id) {
-        return response()->json([
-            'data' => $id
-        ]);
+    function TfbySOBatal($id)
+    {
+        try {
+            //code...
+            $dpp = DB::select('select group_concat(dpp.id) as id from detail_pesanan_produk dpp
+            left join detail_pesanan dp
+            on dpp.detail_pesanan_id = dp.id
+            left join pesanan p
+            on p.id = dp.pesanan_id
+            where p.id = ? AND
+             NOT EXISTS (
+                SELECT *
+                FROM t_gbj_detail tgd
+                WHERE tgd.detail_pesanan_produk_id  = dpp.id
+            )', [$id]);
+
+            $dppArray = explode(',', $dpp[0]->id);
+
+            DetailPesananProduk::whereIn('id', $dppArray)
+                ->update(['status_cek' => NULL, 'checked_by' => NULL]);
+
+
+            return response()->json([
+                'error' => true,
+                'msg' => 'ok'
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'error' => true,
+                'msg' => 'ok'
+            ]);
+        }
     }
 
     function get_so_batal()
@@ -5046,8 +5075,6 @@ class GudangController extends Controller
             $data = TFProduksi::whereHas('Pesanan', function ($q) {
                 $q->where('log_id', 20);
             })->get();
-
-
 
             return datatables()->of($data)
                 ->addIndexColumn()

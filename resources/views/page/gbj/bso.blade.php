@@ -511,8 +511,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                    </span>&emsp;Mohon Tunggu ...",
+                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                </span>&emsp;Mohon Tunggu ...",
                 }
             });
             a.on('order.dt search.dt', function() {
@@ -720,8 +720,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                    </span>&emsp;Mohon Tunggu ...",
+                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                </span>&emsp;Mohon Tunggu ...",
                 }
             })
             // testing
@@ -1055,7 +1055,7 @@
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Batas Maksimal ' + max + ' Barang!',
-                }) 
+                })
             } else {
                 Swal.fire({
                     position: 'center',
@@ -1159,8 +1159,8 @@
         $(document).on('click', '#batal', function(e) {
             e.preventDefault();
             Swal.fire({
-                title: 'Apakah Anda Yakin?',
-                text: "Anda akan membatalkan pesanan ini!",
+                title: 'Batalkan Persiapan?',
+                text: "Jika ada noseri yang ke transfer akan dibatalkan",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -1169,22 +1169,23 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     if (result.isConfirmed) {
-                    $(this).attr('disabled', true);
-                    $.ajax({
-                        url: `/api/tfp/byso-batal/${id}`,
-                        type: "post",
-                        success: function(res) {
-                            console.log(res);
-                            Swal.fire(
-                                'Success!',
-                                'Data Terkirim ke QC',
-                                'success'
-                            ).then(function() {
-                                location.reload();
-                            })
-                        }
-                    })
-                }
+                        // $(this).attr('disabled', true);
+                        $.ajax({
+                            url: `/api/tfp/byso-batal/${id}`,
+                            type: "post",
+                            success: function(res) {
+                                console.log(res);
+                                Swal.fire(
+                                    'Success!',
+                                    'Data Terkirim ke QC',
+                                    'success'
+                                )
+                                // .then(function() {
+                                //     location.reload();
+                                // })
+                            }
+                        })
+                    }
                 }
             });
         })
