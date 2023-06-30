@@ -511,8 +511,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                </span>&emsp;Mohon Tunggu ...",
+                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                        </span>&emsp;Mohon Tunggu ...",
                 }
             });
             a.on('order.dt search.dt', function() {
@@ -720,8 +720,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                </span>&emsp;Mohon Tunggu ...",
+                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                        </span>&emsp;Mohon Tunggu ...",
                 }
             })
             // testing
@@ -1176,9 +1176,20 @@
                             success: function(res) {
                                 console.log(res);
                                 Swal.fire(
-                                    'Success!',
-                                    'Data Terkirim ke QC',
-                                    'success'
+                                        'Success!',
+                                        'Data berhasil dibatalkan',
+                                        'success'
+                                    )
+                                    .then(function() {
+                                        location.reload();
+                                    })
+                            },
+                            error: function(err) {
+                                console.log(err);
+                                Swal.fire(
+                                    'Error!',
+                                    'Data Gagal Dibatalkan',
+                                    'error'
                                 )
                                 // .then(function() {
                                 //     location.reload();
