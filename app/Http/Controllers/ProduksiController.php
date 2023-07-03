@@ -705,7 +705,7 @@ class ProduksiController extends Controller
                     } else {
                         return '-';
                     }
-                })
+                }) 
                 ->addColumn('status', function ($data) {
                     $cek = TFProduksi::where('pesanan_id', $data->id)->where('status_id', 1)->get()->count();
                     if ($cek == 0) {

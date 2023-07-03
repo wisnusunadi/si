@@ -150,8 +150,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                <div class="hidden-with-condition">
                     <button type="button" class="btn btn-success" id="okk">Transfer</button>
                     <button type="button" class="btn btn-info" id="batal">Batalkan Persiapan</button>
+                </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                 </div>
             </div>
@@ -729,11 +731,33 @@
                 type: "get",
                 url: "/api/tfp/detail-so/" + id + "/" + x,
                 success: function(response) {
-                    console.log(response);
+                    checkaddProdukModal();
                 }
             });
+            $('.hidden-with-condition').hide();
             $('#addProdukModal').modal('show');
         });
+
+        function checkaddProdukModal() {
+            // check action on table addProduk when contains siapkan dulu
+            var table = $('#addProduk').DataTable();
+            var data = table.rows().data();
+            
+            var count = 0;
+
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].action == 'Siapkan Produk Dulu') {
+                    count++;
+                }
+            }
+
+            if (count > 0) {
+                $('.hidden-with-condition').hide();
+            } else {
+                $('.hidden-with-condition').show();
+            }
+            console.log("count", count);
+        }
 
         function make_temp_array(prd1) {
             let result = {};
