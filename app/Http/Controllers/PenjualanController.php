@@ -378,7 +378,6 @@ class PenjualanController extends Controller
             $Spb = "";
             if (in_array('ekatalog', $x)) {
                 $Ekatalog = collect(Ekatalog::with(['Pesanan.State',  'Customer'])->addSelect([
-
                     'tgl_kontrak_custom' => function ($q) {
                         $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
                             ->from('ekatalog as e')

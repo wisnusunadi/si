@@ -705,7 +705,7 @@ class ProduksiController extends Controller
                     } else {
                         return '-';
                     }
-                })
+                }) 
                 ->addColumn('status', function ($data) {
                     $cek = TFProduksi::where('pesanan_id', $data->id)->where('status_id', 1)->get()->count();
                     if ($cek == 0) {
@@ -1073,7 +1073,7 @@ class ProduksiController extends Controller
                     if ($data->status_cek == 4) {
                         return $x;
                     } else {
-                        return '<input type="text" class="form-control jumlah" name="qty[]" id="qty" value="' . $x . '">';
+                        return '<input type="text" disabled class="form-control jumlah" name="qty[]" id="qty" value="' . $x . '">';
                     }
                 })
                 ->addColumn('jumlah', function ($data) {

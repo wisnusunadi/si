@@ -261,6 +261,7 @@ Route::prefix('/dashboard-gbj')->group(function () {
 Route::prefix('/tfp')->group(function () {
     Route::post('/create', [ProduksiController::class, 'CreateTFItem']);
     Route::post('/byso', [ProduksiController::class, 'TfbySO']);
+    Route::post('/byso-batal/{id}', [GudangController::class, 'TfbySOBatal']);
     Route::post('/byso-final', [GudangController::class, 'TfbySOFinal']);
     Route::post('/create-noseri', [GudangController::class, 'storeNoseri']);
     Route::post('/create-final', [GudangController::class, 'finalDraftRakit']);
