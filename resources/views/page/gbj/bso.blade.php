@@ -150,9 +150,11 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                <div class="hidden-with-condition">
                     <button type="button" class="btn btn-success" id="okk">Transfer</button>
-                    {{-- <button type="button" class="btn btn-info" id="rancang">Rancang</button> --}}
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-info" id="batal">Batalkan Persiapan</button>
+                </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
@@ -511,8 +513,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                    </span>&emsp;Mohon Tunggu ...",
+                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                        </span>&emsp;Mohon Tunggu ...",
                 }
             });
             a.on('order.dt search.dt', function() {
@@ -720,8 +722,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                    </span>&emsp;Mohon Tunggu ...",
+                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                        </span>&emsp;Mohon Tunggu ...",
                 }
             })
             // testing
@@ -729,11 +731,33 @@
                 type: "get",
                 url: "/api/tfp/detail-so/" + id + "/" + x,
                 success: function(response) {
-                    console.log(response);
+                    checkaddProdukModal();
                 }
             });
+            $('.hidden-with-condition').hide();
             $('#addProdukModal').modal('show');
         });
+
+        function checkaddProdukModal() {
+            // check action on table addProduk when contains siapkan dulu
+            var table = $('#addProduk').DataTable();
+            var data = table.rows().data();
+            
+            var count = 0;
+
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].action == 'Siapkan Produk Dulu') {
+                    count++;
+                }
+            }
+
+            if (count > 0) {
+                $('.hidden-with-condition').hide();
+            } else {
+                $('.hidden-with-condition').show();
+            }
+            console.log("count", count);
+        }
 
         function make_temp_array(prd1) {
             let result = {};
@@ -1055,7 +1079,7 @@
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Batas Maksimal ' + max + ' Barang!',
-                }) 
+                })
             } else {
                 Swal.fire({
                     position: 'center',
@@ -1156,6 +1180,50 @@
                 }
             });
         });
+        $(document).on('click', '#batal', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Batalkan Persiapan?',
+                text: "Jika ada noseri yang ke transfer akan dibatalkan",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya Batalkan'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (result.isConfirmed) {
+                        // $(this).attr('disabled', true);
+                        $.ajax({
+                            url: `/api/tfp/byso-batal/${id}`,
+                            type: "post",
+                            success: function(res) {
+                                console.log(res);
+                                Swal.fire(
+                                        'Success!',
+                                        'Data berhasil dibatalkan',
+                                        'success'
+                                    )
+                                    .then(function() {
+                                        location.reload();
+                                    })
+                            },
+                            error: function(err) {
+                                console.log(err);
+                                Swal.fire(
+                                    'Error!',
+                                    'Data Gagal Dibatalkan',
+                                    'error'
+                                )
+                                // .then(function() {
+                                //     location.reload();
+                                // })
+                            }
+                        })
+                    }
+                }
+            });
+        })
         $(document).on('click', '.cb-child-prd', function() {
             if ($(this).is(":checked")) {
                 $(this).parent().next().next().next().next().children().find('button').removeClass('disabled').attr(
