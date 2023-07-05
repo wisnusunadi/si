@@ -22,6 +22,7 @@ use PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class KesehatanController extends Controller
 {
@@ -1027,63 +1028,132 @@ class KesehatanController extends Controller
     }
     public function karyawan_sakit_aksi_tambah(Request $request)
     {
-
-
-        $this->validate(
-            $request,
-            [
-                'karyawan_id' => 'required',
-                'tgl' => 'required',
-                'pemeriksa_id' => 'required',
-                'obat.*' => 'required',
-            ],
-            [
-                'pemeriksa_id.required' => 'Pemeriksa harus di pilih',
-                'karyawan_id.required' => 'Karyawan harus di pilih',
-                'tgl.required' => 'Tanggal pengecekan harus di isi',
-            ]
-        );
-        $karyawan_sakit = Karyawan_sakit::create([
-            'tgl_cek' => $request->tgl,
-            'karyawan_id' => $request->karyawan_id,
-            'pemeriksa_id' => $request->pemeriksa_id,
-            'analisa' => $request->analisa,
-            'diagnosa' => $request->diagnosa,
-            'tindakan' => $request->hasil_1,
-            'terapi' => $request->terapi,
-            'keputusan' => $request->hasil_2
+        // dd($request->all());
+        $validator = Validator::make($request->all(),  [
+            'karyawan_id' => 'required',
+            'tgl' => 'required',
+            'pemeriksa_id' => 'required',
+            'analisa' => 'required',
+            'diagnosa' => 'required',
+            'terapi' => 'required',
         ]);
 
-        if ($request->hasil_1 == 'Pengobatan') {
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
+        } else {
+            //Cek Dengan Obat
+            if (isset($request->isi_obat)) {
+                //Cek Form Kosong
+                if (in_array(NULL, $request->dosis_obat_custom_obat) || in_array(NULL, $request->dosis_obat_custom_hari) || in_array(NULL, $request->jumlah) ||  in_array("NULL", $request->obat)) {
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Form Kosong',
+                    ], 500);
+                }
 
-            for ($i = 0; $i < count($request->obat); $i++) {
-                $obat = Obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
+                $karyawan_sakit =  Karyawan_sakit::create([
+                    'tgl_cek' => $request->tgl,
+                    'karyawan_id' => $request->karyawan_id,
+                    'pemeriksa_id' => $request->pemeriksa_id,
+                    'analisa' => $request->analisa,
+                    'diagnosa' => $request->diagnosa,
+                    'tindakan' => 'Pengobatan',
+                    'terapi' => $request->terapi,
+                    'keputusan' => '-'
+                ]);
 
-                if ($request->dosis_obat_custom_obat[$i] != null) {
-                    $detail_obat = detail_obat::create([
+                for ($i = 0; $i < count($request->obat); $i++) {
+                    Obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
+                    Detail_obat::create([
                         'karyawan_sakit_id' => $karyawan_sakit->id,
                         'obat_id' => $request->obat[$i],
                         'jumlah' => $request->jumlah[$i],
                         'aturan' => '-',
                         'konsumsi' =>  $request->dosis_obat_custom_obat[$i] . 'x' . $request->dosis_obat_custom_hari[$i],
                     ]);
-                } else {
-                    $detail_obat = detail_obat::create([
-                        'karyawan_sakit_id' => $karyawan_sakit->id,
-                        'obat_id' => $request->obat[$i],
-                        'jumlah' => $request->jumlah[$i],
-                        'konsumsi' => $request->dosis_obat[$i],
-                        'aturan' => '-',
-                    ]);
                 }
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Dengan Obat OK',
+                ], 200);
+            } else {
+
+                Karyawan_sakit::create([
+                    'tgl_cek' => $request->tgl,
+                    'karyawan_id' => $request->karyawan_id,
+                    'pemeriksa_id' => $request->pemeriksa_id,
+                    'analisa' => $request->analisa,
+                    'diagnosa' => $request->diagnosa,
+                    'tindakan' => 'Terapi',
+                    'terapi' => $request->terapi,
+                    'keputusan' => '-'
+                ]);
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Tanpa Obat OK',
+                ], 200);
             }
         }
 
-        if ($karyawan_sakit || $detail_obat) {
-            return redirect()->back()->with('success', 'Berhasil menambahkan data');
-        } else {
-            return redirect()->back()->with('error', 'Gagal menambahkan data');
-        }
+        // $this->validate(
+        //     $request,
+        //     [
+        //         'karyawan_id' => 'required',
+        //         'tgl' => 'required',
+        //         'pemeriksa_id' => 'required',
+        //         'obat.*' => 'required',
+        //     ],
+        //     [
+        //         'pemeriksa_id.required' => 'Pemeriksa harus di pilih',
+        //         'karyawan_id.required' => 'Karyawan harus di pilih',
+        //         'tgl.required' => 'Tanggal pengecekan harus di isi',
+        //     ]
+        // );
+        // $karyawan_sakit = Karyawan_sakit::create([
+        //     'tgl_cek' => $request->tgl,
+        //     'karyawan_id' => $request->karyawan_id,
+        //     'pemeriksa_id' => $request->pemeriksa_id,
+        //     'analisa' => $request->analisa,
+        //     'diagnosa' => $request->diagnosa,
+        //     'tindakan' => $request->hasil_1,
+        //     'terapi' => $request->terapi,
+        //     'keputusan' => $request->hasil_2
+        // ]);
+
+        // if ($request->hasil_1 == 'Pengobatan') {
+
+        //     for ($i = 0; $i < count($request->obat); $i++) {
+        //         $obat = Obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
+
+        //         if ($request->dosis_obat_custom_obat[$i] != null) {
+        //             $detail_obat = detail_obat::create([
+        //                 'karyawan_sakit_id' => $karyawan_sakit->id,
+        //                 'obat_id' => $request->obat[$i],
+        //                 'jumlah' => $request->jumlah[$i],
+        //                 'aturan' => '-',
+        //                 'konsumsi' =>  $request->dosis_obat_custom_obat[$i] . 'x' . $request->dosis_obat_custom_hari[$i],
+        //             ]);
+        //         } else {
+        //             $detail_obat = detail_obat::create([
+        //                 'karyawan_sakit_id' => $karyawan_sakit->id,
+        //                 'obat_id' => $request->obat[$i],
+        //                 'jumlah' => $request->jumlah[$i],
+        //                 'konsumsi' => $request->dosis_obat[$i],
+        //                 'aturan' => '-',
+        //             ]);
+        //         }
+        //     }
+        // }
+
+        // if ($karyawan_sakit || $detail_obat) {
+        //     return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        // } else {
+        //     return redirect()->back()->with('error', 'Gagal menambahkan data');
+        // }
     }
     public function karyawan_sakit_cetak($id)
     {
@@ -1149,77 +1219,104 @@ class KesehatanController extends Controller
     public function karyawan_masuk_aksi_tambah(Request $request)
     {
 
-        $this->validate(
-            $request,
-            [
-                'tgl' => 'required',
-                'karyawan_id' => 'required'
-            ],
-            [
-                'tgl.required' => 'Tgl pemeriksaan harus di isi',
-                'karyawan_id.unique' => 'Nama karyawan harus di pilih'
-            ]
-        );
 
-        if ($request->alasan == "Sakit") {
+        $validator = Validator::make($request->all(),  [
+            'pemeriksa_id' => 'required',
+            'karyawan_id' => 'required',
+            'tgl' => 'required',
+            'alasan' => 'required',
 
+        ]);
 
-            $karyawan_sakit = Karyawan_sakit::create([
-                'tgl_cek' => $request->tgl,
-                'karyawan_id' => $request->karyawan_id,
-                'pemeriksa_id' => $request->pemeriksa_id,
-                'analisa' => $request->analisa,
-                'diagnosa' => $request->diagnosa,
-                'tindakan' => $request->hasil_1,
-                'terapi' => $request->terapi,
-                'keputusan' => $request->hasil_2
-            ]);
-
-            $karyawan_masuk = Karyawan_masuk::create([
-                'karyawan_id' => $request->karyawan_id,
-                'pemeriksa_id' => $request->pemeriksa_id,
-                'karyawan_sakit_id' => $karyawan_sakit->id,
-                'tgl_cek' => $request->tgl,
-                'alasan' => $request->alasan,
-                'keterangan' => $request->keterangan
-            ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
         } else {
-            $karyawan_masuk = Karyawan_masuk::create([
+            Karyawan_masuk::create([
                 'karyawan_id' => $request->karyawan_id,
                 'pemeriksa_id' => $request->pemeriksa_id,
                 'tgl_cek' => $request->tgl,
                 'alasan' => $request->alasan,
                 'keterangan' => $request->keterangan
             ]);
-        }
-        if ($request->hasil_1 == 'Pengobatan') {
-            for ($i = 0; $i < count($request->obat); $i++) {
-                $obat = obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
 
-                if ($request->dosis_obat_custom_obat[$i] != null) {
-                    $detail_obat = detail_obat::create([
-                        'karyawan_sakit_id' => $karyawan_sakit->id,
-                        'obat_id' => $request->obat[$i],
-                        'jumlah' => $request->jumlah[$i],
-                        'aturan' => '-',
-                        'konsumsi' =>  $request->dosis_obat_custom_obat[$i] . 'x' . $request->dosis_obat_custom_hari[$i],
-                    ]);
-                } else {
-                    $detail_obat = detail_obat::create([
-                        'karyawan_sakit_id' => $karyawan_sakit->id,
-                        'obat_id' => $request->obat[$i],
-                        'jumlah' => $request->jumlah[$i],
-                        'konsumsi' => $request->dosis_obat[$i],
-                        'aturan' => '-',
-                    ]);
-                }
-            }
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil Ditambahkan',
+            ], 200);
         }
-        if ($karyawan_masuk) {
-            return redirect()->back()->with('success', 'Berhasil menambahkan data');
-        } else {
-            return redirect()->back()->with('error', 'Gagal menambahkan data');
-        }
+        // $this->validate(
+        //     $request,
+        //     [
+        //         'tgl' => 'required',
+        //         'karyawan_id' => 'required'
+        //     ],
+        //     [
+        //         'tgl.required' => 'Tgl pemeriksaan harus di isi',
+        //         'karyawan_id.unique' => 'Nama karyawan harus di pilih'
+        //     ]
+        // );
+
+        // if ($request->alasan == "Sakit") {
+
+
+        //     $karyawan_sakit = Karyawan_sakit::create([
+        //         'tgl_cek' => $request->tgl,
+        //         'karyawan_id' => $request->karyawan_id,
+        //         'pemeriksa_id' => $request->pemeriksa_id,
+        //         'analisa' => $request->analisa,
+        //         'diagnosa' => $request->diagnosa,
+        //         'tindakan' => $request->hasil_1,
+        //         'terapi' => $request->terapi,
+        //         'keputusan' => $request->hasil_2
+        //     ]);
+
+        //     $karyawan_masuk = Karyawan_masuk::create([
+        //         'karyawan_id' => $request->karyawan_id,
+        //         'pemeriksa_id' => $request->pemeriksa_id,
+        //         'karyawan_sakit_id' => $karyawan_sakit->id,
+        //         'tgl_cek' => $request->tgl,
+        //         'alasan' => $request->alasan,
+        //         'keterangan' => $request->keterangan
+        //     ]);
+        // } else {
+        //     $karyawan_masuk = Karyawan_masuk::create([
+        //         'karyawan_id' => $request->karyawan_id,
+        //         'pemeriksa_id' => $request->pemeriksa_id,
+        //         'tgl_cek' => $request->tgl,
+        //         'alasan' => $request->alasan,
+        //         'keterangan' => $request->keterangan
+        //     ]);
+        // }
+        // if ($request->hasil_1 == 'Pengobatan') {
+        //     for ($i = 0; $i < count($request->obat); $i++) {
+        //         $obat = obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
+
+        //         if ($request->dosis_obat_custom_obat[$i] != null) {
+        //             $detail_obat = detail_obat::create([
+        //                 'karyawan_sakit_id' => $karyawan_sakit->id,
+        //                 'obat_id' => $request->obat[$i],
+        //                 'jumlah' => $request->jumlah[$i],
+        //                 'aturan' => '-',
+        //                 'konsumsi' =>  $request->dosis_obat_custom_obat[$i] . 'x' . $request->dosis_obat_custom_hari[$i],
+        //             ]);
+        //         } else {
+        //             $detail_obat = detail_obat::create([
+        //                 'karyawan_sakit_id' => $karyawan_sakit->id,
+        //                 'obat_id' => $request->obat[$i],
+        //                 'jumlah' => $request->jumlah[$i],
+        //                 'konsumsi' => $request->dosis_obat[$i],
+        //                 'aturan' => '-',
+        //             ]);
+        //         }
+        //     }
+        // }
+        // if ($karyawan_masuk) {
+        //     return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        // } else {
+        //     return redirect()->back()->with('error', 'Gagal menambahkan data');
+        // }
     }
     public function karyawan_masuk_detail_data($id)
     {

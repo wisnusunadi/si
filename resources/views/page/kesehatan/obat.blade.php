@@ -100,21 +100,6 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            {{-- @if (session()->has('success'))
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    Data berhasil ditambahkan
-                </div>
-            @elseif(session()->has('error') || count($errors) > 0)
-                <div class="alert alert-danger alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    Data gagal ditambahkan
-                </div>
-            @endif --}}
             <div class="card">
                 <div class="card-body">
                     <div class='table-responsive'>
