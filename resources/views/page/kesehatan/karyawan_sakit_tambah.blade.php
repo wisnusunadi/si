@@ -101,7 +101,7 @@
                                             <select type="text"
                                                 class="form-control @error('karyawan_id') is-invalid @enderror select2 karyawan_id"
                                                 name="karyawan_id" id="karyawan_id">
-
+                                                <option value="NULL">Pilih Karyawan</option>
                                                 @foreach ($karyawan as $k)
                                                     <option value="{{ $k->id }}">{{ $k->nama }}</option>
                                                 @endforeach
@@ -340,6 +340,7 @@
 @section('adminlte_js')
     <script>
         var where = [''];
+
         $(document).on('submit', '#formkaryawansakit', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
@@ -357,7 +358,9 @@
                         'Berhasil',
                         'Data Berhasil Ditambahkan',
                         'success'
-                    );
+                    ).then(function() {
+                        window.location.href = '/karyawan/sakit/tambah';
+                    });
                 },
                 error: function(xhr, status, error, response) {
                     swal.fire(
@@ -498,6 +501,7 @@
             });
 
             addNull()
+
 
             function addNull() {
                 $('.obat_data').append($('<option>', {

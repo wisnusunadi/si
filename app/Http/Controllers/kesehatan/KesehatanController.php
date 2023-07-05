@@ -1046,7 +1046,7 @@ class KesehatanController extends Controller
             //Cek Dengan Obat
             if (isset($request->isi_obat)) {
                 //Cek Form Kosong
-                if (in_array(NULL, $request->dosis_obat_custom_obat) || in_array(NULL, $request->dosis_obat_custom_hari) || in_array(NULL, $request->jumlah) ||  in_array("NULL", $request->obat)) {
+                if (in_array(NULL, $request->dosis_obat_custom_obat) || $request->karyawan_id == "NULL" || in_array(NULL, $request->dosis_obat_custom_hari) || in_array(NULL, $request->jumlah) ||  in_array("NULL", $request->obat)) {
                     return response()->json([
                         'status' => 200,
                         'message' => 'Form Kosong',
@@ -1203,7 +1203,7 @@ class KesehatanController extends Controller
                 } else {
                     $btn .= '<span class="m-1"><button type="button"  class="btn btn-block btn-light btn-sm" disabled><i class="fa fa-eye" aria-hidden="true"></i> Detail</button></span>';
                 }
-                $btn .= '<span class="m-1"><button type="button" id="delete" class="btn btn-sm btn-danger" data-id="' . $data->id . '"><i class="fas fa-trash"></i> Hapus</button></span></div>';
+                $btn = '<span class="m-1"><button type="button" id="delete" class="btn btn-sm btn-danger" data-id="' . $data->id . '"><i class="fas fa-trash"></i> Hapus</button></span></div>';
                 return $btn;
             })
             ->rawColumns(['button'])
@@ -1219,7 +1219,6 @@ class KesehatanController extends Controller
     public function karyawan_masuk_aksi_tambah(Request $request)
     {
 
-
         $validator = Validator::make($request->all(),  [
             'pemeriksa_id' => 'required',
             'karyawan_id' => 'required',
@@ -1233,6 +1232,14 @@ class KesehatanController extends Controller
                 'message' => 'Cek Form Kembali',
             ], 500);
         } else {
+
+            if ($request->karyawan_id == "NULL") {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Form Kosong',
+                ], 500);
+            }
+
             Karyawan_masuk::create([
                 'karyawan_id' => $request->karyawan_id,
                 'pemeriksa_id' => $request->pemeriksa_id,

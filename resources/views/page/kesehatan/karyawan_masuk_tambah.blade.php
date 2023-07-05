@@ -102,7 +102,7 @@
                                             <select type="text"
                                                 class="form-control @error('karyawan_id') is-invalid @enderror select2"
                                                 name="karyawan_id" id="karyawan_id" style="width:45%;">
-
+                                                <option value="NULL">Pilih Karyawan</option>
                                                 @foreach ($karyawan as $k)
                                                     <option value="{{ $k->id }}">{{ $k->nama }}</option>
                                                 @endforeach
@@ -227,7 +227,9 @@
                         'Berhasil',
                         'Data Berhasil Ditambahkan',
                         'success'
-                    );
+                    ).then(function() {
+                        window.location.href = '/karyawan/masuk/tambah';
+                    });
                     // console.log(response)
                 },
                 error: function(xhr, status, error, response) {
