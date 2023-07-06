@@ -23,7 +23,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '26')
+                    @if (Auth::user()->divisi_id == '26')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.produk.show') }}">Produk</a></li>
                         <li class="breadcrumb-item active">Tambah PO</li>

@@ -271,7 +271,7 @@
 @section('adminlte_js')
     <script>
         $(function() {
-            var divisi_id = '{{ Auth::user()->Karyawan->divisi_id }}';
+            var divisi_id = '{{ Auth::user()->divisi_id }}';
             $('#tabel_obat > tbody').on('click', '#delete', function() {
                 var data_id = $(this).attr('data-id');
                 Swal.fire({

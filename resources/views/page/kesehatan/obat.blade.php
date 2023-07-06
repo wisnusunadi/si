@@ -105,7 +105,7 @@
                     <div class='table-responsive'>
                         <table id="tabel" class="table table-hover styled-table table-striped">
                             <thead style="text-align: center;">
-                                @if (Auth::user()->Karyawan->divisi_id == '28')
+                                @if (Auth::user()->divisi_id == '28')
                                     <tr>
                                         <th colspan="12">
                                             <button type="button" id="btntambahobat"
@@ -496,7 +496,7 @@
             });
         @endif
         $(function() {
-            var divisi_id = '{{ Auth::user()->Karyawan->divisi_id }}';
+            var divisi_id = '{{ Auth::user()->divisi_id }}';
             $(document).on('keyup change', '#form_stok_obat', function() {
                 if ($('#tgl_pembelian').val() != "" && $('#stok_pembelian').val() != "") {
                     $('#button_tambah_stok').attr('disabled', false);

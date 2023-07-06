@@ -32,8 +32,8 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 // Route::get('/', function () {
-//     if (auth()->user()->Karyawan->divisi_id == 24) return redirect('/ppic');
-//     else if (auth()->user()->Karyawan->divisi_id == 3) return redirect('/manager-teknik');
+//     if (auth()->user()->divisi_id == 24) return redirect('/ppic');
+//     else if (auth()->user()->divisi_id == 3) return redirect('/manager-teknik');
 //     else return view('home');
 // })->middleware('auth');
 

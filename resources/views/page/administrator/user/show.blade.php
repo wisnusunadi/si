@@ -180,7 +180,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-7">
+                <div class="col-9">
                     @if (Session::has('error') || count($errors) > 0)
                         <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
                             <strong>Gagal menambahkan!</strong> Periksa
@@ -218,6 +218,7 @@
                                                     <thead style="text-align: center;">
                                                         <tr>
                                                             <th width="5%">No</th>
+                                                            <th width="10%">Akses</th>
                                                             <th width="10%">Divisi</th>
                                                             <th width="10%">Username</th>
                                                             <th width="10%">Nama</th>
@@ -570,6 +571,11 @@
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'akses',
+                        className: 'nowrap-text align-center',
+
                     },
                     {
                         data: 'divisi',

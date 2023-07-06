@@ -10,9 +10,9 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '23')
+                    @if (Auth::user()->divisi_id == '23')
                         <li class="breadcrumb-item"><a href="{{ route('qc.dashboard') }}">Beranda</a></li>
-                    @elseif(Auth::user()->Karyawan->divisi_id == '2')
+                    @elseif(Auth::user()->divisi_id == '2')
                         <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                     @endif
                     <li class="breadcrumb-item"><a href="{{ route('qc.so.show') }}">Sales Order QC</a></li>
@@ -273,7 +273,7 @@
                                             </form>
                                         </div>
                                     </span>
-                                    @if (Auth::user()->Karyawan->divisi_id == '23')
+                                    @if (Auth::user()->divisi_id == '23')
                                         <span class="float-right filter">
                                             <a data-toggle="modal" data-target="#editmodal" class="editmodal"
                                                 data-attr="" data-id="">
@@ -355,7 +355,7 @@
 @section('adminlte_js')
     <script>
         $(function() {
-            var divisi = '{{ Auth::user()->Karyawan->divisi_id }}';
+            var divisi = '{{ Auth::user()->divisi_id }}';
             var showtable = $('#showtable').DataTable({
                 destroy: true,
                 processing: true,

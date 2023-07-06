@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="content-header">
-        <input type="hidden" name="" id="authid" value="{{ Auth::user()->Karyawan->divisi_id }}">
+        <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id }}">
 
         <div class="container-fluid">
             <div class="row mb-2">
@@ -23,7 +23,7 @@
                             <div class="row">
                                 <div class="col-8">
                                     <div class="row">
-                                        @if (Auth::user()->Karyawan->divisi_id != 2)
+                                        @if (Auth::user()->divisi_id != 2)
                                             <span class="float-left mr-1">
                                                 <button type="button" class="btn btn-success" id="downloadTemplate">
                                                     <i class="fas fa-download"></i>&nbsp;Template
@@ -48,7 +48,7 @@
                                 <div class="col-4">
                                     <div class="row">
                                         <div class="col-lg-12">
-                                            @if (Auth::user()->Karyawan->divisi_id != 2)
+                                            @if (Auth::user()->divisi_id != 2)
                                                 <span class="float-right">
                                                     <button type="button" class="btn btn-info" data-toggle="modal"
                                                         data-target="#modal-create" id="create">

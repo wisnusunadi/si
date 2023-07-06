@@ -10,14 +10,14 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '8')
+                    @if (Auth::user()->divisi_id == '8')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('as.so.show') }}">Sales Order</a></li>
                         <li class="breadcrumb-item active">Detail</li>
                     @else
-                        @if (Auth::user()->Karyawan->divisi_id == '15')
+                        @if (Auth::user()->divisi_id == '15')
                             <li class="breadcrumb-item"><a href="{{ route('logistik.dashboard') }}">Beranda</a></li>
-                        @elseif(Auth::user()->Karyawan->divisi_id == '2')
+                        @elseif(Auth::user()->divisi_id == '2')
                             <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                         @endif
                         <li class="breadcrumb-item"><a href="{{ route('logistik.pengiriman.show') }}">Pengiriman</a></li>
@@ -676,7 +676,7 @@
 @section('adminlte_js')
     <script>
         $(function() {
-            var role = "{{ Auth::user()->Karyawan->divisi_id }}";
+            var role = "{{ Auth::user()->divisi_id }}";
             var jenis = "{{ $jenis }}";
             var showtable = $('#detailtable').DataTable({
                 destroy: true,

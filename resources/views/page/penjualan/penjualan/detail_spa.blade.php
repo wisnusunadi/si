@@ -228,15 +228,15 @@
                                     <div class="table-responsive overflowcard">
                                         <?php $totalharga = 0; ?>
                                         <?php
-
+                                        
                                         $no_dsb = 0;
-
+                                        
                                         if (isset($data->Pesanan->detailpesanandsb)) {
                                             $no = count($data->Pesanan->detailpesanandsb);
                                         } else {
                                             $no = 0;
                                         }
-
+                                        
                                         ?>
                                         @if (isset($data->Pesanan))
                                             <table class="table"
@@ -251,7 +251,7 @@
                                                         <th rowspan="2">Harga</th>
                                                         <th rowspan="2">Subtotal</th>
                                                         <th rowspan="2">Subtotal</th>
-                                                        @if (Auth::user()->Karyawan->divisi_id == '8')
+                                                        @if (Auth::user()->divisi_id == '8')
                                                             <th rowspan="2">Aksi</th>
                                                         @endif
                                                     </tr>
@@ -329,7 +329,7 @@
                                                                     class="nowraptxt tabnum">@currency($e->harga)</td>
                                                                 <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
                                                                     class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
-                                                                @if (Auth::user()->Karyawan->divisi_id == '8')
+                                                                @if (Auth::user()->divisi_id == '8')
                                                                     <td
                                                                         rowspan="{{ count($e->DetailPesananProduk) + 1 }}">
                                                                         -
@@ -390,7 +390,7 @@
                                                                 </td>
                                                                 <td class="nowraptxt tabnum">@currency($e->harga)</td>
                                                                 <td class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
-                                                                @if (Auth::user()->Karyawan->divisi_id == '8')
+                                                                @if (Auth::user()->divisi_id == '8')
                                                                     @if ($data->Pesanan->log_id == '8' || $data->Pesanan->log_id == '9')
                                                                         <td><a data-toggle="komentar"
                                                                                 class="komentarmodal"
@@ -414,7 +414,7 @@
                                                     <tr>
                                                         <th colspan="6" class="align-center">Total Harga</th>
                                                         <th class="tabnum nowraptxt">@currency($totalharga)</th>
-                                                        @if (Auth::user()->Karyawan->divisi_id == '8')
+                                                        @if (Auth::user()->divisi_id == '8')
                                                             <th></th>
                                                         @endif
                                                     </tr>

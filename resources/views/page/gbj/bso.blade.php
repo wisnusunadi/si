@@ -42,7 +42,7 @@
             overflow-x: hidden;
         }
     </style>
-    <input type="hidden" name="" id="auth" value="{{ Auth::user()->Karyawan->divisi_id }}">
+    <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
     <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
     <div class="content-header">
         <div class="container-fluid">
@@ -150,10 +150,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                <div class="hidden-with-condition">
-                    <button type="button" class="btn btn-success" id="okk">Transfer</button>
-                    <button type="button" class="btn btn-info" id="batal">Batalkan Persiapan</button>
-                </div>
+                    <div class="hidden-with-condition">
+                        <button type="button" class="btn btn-success" id="okk">Transfer</button>
+                        <button type="button" class="btn btn-info" id="batal">Batalkan Persiapan</button>
+                    </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                 </div>
             </div>
@@ -513,8 +513,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                        </span>&emsp;Mohon Tunggu ...",
+                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                            </span>&emsp;Mohon Tunggu ...",
                 }
             });
             a.on('order.dt search.dt', function() {
@@ -722,8 +722,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                        </span>&emsp;Mohon Tunggu ...",
+                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                            </span>&emsp;Mohon Tunggu ...",
                 }
             })
             // testing
@@ -742,7 +742,7 @@
             // check action on table addProduk when contains siapkan dulu
             var table = $('#addProduk').DataTable();
             var data = table.rows().data();
-            
+
             var count = 0;
 
             for (var i = 0; i < data.length; i++) {

@@ -10,9 +10,9 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '9')
+                    @if (Auth::user()->divisi_id == '9')
                         <li class="breadcrumb-item"><a href="{{ route('dc.dashboard') }}">Beranda</a></li>
-                    @elseif(Auth::user()->Karyawan->divisi_id == '9')
+                    @elseif(Auth::user()->divisi_id == '9')
                         <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                     @endif
                     <li class="breadcrumb-item"><a href="{{ route('dc.so.show') }}">Sales Order DC</a></li>
@@ -212,47 +212,47 @@
                                 </thead>
                                 <tbody>
                                     <!-- <tr>
-                                        <td class="nowrap-text">1</td>
-                                        <td class="nowrap-text">19-10-2021</td>
-                                        <td class="nowrap-text minimizechar">B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
-                                        <td class="nowrap-text">21102900256</td>
-                                        <td class="nowrap-text">X</td>
-                                        <td class="nowrap-text">5</td>
-                                        <td class="nowrap-text"><span class="badge green-text">Tersedia</span></td>
-                                        <td class="nowrap-text"></a>
-                                            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="noserishow dropdown-item" type="button">
-                                                    <i class="fas fa-eye"></i>
-                                                    Detail
-                                                </a>
+                                            <td class="nowrap-text">1</td>
+                                            <td class="nowrap-text">19-10-2021</td>
+                                            <td class="nowrap-text minimizechar">B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
+                                            <td class="nowrap-text">21102900256</td>
+                                            <td class="nowrap-text">X</td>
+                                            <td class="nowrap-text">5</td>
+                                            <td class="nowrap-text"><span class="badge green-text">Tersedia</span></td>
+                                            <td class="nowrap-text"></a>
+                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="noserishow dropdown-item" type="button">
+                                                        <i class="fas fa-eye"></i>
+                                                        Detail
+                                                    </a>
 
-                                                    <button class="dropdown-item" type="button">
-                                                        <i class="fas fa-file"></i>
-                                                        Laporan PDF
-                                                    </button>
+                                                        <button class="dropdown-item" type="button">
+                                                            <i class="fas fa-file"></i>
+                                                            Laporan PDF
+                                                        </button>
 
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>21-10-2021</td>
-                                        <td class="minimizechar">PULSE OXIMETER/OXYMETER FOX-2</td>
-                                        <td>20502210102</td>
-                                        <td></td>
-                                        <td>2</td>
-                                        <td><span class="badge red-text">Belum Tersedia</span></td>
-                                        <td class="nowrap-text"></a>
-                                            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="noserishow dropdown-item" type="button">
-                                                    <i class="fas fa-eye"></i>
-                                                    Detail
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr> -->
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>21-10-2021</td>
+                                            <td class="minimizechar">PULSE OXIMETER/OXYMETER FOX-2</td>
+                                            <td>20502210102</td>
+                                            <td></td>
+                                            <td>2</td>
+                                            <td><span class="badge red-text">Belum Tersedia</span></td>
+                                            <td class="nowrap-text"></a>
+                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="noserishow dropdown-item" type="button">
+                                                        <i class="fas fa-eye"></i>
+                                                        Detail
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr> -->
                                 </tbody>
                             </table>
                         </div>

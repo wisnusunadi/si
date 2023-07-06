@@ -29,6 +29,7 @@ class User extends Authenticatable implements JWTSubject
         'status',
         'password',
         'is_aktif',
+        'divisi_id',
 
     ];
 
@@ -62,7 +63,7 @@ class User extends Authenticatable implements JWTSubject
     }
     public function hasRole($role)
     {
-        if ($role == $this->Karyawan->divisi_id) {
+        if ($role == $this->divisi_id) {
             return true;
         }
         return false;

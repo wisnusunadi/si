@@ -10,9 +10,9 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '9')
+                    @if (Auth::user()->divisi_id == '9')
                         <li class="breadcrumb-item"><a href="{{ route('dc.dashboard') }}">Beranda</a></li>
-                    @elseif(Auth::user()->Karyawan->divisi_id == '9')
+                    @elseif(Auth::user()->divisi_id == '9')
                         <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                     @endif
                     <li class="breadcrumb-item active">Sales Order DC</li>
@@ -171,75 +171,75 @@
                                                     </thead>
                                                     <tbody>
                                                         <!-- <tr>
-                                                            <td>1</td>
-                                                            <td>SO/EKAT/X/02/98</td>
-                                                            <td>AK1-909090-1892180</td>
-                                                            <td>
-                                                                <div class="urgent">31-10-2021</div>
-                                                                <small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Kontrak</small>
-                                                            </td>
-                                                            <td>CV. Cipta Jaya Mandiri</td>
-                                                            <td>Pemerintah Kota Gorontalo</td>
-                                                            <td><span class="badge yellow-text">Sebagian Diproses</span></td>
-                                                            <td>-</td>
-                                                            <td><a href="/dc/so/detail/1">
-                                                                    <i class="fas fa-search"></i>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>2</td>
-                                                            <td>SO/EKAT/X/02/100</td>
-                                                            <td>AK1-909090-1892180</td>
-                                                            <td>
-                                                                <div class="urgent">31-10-2021</div>
-                                                                <small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Kontrak</small>
-                                                            </td>
-                                                            <td>CV. Cipta Jaya Mandiri</td>
-                                                            <td>Rumah Sakit Santo Paulus</td>
-                                                            <td>
-                                                                <span class="badge red-text">Belum Diproses</span>
-                                                            </td>
-                                                            <td>-</td>
-                                                            <td><a href="/dc/so/detail/1">
-                                                                    <i class="fas fa-search"></i>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>3</td>
-                                                            <td>SO/SPA/XI/02/01</td>
-                                                            <td>AK1-909090-1892180</td>
-                                                            <td>
-                                                                <div class="warning">04-11-2021</div>
-                                                                <small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa 2 Hari</small>
-                                                            </td>
-                                                            <td>PT. Emiindo Jaya Bersama</td>
-                                                            <td>Pemerintah Kota Padang</td>
-                                                            <td><span class="badge yellow-text">Sebagian Diproses</span></td>
-                                                            <td>-</td>
-                                                            <td><a href="/dc/so/detail/1">
-                                                                    <i class="fas fa-search"></i>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>4</td>
-                                                            <td>SO/SPB/XI/02/01</td>
-                                                            <td>AK1-909090-1892180</td>
-                                                            <td>
-                                                                <div>21-09-2021</div>
-                                                                <small><i class="fas fa-clock info"></i> Batas sisa 6 Hari</small>
-                                                            </td>
-                                                            <td>PT. Emiindo Jaya Bersama</td>
-                                                            <td>Rumah Sakit Santo Paulus</td>
-                                                            <td><span class="badge red-text">Belum Diproses</span></td>
-                                                            <td>-</td>
-                                                            <td><a href="/dc/so/detail/1">
-                                                                    <i class="fas fa-search"></i>
-                                                                </a>
-                                                            </td>
-                                                        </tr> -->
+                                                                <td>1</td>
+                                                                <td>SO/EKAT/X/02/98</td>
+                                                                <td>AK1-909090-1892180</td>
+                                                                <td>
+                                                                    <div class="urgent">31-10-2021</div>
+                                                                    <small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Kontrak</small>
+                                                                </td>
+                                                                <td>CV. Cipta Jaya Mandiri</td>
+                                                                <td>Pemerintah Kota Gorontalo</td>
+                                                                <td><span class="badge yellow-text">Sebagian Diproses</span></td>
+                                                                <td>-</td>
+                                                                <td><a href="/dc/so/detail/1">
+                                                                        <i class="fas fa-search"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>2</td>
+                                                                <td>SO/EKAT/X/02/100</td>
+                                                                <td>AK1-909090-1892180</td>
+                                                                <td>
+                                                                    <div class="urgent">31-10-2021</div>
+                                                                    <small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Kontrak</small>
+                                                                </td>
+                                                                <td>CV. Cipta Jaya Mandiri</td>
+                                                                <td>Rumah Sakit Santo Paulus</td>
+                                                                <td>
+                                                                    <span class="badge red-text">Belum Diproses</span>
+                                                                </td>
+                                                                <td>-</td>
+                                                                <td><a href="/dc/so/detail/1">
+                                                                        <i class="fas fa-search"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>3</td>
+                                                                <td>SO/SPA/XI/02/01</td>
+                                                                <td>AK1-909090-1892180</td>
+                                                                <td>
+                                                                    <div class="warning">04-11-2021</div>
+                                                                    <small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa 2 Hari</small>
+                                                                </td>
+                                                                <td>PT. Emiindo Jaya Bersama</td>
+                                                                <td>Pemerintah Kota Padang</td>
+                                                                <td><span class="badge yellow-text">Sebagian Diproses</span></td>
+                                                                <td>-</td>
+                                                                <td><a href="/dc/so/detail/1">
+                                                                        <i class="fas fa-search"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>4</td>
+                                                                <td>SO/SPB/XI/02/01</td>
+                                                                <td>AK1-909090-1892180</td>
+                                                                <td>
+                                                                    <div>21-09-2021</div>
+                                                                    <small><i class="fas fa-clock info"></i> Batas sisa 6 Hari</small>
+                                                                </td>
+                                                                <td>PT. Emiindo Jaya Bersama</td>
+                                                                <td>Rumah Sakit Santo Paulus</td>
+                                                                <td><span class="badge red-text">Belum Diproses</span></td>
+                                                                <td>-</td>
+                                                                <td><a href="/dc/so/detail/1">
+                                                                        <i class="fas fa-search"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr> -->
                                                     </tbody>
                                                 </table>
                                             </div>

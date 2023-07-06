@@ -2,7 +2,7 @@
 
 @if (isset($item['auth']))
     @foreach ($item['auth'] as $user)
-        @if (isset(Auth::user()->karyawan->divisi_id) && $user == Auth::user()->karyawan->divisi_id)
+        @if (isset(Auth::user()->divisi_id) && $user == Auth::user()->divisi_id)
             @if ($menuItemHelper->isHeader($item))
                 {{-- Header --}}
                 @include('adminlte.partials.sidebar.menu-item-header')

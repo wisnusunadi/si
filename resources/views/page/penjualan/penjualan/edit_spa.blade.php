@@ -11,7 +11,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '26')
+                    @if (Auth::user()->divisi_id == '26')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.penjualan.show') }}">Penjualan</a></li>
                         <li class="breadcrumb-item active">Edit SPA</li>
@@ -95,13 +95,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                    .row {
-                        font-size: 12px;
-                    }
+                        .row {
+                            font-size: 12px;
+                        }
 
-                    h4 {
-                        font-size: 20px;
-                    } */
+                        h4 {
+                            font-size: 20px;
+                        } */
             body {
                 font-size: 12px;
             }
@@ -122,13 +122,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                    .row {
-                        font-size: 12px;
-                    }
+                        .row {
+                            font-size: 12px;
+                        }
 
-                    h4 {
-                        font-size: 20px;
-                    } */
+                        h4 {
+                            font-size: 20px;
+                        } */
             body {
                 font-size: 12px;
             }
