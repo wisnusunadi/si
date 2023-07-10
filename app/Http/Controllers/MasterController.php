@@ -1942,4 +1942,22 @@ class MasterController extends Controller
             ], 500);
         }
     }
+
+    function changeStatusProduk(Request $request) {
+        try {
+            $produk = Produk::find($request->id);
+            $produk->status = $request->status;
+            $produk->save();
+
+            return response()->json([
+                'success' => true,
+                'data' => $produk
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
 }
