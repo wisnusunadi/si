@@ -689,8 +689,16 @@
                     });
 
                     $("#head-cb-so").on('click', function() {
-                        var isChecked = $("#head-cb-so").prop('checked')
-                        $('.cb-child-so').prop('checked', isChecked)
+                        const table = $('.add-produk').DataTable();
+                        // detect table wheen status "belum diinput" on span badge
+                        table.rows().every(function() {
+                            if (this.data().status == '<span class="badge badge-danger">Belum Diinput</span>') {
+                                this.nodes().to$().find('input[type="checkbox"]').prop('checked', $('#head-cb-so').prop(
+                                    'checked'));
+                            }
+                        });
+                        // check column status
+                        
                     });
 
                     if (auth !== 31) {
