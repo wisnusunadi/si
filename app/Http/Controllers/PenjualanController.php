@@ -2596,6 +2596,13 @@ class PenjualanController extends Controller
                         ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
                         ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                },
+                'cgudang' => function ($q) {
+                    $q->selectRaw('count(detail_pesanan_produk.id)')
+                        ->from('detail_pesanan_produk')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->where('detail_pesanan_produk.status_cek', '4')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 }
 
             ])->whereYear('created_at',  $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
@@ -2625,7 +2632,15 @@ class PenjualanController extends Controller
                         ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
                         ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                },
+                'cgudang' => function ($q) {
+                    $q->selectRaw('count(detail_pesanan_produk.id)')
+                        ->from('detail_pesanan_produk')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->where('detail_pesanan_produk.status_cek', '4')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 }
+
 
             ])->whereYear('created_at', $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
             // ])->orderBy('created_at', 'DESC')->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
@@ -2826,7 +2841,7 @@ class PenjualanController extends Controller
 
                 if ($divisi_id == "26") {
                     if (!empty($data->Pesanan->log_id)) {
-                        if ($data->Pesanan->State->nama == "Penjualan") {
+                        if ($data->Pesanan->State->nama == "Penjualan" || $data->cgudang == 0) {
                             $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">
                                 <button class="dropdown-item" type="button" >
                                 <i class="fas fa-pencil-alt"></i>
@@ -2834,25 +2849,25 @@ class PenjualanController extends Controller
                                 </button>
                             </a>
                             ';
-                            if ($data->status == 'sepakat') {
-                                if ($data->Pesanan == '') {
-                                    $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">
-                                        <button class="dropdown-item" type="button" >
-                                        <i class="fas fa-plus"></i>
-                                        Tambah PO
-                                        </button>
-                                    </a>';
-                                } else {
-                                    if ($data->Pesanan->so == '') {
-                                        $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">
-                                            <button class="dropdown-item" type="button" >
-                                            <i class="fas fa-plus"></i>
-                                            Tambah PO
-                                            </button>
-                                        </a>';
-                                    }
-                                }
-                            }
+                            // if ($data->status == 'sepakat') {
+                            //     if ($data->Pesanan == '') {
+                            //         $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">
+                            //             <button class="dropdown-item" type="button" >
+                            //             <i class="fas fa-plus"></i>
+                            //             Tambah PO
+                            //             </button>
+                            //         </a>';
+                            //     } else {
+                            //         if ($data->Pesanan->so == '') {
+                            //             $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">
+                            //                 <button class="dropdown-item" type="button" >
+                            //                 <i class="fas fa-plus"></i>
+                            //                 Tambah PO
+                            //                 </button>
+                            //             </a>';
+                            //         }
+                            //     }
+                            // }
                             $return .= '<a data-toggle="modal" data-target="ekatalog" class="deletemodal" data-id="' . $data->id . '">
                                     <button class="dropdown-item" type="button" >
                                     <i class="far fa-trash-alt"></i>
@@ -3464,8 +3479,13 @@ class PenjualanController extends Controller
     // Create
     public function create_penjualan(Request $request)
     {
-        //  dd($request);
+//    dd($request->all());
         if ($request->jenis_penjualan == 'ekatalog') {
+            if ($request->status == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL")) {
+                    return response()->json([
+                        'message' => 'Cek Form Kembali',
+                    ], 500);
+            }
             //dd($request);
             // $this->validate(
             //     $request,
@@ -3541,7 +3561,7 @@ class PenjualanController extends Controller
 
             $Ekatalog = Ekatalog::create([
                 'customer_id' => $c_id,
-                'provinsi_id' => $request->provinsi,
+                'provinsi_id' => $request->provinsi == 'NULL' ? NULL : $request->provinsi,
                 'pesanan_id' => $x,
                 'no_paket' => $nopaket,
                 'no_urut' => $request->no_urut,
@@ -3629,9 +3649,14 @@ class PenjualanController extends Controller
                 $bool = false;
             }
             if ($bool == true) {
-                return redirect()->back()->with('success', 'Berhasil menambahkan Ekatalog');
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Berhasil Ditambahkan',
+                ], 200);
             } else if ($bool == false) {
-                return redirect()->back()->with('error', 'Gagal menambahkan Ekatalog');
+                return response()->json([
+                    'message' => 'Cek Form Kembali',
+                ], 500);
             }
         } else if ($request->jenis_penjualan == 'spa' || $request->jenis_penjualan == 'spb') {
             $count_array = count($request->jenis_pen);
@@ -3734,9 +3759,14 @@ class PenjualanController extends Controller
             }
 
             if ($bool == true) {
-                return redirect()->back()->with('success', 'Berhasil menambahkan SPA');
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Berhasil Ditambahkan',
+                ], 200);
             } else if ($bool == false) {
-                return redirect()->back()->with('error', 'Gagal menambahkan SPA');
+                return response()->json([
+                    'message' => 'Cek Form Kembali',
+                ], 500);
             }
         }
     }
@@ -3854,9 +3884,13 @@ class PenjualanController extends Controller
     }
     public function update_ekatalog(Request $request, $id)
     {
-        //dd($request->no_urut);
-
-        echo json_encode($request->all());
+        // dd($request->all());
+        if ($request->status_akn == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL")) {
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
+    }
+        // echo json_encode($request->all());
         if ($request->namadistributor == 'belum') {
             $c_id = '484';
         } else {
@@ -4002,9 +4036,14 @@ class PenjualanController extends Controller
         }
 
         if ($bool == true) {
-            return redirect()->back()->with('success', 'Berhasil mengubah Ekatalog');
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil Ditambahkan',
+            ], 200);
         } else if ($bool == false) {
-            return redirect()->back()->with('error', 'Gagal mengubah Ekatalog');
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
         }
     }
     public function update_spa(Request $request, $id)

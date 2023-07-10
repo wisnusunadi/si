@@ -94,13 +94,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                    .row {
-                                                                                                                                                                                                                                                                                                        font-size: 12px;
-                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                            .row {
+                                                                                                                                                                                                                                                                                                                font-size: 12px;
+                                                                                                                                                                                                                                                                                                            }
 
-                                                                                                                                                                                                                                                                                                    h4 {
-                                                                                                                                                                                                                                                                                                        font-size: 20px;
-                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                            h4 {
+                                                                                                                                                                                                                                                                                                                font-size: 20px;
+                                                                                                                                                                                                                                                                                                            } */
             body {
                 font-size: 12px;
             }
@@ -121,13 +121,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                    .row {
-                                                                                                                                                                                                                                                                                                        font-size: 12px;
-                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                            .row {
+                                                                                                                                                                                                                                                                                                                font-size: 12px;
+                                                                                                                                                                                                                                                                                                            }
 
-                                                                                                                                                                                                                                                                                                    h4 {
-                                                                                                                                                                                                                                                                                                        font-size: 20px;
-                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                            h4 {
+                                                                                                                                                                                                                                                                                                                font-size: 20px;
+                                                                                                                                                                                                                                                                                                            } */
             body {
                 font-size: 12px;
             }
@@ -358,7 +358,7 @@
                             @endif
                             <div class="content">
                                 <form method="post" autocomplete="off"
-                                    action="{{ route('penjualan.penjualan.update_ekatalog', ['id' => $e->id]) }}">
+                                    action="{{ route('penjualan.penjualan.update_ekatalog', ['id' => $e->id]) }}" id="edit_penjualan">
                                     {{ csrf_field() }}
                                     {{ method_field('PUT') }}
                                     <div class="row d-flex justify-content-center">
@@ -554,9 +554,9 @@
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
                                                                             <div class="col-lg-5 col-md-12 col-form-label">
                                                                                 <!-- <div class="form-check form-check-inline">
-                                                                                                                                                                                                                                                                                                                                                                            <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
-                                                                                                                                                                                                                                                                                                                                                                            <label class="form-check-label" for="status_akn4">Draft</label>
-                                                                                                                                                                                                                                                                                                                                                                        </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                    <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
+                                                                                                                                                                                                                                                                                                                                                                                    <label class="form-check-label" for="status_akn4">Draft</label>
+                                                                                                                                                                                                                                                                                                                                                                                </div> -->
                                                                                 <div class="form-check form-check-inline">
                                                                                     <input class="form-check-input"
                                                                                         type="radio" name="status_akn"
@@ -744,7 +744,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="form-group row @if ($e->Pesanan->tgl_do == null) checked @endif"
+                                                                        <div class="form-group row @if ($e->Pesanan->tgl_do == null) hide @endif"
                                                                             id="do_detail_tgl_ekat">
                                                                             <label for=""
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
@@ -832,7 +832,7 @@
                                                                                 <select name="provinsi" id="provinsi"
                                                                                     class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror"
                                                                                     style="width: 100%;">
-                                                                                    @if (!empty($e->provinsi_id))
+                                                                                    @if ($e->provinsi_id != NULL || $e->provinsi_id != "" )
                                                                                         <option
                                                                                             value="{{ $e->provinsi_id }}"
                                                                                             selected>
@@ -1313,6 +1313,37 @@
 
 @section('adminlte_js')
     <script>
+          $(document).on('submit', '#edit_penjualan', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $(this).serialize(),
+                dataType: 'JSON',
+                success: function(response) {
+                    // console.log(response)
+                    swal.fire(
+                        'Berhasil',
+                        'Data Berhasil di Update',
+                        'success'
+                    ).then(function() {
+                        window.location.href = '/penjualan/penjualan/edit_ekatalog/' + {{ $e->id }} + '/ekatalog';
+                    });
+                },
+                error: function(xhr, status, error, response) {
+                    // console.log(response)
+                    swal.fire(
+                        'Gagal',
+                        'Cek Form Kembali',
+                        'error'
+                    );
+                }
+            });
+          });
         $(function() {
             $('#jenis_paket').select2();
             var nopaketdb = "{{ str_replace(['AK1-', 'FKS-', 'KLK-'], '', $e->no_paket) }}";
@@ -1329,8 +1360,8 @@
             // var instansi_array = [];
 
 
-            $("#tgl_edit").attr("max", today);
-            $("#batas_kontrak").attr("min", today);
+            // $("#tgl_edit").attr("max", today);
+            // $("#batas_kontrak").attr("min", today);
 
             loop();
             load_variasi();
@@ -1597,13 +1628,17 @@
             if ('{{ $e->customer_id }}' == 484) {
                 var cust_id = 'belum';
                 $("#customer_id").attr('disabled', true);
-                $("#customer_id").empty().trigger('change');
-                $("#provinsi").attr('disabled', true);
-                $("#provinsi").empty().trigger('change');
+                $("#customer_id").val("484").trigger('change');
                 $("#alamat").val("");
                 $("#telepon").val("");
             } else {
                 var cust_id = 'sudah';
+            }
+            if ('{{ $e->provinsi_id }}' == "") {
+                $('.provinsi').append($('<option>', {
+                    value: 'NULL',
+                    text: 'Pilih Provinsi'
+                }));
             }
 
             if (status_akn != 'sepakat') {
@@ -1612,8 +1647,8 @@
                     if (jum_produk <= 0) {
                         $("#dataproduk").addClass("hide");
                     }
-                    $("#provinsi").attr('disabled', true);
-                    $("#provinsi").empty().trigger('change')
+                    // $("#provinsi").attr('disabled', true);
+                    // $("#provinsi").empty().trigger('change')
                     $("#batas_kontrak").attr('disabled', true);
                 }
             }
@@ -1622,9 +1657,14 @@
                 if ($(this).val() != "") {
                     if ($(this).val() == "sudah") {
                         $("#customer_id").attr('disabled', false);
+                        var $newOption = $("<option selected='selected'></option>").val("213").text(
+                            "PT. EMIINDO Jaya Bersama")
+                        $(".customer_id").append($newOption).trigger('change');
                     } else {
                         $("#customer_id").attr('disabled', true);
-                        $("#customer_id").empty().trigger('change')
+                        var $newOption = $("<option selected='selected'></option>").val("484").text(
+                            "BELUM DIKETAHUI")
+                        $(".customer_id").append($newOption).trigger('change');
                         $("#alamat").val("");
                         $("#telepon").val("");
                     }
@@ -1659,9 +1699,9 @@
                         $("#dataproduk").removeClass("hide");
                         $("#batas_kontrak").attr('disabled', false);
                         $("#provinsi").attr('disabled', false);
-                        var $newOption = $("<option selected='selected'></option>").val("11").text(
-                            "Jawa Timur")
-                        $(".provinsi").append($newOption).trigger('change');
+                        // var $newOption = $("<option selected='selected'></option>").val("11").text(
+                        //     "Jawa Timur")
+                        // $(".provinsi").append($newOption).trigger('change');
                         if (nopaketubah == false) {
                             $('#no_paket').val(nopaketdb);
                         }
@@ -1676,8 +1716,8 @@
                         // $('#no_paket').val("");
                         // $('#no_paket').attr('readonly', true);
                         $("#batas_kontrak").attr('disabled', true);
-                        $("#provinsi").attr('disabled', true);
-                        $("#provinsi").empty().trigger('change');
+                        // $("#provinsi").attr('disabled', true);
+                        // $("#provinsi").empty().trigger('change');
 
                         if ($('#no_paket').val() != '') {
                             $('#no_paket').attr('readonly', false);
@@ -1705,8 +1745,8 @@
                         $("#batas_kontrak").val("");
                         $("#batas_kontrak").attr('disabled', true);
                         $("#dataproduk").removeClass("hide");
-                        $("#provinsi").attr('disabled', true);
-                        $("#provinsi").empty().trigger('change')
+                        // $("#provinsi").attr('disabled', true);
+                        // $("#provinsi").empty().trigger('change')
                         if (nopaketubah == false) {
                             $('#no_paket').val(nopaketdb);
                         }

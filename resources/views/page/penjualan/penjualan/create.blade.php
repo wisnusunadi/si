@@ -231,24 +231,7 @@
                             <div class="card-title">Form Tambah Data</div>
                         </div>
                         <div class="card-body">
-                            @if (Session::has('error') || count($errors) > 0)
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>{{ Session::get('error') }}</strong> Periksa
-                                    kembali data yang diinput
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            @elseif(Session::has('success'))
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <strong>{{ Session::get('success') }}</strong>,
-                                    Terima kasih
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            @endif
-                            <form method="post" autocomplete="off" action="{{ route('penjualan.penjualan.store') }}">
+                            <form method="post" id="create_penjualan" autocomplete="off" action="{{ route('penjualan.penjualan.store') }}">
                                 {{ csrf_field() }}
                                 <div class="row d-flex justify-content-center">
                                     <div class="col-lg-11 col-md-12">
@@ -1261,6 +1244,35 @@
 
 @section('adminlte_js')
     <script>
+          $(document).on('submit', '#create_penjualan', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $(this).serialize(),
+                dataType: 'JSON',
+                success: function(response) {
+                    swal.fire(
+                        'Berhasil',
+                        'Data Berhasil Ditambahkan',
+                        'success'
+                    ).then(function() {
+                        window.location.href = '/penjualan/penjualan/create';
+                    });
+                },
+                error: function(xhr, status, error, response) {
+                    swal.fire(
+                        'Gagal',
+                        'Cek Form Kembali',
+                        'error'
+                    );
+                }
+            });
+          });
         $(function() {
             var produk_obj = {};
             var part_obj = {};
@@ -1269,6 +1281,19 @@
             $('#jenis_paket').select2({
                 placeholder: "Pilih Paket"
             });
+
+            addNull()
+            function addNull() {
+                $('.provinsi').append($('<option>', {
+                    value: 'NULL',
+                    text: 'Pilih Provinsi'
+                }));
+
+                // var $newOption = $("<option selected='selected'></option>").val("NULL").text(
+                //     "Pilih Produk")
+                // $(".obat_data").append($newOption).trigger('change');
+            }
+
 
             function perencanaan(customer_id, instansi) {
                 $('#perencanaantable').DataTable({
@@ -1386,8 +1411,7 @@
                             "input[name='status']:checked")
                         .val() != "" && $('#tanggal_pemesanan').val() != "" && $("#batas_kontrak").val() != "") {
                         $('#pills-instansi-tab').removeClass('disabled');
-                        if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi")
-                            .val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "") {
+                        if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== ""  && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "") {
                             $('#pills-produk-tab').removeClass('disabled');
                         } else {
                             $('#pills-produk-tab').addClass('disabled');
@@ -1538,7 +1562,7 @@
                 }
                 if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
                     if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi")
-                        .val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $(
+                        .val() !== "" && $("#alamatinstansi").val() !== "" && $(
                             "#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass(
                             'is-invalid')) && $("input[name='status']:checked").val() != "" && $("#batas_kontrak")
                         .val() != "" && $("#deskripsi").val() != "" && ((!$("#no_urut")
@@ -2002,10 +2026,6 @@
                         $('#no_paket').attr('readonly', false);
                         $("#dataproduk").removeClass("hide");
                         $("#batas_kontrak").attr('disabled', false);
-                        $("#provinsi").attr('disabled', false);
-                        var $newOption = $("<option selected='selected'></option>").val("11").text(
-                            "Jawa Timur")
-                        $(".provinsi").append($newOption).trigger('change');
                     } else if (($(this).val() == "draft") || ($(this).val() == "batal")) {
                         $('#checkbox_nopaket').removeClass('hide');
                         $('#isi_nopaket').prop("checked", false);
@@ -2020,8 +2040,6 @@
                         $("#totalhargaprd").text("Rp. 0");
                         $("#dataproduk").addClass("hide");
                         $("#batas_kontrak").attr('disabled', true);
-                        $("#provinsi").attr('disabled', true);
-                        $("#provinsi").empty().trigger('change');
                         $('#isi_produk_input').removeClass('hide');
                     }
                     //  else if ($(this).val() == "batal") {
@@ -2047,8 +2065,6 @@
                         $("#batas_kontrak").val("");
                         $("#batas_kontrak").attr('disabled', true);
                         $("#dataproduk").removeClass("hide");
-                        $("#provinsi").attr('disabled', true);
-                        $("#provinsi").empty().trigger('change')
                     }
 
                 } else {
