@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 export default {
     props: ['produk'],
     data() {
@@ -33,8 +34,13 @@ export default {
             this.data_detail = updatedDetail
             this.dialogDetail = true
         },
-        updateStatus(item) {
-            console.log(item)
+        async updateStatus(item) {
+            const { data } = await axios.post('/api/changeStatusProduk', {
+                id: item.id,
+                status: item.status
+            })
+
+            console.log(data)
         },
         editProduk(item) {
             this.$emit('editProduk', item)
