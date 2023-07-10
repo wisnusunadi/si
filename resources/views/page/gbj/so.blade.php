@@ -697,8 +697,6 @@
                                     'checked'));
                             }
                         });
-                        // check column status
-                        
                     });
 
                     if (auth !== 31) {
