@@ -1054,7 +1054,6 @@ export default {
                 <div class="control">
                   <input
                     type="date"
-                    :min="dateFormatter(year, month, 1)"
                     :max="dateFormatter(year, month, last_date)"
                     class="input"
                     v-model="start_date"
@@ -1068,7 +1067,6 @@ export default {
                 <div class="control">
                   <input
                     type="date"
-                    :min="dateFormatter(year, month, 1)"
                     :max="dateFormatter(year, month, last_date)"
                     class="input"
                     v-model="end_date"
