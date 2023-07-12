@@ -2061,17 +2061,17 @@
                 id = $('select[name="' + name + '"]').attr('data-id');
                 vals = $('select[name="' + name + '"]').select2('data')[0];
                 var kebutuhan = jumlah * vals.jumlah;
-                if (cek_stok(vals.id) < kebutuhan) {
+                if (vals.stok < kebutuhan) {
                     var jumlah_kekurangan = 0;
-                    if (cek_stok(vals.id) < 0) {
+                    if (vals.stok < 0) {
                         jumlah_kekurangan = kebutuhan;
                     } else {
-                        jumlah_kekurangan = Math.abs(cek_stok(vals.id) - kebutuhan);
+                        jumlah_kekurangan = Math.abs(vals.stok - kebutuhan);
                     }
                     $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass('is-invalid');
                     $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang ' +
                         jumlah_kekurangan + ' dari Permintaan');
-                } else if (cek_stok(vals.id) >= kebutuhan) {
+                } else if (vals.stok >= kebutuhan) {
                     $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
                     $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
                 }
@@ -2257,8 +2257,8 @@
                                         id: res[0].produk[x].gudang_barang_jadi[y].id,
                                         text: nama_var,
                                         jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: cek_stok(res[0].produk[x]
-                                            .gudang_barang_jadi[y].id)
+                                        qt: res[0].produk[x]
+                                            .gudang_barang_jadi[y].stok
                                     });
                                 }
 
@@ -2332,8 +2332,8 @@
                                             id: res[0].produk[x].gudang_barang_jadi[y].id,
                                             text: nama_var,
                                             jumlah: res[0].produk[x].pivot.jumlah,
-                                            qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y]
-                                                .id)
+                                            qt: res[0].produk[x].gudang_barang_jadi[y]
+                                                .stok
                                         });
                                     }
 
@@ -2593,7 +2593,7 @@
                                     id: res[0].produk[x].gudang_barang_jadi[y].id,
                                     text: nama_var,
                                     jumlah: res[0].produk[x].pivot.jumlah,
-                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
+                                    qt: res[0].produk[x].gudang_barang_jadi[y].stok
                                 });
                             }
 

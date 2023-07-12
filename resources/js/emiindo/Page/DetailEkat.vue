@@ -2428,19 +2428,19 @@
                                                 let data = {
                                                     refnumber: this.ekat.epurno,
                                                 }
-                                                axios.post(
-                                                    'https://sinko.api.hyperdatasystem.com/api/salesorder/save',
-                                                    data, {
-                                                        headers: {
-                                                            Authorization: 'Bearer ' + sessionStorage
-                                                                .getItem('token')
-                                                        },
-                                                    }).then(response => {
-                                                    this.loadData()
-                                                    this.$router.push({
-                                                        name: "Index",
-                                                    });
-                                                })
+                                                // axios.post(
+                                                //     'https://sinko.api.hyperdatasystem.com/api/salesorder/save',
+                                                //     data, {
+                                                //         headers: {
+                                                //             Authorization: 'Bearer ' + sessionStorage
+                                                //                 .getItem('token')
+                                                //         },
+                                                //     }).then(response => {
+                                                //     this.loadData()
+                                                //     this.$router.push({
+                                                //         name: "Index",
+                                                //     });
+                                                // })
                                             } catch (error) {
                                                 console.log(error);
                                             }
@@ -2498,34 +2498,34 @@
                                             let data = {
                                                 refnumber: this.formpenjualanpo.po.nomorpo,
                                             }
-                                            axios.post(
-                                                'https://sinko.api.hyperdatasystem.com/api/purchaseorder/save',
-                                                data, {
-                                                    headers: {
-                                                        Authorization: 'Bearer ' + sessionStorage
-                                                            .getItem('token')
-                                                    },
-                                                }).then(response => {
-                                                this.loadData()
-                                                this.$router.push({
-                                                    name: "Index",
-                                                });
+                                            // axios.post(
+                                            //     'https://sinko.api.hyperdatasystem.com/api/purchaseorder/save',
+                                            //     data, {
+                                            //         headers: {
+                                            //             Authorization: 'Bearer ' + sessionStorage
+                                            //                 .getItem('token')
+                                            //         },
+                                            //     }).then(response => {
+                                            //     this.loadData()
+                                            //     this.$router.push({
+                                            //         name: "Index",
+                                            //     });
 
-                                            })
+                                            // })
                                             if (dataPO.no_do != null || dataPO.no_do != "") {
                                                 let data = {
                                                     refnumber: dataPO.no_do,
                                                 }
-                                                axios.post(
-                                                    'https://sinko.api.hyperdatasystem.com/api/deliveryorder/save',
-                                                    data, {
-                                                        headers: {
-                                                            Authorization: 'Bearer ' + sessionStorage
-                                                                .getItem('token')
-                                                        },
-                                                    }).then(response => {
-                                                    console.log("berhasil DO");
-                                                })
+                                                // axios.post(
+                                                //     'https://sinko.api.hyperdatasystem.com/api/deliveryorder/save',
+                                                //     data, {
+                                                //         headers: {
+                                                //             Authorization: 'Bearer ' + sessionStorage
+                                                //                 .getItem('token')
+                                                //         },
+                                                //     }).then(response => {
+                                                //     console.log("berhasil DO");
+                                                // })
                                             }
                                         } catch (error) {
                                             console.log(error);
@@ -2691,33 +2691,33 @@
                                             let data = {
                                                 refnumber: this.formpenjualanpo.po.nomorpo,
                                             }
-                                            axios.post(
-                                                'https://sinko.api.hyperdatasystem.com/api/purchaseorder/save',
-                                                data, {
-                                                    headers: {
-                                                        Authorization: 'Bearer ' + sessionStorage
-                                                            .getItem('token')
-                                                    },
-                                                }).then(response => {
-                                                this.loadData()
-                                                this.$router.push({
-                                                    name: "Index",
-                                                });
-                                            })
+                                            // axios.post(
+                                            //     'https://sinko.api.hyperdatasystem.com/api/purchaseorder/save',
+                                            //     data, {
+                                            //         headers: {
+                                            //             Authorization: 'Bearer ' + sessionStorage
+                                            //                 .getItem('token')
+                                            //         },
+                                            //     }).then(response => {
+                                            //     this.loadData()
+                                            //     this.$router.push({
+                                            //         name: "Index",
+                                            //     });
+                                            // })
                                             if (dataSPA.no_do != null || dataSPA.no_do != "") {
                                                 let data = {
                                                     refnumber: dataSPA.no_do,
                                                 }
-                                                axios.post(
-                                                    'https://sinko.api.hyperdatasystem.com/api/deliveryorder/save',
-                                                    data, {
-                                                        headers: {
-                                                            Authorization: 'Bearer ' + sessionStorage
-                                                                .getItem('token')
-                                                        },
-                                                    }).then(response => {
-                                                    console.log("berhasil DO");
-                                                })
+                                                // axios.post(
+                                                //     'https://sinko.api.hyperdatasystem.com/api/deliveryorder/save',
+                                                //     data, {
+                                                //         headers: {
+                                                //             Authorization: 'Bearer ' + sessionStorage
+                                                //                 .getItem('token')
+                                                //         },
+                                                //     }).then(response => {
+                                                //     console.log("berhasil DO");
+                                                // })
                                             }
                                         } catch (error) {
                                             console.log(error);

@@ -2374,17 +2374,17 @@
                 id = $('select[name="' + name + '"]').attr('data-id');
                 vals = $('select[name="' + name + '"]').select2('data')[0];
                 var kebutuhan = jumlah * vals.jumlah;
-                if (cek_stok(vals.id) < kebutuhan) {
+                if (vals.qt < kebutuhan) {
                     var jumlah_kekurangan = 0;
-                    if (cek_stok(vals.id) < 0) {
+                    if (vals.qt < 0) {
                         jumlah_kekurangan = kebutuhan;
                     } else {
-                        jumlah_kekurangan = Math.abs(cek_stok(vals.id) - kebutuhan);
+                        jumlah_kekurangan = Math.abs(vals.qt - kebutuhan);
                     }
                     $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass('is-invalid');
                     $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang ' +
                         jumlah_kekurangan + ' dari Permintaan');
-                } else if (cek_stok(vals.id) >= kebutuhan) {
+                } else if (vals.qt >= kebutuhan) {
                     $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
                     $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
                 }
@@ -2442,106 +2442,35 @@
             }
 
             function select_data(prm) {
+
+                let produk = []
+                const url = '/api/penjualan_produk/select_param/' + prm;
                 // $('.penjualan_produk_id').on('change', function() {
                 //     for (i = 0; i < 3; ++i) {
                 //         $("#produktable ").append('<tr><td>Detail Paket</td></tr>');
                 //     }
                 // });
-
-
-                $('.penjualan_produk_id').select2({
-                    placeholder: "Pilih Produk",
-                    width: 'resolve',
-                    ajax: {
-                        minimumResultsForSearch: 20,
-                        dataType: 'json',
-                        theme: "bootstrap",
-                        delay: 250,
-                        type: 'GET',
-                        url: '/api/penjualan_produk/select_param/' + prm,
-                        data: function(params) {
-                            return {
-                                term: params.term
-                            }
-                        },
-                        processResults: function(data) {
-
-                            return {
-                                results: $.map(data, function(obj) {
-                                    return {
-                                        id: obj.id,
-                                        text: obj.nama
-                                    };
+                    // push data to array produk
+                    produk.push({
+                        id: 0,
+                        text: 'Pilih Produk'
+                    })
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.map((item, index) => {
+                                produk.push({
+                                    id: item.id,
+                                    text: item.nama
                                 })
-                            };
-                        },
-                    }
-                });
-                // .change(function() {
-                //     var index = $(this).attr('id');
-                //     var id = $(this).val();
-                //     $.ajax({
-                //         url: '/api/penjualan_produk/select/' + id,
-                //         type: 'GET',
-                //         dataType: 'json',
-                //         success: function(res) {
-                //             $('#produk_harga' + index).val(formatmoney(res[0].harga));
-                //             var jumlah_pesan = $('#produk_jumlah' + index).val();
-                //             if (jumlah_pesan == "") {
-                //                 jumlah_pesan = 0;
-                //             }
-                //             console.log('subtotal' + formatmoney((res[0].harga) * jumlah_pesan));
-                //             $('#produk_subtotal' + index).val(formatmoney((res[0].harga) * jumlah_pesan));
-                //             var tes = $('#detail_produk' + index);
-                //             tes.empty();
-                //             var datas = "";
-                //             tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
-                //             for (var x = 0; x < res[0].produk.length; x++) {
-                //                 var data = [];
-                //                 tes.append(`<div>`);
-                //                 tes.append(`<div class="card-body blue-bg">
-            //                             <h6>` + res[0].produk[x].nama + `</h6>
-            //                             <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" id="variasi` + index + `` + x + `" data-attr="variasi` + x + `" data-id="` + x + `"></select>
-            //                             <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
-            //                           </div>`);
-                //                 if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
-                //                     data.push({
-                //                         id: res[0].produk[x].gudang_barang_jadi[0].id,
-                //                         text: res[0].produk[x].nama,
-                //                         jumlah: res[0].produk[x].pivot.jumlah,
-                //                         qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
-                //                     });
-                //                 } else {
-                //                     for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
-                //                         data.push({
-                //                             id: res[0].produk[x].gudang_barang_jadi[y].id,
-                //                             text: res[0].produk[x].gudang_barang_jadi[y].nama,
-                //                             jumlah: res[0].produk[x].pivot.jumlah,
-                //                             qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
-                //                         });
-                //                     }
-                //                 }
-                //                 $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
-                //                     placeholder: 'Pilih Variasi',
-                //                     data: data,
-                //                     templateResult: function(data) {
-                //                         var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
-                //                         return $span;
-                //                     },
-                //                     templateSelection: function(data) {
-                //                         var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
-                //                         return $span;
-                //                     }
-                //                 });
-
-                //                 $(`select[name="variasi[` + index + `][` + x + `]"]`).trigger("change");
-                //                 tes.append(`</div>`)
-                //             }
-                //             tes.append(`</fieldset>`);
-                //             // tes.html(datas);
-                //         }
-                //     });
-                // });
+                            })
+                            $('.penjualan_produk_id').select2({
+                                data: produk,
+                                placeholder: 'Pilih Produk',
+                                width: 'resolve',
+                            });
+                        })
+                        .catch(err => console.log(err));
             }
 
             function load_part() {
@@ -2673,8 +2602,8 @@
                                     id: res[0].produk[x].gudang_barang_jadi[0].id,
                                     text: res[0].produk[x].nama,
                                     jumlah: res[0].produk[x].pivot.jumlah,
-                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0]
-                                        .id)
+                                    qt: res[0].produk[x].gudang_barang_jadi[0]
+                                        .stok
                                 });
                             } else {
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi
@@ -2691,8 +2620,8 @@
                                         id: res[0].produk[x].gudang_barang_jadi[y].id,
                                         text: nama_var,
                                         jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: cek_stok(res[0].produk[x]
-                                            .gudang_barang_jadi[y].id)
+                                        qt: res[0].produk[x]
+                                            .gudang_barang_jadi[y].stok
                                     });
                                 }
                             }
@@ -2756,17 +2685,17 @@
                             'data')[0];
                         var kebutuhan = jumlah * variasires.jumlah;
 
-                        if (cek_stok(variasires.id) < kebutuhan) {
+                        if (variasires.qt < kebutuhan) {
                             var jumlah_kekurangan = 0;
-                            if (cek_stok(variasires.id) < 0) {
+                            if (variasires.qt < 0) {
                                 jumlah_kekurangan = kebutuhan;
                             } else {
-                                jumlah_kekurangan = Math.abs(cek_stok(variasires.id) - kebutuhan);
+                                jumlah_kekurangan = Math.abs(variasires.qt - kebutuhan);
                             }
                             $('select[name="variasi[' + ppid + '][' + i + ']"]').addClass('is-invalid');
                             $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang ' +
                                 jumlah_kekurangan + ' dari Permintaan');
-                        } else if (cek_stok(variasires.id) >= kebutuhan) {
+                        } else if (variasires.qt >= kebutuhan) {
                             $('select[name="variasi[' + ppid + '][' + i + ']"]').removeClass('is-invalid');
                             $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('');
                         }
@@ -2932,7 +2861,7 @@
                                     id: res[0].produk[x].gudang_barang_jadi[0].id,
                                     text: res[0].produk[x].nama,
                                     jumlah: res[0].produk[x].pivot.jumlah,
-                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
+                                    qt: res[0].produk[x].gudang_barang_jadi[0].stok
                                 });
                             } else {
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
@@ -2940,7 +2869,7 @@
                                         id: res[0].produk[x].gudang_barang_jadi[y].id,
                                         text: res[0].produk[x].gudang_barang_jadi[y].nama,
                                         jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
+                                        qt: res[0].produk[x].gudang_barang_jadi[0].stok
                                     });
                                 }
                             }
