@@ -10,7 +10,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '8')
+                    @if (Auth::user()->divisi_id == '8')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item active">Perbaikan</li>
                     @endif
@@ -22,7 +22,6 @@
 
 @section('adminlte_css')
     <style>
-
         .hide {
             display: none !important;
         }
@@ -42,6 +41,7 @@
         .nowraps {
             white-space: nowrap;
         }
+
         #profileImage {
             width: 60px;
             height: 60px;
@@ -54,12 +54,14 @@
             margin-top: 10px;
             margin-bottom: 10px;
         }
+
         .center {
             display: block;
             margin-left: auto;
             margin-right: auto;
             width: 50%;
         }
+
         @media screen and (min-width: 1220px) {
 
             body {
@@ -99,9 +101,9 @@
             }
 
             div.contentdiv {
-            max-height: 300px;
-            overflow-y: scroll;
-        }
+                max-height: 300px;
+                overflow-y: scroll;
+            }
 
             .cust {
                 max-width: 40%;
@@ -144,14 +146,14 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <a href="{{ route('as.perbaikan.create') }}" type="button" class="btn btn-info float-right my-2"><i
-                                    class="fas fa-plus"></i> Tambah</a>
+                            <a href="{{ route('as.perbaikan.create') }}" type="button"
+                                class="btn btn-info float-right my-2"><i class="fas fa-plus"></i> Tambah</a>
                             <div class="table-responsive">
                                 <table class="table table-hover" id="showtable" style="text-align: center; width: 100%;">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>No Perbaikan</th>
+                                            <th>No Referensi</th>
                                             <th>Tgl Perbaikan</th>
                                             <th>No Retur</th>
                                             <th>Produk</th>
@@ -183,7 +185,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="perbaikan_modal" role="dialog" aria-labelledby="perbaikan_modal" aria-hidden="true">
+                <div class="modal fade" id="perbaikan_modal" role="dialog" aria-labelledby="perbaikan_modal"
+                    aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content" style="margin: 10px">
                             <div class="modal-header">
@@ -210,9 +213,11 @@
             var noseritable = "";
             var produk_id = "";
             var produk_nama = "";
-            function cust_image(cust_name){
+
+            function cust_image(cust_name) {
                 var cust = cust_name;
-                var cust = cust.replace('.', '').replace('PT ', '').replace('CV ', '').replace('& ', '').replace('(','').replace(')', '');
+                var cust = cust.replace('.', '').replace('PT ', '').replace('CV ', '').replace('& ', '').replace(
+                    '(', '').replace(')', '');
                 var init = cust.split(" ");
                 var initial = "";
                 for (var i = 0; i < init.length; i++) {
@@ -220,7 +225,8 @@
                 }
                 var profileImage = $('#profileImage').text(initial);
             }
-            function no_kolom(table){
+
+            function no_kolom(table) {
                 table.on('order.dt search.dt', function() {
                     table.column(0, {
                         search: 'applied',
@@ -231,91 +237,135 @@
                 }).draw();
             }
 
+            const checkDateMoreThanSevenDays = (date) => {
+                const today = new Date();
+                const dateInput = new Date(date);
+                dateInput.setDate(dateInput.getDate() + 7);
+                const diffTime = Math.abs(dateInput - today);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                const dateIndo = moment(date).format('DD MMMM YYYY');
+
+                if (dateInput > today) {
+                    if (diffDays > 7) {
+                        return `
+                        <div >${dateIndo}</div>
+                        <div><small><i class="fas fa-exclamation-circle" id="info"></i> Masih Kurang ${diffDays} Hari</small></div>
+                        `
+                    } else if (diffDays > 0 && diffDays <= 7) {
+                        return `
+                        <div >${dateIndo}</div>
+                        <div><small><i class="fas fa-exclamation-circle" id="info"></i> Kurang Dari ${diffDays} Hari</small></div>
+                        `
+                    } else {
+                        return `
+                        <div>${dateIndo}</div>
+                        `
+                    }
+                } else {
+                    return `
+                    <div  class="text-danger">${dateIndo}</div>
+                    <div class="invalid-feedback d-block"><small><i class="fas fa-exclamation-circle" id="info"></i> Lebih Dari ${diffDays} Hari</small></div>
+                    `
+                }
+
+
+            }
+
             var showtable = $('#showtable').DataTable({
-                    destroy: true,
-                    processing: true,
-                    // serverSide: true,
-                    ajax: {
-                        'url': '/as/perbaikan/data',
-                        'dataType': 'json',
-                        'type': 'POST',
-                        'headers': {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                destroy: true,
+                processing: true,
+                // serverSide: true,
+                ajax: {
+                    'url': '/as/perbaikan/data',
+                    'dataType': 'json',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: null,
+                    },
+                    {
+                        data: 'no_perbaikan',
+                        className: 'nowraps align-center'
+                    },
+                    {
+                        data: null,
+                        className: 'nowraps align-center',
+                        render: function(data, type, row) {
+                            const date = moment(new Date(row.tanggal).toString()).format(
+                                'YYYY-MM-DD');
+                            return checkDateMoreThanSevenDays(date)
                         }
                     },
-                    language: {
-                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    {
+                        data: 'retur.no',
+                        className: 'nowraps align-center'
                     },
-                    columns: [{
-                            data: null,
-                        },
-                        {
-                            data: 'no_perbaikan',
-                            className: 'nowraps align-center'
-                        },
-                        {
-                            data: null,
-                            className: 'nowraps align-center',
-                            render: function(data, type, row) {
-                                return moment(new Date(row.tanggal).toString()).format('DD-MM-YYYY');
-                            }
-                        },
-                        {
-                            data: 'retur.no',
-                            className: 'nowraps align-center'
-                        },
-                        {
-                            data: 'produk',
-                        },
-                        {
-                            data: 'customer.nama',
-                            className: 'nowraps align-center'
-                        },
-                        {
-                            data: null,
-                            className: 'nowraps align-center',
-                            render: function(data, type, row) {
-                                var perbaikan = parseInt(data.count_perbaikan);
-                                var done = parseInt(data.count_perbaikan_karantina) + parseInt(data.count_perbaikan_non_karantina) + parseInt(data.count_perbaikan_pengganti);
-                                var hitung = Math.floor((done / perbaikan) * 100);
-                                if(hitung > 0){
-                                    return `<div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="`+hitung+`"  style="width:`+hitung+`%" aria-valuemin="0" aria-valuemax="100">`+hitung+`%</div>
+                    {
+                        data: 'produk',
+                    },
+                    {
+                        data: 'customer.nama',
+                        className: 'nowraps align-center'
+                    },
+                    {
+                        data: null,
+                        className: 'nowraps align-center',
+                        render: function(data, type, row) {
+                            var perbaikan = parseInt(data.count_perbaikan);
+                            var done = parseInt(data.count_perbaikan_karantina) + parseInt(data
+                                .count_perbaikan_non_karantina) + parseInt(data
+                                .count_perbaikan_pengganti);
+                            var hitung = Math.floor((done / perbaikan) * 100);
+                            if (hitung > 0) {
+                                return `<div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="` +
+                                    hitung + `"  style="width:` + hitung +
+                                    `%" aria-valuemin="0" aria-valuemax="100">` + hitung + `%</div>
                                     </div>
                                     <small class="text-muted">Selesai</small>`;
-                                }
-                                else{
-                                    return `<div class="progress">
+                            } else {
+                                return `<div class="progress">
                                         <div class="progress-bar bg-light" role="progressbar" aria-valuenow="100"  style="width:100%" aria-valuemin="0" aria-valuemax="100">0%</div>
                                     </div>
                                     <small class="text-muted">Selesai</small>`;
-                                }
                             }
-                        },
-                        {
-                            data: null,
-                            className: 'nowraps align-center',
-                            render: function(data, type, row) {
-                                var res = "";
-                                var jumlah = parseInt(data.count_pengiriman) + parseInt(data.count_pengiriman_pengganti);
-                                var perbaikan = parseInt(data.count_perbaikan) - parseInt(data.count_perbaikan_karantina);
+                        }
+                    },
+                    {
+                        data: null,
+                        className: 'nowraps align-center',
+                        render: function(data, type, row) {
+                            var res = "";
+                            var jumlah = parseInt(data.count_pengiriman) + parseInt(data
+                                .count_pengiriman_pengganti);
+                            var perbaikan = parseInt(data.count_perbaikan) - parseInt(data
+                                .count_perbaikan_karantina);
 
-                                res += `<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" id="detailmodal"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a> `;
-                                if(perbaikan > jumlah){
-                                    res += `<a href="/as/perbaikan/edit/`+row.id+`"><button class="btn btn-warning btn-sm"><i class="fas fa-pencil-alt"></i> Edit</button></a>`;
-                                }
-                                return res;
+                            res +=
+                                `<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" id="detailmodal"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a> `;
+                            if (perbaikan > jumlah) {
+                                res += `<a href="/as/perbaikan/edit/` + row.id +
+                                    `"><button class="btn btn-warning btn-sm"><i class="fas fa-pencil-alt"></i> Edit</button></a>`;
                             }
-                        },
-                    ],
-                    columnDefs: [{
-                        "searchable": false,
-                        "orderable": false,
-                        "targets": 0
-                    }, ],
-                    order: [
-                        [1, 'asc']
-                    ],
+                            return res;
+                        }
+                    },
+                ],
+                columnDefs: [{
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                }, ],
+                order: [
+                    [1, 'asc']
+                ],
             });
 
             no_kolom(showtable)
@@ -366,7 +416,7 @@
                 })
             });
 
-            function select_noseri(id){
+            function select_noseri(id) {
                 $('#noseri_id').select2({
                     placeholder: 'Pilih Noseri',
                     minimumResultsForSearch: 2,
@@ -375,7 +425,7 @@
                         theme: "bootstrap",
                         delay: 250,
                         type: 'GET',
-                        url: '/api/noseri/pengganti/'+id,
+                        url: '/api/noseri/pengganti/' + id,
                         data: function(params) {
                             return {
                                 term: params.term
@@ -395,7 +445,7 @@
                 })
             }
 
-            $(document).on('click', '#donekarantina', function(){
+            $(document).on('click', '#donekarantina', function() {
                 var rows = noseritable.rows($(this).parents('tr')).data();
                 var id = rows[0]['id'];
                 Swal.fire({
@@ -414,26 +464,28 @@
                             },
                             type: "POST",
                             url: "{{ route('as.perbaikan.done_karantina') }}",
-                            data: {'id': id },
+                            data: {
+                                'id': id
+                            },
                             beforeSend: function() {
                                 $('#loader').show();
                             },
                             success: function(response) {
                                 if (response['res'] == "success") {
                                     swal.fire(
-                                            'Berhasil',
-                                            response['msg'],
-                                            'success'
-                                        );
-                                        $('#showtable').DataTable().ajax.reload();
-                                        $('#noseritable').DataTable().ajax.reload();
-                                    } else if (response['res'] == "error") {
-                                        swal.fire(
-                                            'Gagal',
-                                            response['msg'],
-                                            'error'
-                                        );
-                                    }
+                                        'Berhasil',
+                                        response['msg'],
+                                        'success'
+                                    );
+                                    $('#showtable').DataTable().ajax.reload();
+                                    $('#noseritable').DataTable().ajax.reload();
+                                } else if (response['res'] == "error") {
+                                    swal.fire(
+                                        'Gagal',
+                                        response['msg'],
+                                        'error'
+                                    );
+                                }
                             },
                             complete: function() {
                                 $('#loader').hide();
@@ -442,13 +494,12 @@
                                 alert(error);
                             }
                         });
-                    }
-                    else{
+                    } else {
                         swal.fire(
-                                'Batal',
-                                'Batal melakukan pengembalian',
-                                'error'
-                            );
+                            'Batal',
+                            'Batal melakukan pengembalian',
+                            'error'
+                        );
                     }
                 })
             })
@@ -540,12 +591,12 @@
                 });
             });
 
-            function noseri_table(id){
+            function noseri_table(id) {
                 noseritable = $('#noseritable').DataTable({
                     destroy: true,
                     processing: true,
                     ajax: {
-                        'url': '/api/as/perbaikan/detail/noseri/'+id,
+                        'url': '/api/as/perbaikan/detail/noseri/' + id,
                         'dataType': 'json',
                         'type': 'POST',
                         'headers': {
@@ -563,13 +614,14 @@
                             className: 'nowraps align-center',
                             render: function(data, type, row) {
                                 if (row.tindak_lanjut == "karantina") {
-                                    if(row.noseri_pengganti_id != null){
-                                        return row.no_seri+'<div><small class="text-success">Digantikan Noseri '+row.noseri_pengganti_id+'</small></div>';
-                                    }else{
+                                    if (row.noseri_pengganti_id != null) {
+                                        return row.no_seri +
+                                            '<div><small class="text-success">Digantikan Noseri ' +
+                                            row.noseri_pengganti_id + '</small></div>';
+                                    } else {
                                         return row.no_seri;
                                     }
-                                }
-                                else {
+                                } else {
                                     return row.no_seri;
                                 }
                             }
@@ -579,14 +631,18 @@
                             className: 'nowraps align-center',
                             render: function(data, type, row) {
                                 if (row.tindak_lanjut == "perbaikan") {
-                                    return '<span class="yellow-text badge">' + row.tindak_lanjut[0].toUpperCase() + row.tindak_lanjut.substring(1) +
-                                            '</span>';
+                                    return '<span class="yellow-text badge">' + row.tindak_lanjut[0]
+                                        .toUpperCase() + row.tindak_lanjut.substring(1) +
+                                        '</span>';
                                 } else if (row.tindak_lanjut == "karantina") {
-                                    return '<span class="red-text badge">' + row.tindak_lanjut[0].toUpperCase() + row.tindak_lanjut.substring(1) +
-                                            '</span>';
+                                    return '<span class="red-text badge">' + row.tindak_lanjut[0]
+                                        .toUpperCase() + row.tindak_lanjut.substring(1) +
+                                        '</span>';
                                 } else {
-                                    return '<span class="secondary-text badge">' + row.tindak_lanjut[0].toUpperCase() + row.tindak_lanjut.substring(1) +
-                                            '</span>';
+                                    return '<span class="secondary-text badge">' + row
+                                        .tindak_lanjut[0].toUpperCase() + row.tindak_lanjut
+                                        .substring(1) +
+                                        '</span>';
                                 }
                             }
                         },
@@ -598,9 +654,9 @@
                             className: 'nowraps align-center',
                             render: function(data, type, row) {
                                 if (row.tindak_lanjut == "karantina" && row.status != "Done") {
-                                    return '<a data-toggle="perbaikanmodal" data-target="#perbaikanmodal" class="perbaikanmodal" id="perbaikanmodal"><button type="button" class="btn btn-outline-warning btn-sm"><i class="fas fa-pencil"></i> Input No Seri</button></a> '+
-                                    '<button type="button" class="btn btn-outline-primary btn-sm" id="donekarantina"><i class="fas fa-check"></i> Masuk Gudang</button>';
-                                } else{
+                                    return '<a data-toggle="perbaikanmodal" data-target="#perbaikanmodal" class="perbaikanmodal" id="perbaikanmodal"><button type="button" class="btn btn-outline-warning btn-sm"><i class="fas fa-pencil"></i> Input No Seri</button></a> ' +
+                                        '<button type="button" class="btn btn-outline-primary btn-sm" id="donekarantina"><i class="fas fa-check"></i> Masuk Gudang</button>';
+                                } else {
                                     return '-';
                                 }
                             }
@@ -617,12 +673,13 @@
                 });
                 no_kolom(noseritable);
             }
-            function part_table(id){
+
+            function part_table(id) {
                 var parttable = $('#parttable').DataTable({
                     destroy: true,
                     processing: true,
                     ajax: {
-                        'url': '/api/as/perbaikan/detail/part_pengganti/'+id,
+                        'url': '/api/as/perbaikan/detail/part_pengganti/' + id,
                         'dataType': 'json',
                         'type': 'POST',
                         'headers': {

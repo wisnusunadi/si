@@ -10,9 +10,9 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '15')
+                    @if (Auth::user()->divisi_id == '15')
                         <li class="breadcrumb-item"><a href="{{ route('logistik.dashboard') }}">Beranda</a></li>
-                    @elseif(Auth::user()->Karyawan->divisi_id == '2')
+                    @elseif(Auth::user()->divisi_id == '2')
                         <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                     @endif
                     <li class="breadcrumb-item active">Ekspedisi</li>
@@ -725,7 +725,7 @@
                     $('#msgjalur').text("");
                     $('input[type="checkbox"][name="jalur"]').removeClass("is-invalid");
                     if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('#jurusan')
-                    .val() != "" && $('#alamat').val() != "") {
+                        .val() != "" && $('#alamat').val() != "") {
                         $("#btntambah").removeAttr('disabled');
                     } else {
                         $("#btntambah").attr('disabled', true);
@@ -756,7 +756,7 @@
                     $('#msgemail').text("");
                     $('#email').removeClass("is-invalid");
                     if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat")
-                    .val() != "" && $('input[type="radio"][name="jalur"]').val() != "" && $('#jurusan')
+                        .val() != "" && $('input[type="radio"][name="jalur"]').val() != "" && $('#jurusan')
                         .val() != "") {
                         $("#btnsimpan").removeAttr('disabled');
                     }

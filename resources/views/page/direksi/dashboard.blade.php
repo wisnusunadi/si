@@ -157,7 +157,7 @@
 @stop
 
 @section('content')
-    <input type="hidden" id="auth" name="" value="{{ Auth::user()->Karyawan->divisi_id }}">
+    <input type="hidden" id="auth" name="" value="{{ Auth::user()->divisi_id }}">
     <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/main.css') }}">
     <script src="{{ asset('vendor/fullcalendar/main.js') }}"></script>
     <section class="content">

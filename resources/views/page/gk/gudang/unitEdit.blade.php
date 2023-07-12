@@ -68,7 +68,7 @@
             border-radius: 6px;
         }
     </style>
-    <input type="hidden" name="" id="auth" value="{{ Auth::user()->Karyawan->divisi_id }}">
+    <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 
     <div class="row">
         <div class="col-sm-1">

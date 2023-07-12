@@ -10,9 +10,9 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '15')
+                    @if (Auth::user()->divisi_id == '15')
                         <li class="breadcrumb-item"><a href="{{ route('logistik.dashboard') }}">Beranda</a></li>
-                    @elseif(Auth::user()->Karyawan->divisi_id == '2')
+                    @elseif(Auth::user()->divisi_id == '2')
                         <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                     @endif
                     <li class="breadcrumb-item"><a href="{{ route('logistik.so.show') }}">Sales Order</a></li>
@@ -317,7 +317,7 @@
                                                                 <div class="card-body">
                                                                     <div class="row">
                                                                         <div class="col-12">
-                                                                            @if (Auth::user()->Karyawan->divisi_id == '15')
+                                                                            @if (Auth::user()->divisi_id == '15')
                                                                                 <a data-toggle="modal"
                                                                                     data-target="#editmodal"
                                                                                     class="editmodal" data-attr=""
@@ -532,7 +532,7 @@
             } else {
                 echo $data->Customer->Provinsi->id;
             } ?>;
-            var divisi_id = "{{ Auth::user()->Karyawan->divisi_id }}";
+            var divisi_id = "{{ Auth::user()->divisi_id }}";
             var jenis_penjualan = "{{ $value }}";
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');

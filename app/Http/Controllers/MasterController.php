@@ -273,7 +273,7 @@ class MasterController extends Controller
     public function get_data_ekspedisi($value1, $value2)
     {
         $x = explode(',', $value1);
-        $divisi_id = auth()->user()->Karyawan->divisi_id;
+        $divisi_id = auth()->user()->divisi_id;
 
         if ($value1 == 'semua' && $value2 == 'semua' || $value1 == 'kosong' && $value2 == 'semua') {
             $data = Ekspedisi::orderby('nama', 'ASC')->get();
@@ -897,7 +897,7 @@ class MasterController extends Controller
                 }
             })
             ->addColumn('aksi', function ($data) {
-                if (Auth::user()->Karyawan->divisi_id == '9') {
+                if (Auth::user()->divisi_id == '9') {
                     return '<a data-toggle="modal" class="editmodal" data-attr="' . route('master.produk.edit_coo',  $data->id) . '">
                             <i class="fas fa-edit info"></i>
                         </a>';
@@ -1844,16 +1844,17 @@ class MasterController extends Controller
         }
     }
 
-    public function indexProduk() {
+    public function indexProduk()
+    {
         try {
             $produk = MProduk::whereDoesntHave('detailproduk')
-            ->orWhereHas('detailproduk', function ($query) {
-                $query->whereHas('GudangBarangJadi');
-            })
-            ->with(['detailproduk' => function ($query) {
-                $query->with('GudangBarangJadi');
-            }])
-            ->get();
+                ->orWhereHas('detailproduk', function ($query) {
+                    $query->whereHas('GudangBarangJadi');
+                })
+                ->with(['detailproduk' => function ($query) {
+                    $query->with('GudangBarangJadi');
+                }])
+                ->get();
 
             return response()->json([
                 'success' => true,
@@ -1867,7 +1868,8 @@ class MasterController extends Controller
         }
     }
 
-    public function postOrEditProduk(Request $request) {
+    public function postOrEditProduk(Request $request)
+    {
         try {
             $produk = collect($request->json())->map(function ($item) {
                 // check validasi nama tidak boleh sama di produk
@@ -1911,23 +1913,41 @@ class MasterController extends Controller
                             'no_akd' => $subproduk['no_akd'],
                             'status' => $subproduk['status'],
                         ]
+                    );
+                    foreach ($subproduk['gudang_barang_jadi'] as $gudang) {
+                        $gbj = GudangBarangJadi::updateOrCreate(
+                            [
+                                'id' => isset($gudang['id']) ? $gudang['id'] : null
+                            ],
+                            [
+                                'produk_id' => $subProduk->id,
+                                'nama' => isset($gudang['nama']) ? $gudang['nama'] : ' ',
+                                'stok' => $gudang['stok'],
+                                'stok_siap' => $gudang['stok_siap'],
+                                'satuan_id' => $gudang['satuan_id'],
+                            ]
                         );
-                        foreach ($subproduk['gudang_barang_jadi'] as $gudang) {
-                            $gbj = GudangBarangJadi::updateOrCreate(
-                                [
-                                    'id' => isset($gudang['id']) ? $gudang['id'] : null
-                                ],
-                                [
-                                    'produk_id' => $subProduk->id,
-                                    'nama' => isset($gudang['nama']) ? $gudang['nama'] : ' ',
-                                    'stok' => $gudang['stok'],
-                                    'stok_siap' => $gudang['stok_siap'],
-                                    'satuan_id' => $gudang['satuan_id'],
-                                ]
-                                );
-                        }
+                    }
                 }
             });
+
+            return response()->json([
+                'success' => true,
+                'data' => $produk
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    function changeStatusProduk(Request $request) {
+        try {
+            $produk = Produk::find($request->id);
+            $produk->status = $request->status;
+            $produk->save();
 
             return response()->json([
                 'success' => true,

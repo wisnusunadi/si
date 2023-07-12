@@ -124,7 +124,7 @@ class KaryawanController extends Controller
         $id = $request->id;
         $karyawan = Karyawan::find($id);
         $karyawan->tgllahir = $request->tgllahir;
-        $karyawan->divisi_id = $request->divisi;
+        $divisi_id = $request->divisi;
         $karyawan->jabatan = $request->jabatan;
         $karyawan->is_aktif = $request->status_karyawan;
         $karyawan->kelamin = $request->jenis;
