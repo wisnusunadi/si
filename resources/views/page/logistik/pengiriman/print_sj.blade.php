@@ -99,7 +99,8 @@
                             <td style="width:2% ;" class="vera">:</td>
                             <td class="wb">SJ.{{$data->nosurat}}</td>
                             <td class="align-right">
-                                Tanggal : {{App\Http\Controllers\LogistikController::tgl_footer($data->tgl_kirim)}}
+                                {{-- Tanggal : {{App\Http\Controllers\LogistikController::tgl_footer($data->tgl_kirim)}} --}}
+                                {{$data->tgl_kirim}}
                             </td>
                         </tr>
                     </tbody>
