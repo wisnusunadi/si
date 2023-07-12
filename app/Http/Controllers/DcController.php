@@ -640,6 +640,11 @@ class DcController extends Controller
                         Coo + Background + Ttd + Stamp
                     </button>
                             </a>
+
+                        <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="'.$data->id.'"><i class="fas fa-times text-danger"></i>
+                       <b class="text-danger">Batal</b>
+                    </button>
+
                     </div>';
                 } else {
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -672,7 +677,9 @@ class DcController extends Controller
                                     Coo + Background + Ttd + Stamp
                                 </button>
                             </a>
-
+                                <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="'.$data->id.'"><i class="fas fa-times "></i>
+                                <b class="text-danger">Batal</b>
+                                </button>
                     </div>';
                 }
             })
@@ -2417,4 +2424,23 @@ class DcController extends Controller
         }
         return Carbon::parse($value)->subDays($days);
     }
+
+    public function cancel_so(Request $request)
+    {
+       $cek =  str_word_count($request->alasan);
+       if($cek < 5){
+        return response()->json([
+            'message' => 'Alasan yang dimasukkan minimal 5 kata',
+        ], 200);
+       }
+
+
+    }
+
+    public function cancel_so_view($id)
+    {
+        $data = Pesanan::find($id);
+        return view('page.dc.so.cancel',['id' => $id,'data' => $data]);
+    }
+
 }
