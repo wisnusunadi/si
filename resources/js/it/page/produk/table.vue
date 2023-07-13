@@ -5,9 +5,9 @@ export default {
     data() {
         return {
             search: '',
+            searchDetail: '',
             header: [
                 { text: 'Nama Produk', value: 'nama' },
-                { text: 'Detail Produk', value: 'detail'},
                 { text: 'Aksi', value: 'action' },
             ],
             dialogDetail: false,
@@ -48,7 +48,23 @@ export default {
         addProduk() {
             this.$emit('addProduk')
         }
-    }
+    },
+    computed: {
+        filteredProduk() {
+            return this.produk.filter((item) => {
+                const namaMatches = item.nama.toLowerCase().includes(this.search.toLowerCase());
+                const detailMatches = item.detailproduk.some((detail) =>
+                detail.nama.toLowerCase().includes(this.search.toLowerCase())
+                );
+                return namaMatches || detailMatches;
+            });
+        },
+    },
+    methods: {
+        filteredDetailproduk(item) {
+            return item.nama.toLowerCase().includes(this.search.toLowerCase());
+        },
+  },
 }
 </script>
 <template>
@@ -70,20 +86,34 @@ export default {
                         </v-btn>
                     </div>
         <v-data-table
-            :search="search"
             :headers="header"
-            :items="produk"
+            :items="filteredProduk"
+            :expanded.sync="expanded"
+            show-expand
+            single-expand
         >
-            <template #item.detail="{ item }">
-                <div>
-                    <v-btn
-                        color="primary"
-                        @click="detailproduk(item)"
-                    >
-                        Detail
-                    </v-btn>
-                </div>
-            </template>
+
+        <template #expanded-item="{ headers, item }">
+            <td :colspan="headers.length">
+                <div class="d-flex">
+                        <v-card flat class="ml-5">
+                            <v-text-field
+                            v-model="searchDetail"
+                            placeholder="Cari Produk Detail"
+                            ></v-text-field>
+                        </v-card>
+                    </div>
+                <v-data-table :headers="headersdetail" :items="item.detailproduk" :search="searchDetail">
+                    <template #item.status="{ item }">
+                        <v-switch
+                            @click="updateStatus(item)"
+                            v-model="item.status"
+                            :label="item.status ? 'Aktif' : 'Tidak Aktif'"
+                        ></v-switch>
+                    </template>
+            </v-data-table>
+            </td>
+        </template>
 
             <template #item.action = "{ item }">
                 <div>
@@ -124,14 +154,22 @@ export default {
                         <v-data-table 
                         :headers="headersdetail" 
                         :items="data_detail">
-                            
-                            <template #item.status="{ item }">
-                                <v-switch
+
+                        <template #item="{ item }">
+                            <tr v-if="filteredDetailproduk(item)">
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.nama }}</td>
+                                <td>{{ item.nama_coo }}</td>
+                                <td>{{ item.no_akd }}</td>
+                                <td>
+                                    <v-switch
                                     @click="updateStatus(item)"
                                     v-model="item.status"
                                     :label="item.status ? 'Aktif' : 'Tidak Aktif'"
                                 ></v-switch>
-                            </template>
+                                </td>
+                            </tr>
+                        </template>
                         </v-data-table>
                     </v-card-text>
             </v-card>
