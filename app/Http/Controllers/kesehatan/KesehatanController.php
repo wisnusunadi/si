@@ -22,9 +22,20 @@ use PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class KesehatanController extends Controller
 {
+    public function get_data_karyawan_pemeriksa()
+    {
+        return  Karyawan::orderby('nama')->where('is_aktif', 1)->where('divisi_id', '28')->get();
+    }
+
+    public function get_data_karyawan_aktif()
+    {
+        return  Karyawan::orderby('nama')->where('is_aktif', 1)->get();
+    }
+
     public function kesehatan()
     {
         $karyawan = Karyawan::orderBy('nama', 'ASC')
@@ -121,9 +132,8 @@ class KesehatanController extends Controller
     }
     public function kesehatan_tambah()
     {
-        $karyawan = Karyawan::doesnthave('Kesehatan_awal')->orderBy('nama', 'ASC')->get();
-        $pengecek = Karyawan::where('divisi_id', '28')
-            ->get();
+        $karyawan = Karyawan::doesnthave('Kesehatan_awal')->where('is_aktif', 1)->orderBy('nama', 'ASC')->get();
+        $pengecek = $this->get_data_karyawan_pemeriksa();
         return view('page.kesehatan.kesehatan_tambah', ['karyawan' => $karyawan, 'pengecek' => $pengecek]);
     }
     public function kesehatan_aksi_tambah(Request $request)
@@ -508,9 +518,8 @@ class KesehatanController extends Controller
 
     public function kesehatan_mingguan_tambah()
     {
-        $pengecek = Karyawan::where('divisi_id', '28')
-            ->get();
-        $karyawan = Karyawan::all();
+        $pengecek = $this->get_data_karyawan_pemeriksa();
+        $karyawan =  $this->get_data_karyawan_aktif();
         $divisi = Divisi::all();
         return view('page.kesehatan.kesehatan_mingguan_tambah', ['divisi' => $divisi, 'pengecek' => $pengecek, 'karyawan' => $karyawan]);
     }
@@ -537,16 +546,15 @@ class KesehatanController extends Controller
 
     public function kesehatan_mingguan_tensi_tambah()
     {
-        $pengecek = Karyawan::where('divisi_id', '28')->get();
-        $karyawan = Karyawan::all();
+        $pengecek = $this->get_data_karyawan_pemeriksa();
+        $karyawan = $this->get_data_karyawan_aktif();
         $divisi = Divisi::all();
         return view('page.kesehatan.kesehatan_mingguan_tensi_tambah', ['divisi' => $divisi, 'pengecek' => $pengecek, 'karyawan' => $karyawan]);
     }
     public function kesehatan_mingguan_rapid_tambah()
     {
-        $pengecek = Karyawan::where('pemeriksa_rapid', '1')
-            ->get();
-        $karyawan = Karyawan::all();
+        $pengecek = $this->get_data_karyawan_pemeriksa();
+        $karyawan = $this->get_data_karyawan_aktif();
         $divisi = Divisi::all();
         return view('page.kesehatan.kesehatan_mingguan_rapid_tambah', ['divisi' => $divisi, 'pengecek' => $pengecek, 'karyawan' => $karyawan]);
     }
@@ -727,7 +735,7 @@ class KesehatanController extends Controller
             ->addColumn('button', function ($data) {
                 $btn = '<div class="btn-toolbar d-flex justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
                 <button type="button" id="riwayat"  class="btn btn-sm btn-outline-primary btn-sm m-1"><i class="fas fa-eye"></i> Riwayat Pakai</button>
-                <button type="button" id="edit" class="btn btn-sm btn-warning btn-sm m-1"><i class="fas fa-edit"></i> Ubah</button>
+                <button type="button" id="edit" class="btn btn-sm btn-warning btn-sm m-1" data-obat-status="' . $data->is_aktif . '"><i class="fas fa-edit"></i> Ubah</button>
                 <button type="button" id="delete" class="btn btn-sm btn-danger btn-sm m-1" data-id="' . $data->id . '"><i class="fas fa-trash"></i> Hapus</button>
                 </div>';
 
@@ -736,6 +744,11 @@ class KesehatanController extends Controller
                 return $btn;
             })
             ->rawColumns(['button', 'detail_button', 'a'])
+            ->setRowClass(function ($data) {
+                if ($data->is_aktif == 0) {
+                    return 'text-danger font-weight-bold line-through';
+                }
+            })
             ->make(true);
     }
     public function obat_stok_data($id)
@@ -759,7 +772,7 @@ class KesehatanController extends Controller
     }
     public function obat_detail_data($id)
     {
-        $data = Detail_obat::where('obat_id', $id);
+        $data = Detail_obat::where('obat_id', $id)->orderby('id', 'DESC');
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl', function ($data) {
@@ -854,6 +867,7 @@ class KesehatanController extends Controller
         $obat->nama = $request->nama;
         $obat->keterangan = $request->keterangan;
         $obat->aturan = $request->aturan_obat;
+        $obat->is_aktif = $request->status_obat;
         $obat->save();
         if ($obat) {
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
@@ -864,7 +878,7 @@ class KesehatanController extends Controller
     public function obat_data_select(Request $request, $where)
     {
         $x = explode(',', $where);
-        $data = Obat::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')->whereNotIN('id', $x)->get();
+        $data = Obat::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')->where('is_aktif', 1)->whereNotIN('id', $x)->get();
         echo json_encode($data);
     }
     public function obat_data_id(Request $request, $id)
@@ -965,11 +979,9 @@ class KesehatanController extends Controller
     }
     public function karyawan_sakit_tambah()
     {
-        $karyawan = Karyawan::orderBy('nama', 'ASC')
-            ->get();
+        $karyawan = $this->get_data_karyawan_aktif();
         $obat = Obat::where('stok', '!=', 0)->get();
-        $pengecek = Karyawan::where('divisi_id', '28')
-            ->get();
+        $pengecek = $this->get_data_karyawan_pemeriksa();
         return view('page.kesehatan.karyawan_sakit_tambah', ['karyawan' => $karyawan, 'pengecek' => $pengecek, 'obat' => $obat]);
     }
     public function karyawan_sakit_aksi_delete($id)
@@ -1016,65 +1028,132 @@ class KesehatanController extends Controller
     }
     public function karyawan_sakit_aksi_tambah(Request $request)
     {
-
-
-        $this->validate(
-            $request,
-            [
-                'karyawan_id' => 'required',
-                'tgl' => 'required',
-                'pemeriksa_id' => 'required',
-            ],
-            [
-                'pemeriksa_id.required' => 'Pemeriksa harus di pilih',
-                'karyawan_id.required' => 'Karyawan harus di pilih',
-                'tgl.required' => 'Tanggal pengecekan harus di isi',
-            ]
-        );
-        $karyawan_sakit = Karyawan_sakit::create([
-            'tgl_cek' => $request->tgl,
-            'karyawan_id' => $request->karyawan_id,
-            'pemeriksa_id' => $request->pemeriksa_id,
-            'analisa' => $request->analisa,
-            'diagnosa' => $request->diagnosa,
-            'tindakan' => $request->hasil_1,
-            'terapi' => $request->terapi,
-            'keputusan' => $request->hasil_2
+        // dd($request->all());
+        $validator = Validator::make($request->all(),  [
+            'karyawan_id' => 'required',
+            'tgl' => 'required',
+            'pemeriksa_id' => 'required',
+            'analisa' => 'required',
+            'diagnosa' => 'required',
+            'terapi' => 'required',
         ]);
 
-        if ($request->hasil_1 == 'Pengobatan') {
-            // $id = $request->obat_id;
-            // $jumlah = $request->jumlah;
-            // $obat = Obat::find($id)->decrement('stok', $jumlah);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
+        } else {
+            //Cek Dengan Obat
+            if (isset($request->isi_obat)) {
+                //Cek Form Kosong
+                if (in_array(NULL, $request->dosis_obat_custom_obat) || $request->karyawan_id == "NULL" || in_array(NULL, $request->dosis_obat_custom_hari) || in_array(NULL, $request->jumlah) ||  in_array("NULL", $request->obat)) {
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Form Kosong',
+                    ], 500);
+                }
 
-            for ($i = 0; $i < count($request->obat); $i++) {
-                //   $obat = obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
+                $karyawan_sakit =  Karyawan_sakit::create([
+                    'tgl_cek' => $request->tgl,
+                    'karyawan_id' => $request->karyawan_id,
+                    'pemeriksa_id' => $request->pemeriksa_id,
+                    'analisa' => $request->analisa,
+                    'diagnosa' => $request->diagnosa,
+                    'tindakan' => 'Pengobatan',
+                    'terapi' => $request->terapi,
+                    'keputusan' => '-'
+                ]);
 
-                if ($request->dosis_obat_custom_obat[$i] != null) {
-                    $detail_obat = detail_obat::create([
+                for ($i = 0; $i < count($request->obat); $i++) {
+                    Obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
+                    Detail_obat::create([
                         'karyawan_sakit_id' => $karyawan_sakit->id,
                         'obat_id' => $request->obat[$i],
                         'jumlah' => $request->jumlah[$i],
                         'aturan' => '-',
                         'konsumsi' =>  $request->dosis_obat_custom_obat[$i] . 'x' . $request->dosis_obat_custom_hari[$i],
                     ]);
-                } else {
-                    $detail_obat = detail_obat::create([
-                        'karyawan_sakit_id' => $karyawan_sakit->id,
-                        'obat_id' => $request->obat[$i],
-                        'jumlah' => $request->jumlah[$i],
-                        'konsumsi' => $request->dosis_obat[$i],
-                        'aturan' => '-',
-                    ]);
                 }
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Dengan Obat OK',
+                ], 200);
+            } else {
+
+                Karyawan_sakit::create([
+                    'tgl_cek' => $request->tgl,
+                    'karyawan_id' => $request->karyawan_id,
+                    'pemeriksa_id' => $request->pemeriksa_id,
+                    'analisa' => $request->analisa,
+                    'diagnosa' => $request->diagnosa,
+                    'tindakan' => 'Terapi',
+                    'terapi' => $request->terapi,
+                    'keputusan' => '-'
+                ]);
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Tanpa Obat OK',
+                ], 200);
             }
         }
 
-        if ($karyawan_sakit || $detail_obat) {
-            return redirect()->back()->with('success', 'Berhasil menambahkan data');
-        } else {
-            return redirect()->back()->with('error', 'Gagal menambahkan data');
-        }
+        // $this->validate(
+        //     $request,
+        //     [
+        //         'karyawan_id' => 'required',
+        //         'tgl' => 'required',
+        //         'pemeriksa_id' => 'required',
+        //         'obat.*' => 'required',
+        //     ],
+        //     [
+        //         'pemeriksa_id.required' => 'Pemeriksa harus di pilih',
+        //         'karyawan_id.required' => 'Karyawan harus di pilih',
+        //         'tgl.required' => 'Tanggal pengecekan harus di isi',
+        //     ]
+        // );
+        // $karyawan_sakit = Karyawan_sakit::create([
+        //     'tgl_cek' => $request->tgl,
+        //     'karyawan_id' => $request->karyawan_id,
+        //     'pemeriksa_id' => $request->pemeriksa_id,
+        //     'analisa' => $request->analisa,
+        //     'diagnosa' => $request->diagnosa,
+        //     'tindakan' => $request->hasil_1,
+        //     'terapi' => $request->terapi,
+        //     'keputusan' => $request->hasil_2
+        // ]);
+
+        // if ($request->hasil_1 == 'Pengobatan') {
+
+        //     for ($i = 0; $i < count($request->obat); $i++) {
+        //         $obat = Obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
+
+        //         if ($request->dosis_obat_custom_obat[$i] != null) {
+        //             $detail_obat = detail_obat::create([
+        //                 'karyawan_sakit_id' => $karyawan_sakit->id,
+        //                 'obat_id' => $request->obat[$i],
+        //                 'jumlah' => $request->jumlah[$i],
+        //                 'aturan' => '-',
+        //                 'konsumsi' =>  $request->dosis_obat_custom_obat[$i] . 'x' . $request->dosis_obat_custom_hari[$i],
+        //             ]);
+        //         } else {
+        //             $detail_obat = detail_obat::create([
+        //                 'karyawan_sakit_id' => $karyawan_sakit->id,
+        //                 'obat_id' => $request->obat[$i],
+        //                 'jumlah' => $request->jumlah[$i],
+        //                 'konsumsi' => $request->dosis_obat[$i],
+        //                 'aturan' => '-',
+        //             ]);
+        //         }
+        //     }
+        // }
+
+        // if ($karyawan_sakit || $detail_obat) {
+        //     return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        // } else {
+        //     return redirect()->back()->with('error', 'Gagal menambahkan data');
+        // }
     }
     public function karyawan_sakit_cetak($id)
     {
@@ -1124,7 +1203,7 @@ class KesehatanController extends Controller
                 } else {
                     $btn .= '<span class="m-1"><button type="button"  class="btn btn-block btn-light btn-sm" disabled><i class="fa fa-eye" aria-hidden="true"></i> Detail</button></span>';
                 }
-                $btn .= '<span class="m-1"><button type="button" id="delete" class="btn btn-sm btn-danger" data-id="' . $data->id . '"><i class="fas fa-trash"></i> Hapus</button></span></div>';
+                $btn = '<span class="m-1"><button type="button" id="delete" class="btn btn-sm btn-danger" data-id="' . $data->id . '"><i class="fas fa-trash"></i> Hapus</button></span></div>';
                 return $btn;
             })
             ->rawColumns(['button'])
@@ -1133,86 +1212,118 @@ class KesehatanController extends Controller
     public function karyawan_masuk_tambah()
     {
         $obat = Obat::where('stok', '!=', 0)->get();
-        $karyawan = Karyawan::orderBy('nama', 'ASC')
-            ->get();
-        $pengecek = Karyawan::where('divisi_id', '28')
-            ->get();
+        $karyawan = $this->get_data_karyawan_aktif();
+        $pengecek = $this->get_data_karyawan_pemeriksa();
         return view('page.kesehatan.karyawan_masuk_tambah', ['karyawan' => $karyawan, 'pengecek' => $pengecek, 'obat' => $obat]);
     }
     public function karyawan_masuk_aksi_tambah(Request $request)
     {
 
-        $this->validate(
-            $request,
-            [
-                'tgl' => 'required',
-                'karyawan_id' => 'required'
-            ],
-            [
-                'tgl.required' => 'Tgl pemeriksaan harus di isi',
-                'karyawan_id.unique' => 'Nama karyawan harus di pilih'
-            ]
-        );
+        $validator = Validator::make($request->all(),  [
+            'pemeriksa_id' => 'required',
+            'karyawan_id' => 'required',
+            'tgl' => 'required',
+            'alasan' => 'required',
 
-        if ($request->alasan == "Sakit") {
+        ]);
 
-
-            $karyawan_sakit = Karyawan_sakit::create([
-                'tgl_cek' => $request->tgl,
-                'karyawan_id' => $request->karyawan_id,
-                'pemeriksa_id' => $request->pemeriksa_id,
-                'analisa' => $request->analisa,
-                'diagnosa' => $request->diagnosa,
-                'tindakan' => $request->hasil_1,
-                'terapi' => $request->terapi,
-                'keputusan' => $request->hasil_2
-            ]);
-
-            $karyawan_masuk = Karyawan_masuk::create([
-                'karyawan_id' => $request->karyawan_id,
-                'pemeriksa_id' => $request->pemeriksa_id,
-                'karyawan_sakit_id' => $karyawan_sakit->id,
-                'tgl_cek' => $request->tgl,
-                'alasan' => $request->alasan,
-                'keterangan' => $request->keterangan
-            ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
         } else {
-            $karyawan_masuk = Karyawan_masuk::create([
-                'karyawan_id' => $request->karyawan_id,
-                'pemeriksa_id' => $request->pemeriksa_id,
-                'tgl_cek' => $request->tgl,
-                'alasan' => $request->alasan,
-                'keterangan' => $request->keterangan
-            ]);
-        }
-        if ($request->hasil_1 == 'Pengobatan') {
-            for ($i = 0; $i < count($request->obat); $i++) {
-                //   $obat = obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
 
-                if ($request->dosis_obat_custom_obat[$i] != null) {
-                    $detail_obat = detail_obat::create([
-                        'karyawan_sakit_id' => $karyawan_sakit->id,
-                        'obat_id' => $request->obat[$i],
-                        'jumlah' => $request->jumlah[$i],
-                        'aturan' => '-',
-                        'konsumsi' =>  $request->dosis_obat_custom_obat[$i] . 'x' . $request->dosis_obat_custom_hari[$i],
-                    ]);
-                } else {
-                    $detail_obat = detail_obat::create([
-                        'karyawan_sakit_id' => $karyawan_sakit->id,
-                        'obat_id' => $request->obat[$i],
-                        'jumlah' => $request->jumlah[$i],
-                        'konsumsi' => $request->dosis_obat[$i],
-                        'aturan' => '-',
-                    ]);
-                }
+            if ($request->karyawan_id == "NULL") {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Form Kosong',
+                ], 500);
             }
+
+            Karyawan_masuk::create([
+                'karyawan_id' => $request->karyawan_id,
+                'pemeriksa_id' => $request->pemeriksa_id,
+                'tgl_cek' => $request->tgl,
+                'alasan' => $request->alasan,
+                'keterangan' => $request->keterangan
+            ]);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil Ditambahkan',
+            ], 200);
         }
-        if ($karyawan_masuk) {
-            return redirect()->back()->with('success', 'Berhasil menambahkan data');
-        } else {
-            return redirect()->back()->with('error', 'Gagal menambahkan data');
-        }
+        // $this->validate(
+        //     $request,
+        //     [
+        //         'tgl' => 'required',
+        //         'karyawan_id' => 'required'
+        //     ],
+        //     [
+        //         'tgl.required' => 'Tgl pemeriksaan harus di isi',
+        //         'karyawan_id.unique' => 'Nama karyawan harus di pilih'
+        //     ]
+        // );
+
+        // if ($request->alasan == "Sakit") {
+
+
+        //     $karyawan_sakit = Karyawan_sakit::create([
+        //         'tgl_cek' => $request->tgl,
+        //         'karyawan_id' => $request->karyawan_id,
+        //         'pemeriksa_id' => $request->pemeriksa_id,
+        //         'analisa' => $request->analisa,
+        //         'diagnosa' => $request->diagnosa,
+        //         'tindakan' => $request->hasil_1,
+        //         'terapi' => $request->terapi,
+        //         'keputusan' => $request->hasil_2
+        //     ]);
+
+        //     $karyawan_masuk = Karyawan_masuk::create([
+        //         'karyawan_id' => $request->karyawan_id,
+        //         'pemeriksa_id' => $request->pemeriksa_id,
+        //         'karyawan_sakit_id' => $karyawan_sakit->id,
+        //         'tgl_cek' => $request->tgl,
+        //         'alasan' => $request->alasan,
+        //         'keterangan' => $request->keterangan
+        //     ]);
+        // } else {
+        //     $karyawan_masuk = Karyawan_masuk::create([
+        //         'karyawan_id' => $request->karyawan_id,
+        //         'pemeriksa_id' => $request->pemeriksa_id,
+        //         'tgl_cek' => $request->tgl,
+        //         'alasan' => $request->alasan,
+        //         'keterangan' => $request->keterangan
+        //     ]);
+        // }
+        // if ($request->hasil_1 == 'Pengobatan') {
+        //     for ($i = 0; $i < count($request->obat); $i++) {
+        //         $obat = obat::find($request->obat[$i])->decrement('stok', $request->jumlah[$i]);
+
+        //         if ($request->dosis_obat_custom_obat[$i] != null) {
+        //             $detail_obat = detail_obat::create([
+        //                 'karyawan_sakit_id' => $karyawan_sakit->id,
+        //                 'obat_id' => $request->obat[$i],
+        //                 'jumlah' => $request->jumlah[$i],
+        //                 'aturan' => '-',
+        //                 'konsumsi' =>  $request->dosis_obat_custom_obat[$i] . 'x' . $request->dosis_obat_custom_hari[$i],
+        //             ]);
+        //         } else {
+        //             $detail_obat = detail_obat::create([
+        //                 'karyawan_sakit_id' => $karyawan_sakit->id,
+        //                 'obat_id' => $request->obat[$i],
+        //                 'jumlah' => $request->jumlah[$i],
+        //                 'konsumsi' => $request->dosis_obat[$i],
+        //                 'aturan' => '-',
+        //             ]);
+        //         }
+        //     }
+        // }
+        // if ($karyawan_masuk) {
+        //     return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        // } else {
+        //     return redirect()->back()->with('error', 'Gagal menambahkan data');
+        // }
     }
     public function karyawan_masuk_detail_data($id)
     {
@@ -1233,9 +1344,7 @@ class KesehatanController extends Controller
     }
     public function kesehatan_bulanan()
     {
-        $karyawan = Karyawan::orderBy('nama', 'ASC')
-            ->has('Kesehatan_awal')
-            ->get();
+        $karyawan = $this->get_data_karyawan_aktif();
         return view('page.kesehatan.kesehatan_bulanan', ['karyawan' => $karyawan]);
     }
 
@@ -1381,12 +1490,14 @@ class KesehatanController extends Controller
     }
     public function kesehatan_bulanan_gcu_tambah()
     {
-        $karyawan = Karyawan::orderby('nama')->get();
+        $karyawan =  $this->get_data_karyawan_aktif();
         return view('page.kesehatan.kesehatan_bulanan_gcu_tambah', ['karyawan' => $karyawan]);
     }
+
+
     public function kesehatan_bulanan_berat_tambah()
     {
-        $karyawan = Karyawan::orderby('nama')->get();
+        $karyawan = $this->get_data_karyawan_aktif();
         return view('page.kesehatan.kesehatan_bulanan_berat_tambah', ['karyawan' => $karyawan]);
     }
 

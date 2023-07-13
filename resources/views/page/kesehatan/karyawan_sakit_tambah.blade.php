@@ -74,24 +74,9 @@
     <section class="content">
         <div class="row">
             <div class="col-lg-12">
-                @if (session()->has('success'))
-                    <div class="alert alert-success alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        {{ session()->get('success') }}
-                    </div>
-                @elseif(session()->has('error') || count($errors) > 0)
-                    <div class="alert alert-danger alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        Data gagal ditambahkan
-                    </div>
-                @endif
                 <div class="col-lg-12">
-                    <form action="/karyawan/sakit/aksi_tambah" method="post" id="formkaryawansakit">
-                        @csrf
+                    <form action="/karyawan/sakit/aksi_tambah" id="formkaryawansakit">
+                        {{ csrf_field() }}
                         <div class="card card-primary card-outline">
                             <div class="card-header">
                                 <h6 class="card-title">Detail Umum</h6>
@@ -116,7 +101,7 @@
                                             <select type="text"
                                                 class="form-control @error('karyawan_id') is-invalid @enderror select2 karyawan_id"
                                                 name="karyawan_id" id="karyawan_id">
-
+                                                <option value="NULL">Pilih Karyawan</option>
                                                 @foreach ($karyawan as $k)
                                                     <option value="{{ $k->id }}">{{ $k->nama }}</option>
                                                 @endforeach
@@ -177,6 +162,25 @@
                                     </div>
                                     <div class="form-group row">
                                         <label for="kondisi" class="col-sm-5 col-form-label"
+                                            style="text-align:right;">Terapi Faskes</label>
+                                        <div class="col-sm-4">
+                                            <textarea type="text" class="form-control @error('terapi') is-invalid @enderror" id="terapi"
+                                                value="{{ old('terapi') }}" placeholder="Terapi yang digunakan" name="terapi"></textarea>
+                                        </div>
+                                        <span role="alert" id="no_seri-msg"></span>
+                                    </div>
+                                    <div class="form-group row " id="isi_obat_input">
+                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket"></label>
+                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" name="isi_obat"
+                                                    id="isi_obat" value="true" />
+                                                <label class="form-check-label" for="isi_obat">Pakai Obat</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- <div class="form-group row">
+                                        <label for="kondisi" class="col-sm-5 col-form-label"
                                             style="text-align:right;">Penanganan</label>
                                         <div class="col-sm-7 col-form-label">
                                             <div class="icheck-success d-inline col-sm-4">
@@ -193,8 +197,8 @@
                                             </div>
                                             <span class="invalid-feedback" role="alert" id="kondisi-msg"></span>
                                         </div>
-                                    </div>
-                                    <div id="tipe_1" style="display:none">
+                                    </div> --}}
+                                    {{-- <div id="tipe_1" style="display:none">
                                         <div class="form-group row">
                                             <label for="tanggal" class="col-sm-5 col-form-label"
                                                 style="text-align:right;">Terapi</label>
@@ -204,7 +208,7 @@
                                             </div>
                                             <span role="alert" id="no_seri-msg"></span>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div id="tipe_2" style="display:none">
                                         <div class="form-group row">
                                             <table class="table table-hover styled-table table-striped col-sm-12"
@@ -213,7 +217,7 @@
                                                     <tr>
                                                         <th width="5%">No</th>
                                                         <th width="25%">Obat</th>
-                                                        {{-- <th width="20%">Aturan</th> --}}
+                                                        <th width="2%" hidden></th>
                                                         <th width="50%">Aturan</th>
                                                         <th width="15%">Jumlah</th>
                                                         <th width="5%"></th>
@@ -227,34 +231,11 @@
                                                                 id="0">
                                                             </select>
                                                         </td>
-                                                        {{-- <td>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input aturan_obat" type="radio" name="aturan_obat[]" value="Sebelum Makan">
-                                                        <label class="form-check-label">Sebelum Makan</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input aturan_obat" type="radio" name="aturan_obat[]" value="Sesudah Makan">
-                                                        <label class="form-check-label">Sesudah Makan</label>
-                                                    </div>
-                                                </td> --}}
+                                                        <td hidden>
+                                                            <input class="jumlah_obat_db" id="jumlah_obat_db0">
+                                                        </td>
                                                         <td>
-                                                            <div class="form-check form-check-inline" style="width:20%">
-                                                                <input class="form-check-input dosis_obat" type="radio"
-                                                                    name="dosis_obat[]" value="1x1">
-                                                                <label class="form-check-label" for="dosis_obat">
-                                                                    1x1 Hari
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline" style="width:20%">
-                                                                <input class="form-check-input dosis_obat" type="radio"
-                                                                    name="dosis_obat[]" value="2x1">
-                                                                <label class="form-check-label" for="dosis_obat">
-                                                                    2x1 Hari
-                                                                </label>
-                                                            </div>
                                                             <div class="form-check form-check-inline" style="width:50%">
-                                                                <input class="form-check-input dosis_obat" type="radio"
-                                                                    name="dosis_obat[]" value="2x1">
                                                                 <div class="form-row align-items-center">
                                                                     <div class="col-4">
                                                                         <input type="text"
@@ -286,7 +267,8 @@
                                                                     <span class="input-group-text">Pcs</span>
                                                                 </div>
                                                             </div>
-                                                            {{-- <small id="stok0" class="stok text-muted">Stok : - </small> --}}
+                                                            <small id="stok0" class="stok text-muted">Stok : -
+                                                            </small>
 
                                                         </td>
 
@@ -300,7 +282,7 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    {{-- <div class="form-group row">
                                         <label for="kondisi" class="col-sm-5 col-form-label"
                                             style="text-align:right;">Tindak lanjut</label>
                                         <div class="col-sm-7 col-form-label">
@@ -327,8 +309,8 @@
                                             </div>
                                             <span class="invalid-feedback" role="alert" id="kondisi-msg"></span>
                                         </div>
-                                    </div>
-                                    <div id="tindak_lanjut_istirahat" style="display:none">
+                                    </div> --}}
+                                    {{-- <div id="tindak_lanjut_istirahat" style="display:none">
                                         <div class="form-group row">
                                             <label for="tanggal" class="col-sm-5 col-form-label"
                                                 style="text-align:right;">Tanda Vital</label>
@@ -338,19 +320,8 @@
                                             </div>
                                             <span role="alert" id="no_seri-msg"></span>
                                         </div>
-                                    </div>
-                                    <!-- <div class="form-group row">
-                                        <label for="kondisi" class="col-sm-4 col-form-label" style="text-align:right;"></label>
-                                        <div class="col-sm-8" style="margin-top:7px;">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                                <label class="" for=" flexCheckDefault">
-                                                    Surat Keterangan Istirahat
-                                                </label>
-                                            </div>
-                                            <span class="invalid-feedback" role="alert" id="kondisi-msg"></span>
-                                        </div>
-                                    </div> -->
+                                    </div> --}}
+                                    <!-- <div class="form-group row">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div> -->
                                 </div>
                             </div>
                         </div>
@@ -358,7 +329,7 @@
                             <div class="col-6"><a class="btn btn-danger float-left" href="/karyawan/sakit">Batal</a>
                             </div>
                             <div class="col-6"><button class="btn btn-primary float-right" type="submit"
-                                    id="button_tambah" disabled="true">Simpan</button></div>
+                                    id="button_tambah">Simpan</button></div>
                         </div>
                     </form>
                 </div>
@@ -369,22 +340,39 @@
 @section('adminlte_js')
     <script>
         var where = [''];
-        $(document).ready(function() {
-            $('#formkaryawansakit').on('keyup change', function() {
-                if ($('input[name="tgl"]').val() != "" && $('#karyawan_id').val() != "" && $(
-                        '#pemeriksa_id').val() != "" && $('#analisa').val() != "" && $('#diagnosa').val() !=
-                    "" && $('input[name="hasil_1"][type="radio"]:checked').val() != "" && $(
-                        'input[name="hasil_2"][type="radio"]:checked').val() != "") {
-                    if (($('input[type="radio"][name="hasil_1"]:checked').val() == "Terapi" && $('#terapi')
-                            .val() != "") || $('input[name="hasil_1"]:checked').val() == "Pengobatan") {
-                        $('#button_tambah').attr('disabled', false);
-                    } else {
-                        $('#button_tambah').attr('disabled', true);
-                    }
-                } else {
-                    $('#button_tambah').attr('disabled', true);
+
+        $(document).on('submit', '#formkaryawansakit', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $(this).serialize(),
+
+                dataType: 'JSON',
+                success: function(response) {
+                    swal.fire(
+                        'Berhasil',
+                        'Data Berhasil Ditambahkan',
+                        'success'
+                    ).then(function() {
+                        window.location.href = '/karyawan/sakit/tambah';
+                    });
+                },
+                error: function(xhr, status, error, response) {
+                    swal.fire(
+                        'Gagal',
+                        'Cek Form Kembali',
+                        'error'
+                    );
                 }
             });
+        });
+        $(document).ready(function() {
+
             $('.select2').select2();
             select_data();
 
@@ -394,16 +382,20 @@
                     $(el).find("td:eq(0)").html(++c);
                     var j = c - 1;
                     $(el).find('input.aturan_obat:radio').attr('name', 'aturan_obat[' + j + ']');
-                    $(el).find('input.dosis_obat:radio').attr('name', 'dosis_obat[' + j + ']');
+
                     $(el).find('.jumlah').attr('name', 'jumlah[' + j + ']');
                     $(el).find('.dosis_obat_custom_obat').attr('name', 'dosis_obat_custom_obat[' + j + ']');
                     $(el).find('.dosis_obat_custom_hari').attr('name', 'dosis_obat_custom_hari[' + j + ']');
+                    $(el).find('.jumlah_obat_db').attr('id', 'jumlah_obat_db' + j + '');
                     $(el).find('.jumlah').attr('id', 'jumlah' + j + '');
                     $(el).find('.stok').attr('id', 'stok' + j + '');
                     $(el).find('.obat').attr('name', 'obat[' + j + ']');
                     $(el).find('.obat_data').attr('id', j);
                     $(el).find('.obat_data').attr('name', 'obat[' + j + ']');
                     select_data();
+                    addNull()
+
+
                 });
             }
             $('#obat').on("change", ".obat_data", function(i) {
@@ -414,15 +406,24 @@
                 if (index == 0) {
                     where.splice(1, 1);
                 }
-                console.log(where);
+                // console.log(where);
                 $.ajax({
                     url: '/obat/data/' + id,
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
+                        $("#jumlah_obat_db" + index).val(data[0].stok);
                         $("#stok" + index).text('Stok : ' + data[0].stok);
                         $("#jumlah" + index).prop('max', data[0].stok);
                         $("#jumlah" + index).prop('min', 1);
+                        $("#jumlah" + index).val(1);
+                        // stok 0 disabled jumlah
+                        if (data[0].stok == 0) {
+                            $("#jumlah" + index).prop('disabled', true);
+                            $("#jumlah" + index).val('');
+                        } else {
+                            $("#jumlah" + index).prop('disabled', false);
+                        }
                     },
                     error: function(error) {
                         console.log(error);
@@ -436,6 +437,9 @@
                                                                     <select class="form-control  obat_data " id="0" name="obat[]">
                                                                     </select>
                                                                 </td>
+                                                                <td hidden>
+                                                                <input type="text" class="jumlah_obat_db" id="jumlah_obat_db0">
+                                                                </td>
                                                                 {{-- <td>
                                                                     <div class="form-check form-check-inline">
                                                                         <input class="form-check-input aturan_obat" type="radio" name="aturan_obat[]" value="Sebelum Makan">
@@ -447,20 +451,8 @@
                                                                     </div>
                                                                 </td> --}}
                                                                 <td>
-                                                                    <div class="form-check form-check-inline" style="width:20%">
-                                                                        <input class="form-check-input dosis_obat" type="radio" name="dosis_obat[]" value="1x1">
-                                                                        <label class="form-check-label" for="dosis_obat">
-                                                                            1x1 Hari
-                                                                        </label>
-                                                                    </div>
-                                                                    <div class="form-check form-check-inline" style="width:20%">
-                                                                        <input class="form-check-input dosis_obat" type="radio" name="dosis_obat[]" value="2x1">
-                                                                        <label class="form-check-label" for="dosis_obat">
-                                                                            2x1 Hari
-                                                                        </label>
-                                                                    </div>
+
                                                                     <div class="form-check form-check-inline" style="width:50%">
-                                                                        <input class="form-check-input dosis_obat" type="radio" name="dosis_obat[]" value="2x1">
                                                                         <div class="form-row align-items-center">
                                                                             <div class="col-4">
                                                                                 <input type="text" class="form-control dosis_obat_custom_obat" name="dosis_obat_custom_obat[]" id="dosis_obat_custom_obat" placeholder="Obat" width="5%">
@@ -491,7 +483,7 @@
                                                                             <span class="input-group-text">Pcs</span>
                                                                         </div>
                                                                     </div>
-                                                                    {{-- <small id="stok0" class="stok text-muted">Stok : - </small> - --}}
+                                                                    <small id="stok0" class="stok text-muted">Stok : - </small>
                                                                 </td>
                                                                 <td style="text-align: right;">
                                                                 <button type="button" class="btn btn-danger karyawan-img-small" style="border-radius:50%;" id="closetable"><i class="fas fa-times-circle"></i></button>
@@ -501,7 +493,6 @@
                 numberRows($("#obat"));
             });
 
-
             $('#obat').on('click', '#closetable', function(e) {
                 var id = $(this).closest('tr').find('.obat_data').attr('id');
                 $(this).closest('tr').remove();
@@ -509,6 +500,19 @@
                 numberRows($("#obat"));
             });
 
+            addNull()
+
+
+            function addNull() {
+                $('.obat_data').append($('<option>', {
+                    value: 'NULL',
+                    text: 'Pilih Obat'
+                }));
+
+                // var $newOption = $("<option selected='selected'></option>").val("NULL").text(
+                //     "Pilih Produk")
+                // $(".obat_data").append($newOption).trigger('change');
+            }
 
             function select_data() {
                 if (where == '') {
@@ -516,7 +520,7 @@
                 }
                 //console.log(where);
                 $('.obat_data').select2({
-                    placeholder: "Pilih Produk",
+                    placeholder: "Pilih Obat",
                     ajax: {
                         dataType: 'json',
                         delay: 250,
@@ -528,7 +532,7 @@
                             }
                         },
                         processResults: function(data) {
-                            console.log(data);
+                            // console.log(data);
                             return {
                                 results: $.map(data, function(obj) {
                                     return {
@@ -547,60 +551,65 @@
                             data.stok + `">` + data.stok + `</span></div>`);
                         return $span;
                     }
-                    // ,
-                    // templateSelection: function(data) {
-                    //     var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.stok + `">` + data.stok + `</span></div>`);
-                    //     return $span;
-                    // }
                 });
             }
 
-            $('input[name=dosis_obat]').on("click", function() {
-                check = $("#custom_radio").is(":checked");
-                if (check) {
-                    $('input[id=dosis_obat_custom]').prop("required", true);
-                } else {
-                    $('input[id=dosis_obat_custom]').prop("required", false);
-                    $('#dosis_obat_custom').val('');
-                }
-            });
-            $('input[name=hasil_1]').prop("required", true);
-            $('input[name=hasil_2]').prop("required", true);
-            $('input[name=hasil_2]').on('change', function() {
-                if ($('input[name=hasil_2]:checked').val() == 'Istirahat') {
-                    $('#tindak_lanjut_istirahat').removeAttr('style');
-                } else {
-                    $('#tindak_lanjut_istirahat').css('display', 'none');
-                }
-            })
-            $('input[type=radio][name=hasil_1]').on('change', function() {
-                if (this.value == 'Terapi') {
+            //Radio Baru
+            $('input[type="checkbox"][name="isi_obat"]').change(function() {
+                if ($('input[type="checkbox"][name="isi_obat"]:checked').length > 0) {
+                    $('input[name=jumlah]').prop("required", true);
+                    $('select[name=obat_id]').prop("required", true);
+                    $('input[name=aturan_obat]').prop("required", true);
                     $('#obat').val(null).trigger('change');
-                    $("#tipe_1").removeAttr("style");
+
+                    $("#tipe_2").removeAttr("style");
+                    select_data();
+                } else {
+                    $('#obat').val(null).trigger('change');
                     $("#tipe_2").css('display', 'none');
                     $('#dosis_obat_custom').val('');
                     $('#jumlah').val('');
                     $('select[name=obat_id]').prop("required", false);
                     $('input[name=jumlah]').prop("required", false);
                     $('input[name=aturan_obat]').prop("required", false);
-                    $('input[name=dosis_obat]').prop("required", false);
                     $('input[name=aturan_obat]').prop("checked", false);
-                    $('input[name=dosis_obat]').prop("checked", false);
                     $('textarea[id=terapi]').prop("required", true);
                     $('#obat').val(null).trigger('change');
                     $('#stok').text('');
-                } else {
-                    $('input[name=jumlah]').prop("required", true);
-                    $('select[name=obat_id]').prop("required", true);
-                    $('input[name=dosis_obat]').prop("required", true);
-                    $('input[name=aturan_obat]').prop("required", true);
-                    $('#obat').val(null).trigger('change');
-                    $("#tipe_1").css('display', 'none')
-                    $("#tipe_2").removeAttr("style");
-                    $('textarea[id=terapi]').prop("required", false);
-                    select_data();
                 }
+                // checkvalidasi();
             });
+
+            //Radio Lama
+
+            // $('input[type=radio][name=hasil_1]').on('change', function() {
+            //     if (this.value == 'Terapi') {
+            //         $('#obat').val(null).trigger('change');
+            //         $("#tipe_1").removeAttr("style");
+            //         $("#tipe_2").css('display', 'none');
+            //         $('#dosis_obat_custom').val('');
+            //         $('#jumlah').val('');
+            //         $('select[name=obat_id]').prop("required", false);
+            //         $('input[name=jumlah]').prop("required", false);
+            //         $('input[name=aturan_obat]').prop("required", false);
+            //         $('input[name=dosis_obat]').prop("required", false);
+            //         $('input[name=aturan_obat]').prop("checked", false);
+            //         $('input[name=dosis_obat]').prop("checked", false);
+            //         $('textarea[id=terapi]').prop("required", true);
+            //         $('#obat').val(null).trigger('change');
+            //         $('#stok').text('');
+            //     } else {
+            //         $('input[name=jumlah]').prop("required", true);
+            //         $('select[name=obat_id]').prop("required", true);
+            //         $('input[name=dosis_obat]').prop("required", true);
+            //         $('input[name=aturan_obat]').prop("required", true);
+            //         $('#obat').val(null).trigger('change');
+            //         $("#tipe_1").css('display', 'none')
+            //         $("#tipe_2").removeAttr("style");
+            //         $('textarea[id=terapi]').prop("required", false);
+            //         select_data();
+            //     }
+            // });
             $("#diagnosa").autocomplete({
                 source: function(request, response) {
                     $.ajax({
@@ -625,7 +634,17 @@
                     });
                 }
             });
-
+            $("#obat").on('keyup change', '.jumlah', function() {
+                var jumlah_stok_obat = $(this).closest('tr').find('.jumlah_obat_db').val();
+                if (parseInt($(this).val()) > jumlah_stok_obat) {
+                    swal.fire(
+                        'Jumlah Tidak Tersedia',
+                        'Jumlah lebih dari Stok',
+                        'warning'
+                    );
+                    $(this).val(1)
+                }
+            });
 
             $("#analisa").autocomplete({
                 source: function(request, response) {

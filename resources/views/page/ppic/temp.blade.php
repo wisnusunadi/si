@@ -98,13 +98,13 @@
                         </table>
                     </div>
                 </div>
-                @if (Auth::user()->Karyawan->divisi_id == 3)
+                @if (Auth::user()->divisi_id == 3)
                     @if ($status == 'penyusunan')
                         <button class="btn btn-danger btn-block" id="acc-button" style="display: none;">Konfirmasi
                             jadwal</button>
                     @endif
                 @endif
-                @if (Auth::user()->Karyawan->divisi_id == 24)
+                @if (Auth::user()->divisi_id == 24)
                     <button class="btn btn-info btn-block" id="bppb-button" style="display: none;">BPPB</button>
                     <button class="btn btn-primary btn-block" id="approval-button" style="display: none;">Minta
                         persetujuan</button>
@@ -698,7 +698,7 @@
                             result.forEach(element => {
                                 $('#product-bom-version').append(
                                     `<option value="${element.versi}">${element.versi}</option>`
-                                    );
+                                );
                             });
                             $('#product-bom-version').prop('disabled', false);
                             $('#product-bom-version').change(product_bom_version_change);

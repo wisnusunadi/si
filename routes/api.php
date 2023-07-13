@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [App\Http\Controllers\ApiController::class, 'authenticate']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return response()->json([
+        'id' => $request->user()->id,
         'username' => $request->user()->karyawan->nama,
         'divisi_id' =>  $request->user()->divisi_id,
         'foto' => $request->user()->foto,
@@ -34,6 +35,7 @@ Route::prefix('/master')->group(function () {
 });
 
 Route::prefix('/ppic')->group(function () {
+    Route::post('/update_pwd', [App\Http\Controllers\Auth\ResetPasswordController::class, 'updatePwd'])->middleware('jwt.verify');
     Route::post('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data'])->middleware('jwt.verify');
     Route::post('/master_stok/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_stok'])->middleware('jwt.verify');
     Route::post('/master_pengiriman/data', [App\Http\Controllers\PpicController::class, 'get_master_pengiriman_data'])->middleware('jwt.verify');
@@ -260,6 +262,7 @@ Route::prefix('/dashboard-gbj')->group(function () {
 Route::prefix('/tfp')->group(function () {
     Route::post('/create', [ProduksiController::class, 'CreateTFItem']);
     Route::post('/byso', [ProduksiController::class, 'TfbySO']);
+    Route::post('/byso-batal/{id}', [GudangController::class, 'TfbySOBatal']);
     Route::post('/byso-final', [GudangController::class, 'TfbySOFinal']);
     Route::post('/create-noseri', [GudangController::class, 'storeNoseri']);
     Route::post('/create-final', [GudangController::class, 'finalDraftRakit']);
@@ -585,6 +588,7 @@ Route::prefix('/dc')->group(function () {
     });
     Route::prefix('/so')->group(function () {
         Route::post('store/{value}', [App\Http\Controllers\DcController::class, 'store_coo']);
+        Route::post('cancel', [App\Http\Controllers\DcController::class, 'cancel_so']);
         Route::post('update/{value}', [App\Http\Controllers\DcController::class, 'update_coo']);
         Route::put('update_tgl_kirim_coo/{value}', [App\Http\Controllers\DcController::class, 'update_tgl_kirim_coo']);
         Route::post('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);

@@ -50,7 +50,7 @@
         }
     </style>
     <div class="content-header">
-        <input type="hidden" name="" id="authid" value="{{ Auth::user()->Karyawan->divisi_id }}">
+        <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id }}">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
@@ -523,8 +523,8 @@
             "language": {
                 // "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                 processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                        </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
             },
             order: [
                 [0, 'desc']
@@ -625,8 +625,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                                                                                                                                                                </span>&emsp;Mohon Tunggu ...",
                 },
             });
             $(document).on("click", "#semua-produk-tab", function() {
@@ -731,8 +731,8 @@
             ],
             language: {
                 processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                                                                                                                                                                </span>&emsp;Mohon Tunggu ...",
             }
         });
         // Sales Order Cetak

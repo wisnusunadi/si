@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\administrator;
 
 use App\Http\Controllers\Controller;
+use App\Models\Divisi;
 use App\Models\kesehatan\Karyawan;
 use App\Models\SystemLog;
 use App\Models\User;
@@ -54,6 +55,9 @@ class AdministratorController extends Controller
         $data = User::with('Karyawan.Divisi')->get();
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('akses', function ($data) {
+                return $data->Divisi->nama;
+            })
             ->addColumn('divisi', function ($data) {
                 return $data->Karyawan->Divisi->nama;
             })
@@ -96,21 +100,24 @@ class AdministratorController extends Controller
         $user_id = User::select('karyawan_id')->pluck('karyawan_id');
         $karyawan = Karyawan::whereNotIN('id', $user_id)->get();
         $user = User::find($id);
+        $divisi = Divisi::all();
 
-        return view("page.administrator.user.edit", ['karyawan' => $karyawan, 'user' => $user]);
+        return view("page.administrator.user.edit", ['karyawan' => $karyawan, 'user' => $user, 'divisi' => $divisi]);
     }
     public function get_create_user_modal()
     {
         $user_id = User::select('karyawan_id')->pluck('karyawan_id');
         $karyawan = Karyawan::whereNotIN('id', $user_id)->get();
-        return view("page.administrator.user.create", ['karyawan' => $karyawan]);
+        $divisi = Divisi::all();
+        return view("page.administrator.user.create", ['karyawan' => $karyawan, 'divisi' => $divisi]);
     }
     public function get_store_user(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|unique:users',
             'email' => 'required',
-            'karyawan' => 'required'
+            'karyawan' => 'required',
+            'akses_divisi' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -123,7 +130,7 @@ class AdministratorController extends Controller
                 'karyawan_id' => $request->karyawan,
                 'status' => 'online',
                 'password' =>   Hash::make('sinkoprima'),
-                'is_aktif' => 1,
+                'divisi_id' => $request->akses_divisi,
 
             ]);
 
@@ -176,6 +183,7 @@ class AdministratorController extends Controller
                 $nama_lama = Karyawan::find($user->karyawan_id)->nama;
 
                 $user->username = $request->username;
+                $user->divisi_id = $request->akses_divisi;
                 $user->email = $request->email;
                 $user->karyawan_id = $request->karyawan;
                 $user->save();

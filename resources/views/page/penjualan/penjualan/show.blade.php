@@ -10,10 +10,10 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '26')
+                    @if (Auth::user()->divisi_id == '26')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item active">Penjualan</li>
-                    @elseif(Auth::user()->Karyawan->divisi_id == '2')
+                    @elseif(Auth::user()->divisi_id == '2')
                         <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item active">Penjualan</li>
                     @endif
@@ -204,9 +204,9 @@
         }
 
         /* .overflowcard {
-                                                                                                                                                                                                                                                                                                                                                                                                                    max-height:
-                                                                                                                                                                                                                                                                                                                                                                                                                    700px;
-                                                                                                                                                                                                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                                                                                                                                        max-height:
+                                                                                                                                                                                                                                                                                                                                                                                                                        700px;
+                                                                                                                                                                                                                                                                                                                                                                                                                    } */
 
         .bg-chart-light {
             background: rgba(192, 192, 192, 0.2);
@@ -304,7 +304,7 @@
         <div class="container-fluid">
             <div class="col-12">
                 <div class="row">
-                    <div id="auth" class="hide">{{ Auth::user()->Karyawan->divisi_id }}</div>
+                    <div id="auth" class="hide">{{ Auth::user()->divisi_id }}</div>
                     <div class="col-12">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -338,7 +338,7 @@
                                         </span>
                                     </div> --}}
                                     <div class="col-12">
-                                        @if (Auth::user()->Karyawan->divisi_id == '26')
+                                        @if (Auth::user()->divisi_id == '26')
                                             <span class="float-right filter">
                                                 <a href="{{ route('penjualan.penjualan.create') }}"><button
                                                         class="btn btn-outline-info">
@@ -462,7 +462,7 @@
                                 aria-labelledby="spa-tab">
                                 <div class="row">
                                     <div class="col-12">
-                                        @if (Auth::user()->Karyawan->divisi_id == '26')
+                                        @if (Auth::user()->divisi_id == '26')
                                             <span class="float-right filter">
                                                 <a href="{{ route('penjualan.penjualan.create') }}"><button
                                                         class="btn btn-outline-info">
@@ -588,7 +588,7 @@
                                 aria-labelledby="spb-tab">
                                 <div class="row">
                                     <div class="col-12">
-                                        @if (Auth::user()->Karyawan->divisi_id == '26')
+                                        @if (Auth::user()->divisi_id == '26')
                                             <span class="float-right filter">
                                                 <a href="{{ route('penjualan.penjualan.create') }}"><button
                                                         class="btn btn-outline-info">
@@ -722,7 +722,7 @@
                                 aria-labelledby="semua-penjualan-tab">
                                 <div class="row">
                                     <div class="col-12">
-                                        @if (Auth::user()->Karyawan->divisi_id == '26')
+                                        @if (Auth::user()->divisi_id == '26')
                                             <span class="float-right filter">
                                                 <a href="{{ route('penjualan.penjualan.create') }}"><button
                                                         class="btn btn-outline-info">
@@ -970,7 +970,7 @@
                     "scrollX": false
                 });
             }
-            var divisi_id = "{{ Auth::user()->Karyawan->divisi_id }}";
+            var divisi_id = "{{ Auth::user()->divisi_id }}";
 
             function p_show() {
                 var penjualantable = $('#penjualantable').DataTable({

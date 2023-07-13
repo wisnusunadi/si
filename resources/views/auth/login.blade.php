@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="input-group mb-3">
                                         <input type="password" id="password" class="form-control"
-                                            placeholder="password" />
+                                            placeholder="Password" />
                                         <div class="input-group-append">
                                             <div class="input-group-text">
                                                 <span><i class="fas fa-lock"></i></span>
@@ -66,7 +66,7 @@
                                         <div>
                                             <a href="https://forms.gle/fGiRwPTz4TB8dBFs6" class="nav-link"
                                                 target="_blank">
-                                                <i class="fa fa-phone" aria-hidden="true"></i>
+                                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                                 Lapor Kendala Teknis
                                             </a>
                                         </div>

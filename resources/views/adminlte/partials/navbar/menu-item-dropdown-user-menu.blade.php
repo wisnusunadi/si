@@ -16,9 +16,9 @@
 <li class="nav-item dropdown user-menu">
     {{-- User menu toggler --}}
     <a href="https://forms.gle/fGiRwPTz4TB8dBFs6" class="nav-link" target="_blank">
-        <i class="fa fa-phone" aria-hidden="true"></i>
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
         Lapor Kendala Teknis
-    </a>
+    </a>    
 </li>
 <li class="nav-item dropdown user-menu">
 

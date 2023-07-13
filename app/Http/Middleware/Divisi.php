@@ -25,7 +25,7 @@ class Divisi
             $d = ModelsDivisi::where('kode', $a)->first();
             $allow[] = $d->id;
         }
-        $role = strtolower(request()->user()->Karyawan->divisi_id);
+        $role = strtolower(request()->user()->divisi_id);
 
         if (in_array($role, $allow)) {
             return $next($request);

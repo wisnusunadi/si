@@ -612,6 +612,12 @@ return [
             'auth' => [14],
             'url'  => '/administrator/user',
         ],
+        [
+            'text' => 'Produk',
+            'url'  => '/administrator/produk',
+            'icon' => 'fas fa-table',
+            'auth' => [14]
+        ],
         // [
         //     'text'    => 'Part',
         //     'icon'    => 'fas fa-boxes',
@@ -1724,6 +1730,12 @@ return [
             'text' => 'Ubah Password',
             'icon' => 'fa-solid fa-gear',
             'url' => '/edit_pwd',
+            'auth' => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 14]
+        ],
+        [
+            'text' => 'Monitoring Lap. Teknis',
+            'icon' => 'fa-solid fa-chart-line',
+            'url' => 'https://docs.google.com/spreadsheets/d/1OxZY8JTqDBrIm89A9cTcTnRndRBOUCtnblY0f0F76p4/edit?usp=sharing',
             'auth' => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 14]
         ],
     ],

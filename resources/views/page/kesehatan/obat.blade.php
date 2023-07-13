@@ -35,7 +35,7 @@
             align-items: center !important;
         }
 
-        tr.line-through td:not(:nth-last-child(-n+2)):before {
+        tr.line-through td:not(:nth-last-child(-n+1)):before {
             content: " ";
             position: absolute;
             left: 0;
@@ -100,27 +100,12 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            {{-- @if (session()->has('success'))
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    Data berhasil ditambahkan
-                </div>
-            @elseif(session()->has('error') || count($errors) > 0)
-                <div class="alert alert-danger alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    Data gagal ditambahkan
-                </div>
-            @endif --}}
             <div class="card">
                 <div class="card-body">
                     <div class='table-responsive'>
                         <table id="tabel" class="table table-hover styled-table table-striped">
                             <thead style="text-align: center;">
-                                @if (Auth::user()->Karyawan->divisi_id == '28')
+                                @if (Auth::user()->divisi_id == '28')
                                     <tr>
                                         <th colspan="12">
                                             <button type="button" id="btntambahobat"
@@ -271,11 +256,31 @@
                                                                 <label for="tanggal"
                                                                     class="col-sm-12 col-lg-4 col-form-label"
                                                                     style="text-align:right;">Keterangan</label>
-                                                                <div class="col-sm-6 col-lg-5">
+                                                                <div class="col-sm-8 col-lg-7">
                                                                     <textarea type="text" class="form-control @error('keterangan') is-invalid @enderror" name="keterangan"
                                                                         value="{{ old('keterangan') }}" placeholder="Catatan tambahan"></textarea>
                                                                 </div>
                                                                 <span role="alert" id="no_seri-msg"></span>
+                                                            </div>
+
+                                                            <div class="form-group row">
+                                                                <label for=""
+                                                                    class="col-sm-12 col-lg-4 col-form-label"
+                                                                    style="text-align: right;">Status</label>
+                                                                <div class="col-sm-8 col-lg-7 col-form-label">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input status_obat"
+                                                                            type="radio" name="status_obat"
+                                                                            value="1">
+                                                                        <label class="form-check-label">Aktif</label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input status_obat"
+                                                                            type="radio" name="status_obat"
+                                                                            value="0">
+                                                                        <label class="form-check-label">Tidak Aktif</label>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -491,7 +496,7 @@
             });
         @endif
         $(function() {
-            var divisi_id = '{{ Auth::user()->Karyawan->divisi_id }}';
+            var divisi_id = '{{ Auth::user()->divisi_id }}';
             $(document).on('keyup change', '#form_stok_obat', function() {
                 if ($('#tgl_pembelian').val() != "" && $('#stok_pembelian').val() != "") {
                     $('#button_tambah_stok').attr('disabled', false);
@@ -754,6 +759,8 @@
 
             $('#tabel > tbody').on('click', '#edit', function() {
                 var rows = tabel.rows($(this).parents('tr')).data();
+                var statusObat = $(this).attr("data-obat-status");
+
                 $('input[id="id"]').val(rows[0]['id']);
                 $('input[id="nama_obat"]').val(rows[0]['nama']);
                 $('input[type="radio"][name="aturan"][value="' + rows[0]['aturan'] + '"]').attr('checked',
@@ -766,6 +773,12 @@
                 $('#edit_mod').modal(
                     'show');
                 $('.modal-title > .data_detail_head').text('Ubah ' + rows[0]['nama']);
+
+                if (statusObat == 1) {
+                    $('input[name="status_obat"][value="1"]').attr('checked', 'checked');
+                } else {
+                    $('input[name="status_obat"][value="0"]').attr('checked', 'checked');
+                }
             })
 
             $('#tabel > tbody').on('click', '#stok_obat_edit', function() {

@@ -10,9 +10,9 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '15')
+                    @if (Auth::user()->divisi_id == '15')
                         <li class="breadcrumb-item"><a href="{{ route('logistik.dashboard') }}">Beranda</a></li>
-                    @elseif(Auth::user()->Karyawan->divisi_id == '2')
+                    @elseif(Auth::user()->divisi_id == '2')
                         <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                     @endif
                     <li class="breadcrumb-item"><a href="{{ route('logistik.ekspedisi.show') }}">Ekspedisi</a></li>
@@ -228,9 +228,9 @@
                                                                     Provinsi</label>
                                                             </div>
                                                             <!-- <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan3" value="kota_kabupaten" />
-                                                                        <label class="form-check-label" for="jurusan3">Per Kota / Kabupaten</label>
-                                                                    </div> -->
+                                                                            <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan3" value="kota_kabupaten" />
+                                                                            <label class="form-check-label" for="jurusan3">Per Kota / Kabupaten</label>
+                                                                        </div> -->
 
                                                             <div class="invalid-feedback" id="msgjurusan">
                                                             </div>
@@ -411,7 +411,8 @@
                     $('#msgemail').text("");
                     $('#email').removeClass("is-invalid");
                     if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat")
-                    .val() != "" && $('input[type="checkbox"][name="jalur[][]"]:checked').length > 0 && $(
+                        .val() != "" && $('input[type="checkbox"][name="jalur[][]"]:checked').length > 0 &&
+                        $(
                             '#jurusan').val() != "") {
                         $("#btntambah").removeAttr('disabled');
                     }
@@ -454,7 +455,7 @@
                     $('#msgjalur').text("");
                     $('input[type="checkbox"][name="jalur[]"]').removeClass("is-invalid");
                     if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('#jurusan')
-                    .val() != "" && $('#alamat').val() != "") {
+                        .val() != "" && $('#alamat').val() != "") {
                         $("#btntambah").removeAttr('disabled');
                     } else {
                         $("#btntambah").attr('disabled', true);

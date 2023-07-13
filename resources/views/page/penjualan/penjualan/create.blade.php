@@ -11,7 +11,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '26')
+                    @if (Auth::user()->divisi_id == '26')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.penjualan.show') }}">Penjualan</a></li>
                         <li class="breadcrumb-item active">Tambah Penjualan</li>
@@ -25,6 +25,9 @@
 
 @section('adminlte_css')
     <style>
+        .hidden{
+            display: none;
+        }
         table>tbody>tr>td>.form-group>.select2>.selection>.select2-selection--single {
             height: 100% !important;
         }
@@ -125,13 +128,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                    .row {
-                                                                        font-size: 12px;
-                                                                    }
+                                                                                                                                            .row {
+                                                                                                                                                font-size: 12px;
+                                                                                                                                            }
 
-                                                                    h4 {
-                                                                        font-size: 20px;
-                                                                    } */
+                                                                                                                                            h4 {
+                                                                                                                                                font-size: 20px;
+                                                                                                                                            } */
             body {
                 font-size: 12px;
             }
@@ -148,13 +151,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                                    .row {
-                                                                        font-size: 12px;
-                                                                    }
+                                                                                                                                            .row {
+                                                                                                                                                font-size: 12px;
+                                                                                                                                            }
 
-                                                                    h4 {
-                                                                        font-size: 20px;
-                                                                    } */
+                                                                                                                                            h4 {
+                                                                                                                                                font-size: 20px;
+                                                                                                                                            } */
             section {
                 font-size: 12px;
             }
@@ -231,24 +234,7 @@
                             <div class="card-title">Form Tambah Data</div>
                         </div>
                         <div class="card-body">
-                            @if (Session::has('error') || count($errors) > 0)
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>{{ Session::get('error') }}</strong> Periksa
-                                    kembali data yang diinput
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            @elseif(Session::has('success'))
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <strong>{{ Session::get('success') }}</strong>,
-                                    Terima kasih
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            @endif
-                            <form method="post" autocomplete="off" action="{{ route('penjualan.penjualan.store') }}">
+                            <form method="post" id="create_penjualan" autocomplete="off" action="{{ route('penjualan.penjualan.store') }}">
                                 {{ csrf_field() }}
                                 <div class="row d-flex justify-content-center">
                                     <div class="col-lg-11 col-md-12">
@@ -934,6 +920,12 @@
                                 <div class="row justify-content-center hide" id="dataproduk">
                                     <div class="col-lg-11 col-md-12">
                                         <h4>Data Produk</h4>
+                                        <div class="hidden">
+                                            <div class="spinner-border hidden" role="status">
+                                                <span class="sr-only">Loading...</span>
+                                              </div>
+                                              Loading...
+                                        </div>
                                         <div class="row">
                                             <div class="col-lg-12 col-md-12">
                                                 <div class="card">
@@ -1261,6 +1253,35 @@
 
 @section('adminlte_js')
     <script>
+          $(document).on('submit', '#create_penjualan', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $(this).serialize(),
+                dataType: 'JSON',
+                success: function(response) {
+                    swal.fire(
+                        'Berhasil',
+                        'Data Berhasil Ditambahkan',
+                        'success'
+                    ).then(function() {
+                        window.location.href = '/penjualan/penjualan/create';
+                    });
+                },
+                error: function(xhr, status, error, response) {
+                    swal.fire(
+                        'Gagal',
+                        'Cek Form Kembali',
+                        'error'
+                    );
+                }
+            });
+          });
         $(function() {
             var produk_obj = {};
             var part_obj = {};
@@ -1269,6 +1290,19 @@
             $('#jenis_paket').select2({
                 placeholder: "Pilih Paket"
             });
+
+            addNull()
+            function addNull() {
+                $('.provinsi').append($('<option>', {
+                    value: 'NULL',
+                    text: 'Pilih Provinsi'
+                }));
+
+                // var $newOption = $("<option selected='selected'></option>").val("NULL").text(
+                //     "Pilih Produk")
+                // $(".obat_data").append($newOption).trigger('change');
+            }
+
 
             function perencanaan(customer_id, instansi) {
                 $('#perencanaantable').DataTable({
@@ -1386,8 +1420,7 @@
                             "input[name='status']:checked")
                         .val() != "" && $('#tanggal_pemesanan').val() != "" && $("#batas_kontrak").val() != "") {
                         $('#pills-instansi-tab').removeClass('disabled');
-                        if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi")
-                            .val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "") {
+                        if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== ""  && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "") {
                             $('#pills-produk-tab').removeClass('disabled');
                         } else {
                             $('#pills-produk-tab').addClass('disabled');
@@ -1538,7 +1571,7 @@
                 }
                 if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
                     if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi")
-                        .val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $(
+                        .val() !== "" && $("#alamatinstansi").val() !== "" && $(
                             "#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass(
                             'is-invalid')) && $("input[name='status']:checked").val() != "" && $("#batas_kontrak")
                         .val() != "" && $("#deskripsi").val() != "" && ((!$("#no_urut")
@@ -1722,7 +1755,7 @@
                 }
 
                 if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
-                    if ($('#customer_id').val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "" &&
+                    if ($('#customer_id').val() != 484 && $("#no_po").val() != "" && $("#tanggal_po").val() != "" &&
                         $("#no_do").val() != "" && $("#tanggal_do").val() != "" && penjualan_produk_id == true &&
                         variasi == true && produk_jumlah == true && produk_harga == true && part_id == true &&
                         part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {
@@ -1731,7 +1764,7 @@
                         $('#btntambah').attr("disabled", true);
                     }
                 } else if ($('input[type="radio"][name="do"]:checked').val() == "no") {
-                    if ($('#customer_id').val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "" &&
+                    if ($('#customer_id').val() != 484 && $("#no_po").val() != "" && $("#tanggal_po").val() != "" &&
                         penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga ==
                         true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true &&
                         jasa_harga == true) {
@@ -1802,6 +1835,11 @@
                     $("#akn").addClass("hide");
                     $(".os-content-arrange").remove();
                     $("#customer_id").attr('disabled', false);
+
+                    var $newOption = $("<option selected='selected'></option>").val("484").text(
+                        "Pilih Customer")
+                    $(".customer_id").append($newOption).trigger('change');
+
                     //cek
                     $("#belum_dsb").addClass("hide");
                     $("#penj_prd").removeClass("hide");
@@ -1834,6 +1872,11 @@
                     $("#akn").addClass("hide");
                     $(".os-content-arrange").remove();
                     $("#customer_id").attr('disabled', false);
+
+                    var $newOption = $("<option selected='selected'></option>").val("484").text(
+                        "Pilih Customer")
+                    $(".customer_id").append($newOption).trigger('change');
+
                     //cek
                     $("#belum_dsb").addClass("hide");
                     $("#penj_prd").removeClass("hide");
@@ -1992,10 +2035,6 @@
                         $('#no_paket').attr('readonly', false);
                         $("#dataproduk").removeClass("hide");
                         $("#batas_kontrak").attr('disabled', false);
-                        $("#provinsi").attr('disabled', false);
-                        var $newOption = $("<option selected='selected'></option>").val("11").text(
-                            "Jawa Timur")
-                        $(".provinsi").append($newOption).trigger('change');
                     } else if (($(this).val() == "draft") || ($(this).val() == "batal")) {
                         $('#checkbox_nopaket').removeClass('hide');
                         $('#isi_nopaket').prop("checked", false);
@@ -2010,8 +2049,6 @@
                         $("#totalhargaprd").text("Rp. 0");
                         $("#dataproduk").addClass("hide");
                         $("#batas_kontrak").attr('disabled', true);
-                        $("#provinsi").attr('disabled', true);
-                        $("#provinsi").empty().trigger('change');
                         $('#isi_produk_input').removeClass('hide');
                     }
                     //  else if ($(this).val() == "batal") {
@@ -2037,8 +2074,6 @@
                         $("#batas_kontrak").val("");
                         $("#batas_kontrak").attr('disabled', true);
                         $("#dataproduk").removeClass("hide");
-                        $("#provinsi").attr('disabled', true);
-                        $("#provinsi").empty().trigger('change')
                     }
 
                 } else {
@@ -2300,6 +2335,7 @@
                 }
             }).change(function() {
                 var id = $(this).val();
+                var jenis = $('input[name="jenis_penjualan"]:checked').val();
                 // instansi_array.length = 0
                 $.ajax({
                     url: '/api/customer/select/' + id,
@@ -2309,6 +2345,9 @@
                         if (data[0] != undefined) {
                             $('#alamat').val(data[0].alamat);
                             $('#telepon').val(data[0].telp);
+                            if (jenis == 'spa' || jenis == 'spb') {
+                                checkvalidasinonakn()
+                            }
                         }
                     }
                 });
@@ -2344,17 +2383,17 @@
                 id = $('select[name="' + name + '"]').attr('data-id');
                 vals = $('select[name="' + name + '"]').select2('data')[0];
                 var kebutuhan = jumlah * vals.jumlah;
-                if (cek_stok(vals.id) < kebutuhan) {
+                if (vals.qt < kebutuhan) {
                     var jumlah_kekurangan = 0;
-                    if (cek_stok(vals.id) < 0) {
+                    if (vals.qt < 0) {
                         jumlah_kekurangan = kebutuhan;
                     } else {
-                        jumlah_kekurangan = Math.abs(cek_stok(vals.id) - kebutuhan);
+                        jumlah_kekurangan = Math.abs(vals.qt - kebutuhan);
                     }
                     $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass('is-invalid');
                     $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang ' +
                         jumlah_kekurangan + ' dari Permintaan');
-                } else if (cek_stok(vals.id) >= kebutuhan) {
+                } else if (vals.qt >= kebutuhan) {
                     $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
                     $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
                 }
@@ -2412,106 +2451,38 @@
             }
 
             function select_data(prm) {
+
+                let produk = []
+
+                $('.spinner-border').removeClass('hidden');
+                const url = '/api/penjualan_produk/select_param/' + prm;
                 // $('.penjualan_produk_id').on('change', function() {
                 //     for (i = 0; i < 3; ++i) {
                 //         $("#produktable ").append('<tr><td>Detail Paket</td></tr>');
                 //     }
                 // });
-
-
-                $('.penjualan_produk_id').select2({
-                    placeholder: "Pilih Produk",
-                    width: 'resolve',
-                    ajax: {
-                        minimumResultsForSearch: 20,
-                        dataType: 'json',
-                        theme: "bootstrap",
-                        delay: 250,
-                        type: 'GET',
-                        url: '/api/penjualan_produk/select_param/' + prm,
-                        data: function(params) {
-                            return {
-                                term: params.term
-                            }
-                        },
-                        processResults: function(data) {
-
-                            return {
-                                results: $.map(data, function(obj) {
-                                    return {
-                                        id: obj.id,
-                                        text: obj.nama
-                                    };
+                    // push data to array produk
+                    produk.push({
+                        id: 0,
+                        text: 'Pilih Produk'
+                    })
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.map((item, index) => {
+                                produk.push({
+                                    id: item.id,
+                                    text: item.nama
                                 })
-                            };
-                        },
-                    }
-                });
-                // .change(function() {
-                //     var index = $(this).attr('id');
-                //     var id = $(this).val();
-                //     $.ajax({
-                //         url: '/api/penjualan_produk/select/' + id,
-                //         type: 'GET',
-                //         dataType: 'json',
-                //         success: function(res) {
-                //             $('#produk_harga' + index).val(formatmoney(res[0].harga));
-                //             var jumlah_pesan = $('#produk_jumlah' + index).val();
-                //             if (jumlah_pesan == "") {
-                //                 jumlah_pesan = 0;
-                //             }
-                //             console.log('subtotal' + formatmoney((res[0].harga) * jumlah_pesan));
-                //             $('#produk_subtotal' + index).val(formatmoney((res[0].harga) * jumlah_pesan));
-                //             var tes = $('#detail_produk' + index);
-                //             tes.empty();
-                //             var datas = "";
-                //             tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
-                //             for (var x = 0; x < res[0].produk.length; x++) {
-                //                 var data = [];
-                //                 tes.append(`<div>`);
-                //                 tes.append(`<div class="card-body blue-bg">
-            //                             <h6>` + res[0].produk[x].nama + `</h6>
-            //                             <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" id="variasi` + index + `` + x + `" data-attr="variasi` + x + `" data-id="` + x + `"></select>
-            //                             <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
-            //                           </div>`);
-                //                 if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
-                //                     data.push({
-                //                         id: res[0].produk[x].gudang_barang_jadi[0].id,
-                //                         text: res[0].produk[x].nama,
-                //                         jumlah: res[0].produk[x].pivot.jumlah,
-                //                         qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
-                //                     });
-                //                 } else {
-                //                     for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
-                //                         data.push({
-                //                             id: res[0].produk[x].gudang_barang_jadi[y].id,
-                //                             text: res[0].produk[x].gudang_barang_jadi[y].nama,
-                //                             jumlah: res[0].produk[x].pivot.jumlah,
-                //                             qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
-                //                         });
-                //                     }
-                //                 }
-                //                 $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
-                //                     placeholder: 'Pilih Variasi',
-                //                     data: data,
-                //                     templateResult: function(data) {
-                //                         var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
-                //                         return $span;
-                //                     },
-                //                     templateSelection: function(data) {
-                //                         var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
-                //                         return $span;
-                //                     }
-                //                 });
-
-                //                 $(`select[name="variasi[` + index + `][` + x + `]"]`).trigger("change");
-                //                 tes.append(`</div>`)
-                //             }
-                //             tes.append(`</fieldset>`);
-                //             // tes.html(datas);
-                //         }
-                //     });
-                // });
+                            })
+                            $('.penjualan_produk_id').select2({
+                                data: produk,
+                                placeholder: 'Pilih Produk',
+                                width: 'resolve',
+                            });
+                        })
+                        .catch(err => console.log(err));
+                $('.spinner-border').addClass('hidden');
             }
 
             function load_part() {
@@ -2609,6 +2580,7 @@
             $("#produktable").on('keyup change', '.penjualan_produk_id', function() {
                 var index = $(this).attr('id');
                 var id = $(this).val();
+                $('.spinner-border').addClass('hidden');
                 $.ajax({
                     url: '/api/penjualan_produk/select/' + id,
                     type: 'GET',
@@ -2643,8 +2615,8 @@
                                     id: res[0].produk[x].gudang_barang_jadi[0].id,
                                     text: res[0].produk[x].nama,
                                     jumlah: res[0].produk[x].pivot.jumlah,
-                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0]
-                                        .id)
+                                    qt: res[0].produk[x].gudang_barang_jadi[0]
+                                        .stok
                                 });
                             } else {
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi
@@ -2661,8 +2633,8 @@
                                         id: res[0].produk[x].gudang_barang_jadi[y].id,
                                         text: nama_var,
                                         jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: cek_stok(res[0].produk[x]
-                                            .gudang_barang_jadi[y].id)
+                                        qt: res[0].produk[x]
+                                            .gudang_barang_jadi[y].stok
                                     });
                                 }
                             }
@@ -2702,7 +2674,7 @@
                 } else {
                     checkvalidasinonakn();
                 }
-
+                $('.spinner-border').removeClass('hidden');
             });
             $("#produktable").on('keyup change', '.produk_jumlah', function() {
                 var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
@@ -2726,17 +2698,17 @@
                             'data')[0];
                         var kebutuhan = jumlah * variasires.jumlah;
 
-                        if (cek_stok(variasires.id) < kebutuhan) {
+                        if (variasires.qt < kebutuhan) {
                             var jumlah_kekurangan = 0;
-                            if (cek_stok(variasires.id) < 0) {
+                            if (variasires.qt < 0) {
                                 jumlah_kekurangan = kebutuhan;
                             } else {
-                                jumlah_kekurangan = Math.abs(cek_stok(variasires.id) - kebutuhan);
+                                jumlah_kekurangan = Math.abs(variasires.qt - kebutuhan);
                             }
                             $('select[name="variasi[' + ppid + '][' + i + ']"]').addClass('is-invalid');
                             $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang ' +
                                 jumlah_kekurangan + ' dari Permintaan');
-                        } else if (cek_stok(variasires.id) >= kebutuhan) {
+                        } else if (variasires.qt >= kebutuhan) {
                             $('select[name="variasi[' + ppid + '][' + i + ']"]').removeClass('is-invalid');
                             $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('');
                         }
@@ -2902,7 +2874,7 @@
                                     id: res[0].produk[x].gudang_barang_jadi[0].id,
                                     text: res[0].produk[x].nama,
                                     jumlah: res[0].produk[x].pivot.jumlah,
-                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
+                                    qt: res[0].produk[x].gudang_barang_jadi[0].stok
                                 });
                             } else {
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
@@ -2910,7 +2882,7 @@
                                         id: res[0].produk[x].gudang_barang_jadi[y].id,
                                         text: res[0].produk[x].gudang_barang_jadi[y].nama,
                                         jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
+                                        qt: res[0].produk[x].gudang_barang_jadi[0].stok
                                     });
                                 }
                             }

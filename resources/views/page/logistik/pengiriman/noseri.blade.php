@@ -30,7 +30,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>No Seri</th>
-                                    @if (Auth::user()->Karyawan->divisi_id == '8')
+                                    @if (Auth::user()->divisi_id == '8')
                                         <th>Tanggal Pengujian</th>
                                     @endif
                                 </tr>
@@ -39,14 +39,14 @@
                                 <tr>
                                     <td>1</td>
                                     <td>SJ0131831947</td>
-                                    @if (Auth::user()->Karyawan->divisi_id == '8')
+                                    @if (Auth::user()->divisi_id == '8')
                                         <td>23-10-2021</td>
                                     @endif
                                 </tr>
                                 <tr>
                                     <td>2</td>
                                     <td>SJ0131831948</td>
-                                    @if (Auth::user()->Karyawan->divisi_id == '8')
+                                    @if (Auth::user()->divisi_id == '8')
                                         <td>23-10-2021</td>
                                     @endif
                                 </tr>

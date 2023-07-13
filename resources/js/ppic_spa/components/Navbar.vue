@@ -39,6 +39,9 @@
           </a>
 
           <div class="navbar-dropdown is-right">
+            <a class="navbar-item" href="/ppic/change_password">
+              Ubah Password
+            </a>
             <a
               class="navbar-item"
               href="https://forms.gle/fGiRwPTz4TB8dBFs6"

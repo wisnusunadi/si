@@ -798,7 +798,7 @@ class AfterSalesController extends Controller
             $tes = NULL;
             if ($cr) {
                 $tg = TFProduksi::create([
-                    'dari' => Auth::user()->Karyawan->divisi_id,
+                    'dari' => Auth::user()->divisi_id,
                     'ke' => '13',
                     'deskripsi' => NULL,
                     'status_id' => NULL,
@@ -1130,14 +1130,14 @@ class AfterSalesController extends Controller
             $tes = NULL;
             if ($u) {
                 $tfp = TFProduksi::find($tg->id);
-                $tfp->dari = Auth::user()->Karyawan->divisi_id;
+                $tfp->dari = Auth::user()->divisi_id;
                 $tfp->ke = 13;
                 $tfp->jenis = 'masuk';
                 $tfp->tgl_masuk = $r->tgl_retur;
                 $tfp->created_by = Auth::user()->id;
                 $tfp->save();
                 // $tg = TFProduksi::create([
-                //     'dari' => Auth::user()->Karyawan->divisi_id,
+                //     'dari' => Auth::user()->divisi_id,
                 //     'ke' => '13',
                 //     'deskripsi' => NULL,
                 //     'status_id' => NULL,
@@ -1601,7 +1601,7 @@ class AfterSalesController extends Controller
             } else {
                 $ct = TFProduksi::create([
                     'dari' => '13',
-                    'ke' => Auth::user()->Karyawan->divisi_id,
+                    'ke' => Auth::user()->divisi_id,
                     'deskripsi' => NULL,
                     'status_id' => NULL,
                     'pesanan_id' => NULL,

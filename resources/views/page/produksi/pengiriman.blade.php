@@ -41,8 +41,8 @@
         }
 
         /* .dataTables_filter{
-                        display: none;
-                    } */
+                            display: none;
+                        } */
         #DataTables_Table_1_filter {
             display: none;
         }
@@ -53,7 +53,7 @@
     </style>
     <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/main.css') }}">
     <script src="{{ asset('vendor/fullcalendar/main.js') }}"></script>
-    <input type="hidden" name="" id="auth" value="{{ Auth::user()->Karyawan->divisi_id }}">
+    <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">

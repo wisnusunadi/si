@@ -152,6 +152,5 @@ Route::group(['prefix' => '/obat'], function () {
     Route::get('/stok/data/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'obat_stok_data']);
     Route::put('/aksi_ubah', [App\Http\Controllers\kesehatan\KesehatanController::class, 'obat_aksi_ubah']);
     Route::delete('/delete/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'obat_aksi_delete']);
-
     //  });
 });

@@ -10,7 +10,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '8')
+                    @if (Auth::user()->divisi_id == '8')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item active">Pengiriman</li>
                     @endif
@@ -41,6 +41,7 @@
         .nowraps {
             white-space: nowrap;
         }
+
         #profileImage {
             width: 60px;
             height: 60px;
@@ -53,12 +54,14 @@
             margin-top: 10px;
             margin-bottom: 10px;
         }
+
         .center {
             display: block;
             margin-left: auto;
             margin-right: auto;
             width: 50%;
         }
+
         @media screen and (min-width: 1220px) {
 
             body {
@@ -146,8 +149,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <a href="{{ route('as.pengiriman.create') }}" type="button" class="btn btn-info float-right my-2"><i
-                                    class="fas fa-plus"></i> Tambah</a>
+                            <a href="{{ route('as.pengiriman.create') }}" type="button"
+                                class="btn btn-info float-right my-2"><i class="fas fa-plus"></i> Tambah</a>
                             <div class="table-responsive">
                                 <table class="table table-hover" id="showtable" style="text-align: center; width:100%;">
                                     <thead>
@@ -191,7 +194,7 @@
 @section('adminlte_js')
     <script>
         $(function() {
-            function no_kolom(table){
+            function no_kolom(table) {
                 table.on('order.dt search.dt', function() {
                     table.column(0, {
                         search: 'applied',
@@ -228,9 +231,10 @@
                         data: null,
                         className: 'nowraps align-center',
                         render: function(data, type, row) {
-                            if(data.tanggal != null){
-                                return moment(new Date(row.tanggal).toString()).format('DD-MM-YYYY');
-                            }else{
+                            if (data.tanggal != null) {
+                                return moment(new Date(row.tanggal).toString()).format(
+                                'DD-MM-YYYY');
+                            } else {
                                 return data.tanggal;
                             }
                         }
@@ -259,9 +263,9 @@
                         className: 'nowraps align-center',
                         render: function(data, type, row) {
                             if (row.status == "Belum Terkirim") {
-                                return '<span class="red-text badge">' + row.status +'</span>';
+                                return '<span class="red-text badge">' + row.status + '</span>';
                             } else {
-                                return '<span class="green-text badge">' + row.status +'</span>';
+                                return '<span class="green-text badge">' + row.status + '</span>';
                             }
                         }
                     },
@@ -270,10 +274,12 @@
                         className: 'nowraps align-center',
                         render: function(data, type, row) {
                             var data = '';
-                            if(row.no_pengiriman == null){
-                                data = `<a href="/as/pengiriman/edit/`+ row.id +`"><button type="button" class="btn btn-warning btn-sm"><i class="fas fa-pencil"></i> Edit</button></a> `;
+                            if (row.no_pengiriman == null) {
+                                data = `<a href="/as/pengiriman/edit/` + row.id +
+                                    `"><button type="button" class="btn btn-warning btn-sm"><i class="fas fa-pencil"></i> Edit</button></a> `;
                             }
-                            data += `<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" id="detailmodal"><button type="button" class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i> Detail</button></a>`;
+                            data +=
+                                `<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" id="detailmodal"><button type="button" class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i> Detail</button></a>`;
                             return data;
                         }
                     },
@@ -290,11 +296,11 @@
 
             no_kolom(showtable);
 
-            $(document).on('click', '#kirimbutton', function(){
+            $(document).on('click', '#kirimbutton', function() {
                 var rows = showtable.rows($(this).parents('tr')).data();
                 var id = rows[0]['id'];
                 var ekspedisi_id = rows[0]['ekspedisi_id'];
-                if(ekspedisi_id == null){
+                if (ekspedisi_id == null) {
                     Swal.fire({
                         title: 'Kirim Barang?',
                         text: "Setelah klik Kirim Barang, Anda tidak bisa merubahnya kembali",
@@ -307,11 +313,14 @@
                         if (result.isConfirmed) {
                             $.ajax({
                                 headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                        'content')
                                 },
                                 type: "POST",
                                 url: "{{ route('as.pengiriman.send') }}",
-                                data: {'id': id },
+                                data: {
+                                    'id': id
+                                },
                                 beforeSend: function() {
                                     $('#loader').show();
                                 },
@@ -338,8 +347,7 @@
                                     alert(error);
                                 }
                             });
-                        }
-                        else{
+                        } else {
                             swal.fire(
                                 'Batal',
                                 'Batal melakukan pengiriman',
@@ -347,9 +355,10 @@
                             );
                         }
                     })
-                }
-                else{
-                    const { value: resi } = Swal.fire({
+                } else {
+                    const {
+                        value: resi
+                    } = Swal.fire({
                         title: 'No Resi',
                         input: 'text',
                         inputPlaceholder: 'Masukkan No Resi dari Pengiriman ini',
@@ -361,11 +370,15 @@
                         if (result.isConfirmed) {
                             $.ajax({
                                 headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                        'content')
                                 },
                                 type: "POST",
                                 url: "{{ route('as.pengiriman.send') }}",
-                                data: {'id': id, 'resi': result.value},
+                                data: {
+                                    'id': id,
+                                    'resi': result.value
+                                },
                                 beforeSend: function() {
                                     $('#loader').show();
                                 },
@@ -392,8 +405,7 @@
                                     alert(error);
                                 }
                             });
-                        }
-                        else{
+                        } else {
                             swal.fire(
                                 'Batal',
                                 'Batal melakukan pengiriman',
@@ -406,9 +418,10 @@
 
 
 
-            function cust_image(cust_name){
+            function cust_image(cust_name) {
                 var cust = cust_name;
-                var cust = cust.replace('.', '').replace('PT ', '').replace('CV ', '').replace('& ', '').replace('(',
+                var cust = cust.replace('.', '').replace('PT ', '').replace('CV ', '').replace('& ', '').replace(
+                    '(',
                     '').replace(')', '');
                 var init = cust.split(" ");
                 var initial = "";
@@ -441,42 +454,41 @@
                     timeout: 8000
                 })
             });
-            function noseri_table(produk){
-                if(produk != null){
-                var noseritable = $('#noseritable').DataTable({
-                    destroy: true,
-                    data: produk,
-                    columns: [
-                        {
-                            data: null,
-                            className: 'align-center'
-                        },
-                        {
-                            data: "nama",
-                            className: 'nowraps align-center',
-                        },
-                        {
-                            data: "noseri",
-                            className: 'nowraps align-center',
-                        },
-                    ],
-                });
 
-                no_kolom(noseritable);
-                }
-                else{
+            function noseri_table(produk) {
+                if (produk != null) {
+                    var noseritable = $('#noseritable').DataTable({
+                        destroy: true,
+                        data: produk,
+                        columns: [{
+                                data: null,
+                                className: 'align-center'
+                            },
+                            {
+                                data: "nama",
+                                className: 'nowraps align-center',
+                            },
+                            {
+                                data: "noseri",
+                                className: 'nowraps align-center',
+                            },
+                        ],
+                    });
+
+                    no_kolom(noseritable);
+                } else {
                     $('#noseritable').DataTable({
                         destroy: true
                     });
                 }
             }
-            function part_table(part){
-                if(part != null){
+
+            function part_table(part) {
+                if (part != null) {
                     var parttable = $('#parttable').DataTable({
                         destroy: true,
                         data: part,
-                        columns: [
-                            {
+                        columns: [{
                                 data: null,
                                 className: 'align-center'
                             },
@@ -491,8 +503,7 @@
                         ],
                     });
                     no_kolom(parttable);
-                }
-                else{
+                } else {
                     $('#parttable').DataTable({
                         destroy: true
                     });
@@ -582,9 +593,9 @@
             //                 className: 'nowraps align-center',
             //                 render: function(data, type, row) {
             //                     return `<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal"
-            //                                         id="detailmodal"><button type="button"
-            //                                             class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i>
-            //                                             Detail</button></a>`;
+        //                                         id="detailmodal"><button type="button"
+        //                                             class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i>
+        //                                             Detail</button></a>`;
             //                 }
             //             },
             //         ],
@@ -626,18 +637,20 @@
             //     })
             // });
 
-            function pengiriman_detail(id){
+            function pengiriman_detail(id) {
                 $.ajax({
                     url: "/api/as/pengiriman/detail",
                     dataType: 'json',
                     type: 'GET',
-                    data: {'id': id},
+                    data: {
+                        'id': id
+                    },
                     beforeSend: function() {
                         $('#loader').show();
                     },
                     success: function(result) {
                         var date_pengiriman = "";
-                        if(result.tgl_pengiriman){
+                        if (result.tgl_pengiriman) {
                             var date_pengiriman = result.tgl_pengiriman;
                             var [year, month, day] = date_pengiriman.split('-');
                         }
@@ -646,21 +659,23 @@
                         var [year_r, month_r, day_r] = date_retur.split('-');
 
                         $('#no_pengiriman').html(result.no_pengiriman ? result.no_pengiriman : '-');
-                        $('#tgl_pengiriman').html(date_pengiriman != "" ? day+'-'+month+'-'+year : '-');
+                        $('#tgl_pengiriman').html(date_pengiriman != "" ? day + '-' + month + '-' +
+                            year : '-');
                         $('#ekspedisi_id').html(result.ekspedisi_id ? result.ekspedisi_id : '-');
                         $('#biaya_kirim').html(result.biaya_kirim ? result.biaya_kirim : '-');
                         $('#no_resi').html(result.no_resi);
 
                         $('#nama_penerima').html(result.nama_penerima);
                         $('#alamat_penerima').html(result.alamat_penerima);
-                        $('#telp_penerima').html(result.telp_penerima != null ? result.telp_penerima : '-');
+                        $('#telp_penerima').html(result.telp_penerima != null ? result.telp_penerima :
+                            '-');
                         cust_image(result.customer_id);
                         $('#customer').html(result.customer_id);
                         $('#alamat').html(result.alamat);
                         $('#telp').html(result.telp);
 
                         $('#no_retur').html(result.no_retur);
-                        $('#tgl_retur').html(day_r+'-'+month_r+'-'+year_r);
+                        $('#tgl_retur').html(day_r + '-' + month_r + '-' + year_r);
                         $('#jenis_retur').html(result.jenis);
                         $('#keterangan').html(result.keterangan);
 

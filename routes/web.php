@@ -32,8 +32,8 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 // Route::get('/', function () {
-//     if (auth()->user()->Karyawan->divisi_id == 24) return redirect('/ppic');
-//     else if (auth()->user()->Karyawan->divisi_id == 3) return redirect('/manager-teknik');
+//     if (auth()->user()->divisi_id == 24) return redirect('/ppic');
+//     else if (auth()->user()->divisi_id == 3) return redirect('/manager-teknik');
 //     else return view('home');
 // })->middleware('auth');
 
@@ -62,6 +62,7 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function () 
         Route::post('/update/{jenis}/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_update_user']);
         Route::post('/reset_pwd/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'reset_pwd_user'])->name('user.resetpwd');
     });
+    Route::view('/produk', 'page.it.produk');
     Route::group(['prefix' => 'part', 'middleware' => 'auth'], function () {
         Route::view('/', 'page.administrator.part.show');
     });
@@ -370,6 +371,7 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
         });
 
         Route::group(['prefix' => '/so'], function () {
+            Route::get('/cancel/{id}',  [App\Http\Controllers\DcController::class, 'cancel_so_view'])->name('dc.so.cancel_view');
             Route::view('/show', 'page.dc.so.show')->name('dc.so.show');
             Route::get('/detail/{id}/{value}',  [App\Http\Controllers\DcController::class, 'detail_coo'])->name('dc.so.detail');
             Route::view('/create/{id}', 'page.dc.so.create')->name('dc.so.create');

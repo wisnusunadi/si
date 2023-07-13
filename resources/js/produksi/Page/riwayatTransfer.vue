@@ -5,7 +5,7 @@
                 <h2 class="display-1">Riwayat Transfer</h2>
                 <v-row>
                     <v-col cols="12" md="12">
-                        <v-data-table :headers="headers" :items="dateFilter">
+                        <v-data-table :headers="headers" :items="dateFilter" :search="searchRiwayat">
                             <template v-slot:top>
                                 <v-toolbar flat extended >
                                     <v-row>
@@ -22,24 +22,13 @@
                                         </v-menu>
                                         </v-col>
                                         <v-col md="4">
-                                             <!-- <v-select v-model="selectedProduct" :items="productUnique" label="Nama Produk" multiple>
-                                                    <template v-slot:prepend-item>
-                                                        <v-list-item ripple @mousedown.prevent @click="toggle">
-                                                            <v-list-item-action>
-                                                                <v-icon :color="selectedProduct.length > 0 ? 'indigo darken-4' : ''">
-                                                                    {{ icon }}
-                                                                </v-icon>
-                                                            </v-list-item-action>
-                                                            <v-list-item-content>
-                                                                <v-list-item-title>
-                                                                    Select All
-                                                                </v-list-item-title>
-                                                            </v-list-item-content>
-                                                        </v-list-item>
-                                                        <v-divider class="mt-2"></v-divider>
-                                                    </template>
-                                                </v-select> -->
-                                                 <v-autocomplete v-model="selectedProduct" :items="productUnique" outlined dense chips small-chips label="Nama Produk" multiple></v-autocomplete>
+                                            <v-autocomplete v-model="selectedProduct" :items="productUnique" outlined dense chips small-chips label="Nama Produk" multiple></v-autocomplete>
+                                        </v-col>
+                                        <v-col md="4">
+                                            <v-text-field
+                                            label="Cari"
+                                            v-model="searchRiwayat"
+                                            ></v-text-field>
                                         </v-col>
                                     </v-row>
                                     <v-dialog v-model="dialog" max-width="1000px">
@@ -73,6 +62,7 @@
     export default {
         data() {
             return {
+                searchRiwayat: null,
                 search: null,
                 dialog: false,
                 dataRiwayat: [],
