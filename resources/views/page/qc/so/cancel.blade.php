@@ -1,4 +1,4 @@
-<div class="row filter">
+{{-- <div class="row filter">
     <div class="col-12">
         <div class="card card-navy card-outline card-tabs">
             <div class="card-header p-0 pt-1 border-bottom-0">
@@ -98,4 +98,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}

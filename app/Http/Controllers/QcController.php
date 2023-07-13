@@ -2221,11 +2221,11 @@ class QcController extends Controller
         }
     }
 
-    public function cancel_so($id)
+    public function cancel_so()
     {
-        $p = Pesanan::where('id', $id)->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->first();
+        // $p = Pesanan::where('id', $id)->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->first();
 
-        return view('page.qc.so.cancel', ['id' => $id, 'p' => $p]);
+        return view('page.qc.so.cancel');
     }
 
     public function detail_modal_riwayat_so($id, $jenis)
