@@ -7,6 +7,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <input class="d-none" name="id" value="{{$id}}" hidden/>
+                                <input class="d-none" name="user" value="{{Auth::user()->id}}" hidden/>
                                 <textarea class="form-control" placeholder="Masukkan alasan membatalkan transaksi {{$data->no_po}}" name="alasan" ></textarea>
                             </div>
                         </div>

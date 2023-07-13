@@ -240,38 +240,32 @@ $(document).on('submit', '#batal_so_dc', function(e) {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
-                        swal.fire(
-                            'Error',
-                            response.message,
-                            'warning'
-                        );
-                        // if (response['data'] == "success") {
-                        //     swal.fire(
-                        //         'Berhasil',
-                        //         'Berhasil melakukan Hapus Data',
-                        //         'success'
-                        //     );
-                        //     $('#showtable').DataTable().ajax.reload();
-                        //     $("#hapusmodal").modal('hide');
-                        // } else if (response['data'] == "error") {
-                        //     swal.fire(
-                        //         'Gagal',
-                        //         'Gagal melakukan Penambahan Data Pengujian',
-                        //         'error'
-                        //     );
-                        // } else {
-                        //     swal.fire(
-                        //         'Error',
-                        //         'Data telah digunakan dalam Transaksi Lain',
-                        //         'warning'
-                        //     );
-                        // }
+                            if (response['data'] == "alasan_salah") {
+                            swal.fire(
+                                'Gagal',
+                                response['message'],
+                                'error'
+                            );
+                        }
+                            if (response['data'] == "berhasil") {
+                            swal.fire(
+                                'Berhasil',
+                                response['message'],
+                                'success'
+                            ).then(function() {
+                                $('.modal').modal('hide')
+                                $('#showtable').DataTable().ajax.url('/api/dc/so/data/semua').load();
+                                selesaitable()
+
+                         });
+                        }
+
                     },
                     error: function(xhr, status, error) {
                     console.log(error)
                         swal.fire(
                             'Error',
-                            'Data telah digunakan dalam Transaksi Lain',
+                            'Ada kesalahan, batal transaksi gagal',
                             'warning'
                         );
 
@@ -283,22 +277,60 @@ $(document).on('submit', '#batal_so_dc', function(e) {
              $("#showtable").on('click', '.batalmodal', function(event) {
                 event.preventDefault();
                 var id = $(this).data('id');
-                $.ajax({
-                    url: '/dc/so/cancel/' + id,
-                    success: function(result) {
-                        $('#batalmodal').modal("show");
-                         $('#batal').html(result).show();
-
-                    },
-                    error: function(jqXHR, testStatus, error) {
-                        console.log(error);
-                        alert("Page cannot open. Error:" + error);
-                        $('#loader').hide();
-                    },
-                    timeout: 8000
-                })
+                swal.fire({
+                    title: 'Batalkan Transaksi',
+                    text: "Data transaksi ini akan terhapus semua",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'Tidak',
+                    confirmButtonText: 'Iya',
+                    }).then(function(isConfirm) {
+                        if (isConfirm.value === true) {
+                            console.log(id)
+                           $.ajax({
+                                url: '/dc/so/cancel/' + id,
+                                success: function(result) {
+                                    $('#batalmodal').modal("show");
+                                    $('#batal').html(result).show();
+                                },
+                                error: function(jqXHR, testStatus, error) {
+                                    alert("Page cannot open. Error:" + error);
+                                    $('#loader').hide();
+                                },
+                                timeout: 8000
+                              })
+                        }
+                    })
             });
-        $(function() {
+             $("#selesaitable").on('click', '.batalmodal', function(event) {
+                event.preventDefault();
+                var id = $(this).data('id');
+                swal.fire({
+                    title: 'Batalkan Transaksi',
+                    text: "Data transaksi ini akan terhapus semua",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'Tidak',
+                    confirmButtonText: 'Iya',
+                    }).then(function(isConfirm) {
+                        if (isConfirm.value === true) {
+                            console.log(id)
+                           $.ajax({
+                                url: '/dc/so/cancel/' + id,
+                                success: function(result) {
+                                    $('#batalmodal').modal("show");
+                                    $('#batal').html(result).show();
+                                },
+                                error: function(jqXHR, testStatus, error) {
+                                    alert("Page cannot open. Error:" + error);
+                                    $('#loader').hide();
+                                },
+                                timeout: 8000
+                              })
+                        }
+                    })
+            });
+
 
             $(document).on('click', '#pills-selesai_coo-tab', function() {
                 selesaitable();
@@ -345,6 +377,9 @@ $(document).on('submit', '#batal_so_dc', function(e) {
                 }]
             })
 
+            function selesaitables() {
+            alert('ok')
+            }
             function selesaitable() {
                 var showtable = $('#selesaitable').DataTable({
                     destroy: true,
@@ -401,6 +436,6 @@ $(document).on('submit', '#batal_so_dc', function(e) {
                 $('#showtable').DataTable().ajax.url('/api/dc/so/data/' + x).load();
                 return false;
             });
-        })
+
     </script>
 @stop
