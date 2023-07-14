@@ -145,7 +145,7 @@ export default {
                                     <v-text-field
                                     class="mt-5"
                                     v-model="item.nama"
-                                    :rules="[rules.required, rules.nameUnique(item.id)]"
+                                    :rules="[rules.required, rules.nameUnique(item.id, item.nama)]"
                                     outlined
                                     dense
                                 ></v-text-field>
