@@ -60,15 +60,18 @@ use stdClass;
 
 class GudangController extends Controller
 {
-    function updateStokGudang($id)
+    function updateStokGudang()
     {
-        $d = NoseriBarangJadi::whereHas('gudang', function ($q) use ($id) {
-            $q->where('gdg_barang_jadi_id', $id);
-        })->where('is_aktif', 1)->count();
-        $a = NoseriBarangJadi::whereHas('gudang', function ($q) use ($id) {
-            $q->where('gdg_barang_jadi_id', $id);
-        })->where('is_aktif', 1)->where('is_ready', 0)->count();
-        GudangBarangJadi::find($id)->update(['stok' => $d, 'stok_siap' => $a]);
+        // $d = NoseriBarangJadi::whereHas('gudang', function ($q) use ($id) {
+        //     $q->where('gdg_barang_jadi_id', $id);
+        // })->where('is_aktif', 1)->count();
+        // $a = NoseriBarangJadi::whereHas('gudang', function ($q) use ($id) {
+        //     $q->where('gdg_barang_jadi_id', $id);
+        // })->where('is_aktif', 1)->where('is_ready', 0)->count();
+        //         GudangBarangJadi::find($id)->update(['stok' => $d, 'stok_siap' => $a]);
+
+        $data = NoseriBarangJadi::count()->where('is_aktif');
+        return response()->json(['id' => 1]);
     }
     // get
     function get_rekap_so_produk()
@@ -383,7 +386,7 @@ class GudangController extends Controller
                     return '-';
                 })
                 ->addColumn('jumlah', function ($data) {
-                    $this->updateStokGudang($data->id);
+                    //   $this->updateStokGudang($data->id);
                     return $data->stok . ' ' . $data->satuan . '<br><span class="badge badge-dark">Stok Siap: ' . $data->stok_siap . ' ' . $data->satuan . '</span>';
                 })
                 ->addColumn('jumlah1', function ($data) {

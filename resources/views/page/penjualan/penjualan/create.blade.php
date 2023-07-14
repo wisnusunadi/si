@@ -25,6 +25,9 @@
 
 @section('adminlte_css')
     <style>
+        .hidden{
+            display: none;
+        }
         table>tbody>tr>td>.form-group>.select2>.selection>.select2-selection--single {
             height: 100% !important;
         }
@@ -917,6 +920,12 @@
                                 <div class="row justify-content-center hide" id="dataproduk">
                                     <div class="col-lg-11 col-md-12">
                                         <h4>Data Produk</h4>
+                                        <div class="hidden">
+                                            <div class="spinner-border hidden" role="status">
+                                                <span class="sr-only">Loading...</span>
+                                              </div>
+                                              Loading...
+                                        </div>
                                         <div class="row">
                                             <div class="col-lg-12 col-md-12">
                                                 <div class="card">
@@ -2444,6 +2453,8 @@
             function select_data(prm) {
 
                 let produk = []
+
+                $('.spinner-border').removeClass('hidden');
                 const url = '/api/penjualan_produk/select_param/' + prm;
                 // $('.penjualan_produk_id').on('change', function() {
                 //     for (i = 0; i < 3; ++i) {
@@ -2471,6 +2482,7 @@
                             });
                         })
                         .catch(err => console.log(err));
+                $('.spinner-border').addClass('hidden');
             }
 
             function load_part() {
@@ -2568,6 +2580,7 @@
             $("#produktable").on('keyup change', '.penjualan_produk_id', function() {
                 var index = $(this).attr('id');
                 var id = $(this).val();
+                $('.spinner-border').addClass('hidden');
                 $.ajax({
                     url: '/api/penjualan_produk/select/' + id,
                     type: 'GET',
@@ -2661,7 +2674,7 @@
                 } else {
                     checkvalidasinonakn();
                 }
-
+                $('.spinner-border').removeClass('hidden');
             });
             $("#produktable").on('keyup change', '.produk_jumlah', function() {
                 var jumlah = $(this).closest('tr').find('.produk_jumlah').val();

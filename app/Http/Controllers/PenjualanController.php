@@ -3916,7 +3916,7 @@ class PenjualanController extends Controller
 
         $poid = $ekatalog->pesanan_id;
         $ekatalog->customer_id = $c_id;
-        $ekatalog->provinsi_id = $request->provinsi;
+        $ekatalog->provinsi_id = $request->provinsi == "NULL" ? NULL : $request->provinsi;
         $ekatalog->deskripsi = $request->deskripsi;
         $ekatalog->instansi = $request->instansi;
         $ekatalog->alamat = $request->alamatinstansi;
@@ -5163,7 +5163,9 @@ class PenjualanController extends Controller
         $tgl_awal = $now->year . "-01-01";
         $tgl_akhir = $now->year . "-12-31";
         //EKAT
-        $ekatalog = Pesanan::Has('Ekatalog')
+        $ekatalog = Pesanan::whereHas('Ekatalog',function ($q){
+            $q->where('status','sepakat');
+        })
             ->whereBetween('tgl_po', [$tgl_awal, $tgl_akhir])
             ->select('Pesanan.tgl_po')
             ->get()

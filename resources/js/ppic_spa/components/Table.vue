@@ -264,6 +264,9 @@ export default {
 
     async handleSubmit() {
       this.$store.commit("setIsLoading", true);
+      let start_date = new Date(this.start_date);
+        let end_date = new Date(this.end_date);
+        
       if (this.action === "add") {
         let start_date = new Date(this.start_date);
         let end_date = new Date(this.end_date);
@@ -273,10 +276,11 @@ export default {
           !this.end_date ||
           this.produk === null ||
           this.jumlah < 1 ||
-          end_date.getDate() < start_date.getDate()
+          // cek full tanggal mulai lebih kecil dari tanggal selesai
+          end_date.getTime() < start_date.getTime()
         ) {
           let text;
-          if (end_date.getDate() < start_date.getDate())
+          if (end_date.getTime() < start_date.getTime())
             text =
               "Tanggal mulai harus lebih dahulu dibandingkan tanggal selesai";
           else text = "Mohon periksa kembali form yang Anda isi !!";
@@ -307,6 +311,7 @@ export default {
           .then((response) => {
             this.$store.commit("setJadwal", response.data);
             this.addProdukModal = false;
+            this.$swal('Success', 'Berhasil menambahkan data', 'success');
           })
           .catch((err) => {
             this.$swal({
@@ -323,12 +328,12 @@ export default {
 
           if (
             this.updated_events.events[index].jumlah < 1 ||
-            end_date.getDate() < start_date.getDate() ||
+            end_date.getTime() < start_date.getTime() ||
             this.updated_events.events[index].jumlah <
               this.updated_events.events[index].progres
           ) {
             let text;
-            if (end_date.getDate() < start_date.getDate())
+            if (end_date.getTime() < start_date.getTime())
               text =
                 "Tanggal mulai harus lebih dahulu dibandingkan tanggal selesai";
             else if (
@@ -1054,7 +1059,6 @@ export default {
                 <div class="control">
                   <input
                     type="date"
-                    :min="dateFormatter(year, month, 1)"
                     :max="dateFormatter(year, month, last_date)"
                     class="input"
                     v-model="start_date"
@@ -1068,7 +1072,6 @@ export default {
                 <div class="control">
                   <input
                     type="date"
-                    :min="dateFormatter(year, month, 1)"
                     :max="dateFormatter(year, month, last_date)"
                     class="input"
                     v-model="end_date"
