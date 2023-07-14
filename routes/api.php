@@ -166,7 +166,8 @@ Route::prefix('/laporan')->group(function () {
 });
 
 Route::prefix('/gbj')->group(function () {
-    Route::post('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi'])->middleware('jwt.verify');
+    Route::post('update_stok', [App\Http\Controllers\GudangController::class, 'updateStokGudang']);
+    Route::post('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
     Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
     Route::post('/edit/{id}', [App\Http\Controllers\GudangController::class, 'UpdateBarangJadi']);
     Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
@@ -435,7 +436,7 @@ Route::prefix('/gk')->group(function () {
     });
 
     Route::prefix('/dashboard')->group(function () {
-        Route::post('/tingkat', [SparepartController::class, 'byTingkat']);
+        Route::post('/tingkat', [SparepartController::class, 'byTingkat'])->middleware('jwt.verify');
         Route::post('/layout', [SparepartController::class, 'byLayout'])->middleware('jwt.verify');
 
         // stok
@@ -587,6 +588,7 @@ Route::prefix('/dc')->group(function () {
     });
     Route::prefix('/so')->group(function () {
         Route::post('store/{value}', [App\Http\Controllers\DcController::class, 'store_coo']);
+        Route::post('cancel', [App\Http\Controllers\DcController::class, 'cancel_so']);
         Route::post('update/{value}', [App\Http\Controllers\DcController::class, 'update_coo']);
         Route::put('update_tgl_kirim_coo/{value}', [App\Http\Controllers\DcController::class, 'update_tgl_kirim_coo']);
         Route::post('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);

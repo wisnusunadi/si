@@ -371,6 +371,7 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
         });
 
         Route::group(['prefix' => '/so'], function () {
+            Route::get('/cancel/{id}',  [App\Http\Controllers\DcController::class, 'cancel_so_view'])->name('dc.so.cancel_view');
             Route::view('/show', 'page.dc.so.show')->name('dc.so.show');
             Route::get('/detail/{id}/{value}',  [App\Http\Controllers\DcController::class, 'detail_coo'])->name('dc.so.detail');
             Route::view('/create/{id}', 'page.dc.so.create')->name('dc.so.create');
