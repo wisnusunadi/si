@@ -9,6 +9,7 @@ export default {
                 { text: 'Nama Kategori', value: 'nama' },
                 { text: 'Action', value: 'action', sortable: false}
             ],
+            valid: true,
             rules: {
                 required: value => !!value || 'Required.',
                 unique: (id, nama) => {
@@ -24,15 +25,16 @@ export default {
             this.$emit('getCategory')
         },
         async simpan() {
+            const isValid = await this.$refs.formCategory.validate()
+            if(!isValid) return
             try {
                 const { data } = await axios.post('/api/kategori', this.selectCategory)
-                this.$emit('getCategory')
+                this.closeDialog()
                 this.$swal('Berhasil', 'Kategori berhasil ditambahkan', 'success')
             } catch (error) {
                 console.log(error)
                 this.$swal('Gagal', 'Kategori gagal ditambahkan', 'error')
             }
-            this.closeDialog()
         },
         tambah() {
             this.selectCategory.push({
@@ -60,7 +62,7 @@ export default {
                     <v-btn text @click="simpan">Simpan</v-btn>
                 </v-toolbar>
 
-                <v-form ref="formCategory">
+                <v-form ref="formCategory" v-model="valid" lazy-validation>
                     <v-data-table
                         :headers="header"
                         :items="selectCategory"

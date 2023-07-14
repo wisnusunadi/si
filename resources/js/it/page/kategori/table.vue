@@ -28,9 +28,6 @@ export default {
         getCategory() {
             this.$emit('getCategory')
         },
-        closeDialog() {
-            this.showDialog = false
-        },
         async deleteCategory() {
             this.$swal({
                 title: 'Apakah anda yakin?',
@@ -62,7 +59,8 @@ export default {
             :dialogCreate="showDialog"
             :kategori="kategori"
             @getCategory="getCategory"
-            @closeDialog="closeDialog">
+            @closeDialog="showDialog = false"
+        >
         </Modal>
 
         <div class="d-flex">

@@ -1,178 +1,145 @@
 <script>
+import Modal from './modalCreateEdit.vue'
 import axios from 'axios'
 export default {
-    props: ['produk'],
+    components: { Modal },
+    props: ['product'],
     data() {
         return {
             search: '',
-            searchDetail: '',
             header: [
-                { text: 'Nama Produk', value: 'nama' },
-                { text: 'Aksi', value: 'action' },
+                { text: 'id', value: 'id' },
+                { text: 'nama', value: 'nama' },
+                { text: 'kategori', value: 'kategori' },
+                { text: 'status', value: 'status'}
             ],
-            dialogDetail: false,
-            data_detail: null,
-            headersdetail: [
-                { text: 'Merk', value: 'merk' },
-                { text: 'Nama Produk', value: 'nama'},
-                { text: 'No AKD', value: 'no_akd'},
-                { text: 'Status', value: 'status'}
-            ],
+            selectAll: false,
+            selectProduct: [],
+            showDialog: false,
         }
     },
-
     methods: {
-        detailproduk(item) {
-            const produk = item.detailproduk
-            let updatedDetail = []
-            for (let i = 0; i < produk.length; i++) {
-                updatedDetail.push({
-                    ...produk[i],
-                    status: produk[i].status == '1' ? true : false
-                })
+        getProduct() {
+            this.$emit('getProduct')
+        },
+        checkAll() {
+            if (this.selectAll) {
+                this.selectProduct = [...this.product]
+            } else {
+                this.selectProduct = [];
             }
-            this.data_detail = updatedDetail
-            this.dialogDetail = true
+        },
+        async deleteProduk() {
+            this.$swal({
+                text: `Yakin ingin menghapus ${this.selectProduct.length} produk?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+            }).then(async (result) => {
+                try {
+                    const { data } = await axios.delete('/api/produk', {
+                        data: this.selectProduct
+                    })
+                    this.$swal('Berhasil', 'Produk berhasil dihapus', 'success')
+                    this.getProduct()
+                } catch (error) {
+                    console.log(error)
+                    this.$swal('Gagal', 'Produk gagal dihapus', 'error')
+                }
+            })
         },
         async updateStatus(item) {
-            const { data } = await axios.post('/api/changeStatusProduk', {
+            try {
+                const { data } = await axios.post('/api/changeStatusProduk', {
                 id: item.id,
                 status: item.status
             })
 
-            console.log(data)
-        },
-        editProduk(item) {
-            this.$emit('editProduk', item)
-        },
-        addProduk() {
-            this.$emit('addProduk')
-        }
-    },
-    computed: {
-        filteredProduk() {
-            return this.produk.filter((item) => {
-                const namaMatches = item.nama.toLowerCase().includes(this.search.toLowerCase());
-                const detailMatches = item.detailproduk.some((detail) =>
-                detail.nama.toLowerCase().includes(this.search.toLowerCase())
-                );
-                return namaMatches || detailMatches;
-            });
+            this.$swal('Berhasil', 'Status berhasil diubah', 'success')
+            } catch (error) {
+                this.$swal('Gagal', 'Status gagal diubah', 'error')
+            }
         },
     },
-    methods: {
-        filteredDetailproduk(item) {
-            return item.nama.toLowerCase().includes(this.search.toLowerCase());
-        },
-  },
 }
 </script>
 <template>
     <div>
+        <Modal
+            @closeDialog="showDialog = false"
+            @getProduct="getProduct"
+            :selectProduct="selectProduct"
+            :dialogCreate="showDialog"
+            :product="product"
+        ></Modal>
         <div class="d-flex">
-                        <v-card flat class="ml-5">
-                            <v-text-field
-                            v-model="search"
-                            placeholder="Cari Produk"
-                            ></v-text-field>
-                        </v-card>
-
-                        <v-btn
-                        color="primary"
-                        class="ml-auto"
-                        @click="addProduk"
-                        >
-                        <v-icon>mdi-plus</v-icon>
-                        </v-btn>
-                    </div>
+            <v-card flat class="ml-5 mr-auto">
+                <v-text-field
+                v-model="search"
+                placeholder="Cari Produk"
+                ></v-text-field>
+            </v-card>
+            <v-card flat>
+                <v-btn color="primary" @click="showDialog = true">
+                    Tambah atau Edit Produk
+                </v-btn>
+                <v-btn color="error" v-if="selectProduct.length" @click="deleteProduk">
+                    Hapus Produk
+                </v-btn>
+            </v-card>
+        </div>
         <v-data-table
-            :headers="header"
-            :items="filteredProduk"
-            :expanded.sync="expanded"
-            show-expand
-            single-expand
+        hide-default-header
+        :headers="header"
+        :items="product"
+        :search="search"
+        :group-by="['kategori']"
         >
-
-        <template #expanded-item="{ headers, item }">
-            <td :colspan="headers.length">
-                <div class="d-flex">
-                        <v-card flat class="ml-5">
-                            <v-text-field
-                            v-model="searchDetail"
-                            placeholder="Cari Produk Detail"
-                            ></v-text-field>
-                        </v-card>
-                    </div>
-                <v-data-table :headers="headersdetail" :items="item.detailproduk" :search="searchDetail">
-                    <template #item.status="{ item }">
-                        <v-switch
-                            @click="updateStatus(item)"
-                            v-model="item.status"
-                            :label="item.status ? 'Aktif' : 'Tidak Aktif'"
-                        ></v-switch>
-                    </template>
-            </v-data-table>
-            </td>
+                <!-- No Data -->
+        <template #no-data>
+            <div class="d-flex justify-center">
+                <v-btn color="primary" @click="getProduct">Refresh</v-btn>
+            </div>
         </template>
 
-            <template #item.action = "{ item }">
-                <div>
-                    <v-btn
-                        icon
-                        @click="editProduk(item)"
-                    >
-                        <v-icon>
-                            mdi-pencil
-                        </v-icon>
-                    </v-btn> 
-                </div>
-            </template>
+        <template #header>
+            <thead>
+                <tr>
+                    <th class="text-left">
+                        <v-checkbox
+                            :indeterminate="selectProduct.length > 0 && selectProduct.length < product.length"
+                            @click.native="checkAll"
+                            v-model="selectAll"
+                        ></v-checkbox>
+                    </th>
+                    <th class="text-left">
+                        Nama Produk
+                    </th>
+                    <th class="text-left">
+                        Status
+                    </th>
+                </tr>
+            </thead>
+        </template>
+
+        <template #item.id = "{ item }">
+            <v-checkbox
+                v-model="selectProduct"
+                :value="item"
+            ></v-checkbox>
+        </template>
+
+        <template #item.status="{ item }">
+            <v-switch
+                @click="updateStatus(item)"
+                v-model="item.status"
+                :label="item.status ? 'Aktif' : 'Tidak Aktif'"
+            ></v-switch>
+        </template>
 
         </v-data-table>
-
-        <v-dialog 
-        v-model="dialogDetail"
-        max-width="500px"
-        persistent
-        >
-            <v-card>
-                <v-toolbar
-                    dark
-                    color="primary"
-                    >
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        icon
-                        dark
-                        @click="dialogDetail = false"
-                    >
-                        <v-icon>mdi-close</v-icon>
-                    </v-btn>
-                    </v-toolbar>
-
-                    <v-card-text>
-                        <v-data-table 
-                        :headers="headersdetail" 
-                        :items="data_detail">
-
-                        <template #item="{ item }">
-                            <tr v-if="filteredDetailproduk(item)">
-                                <td>{{ item.id }}</td>
-                                <td>{{ item.nama }}</td>
-                                <td>{{ item.nama_coo }}</td>
-                                <td>{{ item.no_akd }}</td>
-                                <td>
-                                    <v-switch
-                                    @click="updateStatus(item)"
-                                    v-model="item.status"
-                                    :label="item.status ? 'Aktif' : 'Tidak Aktif'"
-                                ></v-switch>
-                                </td>
-                            </tr>
-                        </template>
-                        </v-data-table>
-                    </v-card-text>
-            </v-card>
-        </v-dialog>
     </div>
 </template>

@@ -10,4 +10,5 @@ Route::delete('/kategori', [App\Http\Controllers\MasterController::class, 'delet
 // Produk
 Route::get('/produk', [App\Http\Controllers\MasterController::class, 'indexProduk']);
 Route::post('/produk', [App\Http\Controllers\MasterController::class, 'postOrEditProduk']);
+Route::delete('/produk', [App\Http\Controllers\MasterController::class, 'deleteProduk']);
 Route::post('/changeStatusProduk', [App\Http\Controllers\MasterController::class, 'changeStatusProduk']);
