@@ -29,8 +29,8 @@ export default {
             if(!isValid) return
             try {
                 const { data } = await axios.post('/api/kategori', this.selectCategory)
-                this.closeDialog()
                 this.$swal('Berhasil', 'Kategori berhasil ditambahkan', 'success')
+                this.closeDialog()
             } catch (error) {
                 console.log(error)
                 this.$swal('Gagal', 'Kategori gagal ditambahkan', 'error')
@@ -91,6 +91,7 @@ export default {
                                 label="Nama Kategori"
                                 outlined
                                 dense
+                                @input="item.nama = item.nama.toUpperCase()"
                                 :rules="[rules.required, rules.unique(item.id, item.nama)]"
                             ></v-text-field>
                         </template>
