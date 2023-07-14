@@ -145,6 +145,7 @@ export default {
                                     <v-text-field
                                     class="mt-5"
                                     v-model="item.nama"
+                                    @input="item.nama = item.nama.toUpperCase()"
                                     :rules="[rules.required, rules.nameUnique(item.id, item.nama)]"
                                     outlined
                                     dense
