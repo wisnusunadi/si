@@ -1844,20 +1844,158 @@ class MasterController extends Controller
         }
     }
 
-    public function indexProduk()
-    {
+    // kategori
+    public function indexKategori() {
         try {
-            $produk = MProduk::whereDoesntHave('detailproduk')
-                ->orWhereHas('detailproduk', function ($query) {
-                    $query->whereHas('GudangBarangJadi');
-                })
-                ->with(['detailproduk' => function ($query) {
-                    $query->with('GudangBarangJadi');
-                }])
-                ->get();
+            $kategori = MProduk::all();
 
             return response()->json([
                 'success' => true,
+                'kategori' => $kategori
+            ], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function postOrEditKategori(Request $request) {
+        try {
+            $kategori = collect($request->json())->map(function($item) {
+                $kategori = MProduk::updateOrCreate(
+                    ['id' => isset($item['id']) ? $item['id'] : null],
+                    [
+                        'nama' => $item['nama'],
+                        'kode' => $item['kode']
+                    ]
+                );
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil menambahkan kategori',
+                'kategori' => $kategori
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deleteKategori(Request $request) {
+        try {
+            $kategori = collect($request->json())->map(function($item) {
+                $kategori = MProduk::where('id', $item['id'])->delete();
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil menghapus kategori',
+                'kategori' => $kategori
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function indexProduk() {
+        try {
+            $produk = Produk::with('GudangBarangJadi')->
+            with('product')->get()->map(function($item) {
+                return [
+                    'id' => $item->id,
+                    'produk_id' => $item->produk_id,
+                    'kelompok_produk_id' => $item->kelompok_produk_id,
+                    'merk' => $item->merk,
+                    'kategori' => $item->product->nama,
+                    'nama' => $item->nama,
+                    'nama_coo' => $item->nama_coo,
+                    'coo' => $item->coo,
+                    'no_akd' => $item->no_akd,
+                    'status' => $item->status == 1 ? true : false,
+                    'gudang_barang_jadi' => $item->GudangBarangJadi
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'produk' => $produk
+            ], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function postOrEditProduk(Request $request) {
+        try {
+            $produk = collect($request->json())->map(function($item) {
+                $produk = Produk::updateOrCreate(
+                    [
+                        'id' => isset($item['id']) ? $item['id'] : null
+                    ],
+                    [
+                        'produk_id' => $item['produk_id'],
+                        'kelompok_produk_id' => $item['kelompok_produk_id'],
+                        'merk' => $item['merk'],
+                        'nama' => $item['nama'],
+                        'nama_coo' => isset($item['nama_coo']) ? $item['nama_coo'] : null,
+                        'coo' => isset($item['coo']) ? $item['coo'] : 1,
+                        'no_akd' => $item['no_akd'],
+                        'status' => $item['status'],
+                    ]
+                );
+                
+                foreach ($item['gudang_barang_jadi'] as $gudang) {
+                    $gbj = GudangBarangJadi::updateOrCreate(
+                        [
+                            'id' => isset($gudang['id']) ? $gudang['id'] : null
+                        ],
+                        [
+                            'produk_id' => $produk->id,
+                            'nama' => isset($gudang['nama']) ? $gudang['nama'] : ' ',
+                            'stok' => $gudang['stok'],
+                            'stok_siap' => $gudang['stok_siap'],
+                            'satuan_id' => $gudang['satuan_id'],
+                        ]
+                    );
+                }
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil menambahkan produk',
+                'produk' => $produk
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deleteProduk(Request $request) {
+        try {
+            $produk = collect($request->json())->map(function($item) {
+                $gudang = GudangBarangJadi::where('produk_id', $item['id'])->delete();
+
+                $produk = Produk::where('id', $item['id'])->delete();
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil menghapus produk',
                 'produk' => $produk
             ], 200);
         } catch (\Throwable $th) {
@@ -1868,82 +2006,7 @@ class MasterController extends Controller
         }
     }
 
-    public function postOrEditProduk(Request $request)
-    {
-        try {
-            $produk = collect($request->json())->map(function ($item) {
-                // check validasi nama tidak boleh sama di produk
-                if (isset($item['id'])) {
-                    $checkNama = MProduk::where('nama', $item['nama'])->where('id', '!=', $item['id'])->first();
-                } else {
-                    $checkNama = MProduk::where('nama', $item['nama'])->first();
-                }
-                if ($checkNama) {
-                    throw new \Exception("Nama Produk tidak boleh sama");
-                }
-                $produkMaster = MProduk::updateOrCreate(
-                    [
-                        'id' => isset($item['id']) ? $item['id'] : null
-                    ],
-                    [
-                        'nama' => $item['nama'],
-                    ]
-                );
-                foreach ($item['detailproduk'] as $subproduk) {
-                    // check validasi nama tidak boleh sama di produk
-                    if (isset($subproduk['id'])) {
-                        $checkNama = Produk::where('nama', $subproduk['nama'])->where('id', '!=', $subproduk['id'])->first();
-                    } else {
-                        $checkNama = Produk::where('nama', $subproduk['nama'])->first();
-                    }
-                    if ($checkNama) {
-                        throw new \Exception("Nama Produk tidak boleh sama");
-                    }
-                    $subProduk = Produk::updateOrCreate(
-                        [
-                            'id' => isset($subproduk['id']) ? $subproduk['id'] : null
-                        ],
-                        [
-                            'produk_id' => $produkMaster->id,
-                            'kelompok_produk_id' => $subproduk['kelompok_produk_id'],
-                            'merk' => $subproduk['merk'],
-                            'nama' => $subproduk['nama'],
-                            'nama_coo' => isset($subproduk['nama_coo']) ? $subproduk['nama_coo'] : null,
-                            'coo' => isset($subproduk['coo']) ? $subproduk['coo'] : 1,
-                            'no_akd' => $subproduk['no_akd'],
-                            'status' => $subproduk['status'],
-                        ]
-                    );
-                    foreach ($subproduk['gudang_barang_jadi'] as $gudang) {
-                        $gbj = GudangBarangJadi::updateOrCreate(
-                            [
-                                'id' => isset($gudang['id']) ? $gudang['id'] : null
-                            ],
-                            [
-                                'produk_id' => $subProduk->id,
-                                'nama' => isset($gudang['nama']) ? $gudang['nama'] : ' ',
-                                'stok' => $gudang['stok'],
-                                'stok_siap' => $gudang['stok_siap'],
-                                'satuan_id' => $gudang['satuan_id'],
-                            ]
-                        );
-                    }
-                }
-            });
-
-            return response()->json([
-                'success' => true,
-                'data' => $produk
-            ], 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'success' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
-    }
-
-    function changeStatusProduk(Request $request) {
+    public function changeStatusProduk(Request $request) {
         try {
             $produk = Produk::find($request->id);
             $produk->status = $request->status;

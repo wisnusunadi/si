@@ -62,7 +62,7 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function () 
         Route::post('/update/{jenis}/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_update_user']);
         Route::post('/reset_pwd/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'reset_pwd_user'])->name('user.resetpwd');
     });
-    Route::view('/produk', 'page.it.produk');
+    Route::view('/{any?}', 'page.it.produk');
     Route::group(['prefix' => 'part', 'middleware' => 'auth'], function () {
         Route::view('/', 'page.administrator.part.show');
     });
