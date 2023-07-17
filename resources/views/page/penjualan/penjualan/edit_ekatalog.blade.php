@@ -1324,6 +1324,10 @@
                 url: action,
                 data: $(this).serialize(),
                 dataType: 'JSON',
+                beforeSend: function() {
+                    $('#btnsimpan').attr('disabled', true);
+                    $('#btnsimpan').html('<i class="fa fa-spin fa-spinner"></i>');
+                },
                 success: function(response) {
                     // console.log(response)
                     swal.fire(
