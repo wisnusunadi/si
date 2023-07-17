@@ -1264,6 +1264,11 @@
                 url: action,
                 data: $(this).serialize(),
                 dataType: 'JSON',
+                // loading
+                beforeSend: function() {
+                    $('#btntambah').attr('disabled', true);
+                    $('#btntambah').html('<i class="fas fa-spinner fa-spin"></i>');
+                },
                 success: function(response) {
                     swal.fire(
                         'Berhasil',
