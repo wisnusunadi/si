@@ -457,6 +457,12 @@
                                                                 aria-selected="false">Instansi</a>
                                                         </li>
                                                         <li class="nav-item" role="presentation">
+                                                            <a class="nav-link disabled" id="pills-pengiriman-tab"
+                                                                data-toggle="pill" href="#pills-pengiriman" role="tab"
+                                                                aria-controls="pills-pengiriman"
+                                                                aria-selected="false">Pengiriman</a>
+                                                        </li>
+                                                        <li class="nav-item" role="presentation">
                                                             <a class="nav-link" id="pills-produk-tab" data-toggle="pill"
                                                                 href="#pills-produk" role="tab"
                                                                 aria-controls="pills-produk" aria-selected="false">Rencana
@@ -866,6 +872,41 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="tab-pane fade" id="pills-pengiriman" role="tabpanel"
+                                                        aria-labelledby="pills-pengiriman-tab">
+                                                            <div class="card removeshadow">
+                                                                <div class="card-header">
+                                                                    <h6>Pengiriman</h6>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="form-group row">
+                                                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti" />
+                                                                                <label for="kemasan0" class="form-check-label">PETI</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti" />
+                                                                                <label for="kemasan1" class="form-check-label">NON PETI</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Ekspedisi</label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <select name="ekspedisi" id="ekspedisi" class="form-control"></select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <textarea class="form-control col-form-label" name="keterangan_pengiriman"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                             <div class="tab-pane fade show" id="pills-produk"
                                                                 role="tabpanel" aria-labelledby="pills-produk-tab">
                                                                 <div class="card removeshadow">
@@ -1650,7 +1691,48 @@
                         };
                     },
                 }
-            })
+            }).change(function() {
+                if ($(this).val() != "") {
+                    $('#pills-pengiriman-tab').removeClass('disabled');
+                    $("#msgprovinsi").text("");
+                    $("#provinsi").removeClass('is-invalid');
+                }
+                else{
+                    $('#pills-pengiriman-tab').addClass('disabled');
+                    $("#msgprovinsi").text("Provinsi harus diisi");
+                    $("#provinsi").addClass('is-invalid');
+                    $('#btntambah').attr("disabled", true);
+                }
+            });
+
+            let provinsiSelected = $('.provinsi').val();
+
+            $('#ekspedisi').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + provinsiSelected,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
 
             if ('{{ $e->customer_id }}' == 484) {
                 var cust_id = 'belum';
