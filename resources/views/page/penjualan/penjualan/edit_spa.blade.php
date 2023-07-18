@@ -647,6 +647,15 @@
                                                                                                 </div>
                                                                                             </td>
                                                                                             <td>
+                                                                                                <div class="custom-control custom-switch">
+                                                                                                    <input type="checkbox" class="custom-control-input produk_ppn" 
+                                                                                                    id="produk_ppn{{ $produkpenjualan }}" 
+                                                                                                    name="produk_ppn[{{ $produkpenjualan }}]" 
+                                                                                                    value="{{ $f->ppn }}">
+                                                                                                    <label class="custom-control-label produk_ppn_label" for="produk_ppn{{ $produkpenjualan }}">Non PPN</label>
+                                                                                                  </div>
+                                                                                            </td>
+                                                                                            <td>
                                                                                                 <a id="removerowproduk"><i
                                                                                                         class="fas fa-minus"
                                                                                                         style="color: red"></i></a>
@@ -735,6 +744,13 @@
                                                                                                     aria-describedby="prdsub"
                                                                                                     readonly />
                                                                                             </div>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <div class="custom-control custom-switch">
+                                                                                                <input type="checkbox" class="custom-control-input produk_ppn" 
+                                                                                                id="produk_ppn0" name="produk_ppn[0]" value="0">
+                                                                                                <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
+                                                                                              </div>
                                                                                         </td>
                                                                                         <td>
                                                                                             <a id="removerowproduk"><i
@@ -1491,6 +1507,9 @@
                     $(el).find('.produk_harga').attr('name', 'produk_harga[' + j + ']');
                     $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
                     $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
+                    $(el).find('.produk_ppn').attr('id', 'produk_ppn' + j);
+                    $(el).find('.produk_ppn').attr('name', 'produk_ppn[' + j + ']');
+                    $(el).find('.produk_ppn_label').attr('for', 'produk_ppn' + j);
                     $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
                     $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
                     $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
@@ -1635,6 +1654,12 @@
                             <span class="input-group-text">Rp</span>
                         </div>
                         <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
+                    </div>
+                </td>
+                <td>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                        <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
                     </div>
                 </td>
                 <td>
@@ -2024,6 +2049,23 @@
                     $("#totalhargapart").text("Rp. 0");
                 }
                 checkvalidasi();
+            });
+
+            $(document).on('change', '.custom-control-input', function() {
+                var labelElement = $(this).closest('tr').find('.custom-control-label')
+                var label = labelElement.text();
+                // not checked
+
+                if ($(this).val() == '0' || $(this).val() == '' || $(this).val() == null) {
+                    $(this).val('1');
+                    // change label text
+                    label = label.replace('Non PPN', 'PPN');
+                } else {
+                    $(this).val('0');
+                    // change label text
+                    label = label.replace('PPN', 'Non PPN');
+                }
+                labelElement.text(label);
             });
         });
     </script>

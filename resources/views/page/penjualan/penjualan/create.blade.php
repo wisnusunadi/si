@@ -951,6 +951,7 @@
                                                                         <th width="15%">Harga</th>
                                                                         <th width="15%">Ongkir</th>
                                                                         <th width="15%">Subtotal</th>
+                                                                        <th width="15%">Pajak</th>
                                                                         <th hidden>ID_Rencana</th>
                                                                         <th width="5%">Aksi</th>
                                                                     </tr>
@@ -1018,6 +1019,12 @@
                                                                                     style="width:100%;" readonly />
                                                                             </div>
                                                                         </td>
+                                                                        <td>
+                                                                            <div class="custom-control custom-switch">
+                                                                                <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                                                                                <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
+                                                                              </div>
+                                                                        </td>
                                                                         <td hidden><input type="hidden"
                                                                                 class="rencana_id" name="rencana_id[]"
                                                                                 id="rencana_id0" readonly></td>
@@ -1030,7 +1037,7 @@
                                                                 </tbody>
                                                                 <tfoot>
                                                                     <tr>
-                                                                        <th colspan="5" style="text-align:right;">Total
+                                                                        <th colspan="6" style="text-align:right;">Total
                                                                             Harga</th>
                                                                         <th id="totalhargaprd" class="align-right">Rp. 0
                                                                         </th>
@@ -2833,6 +2840,12 @@
                     `" style="width:100%;" readonly/>
                         </div>
                     </td>
+                    <td>
+                    <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                            <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
+                            </div>
+                    </td>
                     <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly value="` +
                     id + `"></td>
                     <td>
@@ -2946,6 +2959,9 @@
                     $(el).find('.produk_harga').attr('name', 'produk_harga[' + j + ']');
                     $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
                     $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
+                    $(el).find('.produk_ppn').attr('id', 'produk_ppn' + j);
+                    $(el).find('.produk_ppn').attr('name', 'produk_ppn[' + j + ']');
+                    $(el).find('.produk_ppn_label').attr('for', 'produk_ppn' + j);
                     $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
                     $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
                     $(el).find('.rencana_id').attr('id', 'rencana_id' + j);
@@ -2994,6 +3010,12 @@
 
                         <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
                     </div>
+                </td>
+                <td>
+                <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                        <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
+                        </div>
                 </td>
                 <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly></td>
                 <td>
@@ -3555,6 +3577,24 @@
             });
             /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
             // autocomplete(document.getElementById("instansi"), instansi_array);
+
+            //  foreach checboxes
+            $(document).on('change', '.custom-control-input', function() {
+                var labelElement = $(this).closest('tr').find('.custom-control-label')
+                var label = labelElement.text();
+                // not checked
+
+                if ($(this).val() == '0') {
+                    $(this).val('1');
+                    // change label text
+                    label = label.replace('Non PPN', 'PPN');
+                } else {
+                    $(this).val('0');
+                    // change label text
+                    label = label.replace('PPN', 'Non PPN');
+                }
+                labelElement.text(label);
+            });
 
         });
     </script>
