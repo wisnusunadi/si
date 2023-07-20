@@ -2554,36 +2554,50 @@
 
             function select_data(prm) {
 
-                let produk = []
-
                 $('.spinner-border').removeClass('hidden');
                 const url = '/api/penjualan_produk/select_param/' + prm;
-                // $('.penjualan_produk_id').on('change', function() {
-                //     for (i = 0; i < 3; ++i) {
-                //         $("#produktable ").append('<tr><td>Detail Paket</td></tr>');
-                //     }
-                // });
-                    // push data to array produk
-                    produk.push({
-                        id: 0,
-                        text: 'Pilih Produk'
-                    })
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(data => {
-                            data.map((item, index) => {
-                                produk.push({
-                                    id: item.id,
-                                    text: item.nama
+
+                $('.penjualan_produk_id').select2({
+                    placeholder: "Pilih Produk",
+                    ajax: {
+                        minimumResultsForSearch: 20,    
+                        url: url,
+                        type: 'GET',
+                        dataType: 'json',
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
                                 })
-                            })
-                            $('.penjualan_produk_id').select2({
-                                data: produk,
-                                placeholder: 'Pilih Produk',
-                                width: 'resolve',
-                            });
-                        })
-                        .catch(err => console.log(err));
+                            };
+                        },
+                    }
+                })
+
+                    // push data to array produk
+                    // produk.push({
+                    //     id: 0,
+                    //     text: 'Pilih Produk'
+                    // })
+                    // fetch(url)
+                    //     .then(response => response.json())
+                    //     .then(data => {
+                    //         data.map((item, index) => {
+                    //             produk.push({
+                    //                 id: item.id,
+                    //                 text: item.nama
+                    //             })
+                    //         })
+                    //         $('.penjualan_produk_id').select2({
+                    //             data: produk,
+                    //             placeholder: 'Pilih Produk',
+                    //             width: 'resolve',
+                    //         });
+                    //     })
+                    //     .catch(err => console.log(err));
                 $('.spinner-border').addClass('hidden');
             }
 
