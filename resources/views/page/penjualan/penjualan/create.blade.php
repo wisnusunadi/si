@@ -835,7 +835,7 @@
                                                                     <div class="form-group row">
                                                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Ekspedisi</label>
                                                                         <div class="col-lg-6 col-md-12 col-form-label">
-                                                                            <select name="ekspedisi" id="ekspedisi" class="form-control"></select>
+                                                                            <select name="ekspedisi" id="ekspedisi" class="form-control ekspedisi"></select>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
@@ -993,7 +993,53 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="tab-pane fade" id="pills-pengirimannonakn" role="tabpanel" aria-labelledby="pills-pengirimannonakn-tab">...</div>
+                                                        <div class="tab-pane fade" id="pills-pengirimannonakn" role="tabpanel" aria-labelledby="pills-pengirimannonakn-tab">
+                                                            <div class="card-body">
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input type="radio" class="form-check-input" name="pilihan_pengiriman_nonakn" id="pengiriman0" value="distributor" />
+                                                                            <label for="pengiriman0" class="form-check-label">Sama dengan Distributor</label>
+                                                                        </div>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input type="radio" class="form-check-input" name="pilihan_pengiriman_nonakn" id="lainnya" value="lainnya" />
+                                                                            <label for="lainnya" class="form-check-label">Lainnya</label>
+                                                                        </div>
+                                                                        <input type="text"
+                                                                            class="form-control col-form-label mt-2 alamat_pengiriman_nonakn" name="alamat_pengiriman" id="alamat_pengiriman_nonakn" readonly/>
+                                                                        <div class="invalid-feedback"
+                                                                            id="msg_alamat_pengiriman_nonakn">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti" />
+                                                                            <label for="kemasan0" class="form-check-label">PETI</label>
+                                                                        </div>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti" />
+                                                                            <label for="kemasan1" class="form-check-label">NON PETI</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Ekspedisi</label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <select name="ekspedisi" id="ekspedisi_nonakn" class="form-control ekspedisi_nonakn"></select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <textarea class="form-control col-form-label" name="keterangan_pengiriman"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                       </div>
                                                 </div>
                                             </div>
@@ -1960,7 +2006,6 @@
                     $("input[id=jenis_pen][value='produk']").attr("disabled", false);
                     $("input[id=jenis_pen][value='sparepart']").attr("disabled", false);
                     $("input[id=jenis_pen][value='jasa']").attr("disabled", false);
-
 
                 } else if ($(this).val() == "spb") {
                     $("#datapart").removeClass("hide");
@@ -3472,9 +3517,59 @@
                     $('#alamat_pengiriman').attr('readonly', false);
                     ekspedisi(provinsi_instansi);
                 }
+            });
+
+            $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman_nonakn"]', function () {
+                let pilihan_pengiriman = $(this).val();
+                let alamat = $('#alamat').val();
+                $('#alamat_pengiriman_nonakn').attr('readonly', true);
+                $('#alamat_pengiriman_nonakn').val('');
+                $('#alamat_pengiriman_nonakn').removeClass('is-invalid');
+
+                const checkValidasi = (msg) => {
+                    $('#alamat_pengiriman_nonakn').addClass('is-invalid');
+                    $('#msg_alamat_pengiriman_nonakn').text(msg);
+                }
+
+                if(pilihan_pengiriman == 'distributor'){
+                    $('#alamat_pengiriman_nonakn').val($('#alamat').val());
+                }else{
+                    $('#alamat_pengiriman_nonakn').attr('readonly', false);
+                }
+
+                alamat == '-' ? checkValidasi('Alamat Customer harus diisi') : ekspedisi_nonakn(provinsi_customer);
 
 
             });
+
+            const ekspedisi_nonakn = (provinsi) => {
+                $('#ekspedisi_nonakn').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + provinsi,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
 
             const ekspedisi = (provinsi) => {
                 $('#ekspedisi').select2({
