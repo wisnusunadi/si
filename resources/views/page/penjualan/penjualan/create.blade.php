@@ -798,6 +798,28 @@
                                                                 </div>
                                                                 <div class="card-body">
                                                                     <div class="form-group row">
+                                                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pengiriman0" value="distributor" />
+                                                                                <label for="pengiriman0" class="form-check-label">Sama dengan Distributor</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pengiriman1" value="instansi" />
+                                                                                <label for="pengiriman1" class="form-check-label">Sama dengan Instansi</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="lainnya" value="lainnya" />
+                                                                                <label for="lainnya" class="form-check-label">Lainnya</label>
+                                                                            </div>
+                                                                            <input type="text"
+                                                                                class="form-control col-form-label mt-2" name="alamat_pengiriman" id="alamat_pengiriman" readonly/>
+                                                                            <div class="invalid-feedback"
+                                                                                id="msg_alamat_pengiriman">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
                                                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
                                                                         <div class="col-lg-6 col-md-12 col-form-label">
                                                                             <div class="form-check form-check-inline">
@@ -866,93 +888,113 @@
                                             <h4>Info Penjualan</h4>
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <div class="form-group row">
-                                                        <label for=""
-                                                            class="col-form-label col-lg-5 col-md-12 labelket">Nomor
-                                                            PO</label>
-                                                        <div class="col-lg-4 col-md-12">
-                                                            <input type="text"
-                                                                class="form-control col-form-label @error('no_po') is-invalid @enderror"
-                                                                id="no_po" name="no_po" />
-                                                            <div class="invalid-feedback" id="msgno_po">
-                                                                @if ($errors->has('no_po'))
-                                                                    {{ $errors->first('no_po') }}
-                                                                @endif
+                                                    <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab"
+                                                    role="tablist">
+                                                        <li class="nav-item" role="presentation">
+                                                            <a class="nav-link active" id="pills-pononakn-tab"
+                                                                data-toggle="pill" href="#pills-pononakn" role="tab"
+                                                                aria-controls="pills-pononakn"
+                                                                aria-selected="true">Purchase Order</a>
+                                                        </li>
+                                                        <li class="nav-item" role="presentation">
+                                                            <a class="nav-link" id="pills-pengirimannonakn-tab" data-toggle="pill"
+                                                                href="#pills-pengirimannonakn" role="tab"
+                                                                aria-controls="pills-pengirimannonakn"
+                                                                aria-selected="false">Pengiriman</a>
+                                                        </li>
+                                                    </ul>
+                                                      <div class="tab-content" id="pills-tabContent">
+                                                        <div class="tab-pane fade show active" id="pills-pononakn" role="tabpanel" aria-labelledby="pills-pononakn-tab">
+                                                            <div class="form-group row">
+                                                                <label for=""
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Nomor
+                                                                    PO</label>
+                                                                <div class="col-lg-4 col-md-12">
+                                                                    <input type="text"
+                                                                        class="form-control col-form-label @error('no_po') is-invalid @enderror"
+                                                                        id="no_po" name="no_po" />
+                                                                    <div class="invalid-feedback" id="msgno_po">
+                                                                        @if ($errors->has('no_po'))
+                                                                            {{ $errors->first('no_po') }}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for=""
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
+                                                                    PO</label>
+                                                                <div class="col-lg-4 col-md-12">
+                                                                    <input type="date"
+                                                                        class="form-control col-form-label @error('tanggal_po') is-invalid @enderror"
+                                                                        id="tanggal_po" name="tanggal_po" />
+                                                                    <div class="invalid-feedback" id="msgtanggal_po">
+                                                                        @if ($errors->has('tanggal_po'))
+                                                                            {{ $errors->first('tanggal_po') }}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for=""
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Delivery
+                                                                    Order</label>
+                                                                <div class="col-lg-5 col-md-12 col-form-label">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="do" id="yes" value="yes" />
+                                                                        <label class="form-check-label"
+                                                                            for="yes">Tersedia</label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="do" id="no" value="no" />
+                                                                        <label class="form-check-label" for="no">Tidak
+                                                                            tersedia</label>
+                                                                    </div>
+        
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row hide" id="do_detail_no">
+                                                                <label for=""
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Nomor
+                                                                    DO</label>
+                                                                <div class="col-lg-4 col-md-12">
+                                                                    <input type="text"
+                                                                        class="form-control col-form-label @error('no_do') is-invalid @enderror"
+                                                                        id="no_do" name="no_do" />
+                                                                    <div class="invalid-feedback" id="msgno_do">
+                                                                        @if ($errors->has('no_do'))
+                                                                            {{ $errors->first('no_do') }}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row hide" id="do_detail_tgl">
+                                                                <label for=""
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
+                                                                    DO</label>
+                                                                <div class="col-lg-4 col-md-12">
+                                                                    <input type="date"
+                                                                        class="form-control col-form-label @error('tanggal_do') is-invalid @enderror"
+                                                                        id="tanggal_do" name="tanggal_do" />
+                                                                    <div class="invalid-feedback" id="msgtanggal_do">
+                                                                        @if ($errors->has('tanggal_do'))
+                                                                            {{ $errors->first('tanggal_do') }}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="keterangan"
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
+                                                                <div class="col-lg-5 col-md-12">
+                                                                    <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan"></textarea>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for=""
-                                                            class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
-                                                            PO</label>
-                                                        <div class="col-lg-4 col-md-12">
-                                                            <input type="date"
-                                                                class="form-control col-form-label @error('tanggal_po') is-invalid @enderror"
-                                                                id="tanggal_po" name="tanggal_po" />
-                                                            <div class="invalid-feedback" id="msgtanggal_po">
-                                                                @if ($errors->has('tanggal_po'))
-                                                                    {{ $errors->first('tanggal_po') }}
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for=""
-                                                            class="col-form-label col-lg-5 col-md-12 labelket">Delivery
-                                                            Order</label>
-                                                        <div class="col-lg-5 col-md-12 col-form-label">
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio"
-                                                                    name="do" id="yes" value="yes" />
-                                                                <label class="form-check-label"
-                                                                    for="yes">Tersedia</label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio"
-                                                                    name="do" id="no" value="no" />
-                                                                <label class="form-check-label" for="no">Tidak
-                                                                    tersedia</label>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row hide" id="do_detail_no">
-                                                        <label for=""
-                                                            class="col-form-label col-lg-5 col-md-12 labelket">Nomor
-                                                            DO</label>
-                                                        <div class="col-lg-4 col-md-12">
-                                                            <input type="text"
-                                                                class="form-control col-form-label @error('no_do') is-invalid @enderror"
-                                                                id="no_do" name="no_do" />
-                                                            <div class="invalid-feedback" id="msgno_do">
-                                                                @if ($errors->has('no_do'))
-                                                                    {{ $errors->first('no_do') }}
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row hide" id="do_detail_tgl">
-                                                        <label for=""
-                                                            class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
-                                                            DO</label>
-                                                        <div class="col-lg-4 col-md-12">
-                                                            <input type="date"
-                                                                class="form-control col-form-label @error('tanggal_do') is-invalid @enderror"
-                                                                id="tanggal_do" name="tanggal_do" />
-                                                            <div class="invalid-feedback" id="msgtanggal_do">
-                                                                @if ($errors->has('tanggal_do'))
-                                                                    {{ $errors->first('tanggal_do') }}
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="keterangan"
-                                                            class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
-                                                        <div class="col-lg-5 col-md-12">
-                                                            <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan"></textarea>
-                                                        </div>
-                                                    </div>
+                                                        <div class="tab-pane fade" id="pills-pengirimannonakn" role="tabpanel" aria-labelledby="pills-pengirimannonakn-tab">...</div>
+                                                      </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1339,6 +1381,7 @@
             var produk_obj = {};
             var part_obj = {};
             var jasa_obj = {};
+            let provinsi_customer = null;
 
             $('#jenis_paket').select2({
                 placeholder: "Pilih Paket"
@@ -2090,6 +2133,7 @@
                         $('#no_paket').attr('readonly', false);
                         $("#dataproduk").removeClass("hide");
                         $("#batas_kontrak").attr('disabled', false);
+                        $('#pills-pengiriman-tab').removeClass('disabled');
                     } else if (($(this).val() == "draft") || ($(this).val() == "batal")) {
                         $('#checkbox_nopaket').removeClass('hide');
                         $('#isi_nopaket').prop("checked", false);
@@ -2105,6 +2149,7 @@
                         $("#dataproduk").addClass("hide");
                         $("#batas_kontrak").attr('disabled', true);
                         $('#isi_produk_input').removeClass('hide');
+                        $('#pills-pengiriman-tab').addClass('disabled');
                     }
                     //  else if ($(this).val() == "batal") {
                     //     $('#checkbox_nopaket').addClass('hide');
@@ -2129,6 +2174,7 @@
                         $("#batas_kontrak").val("");
                         $("#batas_kontrak").attr('disabled', true);
                         $("#dataproduk").removeClass("hide");
+                        $('#pills-pengiriman-tab').addClass('disabled');
                     }
 
                 } else {
@@ -2398,6 +2444,7 @@
                     dataType: 'json',
                     success: function(data) {
                         if (data[0] != undefined) {
+                            provinsi_customer = data[0].id_provinsi
                             $('#alamat').val(data[0].alamat);
                             $('#telepon').val(data[0].telp);
                             if (jenis == 'spa' || jenis == 'spb') {
@@ -3378,18 +3425,41 @@
                 }
             }).change(function() {
                 if ($(this).val() != "") {
-                    $('#pills-pengiriman-tab').removeClass('disabled');
                     $("#msgprovinsi").text("");
                     $("#provinsi").removeClass('is-invalid');
                     $('.pills')
                     checkvalidasi();
-                    ekspedisi($(this).val());
                 } else if ($(this).val() == "") {
-                    $('#pills-pengiriman-tab').addClass('disabled');
                     $("#msgprovinsi").text("Provinsi harus diisi");
                     $("#provinsi").addClass('is-invalid');
                     $('#btntambah').attr("disabled", true);
                 }
+            });
+
+            $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function () {
+                let pilihan_pengiriman = $(this).val();
+                let provinsi_instansi = $('#provinsi').val();
+                $('#alamat_pengiriman').attr('readonly', true);
+                $('#alamat_pengiriman').val('');
+                $('#alamat_pengiriman').removeClass('is-invalid');
+
+                const checkValidasi = (msg) => {
+                    $('#alamat_pengiriman').addClass('is-invalid');
+                    $('#msg_alamat_pengiriman').text(msg);
+                }
+
+                if(pilihan_pengiriman == 'distributor'){
+                    $('#alamat_pengiriman').val($('#alamat').val());
+                    provinsi_customer ? ekspedisi(provinsi_customer) : checkValidasi('Provinsi Customer harus diisi');
+                }else if (pilihan_pengiriman == 'instansi'){
+                    $('#alamat_pengiriman').val($('#alamatinstansi').val());
+                    provinsi_instansi != 'NULL' ? ekspedisi(provinsi_instansi) : checkValidasi('Provinsi Instansi harus diisi');
+                }else{
+                    $('#alamat_pengiriman').attr('readonly', false);
+                    ekspedisi(provinsi_instansi);
+                }
+
+
             });
 
             const ekspedisi = (provinsi) => {
