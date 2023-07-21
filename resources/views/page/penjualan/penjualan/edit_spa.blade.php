@@ -510,6 +510,7 @@
 
                                                                                     <th width="20%">Harga</th>
                                                                                     <th width="20%">Subtotal</th>
+                                                                                    <th width="2%">Pajak</th>
                                                                                     <th width="2%">Aksi</th>
                                                                                 </tr>
                                                                             </thead>
