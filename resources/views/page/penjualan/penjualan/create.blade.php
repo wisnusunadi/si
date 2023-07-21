@@ -3572,32 +3572,7 @@
             }
 
             const ekspedisi = (provinsi) => {
-                $('#ekspedisi').select2({
-                    placeholder: "Pilih Ekspedisi",
-                    ajax: {
-                        minimumResultsForSearch: 20,
-                        dataType: 'json',
-                        theme: "bootstrap",
-                        delay: 250,
-                        type: 'GET',
-                        url: '/api/logistik/ekspedisi/select/' + provinsi,
-                        data: function(params) {
-                            return {
-                                term: params.term
-                            }
-                        },
-                        processResults: function(data) {
-                            return {
-                                results: $.map(data, function(obj) {
-                                    return {
-                                        id: obj.id,
-                                        text: obj.nama
-                                    };
-                                })
-                            };
-                        },
-                    }
-                })
+                
             }
 
 

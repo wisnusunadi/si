@@ -880,6 +880,28 @@
                                                                 </div>
                                                                 <div class="card-body">
                                                                     <div class="form-group row">
+                                                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pengiriman0" value="distributor" />
+                                                                                <label for="pengiriman0" class="form-check-label">Sama dengan Distributor</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pengiriman1" value="instansi" />
+                                                                                <label for="pengiriman1" class="form-check-label">Sama dengan Instansi</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="lainnya" value="lainnya" />
+                                                                                <label for="lainnya" class="form-check-label">Lainnya</label>
+                                                                            </div>
+                                                                            <input type="text"
+                                                                                class="form-control col-form-label mt-2" name="alamat_pengiriman" id="alamat_pengiriman" readonly/>
+                                                                            <div class="invalid-feedback"
+                                                                                id="msg_alamat_pengiriman">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
                                                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
                                                                         <div class="col-lg-6 col-md-12 col-form-label">
                                                                             <div class="form-check form-check-inline">
@@ -1693,21 +1715,46 @@
                 }
             }).change(function() {
                 if ($(this).val() != "") {
-                    $('#pills-pengiriman-tab').removeClass('disabled');
                     $("#msgprovinsi").text("");
                     $("#provinsi").removeClass('is-invalid');
+                    $('#alamat_pengiriman').removeClass('is-invalid');
+                    $('#msg_alamat_pengiriman').text('');
                 }
                 else{
-                    $('#pills-pengiriman-tab').addClass('disabled');
                     $("#msgprovinsi").text("Provinsi harus diisi");
                     $("#provinsi").addClass('is-invalid');
                     $('#btntambah').attr("disabled", true);
+                    $('#alamat_pengiriman').addClass('is-invalid');
+                    $('#msg_alamat_pengiriman').text('Provinsi instansi harus diisi');
                 }
             });
 
-            let provinsiSelected = $('.provinsi').val();
+            $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function () {
+                let pilihan_pengiriman = $(this).val();
+                let provinsi_instansi = $('#provinsi').val();
+                $('#alamat_pengiriman').attr('readonly', true);
+                $('#alamat_pengiriman').val('');
+                $('#alamat_pengiriman').removeClass('is-invalid');
 
-            $('#ekspedisi').select2({
+                const checkValidasi = (msg) => {
+                    $('#alamat_pengiriman').addClass('is-invalid');
+                    $('#msg_alamat_pengiriman').text(msg);
+                }
+
+                if(pilihan_pengiriman == 'distributor'){
+                    $('#alamat_pengiriman').val($('#alamat_customer').val());
+                    provinsi_customer ? ekspedisi(provinsi_customer) : checkValidasi('Provinsi Customer harus diisi');
+                }else if (pilihan_pengiriman == 'instansi'){
+                    $('#alamat_pengiriman').val($('#alamatinstansi').val());
+                    provinsi_instansi != 'NULL' ? ekspedisi(provinsi_instansi) : checkValidasi('Provinsi Instansi harus diisi');
+                }else{
+                    $('#alamat_pengiriman').attr('readonly', false);
+                    ekspedisi(provinsi_instansi);
+                }
+            });
+
+            const ekspedisi = (provinsi) => {
+                $('#ekspedisi').select2({
                     placeholder: "Pilih Ekspedisi",
                     ajax: {
                         minimumResultsForSearch: 20,
@@ -1715,7 +1762,7 @@
                         theme: "bootstrap",
                         delay: 250,
                         type: 'GET',
-                        url: '/api/logistik/ekspedisi/select/' + provinsiSelected,
+                        url: '/api/logistik/ekspedisi/select/' + provinsi,
                         data: function(params) {
                             return {
                                 term: params.term
@@ -1733,6 +1780,7 @@
                         },
                     }
                 })
+            }
 
             if ('{{ $e->customer_id }}' == 484) {
                 var cust_id = 'belum';
@@ -1819,6 +1867,7 @@
                             $('#produktablve tbody').append(trproduktable());
                         }
                         numberRowsProduk($("#produktable"));
+                        $('#pills-pengiriman-tab').removeClass('disabled');
                     } else if ($(this).val() == "draft" || $(this).val() == "batal") {
                         $('#isi_produk_input').removeClass('hide');
                         $('#checkbox_nopaket').removeClass('hide');
@@ -1847,6 +1896,7 @@
                         if ($('input[type="checkbox"][name="isi_produk"]:checked').length <= 0) {
                             $("#dataproduk").addClass("hide");
                         }
+                        $('#pills-pengiriman-tab').addClass('disabled');
                     } else if ($(this).val() == "negosiasi") {
                         $('#checkbox_nopaket').addClass('hide');
                         $('#isi_nopaket').prop("checked", false);
@@ -1864,6 +1914,7 @@
                             $('#produktable tbody').append(trproduktable());
                         }
                         numberRowsProduk($("#produktable"));
+                        $('#pills-pengiriman-tab').addClass('disabled');
                     }
                 } else {
                     $('#checkbox_nopaket').addClass('hide');
