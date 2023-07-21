@@ -852,7 +852,6 @@
 
             $('.modal-scan').on('shown.bs.modal', function() {
                 $('#scan_filter').addClass('hidden');
-
             });
             // Switch Scan
             $('#switchScan').on('click', function() {
@@ -1475,6 +1474,8 @@
             let dpp = $(this).data('dpp');
             $('#jml').val(jml);
             $('#dpp').val(dpp);
+            // change to first pagination
+            $('.scan-produk').DataTable().page('first').draw('page');
         });
     </script>
 @stop
