@@ -988,8 +988,7 @@
                 }
             });
         });
-        $('.scan-produk').on('click', '.cb-child', function() {
-            $('.scan-produk').DataTable().page(0).draw(false);
+        $(document).on('click', '.cb-child', function(e) {
             if ($(this).is(':checked')) {
                 if (prd1.length < 0 || prd1[dpp] == undefined) {
                     if (tmp.includes($(this).val())) {
@@ -1038,7 +1037,6 @@
                 }
             }
             $(this).val('');
-            $('.scan-produk').DataTable().search('').draw();
             console.log("tmp", tmp)
             console.log("prd1", prd1)
         })
