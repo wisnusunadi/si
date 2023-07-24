@@ -892,11 +892,9 @@ class KesehatanController extends Controller
     }
     public function karyawan_sakit_data($value)
     {
-        if ($value == 'berobat') {
-            $data = Karyawan_sakit::with(['Karyawan.Divisi', 'Pemeriksa'])->where('keputusan', 'Lanjut bekerja')->orderBy('tgl_cek', 'DESC')->get();
-        } else {
-            $data = Karyawan_sakit::with(['Karyawan.Divisi', 'Pemeriksa'])->where('keputusan', 'Dipulangkan')->orderBy('tgl_cek', 'DESC')->get();
-        }
+
+            $data = Karyawan_sakit::with(['Karyawan.Divisi', 'Pemeriksa'])->orderBy('tgl_cek', 'DESC')->get();
+
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -967,9 +965,7 @@ class KesehatanController extends Controller
 
                 $btn = '<div class="btn-group">
                 <span><button type="button" id="detail_tindakan"  class="btn btn-xs btn-outline-info m-1"><i class="fas fa-eye"></i> Detail</button></span>';
-                if ($data->keputusan == 'Dipulangkan') {
-                    $btn .= '<a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" class="btn btn-xs btn-warning m-1" id="cetak_gcu"><i class="fas fa-print"></i> Cetak</button></a>';
-                }
+
                 $btn .= '<span><button type="button" id="delete"  data-id="' . $data->id . '" class="btn btn-xs btn-danger m-1"><i class="fas fa-trash"></i> Hapus</button></span></div>';
                 // $btn = '<div class="inline-flex"><a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" id="cetak_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-print"></i></button></a></div>';
                 return $btn;
@@ -986,8 +982,18 @@ class KesehatanController extends Controller
     }
     public function karyawan_sakit_aksi_delete($id)
     {
+
         $b = Karyawan_sakit::find($id);
-        $delete = $b->DetailObat->delete();
+
+        if($b->Detail_Obat){
+            Detail_obat::where('karyawan_sakit_id', $id)->delete();
+            $delete =  $b->delete();
+
+        }else{
+            $delete =   $b->delete();
+        }
+
+
         if ($delete) {
             return response()->json(['data' => 'success', 'msg' => 'Data berhasil di hapus']);
         } else {
@@ -1019,9 +1025,7 @@ class KesehatanController extends Controller
                 }
                 return $x;
             })
-            ->addColumn('aksi', function ($data) {
-                return '<i class="fas fa-trash text-danger" id="delete" data-id="' . $data->id . '"></i>';
-            })
+
 
             ->rawColumns(['aksi'])
             ->make(true);
