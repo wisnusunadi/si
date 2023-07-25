@@ -408,71 +408,137 @@
                                                 <h4>Info Penjualan</h4>
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <div class="form-group row">
-                                                            <label for=""
-                                                                class="col-form-label col-lg-5 col-md-12 labelket">Delivery
-                                                                Order</label>
-                                                            <div class="col-lg-5 col-md-12 col-form-label">
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="do" id="yes" value="yes"
-                                                                        {{ empty($e->Pesanan->no_do) ? '' : 'checked' }} />
-                                                                    <label class="form-check-label"
-                                                                        for="yes">Tersedia</label>
+                                                <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab"
+                                                    role="tablist">
+                                                        <li class="nav-item" role="presentation">
+                                                            <a class="nav-link active" id="pills-pononakn-tab"
+                                                                data-toggle="pill" href="#pills-pononakn" role="tab"
+                                                                aria-controls="pills-pononakn"
+                                                                aria-selected="true">Purchase Order</a>
+                                                        </li>
+                                                        <li class="nav-item" role="presentation">
+                                                            <a class="nav-link" id="pills-pengirimannonakn-tab" data-toggle="pill"
+                                                                href="#pills-pengirimannonakn" role="tab"
+                                                                aria-controls="pills-pengirimannonakn"
+                                                                aria-selected="false">Pengiriman</a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="tab-content" id="pills-tabContent">
+                                                        <div class="tab-pane fade show active" id="pills-pononakn" role="tabpanel" aria-labelledby="pills-pononakn-tab">
+                                                            <div class="form-group row">
+                                                                <label for=""
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Delivery
+                                                                    Order</label>
+                                                                <div class="col-lg-5 col-md-12 col-form-label">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="do" id="yes" value="yes"
+                                                                            {{ empty($e->Pesanan->no_do) ? '' : 'checked' }} />
+                                                                        <label class="form-check-label"
+                                                                            for="yes">Tersedia</label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="do" id="no" value="no"
+                                                                            {{ empty($e->Pesanan->no_do) ? 'checked' : '' }} />
+                                                                        <label class="form-check-label" for="no">Tidak
+                                                                            tersedia</label>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="do" id="no" value="no"
-                                                                        {{ empty($e->Pesanan->no_do) ? 'checked' : '' }} />
-                                                                    <label class="form-check-label" for="no">Tidak
-                                                                        tersedia</label>
+                                                            </div>
+    
+                                                            <div class="form-group row    @if (empty($e->Pesanan->no_do)) hide @endif "
+                                                                id="do_detail_no">
+                                                                <label for=""
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Nomor
+                                                                    DO</label>
+                                                                <div class="col-4">
+                                                                    <input type="text"
+                                                                        class="form-control col-form-label @error('no_do') is-invalid @enderror"
+                                                                        id="no_do" name="no_do"
+                                                                        value="{{ $e->Pesanan->no_do }}" />
+                                                                    <div class="invalid-feedback" id="msgno_do">
+                                                                        @if ($errors->has('no_do'))
+                                                                            {{ $errors->first('no_do') }}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row  @if (empty($e->Pesanan->tgl_do)) hide @endif "
+                                                                id="do_detail_tgl">
+                                                                <label for=""
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
+                                                                    DO</label>
+                                                                <div class="col-4">
+                                                                    <input type="date"
+                                                                        class="form-control col-form-label @error('tanggal_do') is-invalid @enderror"
+                                                                        id="tanggal_do" name="tanggal_do"
+                                                                        value="{{ $e->Pesanan->tgl_do }}" />
+                                                                    <div class="invalid-feedback" id="msgtanggal_po">
+                                                                        @if ($errors->has('tanggal_do'))
+                                                                            {{ $errors->first('tanggal_do') }}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+    
+    
+                                                            <div class="form-group row">
+                                                                <label for="keterangan"
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
+                                                                <div class="col-lg-5 col-md-12">
+                                                                    <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan">{{ $e->Pesanan->ket }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
-
-                                                        <div class="form-group row    @if (empty($e->Pesanan->no_do)) hide @endif "
-                                                            id="do_detail_no">
-                                                            <label for=""
-                                                                class="col-form-label col-lg-5 col-md-12 labelket">Nomor
-                                                                DO</label>
-                                                            <div class="col-4">
-                                                                <input type="text"
-                                                                    class="form-control col-form-label @error('no_do') is-invalid @enderror"
-                                                                    id="no_do" name="no_do"
-                                                                    value="{{ $e->Pesanan->no_do }}" />
-                                                                <div class="invalid-feedback" id="msgno_do">
-                                                                    @if ($errors->has('no_do'))
-                                                                        {{ $errors->first('no_do') }}
-                                                                    @endif
+                                                        <div class="tab-pane fade" id="pills-pengirimannonakn" role="tabpanel" aria-labelledby="pills-pengirimannonakn-tab">
+                                                            <div class="card-body">
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input type="radio" class="form-check-input" name="pilihan_pengiriman_nonakn" id="pengiriman0" value="distributor" />
+                                                                            <label for="pengiriman0" class="form-check-label">Sama dengan Distributor</label>
+                                                                        </div>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input type="radio" class="form-check-input" name="pilihan_pengiriman_nonakn" id="lainnya" value="lainnya" />
+                                                                            <label for="lainnya" class="form-check-label">Lainnya</label>
+                                                                        </div>
+                                                                        <input type="text"
+                                                                            class="form-control col-form-label mt-2 alamat_pengiriman_nonakn" name="alamat_pengiriman" id="alamat_pengiriman_nonakn" readonly/>
+                                                                        <div class="invalid-feedback"
+                                                                            id="msg_alamat_pengiriman_nonakn">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti" />
+                                                                            <label for="kemasan0" class="form-check-label">PETI</label>
+                                                                        </div>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti" />
+                                                                            <label for="kemasan1" class="form-check-label">NON PETI</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Ekspedisi</label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <select name="ekspedisi" id="ekspedisi_nonakn" class="form-control ekspedisi_nonakn"></select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <textarea class="form-control col-form-label" name="keterangan_pengiriman"></textarea>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group row  @if (empty($e->Pesanan->tgl_do)) hide @endif "
-                                                            id="do_detail_tgl">
-                                                            <label for=""
-                                                                class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
-                                                                DO</label>
-                                                            <div class="col-4">
-                                                                <input type="date"
-                                                                    class="form-control col-form-label @error('tanggal_do') is-invalid @enderror"
-                                                                    id="tanggal_do" name="tanggal_do"
-                                                                    value="{{ $e->Pesanan->tgl_do }}" />
-                                                                <div class="invalid-feedback" id="msgtanggal_po">
-                                                                    @if ($errors->has('tanggal_do'))
-                                                                        {{ $errors->first('tanggal_do') }}
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-
-                                                        <div class="form-group row">
-                                                            <label for="keterangan"
-                                                                class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
-                                                            <div class="col-lg-5 col-md-12">
-                                                                <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan">{{ $e->Pesanan->ket }}</textarea>
-                                                            </div>
-                                                        </div>
+                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1074,6 +1140,7 @@
             var variasi = false;
             var produk_jumlah = false;
             var produk_harga = false;
+            let provinsi_customer = null
 
             var part_id = false;
             var part_jumlah = false;
@@ -1422,6 +1489,7 @@
                     dataType: 'json',
                     success: function(data) {
                         console.log(data);
+                        provinsi_customer = data[0].id_provinsi
                         $('#alamat_customer').val(data[0].alamat);
                         $('#telepon_customer').val(data[0].telp);
                     }
@@ -2068,6 +2136,58 @@
                 }
                 labelElement.text(label);
             });
+
+            $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman_nonakn"]', function () {
+                let pilihan_pengiriman = $(this).val();
+                let alamat = $('#alamat_customer').val();
+                $('#alamat_pengiriman_nonakn').attr('readonly', true);
+                $('#alamat_pengiriman_nonakn').val('');
+                $('#alamat_pengiriman_nonakn').removeClass('is-invalid');
+
+                const checkValidasi = (msg) => {
+                    $('#alamat_pengiriman_nonakn').addClass('is-invalid');
+                    $('#msg_alamat_pengiriman_nonakn').text(msg);
+                }
+
+                if(pilihan_pengiriman == 'distributor'){
+                    $('#alamat_pengiriman_nonakn').val($('#alamat_customer').val());
+                }else{
+                    $('#alamat_pengiriman_nonakn').attr('readonly', false);
+                }
+
+                alamat == '-' ? checkValidasi('Alamat Customer harus diisi') : ekspedisi_nonakn(provinsi_customer);
+
+
+            });
+
+            const ekspedisi_nonakn = (provinsi) => {
+                $('#ekspedisi_nonakn').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + provinsi,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
         });
     </script>
 @stop
