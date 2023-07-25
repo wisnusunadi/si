@@ -507,9 +507,13 @@
                 event.preventDefault();
                 let data_x = $(this).data('x');
                 let data_y = $(this).data('y');
-                let data_z = $(this).data('z');
 
-                console.log("x: " + data_x);
+                // fetch post
+                fetch('/api/logistik/so/data/detail/belum_kirim/' + data_y + '/' + data_x)
+                    .then((response) => response.json())
+                    .then((response) => {
+                        console.log(response);
+                    })
             });
 
         })
