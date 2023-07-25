@@ -1070,9 +1070,20 @@ class LogistikController extends Controller
                     $y = $data->Spb->id;
                 }
                 $z = 'proses';
-                return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '" type="button" class="btn btn-outline-primary btn-sm">
-                        <i class="fas fa-eye"></i> Detail
-                    </a>';
+                return '
+                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                    <a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
+                        <button class="dropdown-item" type="button">
+                            <i class="fas fa-eye"></i> Detail
+                        </button>
+                    </a>
+                    <button class="dropdown-item cetaksj" type="button" data-x="' . $x . '" data-y="' . $y . '" data-z="' . $z . '">
+                        <i class="fas fa-print"></i>
+                        Cetak Surat Jalan
+                    </button>
+                </div>
+                ';
             })
             ->rawColumns(['status', 'button', 'batas'])
             ->setRowClass(function ($data) {

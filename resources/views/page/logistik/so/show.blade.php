@@ -503,6 +503,15 @@
                 return false;
             });
 
+            $(document).on('click', '.cetaksj', function(event) {
+                event.preventDefault();
+                let data_x = $(this).data('x');
+                let data_y = $(this).data('y');
+                let data_z = $(this).data('z');
+
+                console.log("x: " + data_x);
+            });
+
         })
     </script>
 @stop

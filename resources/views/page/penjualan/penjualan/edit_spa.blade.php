@@ -504,6 +504,7 @@
                                                                             <input type="radio" class="form-check-input" name="pilihan_pengiriman_nonakn" id="lainnya" value="lainnya" />
                                                                             <label for="lainnya" class="form-check-label">Lainnya</label>
                                                                         </div>
+                                                                        <input type="text" name="perusahaan_pengiriman_nonakn" id="perusahaan_pengiriman_nonakn" class="form-control col-form-label" readonly>
                                                                         <input type="text"
                                                                             class="form-control col-form-label mt-2 alamat_pengiriman_nonakn" name="alamat_pengiriman" id="alamat_pengiriman_nonakn" readonly/>
                                                                         <div class="invalid-feedback"
@@ -886,6 +887,7 @@
                                                                                     <th width="15%">Jumlah</th>
                                                                                     <th width="20%">Harga</th>
                                                                                     <th width="20%">Subtotal</th>
+                                                                                    <th width="20%">Pajak</th>
                                                                                     <th width="5%">Aksi</th>
                                                                                 </tr>
                                                                             </thead>
@@ -971,6 +973,12 @@
                                                                                                 </div>
                                                                                             </td>
                                                                                             <td>
+                                                                                                <div class="custom-control custom-switch">
+                                                                                                    <input type="checkbox" class="custom-control-input part_ppn" id="part_ppn0" name="part_ppn[]" value="0">
+                                                                                                    <label class="custom-control-label part_ppn_label" for="part_ppn0">Non PPN</label>
+                                                                                                  </div>
+                                                                                            </td>
+                                                                                            <td>
                                                                                                 <a id="removerowpart"><i
                                                                                                         class="fas fa-minus"
                                                                                                         style="color: red"></i></a>
@@ -980,7 +988,7 @@
                                                                                 @endif
                                                                             </tbody>
                                                                             <tfoot>
-                                                                                <th colspan="4"
+                                                                                <th colspan="5"
                                                                                     style="text-align:right;">Total Harga
                                                                                 </th>
                                                                                 <th id="totalhargapart"
@@ -1025,7 +1033,7 @@
                                                                                 <th width="35%">Nama Jasa</th>
                                                                                 <th width="20%">Harga</th>
                                                                                 <th width="20%">Subtotal</th>
-
+                                                                                <th width="20%">Pajak</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -1072,14 +1080,13 @@
                                                                                                 readonly />
                                                                                         </div>
                                                                                     </td>
-
                                                                                 </tr>
                                                                             @endforeach
 
                                                                         </tbody>
                                                                         <tfoot>
                                                                             <tr>
-                                                                                <th colspan="3"
+                                                                                <th colspan="4"
                                                                                     style="text-align:right;">Total Harga
                                                                                 </th>
                                                                                 <th id="totalhargajasa"
@@ -1141,6 +1148,7 @@
             var produk_jumlah = false;
             var produk_harga = false;
             let provinsi_customer = null
+            let nama_customer = null
 
             var part_id = false;
             var part_jumlah = false;
@@ -1488,8 +1496,8 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
-                        console.log(data);
                         provinsi_customer = data[0].id_provinsi
+                        nama_customer = data[0].nama
                         $('#alamat_customer').val(data[0].alamat);
                         $('#telepon_customer').val(data[0].telp);
                     }
@@ -2027,6 +2035,9 @@
                     $(el).find('.part_harga').attr('id', 'part_harga' + j);
                     $(el).find('.part_subtotal').attr('name', 'part_subtotal[' + j + ']');
                     $(el).find('.part_subtotal').attr('id', 'part_subtotal' + j);
+                    $(el).find('.part_ppn').attr('id', 'part_ppn' + j);
+                    $(el).find('.part_ppn').attr('name', 'part_ppn[' + j + ']');
+                    $(el).find('.part_ppn_label').attr('for', 'part_ppn' + j);
                     load_part(j);
                 });
             }
@@ -2065,6 +2076,12 @@
                             <span class="input-group-text">Rp</span>
                         </div>
                         <input type="text" class="form-control part_subtotal" name="part_subtotal[]" id="part_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
+                    </div>
+                </td>
+                <td>
+                    <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input part_ppn" id="part_ppn0" name="part_ppn[]" value="0">
+                            <label class="custom-control-label part_ppn_label" for="part_ppn0">Non PPN</label>
                     </div>
                 </td>
                 <td>
@@ -2140,9 +2157,14 @@
             $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman_nonakn"]', function () {
                 let pilihan_pengiriman = $(this).val();
                 let alamat = $('#alamat_customer').val();
+                $('#perusahaan_pengiriman_nonakn').attr('readonly', true);
                 $('#alamat_pengiriman_nonakn').attr('readonly', true);
+                $('#perusahaan_pengiriman_nonakn').val('');
+                $('#perusahaan_pengiriman_nonakn').attr('placeholder', 'Masukkan Nama Perusahaan');
+                $('#alamat_pengiriman_nonakn').val('');
                 $('#alamat_pengiriman_nonakn').val('');
                 $('#alamat_pengiriman_nonakn').removeClass('is-invalid');
+                $('#alamat_pengiriman_nonakn').attr('placeholder', 'Masukkan Alamat Pengiriman');
 
                 const checkValidasi = (msg) => {
                     $('#alamat_pengiriman_nonakn').addClass('is-invalid');
@@ -2150,8 +2172,10 @@
                 }
 
                 if(pilihan_pengiriman == 'distributor'){
+                    $('#perusahaan_pengiriman_nonakn').val(nama_customer)
                     $('#alamat_pengiriman_nonakn').val($('#alamat_customer').val());
                 }else{
+                    $('#perusahaan_pengiriman_nonakn').attr('readonly', false);
                     $('#alamat_pengiriman_nonakn').attr('readonly', false);
                 }
 
@@ -2188,6 +2212,14 @@
                     }
                 })
             }
+
+            $(function () {
+                let customer = $('#customer_id').val();
+                if(customer){
+                    // trigger event select2
+                    $('#customer_id').trigger('change');
+                }
+            })
         });
     </script>
 @stop

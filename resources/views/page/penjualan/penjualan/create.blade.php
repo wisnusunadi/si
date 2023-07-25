@@ -812,11 +812,12 @@
                                                                                 <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="lainnya" value="lainnya" />
                                                                                 <label for="lainnya" class="form-check-label">Lainnya</label>
                                                                             </div>
-                                                                            <input type="text"
-                                                                                class="form-control col-form-label mt-2" name="alamat_pengiriman" id="alamat_pengiriman" readonly/>
-                                                                            <div class="invalid-feedback"
-                                                                                id="msg_alamat_pengiriman">
-                                                                            </div>
+                                                                                <input type="text" name="perusahaan_pengiriman" id="perusahaan_pengiriman" class="form-control col-form-label" readonly>
+                                                                                <input type="text"
+                                                                                    class="form-control col-form-label mt-2" name="alamat_pengiriman" id="alamat_pengiriman" readonly/>
+                                                                                <div class="invalid-feedback"
+                                                                                    id="msg_alamat_pengiriman">
+                                                                                </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
@@ -1006,6 +1007,7 @@
                                                                             <input type="radio" class="form-check-input" name="pilihan_pengiriman_nonakn" id="lainnya" value="lainnya" />
                                                                             <label for="lainnya" class="form-check-label">Lainnya</label>
                                                                         </div>
+                                                                        <input type="text" name="perusahaan_pengiriman_nonakn" id="perusahaan_pengiriman_nonakn" class="form-control col-form-label" readonly>
                                                                         <input type="text"
                                                                             class="form-control col-form-label mt-2 alamat_pengiriman_nonakn" name="alamat_pengiriman" id="alamat_pengiriman_nonakn" readonly/>
                                                                         <div class="invalid-feedback"
@@ -1207,6 +1209,7 @@
                                                                         <th width="15%">Jumlah</th>
                                                                         <th width="20%">Harga</th>
                                                                         <th width="20%">Subtotal</th>
+                                                                        <th width="20%">Pajak</th>
                                                                         <th width="5%">Aksi</th>
                                                                     </tr>
                                                                 </thead>
@@ -1256,6 +1259,12 @@
                                                                             </div>
                                                                         </td>
                                                                         <td>
+                                                                            <div class="custom-control custom-switch">
+                                                                                <input type="checkbox" class="custom-control-input part_ppn" id="part_ppn0" name="part_ppn[]" value="0">
+                                                                                <label class="custom-control-label part_ppn_label" for="part_ppn0">Non PPN</label>
+                                                                              </div>
+                                                                        </td>
+                                                                        <td>
                                                                             <a id="removerowpart"><i class="fas fa-minus"
                                                                                     style="color: red"></i></a>
                                                                         </td>
@@ -1263,7 +1272,7 @@
                                                                 </tbody>
                                                                 <tfoot>
                                                                     <tr>
-                                                                        <th colspan="4" style="text-align:right;">Total
+                                                                        <th colspan="5" style="text-align:right;">Total
                                                                             Harga</th>
                                                                         <th id="totalhargapart" class="align-right">Rp. 0
                                                                         </th>
@@ -1303,6 +1312,7 @@
                                                                         <th width="35%">Nama Jasa</th>
                                                                         <th width="20%">Harga</th>
                                                                         <th width="20%">Subtotal</th>
+                                                                        <th width="20%">Pajak</th>
                                                                         <th width="5%">Aksi</th>
                                                                     </tr>
                                                                 </thead>
@@ -1342,6 +1352,12 @@
                                                                             </div>
                                                                         </td>
                                                                         <td>
+                                                                            <div class="custom-control custom-switch">
+                                                                                <input type="checkbox" class="custom-control-input jasa_ppn" id="jasa_ppn0" name="jasa_ppn[]" value="0">
+                                                                                <label class="custom-control-label jasa_ppn_label" for="jasa_ppn0">Non PPN</label>
+                                                                              </div>
+                                                                        </td>
+                                                                        <td>
                                                                             <a id="removerowjasa"><i class="fas fa-minus"
                                                                                     style="color: red"></i></a>
                                                                         </td>
@@ -1349,7 +1365,7 @@
                                                                 </tbody>
                                                                 <tfoot>
                                                                     <tr>
-                                                                        <th colspan="3" style="text-align:right;">Total
+                                                                        <th colspan="4" style="text-align:right;">Total
                                                                             Harga</th>
                                                                         <th id="totalhargajasa" class="align-right">Rp. 0
                                                                         </th>
@@ -3218,6 +3234,9 @@
                     $(el).find('.part_harga').attr('id', 'part_harga' + j);
                     $(el).find('.part_subtotal').attr('name', 'part_subtotal[' + j + ']');
                     $(el).find('.part_subtotal').attr('id', 'part_subtotal' + j);
+                    $(el).find('.part_ppn').attr('id', 'part_ppn' + j);
+                    $(el).find('.part_ppn').attr('name', 'part_ppn[' + j + ']');
+                    $(el).find('.part_ppn_label').attr('for', 'part_ppn' + j);
                     load_part();
                 });
             }
@@ -3251,6 +3270,12 @@
                         <input type="text" class="form-control part_subtotal" name="part_subtotal[]" id="part_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
                     </div>
                 </td>
+                <td>
+                    <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input part_ppn" id="part_ppn0" name="part_ppn[]" value="0">
+                            <label class="custom-control-label part_ppn_label" for="part_ppn0">Non PPN</label>
+                    </div>
+                </td>    
                 <td>
                     <a id="removerowpart"><i class="fas fa-minus" style="color: red"></i></a>
                 </td>
@@ -3287,6 +3312,9 @@
                     $(el).find('.jasa_harga').attr('id', 'jasa_harga' + j);
                     $(el).find('.jasa_subtotal').attr('name', 'jasa_subtotal[' + j + ']');
                     $(el).find('.jasa_subtotal').attr('id', 'jasa_subtotal' + j);
+                    $(el).find('.jasa_ppn').attr('id', 'jasa_ppn' + j);
+                    $(el).find('.jasa_ppn').attr('name', 'jasa_ppn[' + j + ']');
+                    $(el).find('.jasa_ppn_label').attr('for', 'jasa_ppn' + j);
                     load_jasa();
                 });
             }
@@ -3312,6 +3340,12 @@
 
                         <input type="text" class="form-control jasa_subtotal" name="jasa_subtotal[]" id="jasa_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
                     </div>
+                </td>
+                <td>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input jasa_ppn" id="jasa_ppn0" name="jasa_ppn[]" value="0">
+                        <label class="custom-control-label jasa_ppn_label" for="jasa_ppn0">Non PPN</label>
+                        </div>
                 </td>
                 <td>
                     <a id="removerowjasa"><i class="fas fa-minus" style="color: red"></i></a>
@@ -3498,9 +3532,15 @@
             $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function () {
                 let pilihan_pengiriman = $(this).val();
                 let provinsi_instansi = $('#provinsi').val();
+                $('#perusahaan_pengiriman').attr('readonly', true);
                 $('#alamat_pengiriman').attr('readonly', true);
+                $('#perusahaan_pengiriman').val('');
+                // add placeholder
+                $('#perusahaan_pengiriman').attr('placeholder', 'Masukkan Nama Perusahaan');
                 $('#alamat_pengiriman').val('');
                 $('#alamat_pengiriman').removeClass('is-invalid');
+                // add placeholder
+                $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
 
                 const checkValidasi = (msg) => {
                     $('#alamat_pengiriman').addClass('is-invalid');
@@ -3508,12 +3548,16 @@
                 }
 
                 if(pilihan_pengiriman == 'distributor'){
+                    // select customer to text
+                    $('#perusahaan_pengiriman').val($('#customer_id').text());
                     $('#alamat_pengiriman').val($('#alamat').val());
                     provinsi_customer ? ekspedisi(provinsi_customer) : checkValidasi('Provinsi Customer harus diisi');
                 }else if (pilihan_pengiriman == 'instansi'){
+                    $('#perusahaan_pengiriman').val($('#satuan_kerja').val());
                     $('#alamat_pengiriman').val($('#alamatinstansi').val());
                     provinsi_instansi != 'NULL' ? ekspedisi(provinsi_instansi) : checkValidasi('Provinsi Instansi harus diisi');
                 }else{
+                    $('#perusahaan_pengiriman').attr('readonly', false);
                     $('#alamat_pengiriman').attr('readonly', false);
                     ekspedisi(provinsi_instansi);
                 }
@@ -3522,9 +3566,15 @@
             $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman_nonakn"]', function () {
                 let pilihan_pengiriman = $(this).val();
                 let alamat = $('#alamat').val();
+                $('#perusahaan_pengiriman_nonakn').attr('readonly', true);
                 $('#alamat_pengiriman_nonakn').attr('readonly', true);
+                $('#perusahaan_pengiriman_nonakn').val('');
+                // add placeholder
+                $('#perusahaan_pengiriman_nonakn').attr('placeholder', 'Masukkan Nama Perusahaan');
                 $('#alamat_pengiriman_nonakn').val('');
                 $('#alamat_pengiriman_nonakn').removeClass('is-invalid');
+                // add placeholder
+                $('#alamat_pengiriman_nonakn').attr('placeholder', 'Masukkan Alamat Pengiriman');
 
                 const checkValidasi = (msg) => {
                     $('#alamat_pengiriman_nonakn').addClass('is-invalid');
@@ -3532,13 +3582,19 @@
                 }
 
                 if(pilihan_pengiriman == 'distributor'){
+                    // remove text pilih customer on customer_id
+                    let customer = $('#customer_id').text();
+                    customer = customer.replace('Pilih Customer', '');
+                    // remove space on text first
+                    customer = customer.replace(/^\s+|\s+$/g, '');
+                    $('#perusahaan_pengiriman_nonakn').val(customer);
                     $('#alamat_pengiriman_nonakn').val($('#alamat').val());
                 }else{
+                    $('#perusahaan_pengiriman_nonakn').attr('readonly', false);
                     $('#alamat_pengiriman_nonakn').attr('readonly', false);
                 }
 
                 alamat == '-' ? checkValidasi('Alamat Customer harus diisi') : ekspedisi_nonakn(provinsi_customer);
-
 
             });
 
@@ -3572,7 +3628,32 @@
             }
 
             const ekspedisi = (provinsi) => {
-                
+                $('#ekspedisi').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + provinsi,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
             }
 
 
@@ -3804,6 +3885,7 @@
 
             //  foreach checboxes
             $(document).on('change', '.custom-control-input', function() {
+                console.log('test');
                 var labelElement = $(this).closest('tr').find('.custom-control-label')
                 var label = labelElement.text();
                 // not checked

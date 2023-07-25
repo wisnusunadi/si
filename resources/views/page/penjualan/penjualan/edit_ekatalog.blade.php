@@ -894,6 +894,7 @@
                                                                                 <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="lainnya" value="lainnya" />
                                                                                 <label for="lainnya" class="form-check-label">Lainnya</label>
                                                                             </div>
+                                                                            <input type="text" name="perusahaan_pengiriman" id="perusahaan_pengiriman" class="form-control col-form-label" readonly>
                                                                             <input type="text"
                                                                                 class="form-control col-form-label mt-2" name="alamat_pengiriman" id="alamat_pengiriman" readonly/>
                                                                             <div class="invalid-feedback"
@@ -1460,6 +1461,8 @@
             var variasi = false;
             var produk_jumlah = false;
             var produk_harga = false;
+            let nama_customer = '';
+            let provinsi_customer = null;
 
             function checkvalidasi() {
 
@@ -1679,6 +1682,8 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
+                        nama_customer = data[0].nama;
+                        provinsi_customer = data[0].id_provinsi;
                         $('#alamat_customer').val(data[0].alamat);
                         $('#telepon_customer').val(data[0].telp);
                     }
@@ -1732,9 +1737,15 @@
             $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function () {
                 let pilihan_pengiriman = $(this).val();
                 let provinsi_instansi = $('#provinsi').val();
+                $('#perusahaan_pengiriman').attr('readonly', true);
                 $('#alamat_pengiriman').attr('readonly', true);
+                $('#perusahaan_pengiriman').val('');
+                // add placeholder
+                $('#perusahaan_pengiriman').attr('placeholder', 'Masukkan Nama Perusahaan');
                 $('#alamat_pengiriman').val('');
                 $('#alamat_pengiriman').removeClass('is-invalid');
+                // add placeholder
+                $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
 
                 const checkValidasi = (msg) => {
                     $('#alamat_pengiriman').addClass('is-invalid');
@@ -1742,12 +1753,15 @@
                 }
 
                 if(pilihan_pengiriman == 'distributor'){
+                    $('#perusahaan_pengiriman').val(nama_customer);
                     $('#alamat_pengiriman').val($('#alamat_customer').val());
                     provinsi_customer ? ekspedisi(provinsi_customer) : checkValidasi('Provinsi Customer harus diisi');
                 }else if (pilihan_pengiriman == 'instansi'){
+                    $('#perusahaan_pengiriman').val($('#satuan_kerja').val());
                     $('#alamat_pengiriman').val($('#alamatinstansi').val());
                     provinsi_instansi != 'NULL' ? ekspedisi(provinsi_instansi) : checkValidasi('Provinsi Instansi harus diisi');
                 }else{
+                    $('#perusahaan_pengiriman').attr('readonly', false);
                     $('#alamat_pengiriman').attr('readonly', false);
                     ekspedisi(provinsi_instansi);
                 }
