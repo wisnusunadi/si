@@ -11,6 +11,24 @@
                     <div class="col-lg-12 col-md-12">
                         <div class="card">
                             <div class="card-body">
+                              <h5>Data PIC</h5>
+                              <div class="form-group row">
+                                <label class="col-form-label col-lg-5 col-md-12 labelket" for="no_invoice">Nama PIC</label>
+                                <div class="col-lg-6 col-md-12">
+                                  <input type="text" class="form-control" name="nama_pic" id="">
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <label class="col-form-label col-lg-5 col-md-12 labelket" for="no_invoice">Nomor Telepon PIC</label>
+                                <div class="col-lg-6 col-md-12">
+                                  {{-- input with number only --}}
+                                  <input type="text" class="form-control" name="telp_pic" id="" onkeypress="return isNumberKey(event)">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        <div class="card">
+                            <div class="card-body">
                                 <div class="form-horizontal">
                                     <h5>Data Pengiriman</h5>
                                     <div class="form-group row">
@@ -126,6 +144,13 @@
                                         {{-- </div> --}}
                                         {{-- </div> --}}
                                     </div>
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-lg-5 col-md-12 labelket"
+                                            for="nama_pengirim">Keterangan Pengiriman</label>
+                                        <div class="col-lg-7 col-md-12">
+                                            <textarea type="text" class="form-control col-form-label" name="keterangan_pengiriman" id="keterangan_pengiriman"></textarea>
+                                        </div>
+                                      </div>
                                 </div>
                             </div>
                         </div>
