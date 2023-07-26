@@ -156,7 +156,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-          <button type="button" class="btn btn-primary cetaksj">
+          <button type="button" class="btn btn-primary cetaksjkirim">
             <i class="fa fa-print"></i> Cetak
           </button>
         </div>
@@ -255,7 +255,7 @@
       }
     });
 
-    $(document).on('click', '.cetaksj', function () {
+    $(document).on('click', '.cetaksjkirim', function () {
     // find data on datatable is checked
         let data = [];
         let table = $('.tableproduk').DataTable();
@@ -275,6 +275,15 @@
 
                 data.push(rowData);
             }
+        }
+
+        if(data.length == 0){
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Tidak ada data yang dipilih!',
+          })
+          return false;
         }
 
         console.log(data);
