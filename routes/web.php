@@ -146,8 +146,8 @@ Route::group(['prefix' => 'master', 'middleware' => 'auth'], function () {
         Route::get('/cancel_po', [App\Http\Controllers\MasterController::class, 'cancel_po'])->name('master.cancel_po');
     });
 });
-
-Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
+// 'middleware' => 'auth'
+Route::group(['prefix' => 'penjualan'], function () {
     Route::group(['middleware' => ['divisi:jual,asp']], function () {
         Route::get('/dashboard', [App\Http\Controllers\PenjualanController::class, 'dashboard'])->name('penjualan.dashboard');
     });
@@ -215,7 +215,8 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::group(['middleware' => ['divisi:jual,ppic']], function () {
             Route::get('/export/{jenis}/{customer_id}/{tgl_awal}/{tgl_akhir}/{seri}/{tampilan}', [App\Http\Controllers\PenjualanController::class, 'export_laporan'])->name('penjualan.penjualan.export');
         });
-        Route::group(['middleware' => ['divisi:jual']], function () {
+        // Route::group(['middleware' => ['divisi:jual']], function () {
+            Route::get('/cetak_surat_perintah/{id}',  [App\Http\Controllers\PenjualanController::class, 'cetak_surat_perintah'])->name('penjualan.penjualan.cetak_surat_perintah');
             Route::view('/create', 'page.penjualan.penjualan.create')->name('penjualan.penjualan.create');
             Route::view('/create_new', 'page.penjualan.penjualan.create_new')->name('penjualan.penjualan.create_new');
             // Route::get('/penjualan/data/{jenis}/{status}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data'])->name('penjualan.penjualan.penjualan.data');
@@ -232,7 +233,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
             Route::view('/edit_spa', 'page.penjualan.penjualan.edit_spa')->name('penjualan.penjualan.edit_spa');
             //Export Laporan
         });
-    });
+    // });
 
     Route::group(['prefix' => '/so', 'middleware' => ['divisi:jual']], function () {
         Route::view('/show', 'page.penjualan.so.show')->name('penjualan.so.show');
@@ -285,7 +286,6 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     Route::group(['middleware' => ['divisi:log']], function () {
         Route::get('/dashboard', [App\Http\Controllers\LogistikController::class, 'dashboard'])->name('logistik.dashboard');
     });
-
     Route::group(['prefix' => '/so', 'middleware' => ['divisi:log,dirut']], function () {
         Route::group(['middleware' => ['divisi:log,dirut']], function () {
             Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');

@@ -26,7 +26,7 @@ use App\Models\Spb;
 use App\Models\Provinsi;
 use App\Models\SaveResponse;
 use App\Models\SystemLog;
-use App\Models\TFProduksi;
+use PDF;
 use Carbon\Doctrine\CarbonType;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -2842,7 +2842,7 @@ class PenjualanController extends Controller
                 if($data->status == 'sepakat') {
                     if ($divisi_id == "26") {
                         $return .= '
-                        <a>
+                        <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
                             <button class="dropdown-item" type="button" >
                             <i class="fas fa-print"></i>
                             Print
@@ -7174,5 +7174,26 @@ class PenjualanController extends Controller
             'message' =>  'Berhasil',
             'data'    =>  $json_array
         ], 200);
+    }
+
+    public function cetak_surat_perintah($id)
+    {
+        $pesanan = Pesanan::find($id);
+        $customPaper = array(0,0,609.44,788.031);
+        foreach($pesanan->DetailPesanan as $key => $k){
+            $pesanan_arr[$key] = array(
+                'no' => $key + 1,
+                'kode' => '-',
+                'nama' => $k->penjualanproduk->nama_alias,
+                'jumlah' => $k->jumlah,
+                'ket' => $pesanan->Ekatalog->ket,
+                'pajak' => 'ppn',
+                'no_paket' => $pesanan->Ekatalog->no_paket,
+            );
+        }
+       $data = array_chunk($pesanan_arr, 12);
+
+        $pdf = PDF::loadView('page.penjualan.surat.surat-perintah-kirim', ['data' => $data,'pesanan'=> $pesanan,'count_page' => count($data)])->setOptions(['defaultFont' => 'sans-serif'])->setPaper($customPaper);
+        return $pdf->stream('');
     }
 }

@@ -104,22 +104,22 @@
 
                                 :
                             </td>
-                              <td style=" border: 1px solid;"><b>PT Emiindo Jaya Bersama</b></td>
+                              <td style=" border: 1px solid;"><b>{{$pesanan->Ekatalog->Customer->nama}}</b></td>
                           </tr>
                           <tr>
                               <td></td>
-                              <td style=" border: 1px solid;">Komplek Perkantoran Pulomas Jalan Perintis Kemerdekaan 10 No. 8, pulo Gadung, Jakarta Timur, DKI Jakarta</td>
+                              <td style=" border: 1px solid;">{{$pesanan->Ekatalog->Customer->alamat}}</td>
                           </tr>
                       </table>
                       <br>
                       <table border="0"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                           <tr>
                               <td class="vera"   width="23%">Alamat Pengiriman :</td>
-                              <td style=" border: 1px solid;"><b>PT Emiindo Jaya Bersama</b></td>
+                              <td style=" border: 1px solid;"><b>{{$pesanan->Ekatalog->instansi}}</b></td>
                             </tr>
                           <tr>
                               <td ></td>
-                              <td style=" border: 1px solid;">Komplek Perkantoran Pulomas Jalan Perintis Kemerdekaan 10 No. 8, pulo Gadung, Jakarta Timur, DKI Jakarta</td>
+                              <td style=" border: 1px solid;">{{$pesanan->Ekatalog->alamat}}</td>
                           </tr>
 
                       </table>
@@ -130,21 +130,21 @@
                           <tr>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>No SO</u> <br>
-                                  asd/df/09/87/22/222222222
+                                  {{$pesanan->so}}
                               </td>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>Tgl SO</u><br>
-                                 23/12/2023
+                                  {{$pesanan->tgl_po}}
                               </td>
                           </tr>
                           <tr>
                               <td style=" border: 1px solid; " class="vera ">
                                   <u>No PO</u> <br>
-                                  044/SRMJ/PBL/BPP/III/2023
+                                  {{$pesanan->no_po}}
                               </td>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>Tgl PO</u><br>
-                                 23/12/2023
+                                  {{$pesanan->tgl_po}}
                               </td>
                           </tr>
                           <tr>
@@ -205,13 +205,13 @@
                         {{$produk['no']}}
                         </td>
                         <td class="vera align-center" style="border-right:    1px solid black ; ">
+                            {{$produk['kode']}}
+                        </td>
+                        <td class="vera align-center" style="border-right:    1px solid black ; ">
                             {{$produk['nama']}}
                         </td>
                         <td class="vera align-center" style="border-right:    1px solid black ; ">
-                            Contrary to popular belief, Lorem Ipsum is not simply random .
-                        </td>
-                        <td class="vera align-center" style="border-right:    1px solid black ; ">
-                        123.00
+                            {{$produk['jumlah']}}.00
                         </td>
                         <td class="vera align-center" style="border-right:    1px solid black ; ">
                          UNIT
@@ -232,7 +232,9 @@
                     Keterangan
                   </td>
                   <td class="align-left"  style=" border: 1px solid;">
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type   Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
+                    {{$produk['no_paket']}}
+                    <br>
+                    {{$produk['ket']}}
                   </td>
                 </tr>
             </table>
