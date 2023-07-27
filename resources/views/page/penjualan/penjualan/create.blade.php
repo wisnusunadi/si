@@ -3538,7 +3538,6 @@
                 // add placeholder
                 $('#perusahaan_pengiriman').attr('placeholder', 'Masukkan Nama Perusahaan');
                 $('#alamat_pengiriman').val('');
-                $('#alamat_pengiriman').removeClass('is-invalid');
                 // add placeholder
                 $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
 
