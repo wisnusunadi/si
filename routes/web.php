@@ -212,7 +212,7 @@ Route::group(['prefix' => 'penjualan'], function () {
             Route::post('/spa/data/{value}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
             Route::post('/spb/data/{value}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
         });
-        Route::group(['middleware' => ['divisi:jual,ppic']], function () {
+    Route::group(['middleware' => ['divisi:jual,ppic']], function () {
             Route::get('/export/{jenis}/{customer_id}/{tgl_awal}/{tgl_akhir}/{seri}/{tampilan}', [App\Http\Controllers\PenjualanController::class, 'export_laporan'])->name('penjualan.penjualan.export');
         });
         // Route::group(['middleware' => ['divisi:jual']], function () {

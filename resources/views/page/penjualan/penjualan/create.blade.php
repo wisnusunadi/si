@@ -1152,7 +1152,7 @@
                                                                         </td>
                                                                         <td>
                                                                             <div class="custom-control custom-switch">
-                                                                                <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                                                                                <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[0]" value="0">
                                                                                 <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
                                                                               </div>
                                                                         </td>
@@ -1260,7 +1260,7 @@
                                                                         </td>
                                                                         <td>
                                                                             <div class="custom-control custom-switch">
-                                                                                <input type="checkbox" class="custom-control-input part_ppn" id="part_ppn0" name="part_ppn[]" value="0">
+                                                                                <input type="checkbox" class="custom-control-input part_ppn" id="part_ppn0" name="part_ppn[0]" value="0">
                                                                                 <label class="custom-control-label part_ppn_label" for="part_ppn0">Non PPN</label>
                                                                               </div>
                                                                         </td>
@@ -1353,7 +1353,7 @@
                                                                         </td>
                                                                         <td>
                                                                             <div class="custom-control custom-switch">
-                                                                                <input type="checkbox" class="custom-control-input jasa_ppn" id="jasa_ppn0" name="jasa_ppn[]" value="0">
+                                                                                <input type="checkbox" class="custom-control-input jasa_ppn" id="jasa_ppn0" name="jasa_ppn[0]" value="0">
                                                                                 <label class="custom-control-label jasa_ppn_label" for="jasa_ppn0">Non PPN</label>
                                                                               </div>
                                                                         </td>
@@ -3007,7 +3007,7 @@
                     </td>
                     <td>
                     <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                            <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[0]" value="0">
                             <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
                             </div>
                     </td>
@@ -3178,7 +3178,7 @@
                 </td>
                 <td>
                 <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                        <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[0]" value="0">
                         <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
                         </div>
                 </td>
@@ -3272,7 +3272,7 @@
                 </td>
                 <td>
                     <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input part_ppn" id="part_ppn0" name="part_ppn[]" value="0">
+                            <input type="checkbox" class="custom-control-input part_ppn" id="part_ppn0" name="part_ppn[0]" value="0">
                             <label class="custom-control-label part_ppn_label" for="part_ppn0">Non PPN</label>
                     </div>
                 </td>    
@@ -3343,7 +3343,7 @@
                 </td>
                 <td>
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input jasa_ppn" id="jasa_ppn0" name="jasa_ppn[]" value="0">
+                        <input type="checkbox" class="custom-control-input jasa_ppn" id="jasa_ppn0" name="jasa_ppn[0]" value="0">
                         <label class="custom-control-label jasa_ppn_label" for="jasa_ppn0">Non PPN</label>
                         </div>
                 </td>
