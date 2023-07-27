@@ -3541,6 +3541,9 @@
                 // add placeholder
                 $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
 
+                $('#alamat_pengiriman').removeClass('is-invalid');
+                $('#msg_alamat_pengiriman').text('');
+
                 const checkValidasi = (msg) => {
                     $('#alamat_pengiriman').addClass('is-invalid');
                     $('#msg_alamat_pengiriman').text(msg);
@@ -3552,6 +3555,7 @@
                     $('#alamat_pengiriman').val($('#alamat').val());
                     provinsi_customer ? ekspedisi(provinsi_customer) : checkValidasi('Provinsi Customer harus diisi');
                 }else if (pilihan_pengiriman == 'instansi'){
+                    console.log(provinsi_instansi);
                     $('#perusahaan_pengiriman').val($('#satuan_kerja').val());
                     $('#alamat_pengiriman').val($('#alamatinstansi').val());
                     provinsi_instansi != 'NULL' ? ekspedisi(provinsi_instansi) : checkValidasi('Provinsi Instansi harus diisi');
@@ -3574,6 +3578,9 @@
                 $('#alamat_pengiriman_nonakn').removeClass('is-invalid');
                 // add placeholder
                 $('#alamat_pengiriman_nonakn').attr('placeholder', 'Masukkan Alamat Pengiriman');
+
+                $('#alamat_pengiriman_nonakn').removeClass('is-invalid');
+                $('#msg_alamat_pengiriman_nonakn').text('');
 
                 const checkValidasi = (msg) => {
                     $('#alamat_pengiriman_nonakn').addClass('is-invalid');
