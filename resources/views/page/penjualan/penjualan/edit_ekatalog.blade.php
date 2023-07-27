@@ -1436,6 +1436,11 @@
             });
           });
         $(function() {
+            // check input[type="radio"][name="status_akn"]:checked == sepakat
+            if ($('input[type="radio"][name="status_akn"]:checked').val() == "sepakat") {
+                $('#pills-pengiriman-tab').removeClass('disabled');
+            }
+
             $('#jenis_paket').select2();
             var nopaketdb = "{{ str_replace(['AK1-', 'FKS-', 'KLK-'], '', $e->no_paket) }}";
             var nopaketubah = false;

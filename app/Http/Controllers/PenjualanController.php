@@ -2839,6 +2839,19 @@ class PenjualanController extends Controller
                     // $return .= "-";
                 }
 
+                if($data->status == 'sepakat') {
+                    if ($divisi_id == "26") {
+                        $return .= '
+                        <a>
+                            <button class="dropdown-item" type="button" >
+                            <i class="fas fa-print"></i>
+                            Print
+                            </button>
+                        </a>
+                        ';
+                    }
+                }
+
                 if ($divisi_id == "26") {
                     if (!empty($data->Pesanan->log_id)) {
                         if ($data->Pesanan->State->nama == "Penjualan" || $data->cgudang == 0) {
