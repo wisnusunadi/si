@@ -894,8 +894,11 @@
                                                                                 <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="lainnya" value="lainnya" />
                                                                                 <label for="lainnya" class="form-check-label">Lainnya</label>
                                                                             </div>
-                                                                            <input type="text" name="perusahaan_pengiriman" id="perusahaan_pengiriman" class="form-control col-form-label" readonly>
+                                                                            <input type="text" name="perusahaan_pengiriman"
+                                                                            value="{{ $e->pesanan->tujuan_kirim }}"
+                                                                            id="perusahaan_pengiriman" class="form-control col-form-label" readonly>
                                                                             <input type="text"
+                                                                            value="{{ $e->pesanan->alamat_kirim }}"
                                                                                 class="form-control col-form-label mt-2" name="alamat_pengiriman" id="alamat_pengiriman" readonly/>
                                                                             <div class="invalid-feedback"
                                                                                 id="msg_alamat_pengiriman">
@@ -906,11 +909,19 @@
                                                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
                                                                         <div class="col-lg-6 col-md-12 col-form-label">
                                                                             <div class="form-check form-check-inline">
-                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti" />
+                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti" 
+                                                                                @if ($e->pesanan->kemasan == "peti")
+                                                                                    checked
+                                                                                @endif
+                                                                                />
                                                                                 <label for="kemasan0" class="form-check-label">PETI</label>
                                                                             </div>
                                                                             <div class="form-check form-check-inline">
-                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti" />
+                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti" 
+                                                                                @if ($e->pesanan->kemasan == "nonpeti")
+                                                                                    checked
+                                                                                @endif
+                                                                                />
                                                                                 <label for="kemasan1" class="form-check-label">NON PETI</label>
                                                                             </div>
                                                                         </div>
@@ -918,13 +929,21 @@
                                                                     <div class="form-group row">
                                                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Ekspedisi</label>
                                                                         <div class="col-lg-6 col-md-12 col-form-label">
-                                                                            <select name="ekspedisi" id="ekspedisi" class="form-control"></select>
+                                                                            <select name="ekspedisi" id="ekspedisi" class="form-control">
+                                                                                @if ($e->pesanan->ekspedisi_id != NULL || $e->pesanan->ekspedisi_id != "" )
+                                                                                <option
+                                                                                    value="{{ $e->pesanan->ekspedisi_id }}"
+                                                                                    selected>
+                                                                                    {{ $e->pesanan->Ekspedisi->nama }}
+                                                                                </option>
+                                                                            @endif
+                                                                            </select>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
                                                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
                                                                         <div class="col-lg-6 col-md-12 col-form-label">
-                                                                            <textarea class="form-control col-form-label" name="keterangan_pengiriman"></textarea>
+                                                                            <textarea class="form-control col-form-label" name="keterangan_pengiriman">{{ $e->pesanan->ket_kirim }}</textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1132,8 +1151,19 @@
                                                                                                 <input type="checkbox" class="custom-control-input produk_ppn" 
                                                                                                 id="produk_ppn{{ $produkpenjualan }}" 
                                                                                                 name="produk_ppn[{{ $produkpenjualan }}]" 
-                                                                                                value="{{ $f->ppn }}">
-                                                                                                <label class="custom-control-label produk_ppn_label" for="produk_ppn{{ $produkpenjualan }}">Non PPN</label>
+                                                                                                value="{{ $f->ppn }}"
+                                                                                                @if ($f->ppn == 1)
+                                                                                                    checked
+                                                                                                @endif
+                                                                                                >
+                                                                                                
+                                                                                                <label class="custom-control-label produk_ppn_label" for="produk_ppn{{ $produkpenjualan }}">
+                                                                                                @if ($f->ppn == 1)
+                                                                                                    PPN
+                                                                                                @else
+                                                                                                    Non PPN
+                                                                                                @endif
+                                                                                                </label>
                                                                                               </div>
                                                                                         </td>
                                                                                         <td hidden><input type="hidden"
@@ -1441,6 +1471,35 @@
                 $('#pills-pengiriman-tab').removeClass('disabled');
             }
 
+            const ekspedisi = (provinsi) => {
+                $('#ekspedisi').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + provinsi,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
+
             $('#jenis_paket').select2();
             var nopaketdb = "{{ str_replace(['AK1-', 'FKS-', 'KLK-'], '', $e->no_paket) }}";
             var nopaketubah = false;
@@ -1468,9 +1527,22 @@
             var produk_harga = false;
             let nama_customer = '';
             let provinsi_customer = null;
+            let provinsi_instansi = $('#provinsi').val();
+
+            let alamat_pengiriman = $('#alamat_pengiriman').val().replace(/\s/g, '');
+            let alamat_customer = $('#alamat_customer').val().replace(/\s/g, '');
+            let alamat_instansi = $('#alamatinstansi').val().replace(/\s/g, '');
+
+            if (alamat_pengiriman == alamat_customer) {
+                $('input[value="distributor"]').prop('checked', true);
+            } else if (alamat_pengiriman == alamat_instansi) {
+                $('input[value="instansi"]').prop('checked', true);
+                ekspedisi(provinsi_instansi)
+            } else {
+                $('input[value="lainnya"]').prop('checked', true);
+            }
 
             function checkvalidasi() {
-
                 $('#produktable').find('.penjualan_produk_id').each(function() {
                     if ($(this).val() != "") {
                         penjualan_produk_id = true;
@@ -1739,6 +1811,13 @@
                 }
             });
 
+            fetch('/api/customer/select/'+$('#customer_id').val())
+                .then(response => response.json())
+                .then(data => {
+                    nama_customer = data[0].nama;
+                    provinsi_customer = data[0].id_provinsi;
+                });
+
             $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function () {
                 let pilihan_pengiriman = $(this).val();
                 let provinsi_instansi = $('#provinsi').val();
@@ -1772,35 +1851,6 @@
                     ekspedisi(provinsi_instansi);
                 }
             });
-
-            const ekspedisi = (provinsi) => {
-                $('#ekspedisi').select2({
-                    placeholder: "Pilih Ekspedisi",
-                    ajax: {
-                        minimumResultsForSearch: 20,
-                        dataType: 'json',
-                        theme: "bootstrap",
-                        delay: 250,
-                        type: 'GET',
-                        url: '/api/logistik/ekspedisi/select/' + provinsi,
-                        data: function(params) {
-                            return {
-                                term: params.term
-                            }
-                        },
-                        processResults: function(data) {
-                            return {
-                                results: $.map(data, function(obj) {
-                                    return {
-                                        id: obj.id,
-                                        text: obj.nama
-                                    };
-                                })
-                            };
-                        },
-                    }
-                })
-            }
 
             if ('{{ $e->customer_id }}' == 484) {
                 var cust_id = 'belum';
