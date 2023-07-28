@@ -7,9 +7,6 @@
 
               margin :  70px 30px 70px 30px
             }
-
-
-}
             main {
                 position: absolute;
                 top: 198px;
@@ -52,7 +49,6 @@
                 font-family: sans-serif;
                 font: normal 13px ;
             }
-
             .vera {
         vertical-align: top;
     }

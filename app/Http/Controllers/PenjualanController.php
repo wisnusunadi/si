@@ -3492,7 +3492,7 @@ class PenjualanController extends Controller
     // Create
     public function create_penjualan(Request $request)
     {
-//    dd($request->all());
+    dd($request->all());
         if ($request->jenis_penjualan == 'ekatalog') {
             if ($request->status == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL")) {
                     return response()->json([
