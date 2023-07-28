@@ -1157,7 +1157,13 @@
                                                                                                 @endif
                                                                                                 >
                                                                                                 
-                                                                                                <label class="custom-control-label produk_ppn_label" for="produk_ppn{{ $produkpenjualan }}">Non PPN</label>
+                                                                                                <label class="custom-control-label produk_ppn_label" for="produk_ppn{{ $produkpenjualan }}">
+                                                                                                @if ($f->ppn == 1)
+                                                                                                    PPN
+                                                                                                @else
+                                                                                                    Non PPN
+                                                                                                @endif
+                                                                                                </label>
                                                                                               </div>
                                                                                         </td>
                                                                                         <td hidden><input type="hidden"
@@ -1465,12 +1471,33 @@
                 $('#pills-pengiriman-tab').removeClass('disabled');
             }
 
-            if ($('#alamat_pengiriman').val() == $('#alamat_customer').val()){
-                $('input[value="distributor"]').prop('checked', true);
-            } else if ($('#alamat_pengiriman').val() == $('#alamatinstansi').val()) {
-                $('input[value="instansi"]').prop('checked', true);
-            } else {
-                $('input[value="lainnya"]').prop('checked', true);
+            const ekspedisi = (provinsi) => {
+                $('#ekspedisi').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + provinsi,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
             }
 
             $('#jenis_paket').select2();
@@ -1500,9 +1527,22 @@
             var produk_harga = false;
             let nama_customer = '';
             let provinsi_customer = null;
+            let provinsi_instansi = $('#provinsi').val();
+
+            let alamat_pengiriman = $('#alamat_pengiriman').val().replace(/\s/g, '');
+            let alamat_customer = $('#alamat_customer').val().replace(/\s/g, '');
+            let alamat_instansi = $('#alamatinstansi').val().replace(/\s/g, '');
+
+            if (alamat_pengiriman == alamat_customer) {
+                $('input[value="distributor"]').prop('checked', true);
+            } else if (alamat_pengiriman == alamat_instansi) {
+                $('input[value="instansi"]').prop('checked', true);
+                ekspedisi(provinsi_instansi)
+            } else {
+                $('input[value="lainnya"]').prop('checked', true);
+            }
 
             function checkvalidasi() {
-
                 $('#produktable').find('.penjualan_produk_id').each(function() {
                     if ($(this).val() != "") {
                         penjualan_produk_id = true;
@@ -1771,6 +1811,13 @@
                 }
             });
 
+            fetch('/api/customer/select/'+$('#customer_id').val())
+                .then(response => response.json())
+                .then(data => {
+                    nama_customer = data[0].nama;
+                    provinsi_customer = data[0].id_provinsi;
+                });
+
             $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function () {
                 let pilihan_pengiriman = $(this).val();
                 let provinsi_instansi = $('#provinsi').val();
@@ -1804,35 +1851,6 @@
                     ekspedisi(provinsi_instansi);
                 }
             });
-
-            const ekspedisi = (provinsi) => {
-                $('#ekspedisi').select2({
-                    placeholder: "Pilih Ekspedisi",
-                    ajax: {
-                        minimumResultsForSearch: 20,
-                        dataType: 'json',
-                        theme: "bootstrap",
-                        delay: 250,
-                        type: 'GET',
-                        url: '/api/logistik/ekspedisi/select/' + provinsi,
-                        data: function(params) {
-                            return {
-                                term: params.term
-                            }
-                        },
-                        processResults: function(data) {
-                            return {
-                                results: $.map(data, function(obj) {
-                                    return {
-                                        id: obj.id,
-                                        text: obj.nama
-                                    };
-                                })
-                            };
-                        },
-                    }
-                })
-            }
 
             if ('{{ $e->customer_id }}' == 484) {
                 var cust_id = 'belum';
