@@ -7179,7 +7179,7 @@ class PenjualanController extends Controller
     public function cetak_surat_perintah($id)
     {
         $pesanan = Pesanan::find($id);
-        $customPaper = array(0,0,609.44,788.031);
+        $customPaper = array(0,0,605.44,788.031);
         foreach($pesanan->DetailPesanan as $key => $k){
             $pesanan_arr[$key] = array(
                 'no' => $key + 1,

@@ -953,7 +953,7 @@
                                                                         <label class="form-check-label" for="no">Tidak
                                                                             tersedia</label>
                                                                     </div>
-        
+
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row hide" id="do_detail_no">
@@ -1152,7 +1152,7 @@
                                                                         </td>
                                                                         <td>
                                                                             <div class="custom-control custom-switch">
-                                                                                <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                                                                                <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[0]" value="0">
                                                                                 <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
                                                                               </div>
                                                                         </td>
@@ -1260,7 +1260,7 @@
                                                                         </td>
                                                                         <td>
                                                                             <div class="custom-control custom-switch">
-                                                                                <input type="checkbox" class="custom-control-input part_ppn" id="part_ppn0" name="part_ppn[]" value="0">
+                                                                                <input type="checkbox" class="custom-control-input part_ppn" id="part_ppn0" name="part_ppn[0]" value="0">
                                                                                 <label class="custom-control-label part_ppn_label" for="part_ppn0">Non PPN</label>
                                                                               </div>
                                                                         </td>
@@ -1353,7 +1353,7 @@
                                                                         </td>
                                                                         <td>
                                                                             <div class="custom-control custom-switch">
-                                                                                <input type="checkbox" class="custom-control-input jasa_ppn" id="jasa_ppn0" name="jasa_ppn[]" value="0">
+                                                                                <input type="checkbox" class="custom-control-input jasa_ppn" id="jasa_ppn0" name="jasa_ppn[0]" value="0">
                                                                                 <label class="custom-control-label jasa_ppn_label" for="jasa_ppn0">Non PPN</label>
                                                                               </div>
                                                                         </td>
@@ -1603,7 +1603,7 @@
                     } else {
                         $('#pills-instansi-tab').addClass('disabled');
                     }
-                } 
+                }
                 else {
                     if ((!$("#no_urut").hasClass('is-invalid')) && ($("#no_paket")
                             .val() != "" && !$("#no_paket").hasClass('is-invalid')) && $(
@@ -2621,7 +2621,7 @@
                 $('.penjualan_produk_id').select2({
                     placeholder: "Pilih Produk",
                     ajax: {
-                        minimumResultsForSearch: 20,    
+                        minimumResultsForSearch: 20,
                         url: url,
                         type: 'GET',
                         dataType: 'json',
@@ -3007,7 +3007,7 @@
                     </td>
                     <td>
                     <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                            <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[0]" value="0">
                             <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
                             </div>
                     </td>
@@ -3178,7 +3178,7 @@
                 </td>
                 <td>
                 <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                        <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[0]" value="0">
                         <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
                         </div>
                 </td>
@@ -3272,10 +3272,10 @@
                 </td>
                 <td>
                     <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input part_ppn" id="part_ppn0" name="part_ppn[]" value="0">
+                            <input type="checkbox" class="custom-control-input part_ppn" id="part_ppn0" name="part_ppn[0]" value="0">
                             <label class="custom-control-label part_ppn_label" for="part_ppn0">Non PPN</label>
                     </div>
-                </td>    
+                </td>
                 <td>
                     <a id="removerowpart"><i class="fas fa-minus" style="color: red"></i></a>
                 </td>
@@ -3343,7 +3343,7 @@
                 </td>
                 <td>
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input jasa_ppn" id="jasa_ppn0" name="jasa_ppn[]" value="0">
+                        <input type="checkbox" class="custom-control-input jasa_ppn" id="jasa_ppn0" name="jasa_ppn[0]" value="0">
                         <label class="custom-control-label jasa_ppn_label" for="jasa_ppn0">Non PPN</label>
                         </div>
                 </td>
@@ -3541,6 +3541,9 @@
                 // add placeholder
                 $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
 
+                $('#alamat_pengiriman').removeClass('is-invalid');
+                $('#msg_alamat_pengiriman').text('');
+
                 const checkValidasi = (msg) => {
                     $('#alamat_pengiriman').addClass('is-invalid');
                     $('#msg_alamat_pengiriman').text(msg);
@@ -3552,6 +3555,7 @@
                     $('#alamat_pengiriman').val($('#alamat').val());
                     provinsi_customer ? ekspedisi(provinsi_customer) : checkValidasi('Provinsi Customer harus diisi');
                 }else if (pilihan_pengiriman == 'instansi'){
+                    console.log(provinsi_instansi);
                     $('#perusahaan_pengiriman').val($('#satuan_kerja').val());
                     $('#alamat_pengiriman').val($('#alamatinstansi').val());
                     provinsi_instansi != 'NULL' ? ekspedisi(provinsi_instansi) : checkValidasi('Provinsi Instansi harus diisi');
@@ -3574,6 +3578,9 @@
                 $('#alamat_pengiriman_nonakn').removeClass('is-invalid');
                 // add placeholder
                 $('#alamat_pengiriman_nonakn').attr('placeholder', 'Masukkan Alamat Pengiriman');
+
+                $('#alamat_pengiriman_nonakn').removeClass('is-invalid');
+                $('#msg_alamat_pengiriman_nonakn').text('');
 
                 const checkValidasi = (msg) => {
                     $('#alamat_pengiriman_nonakn').addClass('is-invalid');

@@ -3,9 +3,18 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:400,600,700,800">
         <style>
             /** Define the margins of your page **/
+            @media print {
+                body {
+                    margin-left: 3cm; /* Sesuaikan angka ini sesuai dengan kebutuhan Anda */
+                }
+            }
             @page {
 
               margin :  70px 30px 70px 30px
+            }
+
+            .text-center {
+                text-align: center;
             }
             main {
                 position: absolute;
@@ -110,7 +119,7 @@
                       <br>
                       <table border="0"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                           <tr>
-                              <td class="vera"   width="23%">Alamat Pengiriman :</td>
+                              <td class="vera"   width="23%">Alamat Pengiriman </td>
                               <td style=" border: 1px solid;"><b>{{$pesanan->Ekatalog->instansi}}</b></td>
                             </tr>
                           <tr>
@@ -124,39 +133,39 @@
                   <td style="text-align: left;" class="vera "  width="31%">
                       <table border="1"  style="table-layout: fixed; width: 100%; border-collapse: collapse;  ">
                           <tr>
-                              <td style=" border: 1px solid;" class="vera">
+                              <td style=" border: 1px solid;" class="vera ">
                                   <u>No SO</u> <br>
-                                  {{$pesanan->so}}
+                                 <div class="text-center">{{$pesanan->so}}</div>
                               </td>
-                              <td style=" border: 1px solid;" class="vera">
+                              <td style=" border: 1px solid;" class="vera ">
                                   <u>Tgl SO</u><br>
-                                  {{$pesanan->tgl_po}}
+                                 <div class="text-center">{{$pesanan->tgl_po}}</div>
                               </td>
                           </tr>
                           <tr>
-                              <td style=" border: 1px solid; " class="vera ">
+                              <td style=" border: 1px solid; " class="vera">
                                   <u>No PO</u> <br>
-                                  {{$pesanan->no_po}}
+                                 <div class="text-center">{{$pesanan->no_po}}</div>
                               </td>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>Tgl PO</u><br>
-                                  {{$pesanan->tgl_po}}
+                                <div class="text-center">{{$pesanan->tgl_po}}</div>
                               </td>
                           </tr>
                           <tr>
-                              <td style=" border: 1px solid;" class="vera ">
-                                  <u>Kemasan</u> <br>
-                                Non Peti
-                              </td>
                               <td style=" border: 1px solid;" class="vera">
+                                  <u>Kemasan</u> <br>
+                               <div class="text-center">Non Peti</div>
+                              </td>
+                              <td style=" border: 1px solid;" class="vera ">
                                   <u>Tgl Pengiriman</u><br>
-                                 23/12/2023
+                                <div class="text-center">23/12/2023</div>
                               </td>
                           </tr>
                           <tr>
                               <td style=" border: 1px solid;" class="vera " colspan="2">
                                   <u>Ekspedisi</u> <br>
-                                  KI 8 (CV. KARYA INDAH DELAPAN)
+                                 <div class="text-center">KI 8 (CV. KARYA INDAH DELAPAN)</div>
                               </td>
 
                           </tr>

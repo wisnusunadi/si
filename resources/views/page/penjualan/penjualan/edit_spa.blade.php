@@ -1735,7 +1735,7 @@
                 </td>
                 <td>
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                        <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[0]" value="0">
                         <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
                     </div>
                 </td>
