@@ -1751,6 +1751,7 @@
                 $('#alamat_pengiriman').removeClass('is-invalid');
                 // add placeholder
                 $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
+                $('#msg_alamat_pengiriman').text('');
 
                 const checkValidasi = (msg) => {
                     $('#alamat_pengiriman').addClass('is-invalid');

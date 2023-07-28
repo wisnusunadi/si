@@ -2171,6 +2171,7 @@
                 $('#alamat_pengiriman_nonakn').val('');
                 $('#alamat_pengiriman_nonakn').removeClass('is-invalid');
                 $('#alamat_pengiriman_nonakn').attr('placeholder', 'Masukkan Alamat Pengiriman');
+                $('#msg_alamat_pengiriman_nonakn').text('');
 
                 const checkValidasi = (msg) => {
                     $('#alamat_pengiriman_nonakn').addClass('is-invalid');

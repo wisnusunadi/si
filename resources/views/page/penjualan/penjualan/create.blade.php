@@ -3520,7 +3520,8 @@
                 if ($(this).val() != "") {
                     $("#msgprovinsi").text("");
                     $("#provinsi").removeClass('is-invalid');
-                    $('.pills')
+                    $('#alamat_pengiriman').removeClass('is-invalid');
+                    $('#msg_alamat_pengiriman').text("");
                     checkvalidasi();
                 } else if ($(this).val() == "") {
                     $("#msgprovinsi").text("Provinsi harus diisi");
