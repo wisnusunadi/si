@@ -109,22 +109,22 @@
 
                                 :
                             </td>
-                              <td style=" border: 1px solid;"><b>{{$pesanan->Ekatalog->Customer->nama}}</b></td>
+                              <td style=" border: 1px solid;"><b>{{$data['customer']}}</b></td>
                           </tr>
                           <tr>
                               <td></td>
-                              <td style=" border: 1px solid;">{{$pesanan->Ekatalog->Customer->alamat}}</td>
+                              <td style=" border: 1px solid;">{{$data['alamat_customer']}}</td>
                           </tr>
                       </table>
                       <br>
                       <table border="0"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                           <tr>
                               <td class="vera"   width="23%">Alamat Pengiriman </td>
-                              <td style=" border: 1px solid;"><b>{{$pesanan->Ekatalog->instansi}}</b></td>
+                              <td style=" border: 1px solid;"><b>{{$data['tujuan_kirim']}}</b></td>
                             </tr>
                           <tr>
                               <td ></td>
-                              <td style=" border: 1px solid;">{{$pesanan->Ekatalog->alamat}}</td>
+                              <td style=" border: 1px solid;">{{$data['alamat_kirim']}}</td>
                           </tr>
 
                       </table>
@@ -135,37 +135,37 @@
                           <tr>
                               <td style=" border: 1px solid;" class="vera ">
                                   <u>No SO</u> <br>
-                                 <div class="text-center">{{$pesanan->so}}</div>
+                                 <div class="text-center">{{$data['so']}}</div>
                               </td>
                               <td style=" border: 1px solid;" class="vera ">
                                   <u>Tgl SO</u><br>
-                                 <div class="text-center">{{$pesanan->tgl_po}}</div>
+                                 <div class="text-center">{{$data['tgl_so']}}</div>
                               </td>
                           </tr>
                           <tr>
                               <td style=" border: 1px solid; " class="vera">
                                   <u>No PO</u> <br>
-                                 <div class="text-center">{{$pesanan->no_po}}</div>
+                                 <div class="text-center">{{$data['no_po']}}</div>
                               </td>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>Tgl PO</u><br>
-                                <div class="text-center">{{$pesanan->tgl_po}}</div>
+                                <div class="text-center">{{$data['tgl_po']}}</div>
                               </td>
                           </tr>
                           <tr>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>Kemasan</u> <br>
-                               <div class="text-center">Non Peti</div>
+                               <div class="text-center">{{$data['kemasan']}}</div>
                               </td>
                               <td style=" border: 1px solid;" class="vera ">
                                   <u>Tgl Pengiriman</u><br>
-                                <div class="text-center">23/12/2023</div>
+                                <div class="text-center">{{$data['tgl_kirim']}}</div>
                               </td>
                           </tr>
                           <tr>
                               <td style=" border: 1px solid;" class="vera " colspan="2">
                                   <u>Ekspedisi</u> <br>
-                                 <div class="text-center">KI 8 (CV. KARYA INDAH DELAPAN)</div>
+                                 <div class="text-center">{{$data['ekspedisi']}}</div>
                               </td>
 
                           </tr>
@@ -178,8 +178,7 @@
         <!-- Wrap the content of your PDF inside a main tag -->
         <main>
             {{-- Hal -1 --}}
-
-            @foreach ($data as $key_page => $page)
+            @foreach ($data['produk'] as $key_page => $page)
             <table id="invoice-table" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; ">
                 <thead class="border-collapse: collapse; border-left: 1px solid black; border-left: 1px solid black">
                    <tr>
