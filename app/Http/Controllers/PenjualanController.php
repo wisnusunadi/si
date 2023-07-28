@@ -3492,11 +3492,16 @@ class PenjualanController extends Controller
     // Create
     public function create_penjualan(Request $request)
     {
-    dd($request->all());
+    // dd($request->all());
         if ($request->jenis_penjualan == 'ekatalog') {
-            if ($request->status == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL")) {
+            if ($request->status == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL") ) {
                     return response()->json([
                         'message' => 'Cek Form Kembali',
+                    ], 500);
+            }
+            if ($request->status == 'sepakat' && ( $request->perusahaan_pengiriman_ekat == NULL || $request->alamat_pengiriman_ekat == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL) ) {
+                    return response()->json([
+                        'message' => 'Ceks Form Kembali',
                     ], 500);
             }
             //dd($request);
@@ -3554,6 +3559,11 @@ class PenjualanController extends Controller
                 'tgl_do' => $tgl_do,
                 'ket' =>  $ket_po,
                 'log_id' => $log_id,
+                'tujuan_kirim' => $request->perusahaan_pengiriman_ekat,
+                'alamat_kirim' => $request->alamat_pengiriman_ekat,
+                'kemasan' => $request->kemasan,
+                'ekspedisi_id' => $request->ekspedisi,
+                'ket_kirim' => $request->keterangan_pengiriman,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ]);
@@ -3606,6 +3616,7 @@ class PenjualanController extends Controller
                             'detail_rencana_penjualan_id' => $request->rencana_id[$i],
                             'jumlah' => $request->produk_jumlah[$i],
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                            'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                             'ongkir' => $ongkir[$i],
                         ]);
 
@@ -3637,6 +3648,7 @@ class PenjualanController extends Controller
                                 'detail_rencana_penjualan_id' => $request->rencana_id[$i],
                                 'jumlah' => $request->produk_jumlah[$i],
                                 'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                                'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                                 'ongkir' => $ongkir[$i],
                             ]);
 
@@ -3672,6 +3684,7 @@ class PenjualanController extends Controller
                 ], 500);
             }
         } else if ($request->jenis_penjualan == 'spa' || $request->jenis_penjualan == 'spb') {
+if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NULL &  $request->kemasan != NULL & $request->ekspedisi != NULL){
             $count_array = count($request->jenis_pen);
             if (in_array("jasa", $request->jenis_pen) && $count_array == 1) {
                 $k = '11';
@@ -3690,6 +3703,11 @@ class PenjualanController extends Controller
                 'no_do' => $request->no_do,
                 'tgl_do' => $request->tanggal_do,
                 'ket' =>  $request->keterangan,
+                'tujuan_kirim' => $request->perusahaan_pengiriman,
+                'alamat_kirim' => $request->alamat_pengiriman,
+                'kemasan' => $request->kemasan,
+                'ekspedisi_id' => $request->ekspedisi,
+                'ket_kirim' => $request->keterangan_pengiriman,
                 'log_id' => $k
             ]);
             $x = $pesanan->id;
@@ -3716,6 +3734,7 @@ class PenjualanController extends Controller
                             'pesanan_id' => $x,
                             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                             'jumlah' => $request->produk_jumlah[$i],
+                            'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => 0,
                         ]);
@@ -3738,6 +3757,7 @@ class PenjualanController extends Controller
                             'm_sparepart_id' => $request->part_id[$i],
                             'jumlah' => $request->part_jumlah[$i],
                             'harga' => str_replace('.', "", $request->part_harga[$i]),
+                            'ppn' => isset($request->part_ppn[$i]) ? $request->part_ppn[$i] : 0,
                             'ongkir' => 0,
                         ]);
                         if (!$dspb) {
@@ -3752,6 +3772,7 @@ class PenjualanController extends Controller
                             'm_sparepart_id' => $request->jasa_id[$i],
                             'jumlah' => 1,
                             'harga' => str_replace('.', "", $request->jasa_harga[$i]),
+                            'ppn' => isset($request->jasa_ppn[$i]) ? $request->jasa_ppn[$i] : 0,
                             'ongkir' => 0,
                         ]);
 
@@ -3782,6 +3803,11 @@ class PenjualanController extends Controller
                 ], 500);
             }
         }
+    }else{
+        return response()->json([
+            'message' => 'Cek Form Kembali',
+        ], 500);
+    }
     }
 
     public function view_so_ekatalog($value)

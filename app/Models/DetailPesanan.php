@@ -9,7 +9,7 @@ class DetailPesanan extends Model
 {
     protected $connection = 'erp';
     protected $table = 'detail_pesanan';
-    protected $fillable = ['pesanan_id', 'penjualan_produk_id', 'detail_rencana_penjualan_id', 'jumlah', 'harga', 'ongkir'];
+    protected $fillable = ['pesanan_id', 'penjualan_produk_id', 'detail_rencana_penjualan_id', 'jumlah', 'harga', 'ongkir','ppn'];
 
     public function Pesanan()
     {

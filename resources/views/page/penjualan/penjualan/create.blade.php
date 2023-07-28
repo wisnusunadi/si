@@ -812,9 +812,9 @@
                                                                                 <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="lainnya" value="lainnya" />
                                                                                 <label for="lainnya" class="form-check-label">Lainnya</label>
                                                                             </div>
-                                                                                <input type="text" name="perusahaan_pengiriman" id="perusahaan_pengiriman" class="form-control col-form-label" readonly>
+                                                                                <input type="text" name="perusahaan_pengiriman_ekat" id="perusahaan_pengiriman" class="form-control col-form-label" readonly>
                                                                                 <input type="text"
-                                                                                    class="form-control col-form-label mt-2" name="alamat_pengiriman" id="alamat_pengiriman" readonly/>
+                                                                                    class="form-control col-form-label mt-2" name="alamat_pengiriman_ekat" id="alamat_pengiriman" readonly/>
                                                                                 <div class="invalid-feedback"
                                                                                     id="msg_alamat_pengiriman">
                                                                                 </div>
@@ -1007,7 +1007,7 @@
                                                                             <input type="radio" class="form-check-input" name="pilihan_pengiriman_nonakn" id="lainnya" value="lainnya" />
                                                                             <label for="lainnya" class="form-check-label">Lainnya</label>
                                                                         </div>
-                                                                        <input type="text" name="perusahaan_pengiriman_nonakn" id="perusahaan_pengiriman_nonakn" class="form-control col-form-label" readonly>
+                                                                        <input type="text" name="perusahaan_pengiriman" id="perusahaan_pengiriman_nonakn" class="form-control col-form-label" readonly>
                                                                         <input type="text"
                                                                             class="form-control col-form-label mt-2 alamat_pengiriman_nonakn" name="alamat_pengiriman" id="alamat_pengiriman_nonakn" readonly/>
                                                                         <div class="invalid-feedback"
