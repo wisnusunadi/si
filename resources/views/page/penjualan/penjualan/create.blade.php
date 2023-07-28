@@ -1431,12 +1431,14 @@
                     });
                 },
                 error: function(xhr, status, error, response) {
+                    $('#btntambah').attr('disabled', false);
+                    $('#btntambah').html('Simpan');
                     swal.fire(
                         'Gagal',
                         'Cek Form Kembali',
                         'error'
                     );
-                }
+                },
             });
           });
         $(function() {
