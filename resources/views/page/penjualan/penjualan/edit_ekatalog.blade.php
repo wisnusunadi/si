@@ -894,8 +894,11 @@
                                                                                 <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="lainnya" value="lainnya" />
                                                                                 <label for="lainnya" class="form-check-label">Lainnya</label>
                                                                             </div>
-                                                                            <input type="text" name="perusahaan_pengiriman" id="perusahaan_pengiriman" class="form-control col-form-label" readonly>
+                                                                            <input type="text" name="perusahaan_pengiriman"
+                                                                            value="{{ $e->pesanan->tujuan_kirim }}"
+                                                                            id="perusahaan_pengiriman" class="form-control col-form-label" readonly>
                                                                             <input type="text"
+                                                                            value="{{ $e->pesanan->alamat_kirim }}"
                                                                                 class="form-control col-form-label mt-2" name="alamat_pengiriman" id="alamat_pengiriman" readonly/>
                                                                             <div class="invalid-feedback"
                                                                                 id="msg_alamat_pengiriman">
@@ -906,11 +909,19 @@
                                                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
                                                                         <div class="col-lg-6 col-md-12 col-form-label">
                                                                             <div class="form-check form-check-inline">
-                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti" />
+                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti" 
+                                                                                @if ($e->pesanan->kemasan == "peti")
+                                                                                    checked
+                                                                                @endif
+                                                                                />
                                                                                 <label for="kemasan0" class="form-check-label">PETI</label>
                                                                             </div>
                                                                             <div class="form-check form-check-inline">
-                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti" />
+                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti" 
+                                                                                @if ($e->pesanan->kemasan == "nonpeti")
+                                                                                    checked
+                                                                                @endif
+                                                                                />
                                                                                 <label for="kemasan1" class="form-check-label">NON PETI</label>
                                                                             </div>
                                                                         </div>
@@ -918,13 +929,21 @@
                                                                     <div class="form-group row">
                                                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Ekspedisi</label>
                                                                         <div class="col-lg-6 col-md-12 col-form-label">
-                                                                            <select name="ekspedisi" id="ekspedisi" class="form-control"></select>
+                                                                            <select name="ekspedisi" id="ekspedisi" class="form-control">
+                                                                                @if ($e->pesanan->ekspedisi_id != NULL || $e->pesanan->ekspedisi_id != "" )
+                                                                                <option
+                                                                                    value="{{ $e->pesanan->ekspedisi_id }}"
+                                                                                    selected>
+                                                                                    {{ $e->pesanan->Ekspedisi->nama }}
+                                                                                </option>
+                                                                            @endif
+                                                                            </select>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
                                                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
                                                                         <div class="col-lg-6 col-md-12 col-form-label">
-                                                                            <textarea class="form-control col-form-label" name="keterangan_pengiriman"></textarea>
+                                                                            <textarea class="form-control col-form-label" name="keterangan_pengiriman">{{ $e->pesanan->ket_kirim }}</textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1132,7 +1151,12 @@
                                                                                                 <input type="checkbox" class="custom-control-input produk_ppn" 
                                                                                                 id="produk_ppn{{ $produkpenjualan }}" 
                                                                                                 name="produk_ppn[{{ $produkpenjualan }}]" 
-                                                                                                value="{{ $f->ppn }}">
+                                                                                                value="{{ $f->ppn }}"
+                                                                                                @if ($f->ppn == 1)
+                                                                                                    checked
+                                                                                                @endif
+                                                                                                >
+                                                                                                
                                                                                                 <label class="custom-control-label produk_ppn_label" for="produk_ppn{{ $produkpenjualan }}">Non PPN</label>
                                                                                               </div>
                                                                                         </td>
@@ -1439,6 +1463,14 @@
             // check input[type="radio"][name="status_akn"]:checked == sepakat
             if ($('input[type="radio"][name="status_akn"]:checked').val() == "sepakat") {
                 $('#pills-pengiriman-tab').removeClass('disabled');
+            }
+
+            if ($('#alamat_pengiriman').val() == $('#alamat_customer').val()){
+                $('input[value="distributor"]').prop('checked', true);
+            } else if ($('#alamat_pengiriman').val() == $('#alamatinstansi').val()) {
+                $('input[value="instansi"]').prop('checked', true);
+            } else {
+                $('input[value="lainnya"]').prop('checked', true);
             }
 
             $('#jenis_paket').select2();

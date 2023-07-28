@@ -15,6 +15,12 @@ class Pesanan extends Model
     {
         return $this->hasOne(Ekatalog::class);
     }
+
+    public function Ekspedisi()
+    {
+        return $this->belongsTo(Ekspedisi::class, 'ekspedisi_id');
+    }
+    
     public function Spa()
     {
         return $this->hasOne(Spa::class);
