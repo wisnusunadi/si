@@ -1431,12 +1431,14 @@
                     });
                 },
                 error: function(xhr, status, error, response) {
+                    $('#btntambah').attr('disabled', false);
+                    $('#btntambah').html('Simpan');
                     swal.fire(
                         'Gagal',
                         'Cek Form Kembali',
                         'error'
                     );
-                }
+                },
             });
           });
         $(function() {
@@ -3520,7 +3522,8 @@
                 if ($(this).val() != "") {
                     $("#msgprovinsi").text("");
                     $("#provinsi").removeClass('is-invalid');
-                    $('.pills')
+                    $('#alamat_pengiriman').removeClass('is-invalid');
+                    $('#msg_alamat_pengiriman').text("");
                     checkvalidasi();
                 } else if ($(this).val() == "") {
                     $("#msgprovinsi").text("Provinsi harus diisi");
