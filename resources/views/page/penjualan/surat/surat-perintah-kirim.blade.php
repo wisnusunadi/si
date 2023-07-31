@@ -178,7 +178,7 @@
         <!-- Wrap the content of your PDF inside a main tag -->
         <main>
             {{-- Hal -1 --}}
-            @foreach ($data['produk'] as $key_page => $page)
+            @foreach ($data['item'] as $key_page => $page)
             <table id="invoice-table" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; ">
                 <thead class="border-collapse: collapse; border-left: 1px solid black; border-left: 1px solid black">
                    <tr>
@@ -203,25 +203,25 @@
                    </tr>
                 </thead>
                 <tbody>
-                    @foreach ($page as $key_produk => $produk)
+                    @foreach ($page as $key_produk => $item)
                     <tr>
                         <td class="vera align-center" style="border-right:    1px solid black ; " >
-                        {{$produk['no']}}
+                        {{$item['no']}}
                         </td>
                         <td class="vera align-center" style="border-right:    1px solid black ; ">
-                            {{$produk['kode']}}
+                            {{$item['kode']}}
                         </td>
                         <td class="vera align-center" style="border-right:    1px solid black ; ">
-                            {{$produk['nama']}}
+                            {{$item['nama']}}
                         </td>
                         <td class="vera align-center" style="border-right:    1px solid black ; ">
-                            {{$produk['jumlah']}}.00
+                            {{$item['jumlah']}}.00
                         </td>
                         <td class="vera align-center" style="border-right:    1px solid black ; ">
                          UNIT
                         </td>
                         <td class="vera align-center">
-                        PPn
+                            {{$item['pajak']}}
                         </td>
                       </tr>
                       @endforeach
@@ -236,9 +236,9 @@
                     Keterangan
                   </td>
                   <td class="align-left"  style=" border: 1px solid;">
-                    {{$produk['no_paket']}}
+                    {{$data['no_paket']}}
                     <br>
-                    {{$produk['ket']}}
+                    {{$data['ket_paket']}}
                   </td>
                 </tr>
             </table>
@@ -274,7 +274,7 @@
                  <tr>
                 <tr>
                   <td class="align-right" colspan="2">
-                <i>No Dokumen : SPA-FR/01/asas/asas/asas/2023</i>
+                <i>No Dokumen : SPA-FR/01/asomeseasomese/2023</i>
                   </td>
 
                 </tr>
@@ -286,7 +286,7 @@
                 <table id="tabel" class="table table-hover styled-table table-striped table_footer" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                     <tr>
                       <td class="align-right" colspan="2">
-                    <i>No Dokumen : SPA-FR/01/asas/asas/asas/2023</i>
+                    <i>No Dokumen : SPA-FR/01/asomeseasomese/2023</i>
                       </td>
 
                     </tr>

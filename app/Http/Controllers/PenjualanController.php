@@ -3416,6 +3416,13 @@ class PenjualanController extends Controller
                                     ';
                                 }
                             }
+                            $return .= '
+                            <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
+                                <button class="dropdown-item" type="button" >
+                                <i class="fas fa-print"></i>
+                                Print
+                                </button>
+                            </a>';
                             $jumkirim = ($data->ckirimprd + $data->ckirimpart);
                             if ($jumkirim <= 0) {
                                 $return .= '<hr class="separator">
@@ -7213,80 +7220,71 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
     {
         $pesanan = Pesanan::find($id);
         $customPaper = array(0,0,605.44,788.031);
-        if ($pesanan->Ekatalog){
-            foreach($pesanan->DetailPesanan as $key => $k){
-                $pesanan_arr[$key] = array(
-                    'no' => $key + 1,
-                    'kode' => '-',
-                    'nama' => $k->penjualanproduk->nama_alias,
-                    'jumlah' => $k->jumlah,
-                    'ket' => $pesanan->Ekatalog->ket,
-                    'pajak' => 'ppn',
-                    'no_paket' => $pesanan->Ekatalog->no_paket,
-                );
-            }
-           $data = array_chunk($pesanan_arr, 12);
 
-           $header = array (
-            'customer' => $pesanan->Ekatalog->Customer->nama,
-            'alamat_customer' =>  $pesanan->Ekatalog->Customer->alamat,
-            'tujuan_kirim' => $pesanan->tujuan_kirim != NULL ? $pesanan->tujuan_kirim : '-',
-            'alamat_kirim' => $pesanan->alamat_kirim != NULL ?  $pesanan->alamat_kirim : '-',
-            'so' =>  $pesanan->so,
-            'tgl_so' =>   Carbon::parse($pesanan->created_at)->format('d M Y'),
-            'no_po' =>  $pesanan->no_po,
-            'tgl_po' => Carbon::parse($pesanan->tgl_po)->format('d M Y'),
-            'kemasan' =>  $pesanan->kemasan,
-            'tgl_kirim' =>  Carbon::parse($pesanan->tgl_do)->format('d M Y'),
-            'ekspedisi' =>  $pesanan->ekspedisi_id != NULL ? $pesanan->Ekspedisi->nama  : '-',
-            'ket_kirim' =>  $pesanan->ket_kirim,
-            'ket_paket' =>  $pesanan->Ekatalog->ket,
-            'produk' => $data
-        );
-        }
 
-        if ($pesanan->Spa){
-            foreach($pesanan->DetailPesanan as $key => $prd){
-                $pesanan_prd[$key] = array(
-                    'no' => $key + 1,
-                    'kode' => '-',
-                    'nama' => $prd->penjualanproduk->nama_alias,
-                    'jumlah' => $prd->jumlah,
-                    'ket' => $pesanan->Spa->ket,
-                    'pajak' => 'ppn'
-                );
-            }
-
-            if(count($pesanan_prd) > 0){
-                $count = count($pesanan_prd);
+            if($pesanan->DetailPesanan->isNotEmpty()){
+                foreach($pesanan->DetailPesanan as $key => $prd){
+                    $pesanan_prd[$key] = array(
+                        'no' => $key + 1 ,
+                        'kode' => '-',
+                        'nama' => $prd->penjualanproduk->nama_alias,
+                        'jumlah' => $prd->jumlah,
+                        'pajak' => $prd->ppn == '1' ? 'PPn' : '-'
+                    );
+                }
             }else{
-                $count = 0;
+                $pesanan_prd = array();
             }
 
+        if($pesanan->DetailPesananPart->isNotEmpty()){
             foreach($pesanan->DetailPesananPart as $key => $part){
                 $pesanan_part[$key] = array(
-                    'no' => $key + $count + 1,
-                    'kode' => '-',
+                    'no' => count($pesanan_prd) + $key + 1,
+                    'kode' => $part->Sparepart->kode,
                     'nama' => $part->Sparepart->nama,
                     'jumlah' => $part->jumlah,
-                    'ket' => $pesanan->Spa->ket,
-                    'pajak' => 'ppn',
+                    'pajak' => $part->ppn == '1' ? 'PPn' : '-'
                 );
             }
+        }else{
+            $pesanan_part = array();
+        }
 
-            if(count($pesanan_prd) > 0 && count($pesanan_part) < 0){
-                $data =  $pesanan_prd;
-            }else if (count($pesanan_part) > 0  && count($pesanan_prd) < 0) {
-                $data =  $pesanan_part;
+
+
+            if(count($pesanan_prd) > 0 && count($pesanan_part) <= 0){
+                $data =  array_chunk($pesanan_prd, 12);
+            }else if (count($pesanan_part) > 0  && count($pesanan_prd) <= 0) {
+                $data = array_chunk($pesanan_part, 12);
             }else if (count($pesanan_prd) > 0 && count($pesanan_part) > 0){
-                $data = array_merge($pesanan_prd, $pesanan_part);
+                $merge = array_merge($pesanan_prd, $pesanan_part);
+                $data = array_chunk($merge, 12);
             }
 
+
+            if ($pesanan->Ekatalog){
+                $cs = $pesanan->Ekatalog->Customer->nama;
+                $alamat_cs = $pesanan->Ekatalog->Customer->alamat;
+                $ket_paket =$pesanan->Ekatalog->ket;
+                $no_paket = $pesanan->Ekatalog->no_paket;
+
+            }elseif($pesanan->Spa){
+                $cs = $pesanan->Spa->Customer->nama;
+                $alamat_cs = $pesanan->Spa->Customer->alamat;
+                $ket_paket =$pesanan->Spa->ket;
+                $no_paket = '-';
+
+            }elseif($pesanan->Spb){
+                $cs = $pesanan->Spb->Customer->nama;
+                $alamat_cs = $pesanan->Spb->Customer->alamat;
+                $ket_paket =$pesanan->Spb->ket;
+                $no_paket = '-';
+            }
 
 
            $header = array (
-            'customer' => $pesanan->Spa->Customer->nama,
-            'alamat_customer' =>  $pesanan->Spa->Customer->alamat,
+            'customer' => $cs,
+            'alamat_customer' =>   $alamat_cs,
             'tujuan_kirim' => $pesanan->tujuan_kirim != NULL ? $pesanan->tujuan_kirim : '-',
             'alamat_kirim' => $pesanan->alamat_kirim != NULL ?  $pesanan->alamat_kirim : '-',
             'so' =>  $pesanan->so,
@@ -7297,13 +7295,14 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
             'tgl_kirim' =>  Carbon::parse($pesanan->tgl_do)->format('d M Y'),
             'ekspedisi' =>   $pesanan->ekspedisi_id != NULL ? $pesanan->Ekspedisi->nama  : '-',
             'ket_kirim' =>  $pesanan->ket_kirim,
-            'ket_paket' =>  $pesanan->Spa->ket,
-            'no_paket' => '-',
-            'produk' => $data
+            'ket_paket' =>  $ket_paket,
+            'no_paket' => $no_paket,
+            'item' => $data
         );
 
-        }
-        return $header;
+
+
+       // return (count($data));
 
         $pdf = PDF::loadView('page.penjualan.surat.surat-perintah-kirim', ['data' => $header,'pesanan'=> $pesanan,'count_page' => count($data)])->setOptions(['defaultFont' => 'sans-serif'])->setPaper($customPaper);
         return $pdf->stream('');
