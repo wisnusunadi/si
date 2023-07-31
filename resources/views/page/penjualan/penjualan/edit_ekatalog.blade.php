@@ -1457,6 +1457,8 @@
                 },
                 error: function(xhr, status, error, response) {
                     // console.log(response)
+                    $('#btnsimpan').attr('disabled', false);
+                    $('#btnsimpan').html('Simpan');
                     swal.fire(
                         'Gagal',
                         'Cek Form Kembali',
