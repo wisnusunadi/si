@@ -3515,7 +3515,7 @@ class PenjualanController extends Controller
             }
             if ($request->status == 'sepakat' && ( $request->perusahaan_pengiriman_ekat == NULL || $request->alamat_pengiriman_ekat == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL) ) {
                     return response()->json([
-                        'message' => 'Ceks Form Kembali',
+                        'message' => 'Cek Form Kembali',
                     ], 500);
             }
             //dd($request);
@@ -3937,20 +3937,25 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
     }
     public function update_ekatalog(Request $request, $id)
     {
-        // dd($request->all());
+        //dd($request->all());
         if ($request->status_akn == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL")) {
             return response()->json([
                 'message' => 'Cek Form Kembali',
             ], 500);
     }
+
+    if ($request->status == 'sepakat' && ( $request->perusahaan_pengiriman == NULL || $request->alamat_pengiriman == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL) ) {
+        return response()->json([
+            'message' => 'Cek Form Kembali',
+        ], 500);
+}
+
         // echo json_encode($request->all());
         if ($request->namadistributor == 'belum') {
             $c_id = '484';
         } else {
             $c_id = $request->customer_id;
         }
-
-
 
         $ekatalog = Ekatalog::find($id);
 
@@ -3991,7 +3996,14 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
         $p->tgl_po = $request->tanggal_po_ekat;
         $p->no_do = $request->no_do_ekat;
         $p->tgl_do = $request->tanggal_do_ekat;
+        $p->tujuan_kirim = $request->perusahaan_pengiriman;
+        $p->alamat_kirim = $request->alamat_pengiriman;
+        $p->kemasan = $request->kemasan;
+        $p->ekspedisi_id = $request->ekspedisi;
+        $p->ket_kirim = $request->keterangan_pengiriman;
         $p->ket = $request->keterangan_po_ekat;
+
+
         if ($request->status_akn == "sepakat" && $request->no_po_ekat != NULL) {
             $p->log_id = "9";
         }
@@ -4034,6 +4046,7 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => $ongkir[$i],
                             'detail_rencana_penjualan_id' => $request->rencana_id[$i],
+                            'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                         ]);
                         if ($c) {
                             for ($j = 0; $j < count($request->variasi[$i]); $j++) {
@@ -4064,6 +4077,7 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
                                 'harga' => str_replace('.', "", $request->produk_harga[$i]),
                                 'ongkir' => $ongkir[$i],
                                 'detail_rencana_penjualan_id' => $request->rencana_id[$i],
+                                'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                             ]);
                             if ($c) {
                                 for ($j = 0; $j < count($request->variasi[$i]); $j++) {
@@ -4101,6 +4115,12 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
     }
     public function update_spa(Request $request, $id)
     {
+        dd($request->all());
+        if ($request->perusahaan_pengiriman_nonakn == NULL || $request->alamat_pengiriman == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL)  {
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
+    }
         $spa = Spa::find($id);
         $poid = $spa->pesanan_id;
         $spa->customer_id = $request->customer_id;
@@ -4111,6 +4131,10 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
             $pesanan->no_do = $request->no_do;
             $pesanan->tgl_do = $request->tanggal_do;
             $pesanan->ket = $request->keterangan;
+            $pesanan->tujuan_kirim = $request->perusahaan_pengiriman_nonakn;
+            $pesanan->alamat_kirim = $request->alamat_pengiriman;
+            $pesanan->kemasan = $request->kemasan;
+            $pesanan->ekspedisi_id = $request->ekspedisi;
             $po = $pesanan->save();
 
             if ($po) {
@@ -4143,6 +4167,7 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
                                     'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                                     'jumlah' => $request->produk_jumlah[$i],
                                     'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                                    'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                                     'ongkir' => 0,
                                 ]);
                                 if (!$c) {
@@ -4191,6 +4216,7 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
                                     'm_sparepart_id' => $request->part_id[$i],
                                     'jumlah' => $request->part_jumlah[$i],
                                     'harga' => str_replace('.', "", $request->part_harga[$i]),
+                                    'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                                     'ongkir' => 0,
                                 ]);
                                 if (!$dspb) {

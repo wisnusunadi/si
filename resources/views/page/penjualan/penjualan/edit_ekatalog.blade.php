@@ -909,7 +909,7 @@
                                                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
                                                                         <div class="col-lg-6 col-md-12 col-form-label">
                                                                             <div class="form-check form-check-inline">
-                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti" 
+                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti"
                                                                                 @if ($e->pesanan->kemasan == "peti")
                                                                                     checked
                                                                                 @endif
@@ -917,7 +917,7 @@
                                                                                 <label for="kemasan0" class="form-check-label">PETI</label>
                                                                             </div>
                                                                             <div class="form-check form-check-inline">
-                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti" 
+                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti"
                                                                                 @if ($e->pesanan->kemasan == "nonpeti")
                                                                                     checked
                                                                                 @endif
@@ -1148,15 +1148,15 @@
                                                                                         </td>
                                                                                         <td>
                                                                                             <div class="custom-control custom-switch">
-                                                                                                <input type="checkbox" class="custom-control-input produk_ppn" 
-                                                                                                id="produk_ppn{{ $produkpenjualan }}" 
-                                                                                                name="produk_ppn[{{ $produkpenjualan }}]" 
+                                                                                                <input type="checkbox" class="custom-control-input produk_ppn"
+                                                                                                id="produk_ppn{{ $produkpenjualan }}"
+                                                                                                name="produk_ppn[{{ $produkpenjualan }}]"
                                                                                                 value="{{ $f->ppn }}"
                                                                                                 @if ($f->ppn == 1)
                                                                                                     checked
                                                                                                 @endif
                                                                                                 >
-                                                                                                
+
                                                                                                 <label class="custom-control-label produk_ppn_label" for="produk_ppn{{ $produkpenjualan }}">
                                                                                                 @if ($f->ppn == 1)
                                                                                                     PPN
@@ -1263,7 +1263,7 @@
                                                                                     </td>
                                                                                     <td>
                                                                                         <div class="custom-control custom-switch">
-                                                                                            <input type="checkbox" class="custom-control-input produk_ppn" 
+                                                                                            <input type="checkbox" class="custom-control-input produk_ppn"
                                                                                             id="produk_ppn0" name="produk_ppn[0]" value="0">
                                                                                             <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
                                                                                           </div>
@@ -1360,7 +1360,7 @@
                                                                                 </td>
                                                                                 <td>
                                                                                     <div class="custom-control custom-switch">
-                                                                                        <input type="checkbox" class="custom-control-input produk_ppn" 
+                                                                                        <input type="checkbox" class="custom-control-input produk_ppn"
                                                                                         id="produk_ppn0" name="produk_ppn[0]" value="0">
                                                                                         <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
                                                                                       </div>
@@ -1457,6 +1457,7 @@
                 },
                 error: function(xhr, status, error, response) {
                     // console.log(response)
+                    $('#btnsimpan').attr('disabled', false);
                     swal.fire(
                         'Gagal',
                         'Cek Form Kembali',
