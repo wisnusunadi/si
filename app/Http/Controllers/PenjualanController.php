@@ -4115,7 +4115,7 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
     }
     public function update_spa(Request $request, $id)
     {
-        dd($request->all());
+        //dd($request->all());
         if ($request->perusahaan_pengiriman_nonakn == NULL || $request->alamat_pengiriman == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL)  {
             return response()->json([
                 'message' => 'Cek Form Kembali',
@@ -4134,6 +4134,7 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
             $pesanan->tujuan_kirim = $request->perusahaan_pengiriman_nonakn;
             $pesanan->alamat_kirim = $request->alamat_pengiriman;
             $pesanan->kemasan = $request->kemasan;
+            $pesanan->ket_kirim = $request->keterangan_pengiriman;
             $pesanan->ekspedisi_id = $request->ekspedisi;
             $po = $pesanan->save();
 
@@ -4250,9 +4251,14 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
         }
 
         if ($bool == true) {
-            return redirect()->back()->with('success', 'Berhasil mengubah SPA');
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil Ditambahkan',
+            ], 200);
         } else if ($bool == false) {
-            return redirect()->back()->with('error', 'Gagal mengubah SPA');
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
         }
     }
     public function update_spb(Request $request, $id)
