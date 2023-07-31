@@ -20,7 +20,7 @@ class Pesanan extends Model
     {
         return $this->belongsTo(Ekspedisi::class, 'ekspedisi_id');
     }
-    
+
     public function Spa()
     {
         return $this->hasOne(Spa::class);
@@ -34,13 +34,6 @@ class Pesanan extends Model
     {
         return $this->hasMany(DetailPesanan::class);
     }
-
-    public function Ekspedisi()
-    {
-        return $this->belongsTo(Ekspedisi::class, 'ekspedisi_id');
-    }
-
-
     public function DetailPesananDsb()
     {
         return $this->hasMany(DetailPesananDsb::class);
