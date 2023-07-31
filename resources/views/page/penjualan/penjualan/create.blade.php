@@ -720,7 +720,7 @@
                                                                             class="col-form-label col-lg-5 col-md-12 labelket">Satuan
                                                                             Kerja</label>
                                                                         <div class="col-lg-6 col-md-12">
-                                                                            <input type="text"
+                                                                            <input type="text" 
                                                                                 class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror"
                                                                                 name="satuan_kerja" id="satuan_kerja" />
                                                                             <div class="invalid-feedback"
@@ -737,7 +737,7 @@
                                                                             Instansi</label>
                                                                         <div class="col-lg-7 col-md-12">
                                                                             <textarea class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi"
-                                                                                id="alamatinstansi"></textarea>
+                                                                                id="alamatinstansi" ></textarea>
                                                                             <div class="invalid-feedback"
                                                                                 id="msgalamatinstansi">
                                                                                 @if ($errors->has('alamatinstansi'))
@@ -2155,6 +2155,7 @@
                 if ($(this).val() != "") {
                     $("#msgalamatinstansi").text("");
                     $("#alamatinstansi").removeClass('is-invalid');
+                    updateinstansi();
 
                 } else if ($(this).val() == "") {
                     $("#msgalamatinstansi").text("Alamat Instansi Harus diisi");
@@ -2293,10 +2294,11 @@
                 checkvalidasi();
             });
 
-            $('#satuan_kerja').on('keyup', function() {
+            $('#satuan_kerja').on('keyup change', function() {
                 if ($(this).val() != "") {
                     $("#msgsatuan_kerja").text("");
                     $("#satuan_kerja").removeClass('is-invalid');
+                    updateinstansi()
 
                 } else if ($(this).val() == "") {
                     $("#msgsatuan_kerja").text("Satuan Kerja Harus diisi");
@@ -2514,6 +2516,22 @@
                             $('#telepon').val(data[0].telp);
                             if (jenis == 'spa' || jenis == 'spb') {
                                 checkvalidasinonakn()
+                            }
+
+                            const pilihan_pengiriman = $('input[name="pilihan_pengiriman"]:checked').val();
+                            if(pilihan_pengiriman == "distributor") {
+                                $('#perusahaan_pengiriman').val(nama_customer);
+                                $('#alamat_pengiriman').val($('#alamat').val());
+                                provinsi_customer ? ekspedisi(provinsi_customer) : null;
+                                $('#alamat_pengiriman').removeClass('is-invalid');
+                            }
+
+                            const pilihan_pengiriman_nonakn = $('input[name="pilihan_pengiriman_nonakn"]:checked').val();
+                            if(pilihan_pengiriman_nonakn == "distributor") {
+                                $('#perusahaan_pengiriman_nonakn').val(nama_customer);
+                                $('#alamat_pengiriman_nonakn').val($('#alamat').val());
+                                provinsi_customer ? ekspedisi_nonakn(provinsi_customer) : null;
+                                $('#alamat_pengiriman_nonakn').removeClass('is-invalid');
                             }
                         }
                     }
@@ -3527,6 +3545,7 @@
                     $('#alamat_pengiriman').removeClass('is-invalid');
                     $('#msg_alamat_pengiriman').text("");
                     checkvalidasi();
+                    ekspedisi($(this).val())
                 } else if ($(this).val() == "") {
                     $("#msgprovinsi").text("Provinsi harus diisi");
                     $("#provinsi").addClass('is-invalid');
@@ -3667,7 +3686,23 @@
                 })
             }
 
+            const updateinstansi = () => {
+                const pilihan_pengiriman = $('input[name="pilihan_pengiriman"]:checked').val();
+                console.log(pilihan_pengiriman);
 
+                let provinsi_instansi = $('#provinsi').val();
+
+                const checkValidasi = (msg) => {
+                    $('#alamat_pengiriman').addClass('is-invalid');
+                    $('#msg_alamat_pengiriman').text(msg);
+                }
+
+                if(pilihan_pengiriman == "instansi") {
+                    $('#perusahaan_pengiriman').val($('#satuan_kerja').val());
+                    $('#alamat_pengiriman').val($('#alamatinstansi').val());
+                    provinsi_instansi != 'NULL' ? ekspedisi(provinsi_instansi) : checkValidasi('Provinsi Instansi harus diisi');
+                }
+            }
 
             function autocomplete(inp, arr) {
                 /*the autocomplete function takes two arguments,

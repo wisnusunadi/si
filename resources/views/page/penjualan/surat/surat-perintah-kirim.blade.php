@@ -21,7 +21,8 @@
                 top: 198px;
                 width: 100%;
                 font-family: sans-serif;
-                font-size: 13px;
+                font-size: 12px;
+                
             }
             header {
                 position: fixed;
@@ -30,6 +31,7 @@
                 right: 0px;
                 height: 220px;
                 font-family: sans-serif;
+                font-size: 12px;
 
                 /** Extra personal styles **/
              background-color: #ffffff;
@@ -54,7 +56,7 @@
                 color: rgb(0, 0, 0);
                 line-height: 20px;
                 font-family: sans-serif;
-                font-size: 16px;
+                font-size: 12px;
             }
             .vera {
         vertical-align: top;
@@ -210,7 +212,7 @@
                         <td class="vera align-center" style="border-right:    1px solid black ; ">
                             {{$item['kode']}}
                         </td>
-                        <td class="vera align-center" style="border-right:    1px solid black ; ">
+                        <td class="vera align-center" style="border-right:    1px solid black ; text-align: left;">
                             {{$item['nama']}}
                         </td>
                         <td class="vera align-center" style="border-right:    1px solid black ; ">
