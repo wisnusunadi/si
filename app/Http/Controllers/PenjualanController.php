@@ -4263,6 +4263,12 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
     }
     public function update_spb(Request $request, $id)
     {
+       // dd($request->all());
+        if ($request->perusahaan_pengiriman_nonakn == NULL || $request->alamat_pengiriman == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL)  {
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
+    }
         $spa = Spb::find($id);
         $poid = $spa->pesanan_id;
         $spa->customer_id = $request->customer_id;
@@ -4273,6 +4279,11 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
             $pesanan->no_do = $request->no_do;
             $pesanan->tgl_do = $request->tanggal_do;
             $pesanan->ket = $request->keterangan;
+            $pesanan->tujuan_kirim = $request->perusahaan_pengiriman_nonakn;
+            $pesanan->alamat_kirim = $request->alamat_pengiriman;
+            $pesanan->kemasan = $request->kemasan;
+            $pesanan->ket_kirim = $request->keterangan_pengiriman;
+            $pesanan->ekspedisi_id = $request->ekspedisi;
             $po = $pesanan->save();
 
             if ($po) {
@@ -4304,6 +4315,7 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
                                     'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                                     'jumlah' => $request->produk_jumlah[$i],
                                     'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                                    'ppn' => isset($request->part_ppn[$i]) ? $request->part_ppn[$i] : 0,
                                     'ongkir' => 0,
                                 ]);
                                 if (!$c) {
@@ -4351,6 +4363,7 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
                                     'pesanan_id' => $poid,
                                     'm_sparepart_id' => $request->part_id[$i],
                                     'jumlah' => $request->part_jumlah[$i],
+                                    'ppn' => isset($request->part_ppn[$i]) ? $request->part_ppn[$i] : 0,
                                     'harga' => str_replace('.', "", $request->part_harga[$i]),
                                     'ongkir' => 0,
                                 ]);
@@ -4385,9 +4398,14 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
         }
 
         if ($bool == true) {
-            return redirect()->back()->with('success', 'Berhasil mengubah SPA');
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil Ditambahkan',
+            ], 200);
         } else if ($bool == false) {
-            return redirect()->back()->with('error', 'Gagal mengubah SPA');
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
         }
     }
 

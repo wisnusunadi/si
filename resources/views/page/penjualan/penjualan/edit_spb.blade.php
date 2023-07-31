@@ -297,7 +297,7 @@
                                 @endif
                                 <div class="content">
                                     <form method="post"
-                                        action="{{ route('penjualan.penjualan.update_spb', ['id' => $e->id]) }}">
+                                        action="{{ route('penjualan.penjualan.update_spb', ['id' => $e->id]) }}"  id="edit_penjualan">
                                         {{ csrf_field() }}
                                         {{ method_field('PUT') }}
                                         <div class="row d-flex justify-content-center">
@@ -446,7 +446,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-    
+
                                                             <div class="form-group row  @if (empty($e->Pesanan->no_do)) hide @endif "
                                                                 id="do_detail_no">
                                                                 <label for=""
@@ -481,8 +481,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-    
-    
+
+
                                                             <div class="form-group row">
                                                                 <label for="keterangan"
                                                                     class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
@@ -519,7 +519,7 @@
                                                                     <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
                                                                     <div class="col-lg-6 col-md-12 col-form-label">
                                                                         <div class="form-check form-check-inline">
-                                                                            <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti" 
+                                                                            <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti"
                                                                             @if ($e->pesanan->kemasan == "peti")
                                                                                 checked
                                                                             @endif
@@ -734,9 +734,9 @@
                                                                                             </td>
                                                                                             <td>
                                                                                                 <div class="custom-control custom-switch">
-                                                                                                    <input type="checkbox" class="custom-control-input produk_ppn" 
-                                                                                                    id="produk_ppn{{ $produkpenjualan }}" 
-                                                                                                    name="produk_ppn[{{ $produkpenjualan }}]" 
+                                                                                                    <input type="checkbox" class="custom-control-input produk_ppn"
+                                                                                                    id="produk_ppn{{ $produkpenjualan }}"
+                                                                                                    name="produk_ppn[{{ $produkpenjualan }}]"
                                                                                                     value="{{ $f->ppn }}"
                                                                                                     @if ($f->ppn == 1)
                                                                                                         checked
@@ -842,7 +842,7 @@
                                                                                         </td>
                                                                                         <td>
                                                                                             <div class="custom-control custom-switch">
-                                                                                                <input type="checkbox" class="custom-control-input produk_ppn" 
+                                                                                                <input type="checkbox" class="custom-control-input produk_ppn"
                                                                                                 id="produk_ppn0" name="produk_ppn[0]" value="0">
                                                                                                 <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
                                                                                               </div>
@@ -1177,6 +1177,49 @@
 
 @section('adminlte_js')
     <script>
+           $(document).on('submit', '#edit_penjualan', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $(this).serialize(),
+                dataType: 'JSON',
+                beforeSend: function() {
+                    $('#btnsimpan').attr('disabled', true);
+                    $('#btnsimpan').html('<i class="fa fa-spin fa-spinner"></i>');
+                },
+                success: function(response) {
+                    // console.log(response)
+                    swal.fire(
+                        'Berhasil',
+                        'Data Berhasil di Update',
+                        'success'
+                    ).then(function() {
+                        window.location.href = '/penjualan/penjualan/edit_ekatalog/' + {{ $e->id }} + '/spb';
+                    });
+                },
+                error: function(xhr, status, error, response) {
+                    // console.log(response)
+                    $('#btnsimpan').attr('disabled', false);
+                    $('#btnsimpan').html('Simpan');
+                    swal.fire(
+                        'Gagal',
+                        'Cek Form Kembali',
+                        'error'
+                    );
+                }
+            });
+          });
+
+
+
+
+
+
         $(function() {
             $(".os-content-arrange").remove();
             loop();
@@ -1343,7 +1386,7 @@
                     $('#parttable').find('.part_id').each(function() {
                         if ($(this).val() != null) {
                             part_id = true;
-                            console.log("part_id: " + $(this).val());
+                            // console.log("part_id: " + $(this).val());
                         } else {
                             part_id = false;
                             return false;
@@ -1353,7 +1396,7 @@
                     $('#parttable').find('.part_jumlah').each(function() {
                         if ($(this).val() != "") {
                             part_jumlah = true;
-                            console.log("part_jumlah: " + $(this).val());
+                            // console.log("part_jumlah: " + $(this).val());
                         } else {
                             part_jumlah = false;
                             return false;
@@ -1363,7 +1406,7 @@
                     $('#parttable').find('.part_harga').each(function() {
                         if ($(this).val() != "") {
                             part_harga = true;
-                            console.log("part_harga: " + $(this).val());
+                            // console.log("part_harga: " + $(this).val());
                         } else {
                             part_harga = false;
                             return false;
@@ -1398,10 +1441,10 @@
                     jasa_harga = true;
                 }
 
-                console.log("produk :" + penjualan_produk_id + ', ' + variasi + ', ' + produk_jumlah + ', ' +
-                    produk_harga);
-                console.log("part :" + part_id + ', ' + part_jumlah + ', ' + part_harga);
-                console.log("jasa :" + jasa_id + ', ' + jasa_harga);
+                // console.log("produk :" + penjualan_produk_id + ', ' + variasi + ', ' + produk_jumlah + ', ' +
+                //     produk_harga);
+                // console.log("part :" + part_id + ', ' + part_jumlah + ', ' + part_harga);
+                // console.log("jasa :" + jasa_id + ', ' + jasa_harga);
 
                 if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
                     if ($('#customer_id').val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "" &&
@@ -1590,7 +1633,7 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
+                        // console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -1608,7 +1651,7 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
-                        console.log(data);
+                        // console.log(data);
                         nama_customer = data[0].nama
                         provinsi_customer = data[0].id_provinsi
                         $('#alamat_customer').val(data[0].alamat);
@@ -1633,7 +1676,7 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
+                        // console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
