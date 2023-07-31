@@ -21,7 +21,7 @@
                 top: 198px;
                 width: 100%;
                 font-family: sans-serif;
-                font: normal 14px ;
+                font-size: 13px;
             }
             header {
                 position: fixed;
@@ -30,7 +30,6 @@
                 right: 0px;
                 height: 220px;
                 font-family: sans-serif;
-                font: normal 13px ;
 
                 /** Extra personal styles **/
              background-color: #ffffff;
@@ -42,7 +41,6 @@
                 position: fixed;
                 bottom: -45px;
                 font-family: sans-serif;
-                font: normal 13px ;
             }
             footer {
                 position: fixed;
@@ -56,7 +54,7 @@
                 color: rgb(0, 0, 0);
                 line-height: 20px;
                 font-family: sans-serif;
-                font: normal 13px ;
+                font-size: 16px;
             }
             .vera {
         vertical-align: top;
@@ -139,7 +137,8 @@
                               </td>
                               <td style=" border: 1px solid;" class="vera ">
                                   <u>Tgl SO</u><br>
-                                 <div class="text-center">{{$pesanan->tgl_po}}</div>
+                                  {{-- change format data dd/mm/yyyy --}}
+                                 <div class="text-center">{{ date('d/m/Y', strtotime($pesanan->tgl_po)) }}</div>
                               </td>
                           </tr>
                           <tr>
@@ -149,7 +148,7 @@
                               </td>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>Tgl PO</u><br>
-                                <div class="text-center">{{$pesanan->tgl_po}}</div>
+                                <div class="text-center">{{ date('d/m/Y', strtotime($pesanan->tgl_po)) }}</div>
                               </td>
                           </tr>
                           <tr>
@@ -186,7 +185,7 @@
                      <th class="align-center" width="8%"  style="border-right:    1px solid black ; border-bottom:    1px solid black">
                        <b>No</b>
                      </th>
-                     <th class="align-center" width="20%"  style="border-right:    1px solid black ; border-bottom:    1px solid black">
+                     <th class="align-center" width="15%"  style="border-right:    1px solid black ; border-bottom:    1px solid black">
                        <b>Kode Barang</b>
                      </th>
                      <th class="align-center"  style="border-right:    1px solid black ; border-bottom:    1px solid black">
