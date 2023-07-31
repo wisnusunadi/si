@@ -1445,6 +1445,7 @@
             var produk_obj = {};
             var part_obj = {};
             var jasa_obj = {};
+            let nama_customer = null;
             let provinsi_customer = null;
 
             $('#jenis_paket').select2({
@@ -2507,6 +2508,7 @@
                     dataType: 'json',
                     success: function(data) {
                         if (data[0] != undefined) {
+                            nama_customer = data[0].nama
                             provinsi_customer = data[0].id_provinsi
                             $('#alamat').val(data[0].alamat);
                             $('#telepon').val(data[0].telp);
@@ -3554,7 +3556,7 @@
 
                 if(pilihan_pengiriman == 'distributor'){
                     // select customer to text
-                    $('#perusahaan_pengiriman').val($('#customer_id').text());
+                    $('#perusahaan_pengiriman').val(nama_customer);
                     $('#alamat_pengiriman').val($('#alamat').val());
                     provinsi_customer ? ekspedisi(provinsi_customer) : checkValidasi('Provinsi Customer harus diisi');
                 }else if (pilihan_pengiriman == 'instansi'){
