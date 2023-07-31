@@ -1006,7 +1006,7 @@
                                                                                                         checked
                                                                                                     @endif
                                                                                                      >
-                                                                                                    <label class="custom-control-label part_ppn_label" for="part_ppn0">
+                                                                                                    <label class="custom-control-label part_ppn_label" for="part_ppn{{ $loop->iteration - 1 }}">
                                                                                                         @if ($f->ppn == 1)
                                                                                                             PPN
                                                                                                         @else
