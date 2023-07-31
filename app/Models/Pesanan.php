@@ -35,6 +35,12 @@ class Pesanan extends Model
         return $this->hasMany(DetailPesanan::class);
     }
 
+    public function Ekspedisi()
+    {
+        return $this->belongsTo(Ekspedisi::class, 'ekspedisi_id');
+    }
+
+
     public function DetailPesananDsb()
     {
         return $this->hasMany(DetailPesananDsb::class);
