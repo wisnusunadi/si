@@ -287,25 +287,18 @@
                       <td class="align-right" colspan="2">
                     <i>No Dokumen : SPA-FR/01/asomeseasomese/2023</i>
                       </td>
-
                     </tr>
                 </table>
-
-
                 <div style="page-break-after: always;"></div>
             @endif
-
             @endforeach
-
             {{-- </div>  --}}
                 {{-- <div style="page-break-after: always;"></div> --}}
             {{-- Hal -2 --}}
                 {{-- <div style="page-break-after: never;"> </div> --}}
         </main>
         {{-- <footer>
-
       </footer> --}}
-
     </body>
 </html>
 
