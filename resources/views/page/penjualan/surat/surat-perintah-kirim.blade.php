@@ -93,13 +93,16 @@
           #invoice-table tbody {
             min-height: 500px;
           }
+          table {
+            table-layout: fixed; width: 100%; border-collapse: collapse; 
+          }
           
           </style>
     </head>
     <body>
         <!-- Define header and footer blocks before your content -->
         <header>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="">
                 <tr>
                   <td style="text-align: left; font-size: 16px;">
                     <b>PERINTAH PENGIRIMAN BARANG</b>
@@ -109,10 +112,10 @@
                   </td>
                 </tr>
             </table>
-            <table id="tabel" class="table table-hover styled-table table-striped " border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; word-wrap:break-word;">
+            <table id="tabel" class="table table-hover styled-table table-striped " border="0" style="word-wrap:break-word;">
                 <tr>
                   <td style="text-align: left;" class="vera" >
-                      <table border="0"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+                      <table border="0"  style="">
                           <tr>
                               <td class="vera"  width="23%">Pelanggan
 
@@ -126,9 +129,9 @@
                           </tr>
                       </table>
                       <br>
-                      <table border="0"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+                      <table border="0"  style="">
                           <tr>
-                              <td class="vera"   width="23%">Alamat Pengiriman </td>
+                              <td class="vera"   width="23%">Alamat Pengiriman :</td>
                               <td style=" border: 1px solid;"><b>{{$data['tujuan_kirim']}}</b></td>
                             </tr>
                           <tr>
@@ -140,7 +143,7 @@
                   </td>
                   <td width="2%"></td>
                   <td style="text-align: left;" class="vera "  width="31%">
-                      <table border="1"  style="table-layout: fixed; width: 100%; border-collapse: collapse;  ">
+                      <table border="1"  style=" ">
                           <tr>
                               <td style=" border: 1px solid;" class="vera ">
                                   <u>No SO</u> <br>
@@ -240,7 +243,7 @@
 
             @if ($key_page == $count_page - 1)
             <footer>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="">
                 <tr>
                   <td class="align-left vera" width="12%">
                     Keterangan
@@ -248,12 +251,16 @@
                   <td class="align-left"  style=" border: 1px solid;">
                     {{$data['no_paket']}}
                     <br>
+                    @if ($data['ket_paket'] != null)
                     {{$data['ket_paket']}}
+                    @else
+                    <br>
+                    @endif
                   </td>
                 </tr>
             </table>
             <br>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="">
                 <tr>
                   <td class="align-center">
                     Dibuat Oleh,
@@ -293,7 +300,7 @@
                 <div style="page-break-after: never;"> </div>
             @else
 
-                <table id="tabel" class="table table-hover styled-table table-striped table_footer" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+                <table id="tabel" class="table table-hover styled-table table-striped table_footer" border="0" style="">
                     <tr>
                       <td class="align-right" colspan="2">
                     <i>No Dokumen : SPA-FR/01/asomeseasomese/2023</i>
