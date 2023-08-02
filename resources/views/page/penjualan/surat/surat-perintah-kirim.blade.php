@@ -2,98 +2,109 @@
     <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:400,600,700,800">
         <style>
-            /** Define the margins of your page **/
-            @media print {
-                body {
-                    margin-left: 3cm; /* Sesuaikan angka ini sesuai dengan kebutuhan Anda */
-                }
-            }
-            @page {
-
-              margin :  70px 30px 70px 30px
-            }
-
-            .text-center {
-                text-align: center;
-            }
-            main {
-                position: absolute;
-                top: 198px;
-                width: 100%;
-                font-family: sans-serif;
-                font-size: 13px;
-            }
-            header {
-                position: fixed;
-                top: -60px;
-                left: 0px;
-                right: 0px;
-                height: 220px;
-                font-family: sans-serif;
-
-                /** Extra personal styles **/
-             background-color: #ffffff;
-                color: rgb(0, 0, 0);
-                line-height: 20px;
-            }
-
-            .table_footer{
-                position: fixed;
-                bottom: -45px;
-                font-family: sans-serif;
-            }
-            footer {
-                position: fixed;
-                bottom: -10px;
-                left: 0px;
-                right: 0px;
-                height: 50px;
-                top: 730px;
-                /** Extra personal styles **/
-                background-color: #ffffff;
-                color: rgb(0, 0, 0);
-                line-height: 20px;
-                font-family: sans-serif;
-                font-size: 16px;
-            }
-            .vera {
-        vertical-align: top;
-    }
-
-    .align-left {
-        text-align: left;
-    }
-
-    .align-right {
-        text-align: right;
-    }
-    .align-center {
-        text-align: center;
-    }
-    .wb {
-            word-break: break-word;
-        }
-    .page-break {
-            page-break-after: always;
-        }
-        #invoice-table {
-            border: 0.5pt solid rgb(0, 0, 0);
-            border-collapse: collapse;
-
-        }
-
-
-        </style>
+          /** Define the margins of your page **/
+          .full-page-border {
+              height: 100%;
+              width: 100%;
+              border: 1px solid black;
+              border-collapse: collapse;
+          }
+          @media print {
+              body {
+                  margin-left: 3cm; /* Sesuaikan angka ini sesuai dengan kebutuhan Anda */
+              }
+          }
+          @page {
+          
+            margin :  70px 30px 70px 30px
+          }
+          
+          .text-center {
+              text-align: center;
+          }
+          main {
+              position: absolute;
+              top: 198px;
+              width: 100%;
+              font-family: sans-serif;
+              font-size: 16px;
+              
+          }
+          header {
+              position: fixed;
+              top: -60px;
+              left: 0px;
+              right: 0px;
+              height: 220px;
+              font-family: sans-serif;
+              font-size: 14px;
+          
+              /** Extra personal styles **/
+            background-color: #ffffff;
+              color: rgb(0, 0, 0);
+              line-height: 20px;
+          }
+          
+          .table_footer{
+              position:  fixed;
+              bottom: -45px;
+              font-family: sans-serif;
+          }
+          footer {
+              position: fixed;
+              bottom: -10px;
+              left: 0px;
+              right: 0px;
+              height: 50px;
+              top: 730px;
+              /** Extra personal styles **/
+              background-color: #ffffff;
+              color: rgb(0, 0, 0);
+              line-height: 20px;
+              font-family: sans-serif;
+              font-size: 16px;
+          }
+          .vera {
+          vertical-align: top;
+          }
+          
+          .align-left {
+          text-align: left;
+          }
+          
+          .align-right {
+          text-align: right;
+          }
+          .align-center {
+          text-align: center;
+          }
+          .wb {
+          word-break: break-word;
+          }
+          .page-break {
+          page-break-after: always;
+          }
+          #invoice-table {
+          border: 0.5pt solid rgb(0, 0, 0);
+          border-collapse: collapse;
+          margin: 0;
+          }
+          
+          #invoice-table tbody {
+            min-height: 500px;
+          }
+          
+          </style>
     </head>
     <body>
         <!-- Define header and footer blocks before your content -->
         <header>
             <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                 <tr>
-                  <td style="text-align: left;">
+                  <td style="text-align: left; font-size: 16px;">
                     <b>PERINTAH PENGIRIMAN BARANG</b>
                   </td>
-                  <th style="text-align: right; padding-right:10px">
+                  <th style="text-align: right; padding-right:10px; font-size: 16px;">
                     PT. Sinko Prima Alloy
                   </td>
                 </tr>
@@ -201,8 +212,8 @@
                      </th>
                    </tr>
                 </thead>
-                <tbody>
-                    @foreach ($page as $key_produk => $item)
+                <tbody >
+                @foreach ($page as $key_produk => $item)
                     <tr>
                         <td class="vera align-center" style="border-right:    1px solid black ; " >
                         {{$item['no']}}
@@ -210,7 +221,7 @@
                         <td class="vera align-center" style="border-right:    1px solid black ; ">
                             {{$item['kode']}}
                         </td>
-                        <td class="vera align-center" style="border-right:    1px solid black ; ">
+                        <td class="vera align-center" style="border-right:    1px solid black ; text-align: left;">
                             {{$item['nama']}}
                         </td>
                         <td class="vera align-center" style="border-right:    1px solid black ; ">
@@ -223,7 +234,7 @@
                             {{$item['pajak']}}
                         </td>
                       </tr>
-                      @endforeach
+                @endforeach
                 </tbody>
             </table>
 

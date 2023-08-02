@@ -7493,12 +7493,12 @@ if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NUL
 
 
             if(count($pesanan_prd) > 0 && count($pesanan_part) <= 0){
-                $data =  array_chunk($pesanan_prd, 12);
+                $data =  array_chunk($pesanan_prd, 15);
             }else if (count($pesanan_part) > 0  && count($pesanan_prd) <= 0) {
-                $data = array_chunk($pesanan_part, 12);
+                $data = array_chunk($pesanan_part, 15);
             }else if (count($pesanan_prd) > 0 && count($pesanan_part) > 0){
                 $merge = array_merge($pesanan_prd, $pesanan_part);
-                $data = array_chunk($merge, 12);
+                $data = array_chunk($merge, 15);
             }
 
 
