@@ -252,6 +252,7 @@
             </div>
 
         </div>
+        @include('page.logistik.so.modalsj')
     </section>
 @stop
 @section('adminlte_js')
@@ -501,6 +502,74 @@
                 }
                 $('#showtable').DataTable().ajax.url('/logistik/so/data/' + x).load();
                 return false;
+            });
+
+            $(document).on('click', '.cetaksj', function(event) {
+                event.preventDefault();
+                let data_x = $(this).data('x');
+                let data_y = $(this).data('y');
+
+                // open modal
+                $('#cetaksjmodal').modal('show');
+
+                $('#cetaksjmodal').on('shown.bs.modal', function() {
+                    // fit to 100% width
+                    $('.tableproduk').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: false,
+                    autowidth: true,
+                    responsive: true,
+                    ajax: {
+                        'url': '/api/logistik/so/data/detail/belum_kirim/' + data_y + '/' + data_x,
+                        'dataType': 'json',
+                        'type': 'POST',
+                        'headers': {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    },
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                        data: 'checkbox',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    }, {
+                        data: 'DT_RowIndex',
+                        className: 'align-center nowrap-text',
+                        orderable: false,
+                        searchable: false
+                    }, {
+                        data: 'nama_produk',
+                    },
+                    {
+                        data: 'jumlah_noseri',
+                        render: function(data, type, row, meta) {
+                            var rowIndex = meta.row;
+                            return '<input type="text" class="form-control form-control-sm jumlah'+rowIndex+'" name="jumlah[' + rowIndex + ']" id="jumlah[' + rowIndex + ']" value="0" disabled/>';
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            var rowIndex = meta.row;
+                            return '<button class="btn btn-outline-primary btn-sm noseri" data-index="' + rowIndex + '">No Seri</button>';
+                        }
+                    },
+                    {
+                        // hidden text
+                        data: 'noseri_selected',
+                        render: function(data, type, row, meta) {
+                            var rowIndex = meta.row;
+                            
+                            return '<input type="hidden" class="keterangannoseri'+ rowIndex+'" name="keterangan[' + rowIndex + ']" id="keterangan[' + rowIndex + ']" placeholder="Keterangan" />';
+                        }
+                    },
+                    ]
+                })
+                })
             });
 
         })

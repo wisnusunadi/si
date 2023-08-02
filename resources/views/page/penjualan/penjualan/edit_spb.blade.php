@@ -297,7 +297,7 @@
                                 @endif
                                 <div class="content">
                                     <form method="post"
-                                        action="{{ route('penjualan.penjualan.update_spb', ['id' => $e->id]) }}">
+                                        action="{{ route('penjualan.penjualan.update_spb', ['id' => $e->id]) }}"  id="edit_penjualan">
                                         {{ csrf_field() }}
                                         {{ method_field('PUT') }}
                                         <div class="row d-flex justify-content-center">
@@ -408,71 +408,157 @@
                                                 <h4>Info Penjualan</h4>
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <div class="form-group row">
-                                                            <label for=""
-                                                                class="col-form-label col-lg-5 col-md-12 labelket">Delivery
-                                                                Order</label>
-                                                            <div class="col-lg-5 col-md-12 col-form-label">
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="do" id="yes" value="yes"
-                                                                        {{ empty($e->Pesanan->no_do) ? '' : 'checked' }} />
-                                                                    <label class="form-check-label"
-                                                                        for="yes">Tersedia</label>
-                                                                </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="do" id="no" value="no"
-                                                                        {{ empty($e->Pesanan->no_do) ? 'checked' : '' }} />
-                                                                    <label class="form-check-label" for="no">Tidak
-                                                                        tersedia</label>
+                                                        <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab"
+                                                    role="tablist">
+                                                        <li class="nav-item" role="presentation">
+                                                            <a class="nav-link active" id="pills-pononakn-tab"
+                                                                data-toggle="pill" href="#pills-pononakn" role="tab"
+                                                                aria-controls="pills-pononakn"
+                                                                aria-selected="true">Purchase Order</a>
+                                                        </li>
+                                                        <li class="nav-item" role="presentation">
+                                                            <a class="nav-link" id="pills-pengirimannonakn-tab" data-toggle="pill"
+                                                                href="#pills-pengirimannonakn" role="tab"
+                                                                aria-controls="pills-pengirimannonakn"
+                                                                aria-selected="false">Pengiriman</a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="tab-content" id="pills-tabContent">
+                                                        <div class="tab-pane fade show active" id="pills-pononakn" role="tabpanel" aria-labelledby="pills-pononakn-tab">
+                                                            <div class="form-group row">
+                                                                <label for=""
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Delivery
+                                                                    Order</label>
+                                                                <div class="col-lg-5 col-md-12 col-form-label">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="do" id="yes" value="yes"
+                                                                            {{ empty($e->Pesanan->no_do) ? '' : 'checked' }} />
+                                                                        <label class="form-check-label"
+                                                                            for="yes">Tersedia</label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="do" id="no" value="no"
+                                                                            {{ empty($e->Pesanan->no_do) ? 'checked' : '' }} />
+                                                                        <label class="form-check-label" for="no">Tidak
+                                                                            tersedia</label>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="form-group row  @if (empty($e->Pesanan->no_do)) hide @endif "
-                                                            id="do_detail_no">
-                                                            <label for=""
-                                                                class="col-form-label col-lg-5 col-md-12 labelket">Nomor
-                                                                DO</label>
-                                                            <div class="col-lg-4 col-md-12">
-                                                                <input type="text"
-                                                                    class="form-control col-form-label @error('no_do') is-invalid @enderror"
-                                                                    id="no_do" name="no_do"
-                                                                    value="{{ $e->Pesanan->no_do }}" />
-                                                                <div class="invalid-feedback" id="msgno_do">
-                                                                    @if ($errors->has('no_do'))
-                                                                        {{ $errors->first('no_do') }}
-                                                                    @endif
+                                                            <div class="form-group row  @if (empty($e->Pesanan->no_do)) hide @endif "
+                                                                id="do_detail_no">
+                                                                <label for=""
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Nomor
+                                                                    DO</label>
+                                                                <div class="col-lg-4 col-md-12">
+                                                                    <input type="text"
+                                                                        class="form-control col-form-label @error('no_do') is-invalid @enderror"
+                                                                        id="no_do" name="no_do"
+                                                                        value="{{ $e->Pesanan->no_do }}" />
+                                                                    <div class="invalid-feedback" id="msgno_do">
+                                                                        @if ($errors->has('no_do'))
+                                                                            {{ $errors->first('no_do') }}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row  @if (empty($e->Pesanan->tgl_do)) hide @endif "
+                                                                id="do_detail_tgl">
+                                                                <label for=""
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
+                                                                    DO</label>
+                                                                <div class="col-lg-4 col-md-7">
+                                                                    <input type="date"
+                                                                        class="form-control col-form-label @error('tanggal_do') is-invalid @enderror"
+                                                                        id="tanggal_do" name="tanggal_do"
+                                                                        value="{{ $e->Pesanan->tgl_do }}" />
+                                                                    <div class="invalid-feedback" id="msgtanggal_po">
+                                                                        @if ($errors->has('tanggal_do'))
+                                                                            {{ $errors->first('tanggal_do') }}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="form-group row">
+                                                                <label for="keterangan"
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
+                                                                <div class="col-lg-5 col-md-12">
+                                                                    <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan">{{ $e->Pesanan->ket }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group row  @if (empty($e->Pesanan->tgl_do)) hide @endif "
-                                                            id="do_detail_tgl">
-                                                            <label for=""
-                                                                class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
-                                                                DO</label>
-                                                            <div class="col-lg-4 col-md-7">
-                                                                <input type="date"
-                                                                    class="form-control col-form-label @error('tanggal_do') is-invalid @enderror"
-                                                                    id="tanggal_do" name="tanggal_do"
-                                                                    value="{{ $e->Pesanan->tgl_do }}" />
-                                                                <div class="invalid-feedback" id="msgtanggal_po">
-                                                                    @if ($errors->has('tanggal_do'))
-                                                                        {{ $errors->first('tanggal_do') }}
-                                                                    @endif
+                                                        <div class="tab-pane fade" id="pills-pengirimannonakn" role="tabpanel" aria-labelledby="pills-pengirimannonakn-tab">
+                                                            <div class="card-body">
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input type="radio" class="form-check-input" name="pilihan_pengiriman_nonakn" id="pengiriman0" value="distributor" />
+                                                                            <label for="pengiriman0" class="form-check-label">Sama dengan Distributor</label>
+                                                                        </div>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input type="radio" class="form-check-input" name="pilihan_pengiriman_nonakn" id="lainnya" value="lainnya" />
+                                                                            <label for="lainnya" class="form-check-label">Lainnya</label>
+                                                                        </div>
+                                                                        <input type="text"
+                                                                        value="{{ $e->pesanan->tujuan_kirim }}"
+                                                                        name="perusahaan_pengiriman_nonakn" id="perusahaan_pengiriman_nonakn" class="form-control col-form-label" readonly>
+                                                                        <input type="text"
+                                                                        value="{{ $e->pesanan->alamat_kirim }}"
+                                                                            class="form-control col-form-label mt-2 alamat_pengiriman_nonakn" name="alamat_pengiriman" id="alamat_pengiriman_nonakn" readonly/>
+                                                                        <div class="invalid-feedback"
+                                                                            id="msg_alamat_pengiriman_nonakn">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti"
+                                                                            @if ($e->pesanan->kemasan == "peti")
+                                                                                checked
+                                                                            @endif
+                                                                            />
+                                                                            <label for="kemasan0" class="form-check-label">PETI</label>
+                                                                        </div>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti"
+                                                                            @if ($e->pesanan->kemasan == "nonpeti")
+                                                                                checked
+                                                                            @endif
+                                                                            />
+                                                                            <label for="kemasan1" class="form-check-label">NON PETI</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Ekspedisi</label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <select name="ekspedisi" id="ekspedisi_nonakn" class="form-control ekspedisi_nonakn">
+                                                                            @if ($e->pesanan->ekspedisi_id != NULL || $e->pesanan->ekspedisi_id != "" )
+                                                                            <option
+                                                                                value="{{ $e->pesanan->ekspedisi_id }}"
+                                                                                selected>
+                                                                                {{ $e->pesanan->Ekspedisi->nama }}
+                                                                            </option>
+                                                                        @endif
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <textarea class="form-control col-form-label" name="keterangan_pengiriman">{{ $e->pesanan->ket_kirim }}</textarea>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-
-
-                                                        <div class="form-group row">
-                                                            <label for="keterangan"
-                                                                class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
-                                                            <div class="col-lg-5 col-md-12">
-                                                                <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan">{{ $e->Pesanan->ket }}</textarea>
-                                                            </div>
-                                                        </div>
+                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -647,6 +733,25 @@
                                                                                                 </div>
                                                                                             </td>
                                                                                             <td>
+                                                                                                <div class="custom-control custom-switch">
+                                                                                                    <input type="checkbox" class="custom-control-input produk_ppn"
+                                                                                                    id="produk_ppn{{ $produkpenjualan }}"
+                                                                                                    name="produk_ppn[{{ $produkpenjualan }}]"
+                                                                                                    value="{{ $f->ppn }}"
+                                                                                                    @if ($f->ppn == 1)
+                                                                                                        checked
+                                                                                                    @endif
+                                                                                                    >
+                                                                                                    <label class="custom-control-label produk_ppn_label" for="produk_ppn{{ $produkpenjualan }}">
+                                                                                                        @if ($f->ppn == 1)
+                                                                                                        PPN
+                                                                                                    @else
+                                                                                                        Non PPN
+                                                                                                    @endif
+                                                                                                    </label>
+                                                                                                  </div>
+                                                                                            </td>
+                                                                                            <td>
                                                                                                 <a id="removerowproduk"><i
                                                                                                         class="fas fa-minus"
                                                                                                         style="color: red"></i></a>
@@ -734,6 +839,13 @@
                                                                                                     aria-describedby="prdsub"
                                                                                                     readonly />
                                                                                             </div>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <div class="custom-control custom-switch">
+                                                                                                <input type="checkbox" class="custom-control-input produk_ppn"
+                                                                                                id="produk_ppn0" name="produk_ppn[0]" value="0">
+                                                                                                <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
+                                                                                              </div>
                                                                                         </td>
                                                                                         <td>
                                                                                             <a id="removerowproduk"><i
@@ -887,6 +999,23 @@
                                                                                                 </div>
                                                                                             </td>
                                                                                             <td>
+                                                                                                <div class="custom-control custom-switch">
+                                                                                                    <input type="checkbox" class="custom-control-input part_ppn"
+                                                                                                     id="part_ppn{{ $loop->iteration - 1 }}" name="part_ppn[{{ $loop->iteration - 1 }}]" value="{{ $f->ppn }}"
+                                                                                                    @if ($f->ppn == 1)
+                                                                                                        checked
+                                                                                                    @endif
+                                                                                                     >
+                                                                                                    <label class="custom-control-label part_ppn_label" for="part_ppn{{ $loop->iteration - 1 }}">
+                                                                                                        @if ($f->ppn == 1)
+                                                                                                            PPN
+                                                                                                        @else
+                                                                                                            Non PPN
+                                                                                                        @endif
+                                                                                                    </label>
+                                                                                                  </div>
+                                                                                            </td>
+                                                                                            <td>
                                                                                                 <a id="removerowpart"><i
                                                                                                         class="fas fa-minus"
                                                                                                         style="color: red"></i></a>
@@ -896,7 +1025,7 @@
                                                                                 @endif
                                                                             </tbody>
                                                                             <tfoot>
-                                                                                <th colspan="4"
+                                                                                <th colspan="5"
                                                                                     style="text-align:right;">Total Harga
                                                                                 </th>
                                                                                 <th id="totalhargapart"
@@ -1048,6 +1177,49 @@
 
 @section('adminlte_js')
     <script>
+           $(document).on('submit', '#edit_penjualan', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $(this).serialize(),
+                dataType: 'JSON',
+                beforeSend: function() {
+                    $('#btnsimpan').attr('disabled', true);
+                    $('#btnsimpan').html('<i class="fa fa-spin fa-spinner"></i>');
+                },
+                success: function(response) {
+                    // console.log(response)
+                    swal.fire(
+                        'Berhasil',
+                        'Data Berhasil di Update',
+                        'success'
+                    ).then(function() {
+                        window.location.href = '/penjualan/penjualan/edit_ekatalog/' + {{ $e->id }} + '/spb';
+                    });
+                },
+                error: function(xhr, status, error, response) {
+                    // console.log(response)
+                    $('#btnsimpan').attr('disabled', false);
+                    $('#btnsimpan').html('Simpan');
+                    swal.fire(
+                        'Gagal',
+                        'Cek Form Kembali',
+                        'error'
+                    );
+                }
+            });
+          });
+
+
+
+
+
+
         $(function() {
             $(".os-content-arrange").remove();
             loop();
@@ -1088,6 +1260,78 @@
 
             var jasa_id = false;
             var jasa_harga = false;
+
+            let provinsi_customer = null
+            let nama_customer = null
+
+            $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman_nonakn"]', function () {
+                let pilihan_pengiriman = $(this).val();
+                let alamat = $('#alamat_customer').val();
+                $('#perusahaan_pengiriman_nonakn').attr('readonly', true);
+                $('#alamat_pengiriman_nonakn').attr('readonly', true);
+                $('#perusahaan_pengiriman_nonakn').val('');
+                $('#perusahaan_pengiriman_nonakn').attr('placeholder', 'Masukkan Nama Perusahaan');
+                $('#alamat_pengiriman_nonakn').val('');
+                $('#alamat_pengiriman_nonakn').removeClass('is-invalid');
+                $('#alamat_pengiriman_nonakn').attr('placeholder', 'Masukkan Alamat Pengiriman');
+                $('#msg_alamat_pengiriman_nonakn').text('');
+
+                const checkValidasi = (msg) => {
+                    $('#alamat_pengiriman_nonakn').addClass('is-invalid');
+                    $('#msg_alamat_pengiriman_nonakn').text(msg);
+                }
+
+                if(pilihan_pengiriman == 'distributor'){
+                    $('#perusahaan_pengiriman_nonakn').val(nama_customer);
+                    $('#alamat_pengiriman_nonakn').val($('#alamat_customer').val());
+                }else{
+                    $('#perusahaan_pengiriman_nonakn').attr('readonly', false);
+                    $('#alamat_pengiriman_nonakn').attr('readonly', false);
+                }
+
+                alamat == '-' ? checkValidasi('Alamat Customer harus diisi') : ekspedisi_nonakn(provinsi_customer);
+
+
+            });
+
+            const ekspedisi_nonakn = (provinsi) => {
+                $('#ekspedisi_nonakn').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + provinsi,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
+
+            let alamat_customer = $('#alamat_customer').val().replace(/\s/g, '');
+            let alamat_pengiriman = $('#alamat_pengiriman_nonakn').val().replace(/\s/g, '');
+
+            if (alamat_pengiriman == alamat_customer) {
+                $('input[value="distributor"]').prop('checked', true);
+                ekspedisi_nonakn(provinsi_customer)
+            } else {
+                $('input[value="lainnya"]').prop('checked', true);
+            }
 
             function checkvalidasi() {
                 var jenis_array = [];
@@ -1142,7 +1386,7 @@
                     $('#parttable').find('.part_id').each(function() {
                         if ($(this).val() != null) {
                             part_id = true;
-                            console.log("part_id: " + $(this).val());
+                            // console.log("part_id: " + $(this).val());
                         } else {
                             part_id = false;
                             return false;
@@ -1152,7 +1396,7 @@
                     $('#parttable').find('.part_jumlah').each(function() {
                         if ($(this).val() != "") {
                             part_jumlah = true;
-                            console.log("part_jumlah: " + $(this).val());
+                            // console.log("part_jumlah: " + $(this).val());
                         } else {
                             part_jumlah = false;
                             return false;
@@ -1162,7 +1406,7 @@
                     $('#parttable').find('.part_harga').each(function() {
                         if ($(this).val() != "") {
                             part_harga = true;
-                            console.log("part_harga: " + $(this).val());
+                            // console.log("part_harga: " + $(this).val());
                         } else {
                             part_harga = false;
                             return false;
@@ -1197,10 +1441,10 @@
                     jasa_harga = true;
                 }
 
-                console.log("produk :" + penjualan_produk_id + ', ' + variasi + ', ' + produk_jumlah + ', ' +
-                    produk_harga);
-                console.log("part :" + part_id + ', ' + part_jumlah + ', ' + part_harga);
-                console.log("jasa :" + jasa_id + ', ' + jasa_harga);
+                // console.log("produk :" + penjualan_produk_id + ', ' + variasi + ', ' + produk_jumlah + ', ' +
+                //     produk_harga);
+                // console.log("part :" + part_id + ', ' + part_jumlah + ', ' + part_harga);
+                // console.log("jasa :" + jasa_id + ', ' + jasa_harga);
 
                 if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
                     if ($('#customer_id').val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "" &&
@@ -1389,7 +1633,7 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
+                        // console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -1407,7 +1651,9 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
-                        console.log(data);
+                        // console.log(data);
+                        nama_customer = data[0].nama
+                        provinsi_customer = data[0].id_provinsi
                         $('#alamat_customer').val(data[0].alamat);
                         $('#telepon_customer').val(data[0].telp);
                     }
@@ -1430,7 +1676,7 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
+                        // console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -1494,6 +1740,9 @@
                     $(el).find('.produk_harga').attr('name', 'produk_harga[' + j + ']');
                     $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
                     $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
+                    $(el).find('.produk_ppn').attr('id', 'produk_ppn' + j);
+                    $(el).find('.produk_ppn').attr('name', 'produk_ppn[' + j + ']');
+                    $(el).find('.produk_ppn_label').attr('for', 'produk_ppn' + j);
                     $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
                     $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
                     $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
@@ -1638,6 +1887,12 @@
                             <span class="input-group-text">Rp</span>
                         </div>
                         <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
+                    </div>
+                </td>
+                <td>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                        <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
                     </div>
                 </td>
                 <td>
@@ -1939,6 +2194,9 @@
                     $(el).find('.part_harga').attr('id', 'part_harga' + j);
                     $(el).find('.part_subtotal').attr('name', 'part_subtotal[' + j + ']');
                     $(el).find('.part_subtotal').attr('id', 'part_subtotal' + j);
+                    $(el).find('.part_ppn').attr('id', 'part_ppn' + j);
+                    $(el).find('.part_ppn').attr('name', 'part_ppn[' + j + ']');
+                    $(el).find('.part_ppn_label').attr('for', 'part_ppn' + j);
                     load_part(j);
                 });
             }
@@ -1977,6 +2235,12 @@
                             <span class="input-group-text">Rp</span>
                         </div>
                         <input type="text" class="form-control part_subtotal" name="part_subtotal[]" id="part_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
+                    </div>
+                </td>
+                <td>
+                    <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input part_ppn" id="part_ppn0" name="part_ppn[]" value="0">
+                            <label class="custom-control-label part_ppn_label" for="part_ppn0">Non PPN</label>
                     </div>
                 </td>
                 <td>
@@ -2031,6 +2295,33 @@
                 }
                 checkvalidasi();
             });
+
+            $(document).on('change', '.custom-control-input', function() {
+                var labelElement = $(this).closest('tr').find('.custom-control-label')
+                var label = labelElement.text();
+                // not checked
+
+                if ($(this).val() == '0' || $(this).val() == '' || $(this).val() == null) {
+                    $(this).val('1');
+                    // change label text
+                    label = label.replace('Non PPN', 'PPN');
+                } else {
+                    $(this).val('0');
+                    // change label text
+                    label = label.replace('PPN', 'Non PPN');
+                }
+                labelElement.text(label);
+            });
+
+
         });
+
+        $(function () {
+            let customer = $('#customer_id').val();
+            if(customer){
+                // trigger event select2
+                $('#customer_id').trigger('change');
+            }
+        })
     </script>
 @stop

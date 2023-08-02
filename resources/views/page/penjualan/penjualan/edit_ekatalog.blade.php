@@ -457,6 +457,12 @@
                                                                 aria-selected="false">Instansi</a>
                                                         </li>
                                                         <li class="nav-item" role="presentation">
+                                                            <a class="nav-link disabled" id="pills-pengiriman-tab"
+                                                                data-toggle="pill" href="#pills-pengiriman" role="tab"
+                                                                aria-controls="pills-pengiriman"
+                                                                aria-selected="false">Pengiriman</a>
+                                                        </li>
+                                                        <li class="nav-item" role="presentation">
                                                             <a class="nav-link" id="pills-produk-tab" data-toggle="pill"
                                                                 href="#pills-produk" role="tab"
                                                                 aria-controls="pills-produk" aria-selected="false">Rencana
@@ -866,6 +872,83 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="tab-pane fade" id="pills-pengiriman" role="tabpanel"
+                                                        aria-labelledby="pills-pengiriman-tab">
+                                                            <div class="card removeshadow">
+                                                                <div class="card-header">
+                                                                    <h6>Pengiriman</h6>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="form-group row">
+                                                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pengiriman0" value="distributor" />
+                                                                                <label for="pengiriman0" class="form-check-label">Sama dengan Distributor</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pengiriman1" value="instansi" />
+                                                                                <label for="pengiriman1" class="form-check-label">Sama dengan Instansi</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="lainnya" value="lainnya" />
+                                                                                <label for="lainnya" class="form-check-label">Lainnya</label>
+                                                                            </div>
+                                                                            <input type="text" name="perusahaan_pengiriman"
+                                                                            value="{{ $e->pesanan->tujuan_kirim }}"
+                                                                            id="perusahaan_pengiriman" class="form-control col-form-label" readonly>
+                                                                            <input type="text"
+                                                                            value="{{ $e->pesanan->alamat_kirim }}"
+                                                                                class="form-control col-form-label mt-2" name="alamat_pengiriman" id="alamat_pengiriman" readonly/>
+                                                                            <div class="invalid-feedback"
+                                                                                id="msg_alamat_pengiriman">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti"
+                                                                                @if ($e->pesanan->kemasan == "peti")
+                                                                                    checked
+                                                                                @endif
+                                                                                />
+                                                                                <label for="kemasan0" class="form-check-label">PETI</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti"
+                                                                                @if ($e->pesanan->kemasan == "nonpeti")
+                                                                                    checked
+                                                                                @endif
+                                                                                />
+                                                                                <label for="kemasan1" class="form-check-label">NON PETI</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Ekspedisi</label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <select name="ekspedisi" id="ekspedisi" class="form-control">
+                                                                                @if ($e->pesanan->ekspedisi_id != NULL || $e->pesanan->ekspedisi_id != "" )
+                                                                                <option
+                                                                                    value="{{ $e->pesanan->ekspedisi_id }}"
+                                                                                    selected>
+                                                                                    {{ $e->pesanan->Ekspedisi->nama }}
+                                                                                </option>
+                                                                            @endif
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <textarea class="form-control col-form-label" name="keterangan_pengiriman">{{ $e->pesanan->ket_kirim }}</textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                             <div class="tab-pane fade show" id="pills-produk"
                                                                 role="tabpanel" aria-labelledby="pills-produk-tab">
                                                                 <div class="card removeshadow">
@@ -1063,6 +1146,26 @@
                                                                                                     readonly />
                                                                                             </div>
                                                                                         </td>
+                                                                                        <td>
+                                                                                            <div class="custom-control custom-switch">
+                                                                                                <input type="checkbox" class="custom-control-input produk_ppn"
+                                                                                                id="produk_ppn{{ $produkpenjualan }}"
+                                                                                                name="produk_ppn[{{ $produkpenjualan }}]"
+                                                                                                value="{{ $f->ppn }}"
+                                                                                                @if ($f->ppn == 1)
+                                                                                                    checked
+                                                                                                @endif
+                                                                                                >
+
+                                                                                                <label class="custom-control-label produk_ppn_label" for="produk_ppn{{ $produkpenjualan }}">
+                                                                                                @if ($f->ppn == 1)
+                                                                                                    PPN
+                                                                                                @else
+                                                                                                    Non PPN
+                                                                                                @endif
+                                                                                                </label>
+                                                                                              </div>
+                                                                                        </td>
                                                                                         <td hidden><input type="hidden"
                                                                                                 class="rencana_id"
                                                                                                 name="rencana_id[{{ $produkpenjualan }}]"
@@ -1158,6 +1261,13 @@
                                                                                                 readonly />
                                                                                         </div>
                                                                                     </td>
+                                                                                    <td>
+                                                                                        <div class="custom-control custom-switch">
+                                                                                            <input type="checkbox" class="custom-control-input produk_ppn"
+                                                                                            id="produk_ppn0" name="produk_ppn[0]" value="0">
+                                                                                            <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
+                                                                                          </div>
+                                                                                    </td>
                                                                                     <td hidden><input type="hidden"
                                                                                             class="rencana_id"
                                                                                             name="rencana_id[]"
@@ -1247,6 +1357,13 @@
                                                                                             aria-describedby="prdsub"
                                                                                             readonly />
                                                                                     </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class="custom-control custom-switch">
+                                                                                        <input type="checkbox" class="custom-control-input produk_ppn"
+                                                                                        id="produk_ppn0" name="produk_ppn[0]" value="0">
+                                                                                        <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
+                                                                                      </div>
                                                                                 </td>
                                                                                 <td hidden><input type="hidden"
                                                                                         class="rencana_id"
@@ -1340,6 +1457,8 @@
                 },
                 error: function(xhr, status, error, response) {
                     // console.log(response)
+                    $('#btnsimpan').attr('disabled', false);
+                    $('#btnsimpan').html('Simpan');
                     swal.fire(
                         'Gagal',
                         'Cek Form Kembali',
@@ -1349,6 +1468,40 @@
             });
           });
         $(function() {
+            // check input[type="radio"][name="status_akn"]:checked == sepakat
+            if ($('input[type="radio"][name="status_akn"]:checked').val() == "sepakat") {
+                $('#pills-pengiriman-tab').removeClass('disabled');
+            }
+
+            const ekspedisi = (provinsi) => {
+                $('#ekspedisi').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + provinsi,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
+
             $('#jenis_paket').select2();
             var nopaketdb = "{{ str_replace(['AK1-', 'FKS-', 'KLK-'], '', $e->no_paket) }}";
             var nopaketubah = false;
@@ -1374,9 +1527,24 @@
             var variasi = false;
             var produk_jumlah = false;
             var produk_harga = false;
+            let nama_customer = '';
+            let provinsi_customer = null;
+            let provinsi_instansi = $('#provinsi').val();
+
+            let alamat_pengiriman = $('#alamat_pengiriman').val().replace(/\s/g, '');
+            let alamat_customer = $('#alamat_customer').val().replace(/\s/g, '');
+            let alamat_instansi = $('#alamatinstansi').val().replace(/\s/g, '');
+
+            if (alamat_pengiriman == alamat_customer) {
+                $('input[value="distributor"]').prop('checked', true);
+            } else if (alamat_pengiriman == alamat_instansi) {
+                $('input[value="instansi"]').prop('checked', true);
+                ekspedisi(provinsi_instansi)
+            } else {
+                $('input[value="lainnya"]').prop('checked', true);
+            }
 
             function checkvalidasi() {
-
                 $('#produktable').find('.penjualan_produk_id').each(function() {
                     if ($(this).val() != "") {
                         penjualan_produk_id = true;
@@ -1593,6 +1761,8 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
+                        nama_customer = data[0].nama;
+                        provinsi_customer = data[0].id_provinsi;
                         $('#alamat_customer').val(data[0].alamat);
                         $('#telepon_customer').val(data[0].telp);
                     }
@@ -1627,7 +1797,62 @@
                         };
                     },
                 }
-            })
+            }).change(function() {
+                if ($(this).val() != "") {
+                    $("#msgprovinsi").text("");
+                    $("#provinsi").removeClass('is-invalid');
+                    $('#alamat_pengiriman').removeClass('is-invalid');
+                    $('#msg_alamat_pengiriman').text('');
+                }
+                else{
+                    $("#msgprovinsi").text("Provinsi harus diisi");
+                    $("#provinsi").addClass('is-invalid');
+                    $('#btntambah').attr("disabled", true);
+                    $('#alamat_pengiriman').addClass('is-invalid');
+                    $('#msg_alamat_pengiriman').text('Provinsi instansi harus diisi');
+                }
+            });
+
+            fetch('/api/customer/select/'+$('#customer_id').val())
+                .then(response => response.json())
+                .then(data => {
+                    nama_customer = data[0].nama;
+                    provinsi_customer = data[0].id_provinsi;
+                });
+
+            $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function () {
+                let pilihan_pengiriman = $(this).val();
+                let provinsi_instansi = $('#provinsi').val();
+                $('#perusahaan_pengiriman').attr('readonly', true);
+                $('#alamat_pengiriman').attr('readonly', true);
+                $('#perusahaan_pengiriman').val('');
+                // add placeholder
+                $('#perusahaan_pengiriman').attr('placeholder', 'Masukkan Nama Perusahaan');
+                $('#alamat_pengiriman').val('');
+                $('#alamat_pengiriman').removeClass('is-invalid');
+                // add placeholder
+                $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
+                $('#msg_alamat_pengiriman').text('');
+
+                const checkValidasi = (msg) => {
+                    $('#alamat_pengiriman').addClass('is-invalid');
+                    $('#msg_alamat_pengiriman').text(msg);
+                }
+
+                if(pilihan_pengiriman == 'distributor'){
+                    $('#perusahaan_pengiriman').val(nama_customer);
+                    $('#alamat_pengiriman').val($('#alamat_customer').val());
+                    provinsi_customer ? ekspedisi(provinsi_customer) : checkValidasi('Provinsi Customer harus diisi');
+                }else if (pilihan_pengiriman == 'instansi'){
+                    $('#perusahaan_pengiriman').val($('#satuan_kerja').val());
+                    $('#alamat_pengiriman').val($('#alamatinstansi').val());
+                    provinsi_instansi != 'NULL' ? ekspedisi(provinsi_instansi) : checkValidasi('Provinsi Instansi harus diisi');
+                }else{
+                    $('#perusahaan_pengiriman').attr('readonly', false);
+                    $('#alamat_pengiriman').attr('readonly', false);
+                    ekspedisi(provinsi_instansi);
+                }
+            });
 
             if ('{{ $e->customer_id }}' == 484) {
                 var cust_id = 'belum';
@@ -1714,6 +1939,7 @@
                             $('#produktablve tbody').append(trproduktable());
                         }
                         numberRowsProduk($("#produktable"));
+                        $('#pills-pengiriman-tab').removeClass('disabled');
                     } else if ($(this).val() == "draft" || $(this).val() == "batal") {
                         $('#isi_produk_input').removeClass('hide');
                         $('#checkbox_nopaket').removeClass('hide');
@@ -1742,6 +1968,7 @@
                         if ($('input[type="checkbox"][name="isi_produk"]:checked').length <= 0) {
                             $("#dataproduk").addClass("hide");
                         }
+                        $('#pills-pengiriman-tab').addClass('disabled');
                     } else if ($(this).val() == "negosiasi") {
                         $('#checkbox_nopaket').addClass('hide');
                         $('#isi_nopaket').prop("checked", false);
@@ -1759,6 +1986,7 @@
                             $('#produktable tbody').append(trproduktable());
                         }
                         numberRowsProduk($("#produktable"));
+                        $('#pills-pengiriman-tab').addClass('disabled');
                     }
                 } else {
                     $('#checkbox_nopaket').addClass('hide');
@@ -1983,6 +2211,9 @@
                     $(el).find('.produk_ongkir').attr('name', 'produk_ongkir[' + j + ']');
                     $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
                     $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
+                    $(el).find('.produk_ppn').attr('id', 'produk_ppn' + j);
+                    $(el).find('.produk_ppn').attr('name', 'produk_ppn[' + j + ']');
+                    $(el).find('.produk_ppn_label').attr('for', 'produk_ppn' + j);
                     $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
                     $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
                     $(el).find('.rencana_id').attr('id', 'rencana_id' + j);
@@ -2159,6 +2390,12 @@
                     <td>
                         <div class="form-group d-flex justify-content-center">
                             <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                            <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
                         </div>
                     </td>
                     <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly></td>
@@ -2545,6 +2782,12 @@
                     `" style="width:100%;" readonly/>
                             </div>
                         </td>
+                        <td>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
+                                <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
+                            </div>
+                        </td>
                         <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly value="` +
                     id + `"></td>
                         <td>
@@ -2628,6 +2871,23 @@
                     }
                 });
             }
+
+            $(document).on('change', '.custom-control-input', function() {
+                var labelElement = $(this).closest('tr').find('.custom-control-label')
+                var label = labelElement.text();
+                // not checked
+
+                if ($(this).val() == '0' || $(this).val() == '' || $(this).val() == null) {
+                    $(this).val('1');
+                    // change label text
+                    label = label.replace('Non PPN', 'PPN');
+                } else {
+                    $(this).val('0');
+                    // change label text
+                    label = label.replace('PPN', 'Non PPN');
+                }
+                labelElement.text(label);
+            });
         });
     </script>
 @stop

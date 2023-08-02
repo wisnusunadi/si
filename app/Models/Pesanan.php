@@ -9,12 +9,18 @@ class Pesanan extends Model
 {
     protected $connection = 'erp';
     protected $table = 'pesanan';
-    protected $fillable = ['no_po', 'so', 'tgl_po', 'no_do', 'tgl_do', 'ket', 'log_id', 'checked_by', 'status_cek'];
+    protected $fillable = ['no_po', 'so', 'tgl_po', 'no_do', 'tgl_do', 'ket', 'log_id', 'checked_by', 'status_cek','tujuan_kirim','alamat_kirim','kemasan','ekspedisi_id','ket_kirim'];
 
     public function Ekatalog()
     {
         return $this->hasOne(Ekatalog::class);
     }
+
+    public function Ekspedisi()
+    {
+        return $this->belongsTo(Ekspedisi::class, 'ekspedisi_id');
+    }
+
     public function Spa()
     {
         return $this->hasOne(Spa::class);
@@ -23,6 +29,7 @@ class Pesanan extends Model
     {
         return $this->hasOne(Spb::class);
     }
+
     public function DetailPesanan()
     {
         return $this->hasMany(DetailPesanan::class);
@@ -36,6 +43,7 @@ class Pesanan extends Model
     {
         return $this->hasMany(DetailPesananPart::class);
     }
+
     public function DetailPesananPartJasa()
     {
         $id = $this->id;

@@ -26,7 +26,7 @@ use App\Models\Spb;
 use App\Models\Provinsi;
 use App\Models\SaveResponse;
 use App\Models\SystemLog;
-use App\Models\TFProduksi;
+use PDF;
 use Carbon\Doctrine\CarbonType;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -2839,6 +2839,19 @@ class PenjualanController extends Controller
                     // $return .= "-";
                 }
 
+
+
+                if($data->status == 'sepakat' && ($data->Pesanan->no_do != NULL && $data->Pesanan->tgl_do != NULL)) {
+                        $return .= '
+                        <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
+                            <button class="dropdown-item" type="button" >
+                            <i class="fas fa-print"></i>
+                            Print
+                            </button>
+                        </a>
+                        ';
+                }
+
                 if ($divisi_id == "26") {
                     if (!empty($data->Pesanan->log_id)) {
                         if ($data->Pesanan->State->nama == "Penjualan" || $data->cgudang == 0) {
@@ -2955,7 +2968,45 @@ class PenjualanController extends Controller
                     $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
                         ->from('detail_pesanan_part')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
-                }
+                },
+                  'cgudang' => function ($q) {
+                    $q->selectRaw('count(detail_pesanan_produk.id)')
+                        ->from('detail_pesanan_produk')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->where('detail_pesanan_produk.status_cek', '4')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'cpart' => function ($q) {
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                    ->where('m_sparepart.kode', 'not like', '%Jasa%')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                },
+                'cjasa' => function ($q) {
+                    $q->selectRaw('count(outgoing_pesanan_part.id)')
+                        ->from('outgoing_pesanan_part')
+                        ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                        ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                        ->where('m_sparepart.kode', 'like', '%Jasa%')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                },
+                'cujipart' => function ($q) {
+                    $q->selectRaw('count(outgoing_pesanan_part.id)')
+                        ->from('outgoing_pesanan_part')
+                        ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                        ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                        ->where('m_sparepart.kode', 'not like', '%Jasa%')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                },
+                'cujijasa' => function ($q) {
+                    $q->selectRaw('count(outgoing_pesanan_part.id)')
+                    ->from('outgoing_pesanan_part')
+                    ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                    ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                    ->where('m_sparepart.kode', 'like', '%Jasa%')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                },
 
             ])->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get();
         } else {
@@ -2985,6 +3036,45 @@ class PenjualanController extends Controller
                     $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
                         ->from('detail_pesanan_part')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                },
+                'cgudang' => function ($q) {
+                    $q->selectRaw('count(detail_pesanan_produk.id)')
+                        ->from('detail_pesanan_produk')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->where('detail_pesanan_produk.status_cek', '4')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'cpart' => function ($q) {
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                    ->where('m_sparepart.kode', 'not like', '%Jasa%')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+
+                },
+                'cjasa' => function ($q) {
+                    $q->selectRaw('count(outgoing_pesanan_part.id)')
+                        ->from('outgoing_pesanan_part')
+                        ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                        ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                        ->where('m_sparepart.kode', 'like', '%Jasa%')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                },
+                'cujipart' => function ($q) {
+                    $q->selectRaw('count(outgoing_pesanan_part.id)')
+                        ->from('outgoing_pesanan_part')
+                        ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                        ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                        ->where('m_sparepart.kode', 'not like', '%Jasa%')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                },
+                'cujijasa' => function ($q) {
+                    $q->selectRaw('count(outgoing_pesanan_part.id)')
+                    ->from('outgoing_pesanan_part')
+                    ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                    ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                    ->where('m_sparepart.kode', 'like', '%Jasa%')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
                 }
 
             ])->whereHas('pesanan', function ($q) use ($x) {
@@ -3111,13 +3201,27 @@ class PenjualanController extends Controller
                             </button>
                         </a>';
                         if (!empty($data->Pesanan->log_id)) {
-                            if ($data->Pesanan->State->nama == "PO") {
+                        $item = array();
+                            if($data->cjumlahprd > 0 && $data->cgudang > 0){
+                                array_push($item,"1");
+                            }
+
+                            if($data->cpart > 0 && $data->cujipart > 0){
+                                array_push($item,"1");
+                            }
+
+                            if($data->cjasa > 0  && $data->cujijasa > 0 ){
+                                array_push($item,"1");
+                            }
+
+                            if ($data->Pesanan->State->nama == "PO" ||count($item) == 0 ) {
                                 $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">
                                     <button class="dropdown-item" type="button" >
                                     <i class="fas fa-pencil-alt"></i>
                                     Edit
                                     </button>
                                 </a>';
+                                if ($divisi_id == "26") {
                                 $return .= '<a data-toggle="modal" data-target="spa" class="deletemodal" data-id="' . $data->id . '">
                                     <button class="dropdown-item" type="button" >
                                     <i class="far fa-trash-alt"></i>
@@ -3125,7 +3229,9 @@ class PenjualanController extends Controller
                                     </button>
                                 </a>
                                 ';
+                            }
                             } else {
+                                if ($divisi_id == "26") {
                                 $return .= '<a data-toggle="modal" data-jenis="spa" class="editmodal" data-id="' . $data->id . '">
                                     <button class="dropdown-item" type="button" >
                                     <i class="fas fa-pencil-alt"></i>
@@ -3133,6 +3239,16 @@ class PenjualanController extends Controller
                                     </button>
                                 </a>
                                 ';
+                             }
+                            }
+                            if ($data->Pesanan->no_do != NULL && $data->Pesanan->tgl_do != NULL) {
+                            $return .= '
+                            <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
+                                <button class="dropdown-item" type="button" >
+                                <i class="fas fa-print"></i>
+                                Cetak SPB
+                                </button>
+                            </a>';
                             }
                             $jumkirim = ($data->ckirimprd + $data->ckirimpart);
                             if ($jumkirim <= 0) {
@@ -3219,7 +3335,46 @@ class PenjualanController extends Controller
                     $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
                         ->from('detail_pesanan_part')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
-                }
+                },
+                'cgudang' => function ($q) {
+                    $q->selectRaw('count(detail_pesanan_produk.id)')
+                        ->from('detail_pesanan_produk')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->where('detail_pesanan_produk.status_cek', '4')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                },
+                'cpart' => function ($q) {
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                    ->where('m_sparepart.kode', 'not like', '%Jasa%')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+
+                },
+                'cjasa' => function ($q) {
+                    $q->selectRaw('count(outgoing_pesanan_part.id)')
+                        ->from('outgoing_pesanan_part')
+                        ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                        ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                        ->where('m_sparepart.kode', 'like', '%Jasa%')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                },
+                'cujipart' => function ($q) {
+                    $q->selectRaw('count(outgoing_pesanan_part.id)')
+                        ->from('outgoing_pesanan_part')
+                        ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                        ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                        ->where('m_sparepart.kode', 'not like', '%Jasa%')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                },
+                'cujijasa' => function ($q) {
+                    $q->selectRaw('count(outgoing_pesanan_part.id)')
+                    ->from('outgoing_pesanan_part')
+                    ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                    ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                    ->where('m_sparepart.kode', 'like', '%Jasa%')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                },
             ])->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get();
         } else {
             $data  = Spb::with(['Pesanan.State',  'Customer'])->addSelect([
@@ -3248,7 +3403,46 @@ class PenjualanController extends Controller
                     $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
                         ->from('detail_pesanan_part')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
-                }
+                } ,
+                'cgudang' => function ($q) {
+                    $q->selectRaw('count(detail_pesanan_produk.id)')
+                        ->from('detail_pesanan_produk')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->where('detail_pesanan_produk.status_cek', '4')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                },
+                'cpart' => function ($q) {
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                    ->where('m_sparepart.kode', 'not like', '%Jasa%')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+
+                },
+                'cjasa' => function ($q) {
+                    $q->selectRaw('count(outgoing_pesanan_part.id)')
+                        ->from('outgoing_pesanan_part')
+                        ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                        ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                        ->where('m_sparepart.kode', 'like', '%Jasa%')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                },
+                'cujipart' => function ($q) {
+                    $q->selectRaw('count(outgoing_pesanan_part.id)')
+                        ->from('outgoing_pesanan_part')
+                        ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                        ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                        ->where('m_sparepart.kode', 'not like', '%Jasa%')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                },
+                'cujijasa' => function ($q) {
+                    $q->selectRaw('count(outgoing_pesanan_part.id)')
+                    ->from('outgoing_pesanan_part')
+                    ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                    ->leftjoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                    ->where('m_sparepart.kode', 'like', '%Jasa%')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                },
             ])->whereHas('pesanan', function ($q) use ($x) {
                 $q->whereIN('log_id', $x);
             })->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get();
@@ -3369,7 +3563,21 @@ class PenjualanController extends Controller
                     </a>';
                     if ($data->log != "batal") {
                         if (!empty($data->Pesanan->log_id)) {
-                            if ($data->Pesanan->State->nama == "PO") {
+
+                            $item = array();
+                            if($data->cjumlahprd > 0 && $data->cgudang > 0){
+                                array_push($item,"1");
+                            }
+
+                            if($data->cpart > 0 && $data->cujipart > 0){
+                                array_push($item,"1");
+                            }
+
+                            if($data->cjasa > 0  && $data->cujijasa > 0 ){
+                                array_push($item,"1");
+                            }
+
+                            if ($data->Pesanan->State->nama == "PO" ||count($item) == 0) {
                                 $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">
                                     <button class="dropdown-item" type="button" >
                                     <i class="fas fa-pencil-alt"></i>
@@ -3396,6 +3604,15 @@ class PenjualanController extends Controller
                                     ';
                                 }
                             }
+                            if ($data->Pesanan->no_do != NULL && $data->Pesanan->tgl_do != NULL) {
+                                $return .= '
+                                <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
+                                    <button class="dropdown-item" type="button" >
+                                    <i class="fas fa-print"></i>
+                                    Cetak SPB
+                                    </button>
+                                </a>';
+                                }
                             $jumkirim = ($data->ckirimprd + $data->ckirimpart);
                             if ($jumkirim <= 0) {
                                 $return .= '<hr class="separator">
@@ -3479,9 +3696,14 @@ class PenjualanController extends Controller
     // Create
     public function create_penjualan(Request $request)
     {
-//    dd($request->all());
+    // dd($request->all());
         if ($request->jenis_penjualan == 'ekatalog') {
-            if ($request->status == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL")) {
+            if ($request->status == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL") ) {
+                    return response()->json([
+                        'message' => 'Cek Form Kembali',
+                    ], 500);
+            }
+            if ($request->status == 'sepakat' && ( $request->perusahaan_pengiriman_ekat == NULL || $request->alamat_pengiriman_ekat == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL) ) {
                     return response()->json([
                         'message' => 'Cek Form Kembali',
                     ], 500);
@@ -3541,6 +3763,11 @@ class PenjualanController extends Controller
                 'tgl_do' => $tgl_do,
                 'ket' =>  $ket_po,
                 'log_id' => $log_id,
+                'tujuan_kirim' => $request->perusahaan_pengiriman_ekat,
+                'alamat_kirim' => $request->alamat_pengiriman_ekat,
+                'kemasan' => $request->kemasan,
+                'ekspedisi_id' => $request->ekspedisi,
+                'ket_kirim' => $request->keterangan_pengiriman,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ]);
@@ -3593,6 +3820,7 @@ class PenjualanController extends Controller
                             'detail_rencana_penjualan_id' => $request->rencana_id[$i],
                             'jumlah' => $request->produk_jumlah[$i],
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                            'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                             'ongkir' => $ongkir[$i],
                         ]);
 
@@ -3624,6 +3852,7 @@ class PenjualanController extends Controller
                                 'detail_rencana_penjualan_id' => $request->rencana_id[$i],
                                 'jumlah' => $request->produk_jumlah[$i],
                                 'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                                'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                                 'ongkir' => $ongkir[$i],
                             ]);
 
@@ -3659,6 +3888,7 @@ class PenjualanController extends Controller
                 ], 500);
             }
         } else if ($request->jenis_penjualan == 'spa' || $request->jenis_penjualan == 'spb') {
+if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NULL &  $request->kemasan != NULL & $request->ekspedisi != NULL){
             $count_array = count($request->jenis_pen);
             if (in_array("jasa", $request->jenis_pen) && $count_array == 1) {
                 $k = '11';
@@ -3677,6 +3907,11 @@ class PenjualanController extends Controller
                 'no_do' => $request->no_do,
                 'tgl_do' => $request->tanggal_do,
                 'ket' =>  $request->keterangan,
+                'tujuan_kirim' => $request->perusahaan_pengiriman,
+                'alamat_kirim' => $request->alamat_pengiriman,
+                'kemasan' => $request->kemasan,
+                'ekspedisi_id' => $request->ekspedisi,
+                'ket_kirim' => $request->keterangan_pengiriman,
                 'log_id' => $k
             ]);
             $x = $pesanan->id;
@@ -3703,6 +3938,7 @@ class PenjualanController extends Controller
                             'pesanan_id' => $x,
                             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                             'jumlah' => $request->produk_jumlah[$i],
+                            'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => 0,
                         ]);
@@ -3725,6 +3961,7 @@ class PenjualanController extends Controller
                             'm_sparepart_id' => $request->part_id[$i],
                             'jumlah' => $request->part_jumlah[$i],
                             'harga' => str_replace('.', "", $request->part_harga[$i]),
+                            'ppn' => isset($request->part_ppn[$i]) ? $request->part_ppn[$i] : 0,
                             'ongkir' => 0,
                         ]);
                         if (!$dspb) {
@@ -3739,6 +3976,7 @@ class PenjualanController extends Controller
                             'm_sparepart_id' => $request->jasa_id[$i],
                             'jumlah' => 1,
                             'harga' => str_replace('.', "", $request->jasa_harga[$i]),
+                            'ppn' => isset($request->jasa_ppn[$i]) ? $request->jasa_ppn[$i] : 0,
                             'ongkir' => 0,
                         ]);
 
@@ -3769,6 +4007,11 @@ class PenjualanController extends Controller
                 ], 500);
             }
         }
+    }else{
+        return response()->json([
+            'message' => 'Cek Form Kembali',
+        ], 500);
+    }
     }
 
     public function view_so_ekatalog($value)
@@ -3884,20 +4127,25 @@ class PenjualanController extends Controller
     }
     public function update_ekatalog(Request $request, $id)
     {
-        // dd($request->all());
+        //dd($request->all());
         if ($request->status_akn == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL")) {
             return response()->json([
                 'message' => 'Cek Form Kembali',
             ], 500);
     }
+
+    if ($request->status == 'sepakat' && ( $request->perusahaan_pengiriman == NULL || $request->alamat_pengiriman == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL) ) {
+        return response()->json([
+            'message' => 'Cek Form Kembali',
+        ], 500);
+}
+
         // echo json_encode($request->all());
         if ($request->namadistributor == 'belum') {
             $c_id = '484';
         } else {
             $c_id = $request->customer_id;
         }
-
-
 
         $ekatalog = Ekatalog::find($id);
 
@@ -3938,7 +4186,14 @@ class PenjualanController extends Controller
         $p->tgl_po = $request->tanggal_po_ekat;
         $p->no_do = $request->no_do_ekat;
         $p->tgl_do = $request->tanggal_do_ekat;
+        $p->tujuan_kirim = $request->perusahaan_pengiriman;
+        $p->alamat_kirim = $request->alamat_pengiriman;
+        $p->kemasan = $request->kemasan;
+        $p->ekspedisi_id = $request->ekspedisi;
+        $p->ket_kirim = $request->keterangan_pengiriman;
         $p->ket = $request->keterangan_po_ekat;
+
+
         if ($request->status_akn == "sepakat" && $request->no_po_ekat != NULL) {
             $p->log_id = "9";
         }
@@ -3981,6 +4236,7 @@ class PenjualanController extends Controller
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => $ongkir[$i],
                             'detail_rencana_penjualan_id' => $request->rencana_id[$i],
+                            'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                         ]);
                         if ($c) {
                             for ($j = 0; $j < count($request->variasi[$i]); $j++) {
@@ -4011,6 +4267,7 @@ class PenjualanController extends Controller
                                 'harga' => str_replace('.', "", $request->produk_harga[$i]),
                                 'ongkir' => $ongkir[$i],
                                 'detail_rencana_penjualan_id' => $request->rencana_id[$i],
+                                'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                             ]);
                             if ($c) {
                                 for ($j = 0; $j < count($request->variasi[$i]); $j++) {
@@ -4048,6 +4305,12 @@ class PenjualanController extends Controller
     }
     public function update_spa(Request $request, $id)
     {
+        //dd($request->all());
+        if ($request->perusahaan_pengiriman_nonakn == NULL || $request->alamat_pengiriman == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL)  {
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
+    }
         $spa = Spa::find($id);
         $poid = $spa->pesanan_id;
         $spa->customer_id = $request->customer_id;
@@ -4058,6 +4321,11 @@ class PenjualanController extends Controller
             $pesanan->no_do = $request->no_do;
             $pesanan->tgl_do = $request->tanggal_do;
             $pesanan->ket = $request->keterangan;
+            $pesanan->tujuan_kirim = $request->perusahaan_pengiriman_nonakn;
+            $pesanan->alamat_kirim = $request->alamat_pengiriman;
+            $pesanan->kemasan = $request->kemasan;
+            $pesanan->ket_kirim = $request->keterangan_pengiriman;
+            $pesanan->ekspedisi_id = $request->ekspedisi;
             $po = $pesanan->save();
 
             if ($po) {
@@ -4090,6 +4358,7 @@ class PenjualanController extends Controller
                                     'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                                     'jumlah' => $request->produk_jumlah[$i],
                                     'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                                    'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                                     'ongkir' => 0,
                                 ]);
                                 if (!$c) {
@@ -4138,6 +4407,7 @@ class PenjualanController extends Controller
                                     'm_sparepart_id' => $request->part_id[$i],
                                     'jumlah' => $request->part_jumlah[$i],
                                     'harga' => str_replace('.', "", $request->part_harga[$i]),
+                                    'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                                     'ongkir' => 0,
                                 ]);
                                 if (!$dspb) {
@@ -4171,13 +4441,24 @@ class PenjualanController extends Controller
         }
 
         if ($bool == true) {
-            return redirect()->back()->with('success', 'Berhasil mengubah SPA');
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil Ditambahkan',
+            ], 200);
         } else if ($bool == false) {
-            return redirect()->back()->with('error', 'Gagal mengubah SPA');
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
         }
     }
     public function update_spb(Request $request, $id)
     {
+       // dd($request->all());
+        if ($request->perusahaan_pengiriman_nonakn == NULL || $request->alamat_pengiriman == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL)  {
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
+    }
         $spa = Spb::find($id);
         $poid = $spa->pesanan_id;
         $spa->customer_id = $request->customer_id;
@@ -4188,6 +4469,11 @@ class PenjualanController extends Controller
             $pesanan->no_do = $request->no_do;
             $pesanan->tgl_do = $request->tanggal_do;
             $pesanan->ket = $request->keterangan;
+            $pesanan->tujuan_kirim = $request->perusahaan_pengiriman_nonakn;
+            $pesanan->alamat_kirim = $request->alamat_pengiriman;
+            $pesanan->kemasan = $request->kemasan;
+            $pesanan->ket_kirim = $request->keterangan_pengiriman;
+            $pesanan->ekspedisi_id = $request->ekspedisi;
             $po = $pesanan->save();
 
             if ($po) {
@@ -4219,6 +4505,7 @@ class PenjualanController extends Controller
                                     'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                                     'jumlah' => $request->produk_jumlah[$i],
                                     'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                                    'ppn' => isset($request->part_ppn[$i]) ? $request->part_ppn[$i] : 0,
                                     'ongkir' => 0,
                                 ]);
                                 if (!$c) {
@@ -4266,6 +4553,7 @@ class PenjualanController extends Controller
                                     'pesanan_id' => $poid,
                                     'm_sparepart_id' => $request->part_id[$i],
                                     'jumlah' => $request->part_jumlah[$i],
+                                    'ppn' => isset($request->part_ppn[$i]) ? $request->part_ppn[$i] : 0,
                                     'harga' => str_replace('.', "", $request->part_harga[$i]),
                                     'ongkir' => 0,
                                 ]);
@@ -4300,9 +4588,14 @@ class PenjualanController extends Controller
         }
 
         if ($bool == true) {
-            return redirect()->back()->with('success', 'Berhasil mengubah SPA');
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil Ditambahkan',
+            ], 200);
         } else if ($bool == false) {
-            return redirect()->back()->with('error', 'Gagal mengubah SPA');
+            return response()->json([
+                'message' => 'Cek Form Kembali',
+            ], 500);
         }
     }
 
@@ -7161,5 +7454,97 @@ class PenjualanController extends Controller
             'message' =>  'Berhasil',
             'data'    =>  $json_array
         ], 200);
+    }
+
+    public function cetak_surat_perintah($id)
+    {
+        $pesanan = Pesanan::find($id);
+        $customPaper = array(0,0,605.44,788.031);
+
+
+            if($pesanan->DetailPesanan->isNotEmpty()){
+                foreach($pesanan->DetailPesanan as $key => $prd){
+                    $pesanan_prd[$key] = array(
+                        'no' => $key + 1 ,
+                        'kode' => '-',
+                        'nama' => $prd->penjualanproduk->nama_alias,
+                        'jumlah' => $prd->jumlah,
+                        'pajak' => $prd->ppn == '1' ? 'PPn' : '-'
+                    );
+                }
+            }else{
+                $pesanan_prd = array();
+            }
+
+        if($pesanan->DetailPesananPart->isNotEmpty()){
+            foreach($pesanan->DetailPesananPart as $key => $part){
+                $pesanan_part[$key] = array(
+                    'no' => count($pesanan_prd) + $key + 1,
+                    'kode' => $part->Sparepart->kode,
+                    'nama' => $part->Sparepart->nama,
+                    'jumlah' => $part->jumlah,
+                    'pajak' => $part->ppn == '1' ? 'PPn' : '-'
+                );
+            }
+        }else{
+            $pesanan_part = array();
+        }
+
+
+
+            if(count($pesanan_prd) > 0 && count($pesanan_part) <= 0){
+                $data =  array_chunk($pesanan_prd, 15);
+            }else if (count($pesanan_part) > 0  && count($pesanan_prd) <= 0) {
+                $data = array_chunk($pesanan_part, 15);
+            }else if (count($pesanan_prd) > 0 && count($pesanan_part) > 0){
+                $merge = array_merge($pesanan_prd, $pesanan_part);
+                $data = array_chunk($merge, 15);
+            }
+
+
+            if ($pesanan->Ekatalog){
+                $cs = $pesanan->Ekatalog->Customer->nama;
+                $alamat_cs = $pesanan->Ekatalog->Customer->alamat;
+                $ket_paket =$pesanan->Ekatalog->ket;
+                $no_paket = $pesanan->Ekatalog->no_paket;
+
+            }elseif($pesanan->Spa){
+                $cs = $pesanan->Spa->Customer->nama;
+                $alamat_cs = $pesanan->Spa->Customer->alamat;
+                $ket_paket =$pesanan->Spa->ket;
+                $no_paket = '-';
+
+            }elseif($pesanan->Spb){
+                $cs = $pesanan->Spb->Customer->nama;
+                $alamat_cs = $pesanan->Spb->Customer->alamat;
+                $ket_paket =$pesanan->Spb->ket;
+                $no_paket = '-';
+            }
+
+
+           $header = array (
+            'customer' => $cs,
+            'alamat_customer' =>   $alamat_cs,
+            'tujuan_kirim' => $pesanan->tujuan_kirim != NULL ? $pesanan->tujuan_kirim : '-',
+            'alamat_kirim' => $pesanan->alamat_kirim != NULL ?  $pesanan->alamat_kirim : '-',
+            'so' =>  $pesanan->so,
+            'tgl_so' =>   Carbon::parse($pesanan->created_at)->format('d M Y'),
+            'no_po' =>  $pesanan->no_po,
+            'tgl_po' => Carbon::parse($pesanan->tgl_po)->format('d M Y'),
+            'kemasan' =>  $pesanan->kemasan,
+            'tgl_kirim' =>  Carbon::parse($pesanan->tgl_do)->format('d M Y'),
+            'ekspedisi' =>   $pesanan->ekspedisi_id != NULL ? $pesanan->Ekspedisi->nama  : '-',
+            'ket_kirim' =>  $pesanan->ket_kirim,
+            'ket_paket' =>  $ket_paket,
+            'no_paket' => $no_paket,
+            'item' => $data
+        );
+
+
+
+       // return (count($data));
+
+        $pdf = PDF::loadView('page.penjualan.surat.surat-perintah-kirim', ['data' => $header,'pesanan'=> $pesanan,'count_page' => count($data)])->setOptions(['defaultFont' => 'sans-serif'])->setPaper($customPaper);
+        return $pdf->stream('');
     }
 }
