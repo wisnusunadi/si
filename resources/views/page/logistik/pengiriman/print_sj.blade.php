@@ -202,10 +202,10 @@
                         @if(isset($e->DetailPesananProduk))
                         <tr>
                             <td class="wb align-left">
-                                @if($e->DetailPesananProduk->GudangBarangJadi->nama == '')
+                                @if($e->DetailPesananProduk->GudangBarangJadi->nama == '' || $e->DetailPesananProduk->GudangBarangJadi->nama == NULL)
                                 {{$e->DetailPesananProduk->GudangBarangJadi->produk->nama}}
                                 @else
-                                {{$e->DetailPesananProduk->GudangBarangJadi->nama}}
+                                {{$e->DetailPesananProduk->GudangBarangJadi->produk->nama}} - {{$e->DetailPesananProduk->GudangBarangJadi->nama}}
                                 @endif
                             </td>
                             <td class="nospace align-right">{{$e->NoseriDetailLogistik->count()}} pcs</td>
