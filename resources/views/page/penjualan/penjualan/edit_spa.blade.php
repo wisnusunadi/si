@@ -447,6 +447,24 @@
                                                                 </div>
                                                             </div>
 
+                                                            <div class="form-group row "
+                                                                id="do_detail_no">
+                                                                <label for=""
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Nomor
+                                                                    PO</label>
+                                                                <div class="col-4">
+                                                                    <input type="text"
+                                                                        class="form-control col-form-label @error('no_po') is-invalid @enderror"
+                                                                        id="no_po" name="no_po"
+                                                                        value="{{ $e->Pesanan->no_po }}" />
+                                                                    <div class="invalid-feedback" id="msgno_po">
+                                                                        @if ($errors->has('no_po'))
+                                                                            {{ $errors->first('no_po') }}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                             <div class="form-group row    @if (empty($e->Pesanan->no_do)) hide @endif "
                                                                 id="do_detail_no">
                                                                 <label for=""

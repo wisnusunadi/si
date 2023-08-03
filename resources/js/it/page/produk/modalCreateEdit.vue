@@ -59,7 +59,7 @@ export default {
                     {
                         stok: 0,
                         stok_siap: 0,
-                        satuan_id: 1,
+                        satuan_id: 2,
                     }
                 ]
             })

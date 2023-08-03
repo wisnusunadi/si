@@ -2846,7 +2846,7 @@ class PenjualanController extends Controller
                         <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
                             <button class="dropdown-item" type="button" >
                             <i class="fas fa-print"></i>
-                            Print
+                            Cetak
                             </button>
                         </a>
                         ';
@@ -3246,7 +3246,7 @@ class PenjualanController extends Controller
                             <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
                                 <button class="dropdown-item" type="button" >
                                 <i class="fas fa-print"></i>
-                                Cetak SPB
+                                Cetak
                                 </button>
                             </a>';
                             }
@@ -3609,7 +3609,7 @@ class PenjualanController extends Controller
                                 <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
                                     <button class="dropdown-item" type="button" >
                                     <i class="fas fa-print"></i>
-                                    Cetak SPB
+                                    Cetak
                                     </button>
                                 </a>';
                                 }
@@ -3888,7 +3888,7 @@ class PenjualanController extends Controller
                 ], 500);
             }
         } else if ($request->jenis_penjualan == 'spa' || $request->jenis_penjualan == 'spb') {
-if( $request->perusahaan_pengiriman != NULL & $request->alamat_pengiriman != NULL &  $request->kemasan != NULL & $request->ekspedisi != NULL){
+if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NULL &&  $request->kemasan != NULL){
             $count_array = count($request->jenis_pen);
             if (in_array("jasa", $request->jenis_pen) && $count_array == 1) {
                 $k = '11';

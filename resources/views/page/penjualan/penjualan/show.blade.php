@@ -889,7 +889,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal"
                 aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
@@ -906,7 +905,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal"
                 aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
@@ -923,7 +921,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="deletemodal"
                 aria-hidden="true">
                 <div class="modal-dialog modal-md" role="document">
@@ -939,7 +936,6 @@
                                     <div class="col-12">Apakah Anda yakin ingin menghapus data ini?
                                     </div>
                                 </div>
-
                             </div>
                             <div class="modal-footer">
                                 <span class="float-left">
