@@ -876,6 +876,20 @@ class LogistikController extends Controller
                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
                         ->limit(1);
                 },
+                'cpoprd' => function ($q) {
+                        $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                        ->from('detail_pesanan')
+                        ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                        ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                },
+                'ctfjasa' => function ($q) {
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah), 0)')
+                        ->from('detail_pesanan_part')
+                        ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                        ->whereRaw('m_sparepart.kode LIKE "%JASA%"')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+                },
                 'cqcprd' => function ($q) {
                     $q->selectRaw('count(noseri_detail_pesanan.id)')
                         ->from('noseri_detail_pesanan')
@@ -927,7 +941,8 @@ class LogistikController extends Controller
                 }
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotIn('log_id', ['7', '10'])
-                ->havingRaw('(((clogjasa < ctfjasa AND clogjasa > 0) OR clogjasa = 0) AND ctfjasa > 0) OR (((clogprd < cqcprd AND clogprd > 0) OR clogprd = 0) AND cqcprd > 0) OR (((clogpart < cqcpart AND clogpart > 0) OR clogpart = 0) AND cqcpart > 0)')
+                ->havingRaw('(cpoprd < clogprd OR clogprd = 0)')
+                // ->havingRaw('(((clogjasa < ctfjasa AND clogjasa > 0) OR clogjasa = 0) AND ctfjasa > 0) OR (((clogprd < cqcprd AND clogprd > 0) OR clogprd = 0) AND cqcprd > 0) OR (((clogpart < cqcpart AND clogpart > 0) OR clogpart = 0) AND cqcpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
         }
@@ -941,34 +956,55 @@ class LogistikController extends Controller
                 return $data->no_po;
             })
             ->addColumn('nama_customer', function ($data) {
-                $name = explode('/', $data->so);
-                if ($name[1] == 'EKAT') {
+                  if ($data->Ekatalog) {
                     return $data->Ekatalog->satuan;
-                } elseif ($name[1] == 'SPA') {
+                } elseif ($data->Spa) {
                     return $data->Spa->Customer->nama;
-                } else {
+                } else if($data->Spb){
                     return $data->Spb->Customer->nama;
                 }
+                // $name = explode('/', $data->so);
+                // if ($name[1] == 'EKAT') {
+                //     return $data->Ekatalog->satuan;
+                // } elseif ($name[1] == 'SPA') {
+                //     return $data->Spa->Customer->nama;
+                // } else {
+                //     return $data->Spb->Customer->nama;
+                // }
             })
             ->addColumn('alamat', function ($data) {
-                $name = explode('/', $data->so);
-                if ($name[1] == 'EKAT') {
+                if ($data->Ekatalog) {
                     return $data->Ekatalog->alamat;
-                } elseif ($name[1] == 'SPA') {
+                } elseif ($data->Spa) {
                     return $data->Spa->Customer->alamat;
-                } else {
+                } else if($data->Spb){
                     return $data->Spb->Customer->alamat;
                 }
+                // $name = explode('/', $data->so);
+                // if ($name[1] == 'EKAT') {
+                //     return $data->Ekatalog->alamat;
+                // } elseif ($name[1] == 'SPA') {
+                //     return $data->Spa->Customer->alamat;
+                // } else {
+                //     return $data->Spb->Customer->alamat;
+                // }
             })
             ->addColumn('telp', function ($data) {
-                $name = explode('/', $data->so);
-                if ($name[1] == 'EKAT') {
+                if ($data->Ekatalog) {
                     return $data->Ekatalog->Customer->telp;
-                } elseif ($name[1] == 'SPA') {
+                } elseif ($data->Spa) {
                     return $data->Spa->Customer->telp;
-                } else {
+                } else if($data->Spb){
                     return $data->Spb->Customer->telp;
                 }
+                // $name = explode('/', $data->so);
+                // if ($name[1] == 'EKAT') {
+                //     return $data->Ekatalog->Customer->telp;
+                // } elseif ($name[1] == 'SPA') {
+                //     return $data->Spa->Customer->telp;
+                // } else {
+                //     return $data->Spb->Customer->telp;
+                // }
             })
             ->addColumn('ket', function ($data) {
                 return $data->ket;
@@ -1057,18 +1093,22 @@ class LogistikController extends Controller
                         return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak)->format('d-m-Y');
                     }
                 }
+             //   return '-';
             })
             ->addColumn('button', function ($data) {
-                $name = explode('/', $data->so);
-                $x = $name[1];
-                $y = "";
-                $pesanan = $data->id;
-                if ($x == 'EKAT') {
+                // $name = explode('/', $data->so);
+                // $x = $name[1];
+                // $y = "";
+                // $pesanan = $data->id;
+                if ($data->Ekatalog) {
                     $y = $data->Ekatalog->id;
-                } elseif ($x == 'SPA') {
+                    $x = 'ekatalog';
+                } elseif ($data->Spa) {
                     $y = $data->Spa->id;
+                    $x = 'spa';
                 } else {
                     $y = $data->Spb->id;
+                    $x = 'spb';
                 }
                 $z = 'proses';
                 return '
@@ -1079,13 +1119,12 @@ class LogistikController extends Controller
                             <i class="fas fa-eye"></i> Detail
                         </button>
                     </a>
-
+                <button class="dropdown-item cetaksj" type="button" data-x="' . $x . '" data-y="' . $data->id. '" data-z="' . $z . '">
+                    <i class="fas fa-print"></i>
+                    Cetak Surat Jalan
+                </button>
                 </div>
                 ';
-                // <button class="dropdown-item cetaksj" type="button" data-x="' . $x . '" data-y="' . $pesanan . '" data-z="' . $z . '">
-                //         <i class="fas fa-print"></i>
-                //         Cetak Surat Jalan
-                //     </button>
             })
             ->rawColumns(['status', 'button', 'batas'])
             ->setRowClass(function ($data) {
@@ -1105,7 +1144,6 @@ class LogistikController extends Controller
             })
             ->make(true);
     }
-
     public function get_data_selesai_so()
     {
         $prd = Pesanan::whereIn('id', function ($q) {
@@ -4256,6 +4294,34 @@ class LogistikController extends Controller
             return Excel::download(new LaporanLogistik($jenis, $ekspedisi, $tgl_awal, $tgl_akhir), 'Laporan Pengiriman Ekspedisi dan Non Ekspedisi ' . $waktu->toDateTimeString() . '.xlsx');
         }
     }
+
+    public function get_data_detail_item($id, $jenis)
+    {
+            $data = DetailPesananProduk::whereHas('DetailPesanan',function($q) use ($id){
+                $q->where('pesanan_id',$id);
+            })->get();
+
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('checkbox', function ($data) {
+                    return '  <div class="form-check col-form-label">
+                        <input class=" form-check-input yet detail_produk_id check_detail"  data-id="' . $data->id . '" type="checkbox" data-value="' . $data->id . '" />
+                        </div>';
+                })
+                ->addColumn('nama_produk', function ($data) {
+                    if ($data->gudangbarangjadi->nama == '') {
+                        return $data->gudangbarangjadi->produk->nama;
+                    } else {
+                        return $data->gudangbarangjadi->produk->nama . ' - ' . $data->gudangbarangjadi->nama;
+                    }
+                })
+                ->addColumn('jumlah', function ($data) {
+                    return $data->DetailPesanan->jumlah;
+                })
+                ->rawColumns(['checkbox', 'button', 'jumlah'])
+                ->make(true);
+    }
+
     //MANAGER
     public function manager_logistik_show()
     {

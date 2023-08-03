@@ -508,6 +508,8 @@
                 event.preventDefault();
                 let data_x = $(this).data('x');
                 let data_y = $(this).data('y');
+                console.log(data_x)
+                console.log(data_y)
 
                 // open modal
                 $('#cetaksjmodal').modal('show');
@@ -521,7 +523,7 @@
                     autowidth: true,
                     responsive: true,
                     ajax: {
-                        'url': '/api/logistik/so/data/detail/belum_kirim/' + data_y + '/' + data_x,
+                        'url': '/api/logistik/so/data/detail/item/' + data_y + '/' + data_x,
                         'dataType': 'json',
                         'type': 'POST',
                         'headers': {
@@ -563,7 +565,7 @@
                         data: 'noseri_selected',
                         render: function(data, type, row, meta) {
                             var rowIndex = meta.row;
-                            
+
                             return '<input type="hidden" class="keterangannoseri'+ rowIndex+'" name="keterangan[' + rowIndex + ']" id="keterangan[' + rowIndex + ']" placeholder="Keterangan" />';
                         }
                     },
