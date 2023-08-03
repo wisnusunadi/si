@@ -1264,8 +1264,8 @@
                                                                                     <td>
                                                                                         <div class="custom-control custom-switch">
                                                                                             <input type="checkbox" class="custom-control-input produk_ppn"
-                                                                                            id="produk_ppn0" name="produk_ppn[0]" value="0">
-                                                                                            <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
+                                                                                            id="produk_ppn0" name="produk_ppn[0]" value="1" checked>
+                                                                                            <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
                                                                                           </div>
                                                                                     </td>
                                                                                     <td hidden><input type="hidden"
@@ -1361,8 +1361,8 @@
                                                                                 <td>
                                                                                     <div class="custom-control custom-switch">
                                                                                         <input type="checkbox" class="custom-control-input produk_ppn"
-                                                                                        id="produk_ppn0" name="produk_ppn[0]" value="0">
-                                                                                        <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
+                                                                                        id="produk_ppn0" name="produk_ppn[0]" value="1" checked>
+                                                                                        <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
                                                                                       </div>
                                                                                 </td>
                                                                                 <td hidden><input type="hidden"
@@ -2394,8 +2394,8 @@
                     </td>
                     <td>
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
-                            <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
+                            <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="1" checked>
+                            <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
                         </div>
                     </td>
                     <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly></td>
@@ -2784,8 +2784,8 @@
                         </td>
                         <td>
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="0">
-                                <label class="custom-control-label produk_ppn_label" for="produk_ppn0">Non PPN</label>
+                                <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="1" checked>
+                                <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
                             </div>
                         </td>
                         <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly value="` +
