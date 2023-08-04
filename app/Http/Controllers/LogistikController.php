@@ -1079,10 +1079,6 @@ class LogistikController extends Controller
                             <i class="fas fa-eye"></i> Detail
                         </button>
                     </a>
-                    <button class="dropdown-item cetaksj" type="button" data-x="' . $x . '" data-y="' . $pesanan . '" data-z="' . $z . '">
-                        <i class="fas fa-print"></i>
-                        Cetak Surat Jalan
-                    </button>
                 </div>
                 ';
             })
