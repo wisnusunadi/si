@@ -3696,14 +3696,14 @@ class PenjualanController extends Controller
     // Create
     public function create_penjualan(Request $request)
     {
-    // dd($request->all());
+
         if ($request->jenis_penjualan == 'ekatalog') {
             if ($request->status == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL") ) {
                     return response()->json([
                         'message' => 'Cek Form Kembali',
                     ], 500);
             }
-            if ($request->status == 'sepakat' && ( $request->perusahaan_pengiriman_ekat == NULL || $request->alamat_pengiriman_ekat == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL) ) {
+            if ($request->no_po_ekat != NULL && ( $request->perusahaan_pengiriman_ekat == NULL || $request->alamat_pengiriman_ekat == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL) ) {
                     return response()->json([
                         'message' => 'Cek Form Kembali',
                     ], 500);
