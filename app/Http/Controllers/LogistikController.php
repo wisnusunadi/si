@@ -15,6 +15,7 @@ use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\Ekspedisi;
 use App\Models\Logistik;
+use App\Models\LogistikDraft;
 use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriDetailPesanan;
 use Illuminate\Http\Request;
@@ -52,6 +53,15 @@ class LogistikController extends Controller
         $pdf = PDF::loadView('page.logistik.pengiriman.print_sj', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
         return $pdf->stream('');
     }
+    public function cetak_surat_jalan($id)
+    {
+        $data = LogistikDraft::where('pesanan_id',5341)->first();
+        $obj = json_decode($data->isi);
+        $customPaper = array(0,0,605.44,788.031);
+        $pdf = PDF::loadView('page.logistik.surat.surat_jalan',['data' => $obj])->setPaper($customPaper);
+        return $pdf->stream('');
+    }
+
     public function get_data_select_produk(Request $r, $jenis)
     {
         if ($jenis == 'EKAT') {
@@ -68,7 +78,6 @@ class LogistikController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('nama_produk', function ($data) {
-
                     $res = "";
                     $produk = DetailPesananProduk::find($data['id']);
                     if ($produk->GudangBarangJadi->nama == '') {
@@ -4297,29 +4306,41 @@ class LogistikController extends Controller
 
     public function get_data_detail_item($id, $jenis)
     {
-            $data = DetailPesananProduk::whereHas('DetailPesanan',function($q) use ($id){
+            $data_prd = DetailPesananProduk::with(['GudangBarangJadi.Produk','DetailPesanan'])->whereHas('DetailPesanan',function($q) use ($id){
                 $q->where('pesanan_id',$id);
             })->get();
+            $data_part = DetailPesananPart::with(['Sparepart'])->where('pesanan_id',$id)->get();
 
-            return datatables()->of($data)
-                ->addIndexColumn()
-                ->addColumn('checkbox', function ($data) {
-                    return '  <div class="form-check col-form-label">
-                        <input class=" form-check-input yet detail_produk_id check_detail"  data-id="' . $data->id . '" type="checkbox" data-value="' . $data->id . '" />
-                        </div>';
-                })
-                ->addColumn('nama_produk', function ($data) {
-                    if ($data->gudangbarangjadi->nama == '') {
-                        return $data->gudangbarangjadi->produk->nama;
-                    } else {
-                        return $data->gudangbarangjadi->produk->nama . ' - ' . $data->gudangbarangjadi->nama;
-                    }
-                })
-                ->addColumn('jumlah', function ($data) {
-                    return $data->DetailPesanan->jumlah;
-                })
-                ->rawColumns(['checkbox', 'button', 'jumlah'])
-                ->make(true);
+            if(count($data_part) > 0){
+                foreach ($data_part as $key => $d){
+                    $part[$key] = array(
+                        'id' => $d->id,
+                        'nama' => $d->Sparepart->nama,
+                        'jumlah' => $d->jumlah
+                    );
+                }
+            }else{
+                $part = array();
+            }
+            if(count($data_prd) > 0){
+                foreach ($data_prd as $key => $d){
+                    $prd[$key] = array(
+                        'id' => $d->id,
+                        'nama' => $d->GudangBarangJadi->Produk->nama.' '.$d->GudangBarangJadi->nama,
+                        'jumlah' => $d->DetailPesanan->jumlah
+                    );
+                }
+            }else{
+                $produk = array();
+            }
+
+            $data = array(
+                'produk' => $prd,
+                'part' => $part
+            );
+
+
+            return response()->json($data);
     }
 
     //MANAGER

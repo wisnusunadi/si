@@ -332,6 +332,7 @@ Route::group(['prefix' => 'logistik'], function () {
             // Route::view('/edit/{id}', 'page.logistik.pengiriman.edit')->name('logistik.pengiriman.edit');
             Route::get('/edit/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'update_modal_surat_jalan'])->name('logistik.pengiriman.edit');
             Route::get('/print/{id}', [App\Http\Controllers\LogistikController::class, 'pdf_surat_jalan'])->name('logistik.pengiriman.print');
+            Route::get('/prints/{id}', [App\Http\Controllers\LogistikController::class, 'cetak_surat_jalan']);
             Route::group(['prefix' => '/riwayat'], function () {
                 Route::view('/show', 'page.logistik.pengiriman.riwayat.show')->name('logistik.riwayat.show');
             });
