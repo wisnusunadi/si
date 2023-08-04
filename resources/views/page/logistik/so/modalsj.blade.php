@@ -41,13 +41,26 @@
                 <h5>Data Pengiriman</h5>
                 <div class="form-horizontal">
                   <div class="form-group row">
+                    <label for="invoice_jenis" class="col-form-label col-lg-5 col-md-12 labelket">Nomor</label>
+                    <div class="col-lg-6 col-md-12 col-form-label">
+                      <div class="form-check form-check-inline">
+                        <input type="radio" name="sj_jenis" id="sj_jenis1" class="form-check-input" value="new" checked>
+                        <label for="sj_jenis1" class="form-check-label">Surat Jalan Baru</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input type="radio" name="sj_jenis" id="sj_jenis2" class="form-check-input" value="old">
+                        <label for="sj_jenis2" class="form-check-label">Surat Jalan Tersedia</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
                     <label class="col-form-label col-lg-5 col-md-12 labelket" for="no_invoice">No
                         Surat Jalan</label>
                     <div class="col-lg-6 col-md-12">
                         <div class="input-group mb-3 sj_baru" id="sj_baru" name="sj_baru">
                             <div class="input-group-prepend">
                                 <select class="form-control jenis_sj" name="jenis_sj" id="jenis_sj">
-                                    <option value="SPA">SPA</option>
+                                    <option value="SPA-">SPA-</option>
                                     <option value="B.">B.</option>
                                     <option value="NBT">NBT</option>
                                 </select>
@@ -347,6 +360,17 @@
         $('#alamat_pengiriman').val('');
         $('#perusahaan_pengiriman').attr('readonly', false);
         $('#alamat_pengiriman').attr('readonly', false);
+      }
+    });
+
+    $(document).on('change', 'input[name=sj_jenis]', function () {
+      let sj_jenis = $(this).val();
+      if(sj_jenis == 'old'){
+        $('.sj_lamas').removeClass('hide');
+        $('.sj_baru').addClass('hide')
+      }else{
+        $('.sj_lamas').addClass('hide');
+        $('.sj_baru').removeClass('hide')
       }
     });
 
