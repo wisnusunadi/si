@@ -835,7 +835,7 @@
                     },
                     beforeSend: function() {
                         swal.fire({
-                            title: 'Sedang Proses',
+                            title: 'Silahkan Tunggu, Jangan di tutup atau di refresh',
                             html: 'Loading...',
                             allowOutsideClick: false,
                             showConfirmButton: false,
