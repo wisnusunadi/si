@@ -576,7 +576,7 @@
 
         $("#divisi").on("change", function() {
             console.log($(this).val());
-            $dTable.columns(1).search($(this).val()).draw();
+            $dTable.columns(2).search($(this).val()).draw();
         });
 
         $("#kt_datatable_search_query").on("keyup", function() {
