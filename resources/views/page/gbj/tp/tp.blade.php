@@ -41,13 +41,13 @@
             width: 500px !important;
         }
 
-        th.prev.available {
+        /* th.prev.available {
             visibility: hidden;
         }
 
         th.next.available {
             visibility: hidden;
-        }
+        } */
     </style>
     <div class="content-header">
         <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id }}">
@@ -84,77 +84,43 @@
                     <div class="tab-content card" id="myTabContent">
                         <div class="tab-pane fade show active card-body" id="semua-produk" role="tabpanel"
                             aria-labelledby="semua-produk-tab">
-                            <div class="row">
-                                <div class="col-sm-8">
-                                    <div class="row align-items-center">
-                                        <div class="col-lg-9 col-xl-8">
-                                            <div class="row align-items-center">
-                                                <div class="col-md-4 my-2 my-md-0">
-                                                    <div class="input-icon">
-                                                        <input type="text" class="form-control" placeholder="Cari..."
-                                                            id="kt_datatable_search_query">
-                                                        <span>
-                                                            <i class="flaticon2-search-1 text-muted"></i>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 my-2 my-md-0">
-                                                    <div class="d-flex align-items-center">
-                                                        <label class="mr-3 mb-0 d-none d-md-block"
-                                                            for="">Dari</label>
-                                                        <select name="" id="divisi" class="form-control ">
-                                                            <option value="">All</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 my-2 my-md-0">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="dropdown">
-                                                            <button class="btn btn-outline-secondary dropdown-toggle"
-                                                                type="button" id="dropdownMenuButton"
-                                                                data-toggle="dropdown" aria-expanded="false">
-                                                                Filter Tanggal
-                                                            </button>
-                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <div class="row m-0">
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label for="kt_datepicker_1">Tanggal
-                                                                                Masuk</label>
-                                                                            <input type="text" class="form-control"
-                                                                                id="kt_datepicker_1">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label for="kt_datepicker_2">Tanggal
-                                                                                Keluar</label>
-                                                                            <input type="text" class="form-control"
-                                                                                id="kt_datepicker_2">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                            <div class="row align-items-center">
+                                <div class="col-2 my-2 my-md-0">
+                                    <div class="input-icon">
+                                        <input type="text" class="form-control" placeholder="Cari..."
+                                            id="kt_datatable_search_query">
+                                        <span>
+                                            <i class="flaticon2-search-1 text-muted"></i>
+                                        </span>
                                     </div>
                                 </div>
-                                {{-- <div class="col-sm-4">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <p class="card-text">Keterangan Kolom <b>Dari/Ke:</b></p>
-                                        <p class="card-text">
-                                            <div class="foo green"></div> : Dari
-                                        </p>
-                                        <p class="card-text">
-                                            <div class="foo blue"></div> : Ke
-                                        </p>
+                                <div class="col-2 my-2 my-md-0">
+                                    <div class="d-flex align-items-center">
+                                        <label class="mr-3 mb-0 d-none d-md-block"
+                                            for="">Dari</label>
+                                        <select name="" id="divisi" class="form-control ">
+                                            <option value="">All</option>
+                                        </select>
                                     </div>
                                 </div>
-                            </div> --}}
+                                <div class="col-3 my-2 my-md-0">
+                                    <div class="d-flex align-items-center">
+                                        <label class="mr-3 mb-0 d-none d-md-block"
+                                            for="">Tanggal Masuk</label>
+                                            <input type="text" class="form-control"
+                                            id="kt_datepicker_1">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-3 my-2 my-md-0">
+                                    <div class="d-flex align-items-center">
+                                        <label class="mr-3 mb-0 d-none d-md-block"
+                                            for="">Tanggal Keluar</label>
+                                            <input type="text" class="form-control"
+                                            id="kt_datepicker_2">
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
