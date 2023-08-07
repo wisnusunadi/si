@@ -1006,7 +1006,12 @@ class QcController extends Controller
                     }
                     return '<a class="btn btn-outline-primary btn-sm" href="' . route('qc.so.detail', [$data->id, $x]) . '">
                                 <i class="fas fa-eye"></i> Detail
-                        </a>';
+                        </a>
+                        <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
+                            <i class="fas fa-print"></i>
+                            Cetak
+                        </a>
+                        ';
                 }
             })
             ->rawColumns(['button', 'status', 'batas_uji'])
