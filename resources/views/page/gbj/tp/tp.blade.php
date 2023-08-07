@@ -644,10 +644,11 @@
 
         $(document).on('click', '.editmodal', function() {
             var id = $(this).data('id');
+            var tanggal = $(this).data('tanggal');
             console.log(id);
 
             $.ajax({
-                url: "/api/transaksi/all-detail/" + id,
+                url: "/api/transaksi/all-detail/" + id +"/" + tanggal ,
                 success: function(res) {
                     console.log(res);
                     $('span#title').text(res.data[0].title);
@@ -659,7 +660,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    url: "/api/transaksi/all-detail/" + id,
+                    url: "/api/transaksi/all-detail/"  + id +"/" + tanggal ,
                 },
                 columns: [{
                         data: 'seri',
