@@ -742,14 +742,14 @@ class GudangController extends Controller
                     })
                     ->addColumn('date_in', function ($d) {
                         if (isset($d->tgl_masuk)) {
-                            return Carbon::parse($d->tgl_masuk)->isoFormat('D MMMM Y');
+                            return Carbon::parse($d->tgl_masuk)->isoFormat('DD-MM-Y');
                         } else {
                             return "-";
                         }
                     })
                     ->addColumn('date_out', function ($d) {
                         if (isset($d->tgl_keluar)) {
-                            return Carbon::parse($d->tgl_keluar)->isoFormat('D MMMM Y');
+                            return Carbon::parse($d->tgl_keluar)->isoFormat('DD-MM-Y');
                         } else {
                             return "-";
                         }
@@ -1942,7 +1942,7 @@ class GudangController extends Controller
                 })
                 ->addColumn('tgl_keluar', function ($d) {
                     return  Carbon::createFromFormat('Y-m-d', $d->tgl_keluar)
-                        ->format('d M Y');
+                        ->format('d-m-Y');
                 })
                 ->addColumn('logs', function ($d) {
                     if (isset($d->id)) {
