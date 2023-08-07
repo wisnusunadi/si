@@ -103,6 +103,15 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-2 my-2 my-md-0">
+                                    <div class="d-flex align-items-center">
+                                        <label class="mr-3 mb-0 d-none d-md-block"
+                                            for="">Tujuan</label>
+                                        <select name="" id="divisitujuan" class="form-control">
+                                            <option value="">All</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-3 my-2 my-md-0">
                                     <div class="d-flex align-items-center">
                                         <label class="mr-3 mb-0 d-none d-md-block"
@@ -337,6 +346,10 @@
             placeholder: "Choose...",
             allowClear: true
         })
+        $('#divisitujuan').select2({
+            placeholder: "Choose...",
+            allowClear: true
+        })
         $.ajax({
             url: '/api/gbj/sel-divisi',
             type: 'GET',
@@ -348,13 +361,20 @@
                 if (res) {
                     console.log(res);
                     $("#divisi").empty();
+                    $('#divisitujuan').empty();
                     $("#divisi").append('<option selected></option>');
+                    $('#divisitujuan').append('<option selected></option>');
                     $.each(res, function(key, value) {
                         $("#divisi").append('<option value="' + value.nama + '">' + value.nama +
                             '</option');
                     });
+                    $.each(res, function(key, value) {
+                        $("#divisitujuan").append('<option value="' + value.nama + '">' + value
+                            .nama + '</option');
+                    });
                 } else {
                     $("#divisi").empty();
+                    $('#divisitujuan').empty();
                 }
             }
         });
@@ -543,6 +563,10 @@
         $("#divisi").on("change", function() {
             console.log($(this).val());
             $dTable.columns(2).search($(this).val()).draw();
+        });
+        $("#divisitujuan").on("change", function() {
+            console.log($(this).val());
+            $dTable.columns(3).search($(this).val()).draw();
         });
 
         $("#kt_datatable_search_query").on("keyup", function() {
