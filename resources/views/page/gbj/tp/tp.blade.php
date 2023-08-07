@@ -29,8 +29,8 @@
             left: 20%;
         }
 
-        .history_filter {
-            display: block;
+        #history_filter {
+            display: none;
         }
 
         #gudang-salesorder_filter {
@@ -455,7 +455,7 @@
         var DateFilterFunction3 = (function(oSettings, aData, iDataIndex) {
             var dateStart = parseDateValue3(start_date3);
             var dateEnd = parseDateValue3(end_date3);
-            var evalDate = parseDateValue3(aData[3]);
+            var evalDate = parseDateValue3(aData[4]);
             if ((isNaN(dateStart) && isNaN(dateEnd)) ||
                 (isNaN(dateStart) && evalDate <= dateEnd) ||
                 (dateStart <= evalDate && isNaN(dateEnd)) ||
@@ -477,7 +477,6 @@
             processing: true,
             autoWidth: false,
             deferRender: true,
-            searching: false,
             ordering: false,
             ajax: {
                 url: "/api/transaksi/all",
