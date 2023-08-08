@@ -389,7 +389,12 @@
                                                         <div class="col-5 hide" id="noseridetail">
                                                             <div class="card removeboxshadow">
                                                                 <div class="card-header">
-                                                                    <div class="card-title">No Seri</div>
+                                                                    <div class="d-flex bd-highlight">
+                                                                        <div class="p-2 flex-grow-1 bd-highlight">No Seri</div>
+                                                                        <div class="p-2 bd-highlight">
+                                                                            <button class="btn btn-primary">Pilih Nomor Seri</button>
+                                                                        </div>
+                                                                      </div>
                                                                 </div>
                                                                 <div class="card-body">
                                                                     <div class="table-responsive">
