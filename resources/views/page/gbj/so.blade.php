@@ -91,7 +91,7 @@
                                                                 <th>Nomor PO</th>
                                                                 <th>Customer</th>
                                                                 <th>Batas Transfer</th>
-                                                                <th>Status</th>
+                                                                {{-- <th>Status</th> --}}
                                                                 <th>Aksi</th>
                                                             </tr>
                                                         </thead>
@@ -116,7 +116,7 @@
                                                                 <th>Nomor PO</th>
                                                                 <th>Customer</th>
                                                                 <th>Batas Transfer</th>
-                                                                <th>Status</th>
+                                                                {{-- <th >Status</th> --}}
                                                                 <th>Aksi</th>
                                                             </tr>
                                                         </thead>
@@ -729,9 +729,9 @@
                                     data: 'batas_out',
                                     name: 'batas_out'
                                 },
-                                {
-                                    data: 'logs'
-                                },
+                                // {
+                                //     data: 'logs'
+                                // },
                                 {
                                     data: 'action',
                                     name: 'action'
@@ -744,13 +744,13 @@
                                                                                                                                                                         </span>&emsp;Mohon Tunggu ...",
                             },
                             "columnDefs": [{
-                                    "targets": [6],
+                                    "targets": [5],
                                     "visible": document.getElementById('auth').value == '2' ? false : true,
                                     "width": "20%",
                                 },
                                 {
                                     "width": "10%",
-                                    "targets": 5
+                                    "targets": 4
                                 }
                             ]
                         });
@@ -784,9 +784,9 @@
                                     data: 'batas_out',
                                     name: 'batas_out'
                                 },
-                                {
-                                    data: 'logs'
-                                },
+                                // {
+                                //     data: 'logs'
+                                // },
                                 {
                                     data: 'action',
                                     name: 'action'
@@ -799,13 +799,13 @@
                                                                                                                                                                         </span>&emsp;Mohon Tunggu ...",
                             },
                             "columnDefs": [{
-                                    "targets": [6],
+                                    "targets": [5],
                                     "visible": document.getElementById('auth').value == '2' ? false : true,
                                     "width": "20%",
                                 },
                                 {
                                     "width": "10%",
-                                    "targets": 5
+                                    "targets": 4
                                 }
                             ]
                         });

@@ -1,6 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:400,600,700,800">
+        <title>Surat Perintah Pengiriman Barang</title>
         <style>
           /** Define the margins of your page **/
           .full-page-border {
@@ -15,10 +16,10 @@
               }
           }
           @page {
-          
+
             margin :  70px 30px 70px 30px
           }
-          
+
           .text-center {
               text-align: center;
           }
@@ -28,7 +29,7 @@
               width: 100%;
               font-family: sans-serif;
               font-size: 16px;
-              
+
           }
           header {
               position: fixed;
@@ -38,13 +39,13 @@
               height: 220px;
               font-family: sans-serif;
               font-size: 14px;
-          
+
               /** Extra personal styles **/
             background-color: #ffffff;
               color: rgb(0, 0, 0);
               line-height: 20px;
           }
-          
+
           .table_footer{
               position:  fixed;
               bottom: -45px;
@@ -67,11 +68,11 @@
           .vera {
           vertical-align: top;
           }
-          
+
           .align-left {
           text-align: left;
           }
-          
+
           .align-right {
           text-align: right;
           }
@@ -89,14 +90,14 @@
           border-collapse: collapse;
           margin: 0;
           }
-          
+
           #invoice-table tbody {
             min-height: 500px;
           }
           table {
-            table-layout: fixed; width: 100%; border-collapse: collapse; 
+            table-layout: fixed; width: 100%; border-collapse: collapse;
           }
-          
+
           </style>
     </head>
     <body>
@@ -152,7 +153,7 @@
                               <td style=" border: 1px solid;" class="vera ">
                                   <u>Tgl SO</u><br>
                                   {{-- change date format dd/mm/yyyy --}}
-                                 <div class="text-center">{{ date('d/m/Y', strtotime($data['tgl_so'])) }}</div>
+                                 <div class="text-center">{{$data['tgl_so']}}</div>
                               </td>
                           </tr>
                           <tr>
@@ -162,7 +163,7 @@
                               </td>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>Tgl PO</u><br>
-                                <div class="text-center">{{ date('d/m/Y', strtotime($data['tgl_po'])) }}</div>
+                                <div class="text-center">{{$data['tgl_po']}}</div>
                               </td>
                           </tr>
                           <tr>
@@ -231,7 +232,7 @@
                             {{$item['jumlah']}}.00
                         </td>
                         <td class="vera align-center" style="border-right:    1px solid black ; ">
-                         UNIT
+                            {{$item['satuan']}}
                         </td>
                         <td class="vera align-center">
                             {{$item['pajak']}}
@@ -291,7 +292,7 @@
                  <tr>
                 <tr>
                   <td class="align-right" colspan="2">
-                <i>No Dokumen : SPA-FR/01/asomeseasomese/2023</i>
+                    <i>No Dokumen : SPA-FR/01/PENJ-02, Tanggal Terbit: 10 November 2021, Revisi: 01</i>
                   </td>
 
                 </tr>
@@ -303,7 +304,7 @@
                 <table id="tabel" class="table table-hover styled-table table-striped table_footer" border="0" style="">
                     <tr>
                       <td class="align-right" colspan="2">
-                    <i>No Dokumen : SPA-FR/01/asomeseasomese/2023</i>
+                    <i>No Dokumen : SPA-FR/01/PENJ-02, Tanggal Terbit: 10 November 2021, Revisi: 01</i>
                       </td>
                     </tr>
                 </table>
