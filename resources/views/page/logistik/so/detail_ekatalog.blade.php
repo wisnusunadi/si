@@ -636,7 +636,7 @@
                         visible: divisi_id == 15 ? true : false
                     }, {
                         data: 'array_check',
-                        className: 'hide'
+                        // className: 'hide'
                     },
                     {
                         data: 'button',

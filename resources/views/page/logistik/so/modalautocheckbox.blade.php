@@ -44,7 +44,27 @@
     const nomorSeri = (noseriditemukan) => {
         $('input[name="check_all_noseri"]:checked').prop('checked', false);
         var rows = $('#noseritable').DataTable().rows().nodes();
-        var text = $('#belumkirimtable > tbody > tr.bgcolor').find('div[name="array_check[]"]').text(noseriditemukan);
+        var text = $('#belumkirimtable > tbody > tr.bgcolor').find('div[name="array_check[]"]').text();
+        // change text to array
+        var array = text.split(',');
+        // push array
+        // remove empty string
+        array = array.filter(function (el) {
+            return el != '';
+        });
+        // remove duplicate
+        if (noseriditemukan.length > 0) {
+            noseriditemukan.forEach(function (item) {
+                array.push(item);
+            });
+            array = [...new Set(array)];
+        }
+
+        // change array to text
+        var text = array.join(',');
+        $('#belumkirimtable > tbody > tr.bgcolor').find('div[name="array_check[]"]').text(text);
+
+
         $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').val($(
                         '.check_noseri:checked', rows)
                     .length);
