@@ -1968,8 +1968,11 @@ class LogistikController extends Controller
             ->make(true);
     }
 
-    public function get_data_riwayat_pengiriman($pengiriman, $provinsi, $jenis_penjualan)
+    public function get_data_riwayat_pengiriman($pengiriman, $provinsi, $jenis_penjualan, $years)
     {
+         return response()->json($years, 200);
+
+
         $x = explode(',', $pengiriman);
         $y = explode(',', $provinsi);
         $z = explode(',', $jenis_penjualan);

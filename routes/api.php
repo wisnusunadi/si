@@ -567,7 +567,7 @@ Route::prefix('/logistik')->group(function () {
         // Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
         Route::group(['prefix' => '/riwayat'], function () {
-            Route::post('/data/{pengiriman}/{provinsi}/{jenis_penjualan}', [App\Http\Controllers\LogistikController::class, 'get_data_riwayat_pengiriman']);
+            Route::post('/data/{pengiriman}/{provinsi}/{jenis_penjualan}/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_riwayat_pengiriman']);
         });
     });
 
