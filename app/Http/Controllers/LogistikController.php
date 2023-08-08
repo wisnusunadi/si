@@ -1079,12 +1079,6 @@ class LogistikController extends Controller
                             <i class="fas fa-eye"></i> Detail
                         </button>
                     </a>
-                    <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
-                        <button class="dropdown-item" type="button" >
-                        <i class="fas fa-print"></i>
-                        SPPB
-                        </button>
-                    </a>
                 </div>
                 ';
             })
