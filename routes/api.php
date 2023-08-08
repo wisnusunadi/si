@@ -215,7 +215,7 @@ Route::prefix('/transaksi')->group(function () {
     Route::get('/history', [GudangController::class, 'getHistorybyProduk']);
     Route::get('/history-detail/{id}', [GudangController::class, 'getDetailHistory']);
     Route::get('/history-detail-seri/{id}', [GudangController::class, 'getDetailHistorySeri']);
-    Route::get('/all-detail/{id}', [GudangController::class, 'getDetailAll']);
+    Route::get('/all-detail/{id}/{date}', [GudangController::class, 'getDetailAll']);
 });
 
 Route::prefix('/dashboard-gbj')->group(function () {
