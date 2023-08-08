@@ -738,7 +738,7 @@ class LogistikController extends Controller
     }
 
     //Get Data
-    public function get_data_so($value)
+    public function get_data_so($value, $years)
     {
         $data = "";
         if ($value == "belum_kirim") {
@@ -801,6 +801,7 @@ class LogistikController extends Controller
                 }
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotIn('log_id', ['7', '10'])
+                ->whereYear('created_at',  $years)
                 ->havingRaw('(clogjasa = 0 AND ctfjasa > 0) OR (clogprd = 0 AND cqcprd > 0) OR (clogpart = 0 AND cqcpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
@@ -864,6 +865,7 @@ class LogistikController extends Controller
                 }
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotIn('log_id', ['7', '10'])
+                ->whereYear('created_at',  $years)
                 ->havingRaw('((clogjasa < ctfjasa AND clogjasa > 0) AND ctfjasa > 0) OR ((clogprd < cqcprd AND clogprd > 0) AND cqcprd > 0) OR ((clogpart < cqcpart AND clogpart > 0) AND cqcpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
@@ -927,10 +929,16 @@ class LogistikController extends Controller
                 }
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotIn('log_id', ['7', '10'])
+                ->whereYear('created_at',  $years)
                 ->havingRaw('(((clogjasa < ctfjasa AND clogjasa > 0) OR clogjasa = 0) AND ctfjasa > 0) OR (((clogprd < cqcprd AND clogprd > 0) OR clogprd = 0) AND cqcprd > 0) OR (((clogpart < cqcpart AND clogpart > 0) OR clogpart = 0) AND cqcpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
         }
+
+        // return response()->json([
+        //     'value' => $value,
+        //     'years' => $data
+        // ]);
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1101,8 +1109,11 @@ class LogistikController extends Controller
             ->make(true);
     }
 
-    public function get_data_selesai_so()
+    public function get_data_selesai_so($years)
     {
+        // return response()->json([
+        //     'years' => $years,
+        // ]);
         $prd = Pesanan::whereIn('id', function ($q) {
             $q->select('pesanan.id')
                 ->from('pesanan')
@@ -1133,7 +1144,7 @@ class LogistikController extends Controller
                 ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                 ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
                 ->limit(1);
-        }])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc');
+        }])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderBy('id', 'desc');
 
         $part = Pesanan::whereIn('id', function ($q) {
             $q->select('pesanan.id')
@@ -1161,7 +1172,7 @@ class LogistikController extends Controller
                 ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                 ->limit(1);
-        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc');
+        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderBy('id', 'desc');
 
 
         $partjasa = Pesanan::whereIn('id', function ($q) {
@@ -1191,7 +1202,7 @@ class LogistikController extends Controller
                 ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                 ->limit(1);
-        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->union($prd)->union($part)->get();
+        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->union($prd)->union($part)->get();
 
         $data = $partjasa;
         return datatables()->of($data)
