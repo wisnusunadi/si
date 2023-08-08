@@ -52,6 +52,8 @@
         if(noseriditemukan.length > 0) {
             $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').removeClass(
                         'is-invalid');
+            $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').attr('disabled',
+            false);
         }
 
         validasi_checked_produk();
@@ -83,6 +85,7 @@
             }
         });
         nomorSeri(nomorseriditemukan);
+        resetNomorSeri();
         $('#modalautocheckbox').modal('hide');
     });
 </script>
