@@ -1009,7 +1009,7 @@ class QcController extends Controller
                         </a>
                         <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
                             <i class="fas fa-print"></i>
-                            Cetak
+                            SPPB
                         </a>
                         ';
                 }

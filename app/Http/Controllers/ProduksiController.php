@@ -589,7 +589,7 @@ class ProduksiController extends Controller
                                         <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="ekatalog" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
                                         <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
                                                 <i class="fas fa-print"></i>
-                                                Cetak
+                                                SPPB
                                             </a>
                                         ';
                             } elseif ($x[1] == 'SPA') {
@@ -598,7 +598,7 @@ class ProduksiController extends Controller
                                         <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spa" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
                                         <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
                                                 <i class="fas fa-print"></i>
-                                                Cetak
+                                                SPPB
                                             </a>
                                         ';
                             } elseif ($x[1] == 'SPB') {
@@ -607,7 +607,7 @@ class ProduksiController extends Controller
                                         <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
                                         <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
                                                 <i class="fas fa-print"></i>
-                                                Cetak
+                                                SPPB
                                             </a>
                                         ';
                             }
@@ -621,7 +621,7 @@ class ProduksiController extends Controller
                                             <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="ekatalog" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
                                             <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
                                                 <i class="fas fa-print"></i>
-                                                Cetak
+                                                SPPB
                                             </a>
                                             
                                             ';
@@ -631,7 +631,7 @@ class ProduksiController extends Controller
                                             <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spa" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
                                             <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
                                                 <i class="fas fa-print"></i>
-                                                Cetak
+                                                SPPB
                                             </a>
                                             ';
                                 } elseif ($x[1] == 'SPB') {
@@ -640,7 +640,7 @@ class ProduksiController extends Controller
                                             <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
                                             <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
                                                 <i class="fas fa-print"></i>
-                                                Cetak
+                                                SPPB
                                             </a>
                                             ';
                                 }

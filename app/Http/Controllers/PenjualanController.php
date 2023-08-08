@@ -2846,7 +2846,7 @@ class PenjualanController extends Controller
                         <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
                             <button class="dropdown-item" type="button" >
                             <i class="fas fa-print"></i>
-                            Cetak
+                            SPPB
                             </button>
                         </a>
                         ';
@@ -3246,7 +3246,7 @@ class PenjualanController extends Controller
                             <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
                                 <button class="dropdown-item" type="button" >
                                 <i class="fas fa-print"></i>
-                                Cetak
+                                SPPB
                                 </button>
                             </a>';
                             }
@@ -3609,7 +3609,7 @@ class PenjualanController extends Controller
                                 <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
                                     <button class="dropdown-item" type="button" >
                                     <i class="fas fa-print"></i>
-                                    Cetak
+                                    SPPB
                                     </button>
                                 </a>';
                                 }
