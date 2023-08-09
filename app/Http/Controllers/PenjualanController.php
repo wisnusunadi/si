@@ -7467,7 +7467,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                     $pesanan_prd[$key] = array(
                         'no' => $key + 1 ,
                         'kode' => '-',
-                        'nama' => $prd->penjualanproduk->nama_alias,
+                        'nama' => $prd->penjualanproduk->nama_alias == '' ? $prd->penjualanproduk->nama : $prd->penjualanproduk->nama_alias,
                         'jumlah' => $prd->jumlah,
                         'pajak' => $prd->ppn == '1' ? 'PPn' : '-',
                         'satuan' => 'UNIT'
