@@ -215,7 +215,7 @@ Route::prefix('/transaksi')->group(function () {
     Route::get('/history', [GudangController::class, 'getHistorybyProduk']);
     Route::get('/history-detail/{id}', [GudangController::class, 'getDetailHistory']);
     Route::get('/history-detail-seri/{id}', [GudangController::class, 'getDetailHistorySeri']);
-    Route::get('/all-detail/{id}', [GudangController::class, 'getDetailAll']);
+    Route::get('/all-detail/{id}/{date}', [GudangController::class, 'getDetailAll']);
 });
 
 Route::prefix('/dashboard-gbj')->group(function () {
@@ -544,7 +544,7 @@ Route::prefix('/logistik')->group(function () {
         Route::post('data/detail/selesai_kirim/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_selesai_kirim_so']);
         //   Route::get('detail/select/{produk_id}/{part_id}/{pesanan_id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_select_produk']);
         Route::post('detail/select/{pesanan_id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_select_produk']);
-        Route::get('data/selesai', [App\Http\Controllers\LogistikController::class, 'get_data_selesai_so']);
+        Route::get('data/selesai/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_selesai_so']);
 
         Route::post('data/sj/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj']);
         Route::post('/data/sj_filter/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_filter_sj']);
@@ -568,7 +568,7 @@ Route::prefix('/logistik')->group(function () {
         // Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
         Route::group(['prefix' => '/riwayat'], function () {
-            Route::post('/data/{pengiriman}/{provinsi}/{jenis_penjualan}', [App\Http\Controllers\LogistikController::class, 'get_data_riwayat_pengiriman']);
+            Route::post('/data/{pengiriman}/{provinsi}/{jenis_penjualan}/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_riwayat_pengiriman']);
         });
     });
 

@@ -289,7 +289,7 @@ Route::group(['prefix' => 'logistik'], function () {
     Route::group(['prefix' => '/so'], function () {
         // Route::group(['middleware' => ['divisi:log,dirut']], function () {
             Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
-            Route::post('/data/{value}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
+            Route::post('/data/{value}/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
             Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
         // });
         Route::group(['middleware' => ['divisi:log']], function () {

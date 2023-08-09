@@ -113,11 +113,27 @@
                                                     <div class="dropdown-menu">
                                                         <div class="px-3 py-3">
                                                             <div class="form-group">
+                                                                <label for="jenis_penjualan">Database</label>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                {{-- show 5 years from now to old --}}
+                                                                @for ($i = date('Y'); $i >= date('Y') - 1; $i--)
+                                                                <div class="form-check">
+                                                                    {{-- checked if years equals now --}}
+                                                                    <input class="form-check-input" type="radio"
+                                                                        value="{{ $i }}" name="tahun" id="defaultCheck{{ $i }}" {{ $i == date('Y') ? 'checked' : '' }} />
+                                                                    <label class="form-check-label" for="defaultCheck{{ $i }}">
+                                                                        {{ $i }}
+                                                                    </label>
+                                                                </div>
+                                                                @endfor                                                                
+                                                            </div>
+                                                            <div class="form-group">
                                                                 <label for="jenis_penjualan">Pengiriman</label>
                                                             </div>
                                                             <div class="form-group">
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="checkbox"
+                                                                    <input class="form-check-input" name="pengiriman" type="checkbox"
                                                                         value="belum_kirim" id="defaultCheck1" />
                                                                     <label class="form-check-label" for="defaultCheck1">
                                                                         Belum Dikirim
@@ -126,7 +142,7 @@
                                                             </div>
                                                             <div class="form-group">
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="checkbox"
+                                                                    <input class="form-check-input" name="pengiriman" type="checkbox"
                                                                         value="sebagian_kirim" id="defaultCheck2" />
                                                                     <label class="form-check-label" for="defaultCheck2">
                                                                         Sebagian Dikirim
@@ -169,6 +185,45 @@
                                 </div>
                                 <div class="tab-pane fade show" id="pills-selesai_kirim" role="tabpanel"
                                     aria-labelledby="pills-selesai_kirim-tab">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span class="float-right filter">
+                                                <button class="btn btn-outline-secondary" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-filter"></i> Filter
+                                                </button>
+                                                <form id="filterSelesaiProses">
+                                                    <div class="dropdown-menu">
+                                                        <div class="px-3 py-3">
+                                                            <div class="form-group">
+                                                                <label for="jenis_penjualan">Database</label>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                {{-- show 5 years from now to old --}}
+                                                                @for ($i = date('Y'); $i >= date('Y') - 1; $i--)
+                                                                <div class="form-check">
+                                                                    {{-- checked if years equals now --}}
+                                                                    <input class="form-check-input" type="radio"
+                                                                        value="{{ $i }}" name="tahunSelesaiProses" id="defaultCheck{{ $i }}" {{ $i == date('Y') ? 'checked' : '' }} />
+                                                                    <label class="form-check-label" for="defaultCheck{{ $i }}">
+                                                                        {{ $i }}
+                                                                    </label>
+                                                                </div>
+                                                                @endfor                                                                
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <span class="float-right">
+                                                                    <button class="btn btn-primary">
+                                                                        Cari
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </span>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="table-responsive">
@@ -257,13 +312,14 @@
 @stop
 @section('adminlte_js')
     <script>
+        let yearsNow = new Date().getFullYear();
         $(function() {
             var showtable = $('#showtable').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/logistik/so/data/semua',
+                    'url': `/logistik/so/data/semua/${yearsNow}`,
                     'dataType': 'json',
                     'type': 'POST',
                     'headers': {
@@ -396,7 +452,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        'url': '/api/logistik/so/data/selesai',
+                        'url': `/api/logistik/so/data/selesai/${yearsNow}`,
                         'dataType': 'json',
                         'type': 'GET',
                         'headers': {
@@ -489,19 +545,21 @@
                 });
             }
 
+            $('#filterSelesaiProses').submit(function() {
+                let years = $('input[name="tahunSelesaiProses"]:checked').val() ?? yearsNow
+
+                $('#selesaitable').DataTable().ajax.url('/api/logistik/so/data/selesai/' + years).load();
+                return false;
+            })
+
 
             $('#filter').submit(function() {
-                var values = [];
-                $("input:checked").each(function() {
-                    values.push($(this).val());
-                });
-                if (values != 0) {
-                    var x = values;
-                } else {
-                    var x = ['semua'];
-                }
-                $('#showtable').DataTable().ajax.url('/logistik/so/data/' + x).load();
+                let pengiriman = $('input[name="pengiriman"]:checked').val() ?? 'semua'
+                let years = $('input[name="tahun"]:checked').val() ?? yearsNow
+            
+                $('#showtable').DataTable().ajax.url('/logistik/so/data/' + pengiriman + '/' + years).load();
                 return false;
+                
             });
 
             $(document).on('click', '.cetaksj', function(event) {

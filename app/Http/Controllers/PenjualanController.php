@@ -2846,7 +2846,7 @@ class PenjualanController extends Controller
                         <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
                             <button class="dropdown-item" type="button" >
                             <i class="fas fa-print"></i>
-                            Cetak
+                            SPPB
                             </button>
                         </a>
                         ';
@@ -3246,7 +3246,7 @@ class PenjualanController extends Controller
                             <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
                                 <button class="dropdown-item" type="button" >
                                 <i class="fas fa-print"></i>
-                                Cetak
+                                SPPB
                                 </button>
                             </a>';
                             }
@@ -3609,7 +3609,7 @@ class PenjualanController extends Controller
                                 <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
                                     <button class="dropdown-item" type="button" >
                                     <i class="fas fa-print"></i>
-                                    Cetak
+                                    SPPB
                                     </button>
                                 </a>';
                                 }
@@ -3696,14 +3696,14 @@ class PenjualanController extends Controller
     // Create
     public function create_penjualan(Request $request)
     {
-    // dd($request->all());
+
         if ($request->jenis_penjualan == 'ekatalog') {
             if ($request->status == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL") ) {
                     return response()->json([
                         'message' => 'Cek Form Kembali',
                     ], 500);
             }
-            if ($request->status == 'sepakat' && ( $request->perusahaan_pengiriman_ekat == NULL || $request->alamat_pengiriman_ekat == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL) ) {
+            if ($request->no_po_ekat != NULL && ( $request->perusahaan_pengiriman_ekat == NULL || $request->alamat_pengiriman_ekat == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL) ) {
                     return response()->json([
                         'message' => 'Cek Form Kembali',
                     ], 500);
@@ -7469,7 +7469,8 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                         'kode' => '-',
                         'nama' => $prd->penjualanproduk->nama_alias,
                         'jumlah' => $prd->jumlah,
-                        'pajak' => $prd->ppn == '1' ? 'PPn' : '-'
+                        'pajak' => $prd->ppn == '1' ? 'PPn' : '-',
+                        'satuan' => 'UNIT'
                     );
                 }
             }else{
@@ -7480,10 +7481,11 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             foreach($pesanan->DetailPesananPart as $key => $part){
                 $pesanan_part[$key] = array(
                     'no' => count($pesanan_prd) + $key + 1,
-                    'kode' => $part->Sparepart->kode,
+                    'kode' =>'-',
                     'nama' => $part->Sparepart->nama,
                     'jumlah' => $part->jumlah,
-                    'pajak' => $part->ppn == '1' ? 'PPn' : '-'
+                    'pajak' => $part->ppn == '1' ? 'PPn' : '-',
+                    'satuan' => 'UNIT'
                 );
             }
         }else{
@@ -7530,9 +7532,9 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             'so' =>  $pesanan->so,
             'tgl_so' =>   Carbon::parse($pesanan->created_at)->format('d M Y'),
             'no_po' =>  $pesanan->no_po,
-            'tgl_po' => Carbon::parse($pesanan->tgl_po)->format('d M Y'),
+            'tgl_po' => $pesanan->tgl_po != NULL ? Carbon::parse($pesanan->tgl_po)->format('d M Y') : '-',
             'kemasan' =>  $pesanan->kemasan,
-            'tgl_kirim' =>  Carbon::parse($pesanan->tgl_do)->format('d M Y'),
+            'tgl_kirim' =>  $pesanan->tgl_do != NULL ? Carbon::parse($pesanan->tgl_do)->format('d M Y') : '-',
             'ekspedisi' =>   $pesanan->ekspedisi_id != NULL ? $pesanan->Ekspedisi->nama  : '-',
             'ket_kirim' =>  $pesanan->ket_kirim,
             'ket_paket' =>  $ket_paket,
