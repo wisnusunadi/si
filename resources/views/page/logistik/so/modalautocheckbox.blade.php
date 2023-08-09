@@ -82,8 +82,8 @@
     }
 
     $(document).on('click', '#simpandata', function () {
-        // split nomor seri berdasarkan enter atau koma atau tab
-        let nomor_seri = $('#nomor_seri').val().split(/[\n,|\t]+/g);
+        // split nomor seri berdasarkan enter atau koma atau tab atau spasi
+        let nomor_seri = $('#nomor_seri').val().split(/[\n, \t]/);
         // remove spasi tiap nomor seri
         nomor_seri = nomor_seri.map(function (item) {
             return item.trim();
