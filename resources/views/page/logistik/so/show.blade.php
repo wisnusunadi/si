@@ -126,7 +126,7 @@
                                                                         {{ $i }}
                                                                     </label>
                                                                 </div>
-                                                                @endfor                                                                
+                                                                @endfor
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="jenis_penjualan">Pengiriman</label>
@@ -209,7 +209,7 @@
                                                                         {{ $i }}
                                                                     </label>
                                                                 </div>
-                                                                @endfor                                                                
+                                                                @endfor
                                                             </div>
                                                             <div class="form-group">
                                                                 <span class="float-right">
@@ -556,25 +556,24 @@
             $('#filter').submit(function() {
                 let pengiriman = $('input[name="pengiriman"]:checked').val() ?? 'semua'
                 let years = $('input[name="tahun"]:checked').val() ?? yearsNow
-            
+
                 $('#showtable').DataTable().ajax.url('/logistik/so/data/' + pengiriman + '/' + years).load();
                 return false;
-                
+
             });
 
             $(document).on('click', '.cetaksj', function(event) {
                 event.preventDefault();
                 let data_x = $(this).data('x');
                 let data_y = $(this).data('y');
-                console.log(data_x)
-                console.log(data_y)
+                //console.log(data_y)
 
                 // open modal
                 $('#cetaksjmodal').modal('show');
 
                 $('#cetaksjmodal').on('shown.bs.modal', function() {
                     $.ajax({
-                    'url': '/api/logistik/so/data/detail/item/' + data_y + '/' + data_x,
+                    'url': '/api/logistik/so/data/detail/item/' + data_y,
                     'dataType': 'json',
                     success: function (data) {
                           console.table(data.produk)

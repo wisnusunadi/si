@@ -1409,15 +1409,6 @@ class LogistikController extends Controller
                 return $data->no_po;
             })
             ->addColumn('nama_customer', function ($data) {
-                // $name = explode('/', $data->so);
-                // if ($name[1] == 'EKAT') {
-                //     return $data->Ekatalog->satuan;
-                // } elseif ($name[1] == 'SPA') {
-                //     return $data->Spa->Customer->nama;
-                // } else {
-                //     return $data->Spb->Customer->nama;
-                // }
-                     // $name = explode('/', $data->so);
                 if ($data->Ekatalog) {
                     return $data->Ekatalog->satuan;
                 } elseif ($data->Spa) {
@@ -1427,14 +1418,6 @@ class LogistikController extends Controller
                 }
             })
             ->addColumn('alamat', function ($data) {
-                // $name = explode('/', $data->so);
-                // if ($name[1] == 'EKAT') {
-                //     return $data->Ekatalog->alamat;
-                // } elseif ($name[1] == 'SPA') {
-                //     return $data->Spa->Customer->alamat;
-                // } else {
-                //     return $data->Spb->Customer->alamat;
-                // }
                 if ($data->Ekatalog) {
                     return $data->Ekatalog->alamat;
                 } elseif ($data->Spa) {
@@ -1444,14 +1427,6 @@ class LogistikController extends Controller
                 }
             })
             ->addColumn('telp', function ($data) {
-                // $name = explode('/', $data->so);
-                // if ($name[1] == 'EKAT') {
-                //     return $data->Ekatalog->Customer->telp;
-                // } elseif ($name[1] == 'SPA') {
-                //     return $data->Spa->Customer->telp;
-                // } else {
-                //     return $data->Spb->Customer->telp;
-                // }
                 if ($data->Ekatalog) {
                     return $data->Ekatalog->Customer->telp;
                 } elseif ($data->Spa) {
@@ -1462,6 +1437,9 @@ class LogistikController extends Controller
             })
             ->addColumn('ket', function ($data) {
                 return $data->ket;
+            })
+            ->addColumn('tfqc', function ($data) {
+                return  $data->cqcprd + $data->cqcpart + $data->ctfjasa;
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
@@ -1573,6 +1551,10 @@ class LogistikController extends Controller
                                 <i class="fas fa-eye"></i> Detail
                             </button>
                         </a>
+                        <button class="dropdown-item cetaksj" type="button" data-x="' . $x . '" data-y="' . $pesanan . '" data-z="' . $z . '">
+                        <i class="fas fa-print"></i>
+                        Cetak Surat Jalan
+                    </button>
                     </div>
                     ';
                 }else{
@@ -4764,7 +4746,7 @@ class LogistikController extends Controller
         }
     }
 
-    public function get_data_detail_item($id, $jenis)
+    public function get_data_detail_item($id)
     {
             $data_prd = DetailPesananProduk::with(['GudangBarangJadi.Produk','DetailPesanan'])->whereHas('DetailPesanan',function($q) use ($id){
                 $q->where('pesanan_id',$id);
@@ -4791,7 +4773,7 @@ class LogistikController extends Controller
                     );
                 }
             }else{
-                $produk = array();
+                $prd = array();
             }
 
             $data = array(
