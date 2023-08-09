@@ -61,6 +61,10 @@
         });
         // remove duplicate
         array = [...new Set(array)];
+        // remove NaN value
+        array = array.filter(function (el) {
+            return !isNaN(el);
+        });
 
         // change array to text
         var text = array.join(',');
