@@ -87,6 +87,22 @@
                     </div>
                 </div>
                 <div class="form-group row">
+                  <label class="col-form-label col-lg-5 col-md-12 labelket"
+                      for="tgl_kirim">Provinsi</label>
+                      <div class="col-lg-5 col-md-12 col-form-label">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="provinsi"
+                                id="provinsi1" value="provinsi_customer" />
+                            <label class="form-check-label" for="provinsi1">Customer</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="provinsi"
+                                id="provinsi_instansi" value="provinsi_instansi" />
+                            <label class="form-check-label" for="provinsi_instansi">Instansi</label>
+                        </div>
+                    </div>
+              </div>
+                <div class="form-group row">
                     <label for=""
                         class="col-form-label col-lg-5 col-md-12 labelket">Pengiriman</label>
                     <div class="col-lg-5 col-md-12 col-form-label">
