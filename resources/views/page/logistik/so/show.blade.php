@@ -561,6 +561,115 @@
                 return false;
 
             });
+
+            const header = (header) => {
+                if(header.jenis_pesanan == 'ekatalog') {
+                    $('.form-provinsi').removeClass('hide')
+
+                    $('.dataprovinsiekat').val(header.provinsi)
+                    if(header.provinsi.instansi){
+                        // checked instansi
+                        $('#provinsi2').prop('checked', true)
+                        let selectElement = $('.provinsi_pengiriman');
+                        // select instansi
+                        let option = $('<option>', {
+                            value: header.provinsi.instansi.id,
+                            text: header.provinsi.instansi.nama
+                        })
+                        // reset select
+                        selectElement.empty()
+                        selectElement.append(option)
+                        selectElement.val(header.provinsi.instansi.id)
+                    } else {
+                        $('#provinsi1').prop('checked', true)
+                        let selectElement = $('.provinsi_pengiriman');
+                        // select instansi
+                        let option = $('<option>', {
+                            value: header.provinsi.dsb.id,
+                            text: header.provinsi.dsb.nama
+                        })
+                        selectElement.empty()
+                        selectElement.append(option)
+                        selectElement.val(header.provinsi.dsb.id)
+                    }
+
+                    let id = $('.provinsi_pengiriman').val()
+
+                    $('.ekspedisi_id').select2({
+                        ajax: {
+                        minimumResultsForSearch: 20,
+                        placeholder: "Pilih Ekspedisi",
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + id,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+                }else{
+                    // add hidden
+                    $('.form-provinsi').addClass('hide')
+
+                    $('.provinsi_pengiriman').val(header.provinsi.id)
+                    $('.provinsi_pengiriman').text(header.provinsi.nama)
+                }
+
+                if(header.ekspedisi) {
+                    $('#pengiriman1').prop('checked', true)
+                    $('#ekspedisi').removeClass('hide')
+                    $('#nonekspedisi').addClass('hide')
+
+                    let selectElement = $('.ekspedisi_id');
+                    let option = $('<option>', {
+                        value: header.ekspedisi.id,
+                        text: header.ekspedisi.nama
+                    })
+                    selectElement.empty()
+                    selectElement.append(option)
+                    selectElement.val(header.ekspedisi.id)
+                } else {
+                    $('#pengiriman2').prop('checked', true)
+                    $('#ekspedisi').addClass('hide')
+                    $('#nonekspedisi').removeClass('hide')
+                }
+
+                if(header.perusahaan_pengiriman && header.alamat_pengiriman) {
+                    // pilihan pengiriman == penjualan
+                    $('#pilihan_pengiriman0').prop('checked', true)
+                    $('#perusahaan_pengiriman').attr('readonly', true);
+                    $('#alamat_pengiriman').attr('readonly', true);
+                    $('input[name="perusahaan_pengiriman"]').val(header.perusahaan_pengiriman)
+                    $('input[name="alamat_pengiriman"]').val(header.alamat_pengiriman)
+                }else{
+                    $('#pilihan_pengiriman1').prop('checked', true)
+                    $('input[name="perusahaan_pengiriman"]').val('')
+                    $('input[name="alamat_pengiriman"]').val('')
+                    $('#perusahaan_pengiriman').attr('readonly', false);
+                    $('#alamat_pengiriman').attr('readonly', false);
+                }
+
+                if(header.kemasan == 'peti') {
+                    $('input[name="kemasan"]').val('peti').prop('checked', true)
+                } else {
+                    $('input[name="kemasan"]').val('nonpeti').prop('checked', true)
+                }
+            }
+
             const tableproduk = (produk) => {
                 $('.tableproduk').DataTable({
                     destroy: true,
@@ -658,8 +767,9 @@
                     'url': '/api/logistik/so/data/detail/item/' + data_y,
                     'dataType': 'json',
                     success: function (data) {
-                        tableproduk(data.produk)
-                        tablepart(data.part)
+                        header(data.header)
+                        tableproduk(data.item.produk)
+                        tablepart(data.item.part)
                     }
                 });
             })

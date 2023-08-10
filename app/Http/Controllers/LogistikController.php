@@ -4837,32 +4837,37 @@ foreach ($mergedNoseri as $nama => $noseriArray) {
 
             if($pesanan->Ekatalog){
                 $provinsi = array();
-                if ($pesanan->Ekatalog->provinsi_id != NULL){
-                    $instansi =  array(
+                $jenis_pesanan = '';
+
+                if ($pesanan->Ekatalog->provinsi_id != NULL) {
+                    $instansi = array(
                         'id' => $pesanan->Ekatalog->provinsi_id,
                         'nama' => $pesanan->Ekatalog->Provinsi->nama
                     );
-                    array_push($provinsi, $instansi);
+                    $provinsi['instansi'] = $instansi;
                 }
-
-                if ($pesanan->Ekatalog->Customer->id_provinsi != NULL){
-                $dsb =  array(
-                    'id' => $pesanan->Ekatalog->Customer->id_provinsi,
-                    'nama' => $pesanan->Ekatalog->Customer->Provinsi->nama
-                );
-                array_push($provinsi, $dsb);
-            }
-
+                
+                if ($pesanan->Ekatalog->Customer->id_provinsi != NULL) {
+                    $dsb = array(
+                        'id' => $pesanan->Ekatalog->Customer->id_provinsi,
+                        'nama' => $pesanan->Ekatalog->Customer->Provinsi->nama
+                    );
+                    $provinsi['dsb'] = $dsb;
+                }
+                $jenis_pesanan = 'ekatalog';
+            
             }elseif($pesanan->Spa){
                 $provinsi =  array(
                     'id' => $pesanan->Spa->Customer->id_provinsi,
                     'nama' => $pesanan->Spa->Customer->Provinsi->nama
                 );
+                $jenis_pesanan = 'spa';
             }else{
                 $provinsi =  array(
                     'id' => $pesanan->Spb->Customer->id_provinsi,
                     'nama' => $pesanan->Spb->Customer->Provinsi->nama
                 );
+                $jenis_pesanan = 'spb';
             }
 
 
@@ -4872,15 +4877,16 @@ foreach ($mergedNoseri as $nama => $noseriArray) {
                     'nama' => $pesanan->Ekspedisi->nama
                 );
             } else{
-                $ekspedisi = array();
+                $ekspedisi = null;
             }
 
             $data = array(
                 'header' => array(
+                    'jenis_pesanan' => $jenis_pesanan, // 'ekatalog', 'spa', 'spb'
                     'provinsi' =>   $provinsi,
                     'ekspedisi' => $ekspedisi,
-                    'tujuan' => $pesanan->tujuan_kirim,
-                    'alamat' => $pesanan->alamat_kirim,
+                    'perusahaan_pengiriman' => $pesanan->tujuan_kirim,
+                    'alamat_pengiriman' => $pesanan->alamat_kirim,
                     'kemasan' => $pesanan->kemasan,
                 ),
                 'item' => array(

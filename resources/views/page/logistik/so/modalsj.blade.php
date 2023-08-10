@@ -7,8 +7,12 @@
   .labelket {
     text-align: right;
   }
+
+  .hide {
+    display: none;
+  }
 </style>
-<div class="modal fade" id="cetaksjmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="cetaksjmodal" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
@@ -86,20 +90,23 @@
                         <div class="invalid-feedback" id="msgtgl_kirim"></div>
                     </div>
                 </div>
-                <div class="form-group row">
+              <div class="form-group row form-provinsi">
                   <label class="col-form-label col-lg-5 col-md-12 labelket"
                       for="tgl_kirim">Provinsi</label>
                       <div class="col-lg-5 col-md-12 col-form-label">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="provinsi"
                                 id="provinsi1" value="provinsi_customer" />
-                            <label class="form-check-label" for="provinsi1">Customer</label>
+                            <label class="form-check-label" for="provinsi1">Distributor</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="provinsi"
-                                id="provinsi_instansi" value="provinsi_instansi" />
+                                id="provinsi2" value="provinsi_instansi" />
                             <label class="form-check-label" for="provinsi_instansi">Instansi</label>
                         </div>
+                        <select name="provinsi" class="form-control provinsi_pengiriman">
+                        </select>
+                        <div class="hidden dataprovinsiekat"></div>
                     </div>
               </div>
                 <div class="form-group row">
@@ -107,18 +114,18 @@
                         class="col-form-label col-lg-5 col-md-12 labelket">Pengiriman</label>
                     <div class="col-lg-5 col-md-12 col-form-label">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="pengiriman"
+                            <input class="form-check-input" type="radio" name="pengiriman_surat_jalan"
                                 id="pengiriman1" value="ekspedisi" />
                             <label class="form-check-label" for="pengiriman1">Ekspedisi</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="pengiriman"
+                            <input class="form-check-input" type="radio" name="pengiriman_surat_jalan"
                                 id="pengiriman2" value="nonekspedisi" />
                             <label class="form-check-label" for="pengiriman2">Non Ekspedisi</label>
                         </div>
                     </div>
                 </div>
-                <div class="form-group row hide" id="ekspedisi">
+                <div class="form-group row" id="ekspedisi">
                     {{-- <div class="card col-lg-12 hide" id="ekspedisi"> --}}
                     {{-- <div class="card-body">
                                 <h6><b>Ekspedisi</b></h6> --}}
@@ -137,7 +144,7 @@
                     {{-- </div> --}}
                     {{-- </div> --}}
                 </div>
-                <div class="form-group row hide" id="nonekspedisi">
+                <div class="form-group row" id="nonekspedisi">
                     {{-- <div class="card col-12 hide" id="nonekspedisi"> --}}
                     {{-- <div class="card-body">
                                 <h6><b>Non Ekspedisi</b></h6> --}}
@@ -156,11 +163,11 @@
                   <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
                     <div class="col-lg-6 col-md-12 col-form-label">
                       <div class="form-check form-check-inline">
-                        <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pengiriman0" value="penjualan" />
+                        <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pilihan_pengiriman0" value="penjualan" />
                         <label for="pengiriman0" class="form-check-label">Sama dengan Penjualan</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pengiriman1" value="lainnya" />
+                        <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pilihan_pengiriman1" value="lainnya" />
                         <label for="pengiriman1" class="form-check-label">Ubah Alamat</label>
                     </div>
                     <input type="text" name="perusahaan_pengiriman" id="perusahaan_pengiriman" class="form-control col-form-label" readonly>
@@ -295,7 +302,6 @@
       let index = $(this).data('index');
       let noseri = $('.keterangannoseri'+index).val();
       //  change array to text with comma
-      console.log(noseri)
       if (noseri != '') {
         noseri = noseri.join(', ');
       }
@@ -347,7 +353,7 @@
       }
     })
 
-    $('input[name="pengiriman"]').on('change', function () {
+    $('input[name="pengiriman_surat_jalan"]').on('change', function () {
       let val = $(this).val();
       if (val == 'ekspedisi') {
         $('#ekspedisi').removeClass('hide');
@@ -443,17 +449,13 @@
       let pilihan_pengiriman = $(this).val();
       $('#perusahaan_pengiriman').attr('readonly', true);
       $('#alamat_pengiriman').attr('readonly', true);
-      $('#perusahaan_pengiriman').val('');
             // add placeholder
       $('#perusahaan_pengiriman').attr('placeholder', 'Masukkan Nama Perusahaan');
-      $('#alamat_pengiriman').val('');
       $('#alamat_pengiriman').removeClass('is-invalid');
       // add placeholder
       $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
 
       if(pilihan_pengiriman == 'lainnya'){
-        $('#perusahaan_pengiriman').val('');
-        $('#alamat_pengiriman').val('');
         $('#perusahaan_pengiriman').attr('readonly', false);
         $('#alamat_pengiriman').attr('readonly', false);
       }
@@ -469,6 +471,54 @@
         $('.sj_baru').removeClass('hide')
       }
     });
+
+    $(document).on('change', 'input[type="radio"][name="provinsi"]', function () {
+      const dataprovinsi = $('.dataprovinsiekat').val();
+      const provinsi = $(this).val();
+      let selectElement = $('.provinsi_pengiriman');
+
+      if(provinsi == 'provinsi_customer'){
+        let option = $('<option>', {
+          value: dataprovinsi.dsb.id,
+          text: dataprovinsi.dsb.nama
+        })
+        selectElement.empty().append(option).val(dataprovinsi.dsb.id).trigger('change');
+      } else {
+        let option = $('<option>', {
+          value: dataprovinsi.instansi.id,
+          text: dataprovinsi.instansi.nama
+        })
+        selectElement.empty().append(option).val(dataprovinsi.instansi.id).trigger('change');
+      }
+
+      let id = $('.provinsi_pengiriman').val()
+          $('.ekspedisi_id').select2({
+              ajax: {
+              minimumResultsForSearch: 20,
+              placeholder: "Pilih Ekspedisi",
+              dataType: 'json',
+              theme: "bootstrap",
+              delay: 250,
+              type: 'GET',
+              url: '/api/logistik/ekspedisi/select/' + id,
+              data: function(params) {
+                  return {
+                      term: params.term
+                  }
+              },
+              processResults: function(data) {
+                  return {
+                      results: $.map(data, function(obj) {
+                          return {
+                              id: obj.id,
+                              text: obj.nama
+                          };
+                      })
+                  };
+              },
+          }
+      })
+    })
 
   </script>
 
