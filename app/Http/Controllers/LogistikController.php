@@ -28,6 +28,7 @@ use App\Models\NoseriTGbj;
 use App\Models\OutgoingPesananPart;
 use App\Models\Pengiriman;
 use Carbon\Carbon as CarbonCarbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
@@ -4810,7 +4811,7 @@ foreach ($mergedNoseri as $nama => $noseriArray) {
                 $q->where('pesanan_id',$id);
             })->get();
             $data_part = DetailPesananPart::with(['Sparepart'])->where('pesanan_id',$id)->get();
-
+            $pesanan = Pesanan::find($id);
             if(count($data_part) > 0){
                 foreach ($data_part as $key => $d){
                     $part[$key] = array(
@@ -4834,9 +4835,59 @@ foreach ($mergedNoseri as $nama => $noseriArray) {
                 $prd = array();
             }
 
+            if($pesanan->Ekatalog){
+                $provinsi = array();
+                if ($pesanan->Ekatalog->provinsi_id != NULL){
+                    $instansi =  array(
+                        'id' => $pesanan->Ekatalog->provinsi_id,
+                        'nama' => $pesanan->Ekatalog->Provinsi->nama
+                    );
+                    array_push($provinsi, $instansi);
+                }
+
+                if ($pesanan->Ekatalog->Customer->id_provinsi != NULL){
+                $dsb =  array(
+                    'id' => $pesanan->Ekatalog->Customer->id_provinsi,
+                    'nama' => $pesanan->Ekatalog->Customer->Provinsi->nama
+                );
+                array_push($provinsi, $dsb);
+            }
+
+            }elseif($pesanan->Spa){
+                $provinsi =  array(
+                    'id' => $pesanan->Spa->Customer->id_provinsi,
+                    'nama' => $pesanan->Spa->Customer->Provinsi->nama
+                );
+            }else{
+                $provinsi =  array(
+                    'id' => $pesanan->Spb->Customer->id_provinsi,
+                    'nama' => $pesanan->Spb->Customer->Provinsi->nama
+                );
+            }
+
+
+            if ($pesanan->ekspedisi_id != NULL){
+                $ekspedisi =  array(
+                    'id' => $pesanan->ekspedisi_id,
+                    'nama' => $pesanan->Ekspedisi->nama
+                );
+            } else{
+                $ekspedisi = array();
+            }
+
             $data = array(
-                'produk' => $prd,
-                'part' => $part
+                'header' => array(
+                    'provinsi' =>   $provinsi,
+                    'ekspedisi' => $ekspedisi,
+                    'tujuan' => $pesanan->tujuan_kirim,
+                    'alamat' => $pesanan->alamat_kirim,
+                    'kemasan' => $pesanan->kemasan,
+                ),
+                'item' => array(
+                    'produk' => $prd,
+                    'part' => $part
+                )
+
             );
 
 
