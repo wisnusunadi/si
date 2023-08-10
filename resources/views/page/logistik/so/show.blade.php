@@ -574,16 +574,20 @@
                     },
                     columns: [{
                         data: null,
-                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false,
                         render: function(data, type, row, meta) {
                             // checkbox
-                            return '<input type="checkbox" class="form-control form-control-sm check_detail" name="array_check[]" value="' + row.id + '"/>';
+                            return '<input type="checkbox" class="check_detail" value="' + data.id + '" />';
                         }
                     }, {
                         data: 'nama',
                     },
                     {
                         data: 'jumlah',
+                    },
+                    {
+                        data: null,
                         render: function(data, type, row, meta) {
                             var rowIndex = meta.row;
                             return '<input type="text" class="form-control form-control-sm jumlah'+rowIndex+'" name="jumlah[' + rowIndex + ']" id="jumlah[' + rowIndex + ']" value="0" disabled/>';
@@ -599,11 +603,41 @@
                     {
                         // hidden text
                         data: 'noseri_selected',
+                        className: 'd-none',
                         render: function(data, type, row, meta) {
                             var rowIndex = meta.row;
 
-                            return '<input type="hidden" class="keterangannoseri'+ rowIndex+'" name="keterangan[' + rowIndex + ']" id="keterangan[' + rowIndex + ']" placeholder="Keterangan" />';
+                            return '<div class="keterangannoseri'+ rowIndex+'" name="keterangan[' + rowIndex + ']" id="keterangan[' + rowIndex + ']"></div>';
                         }
+                    },
+                    ]
+                })
+            }
+
+            const tablepart = (part) => {
+                $('.tablepart').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: false,
+                    autowidth: true,
+                    responsive: true,
+                    data: part,
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            // checkbox
+                            return '<input type="checkbox" class="check_detail_part" value="' + data.id + '" />';
+                        }
+                    }, {
+                        data: 'nama',
+                    },
+                    {
+                        data: 'jumlah',
                     },
                     ]
                 })
@@ -623,9 +657,9 @@
                         'dataType': 'json',
                         success: function (data) {
                             tableproduk(data.produk)
+                            tablepart(data.part)
                         }
                     });
-                    // fit to 100% width
                    
                 })
             });

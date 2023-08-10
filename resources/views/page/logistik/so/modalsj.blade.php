@@ -190,7 +190,7 @@
                     <a class="nav-link active" id="pills-produk-tab" data-toggle="pill" data-target="#pills-produk" type="button" role="tab" aria-controls="pills-produk" aria-selected="true">Produk</a>
                   </li>
                   <li class="nav-item" role="presentation">
-                    <a class="nav-link disabled" id="pills-part-tab" data-toggle="pill" data-target="#pills-part" type="button" role="tab" aria-controls="pills-part" aria-selected="false">Part</a>
+                    <a class="nav-link" id="pills-part-tab" data-toggle="pill" data-target="#pills-part" type="button" role="tab" aria-controls="pills-part" aria-selected="false">Part / Jasa</a>
                   </li>
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
@@ -207,6 +207,7 @@
                           </th>
                           <th>Nama Produk</th>
                           <th>Jumlah</th>
+                          <th>Jumlah No Seri Diinput</th>
                           <th>Aksi</th>
                           <th class="hidden"></th>
                         </tr>
@@ -214,7 +215,23 @@
                       <tbody></tbody>
                     </table>
                   </div>
-                  <div class="tab-pane fade" id="pills-part" role="tabpanel" aria-labelledby="pills-part-tab">...</div>
+                  <div class="tab-pane fade" id="pills-part" role="tabpanel" aria-labelledby="pills-part-tab">
+                    <table class="table tablepart" width="100%">
+                      <thead>
+                        <tr>
+                          <th>
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="check_all_part" id="check_all_part" name="check_all_part" />
+                              <label class="form-check-label" for="check_all_part">
+                              </label>
+                          </div>
+                          </th>
+                          <th>Nama</th>
+                          <th>Jumlah</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -261,32 +278,57 @@
     $(document).on('click', '.noseri', function(){
       let index = $(this).data('index');
       let noseri = $('.keterangannoseri'+index).val();
+      //  change array to text with comma
+      console.log(noseri)
+      if (noseri != '') {
+        noseri = noseri.join(', ');
+      }
 
       $('#noseritext').val(noseri);
       $('#index').val(index);
       $('#modalnoseri').modal('show');
     });
 
+    const validatejml = (jml, index) => {
+       const jumlahproduk = $('.tableproduk').DataTable().cell(index, 2).data();
+       if (jml > jumlahproduk) {
+         Swal.fire({
+           icon: 'error',
+           title: 'Oops...',
+           text: 'Jumlah No Seri Melebihi Jumlah Produk!',
+         })
+         return false;
+       }
+       return true;
+    }
+
     $(document).on('click', '.simpannoseri', function () {
       let index = $('#index').val();
-      let noseri = $('#noseritext').val();
+      let noseri = $('#noseritext').val().split(/[\n, \t]/);
       let keterangan = $('.keterangannoseri'+index);
       let jumlah = $('.jumlah'+index);
 
-      keterangan.val(noseri);
-      // remove spasi
-      noseri = noseri.replace(/\s/g, '');
-      // split by koma
-      noseri = noseri.split(',');
-      // remove empty string
-      noseri = noseri.filter(function (el) {
-        return el != "";
+      // remove spasi tiap nomor seri
+      noseri = noseri.map(function (x) {
+        return x.trim();
       });
-      // jumlahkan
-      jumlah.val(noseri.length);
 
-      console.log(noseri);
-      $('#modalnoseri').modal('hide');
+      // remove spasi atau karakter kosong
+      noseri = noseri.filter(function (el) {
+          return el != '';
+      });
+      // remove duplikat
+      noseri = [...new Set(noseri)];
+
+      if (validatejml(noseri.length, index)) {
+          // change text to array
+          keterangan.val(noseri);
+          
+          // jumlahkan
+          jumlah.val(noseri.length);
+
+          $('#modalnoseri').modal('hide');
+      }
     })
 
     $('input[name="pengiriman"]').on('change', function () {
@@ -320,6 +362,18 @@
       }
     });
 
+    $(document).on('click', '#check_all_part', function () {
+      if (this.checked) {
+        $(document).find('.check_detail_part').each(function () {
+          this.checked = true;
+        });
+      } else {
+        $(document).find('.check_detail_part').each(function () {
+          this.checked = false;
+        });
+      }
+    });
+
     $(document).on('click', '.cetaksjkirim', function () {
     // find data on datatable is checked
         let data = [];
@@ -346,11 +400,26 @@
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Tidak ada data yang dipilih!',
+            text: 'Tidak ada barang yang dipilih!',
           })
           return false;
         }
 
+        let data_part = [];
+        let table_part = $('.tablepart').DataTable();
+        let check_part = $(document).find('.check_detail_part');
+
+        // push data to array
+        for (let i = 0; i < check_part.length; i++) {
+            if (check_part[i].checked) {
+                let row = table_part.row(i).node(); // Get the row node directly
+                let rowData = table_part.row(row).data();
+                data_part.push(rowData);
+            }
+        }
+
+        console.log("produk", data);
+        console.log("part", data_part);
 
     });
 
