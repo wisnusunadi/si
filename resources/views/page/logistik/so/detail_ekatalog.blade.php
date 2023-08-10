@@ -389,7 +389,13 @@
                                                         <div class="col-5 hide" id="noseridetail">
                                                             <div class="card removeboxshadow">
                                                                 <div class="card-header">
-                                                                    <div class="card-title">No Seri</div>
+                                                                    <div class="d-flex bd-highlight">
+                                                                        <div class="p-2 flex-grow-1 bd-highlight">No Seri</div>
+                                                                        <div class="p-2 bd-highlight">
+                                                                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalautocheckbox">Pilih Nomor Seri Via Text</button>
+                                                                        </div>
+                                                                    </div>
+                                                                    @include('page.logistik.so.modalautocheckbox')
                                                                 </div>
                                                                 <div class="card-body">
                                                                     <div class="table-responsive">
@@ -1066,7 +1072,6 @@
             })
 
             $('#noseritable').on('change ', '.check_noseri', function() {
-
                 $('input[name="check_all_noseri"]:checked').prop('checked', false);
                 var rows = $('#noseritable').DataTable().rows().nodes();
                 var text = $('#belumkirimtable > tbody > tr.bgcolor').find('div[name="array_check[]"]')

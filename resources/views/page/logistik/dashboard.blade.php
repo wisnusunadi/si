@@ -745,56 +745,56 @@
                     },
                 })
             }
-            function update_chart(produk,gudang ,qc, log, ki){
-                const ctx = $('#myChart');
-                if(produk == 'part'){
-                    const myChart = new Chart(ctx, {
-                    type: 'pie',
-                data: {
-                    labels: [
-                        'QC',
-                        'Logistik',
-                        'Kirim',
-                    ],
-                    datasets: [{
-                        label: 'STATUS PESANAN',
-                        data: [qc, log, ki],
-                        backgroundColor: [
-                        'rgb(255, 221, 0)',
-                        'rgb(11, 171, 100)',
-                        'rgb(8, 126, 225)'
-                        ],
-                        hoverOffset: 4
-                    }]
-                }
-                });
-                }else{
-                    const myChart = new Chart(ctx, {
-                    type: 'pie',
-                data: {
-                    labels: [
-                        'Gudang',
-                        'QC',
-                        'Logistik',
-                        'Kirim',
-                    ],
-                    datasets: [{
-                        label: 'STATUS PESANAN',
-                        data: [gudang ,qc, log, ki],
-                        backgroundColor: [
+            // function update_chart(produk,gudang ,qc, log, ki){
+            //     const ctx = $('#myChart');
+            //     if(produk == 'part'){
+            //         const myChart = new Chart(ctx, {
+            //         type: 'pie',
+            //     data: {
+            //         labels: [
+            //             'QC',
+            //             'Logistik',
+            //             'Kirim',
+            //         ],
+            //         datasets: [{
+            //             label: 'STATUS PESANAN',
+            //             data: [qc, log, ki],
+            //             backgroundColor: [
+            //             'rgb(255, 221, 0)',
+            //             'rgb(11, 171, 100)',
+            //             'rgb(8, 126, 225)'
+            //             ],
+            //             hoverOffset: 4
+            //         }]
+            //     }
+            //     });
+            //     }else{
+            //         const myChart = new Chart(ctx, {
+            //         type: 'pie',
+            //     data: {
+            //         labels: [
+            //             'Gudang',
+            //             'QC',
+            //             'Logistik',
+            //             'Kirim',
+            //         ],
+            //         datasets: [{
+            //             label: 'STATUS PESANAN',
+            //             data: [gudang ,qc, log, ki],
+            //             backgroundColor: [
 
-                        'rgb(236, 159, 5)',
-                        'rgb(255, 221, 0)',
-                        'rgb(11, 171, 100)',
-                        'rgb(8, 126, 225)'
-                        ],
-                        hoverOffset: 4
-                    }]
-                }
-                });
-                }
+            //             'rgb(236, 159, 5)',
+            //             'rgb(255, 221, 0)',
+            //             'rgb(11, 171, 100)',
+            //             'rgb(8, 126, 225)'
+            //             ],
+            //             hoverOffset: 4
+            //         }]
+            //     }
+            //     });
+            //     }
 
-            }
+            // }
 
             $(document).on('click', '#tabledetailpesan #lihatstok', function(){
                 var id = $(this).attr('data-id');
@@ -813,7 +813,7 @@
                     $("#part_status").removeClass('d-none');
                 }
 
-                    var chartExist = Chart.getChart("myChart"); // <canvas> id
+                    // var chartExist = Chart.getChart("myChart"); // <canvas> id
                     if (chartExist != undefined)
                     chartExist.destroy();
                     update_chart(produk,result.gudang,result.qc,result.log,result.kir);
@@ -1157,43 +1157,43 @@
     //         }
     //     }
     // });
-    var ctx = document.getElementById("myChart");
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
+    // var ctx = document.getElementById("myChart");
+    // var myChart = new Chart(ctx, {
+    //     type: 'bar',
+    //     data: {
+    //         labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+    //         datasets: [{
+    //             label: '# of Votes',
+    //             data: [12, 19, 3, 5, 2, 3],
+    //             backgroundColor: [
+    //                 'rgba(255, 99, 132, 0.2)',
+    //                 'rgba(54, 162, 235, 0.2)',
+    //                 'rgba(255, 206, 86, 0.2)',
+    //                 'rgba(75, 192, 192, 0.2)',
+    //                 'rgba(153, 102, 255, 0.2)',
+    //                 'rgba(255, 159, 64, 0.2)'
+    //             ],
+    //             borderColor: [
+    //                 'rgba(255,99,132,1)',
+    //                 'rgba(54, 162, 235, 1)',
+    //                 'rgba(255, 206, 86, 1)',
+    //                 'rgba(75, 192, 192, 1)',
+    //                 'rgba(153, 102, 255, 1)',
+    //                 'rgba(255, 159, 64, 1)'
+    //             ],
+    //             borderWidth: 1
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             yAxes: [{
+    //                 ticks: {
+    //                     beginAtZero: true
+    //                 }
+    //             }]
+    //         }
+    //     }
+    // });
 </script>
 
 @stop
