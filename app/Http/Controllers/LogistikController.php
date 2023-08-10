@@ -934,12 +934,6 @@ class LogistikController extends Controller
                 ->orderBydesc('created_at')
                 ->get();
         }
-
-        // return response()->json([
-        //     'value' => $value,
-        //     'years' => $data
-        // ]);
-
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
