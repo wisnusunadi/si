@@ -185,26 +185,37 @@
             </div>
             <div class="card">
               <div class="card-body">
-                <h5>Data Barang</h5>
-                <table class="table tableproduk" width="100%">
-                  <thead>
-                    <tr>
-                        <th>
-                          <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
-                              <label class="form-check-label" for="check_all">
-                              </label>
-                          </div>
-                      </th>
-                      <th>No</th>
-                      <th>Nama Produk</th>
-                      <th>Jumlah</th>
-                      <th>Aksi</th>
-                      <th class="hidden"></th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="pills-produk-tab" data-toggle="pill" data-target="#pills-produk" type="button" role="tab" aria-controls="pills-produk" aria-selected="true">Produk</a>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <a class="nav-link disabled" id="pills-part-tab" data-toggle="pill" data-target="#pills-part" type="button" role="tab" aria-controls="pills-part" aria-selected="false">Part</a>
+                  </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                  <div class="tab-pane fade show active" id="pills-produk" role="tabpanel" aria-labelledby="pills-produk-tab">
+                    <table class="table tableproduk" width="100%">
+                      <thead>
+                        <tr>
+                            <th>
+                              <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
+                                  <label class="form-check-label" for="check_all">
+                                  </label>
+                              </div>
+                          </th>
+                          <th>Nama Produk</th>
+                          <th>Jumlah</th>
+                          <th>Aksi</th>
+                          <th class="hidden"></th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                  <div class="tab-pane fade" id="pills-part" role="tabpanel" aria-labelledby="pills-part-tab">...</div>
+                </div>
               </div>
             </div>
         </div>
