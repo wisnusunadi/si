@@ -112,7 +112,7 @@
                     <div class="col-lg-7 col-md-12">
                         <select class="select2 select-info form-control ekspedisi_id"
                             name="ekspedisi_id" id="ekspedisi_id" style="width: 100%;">
-    
+
                         </select>
                         <div class="invalid-feedback" id="msgekspedisi_id"></div>
                         <label for="" id="ekspedisi_nama" class="col-form-label hide"></label>
@@ -250,7 +250,7 @@
     $(document).on('click', '.noseri', function(){
       let index = $(this).data('index');
       let noseri = $('.keterangannoseri'+index).val();
-      
+
       $('#noseritext').val(noseri);
       $('#index').val(index);
       $('#modalnoseri').modal('show');
@@ -340,7 +340,7 @@
           return false;
         }
 
-        console.log(data);
+
     });
 
     $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function () {
@@ -375,4 +375,4 @@
     });
 
   </script>
-  
+

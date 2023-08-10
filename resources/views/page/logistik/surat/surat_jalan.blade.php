@@ -78,22 +78,22 @@
                       <table border="0"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                           <tr>
                               <td class="vera"  width="20%">Pelanggan :</td>
-                              <td style=" border: 1px solid;"><b>PT Emiindo Jaya Bersama</b></td>
+                              <td style=" border: 1px solid;"><b>{{$data->customer}}</b></td>
                           </tr>
                           <tr>
                               <td></td>
-                              <td style=" border: 1px solid;">Komplek Perkantoran Pulomas Jalan Perintis Kemerdekaan 10 No. 8, pulo Gadung, Jakarta Timur, DKI Jakarta</td>
+                              <td style=" border: 1px solid;">{{$data->alamat_customer}}</td>
                           </tr>
                       </table>
                       <br>
                       <table border="0"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                           <tr>
                               <td class="vera"   width="20%">Alamat Pengiriman :</td>
-                              <td style=" border: 1px solid;"  class="vera" ><b>PT Mahkota Anugrah Karya</b></td>
+                              <td style=" border: 1px solid;"  class="vera" ><b>{{$data->tujuan_kirim}}</b></td>
                           </tr>
                           <tr>
                              <td></td>
-                              <td style=" border: 1px solid;">Komplek Perkantoran Pulomas Jalan Perintis Kemerdekaan 10 No. 8, pulo Gadung, Jakarta Timur, DKI Jakarta</td>
+                              <td style=" border: 1px solid;">{{$data->alamat_kirim}}</td>
                           </tr>
 
                       </table>
@@ -104,37 +104,37 @@
                           <tr>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>No SJ</u> <br>
-                                  asd/df/09/87/22
+                                  {{$data->nosj}}
                               </td>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>Tgl SJ</u><br>
-                                 23/12/2023
+                                  {{$data->tgl_sj}}
                               </td>
                           </tr>
                           <tr>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>No PO</u> <br>
-                                  asd/df/09/87/22
+                                  {{$data->no_po}}
                               </td>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>Tgl PO</u><br>
-                                 23/12/2023
+                                  {{$data->tgl_po}}
                               </td>
                           </tr>
                           <tr>
                               <td style=" border: 1px solid;" class="vera ">
                                   <u>Ekspedisi</u> <br>
-                                Non Peti
+                                  {{$data->ekspedisi}}
                               </td>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>Tgl Pengiriman</u><br>
-                                 23/12/2023
+                                  {{$data->tgl_kirim}}
                               </td>
                           </tr>
                           <tr>
                               <td style=" border: 1px solid;" class="vera " colspan="2">
                                   <u>Up</u> <br>
-                              Bu Apriana - 08523901234
+                                  {{$data->up}}
                               </td>
 
                           </tr>
@@ -203,7 +203,7 @@
                          <td class="align-center" width="8%">
                            <b>No</b>
                          </td>
-                         <td class="align-center" width="20%">
+                         <td class="align-center" width="8%">
                            <b>Kode Barang</b>
                          </td>
                          <td class="align-center">
@@ -215,37 +215,38 @@
                          <td class="align-center"  width="8%">
                            <b>Satuan</b>
                          </td>
-                         <td class="align-center"  width="8%">
-                           <b>Pajak</b>
+                         <td class="align-center"  width="20%">
+                           <b>No Seri</b>
                          </td>
                        </tr>
                     </thead>
                     <tbody>
-                        @for ($i=1;$i<=8;$i++)
+                        @foreach ( $data->item as $item )
                         <tr>
                             <td class="align-center">
-                             {{ $i}}
+                            {{$item->no}}
                             </td>
                             <td class="align-center">
-                              Richard McClintock
+                                {{$item->kode}}
                             </td>
                             <td class="align-center">
-                                Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock
+                                {{$item->nama}}
                             </td>
                             <td class="align-center">
-                            123.00
+                                {{$item->jumlah}}.00
                             </td>
                             <td class="align-center">
-                             UNIT
+                                {{$item->satuan}}
                             </td>
                             <td class="align-center">
-                            PPn
+                             @php echo implode(', ',$item->noseri) @endphp
+
                             </td>
                           </tr>
 
-                        @endfor
+                          @endforeach
 
-                        <tr>
+                        {{-- <tr>
                             <td class="align-center" colspan="3">
 
                             </td>
@@ -254,7 +255,7 @@
                             </td>
 
 
-                          </tr>
+                          </tr> --}}
                     </tbody>
                 </table>
                 {{-- <div style="page-break-after: always;"></div> --}}

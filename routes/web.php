@@ -282,16 +282,16 @@ Route::group(['prefix' => 'qc'], function () {
 });
 
 
-Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'logistik'], function () {
     Route::group(['middleware' => ['divisi:log']], function () {
         Route::get('/dashboard', [App\Http\Controllers\LogistikController::class, 'dashboard'])->name('logistik.dashboard');
     });
-    Route::group(['prefix' => '/so', 'middleware' => ['divisi:log,dirut']], function () {
-        Route::group(['middleware' => ['divisi:log,dirut']], function () {
+    Route::group(['prefix' => '/so'], function () {
+        // Route::group(['middleware' => ['divisi:log,dirut']], function () {
             Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
             Route::post('/data/{value}/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
             Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
-        });
+        // });
         Route::group(['middleware' => ['divisi:log']], function () {
             Route::get('/create/{jenis}', [App\Http\Controllers\logistikController::class, 'create_logistik_view'])->name('logistik.so.create');
             Route::view('/edit', 'page.logistik.so.edit')->name('logistik.so.edit');
@@ -332,6 +332,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
             // Route::view('/edit/{id}', 'page.logistik.pengiriman.edit')->name('logistik.pengiriman.edit');
             Route::get('/edit/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'update_modal_surat_jalan'])->name('logistik.pengiriman.edit');
             Route::get('/print/{id}', [App\Http\Controllers\LogistikController::class, 'pdf_surat_jalan'])->name('logistik.pengiriman.print');
+            Route::get('/prints/{id}', [App\Http\Controllers\LogistikController::class, 'cetak_surat_jalan']);
             Route::group(['prefix' => '/riwayat'], function () {
                 Route::view('/show', 'page.logistik.pengiriman.riwayat.show')->name('logistik.riwayat.show');
             });
