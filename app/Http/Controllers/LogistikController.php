@@ -28,6 +28,7 @@ use App\Models\NoseriTGbj;
 use App\Models\OutgoingPesananPart;
 use App\Models\Pengiriman;
 use Carbon\Carbon as CarbonCarbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
@@ -56,11 +57,69 @@ class LogistikController extends Controller
     public function cetak_surat_jalan($id)
     {
         $data = LogistikDraft::where('pesanan_id',5341)->first();
-        $obj = json_decode($data->isi);
-        $customPaper = array(0,0,605.44,788.031);
-        $pdf = PDF::loadView('page.logistik.surat.surat_jalan',['data' => $obj])->setPaper($customPaper);
-        return $pdf->stream('');
+        $log = json_decode($data->isi);
+        $page = array();
+        $mergedNoseri = [];
+        foreach ($log->item as $key => $item) {
+
+            $nama = $item->nama;
+                    $noseri = $item->noseri;
+
+                    if (!isset($mergedNoseri[$nama])) {
+                        $mergedNoseri[$nama] = $noseri;
+                    } else {
+                        $mergedNoseri[$nama] = array_merge($mergedNoseri[$nama], $noseri);
+                    }
+   }
+
+
+   $mergedNoseriFinal = array();
+
+foreach ($mergedNoseri as $nama => $noseriArray) {
+    $noseriChunks = array_chunk($noseriArray, 5);
+
+    foreach ($noseriChunks as $chunkIndex => $chunk) {
+        $result[] = array(
+            "nama" => $nama,
+            "noseri" => $chunk
+        );
     }
+}
+
+
+       return response()->json(['data' => $result]);
+
+    }
+    // public function cetak_surat_jalan($id)
+    // {
+    //     $data = LogistikDraft::where('pesanan_id',5341)->first();
+    //     $log = json_decode($data->isi);
+
+    //     $mergedNoseri = [];
+    //     foreach ($log->item as $key => $item) {
+    //         $nama = $item->nama;
+    //         $noseri = $item->noseri;
+
+    //         if (!isset($mergedNoseri[$nama])) {
+    //             $mergedNoseri[$nama] = $noseri;
+    //         } else {
+    //             $mergedNoseri[$nama] = array_merge($mergedNoseri[$nama], $noseri);
+    //         }
+
+    //         // $mergedNoseri = array_merge($mergedNoseri,  $item->noseri);
+    //     }
+    //     $chunkedNoseri = array();
+
+    //     foreach ($mergedNoseri as $nama => $noseriArray) {
+    //         $chunks = array_chunk($noseriArray, 5);
+    //         $chunkedNoseri[$nama] = $chunks;
+    //     }
+
+    //    return response()->json(['data' => $chunkedNoseri]);
+    //     $customPaper = array(0,0,605.44,788.031);
+    //     $pdf = PDF::loadView('page.logistik.surat.surat_jalan',['data' => $obj])->setPaper($customPaper);
+    //     return $pdf->stream('');
+    // }
 
     public function get_data_select_produk(Request $r, $jenis)
     {
@@ -1363,7 +1422,7 @@ class LogistikController extends Controller
                 ->whereNotIn('log_id', ['10','20'])
                 ->whereNotNull('no_po')
                 ->whereYear('created_at',  $years)
-                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
+                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  (((ctfjasa > 0 AND clogjasa < ctfjasa )OR clogjasa = 0 ) AND ctfjasa > 0 )')
                 ->orderBydesc('created_at')
                 ->get();
         }
@@ -4752,7 +4811,7 @@ class LogistikController extends Controller
                 $q->where('pesanan_id',$id);
             })->get();
             $data_part = DetailPesananPart::with(['Sparepart'])->where('pesanan_id',$id)->get();
-
+            $pesanan = Pesanan::find($id);
             if(count($data_part) > 0){
                 foreach ($data_part as $key => $d){
                     $part[$key] = array(
@@ -4776,9 +4835,59 @@ class LogistikController extends Controller
                 $prd = array();
             }
 
+            if($pesanan->Ekatalog){
+                $provinsi = array();
+                if ($pesanan->Ekatalog->provinsi_id != NULL){
+                    $instansi =  array(
+                        'id' => $pesanan->Ekatalog->provinsi_id,
+                        'nama' => $pesanan->Ekatalog->Provinsi->nama
+                    );
+                    array_push($provinsi, $instansi);
+                }
+
+                if ($pesanan->Ekatalog->Customer->id_provinsi != NULL){
+                $dsb =  array(
+                    'id' => $pesanan->Ekatalog->Customer->id_provinsi,
+                    'nama' => $pesanan->Ekatalog->Customer->Provinsi->nama
+                );
+                array_push($provinsi, $dsb);
+            }
+
+            }elseif($pesanan->Spa){
+                $provinsi =  array(
+                    'id' => $pesanan->Spa->Customer->id_provinsi,
+                    'nama' => $pesanan->Spa->Customer->Provinsi->nama
+                );
+            }else{
+                $provinsi =  array(
+                    'id' => $pesanan->Spb->Customer->id_provinsi,
+                    'nama' => $pesanan->Spb->Customer->Provinsi->nama
+                );
+            }
+
+
+            if ($pesanan->ekspedisi_id != NULL){
+                $ekspedisi =  array(
+                    'id' => $pesanan->ekspedisi_id,
+                    'nama' => $pesanan->Ekspedisi->nama
+                );
+            } else{
+                $ekspedisi = array();
+            }
+
             $data = array(
-                'produk' => $prd,
-                'part' => $part
+                'header' => array(
+                    'provinsi' =>   $provinsi,
+                    'ekspedisi' => $ekspedisi,
+                    'tujuan' => $pesanan->tujuan_kirim,
+                    'alamat' => $pesanan->alamat_kirim,
+                    'kemasan' => $pesanan->kemasan,
+                ),
+                'item' => array(
+                    'produk' => $prd,
+                    'part' => $part
+                )
+
             );
 
 

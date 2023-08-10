@@ -203,7 +203,7 @@
                          <td class="align-center" width="8%">
                            <b>No</b>
                          </td>
-                         <td class="align-center" width="8%">
+                         <td class="align-center" >
                            <b>Kode Barang</b>
                          </td>
                          <td class="align-center">
@@ -215,7 +215,7 @@
                          <td class="align-center"  width="8%">
                            <b>Satuan</b>
                          </td>
-                         <td class="align-center"  width="20%">
+                         <td class="align-center" >
                            <b>No Seri</b>
                          </td>
                        </tr>
