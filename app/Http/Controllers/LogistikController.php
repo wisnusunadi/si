@@ -738,7 +738,7 @@ class LogistikController extends Controller
     }
 
     //Get Data
-    public function get_data_so($value)
+    public function get_data_so($value, $years)
     {
         $data = "";
         if ($value == "belum_kirim") {
@@ -801,8 +801,9 @@ class LogistikController extends Controller
                 }
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotIn('log_id', ['7', '10'])
+                ->whereYear('created_at',  $years)
                 ->havingRaw('(clogjasa = 0 AND ctfjasa > 0) OR (clogprd = 0 AND cqcprd > 0) OR (clogpart = 0 AND cqcpart > 0)')
-                ->orderBy('tgl_kontrak', 'asc')
+                ->orderBydesc('created_at')
                 ->get();
         } else if ($value == "sebagian_kirim") {
             $data = Pesanan::addSelect([
@@ -864,8 +865,9 @@ class LogistikController extends Controller
                 }
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotIn('log_id', ['7', '10'])
+                ->whereYear('created_at',  $years)
                 ->havingRaw('((clogjasa < ctfjasa AND clogjasa > 0) AND ctfjasa > 0) OR ((clogprd < cqcprd AND clogprd > 0) AND cqcprd > 0) OR ((clogpart < cqcpart AND clogpart > 0) AND cqcpart > 0)')
-                ->orderBy('tgl_kontrak', 'asc')
+                ->orderBydesc('created_at')
                 ->get();
         } else {
             $data = Pesanan::addSelect([
@@ -927,10 +929,16 @@ class LogistikController extends Controller
                 }
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotIn('log_id', ['7', '10'])
+                ->whereYear('created_at',  $years)
                 ->havingRaw('(((clogjasa < ctfjasa AND clogjasa > 0) OR clogjasa = 0) AND ctfjasa > 0) OR (((clogprd < cqcprd AND clogprd > 0) OR clogprd = 0) AND cqcprd > 0) OR (((clogpart < cqcpart AND clogpart > 0) OR clogpart = 0) AND cqcpart > 0)')
-                ->orderBy('tgl_kontrak', 'asc')
+                ->orderBydesc('created_at')
                 ->get();
         }
+
+        // return response()->json([
+        //     'value' => $value,
+        //     'years' => $data
+        // ]);
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1079,10 +1087,6 @@ class LogistikController extends Controller
                             <i class="fas fa-eye"></i> Detail
                         </button>
                     </a>
-                    <button class="dropdown-item cetaksj" type="button" data-x="' . $x . '" data-y="' . $pesanan . '" data-z="' . $z . '">
-                        <i class="fas fa-print"></i>
-                        Cetak Surat Jalan
-                    </button>
                 </div>
                 ';
             })
@@ -1105,8 +1109,11 @@ class LogistikController extends Controller
             ->make(true);
     }
 
-    public function get_data_selesai_so()
+    public function get_data_selesai_so($years)
     {
+        // return response()->json([
+        //     'years' => $years,
+        // ]);
         $prd = Pesanan::whereIn('id', function ($q) {
             $q->select('pesanan.id')
                 ->from('pesanan')
@@ -1137,7 +1144,7 @@ class LogistikController extends Controller
                 ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                 ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
                 ->limit(1);
-        }])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc');
+        }])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderByDesc('created_at');
 
         $part = Pesanan::whereIn('id', function ($q) {
             $q->select('pesanan.id')
@@ -1165,7 +1172,7 @@ class LogistikController extends Controller
                 ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                 ->limit(1);
-        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc');
+        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderByDesc('created_at');
 
 
         $partjasa = Pesanan::whereIn('id', function ($q) {
@@ -1195,7 +1202,7 @@ class LogistikController extends Controller
                 ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                 ->limit(1);
-        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->union($prd)->union($part)->get();
+        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderByDesc('created_at')->union($prd)->union($part)->get();
 
         $data = $partjasa;
         return datatables()->of($data)
@@ -1961,25 +1968,28 @@ class LogistikController extends Controller
             ->make(true);
     }
 
-    public function get_data_riwayat_pengiriman($pengiriman, $provinsi, $jenis_penjualan)
+    public function get_data_riwayat_pengiriman($pengiriman, $provinsi, $jenis_penjualan, $years)
     {
+
+
+
         $x = explode(',', $pengiriman);
         $y = explode(',', $provinsi);
         $z = explode(',', $jenis_penjualan);
         $data = "";
         if ($pengiriman == "semua" && $provinsi == "semua" && $jenis_penjualan == "semua") {
-            $dataeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->get();
-            $datanoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->get();
+            $dataeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->whereYear('tgl_kirim', $years)->orderByDesc('tgl_kirim')->get();
+            $datanoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->whereYear('tgl_kirim', $years)->orderByDesc('tgl_kirim')->get();
             $data = $dataeks->merge($datanoneks);
         } else if ($pengiriman != "semua" && $provinsi == "semua" && $jenis_penjualan == "semua") {
             $dataeks = "";
             $datanoneks = "";
 
             if (in_array('ekspedisi', $x)) {
-                $dataeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->get();
+                $dataeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->whereYear('tgl_kirim', $years)->get();
             }
             if (in_array('nonekspedisi', $x)) {
-                $datanoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->get();
+                $datanoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->whereYear('tgl_kirim', $years)->get();
             }
 
             if ($dataeks != "" && $datanoneks != "") {
@@ -2000,35 +2010,35 @@ class LogistikController extends Controller
 
             $ekatalogeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Provinsi', function ($q) use ($y) {
                 $q->whereIN('status', $y);
-            })->get();
+            })->whereYear('tgl_kirim', $years)->get();
 
             $spaeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->orwhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                 $q->whereIN('status', $y);
             })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                 $q->whereIN('status', $y);
-            })->get();
+            })->whereYear('tgl_kirim', $years)->get();
 
             $spbeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->orwhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                 $q->whereIN('status', $y);
             })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                 $q->whereIN('status', $y);
-            })->get();
+            })->whereYear('tgl_kirim', $years)->get();
 
             $ekatalognoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Provinsi', function ($q) use ($y) {
                 $q->whereIN('status', $y);
-            })->get();
+            })->whereYear('tgl_kirim', $years)->get();
 
             $spanoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orwhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                 $q->whereIN('status', $y);
             })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                 $q->whereIN('status', $y);
-            })->get();
+            })->whereYear('tgl_kirim', $years)->get();
 
             $spbnoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orWhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                 $q->whereIN('status', $y);
             })->orWhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                 $q->whereIN('status', $y);
-            })->get();
+            })->whereYear('tgl_kirim', $years)->get();
 
             if (in_array('ekspedisi', $x)) {
                 $dataeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->get();
@@ -2044,20 +2054,20 @@ class LogistikController extends Controller
             $Spb = "";
 
             if (in_array('ekat', $z)) {
-                $ekatalogeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->Has('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog')->get();
-                $ekatalognoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->Has('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog')->get();
+                $ekatalogeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->Has('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog')->whereYear('tgl_kirim', $years)->get();
+                $ekatalognoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->Has('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog')->whereYear('tgl_kirim', $years)->get();
                 $Ekatalog = $ekatalogeks->merge($ekatalognoneks);
             }
 
             if (in_array('spa', $z)) {
-                $spaeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa')->get();
-                $spanoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa')->get();
+                $spaeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa')->whereYear('tgl_kirim', $years)->get();
+                $spanoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa')->whereYear('tgl_kirim', $years)->get();
                 $Spa = $spaeks->merge($spanoneks);
             }
 
             if (in_array('spb', $z)) {
-                $spbeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb')->get();
-                $spbnoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb')->get();
+                $spbeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb')->whereYear('tgl_kirim', $years)->get();
+                $spbnoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb')->whereYear('tgl_kirim', $years)->get();
                 $Spb = $spbeks->merge($spbnoneks);
             }
 
@@ -2082,38 +2092,38 @@ class LogistikController extends Controller
             if (in_array('ekspedisi', $x)) {
                 $ekatalogeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
-                })->get();
+                })->whereYear('tgl_kirim', $years)->get();
 
                 $spaeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->orwhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
                 })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
-                })->get();
+                })->whereYear('tgl_kirim', $years)->get();
 
                 $spbeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->orwhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
                 })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
-                })->get();
+                })->whereYear('tgl_kirim', $years)->get();
 
                 $eks = $ekatalogeks->merge($spaeks)->merge($spbeks);
             }
             if (in_array('nonekspedisi', $x)) {
                 $ekatalognoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
-                })->get();
+                })->whereYear('tgl_kirim', $years)->get();
 
                 $spanoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orwhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
                 })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
-                })->get();
+                })->whereYear('tgl_kirim', $years)->get();
 
                 $spbnoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orwhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
                 })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
-                })->get();
+                })->whereYear('tgl_kirim', $years)->get();
 
                 $noneks = $ekatalognoneks->merge($spanoneks)->merge($spbnoneks);
             }
@@ -2134,10 +2144,10 @@ class LogistikController extends Controller
                 $noneks = "";
 
                 if (in_array('ekspedisi', $x)) {
-                    $eks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->Has('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog')->get();
+                    $eks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->Has('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog')->whereYear('tgl_kirim', $years)->get();
                 }
                 if (in_array('nonekspedisi', $x)) {
-                    $noneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->Has('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog')->get();
+                    $noneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->Has('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog')->whereYear('tgl_kirim', $years)->get();
                 }
 
                 if ($eks != "" && $noneks != "") {
@@ -2153,10 +2163,10 @@ class LogistikController extends Controller
                 $noneks = "";
 
                 if (in_array('ekspedisi', $x)) {
-                    $eks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa')->get();
+                    $eks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa')->whereYear('tgl_kirim', $years)->get();
                 }
                 if (in_array('nonekspedisi', $x)) {
-                    $noneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa')->get();
+                    $noneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa')->whereYear('tgl_kirim', $years)->get();
                 }
 
                 if ($eks != "" && $noneks != "") {
@@ -2172,10 +2182,10 @@ class LogistikController extends Controller
                 $noneks = "";
 
                 if (in_array('ekspedisi', $x)) {
-                    $eks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb')->get();
+                    $eks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb')->whereYear('tgl_kirim', $years)->get();
                 }
                 if (in_array('nonekspedisi', $x)) {
-                    $noneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb')->get();
+                    $noneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb')->orHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb')->whereYear('tgl_kirim', $years)->get();
                 }
 
                 if ($eks != "" && $noneks != "") {
@@ -2210,11 +2220,11 @@ class LogistikController extends Controller
             if (in_array('ekat', $z)) {
                 $eks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
-                })->get();
+                })->whereYear('tgl_kirim', $years)->get();
 
                 $noneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
-                })->get();
+                })->whereYear('tgl_kirim', $years)->get();
 
                 $Ekatalog = $eks->merge($noneks);
             }
@@ -2224,13 +2234,13 @@ class LogistikController extends Controller
                     $q->whereIN('status', $y);
                 })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
-                })->get();
+                })->whereYear('tgl_kirim', $years)->get();
 
                 $noneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orwhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
                 })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
-                })->get();
+                })->whereYear('tgl_kirim', $years)->get();
 
                 $Spa = $eks->merge($noneks);
             }
@@ -2240,13 +2250,13 @@ class LogistikController extends Controller
                     $q->whereIN('status', $y);
                 })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
-                })->get();
+                })->whereYear('tgl_kirim', $years)->get();
 
                 $noneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orwhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
                 })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                     $q->whereIN('status', $y);
-                })->get();
+                })->whereYear('tgl_kirim', $years)->get();
 
                 $Spb = $eks->merge($noneks);
             }
@@ -2277,12 +2287,12 @@ class LogistikController extends Controller
                 if (in_array('ekspedisi', $x)) {
                     $eks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Provinsi', function ($q) use ($y) {
                         $q->whereIN('status', $y);
-                    })->get();
+                    })->whereYear('tgl_kirim', $years)->get();
                 }
                 if (in_array('nonekspedisi', $x)) {
                     $noneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Provinsi', function ($q) use ($y) {
                         $q->whereIN('status', $y);
-                    })->get();
+                    })->whereYear('tgl_kirim', $years)->get();
                 }
 
                 if ($eks != "" && $noneks != "") {
@@ -2302,14 +2312,14 @@ class LogistikController extends Controller
                         $q->whereIN('status', $y);
                     })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                         $q->whereIN('status', $y);
-                    })->get();
+                    })->whereYear('tgl_kirim', $years)->get();
                 }
                 if (in_array('nonekspedisi', $x)) {
                     $noneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orwhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                         $q->whereIN('status', $y);
                     })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa.Customer.Provinsi', function ($q) use ($y) {
                         $q->whereIN('status', $y);
-                    })->get();
+                    })->whereYear('tgl_kirim', $years)->get();
                 }
 
                 if ($eks != "" && $noneks != "") {
@@ -2329,14 +2339,14 @@ class LogistikController extends Controller
                         $q->whereIN('status', $y);
                     })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                         $q->whereIN('status', $y);
-                    })->get();
+                    })->whereYear('tgl_kirim', $years)->get();
                 }
                 if (in_array('nonekspedisi', $x)) {
                     $noneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->orwhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                         $q->whereIN('status', $y);
                     })->orwhereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb.Customer.Provinsi', function ($q) use ($y) {
                         $q->whereIN('status', $y);
-                    })->get();
+                    })->whereYear('tgl_kirim', $years)->get();
                 }
 
                 if ($eks != "" && $noneks != "") {
