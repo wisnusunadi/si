@@ -650,19 +650,19 @@
 
                 // open modal
                 $('#cetaksjmodal').modal('show');
-
-                $('#cetaksjmodal').on('shown.bs.modal', function() {
-                    $.ajax({
-                        'url': '/api/logistik/so/data/detail/item/' + data_y,
-                        'dataType': 'json',
-                        success: function (data) {
-                            tableproduk(data.produk)
-                            tablepart(data.part)
-                        }
-                    });
-                   
-                })
+                $('#cetaksjmodal').data('data_y', data_y);
             });
+            $('#cetaksjmodal').on('shown.bs.modal', function() {
+                let data_y = $(this).data('data_y');
+                $.ajax({
+                    'url': '/api/logistik/so/data/detail/item/' + data_y,
+                    'dataType': 'json',
+                    success: function (data) {
+                        tableproduk(data.produk)
+                        tablepart(data.part)
+                    }
+                });
+            })
 
         })
     </script>
