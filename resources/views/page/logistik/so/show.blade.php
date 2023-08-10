@@ -646,6 +646,8 @@
                     $('#pengiriman2').prop('checked', true)
                     $('#ekspedisi').addClass('hide')
                     $('#nonekspedisi').removeClass('hide')
+                    let selectElement = $('.ekspedisi_id');
+                    selectElement.empty()
                 }
 
                 if(header.perusahaan_pengiriman && header.alamat_pengiriman) {
