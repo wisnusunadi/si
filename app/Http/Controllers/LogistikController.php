@@ -56,11 +56,69 @@ class LogistikController extends Controller
     public function cetak_surat_jalan($id)
     {
         $data = LogistikDraft::where('pesanan_id',5341)->first();
-        $obj = json_decode($data->isi);
-        $customPaper = array(0,0,605.44,788.031);
-        $pdf = PDF::loadView('page.logistik.surat.surat_jalan',['data' => $obj])->setPaper($customPaper);
-        return $pdf->stream('');
+        $log = json_decode($data->isi);
+        $page = array();
+        $mergedNoseri = [];
+        foreach ($log->item as $key => $item) {
+
+            $nama = $item->nama;
+                    $noseri = $item->noseri;
+
+                    if (!isset($mergedNoseri[$nama])) {
+                        $mergedNoseri[$nama] = $noseri;
+                    } else {
+                        $mergedNoseri[$nama] = array_merge($mergedNoseri[$nama], $noseri);
+                    }
+   }
+
+
+   $mergedNoseriFinal = array();
+
+foreach ($mergedNoseri as $nama => $noseriArray) {
+    $noseriChunks = array_chunk($noseriArray, 5);
+
+    foreach ($noseriChunks as $chunkIndex => $chunk) {
+        $result[] = array(
+            "nama" => $nama,
+            "noseri" => $chunk
+        );
     }
+}
+
+
+       return response()->json(['data' => $result]);
+
+    }
+    // public function cetak_surat_jalan($id)
+    // {
+    //     $data = LogistikDraft::where('pesanan_id',5341)->first();
+    //     $log = json_decode($data->isi);
+
+    //     $mergedNoseri = [];
+    //     foreach ($log->item as $key => $item) {
+    //         $nama = $item->nama;
+    //         $noseri = $item->noseri;
+
+    //         if (!isset($mergedNoseri[$nama])) {
+    //             $mergedNoseri[$nama] = $noseri;
+    //         } else {
+    //             $mergedNoseri[$nama] = array_merge($mergedNoseri[$nama], $noseri);
+    //         }
+
+    //         // $mergedNoseri = array_merge($mergedNoseri,  $item->noseri);
+    //     }
+    //     $chunkedNoseri = array();
+
+    //     foreach ($mergedNoseri as $nama => $noseriArray) {
+    //         $chunks = array_chunk($noseriArray, 5);
+    //         $chunkedNoseri[$nama] = $chunks;
+    //     }
+
+    //    return response()->json(['data' => $chunkedNoseri]);
+    //     $customPaper = array(0,0,605.44,788.031);
+    //     $pdf = PDF::loadView('page.logistik.surat.surat_jalan',['data' => $obj])->setPaper($customPaper);
+    //     return $pdf->stream('');
+    // }
 
     public function get_data_select_produk(Request $r, $jenis)
     {
@@ -1363,7 +1421,7 @@ class LogistikController extends Controller
                 ->whereNotIn('log_id', ['10','20'])
                 ->whereNotNull('no_po')
                 ->whereYear('created_at',  $years)
-                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
+                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  (((ctfjasa > 0 AND clogjasa < ctfjasa )OR clogjasa = 0 ) AND ctfjasa > 0 )')
                 ->orderBydesc('created_at')
                 ->get();
         }

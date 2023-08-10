@@ -323,7 +323,7 @@ Route::group(['prefix' => 'logistik'], function () {
     });
 
     Route::group(['prefix' => '/pengiriman'], function () {
-        Route::group(['middleware' => ['divisi:jual,asp,dirut,log']], function () {
+        // Route::group(['middleware' => ['divisi:jual,asp,dirut,log']], function () {
             Route::view('/show', 'page.logistik.pengiriman.show')->name('logistik.pengiriman.show');
             Route::post('/data/{pengiriman}/{provinsi}/{jenis_penjualan}', [App\Http\Controllers\LogistikController::class, 'get_data_pengiriman']);
             Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_pengiriman_detail_data'])->name('logistik.pengiriman.detail');
@@ -336,7 +336,7 @@ Route::group(['prefix' => 'logistik'], function () {
             Route::group(['prefix' => '/riwayat'], function () {
                 Route::view('/show', 'page.logistik.pengiriman.riwayat.show')->name('logistik.riwayat.show');
             });
-        });
+        // });
     });
 
     Route::group(['prefix' => '/pengiriman_retur'], function () {
