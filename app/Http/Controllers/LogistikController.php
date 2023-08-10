@@ -60,34 +60,57 @@ class LogistikController extends Controller
         $log = json_decode($data->isi);
         $page = array();
         $mergedNoseri = [];
-        foreach ($log->item as $key => $item) {
 
+
+        $groupedSerialNumbers = [];
+
+        foreach ($log->item as $item) {
             $nama = $item->nama;
-                    $noseri = $item->noseri;
-
-                    if (!isset($mergedNoseri[$nama])) {
-                        $mergedNoseri[$nama] = $noseri;
-                    } else {
-                        $mergedNoseri[$nama] = array_merge($mergedNoseri[$nama], $noseri);
-                    }
-   }
+            foreach ($item->noseri as $serial) {
+                $groupedSerialNumbers[$serial] = $nama;
+            }
+        }
 
 
-   $mergedNoseriFinal = array();
+$groupedSerialNumbersFinals = [];
 
-foreach ($mergedNoseri as $nama => $noseriArray) {
-    $noseriChunks = array_chunk($noseriArray, 5);
-
-    foreach ($noseriChunks as $chunkIndex => $chunk) {
-        $result[] = array(
-            "nama" => $nama,
-            "noseri" => $chunk
-        );
-    }
+foreach ($groupedSerialNumbers as $serial => $nama) {
+    $groupedSerialNumbersFinals[] = [
+        'serial' => $serial,
+        'nama' => $nama
+    ];
 }
 
+$chunkedGroups = array_chunk($groupedSerialNumbersFinals, 5);
 
-       return response()->json(['data' => $result]);
+        //         foreach ($log->item as $key => $item) {
+
+//             $nama = $item->nama;
+//                     $noseri = $item->noseri;
+
+//                     if (!isset($mergedNoseri[$nama])) {
+//                         $mergedNoseri[$nama] = $noseri;
+//                     } else {
+//                         $mergedNoseri[$nama] = array_merge($mergedNoseri[$nama], $noseri);
+//                     }
+//    }
+
+
+//    $mergedNoseriFinal = array();
+
+// foreach ($mergedNoseri as $nama => $noseriArray) {
+//     $noseriChunks = array_chunk($noseriArray, 5);
+
+//     foreach ($noseriChunks as $chunkIndex => $chunk) {
+//         $result[] = array(
+//             "nama" => $nama,
+//             "noseri" => $chunk
+//         );
+//     }
+// }
+
+
+       return response()->json(['data' => $chunkedGroups]);
 
     }
     // public function cetak_surat_jalan($id)
