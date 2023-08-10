@@ -4805,6 +4805,76 @@ foreach ($mergedNoseri as $nama => $noseriArray) {
         }
     }
 
+    public function get_data_pesanan_sj_draft($id)
+    {
+        $log = LogistikDraft::where('pesanan_id',$id)->get();
+        foreach($log as $key => $l){
+            $data[$key] = array(
+                'id' => $l->id,
+                'sj' => $l->sj
+            );
+        }
+        return response()->json(['data' => $data]);
+    }
+    public function get_data_pesanan_sj_draft_detail($id)
+    {
+        $logistik = LogistikDraft::find($id);
+        $log = json_decode($logistik->isi);
+        return response()->json(['data' => $log]);
+    }
+
+    public function create_logistik_draft(Request $request)
+    {
+
+        foreach($request->item as $key => $i){
+            $item[$key]= array(
+                "no"=> 1,
+                "kode"=> $i['kode'],
+                "nama"=> $i['nama'],
+                "jumlah"=> $i['jumlah'],
+                "satuan"=>$i['satuan'],
+                "ppn"=> $i['ppn'],
+                "noseri"=> $i['noseri']
+            );
+        }
+        //dd($item);
+
+        $isi = array(
+            "pesanan_id" => $request->pesanan_id,
+            "customer" => $request->customer,
+           "alamat_customer" => $request->alamat_customer,
+           "tujuan_kirim" =>  $request->tujuan_kirim,
+           "alamat_kirim" => $request->alamat_kirim,
+           "so" => $request->so,
+           "no_po" => $request->no_po,
+           "tgl_po" => $request->tgl_po,
+           "nosj" => $request->nosj,
+           "tgl_sj" =>$request->tgl_sj,
+           "ekspedisi" => $request->ekspedisi,
+           "tgl_kirim" => $request->tgl_kirim,
+           "up" => $request->up,
+           "item" => $item
+        );
+
+        $data = json_encode($isi);
+
+
+        $save =  LogistikDraft::create([
+            'pesanan_id' => $request->pesanan_id,
+            'sj' => $request->nosj,
+            'isi' => $data
+
+        ]);
+
+
+        if($save){
+            return response()->json(['messages' => 'berhasil']);
+        }else{
+            return response()->json(['messages' => 'gagal']);
+        }
+
+    }
+
     public function get_data_detail_item($id)
     {
             $data_prd = DetailPesananProduk::with(['GudangBarangJadi.Produk','DetailPesanan'])->whereHas('DetailPesanan',function($q) use ($id){
