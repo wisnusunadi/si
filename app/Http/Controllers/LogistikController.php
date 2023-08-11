@@ -56,7 +56,7 @@ class LogistikController extends Controller
     }
     public function cetak_surat_jalan($id)
     {
-        $data = LogistikDraft::where('pesanan_id',5341)->first();
+        $data = LogistikDraft::where('pesanan_id',6500)->first();
         $log = json_decode($data->isi);
         $page = array();
         $mergedNoseri = [];
@@ -4939,7 +4939,7 @@ $chunkedGroups = array_chunk($groupedSerialNumbersFinals, 5);
                     );
                     $provinsi['instansi'] = $instansi;
                 }
-                
+
                 if ($pesanan->Ekatalog->Customer->id_provinsi != NULL) {
                     $dsb = array(
                         'id' => $pesanan->Ekatalog->Customer->id_provinsi,
@@ -4948,7 +4948,7 @@ $chunkedGroups = array_chunk($groupedSerialNumbersFinals, 5);
                     $provinsi['dsb'] = $dsb;
                 }
                 $jenis_pesanan = 'ekatalog';
-            
+
             }elseif($pesanan->Spa){
                 $provinsi =  array(
                     'id' => $pesanan->Spa->Customer->id_provinsi,
