@@ -369,6 +369,7 @@
       if (val == 'ekspedisi') {
         $('#ekspedisi').removeClass('hide');
         $('#nonekspedisi').addClass('hide');
+        ekspedisi($('#provinsi_id').val());
       } else {
         $('#ekspedisi').addClass('hide');
         $('#nonekspedisi').removeClass('hide');
@@ -499,6 +500,21 @@
         for (let i = 0; i < form.length; i++) {
           dataform[form[i].name] = form[i].value;
         }
+        if($('input[name="pengiriman_surat_jalan"]').val() == 'ekspedisi') {
+          dele
+        }
+
+        $('input[name="pengiriman_surat_jalan"]').on('change', function () {
+      let val = $(this).val();
+      if (val == 'ekspedisi') {
+        $('#ekspedisi').removeClass('hide');
+        $('#nonekspedisi').addClass('hide');
+        ekspedisi($('#provinsi_id').val());
+      } else {
+        $('#ekspedisi').addClass('hide');
+        $('#nonekspedisi').removeClass('hide');
+      }
+    });
 
         // cek apakah ada data yang kosong
         let cek = Object.values(dataform).filter(function (el) {
@@ -533,8 +549,6 @@
       if(pilihan_pengiriman == 'lainnya'){
         $('#perusahaan_pengiriman').attr('readonly', false);
         $('#alamat_pengiriman').attr('readonly', false);
-      }else {
-        ekspedisi($('input[name="provinsi_id"]').val())
       }
     });
 
