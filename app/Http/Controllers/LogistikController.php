@@ -58,7 +58,8 @@ class LogistikController extends Controller
     }
     public function cetak_surat_jalan($id)
     {
-        $data = LogistikDraft::where('pesanan_id',6500)->first();
+
+        $data = LogistikDraft::find(1);
         $log = json_decode($data->isi);
         // $page = array();
         // $mergedNoseri = [];
@@ -66,8 +67,8 @@ class LogistikController extends Controller
 
         $groupedSerialNumbers = [];
 
-
-        foreach ($log->produk as $key => $produk) {
+       // dd(json_decode($data->isi));
+        foreach ($log->item as $key => $produk) {
             $nama = $key;
             // $nama = $item->key;
             foreach ($produk->noseri as $serial) {
@@ -89,7 +90,6 @@ class LogistikController extends Controller
 
         $chunkedGroups = array_chunk($groupedSerialNumbersFinals, 5);
 
-         dd($chunkedGroups);
         $data = new stdClass();
         $data->hal =  count($chunkedGroups);
         $data->pesanan_id = $log->pesanan_id;
@@ -127,7 +127,7 @@ class LogistikController extends Controller
         //dd($data);
 
         $customPaper = array(0,0,605.44,788.031);
-        $pdf = PDF::loadView('page.logistik.surat.surat_jalan',['data' => $data])->setPaper($customPaper);
+        $pdf = PDF::loadView('page.logistik.surat.surat_jalan',['data' => $log,'hal' => 2])->setPaper($customPaper);
         return $pdf->stream('');
 
 //         foreach ($log->item as $key => $item) {

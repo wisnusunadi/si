@@ -1,15 +1,22 @@
 <html>
     <head>
         <style>
+
             /** Define the margins of your page **/
             @page {
                 margin: 100px 25px;
+                /* page-break-inside: avoid !important; */
             }
 
+
             main {
-                position: absolute;
+                position: relative;
                 top: 150px;
                 width: 100%;
+                height: 10px;
+                padding-bottom: 300px;
+
+
             }
             header {
                 position: fixed;
@@ -104,7 +111,7 @@
                           <tr>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>No SJ</u> <br>
-                                  {{$data->no_sj}}
+                                  {{$data->nosj}}
                               </td>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>Tgl SJ</u><br>
@@ -196,7 +203,7 @@
         <!-- Wrap the content of your PDF inside a main tag -->
         <main>
             {{-- Hal -1 --}}
-            @for ($i = 1; $i <= count ($data->noseri); $i++)
+            {{-- @for ($i = 1; $i <= $hal; $i++) --}}
                 <table id="tabel" class="table table-hover styled-table table-striped" border="1" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                     <thead>
                        <tr>
@@ -222,12 +229,8 @@
                     </thead>
                     <tbody>
 
-                        <tr>
-                            <td class="align-center">
-                           a
-                            </td>
-                        </tr>
-                        {{-- @foreach ( $data->item as $item )
+
+                        @foreach ( $data->item as $item )
                         <tr>
                             <td class="align-center">
                             {{$item->no}}
@@ -250,7 +253,7 @@
                             </td>
                           </tr>
 
-                          @endforeach --}}
+                          @endforeach
 
                         {{-- <tr>
                             <td class="align-center" colspan="3">
@@ -264,13 +267,13 @@
                           </tr> --}}
                     </tbody>
                 </table>
-
-                @if($data->hal == $i)
+                {{-- <div style="page-break-after: always;"></div> --}}
+                {{-- @if($hal == $i)
                 <div style="page-break-after: never;"> </div>
                 @else
                 <div style="page-break-after: always;"></div>
                 @endif
-                @endfor
+                @endfor --}}
 
                 {{-- <div style="page-break-after: always;"></div> --}}
             {{-- Hal -2 --}}
