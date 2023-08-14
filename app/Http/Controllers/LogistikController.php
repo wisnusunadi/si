@@ -4850,26 +4850,24 @@ class LogistikController extends Controller
     {
         $item = array();
 
-        if (count($request->part) > 0) {
+        if (isset($request->part)) {
         foreach($request->part as $key_p => $i){
             $part[$key_p]= array(
                 "no"=> $key_p+1,
                 "kode"=> $i['kode'],
                 "nama"=> $i['nama'],
                 "jumlah"=> $i['jumlah'],
-                "satuan"=>$i['satuan'],
-                "noseri"=> $i['noseri']
             );
           }
-          if(count($request->produk ) <= 0){
+          if(isset($request->produk )){
             $items = $part;
          }
         }
-        if (count($request->produk ) > 0) {
+        if (isset($request->produk )) {
             foreach($request->produk as $key_pr => $i){
                 $produk[$key_pr]= array(
                     "no"=> ($key_pr + 1 ) + count($request->part),
-                    "kode"=> $i['kode'],
+                    "kode"=> $i['kode'] ?? "",
                     "nama"=> $i['nama'],
                     "jumlah"=> $i['jumlah'],
                     "satuan"=>$i['satuan'],
@@ -4877,7 +4875,7 @@ class LogistikController extends Controller
                 );
             }
 
-            if(count($request->part ) > 0){
+            if(isset($request->part)){
                 $items =  array_merge($part,$produk);
             }else{
                 $items = $produk;
@@ -4886,20 +4884,19 @@ class LogistikController extends Controller
 
           }
 
-          dd($items);
 
         $isi = array(
-            "pesanan_id" => $request->pesanan_id,
-            "customer" => $request->customer,
-           "alamat_customer" => $request->alamat_customer,
-           "tujuan_kirim" =>  $request->tujuan_kirim,
-           "alamat_kirim" => $request->alamat_kirim,
-           "nosj" => $request->nosj,
-           "tgl_sj" =>$request->tgl_sj,
-           "no_po" => $request->no_po,
-           "tgl_po" => $request->tgl_po,
-           "ekspedisi" => $request->ekspedisi_id,
-           "up" => $request->nama_pic,
+            "pesanan_id" => $request->dataform['pesanan_id'],
+            "customer" => $request->dataform['nama_customer'],
+           "alamat_customer" => $request->dataform['alamat_customer'],
+           "tujuan_kirim" =>  $request->dataform['perusahaan_pengiriman'],
+           "alamat_kirim" => $request->dataform['alamat_pengiriman'],
+           "nosj" => $request->dataform['no_invoice'],
+           "tgl_sj" =>$request->dataform['tgl_kirim'],
+           "no_po" => $request->dataform['no_po'],
+           "tgl_po" => $request->dataform['tgl_po'],
+           "ekspedisi" => $request->dataform['ekspedisi'],
+           "up" => $request->dataform['nama_pic'],
            "item" => $request->item
         );
 
@@ -4933,6 +4930,7 @@ class LogistikController extends Controller
                 foreach ($data_part as $key => $d){
                     $part[$key] = array(
                         'id' => $d->id,
+                        'kode' => $d->Sparepart->kode,
                         'nama' => $d->Sparepart->nama,
                         'jumlah' => $d->jumlah
                     );
