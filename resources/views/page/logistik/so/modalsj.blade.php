@@ -501,16 +501,20 @@
           dataform[form[i].name] = form[i].value;
         }
 
-        if($('input[name="pengiriman_surat_jalan"]').val() == 'ekspedisi') {
+        if($('input[name="pengiriman_surat_jalan"]:checked').val() == 'ekspedisi') {
+          dataform['ekspedisi_id'] = $('select[name="ekspedisi_id"]').val() || '';
           delete dataform.nama_pengirim;
         } else {
           // delete ekspedisi_id
+          dataform['nama_pengirim'] = $('textarea[name="nama_pengirim"]').val();
           delete dataform.ekspedisi_id;
         }
 
-        if($('input[name=sj_jenis]').val() == 'old'){
+        if($('input[name=sj_jenis]:checked').val() == 'old'){
+          dataform['sj_lama'] = $('input[name=sj_lama]').val();
           delete dataform.sj_baru;
         }else{
+          dataform['sj_baru'] = $('select[name=sj_baru]').val() || '';
           delete dataform.sj_lama;
         }
 
