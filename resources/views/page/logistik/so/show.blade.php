@@ -609,6 +609,7 @@
                         selectElement.empty()
                         selectElement.append(option)
                         selectElement.val(header.provinsi.instansi.id)
+                        $('input[name="provinsi_id"]').val(header.provinsi.instansi.id)
                     } else {
                         $('#provinsi1').prop('checked', true)
                         let selectElement = $('.provinsi_pengiriman');
@@ -620,6 +621,7 @@
                         selectElement.empty()
                         selectElement.append(option)
                         selectElement.val(header.provinsi.dsb.id)
+                        $('input[name="provinsi_id"]').val(header.provinsi.dsb.id)
                     }
 
                     let id = $('.provinsi_pengiriman').val()
@@ -656,6 +658,7 @@
 
                     $('.provinsi_pengiriman').val(header.provinsi.id)
                     $('.provinsi_pengiriman').text(header.provinsi.nama)
+                    $('input[name="provinsi_id"]').val(header.provinsi.id)
                 }
 
                 if(header.ekspedisi) {
@@ -707,7 +710,6 @@
                 $('input[name="tgl_po"]').val(header.tgl_po)
                 $('input[name="nama_customer"]').val(header.customer.nama)
                 $('input[name="alamat_customer"]').val(header.customer.alamat)
-                $('input[name="provinsi_id"]').val(header.provinsi.id)
 
             }
 

@@ -144,7 +144,7 @@
                           for="ekspedisi_id">Jasa Pengiriman</label>
                       <div class="col-lg-7 col-md-12">
                           <select class="select2 select-info form-control ekspedisi_id"
-                              name="ekspedisi_id" id="ekspedisi_id" style="width: 100%;">
+                              name="ekspedisi" id="ekspedisi_id" style="width: 100%;">
 
                           </select>
                           <div class="invalid-feedback" id="msgekspedisi_id"></div>
@@ -502,7 +502,10 @@
         }
 
         if($('input[name="pengiriman_surat_jalan"]:checked').val() == 'ekspedisi') {
-          dataform['ekspedisi_id'] = $('select[name="ekspedisi_id"]').val() || '';
+          dataform['ekspedisi'] = {
+            id: $('select[name="ekspedisi"]').val(),
+            nama: $('select[name="ekspedisi"] option:selected').text()
+          }
           delete dataform.nama_pengirim;
         } else {
           // delete ekspedisi_id
@@ -518,8 +521,6 @@
           delete dataform.sj_lama;
         }
 
-        console.log("form", dataform);
-
         // cek apakah ada data yang kosong
         let cek = Object.values(dataform).filter(function (el) {
           return el != '';
@@ -534,9 +535,11 @@
           return false;
         }
 
-        console.log("form", dataform);
-        console.log("produk", data);
-        console.log("part", data_part);
+        console.log("kirim", {
+          dataform: dataform,
+          data: data,
+          data_part: data_part
+        })
 
     });
 
