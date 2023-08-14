@@ -4848,19 +4848,45 @@ $chunkedGroups = array_chunk($groupedSerialNumbersFinals, 5);
 
     public function create_logistik_draft(Request $request)
     {
+        $item = array();
 
-        foreach($request->item as $key => $i){
-            $item[$key]= array(
-                "no"=> 1,
+        if (count($request->part) > 0) {
+        foreach($request->part as $key_p => $i){
+            $part[$key_p]= array(
+                "no"=> $key_p+1,
                 "kode"=> $i['kode'],
                 "nama"=> $i['nama'],
                 "jumlah"=> $i['jumlah'],
                 "satuan"=>$i['satuan'],
-                "ppn"=> $i['ppn'],
                 "noseri"=> $i['noseri']
             );
+          }
+          if(count($request->produk ) <= 0){
+            $items = $part;
+         }
         }
-        //dd($item);
+        if (count($request->produk ) > 0) {
+            foreach($request->produk as $key_pr => $i){
+                $produk[$key_pr]= array(
+                    "no"=> ($key_pr + 1 ) + count($request->part),
+                    "kode"=> $i['kode'],
+                    "nama"=> $i['nama'],
+                    "jumlah"=> $i['jumlah'],
+                    "satuan"=>$i['satuan'],
+                    "noseri"=> $i['noseri']
+                );
+            }
+
+            if(count($request->part ) > 0){
+                $items =  array_merge($part,$produk);
+            }else{
+                $items = $produk;
+            }
+
+
+          }
+
+          dd($items);
 
         $isi = array(
             "pesanan_id" => $request->pesanan_id,
@@ -4868,15 +4894,13 @@ $chunkedGroups = array_chunk($groupedSerialNumbersFinals, 5);
            "alamat_customer" => $request->alamat_customer,
            "tujuan_kirim" =>  $request->tujuan_kirim,
            "alamat_kirim" => $request->alamat_kirim,
-           "so" => $request->so,
-           "no_po" => $request->no_po,
-           "tgl_po" => $request->tgl_po,
            "nosj" => $request->nosj,
            "tgl_sj" =>$request->tgl_sj,
-           "ekspedisi" => $request->ekspedisi,
-           "tgl_kirim" => $request->tgl_kirim,
-           "up" => $request->up,
-           "item" => $item
+           "no_po" => $request->no_po,
+           "tgl_po" => $request->tgl_po,
+           "ekspedisi" => $request->ekspedisi_id,
+           "up" => $request->nama_pic,
+           "item" => $request->item
         );
 
         $data = json_encode($isi);
