@@ -439,63 +439,8 @@
     });
 
     $(document).on('click', '.cetaksjkirim', function () {
-    // find data on datatable is checked
-        let produk = [];
-        let table = $('.tableproduk').DataTable();
-        let check = $(document).find('.check_detail');
-
-        // push data to array
-        for (let i = 0; i < check.length; i++) {
-            if (check[i].checked) {
-                let row = table.row(i).node(); // Get the row node directly
-                let rowIndex = table.row(i).index();
-                let jumlahValue = $('.jumlah' + rowIndex).val(); // Access the input value directly
-                let keteranganValue = $('.keterangannoseri' + rowIndex).val(); // Access the hidden input value directly
-
-                let rowData = table.row(row).data();
-                rowData['jumlah_noseri'] = jumlahValue; // Update the 'jumlah_noseri' property with the input value
-                rowData['noseri_selected'] = keteranganValue; // Update the 'noseri_selected' property with the hidden input value
-
-                produk.push(rowData);
-            }
-        }
-        if(table.data().length > 0) {
-          if(produk.length == 0){
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Tidak ada barang yang dipilih!',
-            })
-            return false;
-          }
-        }
-
-        let part = [];
-        let table_part = $('.tablepart').DataTable();
-        let check_part = $(document).find('.check_detail_part');
-
-        // push data to array
-        for (let i = 0; i < check_part.length; i++) {
-            if (check_part[i].checked) {
-                let row = table_part.row(i).node(); // Get the row node directly
-                let rowData = table_part.row(row).data();
-                part.push(rowData);
-            }
-        }
-
-        if(table_part.data().length > 0) {
-          if(part.length == 0){
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Tidak ada part yang dipilih!',
-            })
-            return false;
-          }
-        }
-
-        // get all value name on id formcetaksj
-        let form = $('#formcetaksj').serializeArray();
+      // get all value name on id formcetaksj
+      let form = $('#formcetaksj').serializeArray();
         let dataform = {};
         for (let i = 0; i < form.length; i++) {
           dataform[form[i].name] = form[i].value;
@@ -534,46 +479,110 @@
           })
           return false;
         }
+    // find data on datatable is checked
+        let produk = [];
+        let table = $('.tableproduk').DataTable();
+        let check = $(document).find('.check_detail');
+
+        // push data to array
+        for (let i = 0; i < check.length; i++) {
+            if (check[i].checked) {
+                let row = table.row(i).node(); // Get the row node directly
+                let rowIndex = table.row(i).index();
+                let jumlahValue = $('.jumlah' + rowIndex).val(); // Access the input value directly
+                let keteranganValue = $('.keterangannoseri' + rowIndex).val(); // Access the hidden input value directly
+
+                let rowData = table.row(row).data();
+                rowData['jumlah_noseri'] = jumlahValue; // Update the 'jumlah_noseri' property with the input value
+                rowData['noseri_selected'] = keteranganValue; // Update the 'noseri_selected' property with the hidden input value
+
+                if (rowData['noseri_selected'] == '') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Nomor seri belum diisi!',
+                    })
+                    return false;
+                }
+
+                produk.push(rowData);
+            }
+        }
+
+        let part = [];
+        let table_part = $('.tablepart').DataTable();
+        let check_part = $(document).find('.check_detail_part');
+
+        // push data to array
+        for (let i = 0; i < check_part.length; i++) {
+            if (check_part[i].checked) {
+                let row = table_part.row(i).node(); // Get the row node directly
+                let rowData = table_part.row(row).data();
+                part.push(rowData);
+            }
+        }
+
+        if(table.data().length > 0) {
+          if(produk.length == 0 && part.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Tidak ada barang yang dipilih',
+            })
+            return false;
+          }
+        }
+
+        if(table_part.data().length > 0) {
+          if(part.length == 0 && produk.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Tidak ada part yang dipilih!',
+            })
+            return false;
+          }
+        }
 
         const kirim = {
           produk: produk,
           part: part,
           dataform: dataform
         }
-
+        console.log(kirim);
 
         // post data
-        $.ajax({
-          url: '/api/logistik/so/create_draft',
-          type: 'POST',
-          data: kirim,
-          success: function (res) {
-            if (res.status == 'success') {
-              Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: res.message,
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  window.location.href = '/logistik/so/show';
-                }
-              })
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: res.message,
-              })
-            }
-          },
-          error: function (err) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: err.message,
-            })
-          }
-        })
+        // $.ajax({
+        //   url: '/api/logistik/so/create_draft',
+        //   type: 'POST',
+        //   data: kirim,
+        //   success: function (res) {
+        //     if (res.status == 'success') {
+        //       Swal.fire({
+        //         icon: 'success',
+        //         title: 'Berhasil',
+        //         text: res.message,
+        //       }).then((result) => {
+        //         if (result.isConfirmed) {
+        //           window.location.href = '/logistik/so/show';
+        //         }
+        //       })
+        //     } else {
+        //       Swal.fire({
+        //         icon: 'error',
+        //         title: 'Oops...',
+        //         text: res.message,
+        //       })
+        //     }
+        //   },
+        //   error: function (err) {
+        //     Swal.fire({
+        //       icon: 'error',
+        //       title: 'Oops...',
+        //       text: err.message,
+        //     })
+        //   }
+        // })
 
     });
 
