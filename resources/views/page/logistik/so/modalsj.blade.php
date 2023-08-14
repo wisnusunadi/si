@@ -26,6 +26,15 @@
               <div class="card">
                 <div class="card-body">
                   <h5>Data PIC</h5>
+                  <div class="hide">
+                    <input type="text" name="pesanan_id" id="">
+                    <input type="text" name="so" id="">
+                    <input type="text" name="no_po" id="">
+                    <input type="text" name="tgl_po" id="">
+                    <input type="text" name="nama_customer" id="">
+                    <input type="text" name="alamat_customer" id="">
+                    <input type="text" name="provinsi_id" id="">
+                  </div>
                   <div class="form-group row">
                     <label class="col-form-label col-lg-5 col-md-12 labelket" for="no_invoice">Nama PIC</label>
                     <div class="col-lg-6 col-md-12">
@@ -374,6 +383,36 @@
       return true;
     }
 
+    const ekspedisi = (provinsi) => {
+        $('#ekspedisi_id').select2({
+            placeholder: "Pilih Ekspedisi",
+            ajax: {
+                minimumResultsForSearch: 20,
+                dataType: 'json',
+                theme: "bootstrap",
+                delay: 250,
+                type: 'GET',
+                url: '/api/logistik/ekspedisi/select/' + provinsi,
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        })
+    }
+
+
     $(document).on('click', '#check_all', function () {
       if (this.checked) {
         $(document).find('.check_detail').each(function () {
@@ -419,14 +458,15 @@
                 data.push(rowData);
             }
         }
-
-        if(data.length == 0){
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Tidak ada barang yang dipilih!',
-          })
-          return false;
+        if(table.data().length > 0) {
+          if(data.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Tidak ada barang yang dipilih!',
+            })
+            return false;
+          }
         }
 
         let data_part = [];
@@ -442,11 +482,36 @@
             }
         }
 
+        if(table_part.data().length > 0) {
+          if(data_part.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Tidak ada part yang dipilih!',
+            })
+            return false;
+          }
+        }
+
         // get all value name on id formcetaksj
         let form = $('#formcetaksj').serializeArray();
         let dataform = {};
         for (let i = 0; i < form.length; i++) {
           dataform[form[i].name] = form[i].value;
+        }
+
+        // cek apakah ada data yang kosong
+        let cek = Object.values(dataform).filter(function (el) {
+          return el != '';
+        });
+
+        if (cek.length != Object.keys(dataform).length) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Data tidak boleh kosong!',
+          })
+          return false;
         }
 
         console.log("form", dataform);
@@ -468,6 +533,8 @@
       if(pilihan_pengiriman == 'lainnya'){
         $('#perusahaan_pengiriman').attr('readonly', false);
         $('#alamat_pengiriman').attr('readonly', false);
+      }else {
+        ekspedisi($('input[name="provinsi_id"]').val())
       }
     });
 
