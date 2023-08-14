@@ -511,12 +511,14 @@
         }
 
         if($('input[name=sj_jenis]:checked').val() == 'old'){
-          dataform['sj_lama'] = $('input[name=sj_lama]').val();
+          dataform['sj_lama'] = $('select[name="sj_lama"]').val() || '';
           delete dataform.sj_baru;
         }else{
-          dataform['sj_baru'] = $('select[name=sj_baru]').val() || '';
+          dataform['sj_baru'] = $('input[name="sj_baru"]').val()
           delete dataform.sj_lama;
         }
+
+        console.log("form", dataform);
 
         // cek apakah ada data yang kosong
         let cek = Object.values(dataform).filter(function (el) {
