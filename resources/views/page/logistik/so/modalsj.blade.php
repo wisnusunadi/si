@@ -500,21 +500,19 @@
         for (let i = 0; i < form.length; i++) {
           dataform[form[i].name] = form[i].value;
         }
+
         if($('input[name="pengiriman_surat_jalan"]').val() == 'ekspedisi') {
-          dele
+          delete dataform.nama_pengirim;
+        } else {
+          // delete ekspedisi_id
+          delete dataform.ekspedisi_id;
         }
 
-        $('input[name="pengiriman_surat_jalan"]').on('change', function () {
-      let val = $(this).val();
-      if (val == 'ekspedisi') {
-        $('#ekspedisi').removeClass('hide');
-        $('#nonekspedisi').addClass('hide');
-        ekspedisi($('#provinsi_id').val());
-      } else {
-        $('#ekspedisi').addClass('hide');
-        $('#nonekspedisi').removeClass('hide');
-      }
-    });
+        if($('input[name=sj_jenis]').val() == 'old'){
+          delete dataform.sj_baru;
+        }else{
+          delete dataform.sj_lama;
+        }
 
         // cek apakah ada data yang kosong
         let cek = Object.values(dataform).filter(function (el) {
