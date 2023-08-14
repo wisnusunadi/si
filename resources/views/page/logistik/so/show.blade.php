@@ -610,6 +610,7 @@
                         selectElement.append(option)
                         selectElement.val(header.provinsi.instansi.id)
                         $('input[name="provinsi_id"]').val(header.provinsi.instansi.id)
+                        ekspedisi(header.provinsi.instansi.id)
                     } else {
                         $('#provinsi1').prop('checked', true)
                         let selectElement = $('.provinsi_pengiriman');
@@ -622,6 +623,7 @@
                         selectElement.append(option)
                         selectElement.val(header.provinsi.dsb.id)
                         $('input[name="provinsi_id"]').val(header.provinsi.dsb.id)
+                        ekspedisi(header.provinsi.dsb.id)
                     }
 
                     let id = $('.provinsi_pengiriman').val()
@@ -659,6 +661,7 @@
                     $('.provinsi_pengiriman').val(header.provinsi.id)
                     $('.provinsi_pengiriman').text(header.provinsi.nama)
                     $('input[name="provinsi_id"]').val(header.provinsi.id)
+                    ekspedisi(header.provinsi.id)
                 }
 
                 if(header.ekspedisi) {
@@ -674,7 +677,6 @@
                     selectElement.empty()
                     selectElement.append(option)
                     selectElement.val(header.ekspedisi.id)
-                    ekspedisi(header.provinsi.id)
                 } else {
                     $('#pengiriman2').prop('checked', true)
                     $('#ekspedisi').addClass('hide')
