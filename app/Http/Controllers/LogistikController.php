@@ -59,53 +59,53 @@ class LogistikController extends Controller
     public function cetak_surat_jalan($id)
     {
 
-        $data = LogistikDraft::find(1);
+        $data = LogistikDraft::find($id);
         $log = json_decode($data->isi);
         // $page = array();
         // $mergedNoseri = [];
 
 
-        $groupedSerialNumbers = [];
+    //     $groupedSerialNumbers = [];
 
-       // dd(json_decode($data->isi));
-        foreach ($log->item as $key => $produk) {
-            $nama = $key;
-            // $nama = $item->key;
-            foreach ($produk->noseri as $serial) {
-                $groupedSerialNumbers[$serial] = $nama;
-            }
-        }
+    //    // dd(json_decode($data->isi));
+    //     foreach ($log->item as $key => $produk) {
+    //         $nama = $key;
+    //         // $nama = $item->key;
+    //         foreach ($produk->noseri as $serial) {
+    //             $groupedSerialNumbers[$serial] = $nama;
+    //         }
+    //     }
 
 
-        $groupedSerialNumbersFinals = [];
+    //     $groupedSerialNumbersFinals = [];
 
-        foreach ($groupedSerialNumbers as $serial => $nama) {
-            $groupedSerialNumbersFinals[] = [
-                'kode' => $nama,
-                'serial' => $serial,
+    //     foreach ($groupedSerialNumbers as $serial => $nama) {
+    //         $groupedSerialNumbersFinals[] = [
+    //             'kode' => $nama,
+    //             'serial' => $serial,
 
-            ];
+    //         ];
 
-        }
+    //     }
 
-        $chunkedGroups = array_chunk($groupedSerialNumbersFinals, 5);
+    //     $chunkedGroups = array_chunk($groupedSerialNumbersFinals, 5);
 
-        $data = new stdClass();
-        $data->hal =  count($chunkedGroups);
-        $data->pesanan_id = $log->pesanan_id;
-        $data->customer = $log->customer;
-        $data->alamat_customer = $log->alamat_customer;
-        $data->tujuan_kirim = $log->tujuan_kirim;
-        $data->alamat_kirim = $log->alamat_kirim;
-        $data->so = $log->so;
-        $data->no_po = $log->no_po;
-        $data->tgl_po = $log->tgl_po;
-        $data->no_sj = $log->nosj;
-        $data->tgl_sj = $log->tgl_sj;
-        $data->ekspedisi = $log->ekspedisi;
-        $data->tgl_kirim = $log->tgl_kirim;
-        $data->up = $log->up;
-        $data->noseri = $chunkedGroups;
+    //     $data = new stdClass();
+    //     $data->hal =  count($chunkedGroups);
+    //     $data->pesanan_id = $log->pesanan_id;
+    //     $data->customer = $log->customer;
+    //     $data->alamat_customer = $log->alamat_customer;
+    //     $data->tujuan_kirim = $log->tujuan_kirim;
+    //     $data->alamat_kirim = $log->alamat_kirim;
+    //     $data->so = $log->so;
+    //     $data->no_po = $log->no_po;
+    //     $data->tgl_po = $log->tgl_po;
+    //     $data->no_sj = $log->nosj;
+    //     $data->tgl_sj = $log->tgl_sj;
+    //     $data->ekspedisi = $log->ekspedisi;
+    //     $data->tgl_kirim = $log->tgl_kirim;
+    //     $data->up = $log->up;
+    //     $data->noseri = $chunkedGroups;
 
         // $data = array(
         //     'hal' => count($chunkedGroups),
@@ -4895,7 +4895,7 @@ class LogistikController extends Controller
 
     public function create_logistik_draft(Request $request)
     {
-      //  dd( $request->dataform);
+
         $item = array();
 
         if (isset($request->part)) {
@@ -4916,7 +4916,6 @@ class LogistikController extends Controller
             foreach($request->produk as $key_pr => $i){
                 $produk[$key_pr]= array(
                     "jenis"=> 'produk',
-                    "no"=> ($key_pr + 1 ) + count($request->part),
                     "kode"=> $i['kode'] ?? "",
                     "nama"=> $i['nama'],
                     "jumlah"=> $i['jumlah'],
@@ -4944,9 +4943,11 @@ class LogistikController extends Controller
            "nosj" => $request->dataform['jenis_sj'] .$request->dataform['no_invoice'],
            "tgl_sj" =>$request->dataform['tgl_kirim'],
            "no_po" => $request->dataform['no_po'],
+           "so" => $request->dataform['so'],
            "tgl_po" => $request->dataform['tgl_po'],
-           "ekspedisi" => $request->dataform['pengiriman_surat_jalan'] == 'ekspedisi' ? $request->dataform['ekspedisi']['nama'] : $request->dataform['nama_pengirima'],
+           "ekspedisi" => $request->dataform['pengiriman_surat_jalan'] == 'ekspedisi' ? $request->dataform['ekspedisi']['nama'] : $request->dataform['nama_pengirim'],
            "up" => $request->dataform['nama_pic'].'-'. $request->dataform['telp_pic'],
+           "ket" => $request->dataform['keterangan_pengiriman'],
            "item" => $items
         );
 
@@ -4961,8 +4962,10 @@ class LogistikController extends Controller
         ]);
 
 
+
         if($save){
-            return response()->json(['messages' => 'berhasil']);
+            return response()->json(['messages' => 'berhasil','id' => $save->id]);
+
         }else{
             return response()->json(['messages' => 'gagal']);
         }

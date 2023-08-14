@@ -807,6 +807,7 @@
                 $('#cetaksjmodal').data('data_y', data_y);
             });
             $('#cetaksjmodal').on('shown.bs.modal', function() {
+                $(this).find('form').trigger('reset');
                 let data_y = $(this).data('data_y');
                 $.ajax({
                     'url': '/api/logistik/so/data/detail/item/' + data_y,

@@ -11,20 +11,20 @@
 
             main {
                 position: relative;
-                top: 150px;
+                top: 159px;
                 width: 100%;
-                height: 10px;
                 padding-bottom: 300px;
 
 
             }
+
             header {
                 position: fixed;
                 top: -60px;
                 left: 0px;
                 right: 0px;
                 height: 220px;
-
+                margin-bottom: 50px;
                 /** Extra personal styles **/
              background-color: #ffffff;
                 color: rgb(0, 0, 0);
@@ -32,12 +32,13 @@
             }
 
             footer {
+
                 position: fixed;
                 bottom: -10px;
                 left: 0px;
                 right: 0px;
                 height: 50px;
-                top: 700px;
+                top: 710px;
                 /** Extra personal styles **/
                 background-color: #ffffff;
                 color: rgb(0, 0, 0);
@@ -102,7 +103,10 @@
                              <td></td>
                               <td style=" border: 1px solid;">{{$data->alamat_kirim}}</td>
                           </tr>
-
+                          <tr>
+                            <td></td>
+                            <td style=" border: 1px solid;"><b>UP : </b>{{$data->up}}</td>
+                          </tr>
                       </table>
                   </td>
                   <td width="1%"></td>
@@ -129,19 +133,23 @@
                               </td>
                           </tr>
                           <tr>
-                              <td style=" border: 1px solid;" class="vera ">
+                              <td style=" border: 1px solid;" class="vera " colspan="2">
                                   <u>Ekspedisi</u> <br>
                                   {{$data->ekspedisi}}
-                              </td>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>Tgl Pengiriman</u><br>
-                                  {{$data->tgl_kirim}}
                               </td>
                           </tr>
                           <tr>
                               <td style=" border: 1px solid;" class="vera " colspan="2">
-                                  <u>Up</u> <br>
-                                  {{$data->up}}
+                                  <u>Keterangan Pengiriman</u> <br>
+                                  @switch($data->ket)
+                                      @case('bayar_tujuan')
+                                          <span>BAYAR TUJUAN <span>
+                                          @break
+                                        @case('bayar_sinko')
+                                            <span>BAYAR SINKO </span>
+                                      @default
+                                      <span>NON BAYAR<span>
+                                  @endswitch
                               </td>
 
                           </tr>
@@ -204,53 +212,56 @@
         <main>
             {{-- Hal -1 --}}
             {{-- @for ($i = 1; $i <= $hal; $i++) --}}
-                <table id="tabel" class="table table-hover styled-table table-striped" border="1" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+                <table id="tabel" class="table table-hover styled-table table-striped items" border="1" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                     <thead>
                        <tr>
-                         <td class="align-center" width="8%">
+                         <td class="vera" width="8%">
                            <b>No</b>
                          </td>
-                         <td class="align-center" >
+                         <td class="vera" >
                            <b>Kode Barang</b>
                          </td>
-                         <td class="align-center">
+                         <td class="vera">
                            <b>Nama Barang</b>
                          </td>
-                         <td class="align-center"  width="8%">
+                         <td class="vera"  width="8%">
                            <b>Jumlah</b>
                          </td>
-                         <td class="align-center"  width="8%">
+                         <td class="vera"  width="8%">
                            <b>Satuan</b>
                          </td>
-                         <td class="align-center" >
+                         <td class="vera" >
                            <b>No Seri</b>
                          </td>
                        </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="page-break-after: avoid !important;">
 
 
-                        @foreach ( $data->item as $item )
+                        @foreach ( $data->item as $key => $item)
                         <tr>
-                            <td class="align-center">
-                            {{$item->no}}
+                            <td class="vera">
+                                {{ $key+1 }}
                             </td>
-                            <td class="align-center">
+                            <td class="vera">
                                 {{$item->kode}}
                             </td>
-                            <td class="align-center">
+                            <td class="vera">
                                 {{$item->nama}}
                             </td>
-                            <td class="align-center">
+                            <td class="vera">
                                 {{$item->jumlah}}.00
                             </td>
-                            <td class="align-center">
+                            <td class="vera">
                                 {{$item->satuan}}
                             </td>
-                            <td class="align-center">
+                            <td class="vera">
                              @php echo implode(', ',$item->noseri) @endphp
 
                             </td>
+                          </tr>
+                          <tr>
+
                           </tr>
 
                           @endforeach

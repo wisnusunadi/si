@@ -356,7 +356,7 @@
       if (validatejml(noseri.length, index)) {
           // change text to array
           keterangan.val(noseri);
-          
+
           // jumlahkan
           jumlah.val(noseri.length);
 
@@ -552,37 +552,36 @@
         console.log(kirim);
 
         // post data
-        // $.ajax({
-        //   url: '/api/logistik/so/create_draft',
-        //   type: 'POST',
-        //   data: kirim,
-        //   success: function (res) {
-        //     if (res.status == 'success') {
-        //       Swal.fire({
-        //         icon: 'success',
-        //         title: 'Berhasil',
-        //         text: res.message,
-        //       }).then((result) => {
-        //         if (result.isConfirmed) {
-        //           window.location.href = '/logistik/so/show';
-        //         }
-        //       })
-        //     } else {
-        //       Swal.fire({
-        //         icon: 'error',
-        //         title: 'Oops...',
-        //         text: res.message,
-        //       })
-        //     }
-        //   },
-        //   error: function (err) {
-        //     Swal.fire({
-        //       icon: 'error',
-        //       title: 'Oops...',
-        //       text: err.message,
-        //     })
-        //   }
-        // })
+        $.ajax({
+          url: '/api/logistik/so/create_draft',
+          type: 'POST',
+          data: kirim,
+          success: function (res) {
+            if (res.messages == 'berhasil') {
+              Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.open(`/logistik/pengiriman/prints/${res.id}`, '_blank')
+                }
+              })
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: res.message,
+              })
+            }
+          },
+          error: function (err) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: err.message,
+            })
+          }
+        })
 
     });
 
