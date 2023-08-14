@@ -104,7 +104,7 @@
                           <tr>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>No SJ</u> <br>
-                                  {{$data->no_sj}}
+                                  {{$data->nosj}}
                               </td>
                               <td style=" border: 1px solid;" class="vera">
                                   <u>Tgl SJ</u><br>
@@ -196,7 +196,7 @@
         <!-- Wrap the content of your PDF inside a main tag -->
         <main>
             {{-- Hal -1 --}}
-            @for ($i = 1; $i <= count ($data->noseri); $i++)
+
                 <table id="tabel" class="table table-hover styled-table table-striped" border="1" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                     <thead>
                        <tr>
@@ -221,13 +221,7 @@
                        </tr>
                     </thead>
                     <tbody>
-
-                        <tr>
-                            <td class="align-center">
-                           a
-                            </td>
-                        </tr>
-                        {{-- @foreach ( $data->item as $item )
+                        @foreach ( $data->item as $item )
                         <tr>
                             <td class="align-center">
                             {{$item->no}}
@@ -250,7 +244,7 @@
                             </td>
                           </tr>
 
-                          @endforeach --}}
+                          @endforeach
 
                         {{-- <tr>
                             <td class="align-center" colspan="3">
@@ -264,14 +258,6 @@
                           </tr> --}}
                     </tbody>
                 </table>
-
-                @if($data->hal == $i)
-                <div style="page-break-after: never;"> </div>
-                @else
-                <div style="page-break-after: always;"></div>
-                @endif
-                @endfor
-
                 {{-- <div style="page-break-after: always;"></div> --}}
             {{-- Hal -2 --}}
 

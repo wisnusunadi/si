@@ -33,6 +33,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
+use stdClass;
+
 use function PHPUnit\Framework\returnSelf;
 
 class LogistikController extends Controller
@@ -54,95 +56,140 @@ class LogistikController extends Controller
         $pdf = PDF::loadView('page.logistik.pengiriman.print_sj', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
         return $pdf->stream('');
     }
-//     public function cetak_surat_jalan($id)
-//     {
-//         $data = LogistikDraft::where('pesanan_id',6500)->first();
-//         $log = json_decode($data->isi);
-//         $page = array();
-//         $mergedNoseri = [];
-
-
-//         $groupedSerialNumbers = [];
-
-//         foreach ($log->item as $item) {
-//             $nama = $item->nama;
-//             foreach ($item->noseri as $serial) {
-//                 $groupedSerialNumbers[$serial] = $nama;
-//             }
-//         }
-
-
-// $groupedSerialNumbersFinals = [];
-
-// foreach ($groupedSerialNumbers as $serial => $nama) {
-//     $groupedSerialNumbersFinals[] = [
-//         'serial' => $serial,
-//         'nama' => $nama
-//     ];
-// }
-
-// $chunkedGroups = array_chunk($groupedSerialNumbersFinals, 5);
-
-//         //         foreach ($log->item as $key => $item) {
-
-// //             $nama = $item->nama;
-// //                     $noseri = $item->noseri;
-
-// //                     if (!isset($mergedNoseri[$nama])) {
-// //                         $mergedNoseri[$nama] = $noseri;
-// //                     } else {
-// //                         $mergedNoseri[$nama] = array_merge($mergedNoseri[$nama], $noseri);
-// //                     }
-// //    }
-
-
-// //    $mergedNoseriFinal = array();
-
-// // foreach ($mergedNoseri as $nama => $noseriArray) {
-// //     $noseriChunks = array_chunk($noseriArray, 5);
-
-// //     foreach ($noseriChunks as $chunkIndex => $chunk) {
-// //         $result[] = array(
-// //             "nama" => $nama,
-// //             "noseri" => $chunk
-// //         );
-// //     }
-// // }
-
-
-//        return response()->json(['data' => $chunkedGroups]);
-
-//     }
     public function cetak_surat_jalan($id)
     {
-        $data = LogistikDraft::where('pesanan_id',5341)->first();
-        $obj = json_decode($data->isi);
+        $data = LogistikDraft::where('pesanan_id',6500)->first();
+        $log = json_decode($data->isi);
+        // $page = array();
+        // $mergedNoseri = [];
 
-        $mergedNoseri = [];
-        foreach ($obj->item as $key => $item) {
-            $nama = $item->nama;
-            $noseri = $item->noseri;
 
-            if (!isset($mergedNoseri[$nama])) {
-                $mergedNoseri[$nama] = $noseri;
-            } else {
-                $mergedNoseri[$nama] = array_merge($mergedNoseri[$nama], $noseri);
+        $groupedSerialNumbers = [];
+
+
+        foreach ($log->produk as $key => $produk) {
+            $nama = $key;
+            // $nama = $item->key;
+            foreach ($produk->noseri as $serial) {
+                $groupedSerialNumbers[$serial] = $nama;
             }
-
-            // $mergedNoseri = array_merge($mergedNoseri,  $item->noseri);
-        }
-        $chunkedNoseri = array();
-
-        foreach ($mergedNoseri as $nama => $noseriArray) {
-            $chunks = array_chunk($noseriArray, 5);
-            $chunkedNoseri[$nama] = $chunks;
         }
 
-    //    return response()->json(['data' => $chunkedNoseri]);
+
+        $groupedSerialNumbersFinals = [];
+
+        foreach ($groupedSerialNumbers as $serial => $nama) {
+            $groupedSerialNumbersFinals[] = [
+                'kode' => $nama,
+                'serial' => $serial,
+
+            ];
+
+        }
+
+        $chunkedGroups = array_chunk($groupedSerialNumbersFinals, 5);
+
+         dd($chunkedGroups);
+        $data = new stdClass();
+        $data->hal =  count($chunkedGroups);
+        $data->pesanan_id = $log->pesanan_id;
+        $data->customer = $log->customer;
+        $data->alamat_customer = $log->alamat_customer;
+        $data->tujuan_kirim = $log->tujuan_kirim;
+        $data->alamat_kirim = $log->alamat_kirim;
+        $data->so = $log->so;
+        $data->no_po = $log->no_po;
+        $data->tgl_po = $log->tgl_po;
+        $data->no_sj = $log->nosj;
+        $data->tgl_sj = $log->tgl_sj;
+        $data->ekspedisi = $log->ekspedisi;
+        $data->tgl_kirim = $log->tgl_kirim;
+        $data->up = $log->up;
+        $data->noseri = $chunkedGroups;
+
+        // $data = array(
+        //     'hal' => count($chunkedGroups),
+        //     'pesanan_id' => $log->pesanan_id,
+        //     'customer' => $log->customer,
+        //     'alamat_customer' => $log->alamat_customer,
+        //     'tujuan_kirim' => $log->tujuan_kirim,
+        //     'alamat_kirim' => $log->alamat_kirim,
+        //     'so' => $log->so,
+        //     'no_po' => $log->no_po,
+        //     'tgl_po' => $log->tgl_po,
+        //     'no_sj' => $log->nosj,
+        //     'tgl_sj' => $log->tgl_sj,
+        //     'ekspedisi' => $log->ekspedisi,
+        //     'tgl_kirim' => $log->tgl_kirim,
+        //     'up' => $log->up,
+        //     'noseri' => $chunkedGroups
+        // );
+        //dd($data);
+
         $customPaper = array(0,0,605.44,788.031);
-        $pdf = PDF::loadView('page.logistik.surat.surat_jalan',['data' => $obj])->setPaper($customPaper);
+        $pdf = PDF::loadView('page.logistik.surat.surat_jalan',['data' => $data])->setPaper($customPaper);
         return $pdf->stream('');
+
+//         foreach ($log->item as $key => $item) {
+
+//             $nama = $item->nama;
+//                     $noseri = $item->noseri;
+
+//                     if (!isset($mergedNoseri[$nama])) {
+//                         $mergedNoseri[$nama] = $noseri;
+//                     } else {
+//                         $mergedNoseri[$nama] = array_merge($mergedNoseri[$nama], $noseri);
+//                     }
+//    }
+
+
+//    $mergedNoseriFinal = array();
+
+// foreach ($mergedNoseri as $nama => $noseriArray) {
+//     $noseriChunks = array_chunk($noseriArray, 5);
+
+//     foreach ($noseriChunks as $chunkIndex => $chunk) {
+//         $result[] = array(
+//             "nama" => $nama,
+//             "noseri" => $chunk
+//         );
+//     }
+// }
+
+
+       return response()->json(['data' => $data]);
+
     }
+    // public function cetak_surat_jalan($id)
+    // {
+    //     $data = LogistikDraft::where('pesanan_id',5341)->first();
+    //     $obj = json_decode($data->isi);
+
+    //     $mergedNoseri = [];
+    //     foreach ($obj->item as $key => $item) {
+    //         $nama = $item->nama;
+    //         $noseri = $item->noseri;
+
+    //         if (!isset($mergedNoseri[$nama])) {
+    //             $mergedNoseri[$nama] = $noseri;
+    //         } else {
+    //             $mergedNoseri[$nama] = array_merge($mergedNoseri[$nama], $noseri);
+    //         }
+
+    //         // $mergedNoseri = array_merge($mergedNoseri,  $item->noseri);
+    //     }
+    //     $chunkedNoseri = array();
+
+    //     foreach ($mergedNoseri as $nama => $noseriArray) {
+    //         $chunks = array_chunk($noseriArray, 5);
+    //         $chunkedNoseri[$nama] = $chunks;
+    //     }
+
+    //   return response()->json(['data' => $chunkedNoseri]);
+    //     $customPaper = array(0,0,605.44,788.031);
+    //     $pdf = PDF::loadView('page.logistik.surat.surat_jalan',['data' => $obj])->setPaper($customPaper);
+    //     return $pdf->stream('');
+    // }
 
     public function get_data_select_produk(Request $r, $jenis)
     {
@@ -4892,15 +4939,18 @@ class LogistikController extends Controller
             "pesanan_id" => $request->pesanan_id,
             "customer" => $request->customer,
            "alamat_customer" => $request->alamat_customer,
-           "tujuan_kirim" =>  $request->tujuan_kirim,
-           "alamat_kirim" => $request->alamat_kirim,
-           "nosj" => $request->nosj,
-           "tgl_sj" =>$request->tgl_sj,
+           "tujuan_kirim" =>  $request->perusahaan_pengiriman,
+           "alamat_kirim" => $request->alamat_pengiriman,
+           "provinsi" => $request->provinsi,
+           "nosj" => $request->jenis_sj .  $request->no_invoice ,
+           "tgl_sj" =>$request->tgl_kirim,
            "no_po" => $request->no_po,
            "tgl_po" => $request->tgl_po,
            "ekspedisi" => $request->ekspedisi_id,
-           "up" => $request->nama_pic,
-           "item" => $request->item
+           "up" => $request->nama_pic .  $request->telp_pic,
+           "item" => $request->item,
+           "keterangan" => $request->keterangan_pengiriman,
+           "pengiriman_surat_jalan" => $request->pengiriman_surat_jalan
         );
 
         $data = json_encode($isi);
