@@ -4895,36 +4895,37 @@ class LogistikController extends Controller
 
     public function create_logistik_draft(Request $request)
     {
+      //  dd( $request->dataform);
         $item = array();
 
-        if (count($request->part) > 0) {
+        if (isset($request->part)) {
         foreach($request->part as $key_p => $i){
             $part[$key_p]= array(
+                "jenis"=> 'part',
                 "no"=> $key_p+1,
                 "kode"=> $i['kode'],
                 "nama"=> $i['nama'],
                 "jumlah"=> $i['jumlah'],
-                "satuan"=>$i['satuan'],
-                "noseri"=> $i['noseri']
             );
           }
-          if(count($request->produk ) <= 0){
+          if(isset($request->produk )){
             $items = $part;
          }
         }
-        if (count($request->produk ) > 0) {
+        if (isset($request->produk )) {
             foreach($request->produk as $key_pr => $i){
                 $produk[$key_pr]= array(
+                    "jenis"=> 'produk',
                     "no"=> ($key_pr + 1 ) + count($request->part),
-                    "kode"=> $i['kode'],
+                    "kode"=> $i['kode'] ?? "",
                     "nama"=> $i['nama'],
                     "jumlah"=> $i['jumlah'],
-                    "satuan"=>$i['satuan'],
-                    "noseri"=> $i['noseri']
+                    "satuan"=> 'Unit',
+                    "noseri"=> $i['noseri_selected']
                 );
             }
 
-            if(count($request->part ) > 0){
+            if(isset($request->part)){
                 $items =  array_merge($part,$produk);
             }else{
                 $items = $produk;
@@ -4933,32 +4934,28 @@ class LogistikController extends Controller
 
           }
 
-          dd($items);
 
         $isi = array(
-            "pesanan_id" => $request->pesanan_id,
-            "customer" => $request->customer,
-           "alamat_customer" => $request->alamat_customer,
-           "tujuan_kirim" =>  $request->perusahaan_pengiriman,
-           "alamat_kirim" => $request->alamat_pengiriman,
-           "provinsi" => $request->provinsi,
-           "nosj" => $request->jenis_sj .  $request->no_invoice ,
-           "tgl_sj" =>$request->tgl_kirim,
-           "no_po" => $request->no_po,
-           "tgl_po" => $request->tgl_po,
-           "ekspedisi" => $request->ekspedisi_id,
-           "up" => $request->nama_pic .  $request->telp_pic,
-           "item" => $request->item,
-           "keterangan" => $request->keterangan_pengiriman,
-           "pengiriman_surat_jalan" => $request->pengiriman_surat_jalan
+            "pesanan_id" => $request->dataform['pesanan_id'],
+            "customer" => $request->dataform['nama_customer'],
+           "alamat_customer" => $request->dataform['alamat_customer'],
+           "tujuan_kirim" =>  $request->dataform['perusahaan_pengiriman'],
+           "alamat_kirim" => $request->dataform['alamat_pengiriman'],
+           "nosj" => $request->dataform['jenis_sj'] .$request->dataform['no_invoice'],
+           "tgl_sj" =>$request->dataform['tgl_kirim'],
+           "no_po" => $request->dataform['no_po'],
+           "tgl_po" => $request->dataform['tgl_po'],
+           "ekspedisi" => $request->dataform['pengiriman_surat_jalan'] == 'ekspedisi' ? $request->dataform['ekspedisi']['nama'] : $request->dataform['nama_pengirima'],
+           "up" => $request->dataform['nama_pic'].'-'. $request->dataform['telp_pic'],
+           "item" => $items
         );
 
         $data = json_encode($isi);
 
 
         $save =  LogistikDraft::create([
-            'pesanan_id' => $request->pesanan_id,
-            'sj' => $request->nosj,
+            'pesanan_id' => $request->dataform['pesanan_id'],
+            'sj' =>$request->dataform['jenis_sj'] .$request->dataform['no_invoice'],
             'isi' => $data
 
         ]);
@@ -4983,6 +4980,7 @@ class LogistikController extends Controller
                 foreach ($data_part as $key => $d){
                     $part[$key] = array(
                         'id' => $d->id,
+                        'kode' => $d->Sparepart->kode,
                         'nama' => $d->Sparepart->nama,
                         'jumlah' => $d->jumlah
                     );
