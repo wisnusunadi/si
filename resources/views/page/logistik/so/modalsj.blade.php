@@ -26,6 +26,15 @@
               <div class="card">
                 <div class="card-body">
                   <h5>Data PIC</h5>
+                  <div class="hide">
+                    <input type="text" name="pesanan_id" id="">
+                    <input type="text" name="so" id="">
+                    <input type="text" name="no_po" id="">
+                    <input type="text" name="tgl_po" id="">
+                    <input type="text" name="nama_customer" id="">
+                    <input type="text" name="alamat_customer" id="">
+                    <input type="text" name="provinsi_id" id="">
+                  </div>
                   <div class="form-group row">
                     <label class="col-form-label col-lg-5 col-md-12 labelket" for="no_invoice">Nama PIC</label>
                     <div class="col-lg-6 col-md-12">
@@ -135,7 +144,7 @@
                           for="ekspedisi_id">Jasa Pengiriman</label>
                       <div class="col-lg-7 col-md-12">
                           <select class="select2 select-info form-control ekspedisi_id"
-                              name="ekspedisi_id" id="ekspedisi_id" style="width: 100%;">
+                              name="ekspedisi" id="ekspedisi_id" style="width: 100%;">
 
                           </select>
                           <div class="invalid-feedback" id="msgekspedisi_id"></div>
@@ -360,6 +369,7 @@
       if (val == 'ekspedisi') {
         $('#ekspedisi').removeClass('hide');
         $('#nonekspedisi').addClass('hide');
+        ekspedisi($('#provinsi_id').val());
       } else {
         $('#ekspedisi').addClass('hide');
         $('#nonekspedisi').removeClass('hide');
@@ -373,6 +383,36 @@
       }
       return true;
     }
+
+    const ekspedisi = (provinsi) => {
+        $('#ekspedisi_id').select2({
+            placeholder: "Pilih Ekspedisi",
+            ajax: {
+                minimumResultsForSearch: 20,
+                dataType: 'json',
+                theme: "bootstrap",
+                delay: 250,
+                type: 'GET',
+                url: '/api/logistik/ekspedisi/select/' + provinsi,
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        })
+    }
+
 
     $(document).on('click', '#check_all', function () {
       if (this.checked) {
@@ -419,14 +459,15 @@
                 data.push(rowData);
             }
         }
-
-        if(data.length == 0){
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Tidak ada barang yang dipilih!',
-          })
-          return false;
+        if(table.data().length > 0) {
+          if(data.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Tidak ada barang yang dipilih!',
+            })
+            return false;
+          }
         }
 
         let data_part = [];
@@ -442,6 +483,17 @@
             }
         }
 
+        if(table_part.data().length > 0) {
+          if(data_part.length == 0){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Tidak ada part yang dipilih!',
+            })
+            return false;
+          }
+        }
+
         // get all value name on id formcetaksj
         let form = $('#formcetaksj').serializeArray();
         let dataform = {};
@@ -449,9 +501,45 @@
           dataform[form[i].name] = form[i].value;
         }
 
-        console.log("form", dataform);
-        console.log("produk", data);
-        console.log("part", data_part);
+        if($('input[name="pengiriman_surat_jalan"]:checked').val() == 'ekspedisi') {
+          dataform['ekspedisi'] = {
+            id: $('select[name="ekspedisi"]').val(),
+            nama: $('select[name="ekspedisi"] option:selected').text()
+          }
+          delete dataform.nama_pengirim;
+        } else {
+          // delete ekspedisi_id
+          dataform['nama_pengirim'] = $('textarea[name="nama_pengirim"]').val();
+          delete dataform.ekspedisi_id;
+        }
+
+        if($('input[name=sj_jenis]:checked').val() == 'old'){
+          dataform['sj_lama'] = $('select[name="sj_lama"]').val() || '';
+          delete dataform.sj_baru;
+        }else{
+          dataform['sj_baru'] = $('input[name="sj_baru"]').val()
+          delete dataform.sj_lama;
+        }
+
+        // cek apakah ada data yang kosong
+        let cek = Object.values(dataform).filter(function (el) {
+          return el != '';
+        });
+
+        if (cek.length != Object.keys(dataform).length) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Data tidak boleh kosong!',
+          })
+          return false;
+        }
+
+        console.log("kirim", {
+          dataform: dataform,
+          data: data,
+          data_part: data_part
+        })
 
     });
 

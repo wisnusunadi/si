@@ -562,6 +562,35 @@
 
             });
 
+            const ekspedisi = (provinsi) => {
+                $('#ekspedisi_id').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + provinsi,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
+
             const header = (header) => {
                 if(header.jenis_pesanan == 'ekatalog') {
                     $('.form-provinsi').removeClass('hide')
@@ -580,6 +609,8 @@
                         selectElement.empty()
                         selectElement.append(option)
                         selectElement.val(header.provinsi.instansi.id)
+                        $('input[name="provinsi_id"]').val(header.provinsi.instansi.id)
+                        ekspedisi(header.provinsi.instansi.id)
                     } else {
                         $('#provinsi1').prop('checked', true)
                         let selectElement = $('.provinsi_pengiriman');
@@ -591,6 +622,8 @@
                         selectElement.empty()
                         selectElement.append(option)
                         selectElement.val(header.provinsi.dsb.id)
+                        $('input[name="provinsi_id"]').val(header.provinsi.dsb.id)
+                        ekspedisi(header.provinsi.dsb.id)
                     }
 
                     let id = $('.provinsi_pengiriman').val()
@@ -627,6 +660,8 @@
 
                     $('.provinsi_pengiriman').val(header.provinsi.id)
                     $('.provinsi_pengiriman').text(header.provinsi.nama)
+                    $('input[name="provinsi_id"]').val(header.provinsi.id)
+                    ekspedisi(header.provinsi.id)
                 }
 
                 if(header.ekspedisi) {
@@ -670,6 +705,14 @@
                 } else {
                     $('input[name="kemasan"]').val('nonpeti').prop('checked', true)
                 }
+
+                $('input[name="pesanan_id"]').val(header.pesanan_id)
+                $('input[name="so"]').val(header.so)
+                $('input[name="no_po"]').val(header.no_po)
+                $('input[name="tgl_po"]').val(header.tgl_po)
+                $('input[name="nama_customer"]').val(header.customer.nama)
+                $('input[name="alamat_customer"]').val(header.customer.alamat)
+
             }
 
             const tableproduk = (produk) => {
