@@ -11,11 +11,9 @@
 
             main {
                 position: relative;
-                top: 159px;
+                top: 190px;
                 width: 100%;
                 padding-bottom: 300px;
-
-
             }
 
             header {
@@ -23,8 +21,8 @@
                 top: -60px;
                 left: 0px;
                 right: 0px;
-                height: 220px;
-                margin-bottom: 50px;
+                height: 250px;
+                margin-bottom: 100px;
                 /** Extra personal styles **/
              background-color: #ffffff;
                 color: rgb(0, 0, 0);
@@ -201,13 +199,13 @@
                     LOGISTIK
                   </td>
                 </tr>
-                <td class="align-right" colspan="2" >
+                <td class="align-right" colspan="3" >
                     <br>
 
 
                  <tr>
                 <tr>
-                  <td class="align-right" colspan="2">
+                  <td class="align-right" colspan="3">
                 <i>No Dokumen : SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
                   </td>
 
@@ -263,6 +261,7 @@
                           @if(isset($item->noseri)){
                           <tr>
                             <td class="vera" colspan="5">
+                                <b>No Seri</b> :
                               @php echo implode(', ',$item->noseri) @endphp
  
                              </td>

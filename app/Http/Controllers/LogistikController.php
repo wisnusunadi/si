@@ -4915,7 +4915,7 @@ class LogistikController extends Controller
                 $produk[$key_pr]= array(
                     "jenis"=> 'produk',
                     "kode"=> $i['kode'] ?? "",
-                    "nama"=> $i['nama'],
+                    "nama"=> $i['nama_alias'] ?? $i['nama'],
                     "jumlah"=> $i['jumlah'],
                     "jumlah_noseri"=> $i['jumlah_noseri'],
                     "satuan"=> 'Unit',
