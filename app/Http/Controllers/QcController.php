@@ -1009,7 +1009,7 @@ class QcController extends Controller
                                 <i class="fas fa-eye"></i> Detail
                         </a>';
 
-                        if($data->no_do != NULL && $data->tgl_do != NULL ){
+                        if($data->no_po != NULL && $data->tgl_po != NULL ){
                             $return .= '    <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
                             <i class="fas fa-print"></i>
                             SPPB
@@ -1679,7 +1679,7 @@ class QcController extends Controller
                                 <i class="fas fa-eye"></i> Detail
                         </a>';
 
-                        if($data->no_do != NULL && $data->tgl_do != NULL ){
+                        if($data->no_po != NULL && $data->tgl_po != NULL ){
                             $return .= '    <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
                             <i class="fas fa-print"></i>
                             SPPB
