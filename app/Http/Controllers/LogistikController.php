@@ -4995,7 +4995,7 @@ class LogistikController extends Controller
                 foreach ($data_prd as $key => $d){
                     $prd[$key] = array(
                         'id' => $d->id,
-                        'nama_alias' => $d->GudangBarangJadi->Produk->nama.' '.$d->GudangBarangJadi->nama,
+                        'nama_alias' => $d->DetailPesanan->PenjualanProduk->nama_alias != NULL ? $d->DetailPesanan->PenjualanProduk->nama_alias  : $d->GudangBarangJadi->Produk->nama,
                         'nama' => $d->GudangBarangJadi->Produk->nama.' '.$d->GudangBarangJadi->nama,
                         'jumlah' => $d->DetailPesanan->jumlah
                     );
