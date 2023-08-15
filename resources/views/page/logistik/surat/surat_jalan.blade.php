@@ -163,8 +163,8 @@
                     Keterangan
                   </td>
                   <td class="align-left"  style=" border: 1px solid;">
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type
-                  </td>
+                    {{$data->paket}}<br> {{$data->ket}}
+                </td>
                 </tr>
             </table>
             <br>
@@ -188,15 +188,15 @@
                 <tr>
                   <td class="align-center">
                     <hr style="width:30%">
-                    
+
                   </td>
                   <td class="align-center">
                     <hr style="width:40%">
-                    KURIR
+                    {{-- KURIR --}}
                   </td>
                   <td class="align-center">
                     <hr style="width:30%">
-                    LOGISTIK
+                    {{-- LOGISTIK --}}
                   </td>
                 </tr>
                 <td class="align-right" colspan="3" >
@@ -252,7 +252,11 @@
                                 {{$item->nama}}
                             </td>
                             <td class="vera">
+                                @if(isset($item->noseri))
                                 {{$item->jumlah_noseri}}.00
+                                @else
+                                {{$item->jumlah}}.00
+                                @endif
                             </td>
                               <td class="vera">
                                 {{ $item->satuan}}
@@ -263,7 +267,7 @@
                             <td class="vera" colspan="5">
                                 <b>No Seri</b> :
                               @php echo implode(', ',$item->noseri) @endphp
- 
+
                              </td>
                           </tr>
                           }

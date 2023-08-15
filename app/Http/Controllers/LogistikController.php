@@ -4926,6 +4926,15 @@ class LogistikController extends Controller
             $items = array_merge($items,$produk);
         }
 
+        $p = Pesanan::find($request->dataform['pesanan_id']);
+        if($p->Ekatalog){
+            $paket = $p->Ekatalog->no_paket;
+            $ket = $p->Ekatalog->instansi;
+        }else{
+            $paket = 'OFFLINE';
+            $ket = '';
+        }
+
 
         $isi = array(
             "pesanan_id" => $request->dataform['pesanan_id'],
@@ -4941,7 +4950,8 @@ class LogistikController extends Controller
            "ekspedisi" => $request->dataform['pengiriman_surat_jalan'] == 'ekspedisi' ? $request->dataform['ekspedisi']['nama'] : $request->dataform['nama_pengirim'],
            "up" => isset($request->dataform['nama_pic']) ?? ''
            .'-'. $request->dataform['telp_pic'] ?? '',
-           "ket" => $request->dataform['keterangan_pengiriman'],
+           "ket" => $ket,
+           "paket" => $paket,
            "item" => $items
         );
 
