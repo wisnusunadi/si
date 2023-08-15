@@ -4896,7 +4896,7 @@ class LogistikController extends Controller
     public function create_logistik_draft(Request $request)
     {
 
-        $item = array();
+        $items = array();
 
         if (isset($request->part)) {
         foreach($request->part as $key_p => $i){
@@ -4946,7 +4946,8 @@ class LogistikController extends Controller
            "so" => $request->dataform['so'],
            "tgl_po" => $request->dataform['tgl_po'],
            "ekspedisi" => $request->dataform['pengiriman_surat_jalan'] == 'ekspedisi' ? $request->dataform['ekspedisi']['nama'] : $request->dataform['nama_pengirim'],
-           "up" => $request->dataform['nama_pic'].'-'. $request->dataform['telp_pic'],
+           "up" => isset($request->dataform['nama_pic']) ?? ''
+           .'-'. $request->dataform['telp_pic'] ?? '',
            "ket" => $request->dataform['keterangan_pengiriman'],
            "item" => $items
         );

@@ -466,6 +466,14 @@
           delete dataform.sj_lama;
         }
 
+        if($('input[name="nama_pic"]').val() == ''){
+          delete dataform.nama_pic;
+        }
+
+        if($('input[name="telp_pic"]').val() == ''){
+          delete dataform.telp_pic;
+        }
+
         // cek apakah ada data yang kosong
         let cek = Object.values(dataform).filter(function (el) {
           return el != '';

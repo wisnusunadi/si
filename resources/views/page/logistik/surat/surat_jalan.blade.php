@@ -230,9 +230,6 @@
                          <td class="vera"  width="8%">
                            <b>Satuan</b>
                          </td>
-                         <td class="vera" >
-                           <b>No Seri</b>
-                         </td>
                        </tr>
                     </thead>
                     <tbody style="page-break-after: avoid !important;">
@@ -255,13 +252,13 @@
                             <td class="vera">
                                 {{$item->satuan}}
                             </td>
-                            <td class="vera">
-                             @php echo implode(', ',$item->noseri) @endphp
 
-                            </td>
                           </tr>
                           <tr>
-
+                            <td class="vera" colspan="5">
+                              @php echo implode(', ',$item->noseri) @endphp
+ 
+                             </td>
                           </tr>
 
                           @endforeach
