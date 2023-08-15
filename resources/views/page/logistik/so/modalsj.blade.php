@@ -27,7 +27,7 @@
               <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Cetak Surat Jalan Baru</a>
             </li>
             <li class="nav-item" role="presentation">
-              <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Cetak Surat Jalan Lama</a>
+              <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat Draft Surat Jalan</a>
             </li>
           </ul>
           <div class="tab-content" id="pills-tabContent">

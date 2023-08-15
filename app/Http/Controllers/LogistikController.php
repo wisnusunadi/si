@@ -4884,7 +4884,12 @@ class LogistikController extends Controller
                 'sj' => $l->sj
             );
         }
-        return response()->json(['data' => $data]);
+
+        if (isset($data)) {
+            return response()->json(['data' => $data]);
+        } else {
+            return response()->json(['data' => []]);
+        }
     }
     public function get_data_pesanan_sj_draft_detail($id)
     {
