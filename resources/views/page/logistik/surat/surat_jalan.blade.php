@@ -22,7 +22,7 @@
                 left: 0px;
                 right: 0px;
                 height: 250px;
-                margin-bottom: 100px;
+                margin-bottom: 110px;
                 /** Extra personal styles **/
              background-color: #ffffff;
                 color: rgb(0, 0, 0);

@@ -4948,20 +4948,10 @@ class LogistikController extends Controller
            "so" => $request->dataform['so'],
            "tgl_po" => $request->dataform['tgl_po'],
            "ekspedisi" => $request->dataform['pengiriman_surat_jalan'] == 'ekspedisi' ? $request->dataform['ekspedisi']['nama'] : $request->dataform['nama_pengirim'],
-           "up" => (isset($request->dataform['nama_pic']) == true ? $request->dataform['nama_pic'] : "") .
-           '-' .
-           ($request->dataform['telp_pic'] == true ? $request->dataform['telp_pic'] : ""),   
-           "ket" => $ket,
-           "paket" => $paket,
-           "item" => $items
-        );
-
-        $data = json_encode($isi);
-
-
-        $save =  LogistikDraft::create([
-            'pesanan_id' => $request->dataform['pesanan_id'],
-            'sj' =>$request->dataform['jenis_sj'] .$request->dataform['no_invoice'],
+           "up" => isset($request->dataform['nama_pic']) ?? ''
+           .'-'. $request->dataform['telp_pic'] ?? '',
+n_id' => $request->dataform['pesanan_id'],
+            'sj' =>$request->dataform['jenis_sj'] .$uest->dataform['no_invoice'],
             'isi' => $data
 
         ]);
@@ -5077,9 +5067,12 @@ class LogistikController extends Controller
                     'provinsi' =>   $provinsi,
                     'ekspedisi' => $ekspedisi,
                     'customer' => $dsb_nama,
-                    'perusahaan_pengiriman' => $pesanan->tujuan_kirim,
-                    'alamat_pengiriman' => $pesanan->alamat_kirim,
-                    'kemasan' => $pesanan->kemasan,
+                    'perusahaan_pengiriman' => $pesan           "up" => (isset($request->dataform['nama_pic']) == true ? $request->dataform['nama_pic           "up" => (isset($request->dataform['nama_pic']) == true ? $request->dataform['nama_pic'           "up" => (isset($request->dataform['nama_pic']) == true ? $request->dataform['nama_pic'] : "") .
+           '-' .
+           ($request->dataform['telp_pic'] == true ? $request->dataform['telp_pic'] : ""),
+
+
+esanan->kemasan,
                 ),
                 'item' => array(
                     'produk' => $prd,
