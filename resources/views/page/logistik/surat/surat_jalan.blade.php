@@ -173,10 +173,13 @@
             <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                 <tr>
                   <td class="align-center">
-                    Dibuat Oleh,
+                    Diterima Oleh,
                   </td>
                   <td class="align-center">
-                Diterima Oleh,
+                    Dibawa Oleh,
+                  </td>
+                  <td class="align-center">
+                  Dibuat Oleh,
                   </td>
                 </tr>
                 <td class="align-right" colspan="2" >
@@ -186,12 +189,16 @@
 
                 <tr>
                   <td class="align-center">
-                    <hr style="width:50%">
-                    Penjualan
+                    <hr style="width:30%">
+                    
                   </td>
                   <td class="align-center">
-                    <hr style="width:50%">
-                    Logistik
+                    <hr style="width:40%">
+                    KURIR
+                  </td>
+                  <td class="align-center">
+                    <hr style="width:30%">
+                    LOGISTIK
                   </td>
                 </tr>
                 <td class="align-right" colspan="2" >
@@ -201,7 +208,7 @@
                  <tr>
                 <tr>
                   <td class="align-right" colspan="2">
-                <i>No Dokumen : SPA-FR/01/asas/asas/asas/2023</i>
+                <i>No Dokumen : SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
                   </td>
 
                 </tr>
@@ -247,19 +254,22 @@
                                 {{$item->nama}}
                             </td>
                             <td class="vera">
-                                {{$item->jumlah}}.00
+                                {{$item->jumlah_noseri}}.00
                             </td>
-                            <td class="vera">
-                                {{$item->satuan}}
-                            </td>
-
+                              <td class="vera">
+                                {{ $item->satuan}}
+                              </td>
                           </tr>
+                          @if(isset($item->noseri)){
                           <tr>
                             <td class="vera" colspan="5">
                               @php echo implode(', ',$item->noseri) @endphp
  
                              </td>
                           </tr>
+                          }
+                          @endif
+
 
                           @endforeach
 

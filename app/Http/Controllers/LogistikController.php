@@ -4895,7 +4895,6 @@ class LogistikController extends Controller
 
     public function create_logistik_draft(Request $request)
     {
-
         $items = array();
 
         if (isset($request->part)) {
@@ -4906,11 +4905,10 @@ class LogistikController extends Controller
                 "kode"=> $i['kode'],
                 "nama"=> $i['nama'],
                 "jumlah"=> $i['jumlah'],
+                "satuan"=> '-',
             );
           }
-          if(isset($request->produk )){
-            $items = $part;
-         }
+          $items = $part;
         }
         if (isset($request->produk )) {
             foreach($request->produk as $key_pr => $i){
@@ -4919,19 +4917,14 @@ class LogistikController extends Controller
                     "kode"=> $i['kode'] ?? "",
                     "nama"=> $i['nama'],
                     "jumlah"=> $i['jumlah'],
+                    "jumlah_noseri"=> $i['jumlah_noseri'],
                     "satuan"=> 'Unit',
                     "noseri"=> $i['noseri_selected']
                 );
             }
 
-            if(isset($request->part)){
-                $items =  array_merge($part,$produk);
-            }else{
-                $items = $produk;
-            }
-
-
-          }
+            $items = array_merge($items,$produk);
+        }
 
 
         $isi = array(
