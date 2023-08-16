@@ -166,13 +166,13 @@
                         {{-- </div> --}}
                         {{-- </div> --}}
                     </div>
-                    {{-- <div class="form-group row">
+                    <div class="form-group row">
                       <label for="dimensi" class="col-form-label col-lg-5 col-md-12 labelket">Ekspedisi Terusan</label>
                       <div class="col-lg-7 col-md-12">
                         <textarea type="text" class="form-control col-form-label" name="ekspedisi_terusan" id="dimensi"></textarea>
                         <div class="invalid-feedback" id="msgnama_pengirim"></div>
                       </div>
-                    </div> --}}
+                    </div>
                     <div class="form-group row">
                       <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
                         <div class="col-lg-6 col-md-12 col-form-label">
@@ -206,13 +206,13 @@
                           </div>
                         </div>
                     </div>
-                    {{-- <div class="form-group row">
+                    <div class="form-group row">
                       <label for="dimensi" class="col-form-label col-lg-5 col-md-12 labelket">Dimensi</label>
                       <div class="col-lg-7 col-md-12">
                         <textarea type="text" class="form-control col-form-label" name="dimensi" id="dimensi"></textarea>
                         <div class="invalid-feedback" id="msgnama_pengirim"></div>
                       </div>
-                    </div> --}}
+                    </div>
                     <div class="form-group row">
                       <label class="col-form-label col-lg-5 col-md-12 labelket"
                           for="nama_pengirim">Keterangan Pengiriman</label>
