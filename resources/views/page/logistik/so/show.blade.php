@@ -591,6 +591,37 @@
                 })
             }
 
+            const sjlama = (sjlama) => {
+                $('#sj-lama').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: false,
+                    autowidth: true,
+                    responsive: true,
+                    data: sjlama,
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [
+                        {
+                            data: null,
+                            render: function(data, type, row, meta) {
+                                return meta.row + 1;
+                            }
+                        },
+                        {
+                            data: 'sj'
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, row, meta) {
+                                return '<a target="_blank" href="/logistik/pengiriman/prints/' + data.id + '" class="btn btn-sm btn-primary"><i class="fa fa-print"></i></a>'
+                            }
+                        }
+                    ]
+                })
+            }
+
             const header = (header) => {
                 if(header.jenis_pesanan == 'ekatalog') {
                     $('.form-provinsi').removeClass('hide')
@@ -712,6 +743,14 @@
                 $('input[name="tgl_po"]').val(header.tgl_po)
                 $('input[name="nama_customer"]').val(header.customer.nama)
                 $('input[name="alamat_customer"]').val(header.customer.alamat)
+
+                $.ajax({
+                    'url': '/api/logistik/so/data/sj_draft/' + header.pesanan_id,
+                    'dataType': 'json',
+                    success: function (data) {
+                        sjlama(data.data)
+                    }
+                });
 
             }
 
