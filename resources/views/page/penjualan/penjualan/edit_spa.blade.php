@@ -665,7 +665,7 @@
                                                                                                                         <option
                                                                                                                             value="{{ $g->GudangBarangJadi->id }}"
                                                                                                                             selected>
-                                                                                                                            @if (!empty($g->GudangBarangJadi->nama))
+                                                                                                                            @if (!empty(trim($g->GudangBarangJadi->nama)))
                                                                                                                                 {{ $g->GudangBarangJadi->nama }}
                                                                                                                             @else
                                                                                                                                 {{ $g->GudangBarangJadi->Produk->nama }}
@@ -1993,7 +1993,7 @@
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi
                                     .length; y++) {
                                     var nama_var = "";
-                                    if (res[0].produk[x].gudang_barang_jadi[y].nama != "") {
+                                    if (res[0].produk[x].gudang_barang_jadi[y].nama.trim() != "") {
                                         nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
                                     } else {
                                         nama_var = res[0].produk[x].nama;
@@ -2068,7 +2068,7 @@
                                     for (var y = 0; y < res[0].produk[x].gudang_barang_jadi
                                         .length; y++) {
                                         var nama_var = "";
-                                        if (res[0].produk[x].gudang_barang_jadi[y].nama != "") {
+                                        if (res[0].produk[x].gudang_barang_jadi[y].nama.trim() != "") {
                                             nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
                                         } else {
                                             nama_var = res[0].produk[x].nama;
