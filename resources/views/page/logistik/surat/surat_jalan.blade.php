@@ -220,13 +220,13 @@
                 <table id="tabel" class="table table-hover styled-table table-striped items" border="1" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                     <thead>
                        <tr>
-                         <td class="vera" width="8%">
+                         <td class="vera align-center" width="8%">
                            <b>No</b>
                          </td>
-                         <td class="vera" >
+                         <td class="vera align-center" width="20%">
                            <b>Kode Barang</b>
                          </td>
-                         <td class="vera">
+                         <td class="vera align-center">
                            <b>Nama Barang</b>
                          </td>
                          <td class="vera"  width="8%">
@@ -242,7 +242,7 @@
 
                         @foreach ( $data->item as $key => $item)
                         <tr>
-                            <td class="vera">
+                            <td class="vera align-center">
                                 {{ $key+1 }}
                             </td>
                             <td class="vera">
