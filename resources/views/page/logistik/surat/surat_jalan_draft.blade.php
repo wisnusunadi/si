@@ -158,21 +158,6 @@
 
         <footer>
             <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
-              <tr>
-                <td class="align-left vera" width="12%">
-                  Ekspedisi Terusan
-                </td>
-                <td class="align-left"  style=" border: 1px solid;">
-                  {{$data->ekspedisi_terusan}}
-              </td>
-              </tr>
-              <tr>
-                <td class="align-left vera" width="12%">
-                  Dimensi
-                </td>
-                <td class="align-left"  style=" border: 1px solid;">
-                  {{$data->dimensi}}
-              </td>
               </tr>
                 <tr>
                   <td class="align-left vera" width="12%">
@@ -302,6 +287,16 @@
                           </tr> --}}
                     </tbody>
                 </table>
+                <div class="align-center" style="margin: 10px 0px;">
+                  Dimensi
+                <br>
+                {{ $data->dimensi}}
+                </div>
+                Ekspedisi Terusan : <br>
+                {{ $data->ekspedisi_terusan}}
+                <br>
+
+
                 {{-- <div style="page-break-after: always;"></div> --}}
                 {{-- @if($hal == $i)
                 <div style="page-break-after: never;"> </div>
