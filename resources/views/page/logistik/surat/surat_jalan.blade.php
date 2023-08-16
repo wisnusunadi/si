@@ -265,7 +265,7 @@
                           @if(isset($item->noseri)){
                           <tr>
                             <td class="vera" colspan="5">
-                                <b>No Seri</b> :
+                                <b>No Seri</b> : <br>
                               @php echo implode(', ',$item->noseri) @endphp
 
                              </td>
