@@ -52,8 +52,9 @@ class LogistikController extends Controller
             $data_prt = DetailLogistikPart::where('logistik_id', $id)->get();
             $data_produk = $data_prd->merge($data_prt);
         }
-        $customPaper = array(0, 0, 684.8094, 792.9372);
-        $pdf = PDF::loadView('page.logistik.pengiriman.print_sj', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
+        $customPaper = array(0,0,605.44,788.031);
+        $pdf = PDF::loadView('page.logistik.surat.surat_jalan_kirim', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
+        // $pdf = PDF::loadView('page.logistik.pengiriman.print_sj', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
         return $pdf->stream('');
     }
     public function cetak_surat_jalan($id)
@@ -125,9 +126,8 @@ class LogistikController extends Controller
         //     'noseri' => $chunkedGroups
         // );
         //dd($data);
-
         $customPaper = array(0,0,605.44,788.031);
-        $pdf = PDF::loadView('page.logistik.surat.surat_jalan',['data' => $log,'hal' => 2])->setPaper($customPaper);
+        $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft',['data' => $log,'hal' => 2])->setPaper($customPaper);
         return $pdf->stream('');
 
 //         foreach ($log->item as $key => $item) {
@@ -4955,7 +4955,7 @@ class LogistikController extends Controller
            "ekspedisi" => $request->dataform['pengiriman_surat_jalan'] == 'ekspedisi' ? $request->dataform['ekspedisi']['nama'] : $request->dataform['nama_pengirim'],
            "up" => (isset($request->dataform['nama_pic']) == true ? $request->dataform['nama_pic'] : "") .
            '-' .
-           (isset($request->dataform['telp_pic']) == true ? $request->dataform['telp_pic'] : ""),   
+           (isset($request->dataform['telp_pic']) == true ? $request->dataform['telp_pic'] : ""),
            "ket" => $ket,
            "paket" => $paket,
            "item" => $items
