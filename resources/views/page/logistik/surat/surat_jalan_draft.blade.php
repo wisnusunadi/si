@@ -216,17 +216,16 @@
         <!-- Wrap the content of your PDF inside a main tag -->
         <main>
             {{-- Hal -1 --}}
-            {{-- @for ($i = 1; $i <= $hal; $i++) --}}
-                <table id="tabel" class="table table-hover styled-table table-striped items" border="1" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+                <table id="tabel" class="table table-hover styled-table table-striped items" border="1" style="table-layout: fixed; width: 100%; border-collapse: collapse;   page-break-inside: avoid !important;">
                     <thead>
                        <tr>
-                         <td class="vera" width="8%">
+                         <td class="vera align-center" width="8%">
                            <b>No</b>
                          </td>
-                         <td class="vera" >
+                         <td class="vera align-center" width="20%">
                            <b>Kode Barang</b>
                          </td>
-                         <td class="vera">
+                         <td class="vera align-center">
                            <b>Nama Barang</b>
                          </td>
                          <td class="vera"  width="8%">
@@ -242,7 +241,7 @@
 
                         @foreach ( $data->item as $key => $item)
                         <tr>
-                            <td class="vera">
+                            <td class="vera align-center">
                                 {{ $key+1 }}
                             </td>
                             <td class="vera">
@@ -267,7 +266,6 @@
                             <td class="vera" colspan="5">
                                 <b>No Seri</b> : <br>
                               @php echo implode(', ',$item->noseri) @endphp
-
                              </td>
                           </tr>
                           }
