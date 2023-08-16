@@ -4958,6 +4958,8 @@ class LogistikController extends Controller
            (isset($request->dataform['telp_pic']) == true ? $request->dataform['telp_pic'] : ""),
            "ket" => $ket,
            "paket" => $paket,
+           "ekspedisi_terusan" => $request->dataform['ekspedisi_terusan'],
+           "dimensi" => $request->dataform['dimensi'],
            "item" => $items
         );
 

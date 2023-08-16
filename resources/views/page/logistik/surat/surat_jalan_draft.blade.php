@@ -36,7 +36,7 @@
                 left: 0px;
                 right: 0px;
                 height: 50px;
-                top: 710px;
+                top: 690px;
                 /** Extra personal styles **/
                 background-color: #ffffff;
                 color: rgb(0, 0, 0);
@@ -158,6 +158,22 @@
 
         <footer>
             <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+              <tr>
+                <td class="align-left vera" width="12%">
+                  Ekspedisi Terusan
+                </td>
+                <td class="align-left"  style=" border: 1px solid;">
+                  {{$data->ekspedisi_terusan}}
+              </td>
+              </tr>
+              <tr>
+                <td class="align-left vera" width="12%">
+                  Dimensi
+                </td>
+                <td class="align-left"  style=" border: 1px solid;">
+                  {{$data->dimensi}}
+              </td>
+              </tr>
                 <tr>
                   <td class="align-left vera" width="12%">
                     Keterangan
