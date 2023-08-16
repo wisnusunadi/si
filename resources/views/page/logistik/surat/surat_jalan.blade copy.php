@@ -1,28 +1,23 @@
 <html>
     <head>
         <style>
-
             /** Define the margins of your page **/
             @page {
                 margin: 100px 25px;
-                /* page-break-inside: avoid !important; */
             }
-
 
             main {
-                position: relative;
-                top: 190px;
+                position: absolute;
+                top: 150px;
                 width: 100%;
-                padding-bottom: 300px;
             }
-
             header {
                 position: fixed;
                 top: -60px;
                 left: 0px;
                 right: 0px;
-                height: 250px;
-                margin-bottom: 100px;
+                height: 220px;
+
                 /** Extra personal styles **/
              background-color: #ffffff;
                 color: rgb(0, 0, 0);
@@ -30,13 +25,12 @@
             }
 
             footer {
-
                 position: fixed;
                 bottom: -10px;
                 left: 0px;
                 right: 0px;
                 height: 50px;
-                top: 710px;
+                top: 700px;
                 /** Extra personal styles **/
                 background-color: #ffffff;
                 color: rgb(0, 0, 0);
@@ -101,10 +95,7 @@
                              <td></td>
                               <td style=" border: 1px solid;">{{$data->alamat_kirim}}</td>
                           </tr>
-                          <tr>
-                            <td></td>
-                            <td style=" border: 1px solid;"><b>UP : </b>{{$data->up}}</td>
-                          </tr>
+
                       </table>
                   </td>
                   <td width="1%"></td>
@@ -131,23 +122,19 @@
                               </td>
                           </tr>
                           <tr>
-                              <td style=" border: 1px solid;" class="vera " colspan="2">
+                              <td style=" border: 1px solid;" class="vera ">
                                   <u>Ekspedisi</u> <br>
                                   {{$data->ekspedisi}}
+                              </td>
+                              <td style=" border: 1px solid;" class="vera">
+                                  <u>Tgl Pengiriman</u><br>
+                                  {{$data->tgl_kirim}}
                               </td>
                           </tr>
                           <tr>
                               <td style=" border: 1px solid;" class="vera " colspan="2">
-                                  <u>Keterangan Pengiriman</u> <br>
-                                  @switch($data->ket)
-                                      @case('bayar_tujuan')
-                                          <span>BAYAR TUJUAN <span>
-                                          @break
-                                        @case('bayar_sinko')
-                                            <span>BAYAR SINKO </span>
-                                      @default
-                                      <span>NON BAYAR<span>
-                                  @endswitch
+                                  <u>Up</u> <br>
+                                  {{$data->up}}
                               </td>
 
                           </tr>
@@ -163,21 +150,18 @@
                     Keterangan
                   </td>
                   <td class="align-left"  style=" border: 1px solid;">
-                    {{$data->paket}}<br> {{$data->ket}}
-                </td>
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type
+                  </td>
                 </tr>
             </table>
             <br>
             <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                 <tr>
                   <td class="align-center">
-                    Diterima Oleh,
+                    Dibuat Oleh,
                   </td>
                   <td class="align-center">
-                    Dibawa Oleh,
-                  </td>
-                  <td class="align-center">
-                  Dibuat Oleh,
+                Diterima Oleh,
                   </td>
                 </tr>
                 <td class="align-right" colspan="2" >
@@ -187,26 +171,22 @@
 
                 <tr>
                   <td class="align-center">
-                    <hr style="width:30%">
-
+                    <hr style="width:50%">
+                    Penjualan
                   </td>
                   <td class="align-center">
-                    <hr style="width:40%">
-                    {{-- KURIR --}}
-                  </td>
-                  <td class="align-center">
-                    <hr style="width:30%">
-                    {{-- LOGISTIK --}}
+                    <hr style="width:50%">
+                    Logistik
                   </td>
                 </tr>
-                <td class="align-right" colspan="3" >
+                <td class="align-right" colspan="2" >
                     <br>
 
 
                  <tr>
                 <tr>
-                  <td class="align-right" colspan="3">
-                <i>No Dokumen : SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
+                  <td class="align-right" colspan="2">
+                <i>No Dokumen : SPA-FR/01/asas/asas/asas/2023</i>
                   </td>
 
                 </tr>
@@ -216,63 +196,53 @@
         <!-- Wrap the content of your PDF inside a main tag -->
         <main>
             {{-- Hal -1 --}}
-            {{-- @for ($i = 1; $i <= $hal; $i++) --}}
-                <table id="tabel" class="table table-hover styled-table table-striped items" border="1" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+
+                <table id="tabel" class="table table-hover styled-table table-striped" border="1" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                     <thead>
                        <tr>
-                         <td class="vera" width="8%">
+                         <td class="align-center" width="8%">
                            <b>No</b>
                          </td>
-                         <td class="vera" >
+                         <td class="align-center" >
                            <b>Kode Barang</b>
                          </td>
-                         <td class="vera">
+                         <td class="align-center">
                            <b>Nama Barang</b>
                          </td>
-                         <td class="vera"  width="8%">
+                         <td class="align-center"  width="8%">
                            <b>Jumlah</b>
                          </td>
-                         <td class="vera"  width="8%">
+                         <td class="align-center"  width="8%">
                            <b>Satuan</b>
+                         </td>
+                         <td class="align-center" >
+                           <b>No Seri</b>
                          </td>
                        </tr>
                     </thead>
-                    <tbody style="page-break-after: avoid !important;">
-
-
-                        @foreach ( $data->item as $key => $item)
+                    <tbody>
+                        @foreach ( $data->item as $item )
                         <tr>
-                            <td class="vera">
-                                {{ $key+1 }}
+                            <td class="align-center">
+                            {{$item->no}}
                             </td>
-                            <td class="vera">
+                            <td class="align-center">
                                 {{$item->kode}}
                             </td>
-                            <td class="vera">
+                            <td class="align-center">
                                 {{$item->nama}}
                             </td>
-                            <td class="vera">
-                                @if(isset($item->noseri))
-                                {{$item->jumlah_noseri}}.00
-                                @else
+                            <td class="align-center">
                                 {{$item->jumlah}}.00
-                                @endif
                             </td>
-                              <td class="vera">
-                                {{ $item->satuan}}
-                              </td>
-                          </tr>
-                          @if(isset($item->noseri)){
-                          <tr>
-                            <td class="vera" colspan="5">
-                                <b>No Seri</b> : <br>
-                              @php echo implode(', ',$item->noseri) @endphp
+                            <td class="align-center">
+                                {{$item->satuan}}
+                            </td>
+                            <td class="align-center">
+                             @php echo implode(', ',$item->noseri) @endphp
 
-                             </td>
+                            </td>
                           </tr>
-                          }
-                          @endif
-
 
                           @endforeach
 
@@ -288,14 +258,6 @@
                           </tr> --}}
                     </tbody>
                 </table>
-                {{-- <div style="page-break-after: always;"></div> --}}
-                {{-- @if($hal == $i)
-                <div style="page-break-after: never;"> </div>
-                @else
-                <div style="page-break-after: always;"></div>
-                @endif
-                @endfor --}}
-
                 {{-- <div style="page-break-after: always;"></div> --}}
             {{-- Hal -2 --}}
 

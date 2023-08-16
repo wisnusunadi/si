@@ -305,6 +305,7 @@ class ProduksiController extends Controller
                     'p.so',
                     'p.no_po',
                     'p.no_do',
+                    'p.tgl_po',
                     'p.tgl_do',
                     'p.log_id',
                     DB::raw('count(dpp.gudang_barang_jadi_id)'),
@@ -380,7 +381,7 @@ class ProduksiController extends Controller
 
                     $return .='        <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="'.$jual.'"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>';
 
-                    if ($data->no_do != NULL && $data->tgl_do != NULL){
+                    if ($data->no_po != NULL && $data->tgl_po != NULL){
                      $return .=' <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
                         <i class="fas fa-print"></i>
                         SPPB
@@ -407,6 +408,7 @@ class ProduksiController extends Controller
                     'p.so',
                     'p.no_po',
                     'p.no_do',
+                    'p.tgl_po',
                     'p.tgl_do',
                     'p.log_id',
                     DB::raw('count(dpp.gudang_barang_jadi_id)'),
@@ -485,7 +487,7 @@ class ProduksiController extends Controller
                     $return .='        <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="'.$jual.'"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
                                     <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="'.$jual.'" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>';
 
-                    if ($data->no_do != NULL && $data->tgl_do != NULL){
+                    if ($data->no_po != NULL && $data->tgl_po != NULL){
                      $return .=' <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
                         <i class="fas fa-print"></i>
                         SPPB

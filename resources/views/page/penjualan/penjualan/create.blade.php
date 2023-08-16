@@ -720,7 +720,7 @@
                                                                             class="col-form-label col-lg-5 col-md-12 labelket">Satuan
                                                                             Kerja</label>
                                                                         <div class="col-lg-6 col-md-12">
-                                                                            <input type="text" 
+                                                                            <input type="text"
                                                                                 class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror"
                                                                                 name="satuan_kerja" id="satuan_kerja" />
                                                                             <div class="invalid-feedback"
@@ -839,7 +839,7 @@
                                                                             <select name="ekspedisi" id="ekspedisi" class="form-control ekspedisi"></select>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group row">
+                                                                    <div class="form-group row d-none">
                                                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
                                                                         <div class="col-lg-6 col-md-12 col-form-label">
                                                                             <textarea class="form-control col-form-label" name="keterangan_pengiriman"></textarea>
@@ -1034,7 +1034,7 @@
                                                                         <select name="ekspedisi" id="ekspedisi_nonakn" class="form-control ekspedisi_nonakn"></select>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group row">
+                                                                <div class="form-group row d-none">
                                                                     <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
                                                                     <div class="col-lg-6 col-md-12 col-form-label">
                                                                         <textarea class="form-control col-form-label" name="keterangan_pengiriman"></textarea>

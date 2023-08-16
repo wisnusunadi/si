@@ -2841,7 +2841,7 @@ class PenjualanController extends Controller
 
 
 
-                if($data->status == 'sepakat' && ($data->Pesanan->no_do != NULL && $data->Pesanan->tgl_do != NULL)) {
+                if($data->status == 'sepakat' && ($data->Pesanan->no_po != NULL && $data->Pesanan->tgl_po != NULL)) {
                         $return .= '
                         <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
                             <button class="dropdown-item" type="button" >
@@ -3241,7 +3241,7 @@ class PenjualanController extends Controller
                                 ';
                              }
                             }
-                            if ($data->Pesanan->no_do != NULL && $data->Pesanan->tgl_do != NULL) {
+                            if ($data->Pesanan->no_po != NULL && $data->Pesanan->tgl_po != NULL) {
                             $return .= '
                             <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
                                 <button class="dropdown-item" type="button" >
@@ -3604,7 +3604,7 @@ class PenjualanController extends Controller
                                     ';
                                 }
                             }
-                            if ($data->Pesanan->no_do != NULL && $data->Pesanan->tgl_do != NULL) {
+                            if ($data->Pesanan->no_po != NULL && $data->Pesanan->tgl_po != NULL) {
                                 $return .= '
                                 <a target="_blank" href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->Pesanan->id]) . '">
                                     <button class="dropdown-item" type="button" >
@@ -7492,35 +7492,32 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             $pesanan_part = array();
         }
 
-
-
             if(count($pesanan_prd) > 0 && count($pesanan_part) <= 0){
-                $data =  array_chunk($pesanan_prd, 15);
+                $data =  array_chunk($pesanan_prd, 9);
             }else if (count($pesanan_part) > 0  && count($pesanan_prd) <= 0) {
-                $data = array_chunk($pesanan_part, 15);
+                $data = array_chunk($pesanan_part, 9);
             }else if (count($pesanan_prd) > 0 && count($pesanan_part) > 0){
                 $merge = array_merge($pesanan_prd, $pesanan_part);
-                $data = array_chunk($merge, 15);
+                $data = array_chunk($merge, 9);
             }
-
 
             if ($pesanan->Ekatalog){
                 $cs = $pesanan->Ekatalog->Customer->nama;
                 $alamat_cs = $pesanan->Ekatalog->Customer->alamat;
-                $ket_paket =$pesanan->Ekatalog->ket;
+                $ket_paket =$pesanan->Ekatalog->instansi;
                 $no_paket = $pesanan->Ekatalog->no_paket;
 
             }elseif($pesanan->Spa){
                 $cs = $pesanan->Spa->Customer->nama;
                 $alamat_cs = $pesanan->Spa->Customer->alamat;
-                $ket_paket =$pesanan->Spa->ket;
-                $no_paket = '-';
+                $ket_paket = '';
+                $no_paket = 'OFFLINE';
 
             }elseif($pesanan->Spb){
                 $cs = $pesanan->Spb->Customer->nama;
                 $alamat_cs = $pesanan->Spb->Customer->alamat;
-                $ket_paket =$pesanan->Spb->ket;
-                $no_paket = '-';
+                $ket_paket =$pesanan->ket_kirim;
+                $no_paket = '';
             }
 
 

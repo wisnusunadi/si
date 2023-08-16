@@ -29,6 +29,7 @@
               width: 100%;
               font-family: sans-serif;
               font-size: 16px;
+              padding-top: 30px;
 
           }
           header {
@@ -39,7 +40,6 @@
               height: 220px;
               font-family: sans-serif;
               font-size: 14px;
-
               /** Extra personal styles **/
             background-color: #ffffff;
               color: rgb(0, 0, 0);
@@ -278,11 +278,11 @@
                 <tr>
                   <td class="align-center">
                     <hr style="width:50%">
-                    Penjualan
+                    {{-- Penjualan --}}
                   </td>
                   <td class="align-center">
                     <hr style="width:50%">
-                    Logistik
+                    {{-- Logistik --}}
                   </td>
                 </tr>
                 <td class="align-right" colspan="2" >

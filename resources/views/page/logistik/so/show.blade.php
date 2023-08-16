@@ -126,7 +126,7 @@
                                                                         {{ $i }}
                                                                     </label>
                                                                 </div>
-                                                                @endfor                                                                
+                                                                @endfor
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="jenis_penjualan">Pengiriman</label>
@@ -209,7 +209,7 @@
                                                                         {{ $i }}
                                                                     </label>
                                                                 </div>
-                                                                @endfor                                                                
+                                                                @endfor
                                                             </div>
                                                             <div class="form-group">
                                                                 <span class="float-right">
@@ -556,54 +556,231 @@
             $('#filter').submit(function() {
                 let pengiriman = $('input[name="pengiriman"]:checked').val() ?? 'semua'
                 let years = $('input[name="tahun"]:checked').val() ?? yearsNow
-            
+
                 $('#showtable').DataTable().ajax.url('/logistik/so/data/' + pengiriman + '/' + years).load();
                 return false;
-                
+
             });
 
-            $(document).on('click', '.cetaksj', function(event) {
-                event.preventDefault();
-                let data_x = $(this).data('x');
-                let data_y = $(this).data('y');
+            const ekspedisi = (provinsi) => {
+                $('#ekspedisi_id').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + provinsi,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
 
-                // open modal
-                $('#cetaksjmodal').modal('show');
-
-                $('#cetaksjmodal').on('shown.bs.modal', function() {
-                    // fit to 100% width
-                    $('.tableproduk').DataTable({
+            const sjlama = (sjlama) => {
+                $('#sj-lama').DataTable({
                     destroy: true,
                     processing: true,
                     serverSide: false,
                     autowidth: true,
                     responsive: true,
-                    ajax: {
-                        'url': '/api/logistik/so/data/detail/belum_kirim/' + data_y + '/' + data_x,
-                        'dataType': 'json',
-                        'type': 'POST',
-                        'headers': {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
+                    data: sjlama,
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                     },
+                    columns: [
+                        {
+                            data: null,
+                            render: function(data, type, row, meta) {
+                                return meta.row + 1;
+                            }
+                        },
+                        {
+                            data: 'sj'
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, row, meta) {
+                                return '<a target="_blank" href="/logistik/pengiriman/prints/' + data.id + '" class="btn btn-sm btn-primary"><i class="fa fa-print"></i></a>'
+                            }
+                        }
+                    ]
+                })
+            }
+
+            const header = (header) => {
+                if(header.jenis_pesanan == 'ekatalog') {
+                    $('.form-provinsi').removeClass('hide')
+
+                    $('.dataprovinsiekat').val(header.provinsi)
+                    if(header.provinsi.instansi){
+                        // checked instansi
+                        $('#provinsi2').prop('checked', true)
+                        let selectElement = $('.provinsi_pengiriman');
+                        // select instansi
+                        let option = $('<option>', {
+                            value: header.provinsi.instansi.id,
+                            text: header.provinsi.instansi.nama
+                        })
+                        // reset select
+                        selectElement.empty()
+                        selectElement.append(option)
+                        selectElement.val(header.provinsi.instansi.id)
+                        $('input[name="provinsi_id"]').val(header.provinsi.instansi.id)
+                        ekspedisi(header.provinsi.instansi.id)
+                    } else {
+                        $('#provinsi1').prop('checked', true)
+                        let selectElement = $('.provinsi_pengiriman');
+                        // select instansi
+                        let option = $('<option>', {
+                            value: header.provinsi.dsb.id,
+                            text: header.provinsi.dsb.nama
+                        })
+                        selectElement.empty()
+                        selectElement.append(option)
+                        selectElement.val(header.provinsi.dsb.id)
+                        $('input[name="provinsi_id"]').val(header.provinsi.dsb.id)
+                        ekspedisi(header.provinsi.dsb.id)
+                    }
+
+                    let id = $('.provinsi_pengiriman').val()
+
+                    $('.ekspedisi_id').select2({
+                        ajax: {
+                        minimumResultsForSearch: 20,
+                        placeholder: "Pilih Ekspedisi",
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + id,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+                }else{
+                    // add hidden
+                    $('.form-provinsi').addClass('hide')
+
+                    $('.provinsi_pengiriman').val(header.provinsi.id)
+                    $('.provinsi_pengiriman').text(header.provinsi.nama)
+                    $('input[name="provinsi_id"]').val(header.provinsi.id)
+                    ekspedisi(header.provinsi.id)
+                }
+
+                if(header.ekspedisi) {
+                    $('#pengiriman1').prop('checked', true)
+                    $('#ekspedisi').removeClass('hide')
+                    $('#nonekspedisi').addClass('hide')
+
+                    let selectElement = $('.ekspedisi_id');
+                    let option = $('<option>', {
+                        value: header.ekspedisi.id,
+                        text: header.ekspedisi.nama
+                    })
+                    selectElement.empty()
+                    selectElement.append(option)
+                    selectElement.val(header.ekspedisi.id)
+                } else {
+                    $('#pengiriman2').prop('checked', true)
+                    $('#ekspedisi').addClass('hide')
+                    $('#nonekspedisi').removeClass('hide')
+                    let selectElement = $('.ekspedisi_id');
+                    selectElement.empty()
+                }
+
+                if(header.perusahaan_pengiriman && header.alamat_pengiriman) {
+                    // pilihan pengiriman == penjualan
+                    $('#pilihan_pengiriman0').prop('checked', true)
+                    $('#perusahaan_pengiriman').attr('readonly', true);
+                    $('#alamat_pengiriman').attr('readonly', true);
+                    $('input[name="perusahaan_pengiriman"]').val(header.perusahaan_pengiriman)
+                    $('input[name="alamat_pengiriman"]').val(header.alamat_pengiriman)
+                }else{
+                    $('#pilihan_pengiriman1').prop('checked', true)
+                    $('input[name="perusahaan_pengiriman"]').val('')
+                    $('input[name="alamat_pengiriman"]').val('')
+                    $('#perusahaan_pengiriman').attr('readonly', false);
+                    $('#alamat_pengiriman').attr('readonly', false);
+                }
+
+                if(header.kemasan == 'peti') {
+                    $('input[name="kemasan"]').val('peti').prop('checked', true)
+                } else {
+                    $('input[name="kemasan"]').val('nonpeti').prop('checked', true)
+                }
+
+                $('input[name="pesanan_id"]').val(header.pesanan_id)
+                $('input[name="so"]').val(header.so)
+                $('input[name="no_po"]').val(header.no_po)
+                $('input[name="tgl_po"]').val(header.tgl_po)
+                $('input[name="nama_customer"]').val(header.customer.nama)
+                $('input[name="alamat_customer"]').val(header.customer.alamat)
+
+                $.ajax({
+                    'url': '/api/logistik/so/data/sj_draft/' + header.pesanan_id,
+                    'dataType': 'json',
+                    success: function (data) {
+                        sjlama(data.data)
+                    }
+                });
+
+            }
+
+            const tableproduk = (produk) => {
+                $('.tableproduk').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: false,
+                    autowidth: true,
+                    responsive: true,
+                    data: produk,
                     language: {
                         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                     },
                     columns: [{
-                        data: 'checkbox',
-                        className: 'nowrap-text align-center',
+                        data: null,
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            // checkbox
+                            return '<input type="checkbox" class="check_detail" value="' + data.id + '" />';
+                        }
                     }, {
-                        data: 'DT_RowIndex',
-                        className: 'align-center nowrap-text',
-                        orderable: false,
-                        searchable: false
-                    }, {
-                        data: 'nama_produk',
+                        data: 'nama',
                     },
                     {
-                        data: 'jumlah_noseri',
+                        data: 'jumlah',
+                    },
+                    {
+                        data: null,
                         render: function(data, type, row, meta) {
                             var rowIndex = meta.row;
                             return '<input type="text" class="form-control form-control-sm jumlah'+rowIndex+'" name="jumlah[' + rowIndex + ']" id="jumlah[' + rowIndex + ']" value="0" disabled/>';
@@ -619,16 +796,68 @@
                     {
                         // hidden text
                         data: 'noseri_selected',
+                        className: 'd-none',
                         render: function(data, type, row, meta) {
                             var rowIndex = meta.row;
-                            
-                            return '<input type="hidden" class="keterangannoseri'+ rowIndex+'" name="keterangan[' + rowIndex + ']" id="keterangan[' + rowIndex + ']" placeholder="Keterangan" />';
+
+                            return '<div class="keterangannoseri'+ rowIndex+'" name="keterangan[' + rowIndex + ']" id="keterangan[' + rowIndex + ']"></div>';
                         }
                     },
                     ]
                 })
+            }
+
+            const tablepart = (part) => {
+                $('.tablepart').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: false,
+                    autowidth: true,
+                    responsive: true,
+                    data: part,
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            // checkbox
+                            return '<input type="checkbox" class="check_detail_part" value="' + data.id + '" />';
+                        }
+                    }, {
+                        data: 'nama',
+                    },
+                    {
+                        data: 'jumlah',
+                    },
+                    ]
                 })
+            }
+
+            $(document).on('click', '.cetaksj', function(event) {
+                event.preventDefault();
+                let data_x = $(this).data('x');
+                let data_y = $(this).data('y');
+
+                // open modal
+                $('#cetaksjmodal').modal('show');
+                $('#cetaksjmodal').data('data_y', data_y);
             });
+            $('#cetaksjmodal').on('shown.bs.modal', function() {
+                $(this).find('form').trigger('reset');
+                let data_y = $(this).data('data_y');
+                $.ajax({
+                    'url': '/api/logistik/so/data/detail/item/' + data_y,
+                    'dataType': 'json',
+                    success: function (data) {
+                        header(data.header)
+                        tableproduk(data.item.produk)
+                        tablepart(data.item.part)
+                    }
+                });
+            })
 
         })
     </script>

@@ -940,7 +940,7 @@
                                                                             </select>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group row">
+                                                                    <div class="form-group row d-none">
                                                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
                                                                         <div class="col-lg-6 col-md-12 col-form-label">
                                                                             <textarea class="form-control col-form-label" name="keterangan_pengiriman">{{ $e->pesanan->ket_kirim }}</textarea>
