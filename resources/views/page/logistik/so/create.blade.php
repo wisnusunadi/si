@@ -1,4 +1,4 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 <form action="/api/logistik/so/create/{{ $jenis }}" method="POST"
     id="form-logistik-create">
     @method('PUT')
@@ -10,7 +10,7 @@
                 {{-- <div class="d-flex justify-content-center"> --}}
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
-                        <div class="card">
+                        {{-- <div class="card">
                             <div class="card-body">
                               <h5>Data PIC</h5>
                               <div class="form-group row">
@@ -22,12 +22,11 @@
                               <div class="form-group row">
                                 <label class="col-form-label col-lg-5 col-md-12 labelket" for="no_invoice">Nomor Telepon PIC</label>
                                 <div class="col-lg-6 col-md-12">
-                                  {{-- input with number only --}}
                                   <input type="text" class="form-control" name="telp_pic" id="" onkeypress="return isNumberKey(event)">
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </div> --}}
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-horizontal">
@@ -145,7 +144,7 @@
                                         {{-- </div> --}}
                                         {{-- </div> --}}
                                     </div>
-                                    <div class="form-group row">
+                                    {{-- <div class="form-group row">
                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
                                           <div class="col-lg-6 col-md-12 col-form-label">
                                             <div class="form-check form-check-inline">
@@ -188,7 +187,7 @@
                                             <option value="non_bayar">NON BAYAR</option>
                                           </select>
                                       </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
