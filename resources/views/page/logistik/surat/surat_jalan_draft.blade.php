@@ -216,8 +216,7 @@
         <!-- Wrap the content of your PDF inside a main tag -->
         <main>
             {{-- Hal -1 --}}
-            {{-- @for ($i = 1; $i <= $hal; $i++) --}}
-                <table id="tabel" class="table table-hover styled-table table-striped items" border="1" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+                <table id="tabel" class="table table-hover styled-table table-striped items" border="1" style="table-layout: fixed; width: 100%; border-collapse: collapse;   page-break-inside: avoid !important;">
                     <thead>
                        <tr>
                          <td class="vera align-center" width="8%">
@@ -267,7 +266,6 @@
                             <td class="vera" colspan="5">
                                 <b>No Seri</b> : <br>
                               @php echo implode(', ',$item->noseri) @endphp
-
                              </td>
                           </tr>
                           }
