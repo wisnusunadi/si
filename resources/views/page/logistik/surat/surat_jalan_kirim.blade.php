@@ -215,7 +215,7 @@
                               <td style=" border: 1px solid;" class="vera">
                                   <u>Tgl PO</u><br>
                                   @if (isset($data->DetailLogistik[0]))
-                                  {{ \Carbon\Carbon::parse($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po)->format('d M Y')}}
+                                   {{ \Carbon\Carbon::parse($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po)->format('d M Y')}}
                                   @else
                                     {{ \Carbon\Carbon::parse($data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->tgl_po)->format('d M Y')}}
                                      @endif
