@@ -287,14 +287,19 @@
                           </tr> --}}
                     </tbody>
                 </table>
-                <div class="align-center" style="margin: 10px 0px;">
-                  Dimensi
+                <div style="margin: 10px 0px;">
+                  <b>Dimensi</b>
                 <br>
                 {{ $data->dimensi}}
-                </div>
-                Ekspedisi Terusan : <br>
+                </div
+                @if($data->dimensi == "")
+                  style="margin: 10px 0px;"
+                @endif
+                >
+                <b>Ekspedisi Terusan : </b><br>
                 {{ $data->ekspedisi_terusan}}
                 <br>
+                </div>
 
 
                 {{-- <div style="page-break-after: always;"></div> --}}
