@@ -126,8 +126,9 @@ class LogistikController extends Controller
         //     'noseri' => $chunkedGroups
         // );
         //dd($data);
+        // return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log, 'hal' => 2]);
         $customPaper = array(0,0,605.44,788.031);
-        $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft',['data' => $log,'hal' => 2])->setPaper($customPaper);
+        $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft_spb',['data' => $log,'hal' => 2])->setPaper($customPaper);
         return $pdf->stream('');
 
 //         foreach ($log->item as $key => $item) {
