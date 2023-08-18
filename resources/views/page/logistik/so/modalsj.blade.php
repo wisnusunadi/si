@@ -493,6 +493,14 @@
           delete dataform.sj_lama;
         }
 
+        if($('textarea[name="ekspedisi_terusan"]').val() == ''){
+          delete dataform.ekspedisi_terusan;
+        }
+
+        if($('textarea[name="dimensi"]').val() == ''){
+          delete dataform.dimensi;
+        }
+
         if($('input[name="nama_pic"]').val() == ''){
           delete dataform.nama_pic;
         }
@@ -505,6 +513,8 @@
         let cek = Object.values(dataform).filter(function (el) {
           return el != '';
         });
+
+        console.log(dataform)
 
         if (cek.length != Object.keys(dataform).length) {
           Swal.fire({

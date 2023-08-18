@@ -287,19 +287,23 @@
                           </tr> --}}
                     </tbody>
                 </table>
-                <div style="margin: 10px 0px;">
-                  <b>Dimensi</b>
-                <br>
-                {{ $data->dimensi}}
-                </div
-                @if($data->dimensi == "")
-                  style="margin: 10px 0px;"
+                @if($data->dimensi != "")
+                  <div style="margin: 10px 0px;">
+                    <b>Dimensi</b>
+                  <br>
+                  {{ $data->dimensi}}
                 @endif
-                >
-                <b>Ekspedisi Terusan : </b><br>
-                {{ $data->ekspedisi_terusan}}
-                <br>
-                </div>
+                @if($data->ekspedisi_terusan != "")
+                  </div
+                  @if($data->dimensi == "")
+                    style="margin: 10px 0px;"
+                  @endif
+                  >
+                  <b>Ekspedisi Terusan : </b><br>
+                  {{ $data->ekspedisi_terusan}}
+                  <br>
+                  </div>
+                @endif
 
 
                 {{-- <div style="page-break-after: always;"></div> --}}
