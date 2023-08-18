@@ -11,6 +11,9 @@
         header>table{
             width: 100%;
         }
+        .table-header-td {
+            width: 50%;
+        }
         .table{
             margin-top: 20px;
             width: 100%;
@@ -54,6 +57,10 @@
             }
         }
 
+        body {
+            font-size: 14px;
+        }
+
     </style>
 </head>
 <body>
@@ -70,16 +77,16 @@
         </table>
         <table>
             <tr>
+                <td>No SJ: {{$data->nosj}}</td>
+                <td></td>
+            </tr>
+            <tr>
                 <td>PO : {{$data->no_po}}</td>
-                <td class="text-right"><b>{{ $data->customer}}</b></td>    
+                <td class="text-right table-header-td"><b>{{ $data->customer}}</b></td>    
             </tr>
             <tr>
                 <td>DO : do-xxx</td>
-                <td class="text-right"><b>{{ $data->alamat_customer}}</b></td>
-            </tr>
-            <tr>
-                <td>Nopol :</td>
-                <td class="text-right"><b>Keterangan: Lorem, ipsum dolor</b></td>
+                <td class="text-right table-header-td"><b>{{ $data->alamat_customer}}</b></td>
             </tr>
         </table>
     </header>
