@@ -43,7 +43,7 @@
                       <input type="text" name="tgl_po" id="">
                       <input type="text" name="nama_customer" id="">
                       <input type="text" name="alamat_customer" id="">
-                      <input type="text" name="provinsi_id" id="">
+                      <input type="text" name="provinsi_id" id="provinsi_id_top">
                     </div>
                     <div class="form-group row">
                       <label class="col-form-label col-lg-5 col-md-12 labelket" for="no_invoice">Nama PIC</label>
@@ -392,10 +392,11 @@
 
     $('input[name="pengiriman_surat_jalan"]').on('change', function () {
       let val = $(this).val();
+      let provinsi = $('#provinsi_id_top').val();
       if (val == 'ekspedisi') {
         $('#ekspedisi').removeClass('hide');
         $('#nonekspedisi').addClass('hide');
-        ekspedisi($('#provinsi_id').val());
+        ekspedisi(provinsi);
       } else {
         $('#ekspedisi').addClass('hide');
         $('#nonekspedisi').removeClass('hide');
