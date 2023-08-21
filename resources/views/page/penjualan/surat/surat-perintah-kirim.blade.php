@@ -28,7 +28,7 @@
               top: 160px;
               width: 100%;
               font-family: sans-serif;
-              font-size: 16px;
+              font-size: 14px;
               padding-top: 30px;
 
           }
@@ -219,7 +219,7 @@
                         <td class="vera align-center">
                             {{$item['kode']}}
                         </td>
-                        <td class="vera align-center">
+                        <td class="vera">
                             {{$item['nama']}}
                         </td>
                         <td class="vera align-center">
@@ -246,16 +246,15 @@
                   <td class="align-left" >
                     <b>Keterangan :</b> <br>
                     {{$data['no_paket']}}
-                    <br>
                     @if ($data['ket_paket'] != null)
-                    {{$data['ket_paket']}}
+                     - {{$data['ket_paket']}}
                     @else
                     <br>
                     @endif
                   </td>
                 </tr>
             </table>
-            <br>
+            <hr>
             <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="">
                 <tr>
                   <td class="align-center">
