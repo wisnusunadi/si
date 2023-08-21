@@ -246,7 +246,11 @@
                     </thead>
                     <tbody style="page-break-after: avoid !important;">
                         @foreach ( $data->item as $key => $item)
-                        <tr>
+                        <tr
+                        @if(!isset($item->noseri))
+                        style="border-bottom: 1px solid black"
+                        @endif
+                        >
                             <td class="vera align-center">
                                 {{ $key+1 }}
                             </td>
@@ -272,7 +276,7 @@
                               </td>
                           </tr>
                           @if(isset($item->noseri)){
-                          <tr>
+                          <tr style="border-bottom: 1px solid black">
                             <td class="vera" colspan="5">
                                 <b>No Seri</b> : <br>
                               @php echo implode(', ',$item->noseri) @endphp
@@ -280,7 +284,7 @@
                           </tr>
                           }
                           @endif
-
+                          
 
                           @endforeach
 
