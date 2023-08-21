@@ -217,10 +217,10 @@
                         <td class="vera align-center">
                         {{$item['no']}}
                         </td>
-                        <td class="vera align-center">
+                        <td class="vera">
                             {{$item['kode']}}
                         </td>
-                        <td class="vera align-center">
+                        <td class="vera">
                             {{$item['nama']}}
                         </td>
                         <td class="vera align-center">
