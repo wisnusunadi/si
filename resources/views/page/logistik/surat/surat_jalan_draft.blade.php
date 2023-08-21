@@ -4,10 +4,13 @@
 
             /** Define the margins of your page **/
             @page {
-                margin: 100px 25px;
+                margin: 100px 30px 0px 13px;
                 /* page-break-inside: avoid !important; */
             }
 
+            body {
+              font-family: sans-serif;
+            }
 
             main {
                 position: relative;
@@ -19,7 +22,7 @@
 
             header {
                 position: fixed;
-                top: -90px;
+                top: -80px;
                 left: 0px;
                 right: 0px;
                 height: 250px;
@@ -80,7 +83,7 @@
     <body>
         <!-- Define header and footer blocks before your content -->
         <header>
-            <table>
+            <table style="font-size: 18px;">
                 <tr>
                   <td>
                     <b>SURAT JALAN</b>
@@ -90,13 +93,14 @@
                   </td>
                 </tr>
             </table>
+            <hr>
             <table>
                 <tr>
                   <td class="vera" >
                       <table>
                           <tr>
                               <td class="vera"  width="20%">Pelanggan :</td>
-                              <td><b>{{$data->customer}}</b></td>
+                              <td><b><u>{{$data->customer}}</u></b></td>
                           </tr>
                           <tr>
                               <td></td>
@@ -226,7 +230,7 @@
                          <td class="vera align-center" width="8%" style="border-bottom: 1px solid black">
                            <b>No</b>
                          </td>
-                         <td class="vera align-center" width="20%" style="border-bottom: 1px solid black">
+                         <td class="vera align-center" width="16%" style="border-bottom: 1px solid black">
                            <b>Kode Barang</b>
                          </td>
                          <td class="vera align-center" style="border-bottom: 1px solid black">
