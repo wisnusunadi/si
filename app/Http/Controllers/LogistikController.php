@@ -4962,7 +4962,7 @@ class LogistikController extends Controller
             isset($request->dataform['nama_pic']) ? $request->dataform['nama_pic'] : ""
             ) . (
                 isset($request->dataform['telp_pic']) ? (
-                    isset($request->dataform['nama_pic']) ? " - " : ""
+                    isset($request->dataform['nama_pic']) ? " - TELP. " : "TELP. "
                 ) . $request->dataform['telp_pic'] : ""
             ),
            "ket" => $ket,
