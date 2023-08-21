@@ -4,29 +4,34 @@
 
             /** Define the margins of your page **/
             @page {
-                margin: 100px 25px;
+                margin: 100px 30px 0px 13px;
                 /* page-break-inside: avoid !important; */
             }
 
+            body {
+              font-family: sans-serif;
+            }
 
             main {
                 position: relative;
-                top: 190px;
+                top: 140px;
                 width: 100%;
                 padding-bottom: 300px;
+                font-size: 14px;
             }
 
             header {
                 position: fixed;
-                top: -60px;
+                top: -80px;
                 left: 0px;
                 right: 0px;
                 height: 250px;
                 margin-bottom: 100px;
                 /** Extra personal styles **/
-             background-color: #ffffff;
+                background-color: #ffffff;
                 color: rgb(0, 0, 0);
                 line-height: 20px;
+                font-size: 14px;
             }
 
             footer {
@@ -42,9 +47,7 @@
                 color: rgb(0, 0, 0);
                 line-height: 20px;
             }
-
-
-            .vera {
+    .vera {
         vertical-align: top;
     }
 
@@ -62,14 +65,27 @@
     .page-break {
             page-break-after: always;
         }
+
+    .td-width-header {
+      width: 35%;
+    }
+
+    main>table{
+      page-break-inside: avoid !important;
+      border-top: 1px solid #000000;
+      border-bottom: 1px solid #000000
+    }
+    table{
+      table-layout: fixed; width: 100%; border-collapse: collapse; 
+    }
         </style>
     </head>
     <body>
         <!-- Define header and footer blocks before your content -->
         <header>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+            <table style="font-size: 18px;">
                 <tr>
-                  <td style="text-align: left;">
+                  <td>
                     <b>SURAT JALAN</b>
                   </td>
                   <th style="text-align: right;">
@@ -77,99 +93,92 @@
                   </td>
                 </tr>
             </table>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
-
+            <hr>
+            <table>
                 <tr>
-                  <td style="text-align: left;" class="vera" >
-                      <table border="0"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+                  <td class="vera" >
+                      <table>
                           <tr>
                               <td class="vera"  width="20%">Pelanggan :</td>
-                              <td style=" border: 1px solid;"><b>{{$data->customer}}</b></td>
+                              <td><b><u>{{$data->customer}}</u></b></td>
                           </tr>
                           <tr>
                               <td></td>
-                              <td style=" border: 1px solid;">{{$data->alamat_customer}}</td>
+                              <td>{{$data->alamat_customer}}</td>
                           </tr>
                       </table>
                       <br>
-                      <table border="0"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+                      <table>
                           <tr>
-                              <td class="vera"   width="20%">Alamat Pengiriman :</td>
-                              <td style=" border: 1px solid;"  class="vera" ><b>{{$data->tujuan_kirim}}</b></td>
+                              <td class="vera" width="20%">Pengiriman :</td>
+                              <td class="vera"><b><u>{{$data->tujuan_kirim}}</u></b></td>
                           </tr>
                           <tr>
                              <td></td>
-                              <td style=" border: 1px solid;">{{$data->alamat_kirim}}</td>
+                              <td>{{$data->alamat_kirim}}</td>
                           </tr>
                           <tr>
                             <td></td>
-                            <td style=" border: 1px solid;"><b>UP : </b>{{$data->up}}</td>
+                            <td><b>UP : </b>{{$data->up}}</td>
                           </tr>
                       </table>
                   </td>
                   <td width="1%"></td>
-                  <td style="text-align: left;" class="vera"  width="28%">
-                      <table border="1"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>No SJ</u> <br>
-                                  {{$data->nosj}}
-                              </td>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>Tgl SJ</u><br>
-                                  {{$data->tgl_sj}}
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>No PO</u> <br>
-                                  {{$data->no_po}}
-                              </td>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>Tgl PO</u><br>
-                                  {{$data->tgl_po}}
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera " colspan="2">
-                                  <u>Ekspedisi</u> <br>
-                                  {{$data->ekspedisi}}
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera " colspan="2">
-                                  <u>Keterangan Pengiriman</u> <br>
-                                  @switch($data->ket)
-                                      @case('bayar_tujuan')
-                                          <span>BAYAR TUJUAN <span>
-                                          @break
-                                        @case('bayar_sinko')
-                                            <span>BAYAR SINKO </span>
-                                      @default
-                                      <span>NON BAYAR<span>
-                                  @endswitch
-                              </td>
-
-                          </tr>
-                      </table>
+                  <td class="vera" width="35%">
+                    <table style="width: 100%">
+                      <tr>
+                        <td class="td-width-header">Nomor SJ</td>
+                        <td>: {{$data->nosj}}</td>
                       </tr>
-                      </table>
+                      <tr>
+                        <td class="td-width-header">Tanggal SJ</td>
+                        {{-- {{ \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') }} --}}
+                        <td>: {{ \Carbon\Carbon::parse($data->tgl_sj)->isoFormat('DD MMMM YYYY') }}</td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Nomor PO</td>
+                        <td>: {{$data->no_po}}</td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Keterangan Pengiriman</td>
+                        <td>:
+                          @switch($data->ket)
+                              @case('bayar_tujuan')
+                                  <span>BAYAR TUJUAN <span>
+                                  @break
+                                @case('bayar_sinko')
+                                    <span>BAYAR SINKO </span>
+                              @default
+                              <span>NON BAYAR<span>
+                          @endswitch
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Ekspedisi</td>
+                        <td>: {{$data->ekspedisi}}</td>
+                      </tr>
+                    </table>
+                    </tr>
+                  </table>
         </header>
 
         <footer>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+            <table>
               </tr>
                 <tr>
                   <td class="align-left vera" width="12%">
-                    Keterangan
+                    <b>Keterangan : </b><br>
+                    {{$data->paket}}
+                    @if ($data->ket != null)
+                     - {{$data->ket}}
+                    @else
+                    <br>
+                    @endif
                   </td>
-                  <td class="align-left"  style=" border: 1px solid;">
-                    {{$data->paket}}<br> {{$data->ket}}
-                </td>
                 </tr>
             </table>
-            <br>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+            <hr>
+            <table>
                 <tr>
                   <td class="align-center">
                     Diterima Oleh,
@@ -202,12 +211,10 @@
                 </tr>
                 <td class="align-right" colspan="3" >
                     <br>
-
-
                  <tr>
                 <tr>
-                  <td class="align-right" colspan="3">
-                <i>No Dokumen : SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
+                  <td class="align-right" colspan="3" style="font-size: 12px">
+                    <i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
                   </td>
 
                 </tr>
@@ -217,36 +224,38 @@
         <!-- Wrap the content of your PDF inside a main tag -->
         <main>
             {{-- Hal -1 --}}
-                <table id="tabel" class="table table-hover styled-table table-striped items" border="1" style="table-layout: fixed; width: 100%; border-collapse: collapse;   page-break-inside: avoid !important;">
+                <table>
                     <thead>
                        <tr>
-                         <td class="vera align-center" width="8%">
+                         <td class="vera align-center" width="8%" style="border-bottom: 1px solid black">
                            <b>No</b>
                          </td>
-                         <td class="vera align-center" width="20%">
+                         <td class="vera align-center" width="16%" style="border-bottom: 1px solid black">
                            <b>Kode Barang</b>
                          </td>
-                         <td class="vera align-center">
+                         <td class="vera align-center" style="border-bottom: 1px solid black">
                            <b>Nama Barang</b>
                          </td>
-                         <td class="vera"  width="8%">
+                         <td class="vera"  width="8%" style="border-bottom: 1px solid black">
                            <b>Jumlah</b>
                          </td>
-                         <td class="vera"  width="8%">
+                         <td class="vera"  width="8%" style="border-bottom: 1px solid black">
                            <b>Satuan</b>
                          </td>
                        </tr>
                     </thead>
                     <tbody style="page-break-after: avoid !important;">
-
-
                         @foreach ( $data->item as $key => $item)
                         <tr>
                             <td class="vera align-center">
                                 {{ $key+1 }}
                             </td>
-                            <td class="vera">
+                            <td class="vera align-center">
+                              @if($item->kode == null)
+                                -
+                              @else
                                 {{$item->kode}}
+                              @endif
                             </td>
                             <td class="vera">
                                 {{$item->nama}}

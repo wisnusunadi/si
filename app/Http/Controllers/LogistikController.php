@@ -126,7 +126,10 @@ class LogistikController extends Controller
         //     'noseri' => $chunkedGroups
         // );
         //dd($data);
+        // return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log]);
         $customPaper = array(0,0,605.44,788.031);
+        // spb
+        // $customPaper = array(0,0,605.44,394.031); 
         $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft',['data' => $log,'hal' => 2])->setPaper($customPaper);
         return $pdf->stream('');
 
@@ -4953,9 +4956,13 @@ class LogistikController extends Controller
            "so" => $request->dataform['so'],
            "tgl_po" => $request->dataform['tgl_po'],
            "ekspedisi" => $request->dataform['pengiriman_surat_jalan'] == 'ekspedisi' ? $request->dataform['ekspedisi']['nama'] : $request->dataform['nama_pengirim'],
-           "up" => (isset($request->dataform['nama_pic']) == true ? $request->dataform['nama_pic'] : "") .
-           '-' .
-           (isset($request->dataform['telp_pic']) == true ? $request->dataform['telp_pic'] : ""),
+           "up" => (
+            isset($request->dataform['nama_pic']) ? $request->dataform['nama_pic'] : ""
+            ) . (
+                isset($request->dataform['telp_pic']) ? (
+                    isset($request->dataform['nama_pic']) ? " - " : ""
+                ) . $request->dataform['telp_pic'] : ""
+            ),
            "ket" => $ket,
            "paket" => $paket,
            "ekspedisi_terusan" => isset($request->dataform['ekspedisi_terusan']) == true ? $request->dataform['ekspedisi_terusan'] : "",
