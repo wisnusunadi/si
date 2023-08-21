@@ -123,7 +123,6 @@
                       <table  style="">
                           <tr>
                               <td class="vera"  width="23%">Pelanggan
-
                                 :
                             </td>
                               <td><b><u>{{$data['customer']}}</u></b></td>

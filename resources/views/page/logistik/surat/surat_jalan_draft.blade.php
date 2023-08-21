@@ -62,6 +62,10 @@
     .page-break {
             page-break-after: always;
         }
+
+    .td-width-header {
+      width: 35%;
+    }
         </style>
     </head>
     <body>
@@ -77,83 +81,72 @@
                   </td>
                 </tr>
             </table>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
-
+            <table id="tabel" class="table table-hover styled-table table-striped" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                 <tr>
                   <td style="text-align: left;" class="vera" >
-                      <table border="0"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+                      <table  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                           <tr>
                               <td class="vera"  width="20%">Pelanggan :</td>
-                              <td style=" border: 1px solid;"><b>{{$data->customer}}</b></td>
+                              <td><b>{{$data->customer}}</b></td>
                           </tr>
                           <tr>
                               <td></td>
-                              <td style=" border: 1px solid;">{{$data->alamat_customer}}</td>
+                              <td>{{$data->alamat_customer}}</td>
                           </tr>
                       </table>
                       <br>
-                      <table border="0"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+                      <table style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
                           <tr>
-                              <td class="vera"   width="20%">Alamat Pengiriman :</td>
-                              <td style=" border: 1px solid;"  class="vera" ><b>{{$data->tujuan_kirim}}</b></td>
+                              <td class="vera" width="20%">Pengiriman :</td>
+                              <td class="vera"><b><u>{{$data->tujuan_kirim}}</u></b></td>
                           </tr>
                           <tr>
                              <td></td>
-                              <td style=" border: 1px solid;">{{$data->alamat_kirim}}</td>
+                              <td>{{$data->alamat_kirim}}</td>
                           </tr>
                           <tr>
                             <td></td>
-                            <td style=" border: 1px solid;"><b>UP : </b>{{$data->up}}</td>
+                            <td><b>UP : </b>{{$data->up}}</td>
                           </tr>
                       </table>
                   </td>
                   <td width="1%"></td>
-                  <td style="text-align: left;" class="vera"  width="28%">
-                      <table border="1"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>No SJ</u> <br>
-                                  {{$data->nosj}}
-                              </td>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>Tgl SJ</u><br>
-                                  {{$data->tgl_sj}}
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>No PO</u> <br>
-                                  {{$data->no_po}}
-                              </td>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>Tgl PO</u><br>
-                                  {{$data->tgl_po}}
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera " colspan="2">
-                                  <u>Ekspedisi</u> <br>
-                                  {{$data->ekspedisi}}
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera " colspan="2">
-                                  <u>Keterangan Pengiriman</u> <br>
-                                  @switch($data->ket)
-                                      @case('bayar_tujuan')
-                                          <span>BAYAR TUJUAN <span>
-                                          @break
-                                        @case('bayar_sinko')
-                                            <span>BAYAR SINKO </span>
-                                      @default
-                                      <span>NON BAYAR<span>
-                                  @endswitch
-                              </td>
-
-                          </tr>
-                      </table>
+                  <td style="text-align: left;" class="vera"  width="35%">
+                    <table style="width: 100%">
+                      <tr>
+                        <td class="td-width-header">Nomor SJ</td>
+                        <td>: {{$data->nosj}}</td>
                       </tr>
-                      </table>
+                      <tr>
+                        <td class="td-width-header">Tanggal SJ</td>
+                        {{-- {{ \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') }} --}}
+                        <td>: {{ \Carbon\Carbon::parse($data->tgl_sj)->isoFormat('DD MMMM YYYY') }}</td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Nomor PO</td>
+                        <td>: {{$data->no_po}}</td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Keterangan Pengiriman</td>
+                        <td>:
+                          @switch($data->ket)
+                              @case('bayar_tujuan')
+                                  <span>BAYAR TUJUAN <span>
+                                  @break
+                                @case('bayar_sinko')
+                                    <span>BAYAR SINKO </span>
+                              @default
+                              <span>NON BAYAR<span>
+                          @endswitch
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Ekspedisi</td>
+                        <td>: {{$data->ekspedisi}}</td>
+                      </tr>
+                    </table>
+                    </tr>
+                  </table>
         </header>
 
         <footer>

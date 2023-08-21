@@ -68,7 +68,7 @@
         <table class="text-right">
             <tr>
                 <td></td>
-                <td><b>Surabaya, {{ \Carbon\Carbon::now()->isoFormat('Do MMMM YYYY') }}</b></td>
+                <td><b>Surabaya, {{ \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') }}</b></td>
             </tr>
             <tr>
                 <td></td>
