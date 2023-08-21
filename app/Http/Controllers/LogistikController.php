@@ -127,10 +127,10 @@ class LogistikController extends Controller
         // );
         //dd($data);
         // return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log]);
-        // $customPaper = array(0,0,605.44,788.031);
+        $customPaper = array(0,0,605.44,788.031);
         // spb
-        $customPaper = array(0,0,605.44,394.031); 
-        $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft_spb',['data' => $log,'hal' => 2])->setPaper($customPaper);
+        // $customPaper = array(0,0,605.44,394.031); 
+        $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft',['data' => $log,'hal' => 2])->setPaper($customPaper);
         return $pdf->stream('');
 
 //         foreach ($log->item as $key => $item) {

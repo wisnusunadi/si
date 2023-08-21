@@ -11,14 +11,14 @@
 
             main {
                 position: relative;
-                top: 190px;
+                top: 170px;
                 width: 100%;
                 padding-bottom: 300px;
             }
 
             header {
                 position: fixed;
-                top: -60px;
+                top: -90px;
                 left: 0px;
                 right: 0px;
                 height: 250px;
@@ -207,7 +207,7 @@
                  <tr>
                 <tr>
                   <td class="align-right" colspan="3">
-                <i>No Dokumen : SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
+                <i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
                   </td>
 
                 </tr>
