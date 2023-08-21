@@ -25,7 +25,7 @@
           }
           main {
               position: absolute;
-              top: 150px;
+              top: 160px;
               width: 100%;
               font-family: sans-serif;
               font-size: 16px;
@@ -116,6 +116,7 @@
                   </td>
                 </tr>
             </table>
+            <hr>
             <table id="tabel" class="table table-hover styled-table table-striped " style="word-wrap:break-word;">
                 <tr>
                   <td style="text-align: left;" class="vera" >
