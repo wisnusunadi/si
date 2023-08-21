@@ -3881,6 +3881,7 @@ class PenjualanController extends Controller
                 return response()->json([
                     'status' => 200,
                     'message' => 'Berhasil Ditambahkan',
+                    'pesanan_id' => $pesanan->no_po != null ? $pesanan->id : 'refresh',
                 ], 200);
             } else if ($bool == false) {
                 return response()->json([
@@ -3915,6 +3916,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 'log_id' => $k
             ]);
             $x = $pesanan->id;
+            $no_po_nonekat = $pesanan->no_po;
             if ($request->jenis_penjualan == 'spa') {
                 $p = Spa::create([
                     'customer_id' => $request->customer_id,
@@ -4000,6 +4002,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 return response()->json([
                     'status' => 200,
                     'message' => 'Berhasil Ditambahkan',
+                    'pesanan_id' => $no_po_nonekat != null ? $x : 'refresh',
                 ], 200);
             } else if ($bool == false) {
                 return response()->json([

@@ -229,6 +229,21 @@
         <div class="container-fluid">
             <div class="row justify-content-center" id="penjualanform">
                 <div class="col-12">
+                    <div class="alert alert-success hide" role="alert">
+                        {{-- route with id --}}
+                        <div class="d-flex bd-highlight">
+                            <div class="p-2 flex-grow-1 bd-highlight card-title">
+                                Berhasil Menambahkan Data
+                            </div>
+                            <div class="p-2 bd-highlight">
+                                <button class="btn btn-light cetaksppb">
+                                    <i class="fas fa-print"></i>
+                                    Cetak SPPB
+                                </button>
+                                
+                            </div>
+                          </div>
+                      </div>
                     <div class="card">
                         <div class="card-header bg-info">
                             <div class="card-title">Form Tambah Data</div>
@@ -1405,6 +1420,35 @@
 
 @section('adminlte_js')
     <script>
+        let pesanan_id_cetak = 0;
+            const resetAllForm = () => {
+                // reset form #create_penjualan
+                $('#create_penjualan')[0].reset();
+                $('#customer_id').val('').trigger('change');
+                // reset table form
+                $('#produktable tbody tr').remove();
+                $('#totalhargaprd').html('Rp. 0')
+                $('#dataproduk').addClass('hide')
+                $('#parttable tbody tr').remove();
+                $('#totalhargapart').html('Rp. 0')
+                $('#datapart').addClass('hide')
+                $('#jasatable tbody tr').remove();
+                $('#totalhargajasa').html('Rp. 0')
+                $('#datajasa').addClass('hide')
+            }
+
+            const showalertcetaksppb = (pesanan_id) => {
+                resetAllForm();
+                $('.alert-success').removeClass('hide')
+            }
+        
+            $(document).on('click', '.cetaksppb', function(e) {
+                e.preventDefault();
+                // open blank new tab /penjualan/penjualan/cetak_surat_perintah/{pesanan_id}
+                console.log("pesanan_id_cetak", pesanan_id_cetak)
+                window.open('/penjualan/penjualan/cetak_surat_perintah/' + pesanan_id_cetak, '_blank');
+            })
+
           $(document).on('submit', '#create_penjualan', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
@@ -1427,7 +1471,10 @@
                         'Data Berhasil Ditambahkan',
                         'success'
                     ).then(function() {
-                        window.location.href = '/penjualan/penjualan/create';
+                        response.pesanan_id != 'refresh' ? showalertcetaksppb(response.pesanan_id) : window.location.reload();
+                        $('#btntambah').attr('disabled', false);
+                        $('#btntambah').html('Simpan');
+                        pesanan_id_cetak = response.pesanan_id;
                     });
                 },
                 error: function(xhr, status, error, response) {
@@ -2822,7 +2869,7 @@
                                     .length; y++) {
 
                                     var nama_var = "";
-                                    if (res[0].produk[x].gudang_barang_jadi[y].nama != "") {
+                                    if (res[0].produk[x].gudang_barang_jadi[y].nama.trim() != "") {
                                         nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
                                     } else {
                                         nama_var = res[0].produk[x].nama;
