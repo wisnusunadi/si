@@ -25,7 +25,7 @@
           }
           main {
               position: absolute;
-              top: 198px;
+              top: 160px;
               width: 100%;
               font-family: sans-serif;
               font-size: 16px;
@@ -57,7 +57,7 @@
               left: 0px;
               right: 0px;
               height: 50px;
-              top: 730px;
+              top: 700px;
               /** Extra personal styles **/
               background-color: #ffffff;
               color: rgb(0, 0, 0);
@@ -86,7 +86,8 @@
           page-break-after: always;
           }
           #invoice-table {
-          border: 0.5pt solid rgb(0, 0, 0);
+          border-top: 1px solid #000000;
+          border-bottom: 1px solid #000000;
           border-collapse: collapse;
           margin: 0;
           }
@@ -95,123 +96,117 @@
             min-height: 500px;
           }
           table {
-            table-layout: fixed; width: 100%; border-collapse: collapse;
+            table-layout: fixed; width: 100%;
           }
-
+          .td-width-header {
+            width: 35%;
+          }
           </style>
     </head>
     <body>
         <!-- Define header and footer blocks before your content -->
         <header>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="">
+            <table id="tabel" class="table table-hover styled-table table-striped" style="">
                 <tr>
-                  <td style="text-align: left; font-size: 16px;">
+                  <td style="text-align: left; font-size: 18px;">
                     <b>PERINTAH PENGIRIMAN BARANG</b>
                   </td>
-                  <th style="text-align: right; padding-right:10px; font-size: 16px;">
+                  <th style="text-align: right; padding-right:10px; font-size: 18px;">
                     PT. Sinko Prima Alloy
                   </td>
                 </tr>
             </table>
-            <table id="tabel" class="table table-hover styled-table table-striped " border="0" style="word-wrap:break-word;">
+            <hr>
+            <table id="tabel" class="table table-hover styled-table table-striped " style="word-wrap:break-word;">
                 <tr>
                   <td style="text-align: left;" class="vera" >
-                      <table border="0"  style="">
+                      <table  style="">
                           <tr>
                               <td class="vera"  width="23%">Pelanggan
 
                                 :
                             </td>
-                              <td style=" border: 1px solid;"><b>{{$data['customer']}}</b></td>
+                              <td><b><u>{{$data['customer']}}</u></b></td>
                           </tr>
                           <tr>
                               <td></td>
-                              <td style=" border: 1px solid;">{{$data['alamat_customer']}}</td>
+                              <td>{{$data['alamat_customer']}}</td>
                           </tr>
                       </table>
                       <br>
-                      <table border="0"  style="">
+                      <table  style="">
                           <tr>
-                              <td class="vera"   width="23%">Alamat Pengiriman :</td>
-                              <td style=" border: 1px solid;"><b>{{$data['tujuan_kirim']}}</b></td>
+                              <td class="vera"   width="23%">Pengiriman :</td>
+                              <td><b><u>{{$data['tujuan_kirim']}}</u></b></td>
                             </tr>
                           <tr>
                               <td ></td>
-                              <td style=" border: 1px solid;">{{$data['alamat_kirim']}}</td>
+                              <td>{{$data['alamat_kirim']}}</td>
                           </tr>
 
                       </table>
                   </td>
                   <td width="2%"></td>
-                  <td style="text-align: left;" class="vera "  width="31%">
-                      <table border="1"  style=" ">
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera ">
-                                  <u>No SO</u> <br>
-                                 <div class="text-center">{{$data['so']}}</div>
-                              </td>
-                              <td style=" border: 1px solid;" class="vera ">
-                                  <u>Tgl SO</u><br>
-                                  {{-- change date format dd/mm/yyyy --}}
-                                 <div class="text-center">{{$data['tgl_so']}}</div>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style=" border: 1px solid; " class="vera">
-                                  <u>No PO</u> <br>
-                                 <div class="text-center">{{$data['no_po']}}</div>
-                              </td>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>Tgl PO</u><br>
-                                <div class="text-center">{{$data['tgl_po']}}</div>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>Kemasan</u> <br>
-                               <div class="text-center">{{$data['kemasan']}}</div>
-                              </td>
-                              <td style=" border: 1px solid;" class="vera ">
-                                  <u>Tgl Pengiriman</u><br>
-                                <div class="text-center">{{$data['tgl_kirim']}}</div>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera " colspan="2">
-                                  <u>Ekspedisi</u> <br>
-                                 <div class="text-center">{{$data['ekspedisi']}}</div>
-                              </td>
-
-                          </tr>
-                      </table>
+                  <td class="vera "  width="40%">
+                    <table style="width: 100%">
+                      <tr>
+                        <td class="td-width-header">Nomor SO</td>
+                        <td>: {{$data['so']}}</td>
                       </tr>
-                      </table>
-        </header>
+                      <tr>
+                        <td class="td-width-header">Tanggal SO</td>
+                        <td>: {{$data['tgl_so']}}</td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Nomor PO</td>
+                        <td>: {{$data['no_po']}}</td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Tanggal PO</td>
+                        <td>: {{$data['tgl_po']}}</td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Kemasan</td>
+                        <td>: {{$data['kemasan']}}</td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Tgl Pengiriman</td>
+                        <td>: {{$data['tgl_kirim']}}</td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Ekspedisi</td>
+                        <td>: {{$data['ekspedisi']}}</td>
+                      </tr>
+                    </table>
+
+                    </tr>
+                </table>
+            </header>
 
 
         <!-- Wrap the content of your PDF inside a main tag -->
         <main>
             {{-- Hal -1 --}}
             @foreach ($data['item'] as $key_page => $page)
-            <table id="invoice-table" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; ">
-                <thead class="border-collapse: collapse; border-left: 1px solid black; border-left: 1px solid black">
+            <table id="invoice-table" class="table table-hover styled-table table-striped" style="table-layout: fixed; width: 100%; ">
+                <thead class="border-collapse: collapse;">
                    <tr>
-                     <th class="align-center" width="8%"  style="border-right:    1px solid black ; border-bottom:    1px solid black">
+                     <th class="align-center" width="8%" style="border-bottom: 1px solid black">
                        <b>No</b>
                      </th>
-                     <th class="align-center" width="15%"  style="border-right:    1px solid black ; border-bottom:    1px solid black">
+                     <th class="align-center" width="15%" style="border-bottom: 1px solid black">
                        <b>Kode Barang</b>
                      </th>
-                     <th class="align-center"  style="border-right:    1px solid black ; border-bottom:    1px solid black">
+                     <th class="align-center" style="border-bottom: 1px solid black">
                        <b>Nama Barang</b>
                      </th>
-                     <th class="align-center"  width="8%"  style="border-right:    1px solid black ; border-bottom:    1px solid black">
+                     <th class="align-center"  width="8%" style="border-bottom: 1px solid black">
                        <b>Jumlah</b>
                      </th>
-                     <th class="align-center"  width="8%"  style="border-right:    1px solid black; border-bottom:    1px solid black">
+                     <th class="align-center"  width="8%" style="border-bottom: 1px solid black">
                        <b>Satuan</b>
                      </th>
-                     <th class="align-center"  width="8%"  style="border-bottom:    1px solid black">
+                     <th class="align-center"  width="8%" style="border-bottom: 1px solid black">
                        <b>Pajak</b>
                      </th>
                    </tr>
@@ -219,19 +214,19 @@
                 <tbody >
                 @foreach ($page as $key_produk => $item)
                     <tr>
-                        <td class="vera align-center" style="border-right:    1px solid black ; " >
+                        <td class="vera align-center">
                         {{$item['no']}}
                         </td>
-                        <td class="vera align-center" style="border-right:    1px solid black ; ">
+                        <td class="vera align-center">
                             {{$item['kode']}}
                         </td>
-                        <td class="vera align-center" style="border-right:    1px solid black ; text-align: left;">
+                        <td class="vera align-center">
                             {{$item['nama']}}
                         </td>
-                        <td class="vera align-center" style="border-right:    1px solid black ; ">
+                        <td class="vera align-center">
                             {{$item['jumlah']}}.00
                         </td>
-                        <td class="vera align-center" style="border-right:    1px solid black ; ">
+                        <td class="vera align-center">
                             {{$item['satuan']}}
                         </td>
                         <td class="vera align-center">
@@ -244,12 +239,13 @@
 
             @if ($key_page == $count_page - 1)
             <footer>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="">
+            <table id="tabel" class="table table-hover styled-table table-striped">
                 <tr>
-                  <td class="align-left vera" width="12%">
-                    Keterangan
-                  </td>
-                  <td class="align-left"  style=" border: 1px solid;">
+                  {{-- <td class="align-left vera" width="13%">
+                    
+                  </td> --}}
+                  <td class="align-left" >
+                    <b>Keterangan :</b> <br>
                     {{$data['no_paket']}}
                     <br>
                     @if ($data['ket_paket'] != null)
@@ -287,12 +283,10 @@
                 </tr>
                 <td class="align-right" colspan="2" >
                     <br>
-
-
                  <tr>
                 <tr>
-                  <td class="align-right" colspan="2">
-                    <i>No Dokumen : SPA-FR/01/PENJ-02, Tanggal Terbit: 10 November 2021, Revisi: 01</i>
+                  <td class="align-right" colspan="2" style="font-size: 12px">
+                    <i>SPA-FR/01/PENJ-02, Tanggal Terbit: 10 November 2021, Revisi: 01</i>
                   </td>
 
                 </tr>
@@ -304,7 +298,7 @@
                 <table id="tabel" class="table table-hover styled-table table-striped table_footer" border="0" style="">
                     <tr>
                       <td class="align-right" colspan="2">
-                    <i>No Dokumen : SPA-FR/01/PENJ-02, Tanggal Terbit: 10 November 2021, Revisi: 01</i>
+                    <i>SPA-FR/01/PENJ-02, Tanggal Terbit: 10 November 2021, Revisi: 01</i>
                       </td>
                     </tr>
                 </table>
