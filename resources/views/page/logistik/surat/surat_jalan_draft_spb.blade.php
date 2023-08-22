@@ -10,6 +10,9 @@
             margin: 5px 10px 0px 13px;
             /* page-break-inside: avoid !important; */
         }
+        .text-left{
+            text-align: left;
+        }
         .text-right{
             text-align: right;
         }
@@ -100,9 +103,9 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Jumlah</th>
+                    <th >No</th>
                     <th>Nama Barang</th>
+                    <th>Jumlah</th>
                 </tr>
             </thead>
             <tbody>
@@ -113,6 +116,7 @@
                 @endif
                 >
                     <td >{{ $key+1 }}</td>
+                    <td class="text-left">{{ $item->nama }}</td>
                     <td>
                         @if(isset($item->noseri))
                         {{$item->jumlah_noseri}}
@@ -120,11 +124,11 @@
                         {{$item->jumlah}}
                         @endif
                     </td>
-                    <td>{{ $item->nama }}</td>
                 </tr>
                 @if(isset($item->noseri)){
                 <tr style="border-bottom: 1px solid black">
-                    <td colspan="3">
+                    <td  ></td>
+                    <td colspan="2">
                         <b>No Seri</b> : <br>
                     @php echo implode(', ',$item->noseri) @endphp
                     </td>
@@ -185,5 +189,22 @@
             </tr>
         </table>
     </footer>
+    @if($data->dimensi != "")
+        <div style="margin: 10px 0px;">
+        <b>Dimensi</b>
+        <br>
+        {{ $data->dimensi}}
+    @endif
+    @if($data->ekspedisi_terusan != "")
+        </div
+        @if($data->dimensi == "")
+        style="margin: 10px 0px;"
+        @endif
+        >
+        <b>Ekspedisi Terusan : </b><br>
+        {{ $data->ekspedisi_terusan}}
+        <br>
+        </div>
+  @endif
 </body>
 </html>
