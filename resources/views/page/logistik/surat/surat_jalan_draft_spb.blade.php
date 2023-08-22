@@ -26,13 +26,11 @@
             margin-top: 20px;
             width: 100%;
             border-collapse: collapse;
-            border: 1px solid black;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
         }
         .table>thead>tr>th{
-            border: 1px solid black;
-        }
-        .table>tbody>tr>td{
-            border: 1px solid black;
+            border-bottom: 1px solid black;
         }
         .all-text{
             /* bold text */
@@ -47,42 +45,47 @@
         }
         /* margin top table ttd pengemudi*/
         .mt-td{
-            padding-top: 100px;
+            padding-top: 60px;
         }
         /* Define styles for the footer */
         footer {
-            position: fixed;
             bottom: 0;
             width: 100%;
         }
-
-        /* Apply styles only when printing */
-        @media print {
-            footer {
-                display: block;
-                position: fixed;
-                bottom: 0;
-            }
+        footer>table {
+            margin-top: 8px
         }
+        .table-footer{
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+        .table-footer>thead>tr>th{
+            border: 1px solid black;
+        }
+        .table-footer>tbody>tr>td{
+            border: 1px solid black;
+        }
+
+        main {
+            margin-top: -10px;
+        }
+
     </style>
 </head>
 <body>
     <header>
-        <table class="text-right">
-            <tr>
+        <table >
+            <tr class="text-right">
                 <td></td>
                 <td><b>Surabaya, {{ \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') }}</b></td>
             </tr>
             <tr>
-                <td></td>
-                <td><b>Kepada Yth. UP. {{ $data->up }} </b></td>
+                <td>No SJ: {{$data->nosj}}</td>
+                <td class="text-right"><b>Kepada Yth. UP. {{ $data->up }} </b></td>
             </tr>
         </table>
         <table>
-            <tr>
-                <td>No SJ: {{$data->nosj}}</td>
-                <td></td>
-            </tr>
             <tr>
                 <td>PO : {{$data->no_po}}</td>
                 <td class="text-right table-header-td"><b>{{ $data->customer}}</b></td>    
@@ -104,7 +107,11 @@
             </thead>
             <tbody>
                 @foreach ( $data->item as $key => $item)
-                <tr class="text-center">
+                <tr class="text-center"
+                @if(!isset($item->noseri))
+                    style="border-bottom: 1px solid black"
+                @endif
+                >
                     <td >{{ $key+1 }}</td>
                     <td>
                         @if(isset($item->noseri))
@@ -116,7 +123,7 @@
                     <td>{{ $item->nama }}</td>
                 </tr>
                 @if(isset($item->noseri)){
-                <tr>
+                <tr style="border-bottom: 1px solid black">
                     <td colspan="3">
                         <b>No Seri</b> : <br>
                     @php echo implode(', ',$item->noseri) @endphp
@@ -149,14 +156,14 @@
     </main>
     <footer>
         <table>
-            <tr>
+            <tr class="tr-first">
                 <td style="width: 40%">Penerima,</td>
                 <td>Hormat Kami,</td>
             </tr>
             <tr>
                 <td class="all-text mt-td">(Nama Terang & Stempel Perusahaan)</td>
                 <td>
-                    <table class="table">
+                    <table class="table-footer">
                         <tbody class="text-center">
                             <tr>
                                 <td>Pengemudi,</td>
@@ -168,6 +175,12 @@
                             </tr>
                         </tbody>
                     </table>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="text-right">
+                    <span style="font-size: 8px"><i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i></span>
                 </td>
             </tr>
         </table>
