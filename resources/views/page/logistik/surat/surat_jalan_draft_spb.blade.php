@@ -4,10 +4,10 @@
     <style>
         body {
             font-family: sans-serif;
-            font-size: 10px;
+            font-size: 12px;
         }
         @page {
-            margin: 5px 10px 0px 13px;
+            margin: 0px 20px 0px 13px;
             /* page-break-inside: avoid !important; */
         }
         .text-left{
@@ -22,11 +22,18 @@
         header>table{
             width: 100%;
         }
+        /* td first */
+        .table-header-td-sm{
+            width: 12%;
+        }
         .table-header-td {
             width: 50%;
         }
+        .td-width-header {
+            width: 35%;
+        }
         .table{
-            margin-top: 20px;
+            margin-top: 10px;
             width: 100%;
             border-collapse: collapse;
             border-top: 1px solid black;
@@ -52,11 +59,9 @@
         }
         /* Define styles for the footer */
         footer {
+            position: fixed;
             bottom: 0;
-            width: 100%;
-        }
-        footer>table {
-            margin-top: 8px
+            width: 98%;
         }
         .table-footer{
             width: 100%;
@@ -74,27 +79,47 @@
             margin-top: -10px;
         }
 
+        hr {
+            border: 0.5px solid black;
+        }
+        /* margin print on 9.5 * 5.5 */
+        @media print {
+            @page {
+                size: 3.5in 0.5in landscape;
+            }
+        }
+
     </style>
 </head>
 <body>
     <header>
-        <table >
-            <tr class="text-right">
-                <td></td>
-                <td><b>Surabaya, {{ \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') }}</b></td>
-            </tr>
+        <table style="font-size: 14px;">
             <tr>
-                <td>No SJ: {{$data->nosj}}</td>
-                <td class="text-right"><b>Kepada Yth. UP. {{ $data->up }} </b></td>
+              <td>
+                <b>SURAT JALAN</b>
+              </td>
+              <th style="text-align: right;">
+                PT. Sinko Prima Alloy
+              </td>
             </tr>
         </table>
-        <table>
+        <hr>
+        <table class="table-header">
             <tr>
-                <td>PO : {{$data->no_po}}</td>
-                <td class="text-right table-header-td"><b>{{ $data->customer}}</b></td>    
+                <td class="table-header-td-sm">Tanggal SJ</td>
+                <td>: {{ \Carbon\Carbon::parse($data->tgl_sj)->isoFormat('DD MMMM YYYY') }}</td>
+                <td class="text-right"><b>Kepada Yth. {{ $data->customer }} </b></td>
             </tr>
             <tr>
-                <td>DO : do-xxx</td>
+                <td class="table-header-td-sm">No SJ</td>
+                <td>: {{$data->nosj}}</td>
+                <td class="text-right table-header-td"><b>UP. {{ $data->up}}</b></td>
+            </tr>
+            <tr>
+                <td class="table-header-td-sm"
+                style="vertical-align: top;"
+                >PO</td>
+                <td style="vertical-align: top;">: {{$data->no_po}}</td>
                 <td class="text-right table-header-td"><b>{{ $data->alamat_customer}}</b></td>
             </tr>
         </table>
@@ -115,13 +140,13 @@
                     style="border-bottom: 1px solid black"
                 @endif
                 >
-                    <td >{{ $key+1 }}</td>
+                    <td >{{ $key+1 }}.</td>
                     <td class="text-left">{{ $item->nama }}</td>
                     <td>
                         @if(isset($item->noseri))
-                        {{$item->jumlah_noseri}}
+                        {{$item->jumlah_noseri}}.00
                         @else
-                        {{$item->jumlah}}
+                        {{$item->jumlah}}.00
                         @endif
                     </td>
                 </tr>
@@ -129,7 +154,7 @@
                 <tr style="border-bottom: 1px solid black">
                     <td  ></td>
                     <td colspan="2">
-                        <b>No Seri</b> : <br>
+                        <b>No Seri</b> :
                     @php echo implode(', ',$item->noseri) @endphp
                     </td>
                 </tr>
@@ -153,12 +178,19 @@
                     $total = $totalproduk + $totalpart;
                 @endphp
                 <tr>
-                    <td colspan="3">Total : {{ $total }} Unit</td>
+                    <td colspan="3">Total : {{ $total }}.00 Unit</td>
                 </tr>
             </tfoot>
         </table>
     </main>
     <footer>
+        <b>Keterangan :</b>
+        {{$data->paket}}
+        @if ($data->ket != null)
+            - {{$data->ket}}
+        @else
+        <br>
+        @endif
         <table>
             <tr class="tr-first">
                 <td style="width: 40%">Penerima,</td>
@@ -184,7 +216,7 @@
             <tr>
                 <td></td>
                 <td class="text-right">
-                    <span style="font-size: 8px"><i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i></span>
+                    <span style="font-size: 4px"><i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i></span>
                 </td>
             </tr>
         </table>

@@ -67,7 +67,7 @@
         }
 
     .td-width-header {
-      width: 35%;
+      width: 40%;
     }
 
     main>table{
@@ -140,7 +140,7 @@
                         <td>: {{$data->no_po}}</td>
                       </tr>
                       <tr>
-                        <td class="td-width-header">Keterangan Pengiriman</td>
+                        <td class="td-width-header">Ket. Pengiriman</td>
                         <td>:
                           @switch($data->keterangan_pengiriman)
                               @case('bayar_tujuan')
