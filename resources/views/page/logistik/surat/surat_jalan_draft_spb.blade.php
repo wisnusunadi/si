@@ -2,6 +2,14 @@
 <html lang="en">
 <head>
     <style>
+        body {
+            font-family: sans-serif;
+            font-size: 10px;
+        }
+        @page {
+            margin: 5px 10px 0px 13px;
+            /* page-break-inside: avoid !important; */
+        }
         .text-right{
             text-align: right;
         }
@@ -56,11 +64,6 @@
                 bottom: 0;
             }
         }
-
-        body {
-            font-size: 14px;
-        }
-
     </style>
 </head>
 <body>
