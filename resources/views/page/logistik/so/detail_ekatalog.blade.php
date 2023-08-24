@@ -797,8 +797,20 @@
                 var sj_lama = $('#sj_lama').val();
                 var tgl_kirim = $('#tgl_kirim').val();
                 var pengiriman = $('input[name="pengiriman"]:checked').val();
+
                 var ekspedisi_id = $('#ekspedisi_id').val();
                 var nama_pengirim = $('#nama_pengirim').val();
+
+                var nama_pic = $('#nama_pic').val();
+                var telp_pic = $('#telp_pic').val();
+                var ekspedisi_terusan = $('#ekspedisi_terusan').val();
+                var pilihan_pengiriman = $('input[name="pilihan_pengiriman"]:checked').val();
+                var perusahaan_pengiriman = $('#perusahaan_pengiriman').val();
+                var alamat_pengiriman = $('#alamat_pengiriman').val();
+                var kemasan = $('input[name="kemasan"]:checked').val();
+                var dimensi = $('#dimensi').val();
+                var keterangan_pengiriman = $('#keterangan_pengiriman').val();
+
 
                 $.each(produk_no_seri, function() {
                     data_produk_no_seri.push(this.value);
@@ -838,18 +850,19 @@
                         produk_id: data_produk_id,
                         part_id: data_part_id,
                         part_jumlah: data_part_jumlah,
+                        nama_pic,telp_pic,no_sj_exist,ekspedisi_terusan,pilihan_pengiriman,perusahaan_pengiriman,alamat_pengiriman,kemasan,dimensi,keterangan_pengiriman
                     },
-                    beforeSend: function() {
-                        swal.fire({
-                            title: 'Silahkan Tunggu, Jangan di tutup atau di refresh',
-                            html: 'Loading...',
-                            allowOutsideClick: false,
-                            showConfirmButton: false,
-                            willOpen: () => {
-                                Swal.showLoading()
-                            }
-                        })
-                    },
+                    // beforeSend: function() {
+                    //     swal.fire({
+                    //         title: 'Silahkan Tunggu, Jangan di tutup atau di refresh',
+                    //         html: 'Loading...',
+                    //         allowOutsideClick: false,
+                    //         showConfirmButton: false,
+                    //         willOpen: () => {
+                    //             Swal.showLoading()
+                    //         }
+                    //     })
+                    // },
                     success: function(response) {
                         if (response['data'] == "success") {
                             swal.fire(

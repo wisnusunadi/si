@@ -4,29 +4,34 @@
 
             /** Define the margins of your page **/
             @page {
-                margin: 100px 25px;
+                margin: 100px 30px 0px 13px;
                 /* page-break-inside: avoid !important; */
             }
 
+            body {
+              font-family: sans-serif;
+            }
 
             main {
                 position: relative;
-                top: 190px;
+                top: 140px;
                 width: 100%;
                 padding-bottom: 300px;
+                font-size: 14px;
             }
 
             header {
                 position: fixed;
-                top: -60px;
+                top: -80px;
                 left: 0px;
                 right: 0px;
                 height: 250px;
                 margin-bottom: 100px;
                 /** Extra personal styles **/
-             background-color: #ffffff;
+                background-color: #ffffff;
                 color: rgb(0, 0, 0);
                 line-height: 20px;
+                font-size: 14px;
             }
 
             footer {
@@ -36,15 +41,13 @@
                 left: 0px;
                 right: 0px;
                 height: 50px;
-                top: 710px;
+                top: 690px;
                 /** Extra personal styles **/
                 background-color: #ffffff;
                 color: rgb(0, 0, 0);
                 line-height: 20px;
             }
-
-
-            .vera {
+    .vera {
         vertical-align: top;
     }
 
@@ -62,14 +65,27 @@
     .page-break {
             page-break-after: always;
         }
+
+    .td-width-header {
+      width: 35%;
+    }
+
+    main>table{
+      page-break-inside: avoid !important;
+      border-top: 1px solid #000000;
+      border-bottom: 1px solid #000000
+    }
+    table{
+      table-layout: fixed; width: 100%; border-collapse: collapse;
+    }
         </style>
     </head>
     <body>
         <!-- Define header and footer blocks before your content -->
         <header>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+            <table style="font-size: 18px;">
                 <tr>
-                  <td style="text-align: left;">
+                  <td>
                     <b>SURAT JALAN</b>
                   </td>
                   <th style="text-align: right;">
@@ -77,14 +93,14 @@
                   </td>
                 </tr>
             </table>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
-
+            <hr>
+            <table>
                 <tr>
-                  <td style="text-align: left;" class="vera" >
-                      <table border="0"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+                  <td class="vera" >
+                      <table>
                           <tr>
                               <td class="vera"  width="20%">Pelanggan :</td>
-                              <td style=" border: 1px solid;"><b>
+                              <td><b><u>
                                 <?php if (isset($data->DetailLogistik[0])) {
                                     $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                                     if ($name[1] == 'EKAT') {
@@ -104,12 +120,11 @@
                                     }
                                 }
                                 ?>
-
-                            </b></td>
+                            </u></b></td>
                           </tr>
                           <tr>
                               <td></td>
-                              <td style=" border: 1px solid;">
+                              <td>
                                 <?php if (isset($data->DetailLogistik[0])) {
                                     $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                                     if ($name[1] == 'EKAT') {
@@ -129,130 +144,84 @@
                                     }
                                 }
                                 ?>
-                                </td>
+                              </td>
                           </tr>
                       </table>
                       <br>
-                      <table border="0"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+                      <table>
                           <tr>
-                              <td class="vera"   width="20%">Alamat Pengiriman :</td>
-                              <td style=" border: 1px solid;"  class="vera" ><b>
-                                <?php if (isset($data->DetailLogistik[0])) {
-                                    $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
-                                    if ($name[1] == 'EKAT') {
-                                        echo    $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi;
-                                    } else if ($name[1] == 'SPA') {
-                                        echo   $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
-                                    } else if ($name[1] == 'SPB') {
-                                        echo   $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
-                                    }
-                                } else {
-
-                                    $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
-                                    if ($name[1] == 'SPA') {
-                                        echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->Customer->nama;
-                                    } else if ($name[1] == 'SPB') {
-                                        echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->nama;
-                                    }
-                                }
-                                ?>
-
-                            </b></td>
+                              <td class="vera" width="20%">Pengiriman :</td>
+                              <td class="vera"><b><u>{{$data->tujuan_pengiriman}}</u></b></td>
                           </tr>
                           <tr>
                              <td></td>
-                              <td style=" border: 1px solid;">
-                                <?php if (isset($data->DetailLogistik[0])) {
-                                    $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
-                                    if ($name[1] == 'EKAT') {
-                                        echo    $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat;
-                                    } else if ($name[1] == 'SPA') {
-                                        echo   $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
-                                    } else if ($name[1] == 'SPB') {
-                                        echo   $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat;
-                                    }
-                                } else {
-
-                                    $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
-                                    if ($name[1] == 'SPA') {
-                                        echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->Customer->alamat;
-                                    } else if ($name[1] == 'SPB') {
-                                        echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->alamat;
-                                    }
-                                }
-                                ?></td>
+                              <td>{{$data->alamat_pengiriman}}</td>
                           </tr>
                           <tr>
                             <td></td>
-                            <td style=" border: 1px solid;"><b>UP : </b></td>
+                            <td><b>UP : </b>{{$data->nama_up}}  {{$data->telp_up}}</td>
                           </tr>
                       </table>
                   </td>
                   <td width="1%"></td>
-                  <td style="text-align: left;" class="vera"  width="28%">
-                      <table border="1"  style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>No SJ</u> <br>
-                               {{$data->nosurat}}
-                              </td>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>Tgl SJ</u><br>
-
-                                  {{ \Carbon\Carbon::parse($data->tgl_kirim)->format('d M Y')}}
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style=" border: 1px solid;word-wrap: break-word" class="vera">
-                                  <u>No PO</u> <br>
-                                  @if (isset($data->DetailLogistik[0]))
-                                    {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
-                                  @else
-                                    {{ $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->no_po}}
-                                  @endif
-
-                              </td>
-                              <td style=" border: 1px solid;" class="vera">
-                                  <u>Tgl PO</u><br>
-                                  @if (isset($data->DetailLogistik[0]))
-                                   {{ \Carbon\Carbon::parse($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po)->format('d M Y')}}
-                                  @else
-                                    {{ \Carbon\Carbon::parse($data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->tgl_po)->format('d M Y')}}
-                                     @endif
-
-
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera " colspan="2">
-                                  <u>Ekspedisi</u> <br>
-                                  @if ($data->nama_pengirim == '')
-                                  {{$data->Ekspedisi->nama}}
-                                  @else
-                                  {{$data->nama_pengirim}}
-                                  @endif
-
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style=" border: 1px solid;" class="vera " colspan="2">
-                                  <u>Keterangan Pengiriman</u> <br>
-                                    -
-                              </td>
-
-                          </tr>
-                      </table>
+                  <td class="vera" width="35%">
+                    <table style="width: 100%">
+                      <tr>
+                        <td class="td-width-header">Nomor SJ</td>
+                        <td>: {{$data->nosurat}}</td>
                       </tr>
-                      </table>
+                      <tr>
+                        <td class="td-width-header">Tanggal SJ</td>
+                        {{-- {{ \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') }} --}}
+                        <td>: {{ \Carbon\Carbon::parse($data->tgl_kirim)->isoFormat('DD MMMM YYYY') }}</td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Nomor PO</td>
+                        <td>:
+                            @if (isset($data->DetailLogistik[0]))
+                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                          @else
+                            {{ $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->no_po}}
+                          @endif
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Keterangan Pengiriman</td>
+                        <td>:
+                          @switch($data->ket)
+                              @case('bayar_tujuan')
+                                  <span>BAYAR TUJUAN <span>
+                                  @break
+                                @case('bayar_sinko')
+                                    <span>BAYAR SINKO </span>
+                                    @break
+                              @default
+                              <span>NON BAYAR<span>
+                              @break
+                          @endswitch
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Ekspedisi</td>
+                        <td>:
+                            @if ($data->nama_pengirim == '')
+                            {{$data->Ekspedisi->nama}}
+                            @else
+                            {{$data->nama_pengirim}}
+                            @endif
+                        </td>
+                      </tr>
+                    </table>
+                    </tr>
+                  </table>
         </header>
 
         <footer>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+            <table>
+              </tr>
                 <tr>
                   <td class="align-left vera" width="12%">
-                    Keterangan
-                  </td>
-                  <td class="align-left"  style=" border: 1px solid;">
+                    <b>Keterangan : </b><br>
                     <?php if (isset($data->DetailLogistik[0])) {
                         $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                         if ($name[1] == 'EKAT') {
@@ -273,11 +242,11 @@
                         }
                     }
                     ?>
-                </td>
+                  </td>
                 </tr>
             </table>
-            <br>
-            <table id="tabel" class="table table-hover styled-table table-striped" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse; ">
+            <hr>
+            <table>
                 <tr>
                   <td class="align-center">
                     Diterima Oleh,
@@ -310,12 +279,10 @@
                 </tr>
                 <td class="align-right" colspan="3" >
                     <br>
-
-
                  <tr>
                 <tr>
-                  <td class="align-right" colspan="3">
-                <i>No Dokumen : SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
+                  <td class="align-right" colspan="3" style="font-size: 12px">
+                    <i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
                   </td>
 
                 </tr>
@@ -325,56 +292,77 @@
         <!-- Wrap the content of your PDF inside a main tag -->
         <main>
             {{-- Hal -1 --}}
-                <table id="tabel" class="table table-hover styled-table table-striped items" border="1" style="table-layout: fixed; width: 100%; border-collapse: collapse;   page-break-inside: avoid !important;">
+                <table>
                     <thead>
                        <tr>
-                         <td class="vera align-center" width="8%">
+                         <td class="vera align-center" width="8%" style="border-bottom: 1px solid black">
                            <b>No</b>
                          </td>
-                         <td class="vera align-center" width="20%">
+                         <td class="vera align-center" width="16%" style="border-bottom: 1px solid black">
                            <b>Kode Barang</b>
                          </td>
-                         <td class="vera align-center">
+                         <td class="vera align-center" style="border-bottom: 1px solid black">
                            <b>Nama Barang</b>
                          </td>
-                         <td class="vera"  width="8%">
+                         <td class="vera"  width="8%" style="border-bottom: 1px solid black">
                            <b>Jumlah</b>
                          </td>
-                         <td class="vera"  width="8%">
+                         <td class="vera"  width="8%" style="border-bottom: 1px solid black">
                            <b>Satuan</b>
                          </td>
                        </tr>
                     </thead>
                     <tbody style="page-break-after: avoid !important;">
                     @php $no = 0; @endphp
-                       @foreach($data_produk as $e)
-                        @if(isset($e->DetailPesananProduk))
-                        @php $no =$loop->iteration; @endphp
-                        <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td></td>
-                            <td class="wb align-left">
+                     @foreach($data_produk as $e)
+                     @if(isset($e->DetailPesananProduk))
+                     @php $no =$loop->iteration; @endphp
+                        <tr
+                        @if(count ($e->NoseriDetailLogistik) <= 0)
+                        style="border-bottom: 1px solid black"
+                        @endif
+                        >
+                            <td class="vera align-center">
+                                {{ $loop->iteration }}
+                            </td>
+                            <td class="vera align-center">
+                              {{-- @if($item->kode == null)
+                                -
+                              @else
+                                {{$item->kode}}
+                              @endif --}}
+                            </td>
+                            <td class="vera">
                                 @if($e->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias != NULL)
                                 {{$e->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias}}
                                 @else
                                 {{$e->DetailPesananProduk->GudangBarangJadi->Produk->nama}} - {{$e->DetailPesananProduk->GudangBarangJadi->nama}}
                                 @endif
                             </td>
-                            <td class="nospace align-right">{{$e->NoseriDetailLogistik->count()}}.00</td>
-                            <td>UNIT</td>
-                        </tr>
-                         <tr>
-                        <td class="vera" colspan="5">
-                            <b>No Seri</b> : <br>
-                            @foreach($e->NoseriDetailLogistik as $x)
-                            {{$x->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}
-                            @if( !$loop->last)
-                            ,
-                            @endif
-                            @endforeach
-                        </td>
-                        </tr>
+                            <td class="vera">
+                                {{$e->NoseriDetailLogistik->count()}}.00
+                            </td>
+                              <td class="vera">
+                               UNIT
+                              </td>
+                          </tr>
+
+                          @if(count ($e->NoseriDetailLogistik) > 0)
+                          <tr style="border-bottom: 1px solid black">
+                            <td class="vera" colspan="5">
+                                <b>No Seri</b> : <br>
+                                @foreach($e->NoseriDetailLogistik as $x)
+                                {{$x->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}
+                                @if( !$loop->last)
+                                ,
+                                @endif
+                                @endforeach
+                             </td>
+                          </tr>
+                          @endif
                         @else
+
+
                         <tr>
                             <td>{{$loop->iteration + $no}}</td>
                             <td>{{$e->DetailPesananPart->Sparepart->kode}}</td>
@@ -386,11 +374,9 @@
                                 UNIT
                             </td>
                         </tr>
+
                         @endif
-                        @endforeach
-
-
-
+                          @endforeach
                         {{-- <tr>
                             <td class="align-center" colspan="3">
 
@@ -403,6 +389,26 @@
                           </tr> --}}
                     </tbody>
                 </table>
+                {{-- lama --}}
+                @if($data->dimensi != "")
+                  <div style="margin: 10px 0px;">
+                    <b>Dimensi</b>
+                  <br>
+                  {{ $data->dimensi}}
+                @endif
+                @if($data->ekspedisi_terusan != "")
+                  </div
+                  @if($data->dimensi == "")
+                    style="margin: 10px 0px;"
+                  @endif
+                  >
+                  <b>Ekspedisi Terusan : </b><br>
+                  {{ $data->ekspedisi_terusan}}
+                  <br>
+                  </div>
+                @endif
+
+
                 {{-- <div style="page-break-after: always;"></div> --}}
                 {{-- @if($hal == $i)
                 <div style="page-break-after: never;"> </div>
