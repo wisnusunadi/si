@@ -965,6 +965,27 @@
                         } else {
                             $('input[name="kemasan"]').val('nonpeti').prop('checked', true)
                         }
+
+                        if(data.header.ekspedisi) {
+                            $('#pengiriman1').prop('checked', true)
+                            $('#ekspedisi').removeClass('hide')
+                            $('#nonekspedisi').addClass('hide')
+
+                            let selectElement = $('.ekspedisi_id');
+                            let option = $('<option>', {
+                                value: data.header.ekspedisi.id,
+                                text: data.header.ekspedisi.nama
+                            })
+                            selectElement.empty()
+                            selectElement.append(option)
+                            selectElement.val(data.header.ekspedisi.id)
+                        } else {
+                            $('#pengiriman2').prop('checked', true)
+                            $('#ekspedisi').addClass('hide')
+                            $('#nonekspedisi').removeClass('hide')
+                            let selectElement = $('.ekspedisi_id');
+                            selectElement.empty()
+                        }
                     }
                 });
             }
