@@ -940,6 +940,29 @@
                 });
             }
 
+            const header = (pesanan_id) => {
+                $.ajax({
+                    url: "/api/logistik/so/data/detail/item/" + pesanan_id,
+                    'dataType': 'json',
+                    success: function (data) {
+                        if(data.header.perusahaan_pengiriman && data.header.alamat_pengiriman) {
+                            // pilihan pengiriman == penjualan
+                            $('#pilihan_pengiriman0').prop('checked', true)
+                            $('#perusahaan_pengiriman').attr('readonly', true);
+                            $('#alamat_pengiriman').attr('readonly', true);
+                            $('input[name="perusahaan_pengiriman"]').val(data.header.perusahaan_pengiriman)
+                            $('input[name="alamat_pengiriman"]').val(data.header.alamat_pengiriman)
+                        }else{
+                            $('#pilihan_pengiriman1').prop('checked', true)
+                            $('input[name="perusahaan_pengiriman"]').val('')
+                            $('input[name="alamat_pengiriman"]').val('')
+                            $('#perusahaan_pengiriman').attr('readonly', false);
+                            $('#alamat_pengiriman').attr('readonly', false);
+                        }
+                    }
+                });
+            }
+
             function noseritable(id, array) {
                 $('#noseritable').DataTable({
                     destroy: true,
@@ -1304,6 +1327,8 @@
                         $('#edit').html(result).show();
                         select_sj_lama();
                         detailpesanan(produk_id, part_id, pesanan_id);
+                        header(pesanan_id);
+
                         $('.jenis_sj').select2({
                             minimumResultsForSearch: -1
                         });
@@ -1474,6 +1499,15 @@
                     $('.ekspedisi_id').next(".select2-container").show();
                     $('#ekspedisi_nama').addClass('hide');
                     $('input[name="pengiriman"]').removeAttr('disabled');
+                    $('input[name="nama_pic"]').removeAttr('disabled');
+                    $('input[name="telp_pic"]').removeAttr('disabled');
+                    $('textarea[name="ekspedisi_terusan"]').removeAttr('disabled');
+                    $('input[name="pilihan_pengiriman"]').removeAttr('disabled');
+                    $('input[name="perusahaan_pengiriman"]').removeAttr('disabled');
+                    $('input[name="alamat_pengiriman"]').removeAttr('disabled');
+                    $('input[name="kemasan"]').removeAttr('disabled');
+                    $('textarea[name="dimensi"]').removeAttr('disabled');
+                    $('select[name="keterangan_pengiriman"]').removeAttr('disabled');
                 } else if ($(this).val() == "lama") {
                     $('#sj_baru').addClass('hide');
                     $('.sj_lamas').removeClass('hide');
@@ -1484,6 +1518,16 @@
                     $('.ekspedisi_id').next(".select2-container").hide();
                     $('#ekspedisi_nama').removeClass('hide');
                     $('input[name="pengiriman"]').attr('disabled', true);
+                    $('input[name="pengiriman"]').attr('disabled', true);
+                    $('input[name="nama_pic"]').attr('disabled', true);
+                    $('input[name="telp_pic"]').attr('disabled', true);
+                    $('textarea[name="ekspedisi_terusan"]').attr('disabled', true);
+                    $('input[name="pilihan_pengiriman"]').attr('disabled', true);
+                    $('input[name="perusahaan_pengiriman"]').attr('disabled', true);
+                    $('input[name="alamat_pengiriman"]').attr('disabled', true);
+                    $('input[name="kemasan"]').attr('disabled', true);
+                    $('textarea[name="dimensi"]').attr('disabled', true);
+                    $('select[name="keterangan_pengiriman"]').attr('disabled', true);
                 }
                 validasi();
             });

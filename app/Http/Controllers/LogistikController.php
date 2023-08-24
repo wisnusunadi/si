@@ -126,7 +126,7 @@ class LogistikController extends Controller
         //     'noseri' => $chunkedGroups
         // );
         //dd($data);
-        return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log]);
+        // return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log]);
         $customPaper = array(0,0,605.44,788.031);
         // spb
         // $customPaper = array(0,0,605.44,394.031);

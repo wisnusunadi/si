@@ -152,11 +152,11 @@
                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
                                           <div class="col-lg-6 col-md-12 col-form-label">
                                             <div class="form-check form-check-inline">
-                                              <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pengiriman0" value="penjualan" />
+                                              <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pilihan_pengiriman0" value="penjualan" />
                                               <label for="pengiriman0" class="form-check-label">Sama dengan Penjualan</label>
                                           </div>
                                           <div class="form-check form-check-inline">
-                                              <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pengiriman1" value="lainnya" />
+                                              <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pilihan_pengiriman1" value="lainnya" />
                                               <label for="pengiriman1" class="form-check-label">Ubah Alamat</label>
                                           </div>
                                           <input type="text" name="perusahaan_pengiriman" id="perusahaan_pengiriman" class="form-control col-form-label" readonly>
