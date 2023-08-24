@@ -959,6 +959,12 @@
                             $('#perusahaan_pengiriman').attr('readonly', false);
                             $('#alamat_pengiriman').attr('readonly', false);
                         }
+
+                        if(data.header.kemasan == 'peti') {
+                            $('input[name="kemasan"]').val('peti').prop('checked', true)
+                        } else {
+                            $('input[name="kemasan"]').val('nonpeti').prop('checked', true)
+                        }
                     }
                 });
             }
