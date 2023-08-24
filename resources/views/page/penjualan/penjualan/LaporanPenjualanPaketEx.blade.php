@@ -112,6 +112,7 @@
                             {{ $e->Sparepart->nama }}
                         @else
                             {{ $e->PenjualanProduk->nama }}
+                            {{$d->GetProduk()}}
                         @endif
 
                     </td>
@@ -124,6 +125,7 @@
                             @else
                                 {{ $e->PenjualanProduk->nama }}
                             @endif
+                            {{$d->GetProduk()}}
                         @endif
 
                     </td>
@@ -281,7 +283,12 @@
                         @if ($e->Sparepart)
                             {{ $e->Sparepart->nama }}
                         @else
+
                             {{ $e->PenjualanProduk->nama }}
+                            {{$d->GetProduk()}}
+
+
+
                         @endif
 
                     </td>
@@ -294,6 +301,7 @@
                             @else
                                 {{ $e->PenjualanProduk->nama }}
                             @endif
+                            {{$d->GetProduk()}}
                         @endif
 
                     </td>

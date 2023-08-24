@@ -129,8 +129,9 @@ class LogistikController extends Controller
         return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log]);
         $customPaper = array(0,0,605.44,788.031);
         // spb
-        $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft', ['data' => $log, 'hal' => 2])->setPaper($customPaper);
-        // return $pdf->stream('');
+        // $customPaper = array(0,0,605.44,394.031);
+        $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft',['data' => $log,'hal' => 2])->setPaper($customPaper);
+        return $pdf->stream('');
 
 //         foreach ($log->item as $key => $item) {
 
@@ -3546,6 +3547,7 @@ class LogistikController extends Controller
 
     public function create_logistik(Request $request, $jenis)
     {
+        // dd($request->all());
         $ids = "";
         $iddp = "";
         $poid = "";
@@ -3556,11 +3558,23 @@ class LogistikController extends Controller
 
         if ($request->no_sj_exist == 'baru') {
 
+            if($request->tujuan_pengiriman == NULL || $request->alamat_pengiriman == NULL || $request->kemasan == NULL || $request->keterangan_pengiriman == NULL){
+                return response()->json(['data' => 'error']);
+            }
             if ($request->pengiriman == 'ekspedisi') {
                 $Logistik = Logistik::create([
                     'ekspedisi_id' => $request->ekspedisi_id,
                     'nosurat' => $kodesj . $request->no_invoice,
                     'tgl_kirim' => $request->tgl_kirim,
+                    'nama_pengirim' => $request->nama_pengirim,
+                    'nama_up' => $request->nama_pic,
+                    'telp_up' => $request->telp_pic,
+                    'ekspedisi_terusan' => $request->ekspedisi_terusan,
+                    'dimensi' => $request->dimensi,
+                    'tujuan_pengiriman' => $request->perusahaan_pengiriman,
+                    'alamat_pengiriman' => $request->alamat_pengiriman,
+                    'kemasan' => $request->kemasan,
+                    'ket' => $request->keterangan_pengiriman,
                     'status_id' => '11'
                 ]);
             } else {
@@ -3568,6 +3582,14 @@ class LogistikController extends Controller
                     'nosurat' => $kodesj . $request->no_invoice,
                     'tgl_kirim' => $request->tgl_kirim,
                     'nama_pengirim' => $request->nama_pengirim,
+                    'nama_up' => $request->nama_pic,
+                    'telp_up' => $request->telp_pic,
+                    'ekspedisi_terusan' => $request->ekspedisi_terusan,
+                    'dimensi' => $request->dimensi,
+                    'tujuan_pengiriman' => $request->perusahaan_pengiriman,
+                    'alamat_pengiriman' => $request->alamat_pengiriman,
+                    'kemasan' => $request->kemasan,
+                    'ket' => $request->keterangan_pengiriman,
                     'status_id' => '11'
                 ]);
             }

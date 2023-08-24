@@ -241,7 +241,7 @@
             <table id="tabel" class="table table-hover styled-table table-striped">
                 <tr>
                   {{-- <td class="align-left vera" width="13%">
-                    
+
                   </td> --}}
                   <td class="align-left" >
                     <b>Keterangan :</b> <br>

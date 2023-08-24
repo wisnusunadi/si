@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Pesanan extends Model
 {
@@ -551,6 +552,22 @@ class Pesanan extends Model
         $part = DetailPesananPart::groupby('m_sparepart_id')->where('pesanan_id', $id)->orderBy('pesanan_id', 'DESC')->get();
         $data = $produk->merge($part);
         return $data;
+    }
+
+    public function GetProduk()
+    {
+        $id = $this->id;
+        $produk = DB::select('select group_concat(dpp.gudang_barang_jadi_id) as id  from detail_pesanan_produk dpp
+        left join detail_pesanan dp on dpp.detail_pesanan_id  = dp.id
+        left join pesanan p on p.id = dp.pesanan_id
+        where p.id = ?',[$id]);
+       $array = explode(",",$produk[0]->id);
+
+        if (in_array(380, $array))
+         {
+            return 'BLUETOOTH';
+         }
+
     }
 
     public function DetailPesananUniqueDsb()
