@@ -1,7 +1,19 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <style>
+        body {
+            font-family: sans-serif;
+            font-size: 12px;
+        }
+        @page {
+            margin: 0px 20px 0px 13px;
+            /* page-break-inside: avoid !important; */
+        }
+        .text-left{
+            text-align: left;
+        }
         .text-right{
             text-align: right;
         }
@@ -11,20 +23,21 @@
         header>table{
             width: 100%;
         }
-        .table-header-td {
+        .td-width-header {
             width: 50%;
         }
+        .vera {
+            vertical-align: top;
+        }
         .table{
-            margin-top: 20px;
+            margin-top: 10px;
             width: 100%;
             border-collapse: collapse;
-            border: 1px solid black;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
         }
         .table>thead>tr>th{
-            border: 1px solid black;
-        }
-        .table>tbody>tr>td{
-            border: 1px solid black;
+            border-bottom: 1px solid black;
         }
         .all-text{
             /* bold text */
@@ -39,87 +52,139 @@
         }
         /* margin top table ttd pengemudi*/
         .mt-td{
-            padding-top: 100px;
+            padding-top: 60px;
         }
         /* Define styles for the footer */
         footer {
             position: fixed;
             bottom: 0;
+            width: 98%;
+        }
+        .table-footer{
             width: 100%;
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+        .table-footer>thead>tr>th{
+            border: 1px solid black;
+        }
+        .table-footer>tbody>tr>td{
+            border: 1px solid black;
         }
 
-        /* Apply styles only when printing */
-        @media print {
-            footer {
-                display: block;
-                position: fixed;
-                bottom: 0;
-            }
+        main {
+            margin-top: -10px;
         }
 
-        body {
-            font-size: 14px;
+        hr {
+            border: 0.5px solid black;
         }
-
     </style>
 </head>
 <body>
     <header>
-        <table class="text-right">
+        <table style="font-size: 18px;">
             <tr>
-                <td></td>
-                <td><b>Surabaya, {{ \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') }}</b></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><b>Kepada Yth. UP. {{ $data->up }} </b></td>
+              <td>
+                <b>SURAT JALAN</b>
+              </td>
+              <th style="text-align: right;">
+                PT. Sinko Prima Alloy
+              </td>
             </tr>
         </table>
+        <hr>
         <table>
             <tr>
-                <td>No SJ: {{$data->nosj}}</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>PO : {{$data->no_po}}</td>
-                <td class="text-right table-header-td"><b>{{ $data->customer}}</b></td>    
-            </tr>
-            <tr>
-                <td>DO : do-xxx</td>
-                <td class="text-right table-header-td"><b>{{ $data->alamat_customer}}</b></td>
-            </tr>
-        </table>
+              <td class="vera" >
+                  <table>
+                      <tr>
+                          <td class="vera" width="25%">Pengiriman :</td>
+                          <td class="vera"><b><u>{{$data->tujuan_kirim}}</u></b></td>
+                      </tr>
+                      <tr>
+                         <td></td>
+                          <td>{{$data->alamat_kirim}}</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td><b>UP : </b>{{$data->up}}</td>
+                      </tr>
+                  </table>
+              </td>
+              <td class="vera" width="40%">
+                <table style="width: 100%">
+                  <tr>
+                    <td class="td-width-header">Nomor SJ</td>
+                    <td>: {{$data->nosj}}</td>
+                  </tr>
+                  <tr>
+                    <td class="td-width-header">Tanggal SJ</td>
+                    {{-- {{ \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') }} --}}
+                    <td>: {{ \Carbon\Carbon::parse($data->tgl_sj)->isoFormat('DD MMMM YYYY') }}</td>
+                  </tr>
+                  <tr>
+                    <td class="td-width-header">Nomor PO</td>
+                    <td>: {{$data->no_po}}</td>
+                  </tr>
+                  <tr>
+                    <td class="td-width-header">Ket. Pengiriman</td>
+                    <td>:
+                      @switch($data->keterangan_pengiriman)
+                          @case('bayar_tujuan')
+                              <span>BAYAR TUJUAN <span>
+                              @break
+                            @case('bayar_sinko')
+                                <span>BAYAR SINKO </span>
+                                @break
+                          @default
+                          <span>NON BAYAR<span>
+                          @break
+                      @endswitch
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="td-width-header">Ekspedisi</td>
+                    <td>: {{$data->ekspedisi}}</td>
+                  </tr>
+                </table>
+                </tr>
+              </table>
     </header>
     <main>
         <table class="table">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Jumlah</th>
+                    <th >No</th>
                     <th>Nama Barang</th>
+                    <th>Jumlah</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ( $data->item as $key => $item)
-                <tr class="text-center">
-                    <td >{{ $key+1 }}</td>
+                <tr class="text-center"
+                @if(!isset($item->noseri))
+                    style="border-bottom: 1px solid black"
+                @endif
+                >
+                    <td >{{ $key+1 }}.</td>
+                    <td class="text-left">{{ $item->nama }}</td>
                     <td>
                         @if(isset($item->noseri))
-                        {{$item->jumlah_noseri}}
+                        {{$item->jumlah_noseri}}.00
                         @else
-                        {{$item->jumlah}}
+                        {{$item->jumlah}}.00
                         @endif
                     </td>
-                    <td>{{ $item->nama }}</td>
                 </tr>
-                @if(isset($item->noseri)){
-                <tr>
-                    <td colspan="3">
-                        <b>No Seri</b> : <br>
+                @if(isset($item->noseri))
+                <tr style="border-bottom: 1px solid black">
+                    <td  ></td>
+                    <td colspan="2">
+                        <b>No Seri</b> :
                     @php echo implode(', ',$item->noseri) @endphp
                     </td>
                 </tr>
-                }
                 @endif
                 @endforeach
             </tbody>
@@ -139,35 +204,93 @@
                     $total = $totalproduk + $totalpart;
                 @endphp
                 <tr>
-                    <td colspan="3">Total : {{ $total }} Unit</td>
+                    <td colspan="3">Total : {{ $total }}.00 Unit</td>
                 </tr>
             </tfoot>
         </table>
+        @if($data->dimensi != "")
+                <div style="margin: 10px 0px;">
+                <b>Dimensi</b>
+                <br>
+                {{ $data->dimensi}}
+            @endif
+            @if($data->ekspedisi_terusan != "")
+                </div
+                @if($data->dimensi == "")
+                style="margin: 10px 0px;"
+                @endif
+                >
+                <b>Ekspedisi Terusan : </b><br>
+                {{ $data->ekspedisi_terusan}}
+                <br>
+                </div>
+        @endif
     </main>
     <footer>
         <table>
+        </tr>
+          <tr>
+            <td class="align-left vera" width="12%">
+              <b>Keterangan : </b><br>
+              {{$data->paket}}
+              @if ($data->ket != null)
+               - {{$data->ket}}
+              @else
+              <br>
+              @endif
+            </td>
+          </tr>
+      </table>
+      <hr>
+        <table>
             <tr>
-                <td style="width: 40%">Penerima,</td>
-                <td>Hormat Kami,</td>
+              <td class="text-center">
+                Diterima Oleh,
+              </td>
+              <td class="text-center">
+                Dibawa Oleh,
+              </td>
+              <td class="text-center">
+              Dibuat Oleh,
+              </td>
             </tr>
+            <td class="text-right" colspan="2" >
+               <br>
+               <br>
+               <br>
+
             <tr>
-                <td class="all-text mt-td">(Nama Terang & Stempel Perusahaan)</td>
-                <td>
-                    <table class="table">
-                        <tbody class="text-center">
-                            <tr>
-                                <td>Pengemudi,</td>
-                                <td style="width: 50%">Dibuat,</td>
-                            </tr>
-                            <tr >
-                                <td class="mt-td"></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
+              <td class="text-center">
+                <hr style="width:40%">
+              </td>
+              <td class="text-center">
+                <hr style="width:40%">
+                {{-- KURIR --}}
+              </td>
+              <td class="text-center">
+                <hr style="width:30%">
+                {{-- LOGISTIK --}}
+              </td>
+            </tr>
+            <td class="text-right" colspan="3" >
+                <br>
+             <tr>
+            <tr>
+              <td class="text-right" colspan="3" style="font-size: 12px">
+                <i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
+              </td>
+
             </tr>
         </table>
     </footer>
 </body>
 </html>
+<script>
+    $(document).ready(function() {
+      window.print();
+    });
+    // click cancel close window
+    window.onafterprint = function(){
+      window.close();
+    }
+  </script>
