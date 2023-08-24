@@ -1396,17 +1396,13 @@
                 let pilihan_pengiriman = $(this).val();
                 $('#perusahaan_pengiriman').attr('readonly', true);
                 $('#alamat_pengiriman').attr('readonly', true);
-                $('#perusahaan_pengiriman').val('');
                         // add placeholder
                 $('#perusahaan_pengiriman').attr('placeholder', 'Masukkan Nama Perusahaan');
-                $('#alamat_pengiriman').val('');
                 $('#alamat_pengiriman').removeClass('is-invalid');
                 // add placeholder
                 $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
 
                 if(pilihan_pengiriman == 'lainnya'){
-                    $('#perusahaan_pengiriman').val('');
-                    $('#alamat_pengiriman').val('');
                     $('#perusahaan_pengiriman').attr('readonly', false);
                     $('#alamat_pengiriman').attr('readonly', false);
                 }
