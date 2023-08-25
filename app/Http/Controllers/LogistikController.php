@@ -5037,9 +5037,7 @@ class LogistikController extends Controller
 
         }else{
             return response()->json(['messages' => 'gagal']);
-        };
-
-
+        }
 
     }
 
@@ -5143,13 +5141,12 @@ class LogistikController extends Controller
                     'provinsi' =>   $provinsi,
                     'ekspedisi' => $ekspedisi,
                     'customer' => $dsb_nama,
-                    'perusahaan_pengiriman' => $pesanan->perusahaan_pengiriman,
+                    'perusahaan_pengiriman' => $pesanan->tujuan_kirim,
                     'item' => array(
-                    'produk' => $prd,
-                    'part' => $part
-                    );
-                );
-
+                        'produk' => $prd,
+                        'part' => $part
+                    )
+                )
             );
 
 
