@@ -4998,7 +4998,7 @@ class LogistikController extends Controller
                     $produk[$id] = array(
                         "id" => $id,
                         "jenis" => 'produk',
-                        "nama_alias" => $nama_paket,
+                        "nama" => $nama_paket,
                         "detail" => array()
                     );
                 }
@@ -5174,10 +5174,10 @@ class LogistikController extends Controller
                     'ekspedisi' => $ekspedisi,
                     'customer' => $dsb_nama,
                     'perusahaan_pengiriman' => $pesanan->tujuan_kirim,
-                    'item' => array(
-                        'produk' => $prd,
-                        'part' => $part
-                    )
+                ),
+                'item' => array(
+                    'produk' => $prd,
+                    'part' => $part
                 )
             );
 

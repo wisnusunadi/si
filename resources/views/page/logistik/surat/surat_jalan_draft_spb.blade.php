@@ -163,26 +163,38 @@
             <tbody>
                 @foreach ( $data->item as $key => $item)
                 <tr class="text-center"
-                @if(!isset($item->noseri))
+                @if(!isset($item->detail))
                     style="border-bottom: 1px solid black"
                 @endif
                 >
                     <td >{{ $key+1 }}.</td>
                     <td class="text-left">{{ $item->nama }}</td>
+                    @php
+                      $jumlah = 0;
+                      if(isset($item->detail)){
+                        foreach ($item->detail as $key => $detail) {
+                          $jumlah += $detail->jumlah_noseri;
+                        }
+                      }else{
+                        $jumlah = $item->jumlah;
+                      }
+                    @endphp
                     <td>
-                        @if(isset($item->noseri))
-                        {{$item->jumlah_noseri}}.00
-                        @else
-                        {{$item->jumlah}}.00
-                        @endif
+                      {{ $jumlah }}.00
                     </td>
                 </tr>
-                @if(isset($item->noseri))
+                @if(isset($item->detail))
                 <tr style="border-bottom: 1px solid black">
-                    <td  ></td>
+                    <td></td>
                     <td colspan="2">
                         <b>No Seri</b> :
-                    @php echo implode(', ',$item->noseri) @endphp
+                        @foreach ($item->detail as $key => $detail)
+                          @if ($key == count($item->detail) - 1)
+                            {{ $detail->nama }} : {{ implode(', ', $detail->noseri) }} 
+                          @else
+                            {{ $detail->nama }} : {{ implode(', ', $detail->noseri) }} <br>
+                          @endif
+                        @endforeach
                     </td>
                 </tr>
                 @endif
@@ -195,7 +207,9 @@
 
                     foreach ($data->item as $item) {
                         if ($item->jenis === 'produk') {
-                            $totalproduk += $item->jumlah_noseri;
+                            foreach ($item->detail as $detail) {
+                                $totalproduk += $detail->jumlah_noseri;
+                            }
                         } elseif ($item->jenis === 'part') {
                             $totalpart += $item->jumlah;
                         }
