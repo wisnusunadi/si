@@ -5174,14 +5174,11 @@ class LogistikController extends Controller
                     'ekspedisi' => $ekspedisi,
                     'customer' => $dsb_nama,
                     'perusahaan_pengiriman' => $pesanan->tujuan_kirim,
-                    'alamat_pengiriman' => $pesanan->alamat_kirim,
-                    'kemasan' => $pesanan->kemasan,
-                ),
-                'item' => array(
-                    'produk' => $prd,
-                    'part' => $part
+                    'item' => array(
+                        'produk' => $prd,
+                        'part' => $part
+                    )
                 )
-
             );
 
 
