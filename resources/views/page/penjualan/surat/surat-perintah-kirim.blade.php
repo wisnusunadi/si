@@ -220,7 +220,17 @@
                             {{$item['kode']}}
                         </td>
                         <td class="vera">
-                            {{$item['nama']}}
+                            {{$item['nama']}} 
+                            @if(isset($item['variasi']))
+                              @foreach ($item['variasi'] as $key => $variasi)
+                                {{-- cek jika ini terakhir maka tidak ada koma dibelakangnya --}}
+                                @if ($key == count($item['variasi']) - 1)
+                                    {{$variasi->nama}}
+                                @else
+                                    {{$variasi->nama}},
+                                @endif
+                              @endforeach
+                            @endif
                         </td>
                         <td class="vera align-center">
                             {{$item['jumlah']}}.00
@@ -241,15 +251,16 @@
             <table id="tabel" class="table table-hover styled-table table-striped">
                 <tr>
                   {{-- <td class="align-left vera" width="13%">
-                    
+
                   </td> --}}
                   <td class="align-left" >
                     <b>Keterangan :</b> <br>
                     {{$data['no_paket']}}
                     @if ($data['ket_paket'] != null)
                      - {{$data['ket_paket']}}
-                    @else
+                    @elseif ($data['catatan'] != null)
                     <br>
+                    {{$data['catatan']}}
                     @endif
                   </td>
                 </tr>

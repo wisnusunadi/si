@@ -52,16 +52,36 @@ class LogistikController extends Controller
             $data_prt = DetailLogistikPart::where('logistik_id', $id)->get();
             $data_produk = $data_prd->merge($data_prt);
         }
-        $customPaper = array(0,0,605.44,788.031);
-        $pdf = PDF::loadView('page.logistik.surat.surat_jalan_kirim', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
-        // $pdf = PDF::loadView('page.logistik.pengiriman.print_sj', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
-        return $pdf->stream('');
+
+        if (isset($data->DetailLogistik[0])) {
+            $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
+            $pesanan = $name[1];
+        }else{
+            $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
+            $pesanan = $name[1];
+        }
+
+        if($pesanan == "SPB"){
+            return view('page.logistik.surat.surat_jalan_kirim_spb', ['data' => $data,'data_produk' => $data_produk]);
+        }else{
+            $customPaper = array(0,0,605.44,788.031);
+            $pdf = PDF::loadView('page.logistik.surat.surat_jalan_kirim', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
+         return $pdf->stream('');
+
+        }
+   $customPaper = array(0,0,605.44,788.031);
+        // $pdf = PDF::loadView('page.logistik.surat.surat_jalan_kirim', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
+        // // $pdf = PDF::loadView('page.logistik.pengiriman.print_sj', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
+
     }
     public function cetak_surat_jalan($id)
     {
-
         $data = LogistikDraft::find($id);
+
         $log = json_decode($data->isi);
+        $name = explode('/', $log->so);
+
+
         // $page = array();
         // $mergedNoseri = [];
 
@@ -126,12 +146,19 @@ class LogistikController extends Controller
         //     'noseri' => $chunkedGroups
         // );
         //dd($data);
-        // return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log]);
-        $customPaper = array(0,0,605.44,788.031);
-        // spb
-        // $customPaper = array(0,0,605.44,394.031); 
-        $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft',['data' => $log,'hal' => 2])->setPaper($customPaper);
-        return $pdf->stream('');
+        // ekat, spa
+
+        if($name[1] == 'SPB'){
+            return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log]);
+        }else{
+            $customPaper = array(0,0,605.44,788.031);
+            $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft',['data' => $log])->setPaper($customPaper);
+             return $pdf->stream('');
+        }
+
+
+
+
 
 //         foreach ($log->item as $key => $item) {
 
@@ -160,7 +187,7 @@ class LogistikController extends Controller
 // }
 
 
-       return response()->json(['data' => $data]);
+    //    return response()->json(['data' => $data]);
 
     }
     // public function cetak_surat_jalan($id)
@@ -3547,6 +3574,7 @@ class LogistikController extends Controller
 
     public function create_logistik(Request $request, $jenis)
     {
+        // dd($request->all());
         $ids = "";
         $iddp = "";
         $poid = "";
@@ -3557,11 +3585,23 @@ class LogistikController extends Controller
 
         if ($request->no_sj_exist == 'baru') {
 
+            if($request->tujuan_pengiriman == NULL || $request->alamat_pengiriman == NULL || $request->kemasan == NULL || $request->keterangan_pengiriman == NULL){
+                return response()->json(['data' => 'error']);
+            }
             if ($request->pengiriman == 'ekspedisi') {
                 $Logistik = Logistik::create([
                     'ekspedisi_id' => $request->ekspedisi_id,
                     'nosurat' => $kodesj . $request->no_invoice,
                     'tgl_kirim' => $request->tgl_kirim,
+                    'nama_pengirim' => $request->nama_pengirim,
+                    'nama_up' => $request->nama_pic,
+                    'telp_up' => $request->telp_pic,
+                    'ekspedisi_terusan' => $request->ekspedisi_terusan,
+                    'dimensi' => $request->dimensi,
+                    'tujuan_pengiriman' => $request->perusahaan_pengiriman,
+                    'alamat_pengiriman' => $request->alamat_pengiriman,
+                    'kemasan' => $request->kemasan,
+                    'ket' => $request->keterangan_pengiriman,
                     'status_id' => '11'
                 ]);
             } else {
@@ -3569,6 +3609,14 @@ class LogistikController extends Controller
                     'nosurat' => $kodesj . $request->no_invoice,
                     'tgl_kirim' => $request->tgl_kirim,
                     'nama_pengirim' => $request->nama_pengirim,
+                    'nama_up' => $request->nama_pic,
+                    'telp_up' => $request->telp_pic,
+                    'ekspedisi_terusan' => $request->ekspedisi_terusan,
+                    'dimensi' => $request->dimensi,
+                    'tujuan_pengiriman' => $request->perusahaan_pengiriman,
+                    'alamat_pengiriman' => $request->alamat_pengiriman,
+                    'kemasan' => $request->kemasan,
+                    'ket' => $request->keterangan_pengiriman,
                     'status_id' => '11'
                 ]);
             }
@@ -5094,14 +5142,11 @@ class LogistikController extends Controller
                     'ekspedisi' => $ekspedisi,
                     'customer' => $dsb_nama,
                     'perusahaan_pengiriman' => $pesanan->tujuan_kirim,
-                    'alamat_pengiriman' => $pesanan->alamat_kirim,
-                    'kemasan' => $pesanan->kemasan,
-                ),
-                'item' => array(
-                    'produk' => $prd,
-                    'part' => $part
+                    'item' => array(
+                        'produk' => $prd,
+                        'part' => $part
+                    )
                 )
-
             );
 
 

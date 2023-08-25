@@ -26,7 +26,7 @@
                 left: 0px;
                 right: 0px;
                 height: 250px;
-                margin-bottom: 100px;
+                margin-bottom: 110px;
                 /** Extra personal styles **/
                 background-color: #ffffff;
                 color: rgb(0, 0, 0);
@@ -67,7 +67,7 @@
         }
 
     .td-width-header {
-      width: 35%;
+      width: 40%;
     }
 
     main>table{
@@ -140,7 +140,7 @@
                         <td>: {{$data->no_po}}</td>
                       </tr>
                       <tr>
-                        <td class="td-width-header">Keterangan Pengiriman</td>
+                        <td class="td-width-header">Ket. Pengiriman</td>
                         <td>:
                           @switch($data->keterangan_pengiriman)
                               @case('bayar_tujuan')
@@ -277,18 +277,16 @@
                                 {{ $item->satuan}}
                               </td>
                           </tr>
-                          @if(isset($item->noseri)){
+                          @if(isset($item->noseri))
                           <tr style="border-bottom: 1px solid black">
-                            <td class="vera" colspan="5">
+                            <td></td>
+                            <td class="vera" colspan="4">
                                 <b>No Seri</b> : <br>
                               @php echo implode(', ',$item->noseri) @endphp
                              </td>
                           </tr>
-                          }
                           @endif
-                          
-
-                          @endforeach
+                        @endforeach
 
                         {{-- <tr>
                             <td class="align-center" colspan="3">

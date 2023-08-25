@@ -108,7 +108,7 @@
                       </tr>
                       <tr>
                         <td></td>
-                        <td><b>UP : </b>{{$data->up}}</td>
+                        <td><b>UP : </b>{{$data->nama_up}}  {{$data->telp_up}}</td>
                       </tr>
                   </table>
               </td>
@@ -116,36 +116,43 @@
                 <table style="width: 100%">
                   <tr>
                     <td class="td-width-header">Nomor SJ</td>
-                    <td>: {{$data->nosj}}</td>
+                    <td>:{{$data->nosurat}}</td>
                   </tr>
                   <tr>
                     <td class="td-width-header">Tanggal SJ</td>
-                    {{-- {{ \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') }} --}}
-                    <td>: {{ \Carbon\Carbon::parse($data->tgl_sj)->isoFormat('DD MMMM YYYY') }}</td>
+                    <td>:  {{ \Carbon\Carbon::parse($data->tgl_kirim)->isoFormat('DD MMMM YYYY') }}</td>
                   </tr>
                   <tr>
                     <td class="td-width-header">Nomor PO</td>
-                    <td>: {{$data->no_po}}</td>
+                    <td>:     @if (isset($data->DetailLogistik[0]))
+                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                          @else
+                            {{ $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->no_po}}
+                          @endif</td>
                   </tr>
                   <tr>
                     <td class="td-width-header">Ket. Pengiriman</td>
                     <td>:
-                      @switch($data->keterangan_pengiriman)
-                          @case('bayar_tujuan')
-                              <span>BAYAR TUJUAN <span>
+                    @switch($data->ket)
+                              @case('bayar_tujuan')
+                                  <span>BAYAR TUJUAN <span>
+                                  @break
+                                @case('bayar_sinko')
+                                    <span>BAYAR SINKO </span>
+                                    @break
+                              @default
+                              <span>NON BAYAR<span>
                               @break
-                            @case('bayar_sinko')
-                                <span>BAYAR SINKO </span>
-                                @break
-                          @default
-                          <span>NON BAYAR<span>
-                          @break
-                      @endswitch
+                          @endswitch
                     </td>
                   </tr>
                   <tr>
                     <td class="td-width-header">Ekspedisi</td>
-                    <td>: {{$data->ekspedisi}}</td>
+                    <td>: @if ($data->nama_pengirim == '')
+                            {{$data->Ekspedisi->nama}}
+                            @else
+                            {{$data->nama_pengirim}}
+                            @endif</td>
                   </tr>
                 </table>
                 </tr>
@@ -155,13 +162,64 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th >No</th>
-                    <th>Nama Barang</th>
-                    <th>Jumlah</th>
+                    <th  class="vera align-center">No</th>
+                    <th  class="vera align-center">Nama Barang</th>
+                    <th  class="vera align-center">Jumlah</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ( $data->item as $key => $item)
+                @php $no = 0; @endphp
+                @foreach($data_produk as $e)
+                @if(isset($e->DetailPesananProduk))
+                @php $no =$loop->iteration; @endphp
+                <tr
+                @if(count ($e->NoseriDetailLogistik) <= 0)
+                style="border-bottom: 1px solid black"
+                @endif>
+
+                <td class="vera align-center">
+                    {{ $loop->iteration }}
+                </td>
+                <td class="vera">
+                    @if($e->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias != NULL)
+                    {{$e->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias}}
+                    @else
+                    {{$e->DetailPesananProduk->GudangBarangJadi->Produk->nama}} - {{$e->DetailPesananProduk->GudangBarangJadi->nama}}
+                    @endif
+                </td>
+                <td class="vera">
+                    {{$e->NoseriDetailLogistik->count()}}.00
+                </td>
+                </tr>
+                @if(count ($e->NoseriDetailLogistik) > 0)
+                <tr style="border-bottom: 1px solid black">
+                  <td class="vera" colspan="2">
+                      <b>No Seri</b> : <br>
+                      @foreach($e->NoseriDetailLogistik as $x)
+                      {{$x->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}
+                      @if( !$loop->last)
+                      ,
+                      @endif
+                      @endforeach
+                   </td>
+                </tr>
+                @endif
+
+                @else
+                <tr >
+                    <td  class="vera align-center"> {{$loop->iteration + $no}}</td>
+                    {{-- <td>{{$e->DetailPesananPart->Sparepart->kode}}</td> --}}
+                    <td class="vera align-center">
+                        {{$e->DetailPesananPart->Sparepart->nama}}
+                    </td>
+                    <td  class="vera align-center">{{$e->DetailPesananPart->jumlah}}.00</td>
+
+                </tr>
+
+                @endif
+
+                @endforeach
+                {{-- @foreach ( $data->item as $key => $item)
                 <tr class="text-center"
                 @if(!isset($item->noseri))
                     style="border-bottom: 1px solid black"
@@ -186,10 +244,10 @@
                     </td>
                 </tr>
                 @endif
-                @endforeach
+                @endforeach  --}}
             </tbody>
             <tfoot class="text-center">
-                @php
+                {{-- @php
                     $totalproduk = 0;
                     $totalpart = 0;
 
@@ -205,25 +263,25 @@
                 @endphp
                 <tr>
                     <td colspan="3">Total : {{ $total }}.00 Unit</td>
-                </tr>
+                </tr>  --}}
             </tfoot>
         </table>
         @if($data->dimensi != "")
-                <div style="margin: 10px 0px;">
-                <b>Dimensi</b>
-                <br>
-                {{ $data->dimensi}}
-            @endif
-            @if($data->ekspedisi_terusan != "")
-                </div
-                @if($data->dimensi == "")
-                style="margin: 10px 0px;"
-                @endif
-                >
-                <b>Ekspedisi Terusan : </b><br>
-                {{ $data->ekspedisi_terusan}}
-                <br>
-                </div>
+        <div style="margin: 10px 0px;">
+          <b>Dimensi</b>
+        <br>
+        {{ $data->dimensi}}
+      @endif
+      @if($data->ekspedisi_terusan != "")
+        </div
+        @if($data->dimensi == "")
+          style="margin: 10px 0px;"
+        @endif
+        >
+        <b>Ekspedisi Terusan : </b><br>
+        {{ $data->ekspedisi_terusan}}
+        <br>
+        </div>
         @endif
     </main>
     <footer>
@@ -232,12 +290,12 @@
           <tr>
             <td class="align-left vera" width="12%">
               <b>Keterangan : </b><br>
-              {{$data->paket}}
+              {{-- {{$data->paket}}
               @if ($data->ket != null)
                - {{$data->ket}}
               @else
               <br>
-              @endif
+              @endif --}}
             </td>
           </tr>
       </table>
