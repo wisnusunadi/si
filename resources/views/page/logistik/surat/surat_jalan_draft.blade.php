@@ -249,7 +249,7 @@
                     <tbody style="page-break-after: avoid !important;">
                         @foreach ( $data->item as $key => $item)
                         <tr
-                        @if(!isset($item->noseri))
+                        @if(!isset($item->detail))
                         style="border-bottom: 1px solid black"
                         @endif
                         >
@@ -257,32 +257,51 @@
                                 {{ $key+1 }}
                             </td>
                             <td class="vera align-center">
-                              @if($item->kode == null)
-                                -
-                              @else
+                              @if(isset($item->kode))
                                 {{$item->kode}}
+                              @else
+                                -
                               @endif
                             </td>
                             <td class="vera">
                                 {{$item->nama}}
                             </td>
+                            @php
+                              $jumlah = 0;
+                              if(isset($item->detail)){
+                                foreach ($item->detail as $key => $detail) {
+                                  $jumlah += $detail->jumlah_noseri;
+                                }
+                              }else{
+                                $jumlah = $item->jumlah;
+                              }
+
+                              $satuan = null;
+                              if(isset($item->detail)){
+                                $satuan = $item->detail[0]->satuan;
+                              }else{
+                                $satuan = $item->satuan;
+                              }
+                            @endphp
                             <td class="vera">
-                                @if(isset($item->noseri))
-                                {{$item->jumlah_noseri}}.00
-                                @else
-                                {{$item->jumlah}}.00
-                                @endif
+                              {{$jumlah}}.00
                             </td>
                               <td class="vera">
-                                {{ $item->satuan}}
+                                {{$satuan}}
                               </td>
                           </tr>
-                          @if(isset($item->noseri))
+                          @if(isset($item->detail))
                           <tr style="border-bottom: 1px solid black">
                             <td></td>
                             <td class="vera" colspan="4">
                                 <b>No Seri</b> : <br>
-                              @php echo implode(', ',$item->noseri) @endphp
+                                @foreach ($item->detail as $key => $detail)
+                                  @if ($key == count($item->detail) - 1)
+                                  {{ $detail->nama }} : {{ implode(', ', $detail->noseri) }} 
+                                @else
+                                  {{ $detail->nama }} : {{ implode(', ', $detail->noseri) }} <br>
+                                @endif
+                                @endforeach
                              </td>
                           </tr>
                           @endif
