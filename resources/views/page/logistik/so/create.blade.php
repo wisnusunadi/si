@@ -1,16 +1,13 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <form action="/api/logistik/so/create/{{ $jenis }}" method="POST"
     id="form-logistik-create">
     @method('PUT')
     @csrf
     <div class="content">
         <div class="row d-flex justify-content-center">
-            {{-- <div class="d-flex justify-content-center"> --}}
             <div class="col-lg-11">
-                {{-- <div class="d-flex justify-content-center"> --}}
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
-                        <div class="card">
+                        {{-- <div class="card">
                             <div class="card-body">
                               <h5>Data PIC</h5>
                               <div class="form-group row">
@@ -22,12 +19,11 @@
                               <div class="form-group row">
                                 <label class="col-form-label col-lg-5 col-md-12 labelket" for="no_invoice">Nomor Telepon PIC</label>
                                 <div class="col-lg-6 col-md-12">
-                                  {{-- input with number only --}}
                                   <input type="text" class="form-control" name="telp_pic" id="" onkeypress="return isNumberKey(event)">
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </div> --}}
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-horizontal">
@@ -145,7 +141,14 @@
                                         {{-- </div> --}}
                                         {{-- </div> --}}
                                     </div>
-                                    <div class="form-group row">
+                                    {{-- <div class="form-group row">
+                                        <label for="dimensi" class="col-form-label col-lg-5 col-md-12 labelket">Ekspedisi Terusan</label>
+                                        <div class="col-lg-7 col-md-12">
+                                          <textarea type="text" class="form-control col-form-label" name="ekspedisi_terusan" id="dimensi"></textarea>
+                                          <div class="invalid-feedback" id="msgnama_pengirim"></div>
+                                        </div>
+                                      </div> --}}
+                                    {{-- <div class="form-group row">
                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
                                           <div class="col-lg-6 col-md-12 col-form-label">
                                             <div class="form-check form-check-inline">
@@ -163,11 +166,11 @@
                                               id="msg_alamat_pengiriman">
                                           </div>
                                         </div>
-                                      </div>
-                                      <div class="form-group row">
+                                      </div> --}}
+                                      {{-- <div class="form-group row">
                                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
                                         <div class="col-lg-6 col-md-12 col-form-label">
-                    
+
                                           <div class="form-check form-check-inline">
                                               <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti" />
                                               <label for="kemasan0" class="form-check-label">PETI</label>
@@ -179,6 +182,13 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
+                                        <label for="dimensi" class="col-form-label col-lg-5 col-md-12 labelket">Dimensi</label>
+                                        <div class="col-lg-7 col-md-12">
+                                          <textarea type="text" class="form-control col-form-label" name="dimensi" id="dimensi"></textarea>
+                                          <div class="invalid-feedback" id="msgnama_pengirim"></div>
+                                        </div>
+                                      </div>
+                                    <div class="form-group row">
                                       <label class="col-form-label col-lg-5 col-md-12 labelket"
                                           for="nama_pengirim">Keterangan Pengiriman</label>
                                       <div class="col-lg-7 col-md-12">
@@ -188,7 +198,7 @@
                                             <option value="non_bayar">NON BAYAR</option>
                                           </select>
                                       </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -232,30 +242,19 @@
                         <button type="submit" class="btn btn-info float-right" id="btnsimpan" disabled>Simpan</button>
                     </div>
                 </div>
-                {{-- </div> --}}
             </div>
-            {{-- </div> --}}
         </div>
     </div>
 </form>
 <script>
-        $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function () {
-      let pilihan_pengiriman = $(this).val();
-      $('#perusahaan_pengiriman').attr('readonly', true);
-      $('#alamat_pengiriman').attr('readonly', true);
-      $('#perusahaan_pengiriman').val('');
-            // add placeholder
-      $('#perusahaan_pengiriman').attr('placeholder', 'Masukkan Nama Perusahaan');
-      $('#alamat_pengiriman').val('');
-      $('#alamat_pengiriman').removeClass('is-invalid');
-      // add placeholder
-      $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
-
-      if(pilihan_pengiriman == 'lainnya'){
-        $('#perusahaan_pengiriman').val('');
-        $('#alamat_pengiriman').val('');
-        $('#perusahaan_pengiriman').attr('readonly', false);
-        $('#alamat_pengiriman').attr('readonly', false);
-      }
-    });
+    function isNumberKey(event) {
+        var charCode = (event.which) ? event.which : event.keyCode
+        if (charCode == 13) {
+            return true;
+        } else if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 </script>
