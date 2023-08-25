@@ -4951,14 +4951,12 @@ class LogistikController extends Controller
 
     public function create_logistik_draft(Request $request)
     {
-
         $items = array();
-
+        // dd($result->all());
         if (isset($request->part)) {
         foreach($request->part as $key_p => $i){
             $part[$key_p]= array(
                 "jenis"=> 'part',
-                "no"=> $key_p+1,
                 "kode"=> $i['kode'],
                 "nama"=> $i['nama'],
                 "jumlah"=> $i['jumlah'],
@@ -4967,21 +4965,55 @@ class LogistikController extends Controller
           }
           $items = $part;
         }
+
+        // $parts[]= array(
+        //     "jenis"=> 'part',
+        //     "no"=> 1,
+        //     "kode"=> 'SP012333',
+        //     "nama"=> 'YUUDDDDF FDFDF',
+        //     "jumlah"=> 2,
+        //     "satuan"=> 'UNIT',
+        // );
+
+        // $items = $parts;
         if (isset($request->produk )) {
-            foreach($request->produk as $key_pr => $i){
-                $produk[$key_pr]= array(
-                    "jenis"=> 'produk',
-                    "kode"=> $i['kode'] ?? "",
-                    "nama"=> $i['nama_alias'] ?? $i['nama'],
-                    "jumlah"=> $i['jumlah'],
-                    "jumlah_noseri"=> $i['jumlah_noseri'],
+            // foreach($request->produk as $key_pr => $i){
+            //     $produk[$key_pr]= array(
+            //         "jenis"=> 'produk',
+            //         "kode"=> $i['kode'] ?? "",
+            //         "nama"=> $i['nama_alias'] ?? $i['nama'],
+            //         "jumlah"=> $i['jumlah'],
+            //         "jumlah_noseri"=> $i['jumlah_noseri'],
+            //         "satuan"=> 'Unit',
+            //         "noseri"=> $i['noseri_selected']
+            //     );
+            // }
+
+            foreach ($request->produk as $item) {
+                $id = $item["detail_pesanan_id"];
+                $nama_paket = $item["nama_alias"];
+                $shippingNo =' $item["shipping_no"]';
+
+                if (!isset($produk[$id])) {
+                    $produk[$id] = array(
+                        "id" => $id,
+                        "jenis" => 'produk',
+                        "nama" => $nama_paket,
+                        "detail" => array()
+                    );
+                }
+                $produk[$id]["detail"][] = array(
+                    "kode"=> $item['kode'] ?? "",
+                    "nama"=>  $item['nama'],
+                    "jumlah"=> $item['jumlah'],
+                    "jumlah_noseri"=> $item['jumlah_noseri'],
                     "satuan"=> 'Unit',
-                    "noseri"=> $i['noseri_selected']
+                    "noseri"=> $item['noseri_selected']
                 );
             }
-
             $items = array_merge($items,$produk);
         }
+        // dd($items);
 
         $p = Pesanan::find($request->dataform['pesanan_id']);
         if($p->Ekatalog){
@@ -5022,15 +5054,14 @@ class LogistikController extends Controller
 
         $data = json_encode($isi);
 
+    //    dd($isi);
 
         $save =  LogistikDraft::create([
             'pesanan_id' => $request->dataform['pesanan_id'],
             'sj' =>$request->dataform['jenis_sj'] .$request->dataform['no_invoice'],
             'isi' => $data
 
-        ]);
-
-
+        ] );
 
         if($save){
             return response()->json(['messages' => 'berhasil','id' => $save->id]);
@@ -5064,6 +5095,7 @@ class LogistikController extends Controller
                 foreach ($data_prd as $key => $d){
                     $prd[$key] = array(
                         'id' => $d->id,
+                        'detail_pesanan_id' => $d->detail_pesanan_id,
                         'nama_alias' => $d->DetailPesanan->PenjualanProduk->nama_alias != NULL ? $d->DetailPesanan->PenjualanProduk->nama_alias  : $d->GudangBarangJadi->Produk->nama,
                         'nama' => $d->GudangBarangJadi->Produk->nama.' '.$d->GudangBarangJadi->nama,
                         'jumlah' => $d->DetailPesanan->jumlah
@@ -5142,10 +5174,10 @@ class LogistikController extends Controller
                     'ekspedisi' => $ekspedisi,
                     'customer' => $dsb_nama,
                     'perusahaan_pengiriman' => $pesanan->tujuan_kirim,
-                    'item' => array(
-                        'produk' => $prd,
-                        'part' => $part
-                    )
+                ),
+                'item' => array(
+                    'produk' => $prd,
+                    'part' => $part
                 )
             );
 
