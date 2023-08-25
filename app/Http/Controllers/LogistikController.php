@@ -5143,11 +5143,12 @@ class LogistikController extends Controller
                     'provinsi' =>   $provinsi,
                     'ekspedisi' => $ekspedisi,
                     'customer' => $dsb_nama,
-                    'perusahaan_pengiriman' => $pesan,
-                'item' => array(
+                    'perusahaan_pengiriman' => $pesanan->perusahaan_pengiriman,
+                    'item' => array(
                     'produk' => $prd,
                     'part' => $part
-                )
+                    );
+                );
 
             );
 
