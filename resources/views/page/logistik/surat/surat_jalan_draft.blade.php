@@ -294,7 +294,7 @@
                           <tr style="border-bottom: 1px solid black">
                             <td></td>
                             <td class="vera" colspan="4">
-                                <b>No Seri</b> : <br>
+                                <b>No Seri</b> :
                                 @foreach ($item->detail as $key => $detail)
                                   @if ($key == count($item->detail) - 1)
                                   {{ $detail->nama }} : {{ implode(', ', $detail->noseri) }} 
