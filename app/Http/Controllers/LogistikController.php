@@ -52,16 +52,36 @@ class LogistikController extends Controller
             $data_prt = DetailLogistikPart::where('logistik_id', $id)->get();
             $data_produk = $data_prd->merge($data_prt);
         }
-        $customPaper = array(0,0,605.44,788.031);
-        $pdf = PDF::loadView('page.logistik.surat.surat_jalan_kirim', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
-        // $pdf = PDF::loadView('page.logistik.pengiriman.print_sj', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
-        return $pdf->stream('');
+
+        if (isset($data->DetailLogistik[0])) {
+            $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
+            $pesanan = $name[1];
+        }else{
+            $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
+            $pesanan = $name[1];
+        }
+
+        if($pesanan == "SPB"){
+            return view('page.logistik.surat.surat_jalan_kirim_spb', ['data' => $data,'data_produk' => $data_produk]);
+        }else{
+            $customPaper = array(0,0,605.44,788.031);
+            $pdf = PDF::loadView('page.logistik.surat.surat_jalan_kirim', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
+         return $pdf->stream('');
+
+        }
+   $customPaper = array(0,0,605.44,788.031);
+        // $pdf = PDF::loadView('page.logistik.surat.surat_jalan_kirim', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
+        // // $pdf = PDF::loadView('page.logistik.pengiriman.print_sj', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
+
     }
     public function cetak_surat_jalan($id)
     {
-
         $data = LogistikDraft::find($id);
+
         $log = json_decode($data->isi);
+        $name = explode('/', $log->so);
+
+
         // $page = array();
         // $mergedNoseri = [];
 
@@ -127,11 +147,16 @@ class LogistikController extends Controller
         // );
         //dd($data);
         // ekat, spa
-        $customPaper = array(0,0,605.44,394.031);
-        $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft',['data' => $log,'hal' => 2])->setPaper($customPaper);
-        return $pdf->stream('');
-        // // spb
-        return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log]);
+
+        if($name[1] == 'SPB'){
+            return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log]);
+        }else{
+            $customPaper = array(0,0,605.44,788.031);
+            $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft',['data' => $log])->setPaper($customPaper);
+             return $pdf->stream('');
+        }
+
+
 
 
 
@@ -162,7 +187,7 @@ class LogistikController extends Controller
 // }
 
 
-       return response()->json(['data' => $data]);
+    //    return response()->json(['data' => $data]);
 
     }
     // public function cetak_surat_jalan($id)
