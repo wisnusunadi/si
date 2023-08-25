@@ -797,8 +797,20 @@
                 var sj_lama = $('#sj_lama').val();
                 var tgl_kirim = $('#tgl_kirim').val();
                 var pengiriman = $('input[name="pengiriman"]:checked').val();
+
                 var ekspedisi_id = $('#ekspedisi_id').val();
                 var nama_pengirim = $('#nama_pengirim').val();
+
+                var nama_pic = $('#nama_pic').val();
+                var telp_pic = $('#telp_pic').val();
+                var ekspedisi_terusan = $('#ekspedisi_terusan').val();
+                var pilihan_pengiriman = $('input[name="pilihan_pengiriman"]:checked').val();
+                var perusahaan_pengiriman = $('#perusahaan_pengiriman').val();
+                var alamat_pengiriman = $('#alamat_pengiriman').val();
+                var kemasan = $('input[name="kemasan"]:checked').val();
+                var dimensi = $('#dimensi').val();
+                var keterangan_pengiriman = $('#keterangan_pengiriman').val();
+
 
                 $.each(produk_no_seri, function() {
                     data_produk_no_seri.push(this.value);
@@ -838,18 +850,19 @@
                         produk_id: data_produk_id,
                         part_id: data_part_id,
                         part_jumlah: data_part_jumlah,
+                        nama_pic,telp_pic,no_sj_exist,ekspedisi_terusan,pilihan_pengiriman,perusahaan_pengiriman,alamat_pengiriman,kemasan,dimensi,keterangan_pengiriman
                     },
-                    beforeSend: function() {
-                        swal.fire({
-                            title: 'Silahkan Tunggu, Jangan di tutup atau di refresh',
-                            html: 'Loading...',
-                            allowOutsideClick: false,
-                            showConfirmButton: false,
-                            willOpen: () => {
-                                Swal.showLoading()
-                            }
-                        })
-                    },
+                    // beforeSend: function() {
+                    //     swal.fire({
+                    //         title: 'Silahkan Tunggu, Jangan di tutup atau di refresh',
+                    //         html: 'Loading...',
+                    //         allowOutsideClick: false,
+                    //         showConfirmButton: false,
+                    //         willOpen: () => {
+                    //             Swal.showLoading()
+                    //         }
+                    //     })
+                    // },
                     success: function(response) {
                         if (response['data'] == "success") {
                             swal.fire(
@@ -924,6 +937,56 @@
                             searchable: false
                         }
                     ]
+                });
+            }
+
+            const header = (pesanan_id) => {
+                $.ajax({
+                    url: "/api/logistik/so/data/detail/item/" + pesanan_id,
+                    'dataType': 'json',
+                    success: function (data) {
+                        if(data.header.perusahaan_pengiriman && data.header.alamat_pengiriman) {
+                            // pilihan pengiriman == penjualan
+                            $('#pilihan_pengiriman0').prop('checked', true)
+                            $('#perusahaan_pengiriman').attr('readonly', true);
+                            $('#alamat_pengiriman').attr('readonly', true);
+                            $('input[name="perusahaan_pengiriman"]').val(data.header.perusahaan_pengiriman)
+                            $('input[name="alamat_pengiriman"]').val(data.header.alamat_pengiriman)
+                        }else{
+                            $('#pilihan_pengiriman1').prop('checked', true)
+                            $('input[name="perusahaan_pengiriman"]').val('')
+                            $('input[name="alamat_pengiriman"]').val('')
+                            $('#perusahaan_pengiriman').attr('readonly', false);
+                            $('#alamat_pengiriman').attr('readonly', false);
+                        }
+
+                        if(data.header.kemasan == 'peti') {
+                            $('input[name="kemasan"]').val('peti').prop('checked', true)
+                        } else {
+                            $('input[name="kemasan"]').val('nonpeti').prop('checked', true)
+                        }
+
+                        if(data.header.ekspedisi) {
+                            $('#pengiriman1').prop('checked', true)
+                            $('#ekspedisi').removeClass('hide')
+                            $('#nonekspedisi').addClass('hide')
+
+                            let selectElement = $('.ekspedisi_id');
+                            let option = $('<option>', {
+                                value: data.header.ekspedisi.id,
+                                text: data.header.ekspedisi.nama
+                            })
+                            selectElement.empty()
+                            selectElement.append(option)
+                            selectElement.val(data.header.ekspedisi.id)
+                        } else {
+                            $('#pengiriman2').prop('checked', true)
+                            $('#ekspedisi').addClass('hide')
+                            $('#nonekspedisi').removeClass('hide')
+                            let selectElement = $('.ekspedisi_id');
+                            selectElement.empty()
+                        }
+                    }
                 });
             }
 
@@ -1291,6 +1354,8 @@
                         $('#edit').html(result).show();
                         select_sj_lama();
                         detailpesanan(produk_id, part_id, pesanan_id);
+                        header(pesanan_id);
+
                         $('.jenis_sj').select2({
                             minimumResultsForSearch: -1
                         });
@@ -1331,17 +1396,13 @@
                 let pilihan_pengiriman = $(this).val();
                 $('#perusahaan_pengiriman').attr('readonly', true);
                 $('#alamat_pengiriman').attr('readonly', true);
-                $('#perusahaan_pengiriman').val('');
                         // add placeholder
                 $('#perusahaan_pengiriman').attr('placeholder', 'Masukkan Nama Perusahaan');
-                $('#alamat_pengiriman').val('');
                 $('#alamat_pengiriman').removeClass('is-invalid');
                 // add placeholder
                 $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
 
                 if(pilihan_pengiriman == 'lainnya'){
-                    $('#perusahaan_pengiriman').val('');
-                    $('#alamat_pengiriman').val('');
                     $('#perusahaan_pengiriman').attr('readonly', false);
                     $('#alamat_pengiriman').attr('readonly', false);
                 }
@@ -1461,6 +1522,15 @@
                     $('.ekspedisi_id').next(".select2-container").show();
                     $('#ekspedisi_nama').addClass('hide');
                     $('input[name="pengiriman"]').removeAttr('disabled');
+                    $('input[name="nama_pic"]').removeAttr('disabled');
+                    $('input[name="telp_pic"]').removeAttr('disabled');
+                    $('textarea[name="ekspedisi_terusan"]').removeAttr('disabled');
+                    $('input[name="pilihan_pengiriman"]').removeAttr('disabled');
+                    $('input[name="perusahaan_pengiriman"]').removeAttr('disabled');
+                    $('input[name="alamat_pengiriman"]').removeAttr('disabled');
+                    $('input[name="kemasan"]').removeAttr('disabled');
+                    $('textarea[name="dimensi"]').removeAttr('disabled');
+                    $('select[name="keterangan_pengiriman"]').removeAttr('disabled');
                 } else if ($(this).val() == "lama") {
                     $('#sj_baru').addClass('hide');
                     $('.sj_lamas').removeClass('hide');
@@ -1471,6 +1541,16 @@
                     $('.ekspedisi_id').next(".select2-container").hide();
                     $('#ekspedisi_nama').removeClass('hide');
                     $('input[name="pengiriman"]').attr('disabled', true);
+                    $('input[name="pengiriman"]').attr('disabled', true);
+                    $('input[name="nama_pic"]').attr('disabled', true);
+                    $('input[name="telp_pic"]').attr('disabled', true);
+                    $('textarea[name="ekspedisi_terusan"]').attr('disabled', true);
+                    $('input[name="pilihan_pengiriman"]').attr('disabled', true);
+                    $('input[name="perusahaan_pengiriman"]').attr('disabled', true);
+                    $('input[name="alamat_pengiriman"]').attr('disabled', true);
+                    $('input[name="kemasan"]').attr('disabled', true);
+                    $('textarea[name="dimensi"]').attr('disabled', true);
+                    $('select[name="keterangan_pengiriman"]').attr('disabled', true);
                 }
                 validasi();
             });

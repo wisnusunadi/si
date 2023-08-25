@@ -7471,6 +7471,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                         'no' => $key + 1 ,
                         'kode' => '-',
                         'nama' => $prd->penjualanproduk->nama_alias == '' ? $prd->penjualanproduk->nama : $prd->penjualanproduk->nama_alias,
+                        'variasi' => $prd->GetVariasi(),
                         'jumlah' => $prd->jumlah,
                         'pajak' => $prd->ppn == '1' ? 'PPn' : '-',
                         'satuan' => 'UNIT'
@@ -7509,18 +7510,21 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 $alamat_cs = $pesanan->Ekatalog->Customer->alamat;
                 $ket_paket =$pesanan->Ekatalog->instansi;
                 $no_paket = $pesanan->Ekatalog->no_paket;
+                $catatan =  $pesanan->Ekatalog->ket;
 
             }elseif($pesanan->Spa){
                 $cs = $pesanan->Spa->Customer->nama;
                 $alamat_cs = $pesanan->Spa->Customer->alamat;
                 $ket_paket = '';
                 $no_paket = 'OFFLINE';
+                $catatan =  $pesanan->Spa->ket;
 
             }elseif($pesanan->Spb){
                 $cs = $pesanan->Spb->Customer->nama;
                 $alamat_cs = $pesanan->Spb->Customer->alamat;
                 $ket_paket =$pesanan->ket_kirim;
                 $no_paket = '';
+                $catatan =  $pesanan->Spb->ket;
             }
 
 
@@ -7539,13 +7543,16 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             'ket_kirim' =>  $pesanan->ket_kirim,
             'ket_paket' =>  $ket_paket,
             'no_paket' => $no_paket,
+            //*Tambahan Penjuaalan
+            'catatan' => $catatan,
+            //
             'item' => $data
         );
 
 
 
-       // return (count($data));
 
+        // return response()->json($header);
         $pdf = PDF::loadView('page.penjualan.surat.surat-perintah-kirim', ['data' => $header,'pesanan'=> $pesanan,'count_page' => count($data)])->setOptions(['defaultFont' => 'sans-serif'])->setPaper($customPaper);
         return $pdf->stream('');
     }
