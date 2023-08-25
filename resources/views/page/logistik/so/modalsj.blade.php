@@ -43,7 +43,7 @@
                       <input type="text" name="tgl_po" id="">
                       <input type="text" name="nama_customer" id="">
                       <input type="text" name="alamat_customer" id="">
-                      <input type="text" name="provinsi_id" id="">
+                      <input type="text" name="provinsi_id" id="provinsi_id_top">
                     </div>
                     <div class="form-group row">
                       <label class="col-form-label col-lg-5 col-md-12 labelket" for="no_invoice">Nama PIC</label>
@@ -392,10 +392,11 @@
 
     $('input[name="pengiriman_surat_jalan"]').on('change', function () {
       let val = $(this).val();
+      let provinsi = $('#provinsi_id_top').val();
       if (val == 'ekspedisi') {
         $('#ekspedisi').removeClass('hide');
         $('#nonekspedisi').addClass('hide');
-        ekspedisi($('#provinsi_id').val());
+        ekspedisi(provinsi);
       } else {
         $('#ekspedisi').addClass('hide');
         $('#nonekspedisi').removeClass('hide');
@@ -492,6 +493,14 @@
           delete dataform.sj_lama;
         }
 
+        if($('textarea[name="ekspedisi_terusan"]').val() == ''){
+          delete dataform.ekspedisi_terusan;
+        }
+
+        if($('textarea[name="dimensi"]').val() == ''){
+          delete dataform.dimensi;
+        }
+
         if($('input[name="nama_pic"]').val() == ''){
           delete dataform.nama_pic;
         }
@@ -504,6 +513,8 @@
         let cek = Object.values(dataform).filter(function (el) {
           return el != '';
         });
+
+        console.log(dataform)
 
         if (cek.length != Object.keys(dataform).length) {
           Swal.fire({

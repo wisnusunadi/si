@@ -3703,7 +3703,7 @@ class PenjualanController extends Controller
                         'message' => 'Cek Form Kembali',
                     ], 500);
             }
-            if ($request->no_po_ekat != NULL && ( $request->perusahaan_pengiriman_ekat == NULL || $request->alamat_pengiriman_ekat == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL) ) {
+            if ($request->no_po_ekat != NULL && ( $request->perusahaan_pengiriman_ekat == NULL || $request->alamat_pengiriman_ekat == NULL ||  $request->kemasan == NULL) ) {
                     return response()->json([
                         'message' => 'Cek Form Kembali',
                     ], 500);
@@ -3881,6 +3881,7 @@ class PenjualanController extends Controller
                 return response()->json([
                     'status' => 200,
                     'message' => 'Berhasil Ditambahkan',
+                    'pesanan_id' => $pesanan->no_po != null ? $pesanan->id : 'refresh',
                 ], 200);
             } else if ($bool == false) {
                 return response()->json([
@@ -3915,6 +3916,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 'log_id' => $k
             ]);
             $x = $pesanan->id;
+            $no_po_nonekat = $pesanan->no_po;
             if ($request->jenis_penjualan == 'spa') {
                 $p = Spa::create([
                     'customer_id' => $request->customer_id,
@@ -4000,6 +4002,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 return response()->json([
                     'status' => 200,
                     'message' => 'Berhasil Ditambahkan',
+                    'pesanan_id' => $no_po_nonekat != null ? $x : 'refresh',
                 ], 200);
             } else if ($bool == false) {
                 return response()->json([
@@ -7468,6 +7471,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                         'no' => $key + 1 ,
                         'kode' => '-',
                         'nama' => $prd->penjualanproduk->nama_alias == '' ? $prd->penjualanproduk->nama : $prd->penjualanproduk->nama_alias,
+                        'variasi' => $prd->GetVariasi(),
                         'jumlah' => $prd->jumlah,
                         'pajak' => $prd->ppn == '1' ? 'PPn' : '-',
                         'satuan' => 'UNIT'
@@ -7506,18 +7510,21 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 $alamat_cs = $pesanan->Ekatalog->Customer->alamat;
                 $ket_paket =$pesanan->Ekatalog->instansi;
                 $no_paket = $pesanan->Ekatalog->no_paket;
+                $catatan =  $pesanan->Ekatalog->ket;
 
             }elseif($pesanan->Spa){
                 $cs = $pesanan->Spa->Customer->nama;
                 $alamat_cs = $pesanan->Spa->Customer->alamat;
                 $ket_paket = '';
                 $no_paket = 'OFFLINE';
+                $catatan =  $pesanan->Spa->ket;
 
             }elseif($pesanan->Spb){
                 $cs = $pesanan->Spb->Customer->nama;
                 $alamat_cs = $pesanan->Spb->Customer->alamat;
                 $ket_paket =$pesanan->ket_kirim;
                 $no_paket = '';
+                $catatan =  $pesanan->Spb->ket;
             }
 
 
@@ -7536,13 +7543,16 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             'ket_kirim' =>  $pesanan->ket_kirim,
             'ket_paket' =>  $ket_paket,
             'no_paket' => $no_paket,
+            //*Tambahan Penjuaalan
+            'catatan' => $catatan,
+            //
             'item' => $data
         );
 
 
 
-       // return (count($data));
 
+        // return response()->json($header);
         $pdf = PDF::loadView('page.penjualan.surat.surat-perintah-kirim', ['data' => $header,'pesanan'=> $pesanan,'count_page' => count($data)])->setOptions(['defaultFont' => 'sans-serif'])->setPaper($customPaper);
         return $pdf->stream('');
     }

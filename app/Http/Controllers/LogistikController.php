@@ -52,15 +52,36 @@ class LogistikController extends Controller
             $data_prt = DetailLogistikPart::where('logistik_id', $id)->get();
             $data_produk = $data_prd->merge($data_prt);
         }
-        $customPaper = array(0, 0, 684.8094, 792.9372);
-        $pdf = PDF::loadView('page.logistik.pengiriman.print_sj', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
-        return $pdf->stream('');
+
+        if (isset($data->DetailLogistik[0])) {
+            $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
+            $pesanan = $name[1];
+        }else{
+            $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
+            $pesanan = $name[1];
+        }
+
+        if($pesanan == "SPB"){
+            return view('page.logistik.surat.surat_jalan_kirim_spb', ['data' => $data,'data_produk' => $data_produk]);
+        }else{
+            $customPaper = array(0,0,605.44,788.031);
+            $pdf = PDF::loadView('page.logistik.surat.surat_jalan_kirim', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
+         return $pdf->stream('');
+
+        }
+   $customPaper = array(0,0,605.44,788.031);
+        // $pdf = PDF::loadView('page.logistik.surat.surat_jalan_kirim', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
+        // // $pdf = PDF::loadView('page.logistik.pengiriman.print_sj', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
+
     }
     public function cetak_surat_jalan($id)
     {
-
         $data = LogistikDraft::find($id);
+
         $log = json_decode($data->isi);
+        $name = explode('/', $log->so);
+
+
         // $page = array();
         // $mergedNoseri = [];
 
@@ -125,10 +146,19 @@ class LogistikController extends Controller
         //     'noseri' => $chunkedGroups
         // );
         //dd($data);
+        // ekat, spa
 
-        $customPaper = array(0,0,605.44,788.031);
-        $pdf = PDF::loadView('page.logistik.surat.surat_jalan',['data' => $log,'hal' => 2])->setPaper($customPaper);
-        return $pdf->stream('');
+        if($name[1] == 'SPB'){
+            return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log]);
+        }else{
+            $customPaper = array(0,0,605.44,788.031);
+            $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft',['data' => $log])->setPaper($customPaper);
+             return $pdf->stream('');
+        }
+
+
+
+
 
 //         foreach ($log->item as $key => $item) {
 
@@ -157,7 +187,7 @@ class LogistikController extends Controller
 // }
 
 
-       return response()->json(['data' => $data]);
+    //    return response()->json(['data' => $data]);
 
     }
     // public function cetak_surat_jalan($id)
@@ -3544,6 +3574,7 @@ class LogistikController extends Controller
 
     public function create_logistik(Request $request, $jenis)
     {
+        // dd($request->all());
         $ids = "";
         $iddp = "";
         $poid = "";
@@ -3554,11 +3585,23 @@ class LogistikController extends Controller
 
         if ($request->no_sj_exist == 'baru') {
 
+            if($request->tujuan_pengiriman == NULL || $request->alamat_pengiriman == NULL || $request->kemasan == NULL || $request->keterangan_pengiriman == NULL){
+                return response()->json(['data' => 'error']);
+            }
             if ($request->pengiriman == 'ekspedisi') {
                 $Logistik = Logistik::create([
                     'ekspedisi_id' => $request->ekspedisi_id,
                     'nosurat' => $kodesj . $request->no_invoice,
                     'tgl_kirim' => $request->tgl_kirim,
+                    'nama_pengirim' => $request->nama_pengirim,
+                    'nama_up' => $request->nama_pic,
+                    'telp_up' => $request->telp_pic,
+                    'ekspedisi_terusan' => $request->ekspedisi_terusan,
+                    'dimensi' => $request->dimensi,
+                    'tujuan_pengiriman' => $request->perusahaan_pengiriman,
+                    'alamat_pengiriman' => $request->alamat_pengiriman,
+                    'kemasan' => $request->kemasan,
+                    'ket' => $request->keterangan_pengiriman,
                     'status_id' => '11'
                 ]);
             } else {
@@ -3566,6 +3609,14 @@ class LogistikController extends Controller
                     'nosurat' => $kodesj . $request->no_invoice,
                     'tgl_kirim' => $request->tgl_kirim,
                     'nama_pengirim' => $request->nama_pengirim,
+                    'nama_up' => $request->nama_pic,
+                    'telp_up' => $request->telp_pic,
+                    'ekspedisi_terusan' => $request->ekspedisi_terusan,
+                    'dimensi' => $request->dimensi,
+                    'tujuan_pengiriman' => $request->perusahaan_pengiriman,
+                    'alamat_pengiriman' => $request->alamat_pengiriman,
+                    'kemasan' => $request->kemasan,
+                    'ket' => $request->keterangan_pengiriman,
                     'status_id' => '11'
                 ]);
             }
@@ -4900,6 +4951,7 @@ class LogistikController extends Controller
 
     public function create_logistik_draft(Request $request)
     {
+
         $items = array();
 
         if (isset($request->part)) {
@@ -4953,10 +5005,27 @@ class LogistikController extends Controller
            "so" => $request->dataform['so'],
            "tgl_po" => $request->dataform['tgl_po'],
            "ekspedisi" => $request->dataform['pengiriman_surat_jalan'] == 'ekspedisi' ? $request->dataform['ekspedisi']['nama'] : $request->dataform['nama_pengirim'],
-           "up" => isset($request->dataform['nama_pic']) ?? ''
-           .'-'. $request->dataform['telp_pic'] ?? '',
-n_id' => $request->dataform['pesanan_id'],
-            'sj' =>$request->dataform['jenis_sj'] .$uest->dataform['no_invoice'],
+           "keterangan_pengiriman" => $request->dataform['keterangan_pengiriman'],
+           "up" => (
+            isset($request->dataform['nama_pic']) ? $request->dataform['nama_pic'] : ""
+            ) . (
+                isset($request->dataform['telp_pic']) ? (
+                    isset($request->dataform['nama_pic']) ? " - telp. " : "telp. "
+                ) . $request->dataform['telp_pic'] : ""
+            ),
+           "ket" => $ket,
+           "paket" => $paket,
+           "ekspedisi_terusan" => isset($request->dataform['ekspedisi_terusan']) == true ? $request->dataform['ekspedisi_terusan'] : "",
+           "dimensi" => isset($request->dataform['dimensi']) == true ? $request->dataform['dimensi'] : "",
+           "item" => $items
+        );
+
+        $data = json_encode($isi);
+
+
+        $save =  LogistikDraft::create([
+            'pesanan_id' => $request->dataform['pesanan_id'],
+            'sj' =>$request->dataform['jenis_sj'] .$request->dataform['no_invoice'],
             'isi' => $data
 
         ]);
