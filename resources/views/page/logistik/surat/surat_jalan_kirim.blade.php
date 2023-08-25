@@ -313,80 +313,34 @@
                        </tr>
                     </thead>
                     <tbody style="page-break-after: avoid !important;">
-                    @php $no = 0; @endphp
-                     @foreach($data_produk as $e)
-                     @if(isset($e->DetailPesananProduk))
-                     @php $no =$loop->iteration; @endphp
-                        <tr
-                        @if(count ($e->NoseriDetailLogistik) <= 0)
-                        style="border-bottom: 1px solid black"
-                        @endif
-                        >
-                            <td class="vera align-center">
-                                {{ $loop->iteration }}
-                            </td>
-                            <td class="vera align-center">
-                              {{-- @if($item->kode == null)
-                                -
-                              @else
-                                {{$item->kode}}
-                              @endif --}}
-                            </td>
-                            <td class="vera">
-                                @if($e->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias != NULL)
-                                {{$e->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias}}
-                                @else
-                                {{$e->DetailPesananProduk->GudangBarangJadi->Produk->nama}} - {{$e->DetailPesananProduk->GudangBarangJadi->nama}}
-                                @endif
-                            </td>
-                            <td class="vera">
-                                {{$e->NoseriDetailLogistik->count()}}.00
-                            </td>
-                              <td class="vera">
-                               UNIT
-                              </td>
-                          </tr>
-
-                          @if(count ($e->NoseriDetailLogistik) > 0)
-                          <tr style="border-bottom: 1px solid black">
-                            <td class="vera" colspan="5">
-                                <b>No Seri</b> : <br>
-                                @foreach($e->NoseriDetailLogistik as $x)
-                                {{$x->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}
-                                @if( !$loop->last)
-                                ,
-                                @endif
-                                @endforeach
-                             </td>
-                          </tr>
-                          @endif
-                        @else
-
+                        @foreach ($data_produk as $key => $item )
 
                         <tr>
-                            <td>{{$loop->iteration + $no}}</td>
-                            <td>{{$e->DetailPesananPart->Sparepart->kode}}</td>
-                            <td class="wb align-left">
-                                {{$e->DetailPesananPart->Sparepart->nama}}
-                            </td>
-                            <td class="nospace align-right">{{$e->DetailPesananPart->jumlah}}.00</td>
-                            <td class="wb">
-                                UNIT
-                            </td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+
                         </tr>
 
-                        @endif
-                          @endforeach
+
+                        @endforeach
+
                         {{-- <tr>
-                            <td class="align-center" colspan="3">
-
-                            </td>
-                            <td class="align-center" colspan="3">
-                              <b>Total 1 Coly</b>
-                            </td>
-
-
-                          </tr> --}}
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                        </tr> --}}
                     </tbody>
                 </table>
                 {{-- lama --}}
