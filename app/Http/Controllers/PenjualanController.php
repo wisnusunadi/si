@@ -7552,7 +7552,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
 
 
 
-        return response()->json($header);
+        // return response()->json($header);
         $pdf = PDF::loadView('page.penjualan.surat.surat-perintah-kirim', ['data' => $header,'pesanan'=> $pesanan,'count_page' => count($data)])->setOptions(['defaultFont' => 'sans-serif'])->setPaper($customPaper);
         return $pdf->stream('');
     }
