@@ -420,6 +420,10 @@
                             className: 'align-center nowrap-text'
                         },
                         {
+                            data: 'detail_pesanan_id',
+                            className: 'hide'
+                        },
+                        {
                             data: 'nama_produk',
                         },
                         {
