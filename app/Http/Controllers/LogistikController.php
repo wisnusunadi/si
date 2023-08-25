@@ -5141,9 +5141,12 @@ class LogistikController extends Controller
                     'provinsi' =>   $provinsi,
                     'ekspedisi' => $ekspedisi,
                     'customer' => $dsb_nama,
-                    'perusahaan_pengiriman' => $pesanan->tujuan_kirim,
-                    'alamat_pengiriman' => $pesanan->alamat_kirim,
-                    'kemasan' => $pesanan->kemasan,
+                    'perusahaan_pengiriman' => $pesan           "up" => (isset($request->dataform['nama_pic']) == true ? $request->dataform['nama_pic           "up" => (isset($request->dataform['nama_pic']) == true ? $request->dataform['nama_pic'           "up" => (isset($request->dataform['nama_pic']) == true ? $request->dataform['nama_pic'] : "") .
+           '-' .
+           ($request->dataform['telp_pic'] == true ? $request->dataform['telp_pic'] : ""),
+
+
+esanan->kemasan,
                 ),
                 'item' => array(
                     'produk' => $prd,
