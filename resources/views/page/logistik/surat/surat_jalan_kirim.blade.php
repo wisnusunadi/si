@@ -313,35 +313,70 @@
                        </tr>
                     </thead>
                     <tbody style="page-break-after: avoid !important;">
-                        @foreach ($data_produk as $key => $item )
+                      @foreach ($data_produk as $key => $item)
+                      <tr
+                      @if(!isset($item['detail']))
+                          style="border-bottom: 1px solid black"
+                      @endif
+                      >
+                          <td class="vera align-center">
+                              {{ $key+1 }}
+                          </td>
+                          <td class="vera align-center">
+                              @if(isset($item['kode']))
+                                  {{ $item['kode'] }}
+                              @else
+                                  -
+                              @endif
+                          </td>
+                          <td class="vera">
+                              {{ $item['nama'] }}
+                          </td>
+                          @php
+                              $jumlah = 0;
+                              if(isset($item['detail'])){
+                                  foreach ($item['detail'] as $key => $detail) {
+                                      // count array length of noseri
+                                      $jumlah += count($detail['seri']);
+                                  }
+                              } else {
+                                  $jumlah = $item->jumlah;
+                              }
+                  
+                              $satuan = null;
+                              if(isset($item['detail'])){
+                                  $satuan = $item['detail'][0]['satuan'];
+                              } else {
+                                  $satuan = $item['satuan'];
+                              }
+                          @endphp
+                          <td class="vera">
+                              {{ $jumlah }}.00
+                          </td>
+                          <td class="vera">
+                              {{ $satuan }}
+                          </td>
+                      </tr>
+                      @if(isset($item['detail']))
+                          <tr style="border-bottom: 1px solid black">
+                              <td></td>
+                              <td class="vera" colspan="4">
+                                  <b>No Seri</b> : <br>
+                                  @foreach ($item['detail'] as $key => $detail)
+                                      {{ $detail['nama'] }} :
 
-                        <tr>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-
-                        </tr>
-
-
-                        @endforeach
-
-                        {{-- <tr>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                        </tr> --}}
-                    </tbody>
+                                      @foreach ($detail['seri'] as $seriDetail)
+                                          {{ $seriDetail['seri'] }}
+                                          @if (!$loop->last)
+                                              ,
+                                          @endif
+                                      @endforeach
+                                  @endforeach
+                              </td>
+                          </tr>
+                      @endif
+                  @endforeach
+                  </tbody>
                 </table>
                 {{-- lama --}}
                 @if($data->dimensi != "")
