@@ -366,10 +366,7 @@
                                       {{ $detail['nama'] }} :
 
                                       @foreach ($detail['seri'] as $seriDetail)
-                                          {{ $seriDetail['seri'] }}
-                                          @if (!$loop->last)
-                                              ,
-                                          @endif
+                                          {{ $seriDetail['seri'] }}@if (!$loop->last),@endif
                                       @endforeach
                                   @endforeach
                               </td>
