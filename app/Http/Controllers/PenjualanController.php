@@ -26,6 +26,7 @@ use App\Models\Spb;
 use App\Models\Provinsi;
 use App\Models\SaveResponse;
 use App\Models\SystemLog;
+use App\Models\TFProduksi;
 use PDF;
 use Carbon\Doctrine\CarbonType;
 use Illuminate\Http\Request;
