@@ -3750,7 +3750,7 @@ class PenjualanController extends Controller
                 $tgl_po = $request->tanggal_po_ekat;
                 $no_do = $request->no_do_ekat;
                 $tgl_do = $request->tanggal_do_ekat;
-                $ket_po = $request->keterangan_po_ekat;
+                $ket_po = $request->keterangan_ekat;
                 if ($request->status == 'sepakat') {
                     $log_id = "9";
                 }
@@ -4195,7 +4195,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
         $p->kemasan = $request->kemasan;
         $p->ekspedisi_id = $request->ekspedisi;
         $p->ket_kirim = $request->keterangan_pengiriman;
-        $p->ket = $request->keterangan_po_ekat;
+        $p->ket = $request->keterangan_ekat;
 
 
         if ($request->status_akn == "sepakat" && $request->no_po_ekat != NULL) {
@@ -7509,7 +7509,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             if ($pesanan->Ekatalog){
                 $cs = $pesanan->Ekatalog->Customer->nama;
                 $alamat_cs = $pesanan->Ekatalog->Customer->alamat;
-                $ket_paket =$pesanan->Ekatalog->instansi;
+                $ket_paket =$pesanan->ket;
                 $no_paket = $pesanan->Ekatalog->no_paket;
                 $catatan =  $pesanan->Ekatalog->ket;
 
@@ -7518,14 +7518,14 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 $alamat_cs = $pesanan->Spa->Customer->alamat;
                 $ket_paket = '';
                 $no_paket = 'OFFLINE';
-                $catatan =  $pesanan->Spa->ket;
+                $catatan =  $pesanan->ket;
 
             }elseif($pesanan->Spb){
                 $cs = $pesanan->Spb->Customer->nama;
                 $alamat_cs = $pesanan->Spb->Customer->alamat;
                 $ket_paket =$pesanan->ket_kirim;
                 $no_paket = '';
-                $catatan =  $pesanan->Spb->ket;
+                $catatan =  $pesanan->ket;
             }
 
 
