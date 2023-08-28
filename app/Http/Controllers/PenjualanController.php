@@ -7517,8 +7517,8 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 $cs = $pesanan->Spa->Customer->nama;
                 $alamat_cs = $pesanan->Spa->Customer->alamat;
                 $ket_paket = '';
-                $no_paket = 'OFFLINE';
-                $catatan =  $pesanan->ket;
+                $no_paket = $pesanan->ket;
+                $catatan =  '';
 
             }elseif($pesanan->Spb){
                 $cs = $pesanan->Spb->Customer->nama;
