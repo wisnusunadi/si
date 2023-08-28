@@ -7,7 +7,7 @@
             <div class="col-lg-11">
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
-                        {{-- <div class="card">
+                        <div class="card">
                             <div class="card-body">
                               <h5>Data PIC</h5>
                               <div class="form-group row">
@@ -23,7 +23,7 @@
                                 </div>
                               </div>
                             </div>
-                          </div> --}}
+                          </div>
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-horizontal">
@@ -141,7 +141,7 @@
                                         {{-- </div> --}}
                                         {{-- </div> --}}
                                     </div>
-                                    {{-- <div class="form-group row">
+                                    <div class="form-group row">
                                         <label for="dimensi" class="col-form-label col-lg-5 col-md-12 labelket">Ekspedisi Terusan</label>
                                         <div class="col-lg-7 col-md-12">
                                           <textarea type="text" class="form-control col-form-label" name="ekspedisi_terusan" id="ekspedisi_terusan"></textarea>
@@ -198,7 +198,7 @@
                                             <option value="non_bayar">NON BAYAR</option>
                                           </select>
                                       </div>
-                                    </div> --}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
