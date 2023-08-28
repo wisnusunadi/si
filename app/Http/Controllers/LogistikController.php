@@ -108,7 +108,7 @@ class LogistikController extends Controller
              $items = array_merge($items,$data_prds);
              }
 
-            //  return response()->json($items);
+            //    return response()->json($items);
 
         }
 

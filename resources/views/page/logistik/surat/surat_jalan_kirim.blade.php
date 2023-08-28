@@ -226,12 +226,23 @@
                         $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                         if ($name[1] == 'EKAT') {
                             echo    $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->no_paket;
-                        }  else  {
-                            echo 'OFFLINE';
+                            echo '<br>';
+                            echo    $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->ket;
+                        }  else if($name[1] == 'SPA')  {
+                            echo 'OFFLINE <br> ';
+                            echo $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->ket;
+                        }else{
+                            echo 'OFFLINE <br> ';
+                            echo $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->ket;
                         }
                     } else {
-
-                             echo 'OFFLINE';
+                        if($name[1] == 'SPA')  {
+                            echo 'OFFLINE <br> ';
+                            echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->ket;
+                        }else{
+                            echo 'OFFLINE <br> ';
+                            echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->ket;
+                        }
                     }
                     ?>
                         <br>
@@ -340,9 +351,9 @@
                                       $jumlah += count($detail['seri']);
                                   }
                               } else {
-                                  $jumlah = $item->jumlah;
+                                  $jumlah = $item['jumlah'];
                               }
-                  
+
                               $satuan = null;
                               if(isset($item['detail'])){
                                   $satuan = $item['detail'][0]['satuan'];
@@ -368,6 +379,7 @@
                                       @foreach ($detail['seri'] as $seriDetail)
                                           {{ $seriDetail['seri'] }}@if (!$loop->last),@endif
                                       @endforeach
+                                      <br />
                                   @endforeach
                               </td>
                           </tr>
