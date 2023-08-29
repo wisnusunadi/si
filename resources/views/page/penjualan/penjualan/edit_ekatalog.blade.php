@@ -1502,6 +1502,35 @@
                 })
             }
 
+            const getekspedisiall = () => {
+                $('#ekspedisi').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/all',
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
+
             $('#jenis_paket').select2();
             var nopaketdb = "{{ str_replace(['AK1-', 'FKS-', 'KLK-'], '', $e->no_paket) }}";
             var nopaketubah = false;
@@ -1542,6 +1571,7 @@
                 ekspedisi(provinsi_instansi)
             } else {
                 $('input[value="lainnya"]').prop('checked', true);
+                getekspedisiall();
             }
 
             function checkvalidasi() {

@@ -2571,6 +2571,8 @@
                                 $('#alamat_pengiriman').val($('#alamat').val());
                                 provinsi_customer ? ekspedisi(provinsi_customer) : null;
                                 $('#alamat_pengiriman').removeClass('is-invalid');
+                            }else{
+                                getekspedisiall();
                             }
 
                             const pilihan_pengiriman_nonakn = $('input[name="pilihan_pengiriman_nonakn"]:checked').val();
@@ -2579,6 +2581,8 @@
                                 $('#alamat_pengiriman_nonakn').val($('#alamat').val());
                                 provinsi_customer ? ekspedisi_nonakn(provinsi_customer) : null;
                                 $('#alamat_pengiriman_nonakn').removeClass('is-invalid');
+                            }else{
+                                getekspedisiallnonakn();
                             }
                         }
                     }
@@ -3633,7 +3637,7 @@
                 }else{
                     $('#perusahaan_pengiriman').attr('readonly', false);
                     $('#alamat_pengiriman').attr('readonly', false);
-                    ekspedisi(provinsi_instansi);
+                    getekspedisiall();
                 }
             });
 
@@ -3669,6 +3673,7 @@
                 }else{
                     $('#perusahaan_pengiriman_nonakn').attr('readonly', false);
                     $('#alamat_pengiriman_nonakn').attr('readonly', false);
+                    getekspedisiallnonakn();
                 }
 
                 alamat == '-' ? checkValidasi('Alamat Customer harus diisi') : ekspedisi_nonakn(provinsi_customer);
@@ -3704,6 +3709,35 @@
                 })
             }
 
+            const getekspedisiallnonakn = () => {
+                $('#ekspedisi_nonakn').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/all',
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
+
             const ekspedisi = (provinsi) => {
                 $('#ekspedisi').select2({
                     placeholder: "Pilih Ekspedisi",
@@ -3717,6 +3751,34 @@
                         data: function(params) {
                             return {
                                 term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
+
+            const getekspedisiall = () => {
+                $('#ekspedisi').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/all',
+                        data: function(term) {
+                            return {
+                                term: term.term
                             }
                         },
                         processResults: function(data) {

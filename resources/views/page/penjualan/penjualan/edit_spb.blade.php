@@ -1323,6 +1323,35 @@
                 })
             }
 
+            const getekspedisiall = () => {
+                $('#ekspedisi_nonakn').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/all',
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
+
             let alamat_customer = $('#alamat_customer').val().replace(/\s/g, '');
             let alamat_pengiriman = $('#alamat_pengiriman_nonakn').val().replace(/\s/g, '');
 
@@ -1331,6 +1360,7 @@
                 ekspedisi_nonakn(provinsi_customer)
             } else {
                 $('input[value="lainnya"]').prop('checked', true);
+                getekspedisiall()
             }
 
             function checkvalidasi() {
