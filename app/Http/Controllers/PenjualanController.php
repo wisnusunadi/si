@@ -4138,7 +4138,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             ], 500);
     }
 
-    if ($request->status == 'sepakat' && ( $request->perusahaan_pengiriman == NULL || $request->alamat_pengiriman == NULL ||  $request->kemasan == NULL || $request->ekspedisi == NULL) ) {
+    if ($request->status == 'sepakat' && ( $request->perusahaan_pengiriman == NULL || $request->alamat_pengiriman == NULL ||  $request->kemasan == NULL ) ) {
         return response()->json([
             'message' => 'Cek Form Kembali',
         ], 500);
