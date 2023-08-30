@@ -4615,6 +4615,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 if (!empty($request->no_do) && !empty($request->tgl_do)) {
                     $po->no_do = $request->no_do;
                     $po->tgl_do = $request->tgl_do;
+                    $po->ket = $request->keterangan;
                     $pou = $po->save();
                     if (!$pou) {
                         $bool = false;
@@ -4622,6 +4623,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 } else if (empty($request->no_do) && empty($request->tgl_do)) {
                     $po->no_do = "";
                     $po->tgl_do = NULL;
+                    $po->ket = $request->keterangan;
                     $pou = $po->save();
                     $bool = true;
                 } else {
@@ -4635,6 +4637,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             if (!empty($request->no_do) && !empty($request->tgl_do)) {
                 $po->no_do = $request->no_do;
                 $po->tgl_do = $request->tgl_do;
+                $po->ket = $request->keterangan;
                 $pou = $po->save();
 
                 if (!$pou) {
@@ -4643,6 +4646,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             } else if (empty($request->no_do) && empty($request->tgl_do)) {
                 $po->no_do = "";
                 $po->tgl_do = NULL;
+                $po->ket = $request->keterangan;
                 $pou = $po->save();
                 $bool = true;
             } else {
