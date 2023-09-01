@@ -2521,6 +2521,17 @@
                 }
             });
             $("#customer_id").attr('disabled', true);
+            const get_data_customer = (id) => {
+                $.ajax({
+                    url: '/api/customer/select/' + id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        $('#perusahaan_pengiriman_nonakn').val(res[0].nama);
+                        $('#alamat_pengiriman_nonakn').val(res[0].alamat);
+                    }
+                });
+            }
             $('.customer_id').select2({
                 placeholder: "Pilih Customer",
                 ajax: {
@@ -2569,7 +2580,8 @@
                             if(pilihan_pengiriman == "distributor") {
                                 $('#perusahaan_pengiriman').val(nama_customer);
                                 $('#alamat_pengiriman').val($('#alamat').val());
-                                provinsi_customer ? ekspedisi(provinsi_customer) : null;
+                                getekspedisiall();
+                                // provinsi_customer ? ekspedisi(provinsi_customer) : null;
                                 $('#alamat_pengiriman').removeClass('is-invalid');
                             }else{
                                 getekspedisiall();
@@ -2577,9 +2589,9 @@
 
                             const pilihan_pengiriman_nonakn = $('input[name="pilihan_pengiriman_nonakn"]:checked').val();
                             if(pilihan_pengiriman_nonakn == "distributor") {
-                                $('#perusahaan_pengiriman_nonakn').val(nama_customer);
-                                $('#alamat_pengiriman_nonakn').val($('#alamat').val());
-                                provinsi_customer ? ekspedisi_nonakn(provinsi_customer) : null;
+                                get_data_customer(id);
+                                // provinsi_customer ? ekspedisi_nonakn(provinsi_customer) : null;
+                                getekspedisiallnonakn();
                                 $('#alamat_pengiriman_nonakn').removeClass('is-invalid');
                             }else{
                                 getekspedisiallnonakn();
@@ -3664,12 +3676,8 @@
 
                 if(pilihan_pengiriman == 'distributor'){
                     // remove text pilih customer on customer_id
-                    let customer = $('#customer_id').text();
-                    customer = customer.replace('Pilih Customer', '');
-                    // remove space on text first
-                    customer = customer.replace(/^\s+|\s+$/g, '');
-                    $('#perusahaan_pengiriman_nonakn').val(customer);
-                    $('#alamat_pengiriman_nonakn').val($('#alamat').val());
+                    let customer = $('select[name="customer_id"]').val();
+                    get_data_customer(customer);
                 }else{
                     $('#perusahaan_pengiriman_nonakn').attr('readonly', false);
                     $('#alamat_pengiriman_nonakn').attr('readonly', false);

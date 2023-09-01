@@ -1568,7 +1568,8 @@
                 $('input[value="distributor"]').prop('checked', true);
             } else if (alamat_pengiriman == alamat_instansi) {
                 $('input[value="instansi"]').prop('checked', true);
-                ekspedisi(provinsi_instansi)
+                // ekspedisi(provinsi_instansi)
+                getekspedisiall();
             } else {
                 $('input[value="lainnya"]').prop('checked', true);
                 getekspedisiall();
@@ -1795,6 +1796,11 @@
                         provinsi_customer = data[0].id_provinsi;
                         $('#alamat_customer').val(data[0].alamat);
                         $('#telepon_customer').val(data[0].telp);
+
+                        if($('input[type="radio"][name="pilihan_pengiriman"]:checked').val() == 'distributor'){
+                            $('#perusahaan_pengiriman').val(data[0].nama);
+                            $('#alamat_pengiriman').val(data[0].alamat);
+                        }
                     }
                 });
 

@@ -1347,7 +1347,9 @@
 
             if (alamat_pengiriman == alamat_customer) {
                 $('input[value="distributor"]').prop('checked', true);
-                ekspedisi_nonakn(provinsi_customer)
+                // ekspedisi_nonakn(provinsi_customer)
+                getekspedisiall()
+
             } else {
                 $('input[value="lainnya"]').prop('checked', true);
                 getekspedisiall()
@@ -1696,6 +1698,11 @@
                         nama_customer = data[0].nama
                         $('#alamat_customer').val(data[0].alamat);
                         $('#telepon_customer').val(data[0].telp);
+
+                        if($('input[type="radio"][name="pilihan_pengiriman_nonakn"]:checked').val() == 'distributor'){
+                            $('#perusahaan_pengiriman_nonakn').val(data[0].nama);
+                            $('#alamat_pengiriman_nonakn').val(data[0].alamat);
+                        }
                     }
                 });
                 checkvalidasi();
