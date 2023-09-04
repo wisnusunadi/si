@@ -1352,6 +1352,8 @@
 
             } else {
                 $('input[value="lainnya"]').prop('checked', true);
+                $('#perusahaan_pengiriman_nonakn').attr('readonly', false);
+                $('#alamat_pengiriman_nonakn').attr('readonly', false);
                 getekspedisiall()
             }
 

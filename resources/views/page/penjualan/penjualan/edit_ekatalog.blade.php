@@ -1566,12 +1566,15 @@
 
             if (alamat_pengiriman == alamat_customer) {
                 $('input[value="distributor"]').prop('checked', true);
+                getekspedisiall();
             } else if (alamat_pengiriman == alamat_instansi) {
                 $('input[value="instansi"]').prop('checked', true);
                 // ekspedisi(provinsi_instansi)
                 getekspedisiall();
             } else {
                 $('input[value="lainnya"]').prop('checked', true);
+                $('#perusahaan_pengiriman').attr('readonly', false);
+                $('#alamat_pengiriman').attr('readonly', false);
                 getekspedisiall();
             }
 
