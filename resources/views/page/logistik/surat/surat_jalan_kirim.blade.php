@@ -344,15 +344,7 @@
                               {{ $item['nama'] }}
                           </td>
                           @php
-                              $jumlah = 0;
-                              if(isset($item['detail'])){
-                                  foreach ($item['detail'] as $key => $detail) {
-                                      // count array length of noseri
-                                      $jumlah += count($detail['seri']);
-                                  }
-                              } else {
-                                  $jumlah = $item['jumlah'];
-                              }
+
 
                               $satuan = null;
                               if(isset($item['detail'])){
@@ -362,7 +354,7 @@
                               }
                           @endphp
                           <td class="vera">
-                              {{ $jumlah }}.00
+                              {{  $item['jumlah'] }}.00
                           </td>
                           <td class="vera">
                               {{ $satuan }}

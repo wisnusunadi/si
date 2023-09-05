@@ -46,7 +46,7 @@ class LogistikController extends Controller
         $data_produk = "";
         if (isset($data->DetailLogistik[0]) && !isset($data->DetailLogistikPart)) {
             $data_prd = DetailLogistik::with(['NoseriDetailLogistik.NoseriDetailPesanan.NoseriTGbj.NoseriBarangJadi','DetailPesananProduk.GudangBarangJadi.Produk','DetailPesananProduk.DetailPesanan.PenjualanProduk'])->where('logistik_id', $id)->get();
-
+            $maxJumlah = 0;
             foreach($data_prd as $key => $prd){
                 $set_produk[$key] = array(
                     'id' => $prd->id,
@@ -66,18 +66,21 @@ class LogistikController extends Controller
 
 
             foreach($set_produk as $prd){
+                $jumlahs = intval($prd['jumlah_noseri']);
                 $id = $prd["detail_pesanan_id"];
                 $nama = $prd["nama_alias"];
                if (!isset($data_prds[$id])) {
                    $data_prds[$id] = array(
                        "id" => $id,
                        "nama" => $nama,
+                       "jumlah" => max($maxJumlah, $jumlahs),
                        "detail" => array()
                    );
                }
 
 
                $data_prds[$id]["detail"][] = array(
+                    "jenis" => 'produk',
                    "kode"=> '',
                    "nama"=> $prd['nama_produk'] . ' ' . $prd['variasi'],
                    "satuan"=> 'UNIT',
@@ -93,6 +96,7 @@ class LogistikController extends Controller
                        if (count($data_prt) > 0) {
                         foreach($data_prt as $key_p => $prt){
                                     $part[$key_p]= array(
+                                        "jenis" => 'sparepart',
                                         "kode"=> $prt->DetailPesananPart->Sparepart->kode,
                                         "nama"=>$prt->DetailPesananPart->Sparepart->nama,
                                         "jumlah"=> $prt->jumlah,
@@ -111,6 +115,7 @@ class LogistikController extends Controller
             if (count($data_prt) > 0) {
                 foreach($data_prt as $key_p => $prt){
                             $part[$key_p]= array(
+                                "jenis" => 'sparepart',
                                 "kode"=> $prt->DetailPesananPart->Sparepart->kode,
                                 "nama"=>$prt->DetailPesananPart->Sparepart->nama,
                                 "jumlah"=> $prt->jumlah,
@@ -122,6 +127,7 @@ class LogistikController extends Controller
 
             //Produks
              if (count($data_prd) > 0) {
+                $maxJumlah = 0;
                 foreach($data_prd as $key => $prd){
                     $set_produk[$key] = array(
                         'id' => $prd->id,
@@ -130,6 +136,7 @@ class LogistikController extends Controller
                         'variasi' => $prd->DetailPesananProduk->GudangBarangJadi->nama,
                         'detail_pesanan_id' => $prd->DetailPesananProduk->detail_pesanan_id,
                         'detail_pesanan_produk_id' => $prd->detail_pesanan_produk_id,
+                        'jumlah_noseri' => $prd->NoseriDetailLogistik->count()
 
                     );
                     foreach($prd->NoseriDetailLogistik as $key_seri => $seri){
@@ -142,16 +149,19 @@ class LogistikController extends Controller
              foreach($set_produk as $prd){
                  $id = $prd["detail_pesanan_id"];
                  $nama = $prd["nama_alias"];
+                 $jumlahs = intval($prd['jumlah_noseri']);
                 if (!isset($data_prds[$id])) {
                     $data_prds[$id] = array(
                         "id" => $id,
                         "nama" => $nama,
+                        "jumlah" => max($maxJumlah, $jumlahs),
                         "detail" => array()
                     );
                 }
 
 
                 $data_prds[$id]["detail"][] = array(
+                    "jenis" => 'produk',
                     "kode"=> '',
                     "nama"=> $prd['nama_produk'] . ' ' . $prd['variasi'],
                     "satuan"=> 'UNIT',
@@ -164,7 +174,7 @@ class LogistikController extends Controller
 
         }
 
-        //return response()->json($items);
+    //    return response()->json($items);
 
         if (isset($data->DetailLogistik[0])) {
             $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
@@ -175,7 +185,7 @@ class LogistikController extends Controller
         }
 
         if($pesanan == "SPB"){
-            return view('page.logistik.surat.surat_jalan_kirim_spb', ['data' => $data,'data_produk' => $data_produk]);
+            return view('page.logistik.surat.surat_jalan_kirim_spb', ['data' => $data,'data_produk' => $items]);
         }else{
 
             $customPaper = array(0,0,605.44,788.031);
@@ -193,6 +203,7 @@ class LogistikController extends Controller
         $data = LogistikDraft::find($id);
 
         $log = json_decode($data->isi);
+        // return response()->json($log);
         $name = explode('/', $log->so);
 
 
@@ -5069,6 +5080,7 @@ class LogistikController extends Controller
 
     public function create_logistik_draft(Request $request)
     {
+
         $items = array();
         // dd($result->all());
         if (isset($request->part)) {
@@ -5106,16 +5118,18 @@ class LogistikController extends Controller
             //         "noseri"=> $i['noseri_selected']
             //     );
             // }
-
+            $maxJumlah = 0;
             foreach ($request->produk as $item) {
                 $id = $item["detail_pesanan_id"];
                 $nama_paket = $item["nama_alias"];
+                $jumlahs = intval($item['jumlah_noseri']);
 
                 if (!isset($produk[$id])) {
                     $produk[$id] = array(
                         "id" => $id,
                         "jenis" => 'produk',
                         "nama" => $nama_paket,
+                        "jumlah" =>  max($maxJumlah, $jumlahs),
                         "detail" => array()
                     );
                 }
@@ -5130,7 +5144,7 @@ class LogistikController extends Controller
             }
             $items = array_merge($items,$produk);
         }
-        // dd($items);
+        // dd($produk);
 
         $p = Pesanan::find($request->dataform['pesanan_id']);
         if($p->Ekatalog){

@@ -76,7 +76,7 @@
       border-bottom: 1px solid #000000
     }
     table{
-      table-layout: fixed; width: 100%; border-collapse: collapse; 
+      table-layout: fixed; width: 100%; border-collapse: collapse;
     }
         </style>
     </head>
@@ -267,15 +267,6 @@
                                 {{$item->nama}}
                             </td>
                             @php
-                              $jumlah = 0;
-                              if(isset($item->detail)){
-                                foreach ($item->detail as $key => $detail) {
-                                  $jumlah += $detail->jumlah_noseri;
-                                }
-                              }else{
-                                $jumlah = $item->jumlah;
-                              }
-
                               $satuan = null;
                               if(isset($item->detail)){
                                 $satuan = $item->detail[0]->satuan;
@@ -284,7 +275,7 @@
                               }
                             @endphp
                             <td class="vera">
-                              {{$jumlah}}.00
+                                {{$item->jumlah}}.00
                             </td>
                               <td class="vera">
                                 {{$satuan}}
@@ -297,7 +288,7 @@
                                 <b>No Seri</b> :
                                 @foreach ($item->detail as $key => $detail)
                                   @if ($key == count($item->detail) - 1)
-                                  {{ $detail->nama }} : {{ implode(', ', $detail->noseri) }} 
+                                  {{ $detail->nama }} : {{ implode(', ', $detail->noseri) }}
                                 @else
                                   {{ $detail->nama }} : {{ implode(', ', $detail->noseri) }} <br>
                                 @endif
