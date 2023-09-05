@@ -399,9 +399,9 @@ class MasterController extends Controller
         $divisi = $divisi_id;
         $x = explode(',', $value);
         if ($value == 0 || $value == 'kosong') {
-            $data = Customer::with('provinsi')->WhereNotIN('id', ['484'])->orderby('nama', 'ASC')->get();
+            $data = Customer::with('Provinsi')->WhereNotIN('id', ['484'])->orderby('nama', 'ASC')->get();
         } else {
-            $data = Customer::with('provinsi')->WhereNotIN('id', ['484'])->whereHas('Provinsi', function ($q) use ($x) {
+            $data = Customer::with('Provinsi')->WhereNotIN('id', ['484'])->whereHas('Provinsi', function ($q) use ($x) {
                 $q->whereIN('status', $x);
             })->get();
         }
@@ -422,7 +422,7 @@ class MasterController extends Controller
                 }
             })
             ->addColumn('prov', function ($data) {
-                return $data->provinsi->nama;
+                return $data->Provinsi->nama;
             })
             ->addColumn('ktp', function ($data) {
                 if (!empty($data->ktp)) {
@@ -1967,7 +1967,7 @@ class MasterController extends Controller
                         'status' => $item['status'],
                     ]
                 );
-                
+
                 foreach ($item['gudang_barang_jadi'] as $gudang) {
                     $gbj = GudangBarangJadi::updateOrCreate(
                         [

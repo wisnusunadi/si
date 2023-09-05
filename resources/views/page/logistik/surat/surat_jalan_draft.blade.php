@@ -314,7 +314,10 @@
                   <div style="margin: 10px 0px;">
                     <b>Dimensi</b>
                   <br>
-                  {{ $data->dimensi}}
+                  @php
+                      echo nl2br($data->dimensi);
+                  @endphp
+
                 @endif
                 @if($data->ekspedisi_terusan != "")
                   </div
@@ -323,7 +326,9 @@
                   @endif
                   >
                   <b>Ekspedisi Terusan : </b><br>
-                  {{ $data->ekspedisi_terusan}}
+                  @php
+                  echo nl2br($data->ekspedisi_terusan);
+                     @endphp
                   <br>
                   </div>
                 @endif
