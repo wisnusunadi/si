@@ -297,16 +297,12 @@
                           </tr>
                           @endif
                         @endforeach
-
                         {{-- <tr>
                             <td class="align-center" colspan="3">
-
                             </td>
                             <td class="align-center" colspan="3">
                               <b>Total 1 Coly</b>
                             </td>
-
-
                           </tr> --}}
                     </tbody>
                 </table>

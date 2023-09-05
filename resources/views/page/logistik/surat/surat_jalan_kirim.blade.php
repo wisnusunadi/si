@@ -344,8 +344,6 @@
                               {{ $item['nama'] }}
                           </td>
                           @php
-
-
                               $satuan = null;
                               if(isset($item['detail'])){
                                   $satuan = $item['detail'][0]['satuan'];
