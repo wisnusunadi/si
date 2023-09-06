@@ -2622,7 +2622,7 @@ class LogistikController extends Controller
             })
             ->addColumn('ekspedisi', function ($data) {
                 if (!empty($data->ekspedisi_id)) {
-                    return $data->ekspedisi->nama;
+                    return $data->Ekspedisi->nama;
                 } else {
                     return $data->nama_pengirim;
                 }

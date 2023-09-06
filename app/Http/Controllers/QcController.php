@@ -895,7 +895,7 @@ class QcController extends Controller
                     } elseif ($name[1] == 'SPA') {
                         return $data->Spa->Customer->nama;
                     } else {
-                        return $data->spb->Customer->nama;
+                        return $data->Spb->Customer->nama;
                     }
                 }
             })
@@ -929,11 +929,11 @@ class QcController extends Controller
                 if (!empty($data->so)) {
                     $name = explode('/', $data->so);
                     if ($name[1] == 'EKAT') {
-                        return $data->ekatalog->ket;
+                        return $data->Ekatalog->ket;
                     } else if ($name[1] == 'SPA') {
-                        return $data->spa->ket;
+                        return $data->Spa->ket;
                     } else if ($name[1] == 'SPB') {
-                        return $data->spb->ket;
+                        return $data->Spb->ket;
                     }
                 }
             })
@@ -1008,7 +1008,6 @@ class QcController extends Controller
                     $return .= '<a class="btn btn-outline-primary btn-sm" href="' . route('qc.so.detail', [$data->id, $x]) . '">
                                 <i class="fas fa-eye"></i> Detail
                         </a>';
-
                         if($data->no_po != NULL && $data->tgl_po != NULL ){
                             $return .= '    <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
                             <i class="fas fa-print"></i>
@@ -1016,7 +1015,6 @@ class QcController extends Controller
                         </a>
                         ';
                         }
-
                         return $return;
                 }
             })
