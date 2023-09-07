@@ -166,7 +166,8 @@ Route::prefix('/laporan')->group(function () {
 });
 
 Route::prefix('/gbj')->group(function () {
-    Route::post('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi'])->middleware('jwt.verify');
+    Route::post('update_stok', [App\Http\Controllers\GudangController::class, 'updateStokGudang']);
+    Route::post('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
     Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
     Route::post('/edit/{id}', [App\Http\Controllers\GudangController::class, 'UpdateBarangJadi']);
     Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
@@ -214,7 +215,7 @@ Route::prefix('/transaksi')->group(function () {
     Route::get('/history', [GudangController::class, 'getHistorybyProduk']);
     Route::get('/history-detail/{id}', [GudangController::class, 'getDetailHistory']);
     Route::get('/history-detail-seri/{id}', [GudangController::class, 'getDetailHistorySeri']);
-    Route::get('/all-detail/{id}', [GudangController::class, 'getDetailAll']);
+    Route::get('/all-detail/{id}/{date}', [GudangController::class, 'getDetailAll']);
 });
 
 Route::prefix('/dashboard-gbj')->group(function () {
@@ -261,6 +262,7 @@ Route::prefix('/dashboard-gbj')->group(function () {
 Route::prefix('/tfp')->group(function () {
     Route::post('/create', [ProduksiController::class, 'CreateTFItem']);
     Route::post('/byso', [ProduksiController::class, 'TfbySO']);
+    Route::post('/byso-batal/{id}', [GudangController::class, 'TfbySOBatal']);
     Route::post('/byso-final', [GudangController::class, 'TfbySOFinal']);
     Route::post('/create-noseri', [GudangController::class, 'storeNoseri']);
     Route::post('/create-final', [GudangController::class, 'finalDraftRakit']);
@@ -434,7 +436,7 @@ Route::prefix('/gk')->group(function () {
     });
 
     Route::prefix('/dashboard')->group(function () {
-        Route::post('/tingkat', [SparepartController::class, 'byTingkat']);
+        Route::post('/tingkat', [SparepartController::class, 'byTingkat'])->middleware('jwt.verify');
         Route::post('/layout', [SparepartController::class, 'byLayout'])->middleware('jwt.verify');
 
         // stok
@@ -531,23 +533,28 @@ Route::prefix('/logistik')->group(function () {
     Route::post('dashboard/so', [App\Http\Controllers\LogistikController::class, 'dashboard_so']);
     Route::group(['prefix' => '/so'], function () {
         Route::put('create/{jenis}', [App\Http\Controllers\LogistikController::class, 'create_logistik']);
+        Route::post('create_draft', [App\Http\Controllers\LogistikController::class, 'create_logistik_draft']);
         // Route::get('data', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::post('noseri/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so']);
         Route::post('noseri/detail/belum_kirim/{id}/{array}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_belum_kirim']);
         Route::get('noseri/detail/selesai_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_selesai_kirim']);
         Route::post('noseri/detail/selesai_kirim/data/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_selesai_kirim_data']);
         // Route::get('data/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_so']);
+        Route::get('data/detail/item/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_item']);
         Route::post('data/detail/belum_kirim/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_belum_kirim_so']);
         Route::post('data/detail/selesai_kirim/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_selesai_kirim_so']);
         //   Route::get('detail/select/{produk_id}/{part_id}/{pesanan_id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_select_produk']);
         Route::post('detail/select/{pesanan_id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_select_produk']);
-        Route::get('data/selesai', [App\Http\Controllers\LogistikController::class, 'get_data_selesai_so']);
+        Route::get('data/selesai/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_selesai_so']);
 
+        Route::get('data/sj_draft/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj_draft']);
+        Route::get('data/sj_draft/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj_draft_detail']);
         Route::post('data/sj/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj']);
         Route::post('/data/sj_filter/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_filter_sj']);
         Route::get('/noseri_array/{produk_id}/{jumlah_kirim}', [App\Http\Controllers\LogistikController::class, 'get_data_noseri_array']);
     });
     Route::group(['prefix' => '/ekspedisi'], function () {
+        Route::get('/all', [App\Http\Controllers\MasterController::class, 'get_data_all_ekspedisi']);
         // Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::get('select/{provinsi}', [App\Http\Controllers\MasterController::class, 'select_ekspedisi']);
         Route::post('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_detail_ekspedisi']);
@@ -565,7 +572,7 @@ Route::prefix('/logistik')->group(function () {
         // Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
         Route::group(['prefix' => '/riwayat'], function () {
-            Route::post('/data/{pengiriman}/{provinsi}/{jenis_penjualan}', [App\Http\Controllers\LogistikController::class, 'get_data_riwayat_pengiriman']);
+            Route::post('/data/{pengiriman}/{provinsi}/{jenis_penjualan}/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_riwayat_pengiriman']);
         });
     });
 
@@ -586,6 +593,7 @@ Route::prefix('/dc')->group(function () {
     });
     Route::prefix('/so')->group(function () {
         Route::post('store/{value}', [App\Http\Controllers\DcController::class, 'store_coo']);
+        Route::post('cancel', [App\Http\Controllers\DcController::class, 'cancel_so']);
         Route::post('update/{value}', [App\Http\Controllers\DcController::class, 'update_coo']);
         Route::put('update_tgl_kirim_coo/{value}', [App\Http\Controllers\DcController::class, 'update_tgl_kirim_coo']);
         Route::post('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);

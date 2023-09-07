@@ -11,7 +11,7 @@ class GudangBarangJadiHis extends Model
 
     protected $connection = 'erp';
     protected $table = 'gdg_barang_jadi_his';
-    protected $fillable = ['gdg_brg_jadi_id','stok', 'jenis', 'created_by', 'tgl_masuk', 'created_at', 'dari', 'ke', 'tujuan'];
+    protected $fillable = ['gdg_brg_jadi_id', 'nama','stok', 'jenis', 'created_by', 'tgl_masuk', 'created_at', 'dari', 'ke', 'tujuan'];
 
     public function produk()
     {

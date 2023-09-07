@@ -59,7 +59,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '26' || Auth::user()->Karyawan->divisi_id == '8')
+                    @if (Auth::user()->divisi_id == '26' || Auth::user()->divisi_id == '8')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.rencana.show') }}">Rencana Penjualan</a></li>
                         <li class="breadcrumb-item active">Tambah</li>
@@ -374,7 +374,7 @@
                     $('#btnsubmit').attr('disabled', true);
                     $('#tableproduk tbody').append(
                         `<tr id="emptycol"><td colspan="7" class="align-center">Belum Ada Data</td></tr>`
-                        );
+                    );
                 }
             });
 
@@ -394,7 +394,7 @@
                     `">` + nama_produk + `</td>
                 <td><input type="hidden" class="jumlah" name="jumlah[]" id="jumlah" value="` + jumlah + `">` + jumlah + `</td>
                 <td><input type="hidden" class="harga" name="harga[]" id="harga" value="` + replaceAll(harga, '.',
-                    '') + `">` + harga + `</td>
+                        '') + `">` + harga + `</td>
                 <td><input type="hidden" class="subtotal" name="subtotal[]" id="subtotal" value="` + (jumlah *
                         parseInt(replaceAll(harga, '.', ''))) + `">` + formatmoney(jumlah * parseInt(
                         replaceAll(harga, '.', ''))) + `</td>
@@ -415,7 +415,7 @@
             function validasiall() {
                 if ($('#customer_id').val() != "" && $('#nama_instansi').val() != "" && $('#tahun').val() != "" &&
                     $('#produk_id').val() != "" && $('#produk_jumlah').val() != "" && $('#produk_harga').val() != ""
-                    ) {
+                ) {
                     $('#btnsubmit').removeAttr('disabled');
                     $('#btntambahproduk').removeAttr('disabled');
                 } else {

@@ -895,7 +895,7 @@ class QcController extends Controller
                     } elseif ($name[1] == 'SPA') {
                         return $data->Spa->Customer->nama;
                     } else {
-                        return $data->spb->Customer->nama;
+                        return $data->Spb->Customer->nama;
                     }
                 }
             })
@@ -929,11 +929,11 @@ class QcController extends Controller
                 if (!empty($data->so)) {
                     $name = explode('/', $data->so);
                     if ($name[1] == 'EKAT') {
-                        return $data->ekatalog->ket;
+                        return $data->Ekatalog->ket;
                     } else if ($name[1] == 'SPA') {
-                        return $data->spa->ket;
+                        return $data->Spa->ket;
                     } else if ($name[1] == 'SPB') {
-                        return $data->spb->ket;
+                        return $data->Spb->ket;
                     }
                 }
             })
@@ -995,6 +995,7 @@ class QcController extends Controller
                 }
             })
             ->addColumn('button', function ($data) {
+                $return = '';
                 if (!empty($data->so)) {
                     $name = explode('/', $data->so);
                     if ($name[1] == 'EKAT') {
@@ -1004,9 +1005,17 @@ class QcController extends Controller
                     } else {
                         $x =  'spb';
                     }
-                    return '<a class="btn btn-outline-primary btn-sm" href="' . route('qc.so.detail', [$data->id, $x]) . '">
+                    $return .= '<a class="btn btn-outline-primary btn-sm" href="' . route('qc.so.detail', [$data->id, $x]) . '">
                                 <i class="fas fa-eye"></i> Detail
                         </a>';
+                        if($data->no_po != NULL && $data->tgl_po != NULL ){
+                            $return .= '    <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
+                            <i class="fas fa-print"></i>
+                            SPPB
+                        </a>
+                        ';
+                        }
+                        return $return;
                 }
             })
             ->rawColumns(['button', 'status', 'batas_uji'])
@@ -1089,7 +1098,7 @@ class QcController extends Controller
                         ->limit(1);
                 }
             ])
-                ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
+                ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->havingRaw('(cqcprd >= ctfprd AND ctfprd > 0)  OR (cqcpart >= ctfpart AND ctfpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
@@ -1151,7 +1160,7 @@ class QcController extends Controller
                         ->limit(1);
                 }
             ])
-                ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
+                ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->havingRaw('(cqcprd >= ctfprd AND ctfprd > 0)  OR (cqcpart >= ctfpart AND ctfpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->doesntHave('Spb')
@@ -1214,7 +1223,7 @@ class QcController extends Controller
                         ->limit(1);
                 }
             ])
-                ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
+                ->with(['Ekatalog.Customer.provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->havingRaw('(cqcprd >= ctfprd AND ctfprd > 0)  OR (cqcpart >= ctfpart AND ctfpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->doesntHave('Spa')
@@ -1277,7 +1286,7 @@ class QcController extends Controller
                         ->limit(1);
                 }
             ])
-                ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
+                ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->havingRaw('(cqcprd >= ctfprd AND ctfprd > 0)  OR (cqcpart >= ctfpart AND ctfpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->doesntHave('Ekatalog')
@@ -1340,7 +1349,7 @@ class QcController extends Controller
                         ->limit(1);
                 }
             ])
-                ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
+                ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->havingRaw('(cqcprd >= ctfprd AND ctfprd > 0)  OR (cqcpart >= ctfpart AND ctfpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->has('Ekatalog')
@@ -1403,7 +1412,7 @@ class QcController extends Controller
                         ->limit(1);
                 }
             ])
-                ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
+                ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->havingRaw('(cqcprd >= ctfprd AND ctfprd > 0)  OR (cqcpart >= ctfpart AND ctfpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->has('Spa')
@@ -1466,7 +1475,7 @@ class QcController extends Controller
                         ->limit(1);
                 }
             ])
-                ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
+                ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->havingRaw('(cqcprd >= ctfprd AND ctfprd > 0)  OR (cqcpart >= ctfpart AND ctfpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->has('Spb')
@@ -1529,7 +1538,7 @@ class QcController extends Controller
                         ->limit(1);
                 }
             ])
-                ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
+                ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.provinsi', 'Spb.Customer.Provinsi'])
                 ->havingRaw('(cqcprd >= ctfprd AND ctfprd > 0)  OR (cqcpart >= ctfpart AND ctfpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
@@ -1559,16 +1568,16 @@ class QcController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_customer', function ($data) {
-                if (!empty($data->so)) {
-                    $name = explode('/', $data->so);
-                    if ($name[1] == 'EKAT') {
+
+
+                    if ($data->Ekatalog) {
                         return $data->Ekatalog->satuan;
-                    } elseif ($name[1] == 'SPA') {
+                    } elseif ($data->Spa) {
                         return $data->Spa->Customer->nama;
                     } else {
-                        return $data->spb->Customer->nama;
+                        return $data->Spb->Customer->nama;
                     }
-                }
+
             })
             ->addColumn('batas_uji', function ($data) {
                 // if (!empty($data->so)) {
@@ -1602,16 +1611,15 @@ class QcController extends Controller
                 // }
             })
             ->addColumn('keterangan', function ($data) {
-                if (!empty($data->so)) {
-                    $name = explode('/', $data->so);
-                    if ($name[1] == 'EKAT') {
-                        return $data->ekatalog->ket;
-                    } else if ($name[1] == 'SPA') {
-                        return $data->spa->ket;
-                    } else if ($name[1] == 'SPB') {
-                        return $data->spb->ket;
+
+                    if ($data->Ekatalog) {
+                        return $data->Ekatalog->ket;
+                    } else if ($data->Spa) {
+                        return $data->Spa->ket;
+                    } else if ($data->Spb) {
+                        return $data->Spb->ket;
                     }
-                }
+
             })
             ->addColumn('status', function ($data) {
                 // if($data->log_id != 20){
@@ -1657,19 +1665,28 @@ class QcController extends Controller
                 // }
             })
             ->addColumn('button', function ($data) {
-                if (!empty($data->so)) {
-                    $name = explode('/', $data->so);
-                    if ($name[1] == 'EKAT') {
+                $return = '';
+                    if ($data->Ekatalog) {
                         $x =  'ekatalog';
-                    } elseif ($name[1] == 'SPA') {
+                    } else if ($data->Spa) {
                         $x =  'spa';
                     } else {
                         $x =  'spb';
                     }
-                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '"  class="btn btn-outline-primary btn-sm">
+                    $return .= '<a class="btn btn-outline-primary btn-sm" href="' . route('qc.so.detail', [$data->id, $x]) . '">
                                 <i class="fas fa-eye"></i> Detail
                         </a>';
-                }
+
+                        if($data->no_po != NULL && $data->tgl_po != NULL ){
+                            $return .= '    <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
+                            <i class="fas fa-print"></i>
+                            SPPB
+                        </a>
+                        ';
+                        }
+
+                        return $return;
+
             })
             ->rawColumns(['button', 'status', 'batas_uji'])
             ->make(true);
@@ -2221,11 +2238,11 @@ class QcController extends Controller
         }
     }
 
-    public function cancel_so($id)
+    public function cancel_so()
     {
-        $p = Pesanan::where('id', $id)->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->first();
+        // $p = Pesanan::where('id', $id)->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->first();
 
-        return view('page.qc.so.cancel', ['id' => $id, 'p' => $p]);
+        return view('page.qc.so.cancel');
     }
 
     public function detail_modal_riwayat_so($id, $jenis)

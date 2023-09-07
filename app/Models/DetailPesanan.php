@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class DetailPesanan extends Model
 {
     protected $connection = 'erp';
     protected $table = 'detail_pesanan';
-    protected $fillable = ['pesanan_id', 'penjualan_produk_id', 'detail_rencana_penjualan_id', 'jumlah', 'harga', 'ongkir'];
+    protected $fillable = ['pesanan_id', 'penjualan_produk_id', 'detail_rencana_penjualan_id', 'jumlah', 'harga', 'ongkir','ppn'];
 
     public function Pesanan()
     {
@@ -28,6 +29,20 @@ class DetailPesanan extends Model
     {
         return $this->belongsTo(DetailRencanaPenjualan::class);
     }
+
+
+    public function GetVariasi()
+    {
+        $id = $this->id;
+        $produk = DB::select('select gbj.nama  from detail_pesanan_produk dpp
+        left join detail_pesanan dp on dpp.detail_pesanan_id  = dp.id
+        left join gdg_barang_jadi gbj on gbj.id = dpp.gudang_barang_jadi_id
+        left join produk p on p.id = gbj.produk_id
+        where dpp.detail_pesanan_id = ? and p.coo = 1',[$id]);
+            return  $produk;
+
+    }
+
 
     public function getJumlahProgress(){
         $id = $this->id;

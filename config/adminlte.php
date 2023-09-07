@@ -612,6 +612,18 @@ return [
             'auth' => [14],
             'url'  => '/administrator/user',
         ],
+        [
+            'text' => 'Kategori Produk',
+            'url'  => '/administrator/kategori_produk',
+            'icon' => 'fas fa-table',
+            'auth' => [14]
+        ],
+        [
+            'text' => 'Produk',
+            'url'  => '/administrator/produk',
+            'icon' => 'fas fa-table',
+            'auth' => [14]
+        ],
         // [
         //     'text'    => 'Part',
         //     'icon'    => 'fas fa-boxes',

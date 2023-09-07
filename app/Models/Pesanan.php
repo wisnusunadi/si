@@ -4,17 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Pesanan extends Model
 {
     protected $connection = 'erp';
     protected $table = 'pesanan';
-    protected $fillable = ['no_po', 'so', 'tgl_po', 'no_do', 'tgl_do', 'ket', 'log_id', 'checked_by', 'status_cek'];
+    protected $fillable = ['no_po', 'so', 'tgl_po', 'no_do', 'tgl_do', 'ket', 'log_id', 'checked_by', 'status_cek','tujuan_kirim','alamat_kirim','kemasan','ekspedisi_id','ket_kirim'];
 
     public function Ekatalog()
     {
         return $this->hasOne(Ekatalog::class);
     }
+
+    public function Ekspedisi()
+    {
+        return $this->belongsTo(Ekspedisi::class, 'ekspedisi_id');
+    }
+
     public function Spa()
     {
         return $this->hasOne(Spa::class);
@@ -23,6 +30,7 @@ class Pesanan extends Model
     {
         return $this->hasOne(Spb::class);
     }
+
     public function DetailPesanan()
     {
         return $this->hasMany(DetailPesanan::class);
@@ -36,6 +44,7 @@ class Pesanan extends Model
     {
         return $this->hasMany(DetailPesananPart::class);
     }
+
     public function DetailPesananPartJasa()
     {
         $id = $this->id;
@@ -543,6 +552,22 @@ class Pesanan extends Model
         $part = DetailPesananPart::groupby('m_sparepart_id')->where('pesanan_id', $id)->orderBy('pesanan_id', 'DESC')->get();
         $data = $produk->merge($part);
         return $data;
+    }
+
+    public function GetProduk()
+    {
+        $id = $this->id;
+        $produk = DB::select('select group_concat(dpp.gudang_barang_jadi_id) as id  from detail_pesanan_produk dpp
+        left join detail_pesanan dp on dpp.detail_pesanan_id  = dp.id
+        left join pesanan p on p.id = dp.pesanan_id
+        where p.id = ?',[$id]);
+       $array = explode(",",$produk[0]->id);
+
+        if (in_array(380, $array))
+         {
+            return 'BLUETOOTH';
+         }
+
     }
 
     public function DetailPesananUniqueDsb()

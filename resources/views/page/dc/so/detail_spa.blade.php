@@ -10,9 +10,9 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '9')
+                    @if (Auth::user()->divisi_id == '9')
                         <li class="breadcrumb-item"><a href="{{ route('dc.dashboard') }}">Beranda</a></li>
-                    @elseif(Auth::user()->Karyawan->divisi_id == '9')
+                    @elseif(Auth::user()->divisi_id == '9')
                         <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                     @endif
                     <li class="breadcrumb-item"><a href="{{ route('dc.so.show') }}">Sales Order DC</a></li>
@@ -109,8 +109,8 @@
             }
 
             /* .cust{
-                max-width: 40%;
-            } */
+                    max-width: 40%;
+                } */
         }
 
         @media screen and (max-width: 1439px) {
@@ -123,8 +123,8 @@
             }
 
             /* .cust{
-                max-width: 40%;
-            } */
+                    max-width: 40%;
+                } */
         }
 
         @media screen and (max-width: 992px) {

@@ -72,22 +72,22 @@
                             <label for="tanggal" class="col-form-label col-12">Tanggal Batal</label>
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <input type="date" class="form-control col-form-label" name="tanggal" id="tanggal"
-                                    @if (Auth::user()->Karyawan->divisi_id != '26') readonly @endif>
+                                    @if (Auth::user()->divisi_id != '26') readonly @endif>
                             </div>
                         </div>
                         <div class="form-group" for="keterangan">
                             <label for="" class="col-form-label">Alasan Batal</label>
                             <textarea class="form-control col-form-label" name="alasan" id="alasan"
-                                @if (Auth::user()->Karyawan->divisi_id != '26') readonly @endif></textarea>
+                                @if (Auth::user()->divisi_id != '26') readonly @endif></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer">
                     <button class="btn btn-outline-danger" data-dismiss="modal">Tutup</button>
-                    @if (Auth::user()->Karyawan->divisi_id == '26')
+                    @if (Auth::user()->divisi_id == '26')
                         <button class="btn btn-danger float-right" id="btnkirimbatal" type="button" disabled="true"><i
                                 class="fas fa-times"></i> Ajukan Pembatalan</button>
-                    @elseif(Auth::user()->Karyawan->divisi_id == '32')
+                    @elseif(Auth::user()->divisi_id == '32')
                         <button class="btn btn-danger float-right" id="btnaccbatal" type="button"><i
                                 class="fas fa-check"></i> Terima Pembatalan</button>
                     @endif

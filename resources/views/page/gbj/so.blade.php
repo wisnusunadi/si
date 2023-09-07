@@ -32,12 +32,12 @@
             font-size: 18px
         }
     </style>
-    <input type="hidden" name="" id="auth" value="{{ Auth::user()->Karyawan->divisi_id }}">
+    <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    @if (Auth::user()->Karyawan->divisi_id !== 31)
+                    @if (Auth::user()->divisi_id !== 31)
                         <h1 class="m-0">Daftar Sales Order</h1>
                     @else
                         <h1 class="m-0">Daftar Batal PO</h1>
@@ -54,7 +54,7 @@
                     <div class="card">
                         <div class="card-body">
                             <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
-                                @if (Auth::user()->Karyawan->divisi_id !== 31)
+                                @if (Auth::user()->divisi_id !== 31)
                                     <li class="nav-item">
                                         <a class="nav-link active" id="pills-proses_kirim-tab" data-toggle="pill"
                                             href="#pills-proses_kirim" role="tab" aria-controls="pills-proses_kirim"
@@ -76,7 +76,7 @@
                                 @endif
                             </ul>
                             <div class="tab-content" id="pills-tabContent">
-                                @if (Auth::user()->Karyawan->divisi_id !== 31)
+                                @if (Auth::user()->divisi_id !== 31)
                                     <div class="tab-pane fade show active" id="pills-proses_kirim" role="tabpanel"
                                         aria-labelledby="pills-proses_kirim-tab">
                                         <div class="row">
@@ -91,7 +91,7 @@
                                                                 <th>Nomor PO</th>
                                                                 <th>Customer</th>
                                                                 <th>Batas Transfer</th>
-                                                                <th>Status</th>
+                                                                {{-- <th>Status</th> --}}
                                                                 <th>Aksi</th>
                                                             </tr>
                                                         </thead>
@@ -116,7 +116,7 @@
                                                                 <th>Nomor PO</th>
                                                                 <th>Customer</th>
                                                                 <th>Batas Transfer</th>
-                                                                <th>Status</th>
+                                                                {{-- <th >Status</th> --}}
                                                                 <th>Aksi</th>
                                                             </tr>
                                                         </thead>
@@ -649,7 +649,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i
                                     class="fas fa-times"></i> Tutup</button>
-                            @if (Auth::user()->Karyawan->divisi_id !== 31)
+                            @if (Auth::user()->divisi_id !== 31)
                                 <button type="button" class="btn btn-dark btn-sm float-right" id="btnProsesBatal"><i
                                         class="fas fa-check"></i> Terima</button>
                             @endif
@@ -689,8 +689,14 @@
                     });
 
                     $("#head-cb-so").on('click', function() {
-                        var isChecked = $("#head-cb-so").prop('checked')
-                        $('.cb-child-so').prop('checked', isChecked)
+                        const table = $('.add-produk').DataTable();
+                        // detect table wheen status "belum diinput" on span badge
+                        table.rows().every(function() {
+                            if (this.data().status == '<span class="badge badge-danger">Belum Diinput</span>') {
+                                this.nodes().to$().find('input[type="checkbox"]').prop('checked', $('#head-cb-so').prop(
+                                    'checked'));
+                            }
+                        });
                     });
 
                     if (auth !== 31) {
@@ -723,9 +729,9 @@
                                     data: 'batas_out',
                                     name: 'batas_out'
                                 },
-                                {
-                                    data: 'logs'
-                                },
+                                // {
+                                //     data: 'logs'
+                                // },
                                 {
                                     data: 'action',
                                     name: 'action'
@@ -734,17 +740,17 @@
                             "language": {
                                 // url: "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json",
                                 processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                        </span>&emsp;Mohon Tunggu ...",
                             },
                             "columnDefs": [{
-                                    "targets": [6],
+                                    "targets": [5],
                                     "visible": document.getElementById('auth').value == '2' ? false : true,
                                     "width": "20%",
                                 },
                                 {
                                     "width": "10%",
-                                    "targets": 5
+                                    "targets": 4
                                 }
                             ]
                         });
@@ -778,9 +784,9 @@
                                     data: 'batas_out',
                                     name: 'batas_out'
                                 },
-                                {
-                                    data: 'logs'
-                                },
+                                // {
+                                //     data: 'logs'
+                                // },
                                 {
                                     data: 'action',
                                     name: 'action'
@@ -789,17 +795,17 @@
                             "language": {
                                 // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                                 processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                        </span>&emsp;Mohon Tunggu ...",
                             },
                             "columnDefs": [{
-                                    "targets": [6],
+                                    "targets": [5],
                                     "visible": document.getElementById('auth').value == '2' ? false : true,
                                     "width": "20%",
                                 },
                                 {
                                     "width": "10%",
-                                    "targets": 5
+                                    "targets": 4
                                 }
                             ]
                         });
@@ -839,8 +845,8 @@
                         "language": {
                             // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                             processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                        </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                    </span>&emsp;Mohon Tunggu ...",
                         }
                     });
 
@@ -1344,8 +1350,8 @@
                         "language": {
                             // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                             processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                        </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                    </span>&emsp;Mohon Tunggu ...",
                         },
                         "order": [
                             [5, 'asc']

@@ -4,11 +4,26 @@
     @csrf
     <div class="content">
         <div class="row d-flex justify-content-center">
-            {{-- <div class="d-flex justify-content-center"> --}}
             <div class="col-lg-11">
-                {{-- <div class="d-flex justify-content-center"> --}}
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                              <h5>Data PIC</h5>
+                              <div class="form-group row">
+                                <label class="col-form-label col-lg-5 col-md-12 labelket" for="no_invoice">Nama PIC</label>
+                                <div class="col-lg-6 col-md-12">
+                                  <input type="text" class="form-control" name="nama_pic" id="nama_pic">
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <label class="col-form-label col-lg-5 col-md-12 labelket" for="no_invoice">Nomor Telepon PIC</label>
+                                <div class="col-lg-6 col-md-12">
+                                  <input type="text" class="form-control" name="telp_pic" id="telp_pic" onkeypress="return isNumberKey(event)">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-horizontal">
@@ -126,6 +141,64 @@
                                         {{-- </div> --}}
                                         {{-- </div> --}}
                                     </div>
+                                    <div class="form-group row">
+                                        <label for="dimensi" class="col-form-label col-lg-5 col-md-12 labelket">Ekspedisi Terusan</label>
+                                        <div class="col-lg-7 col-md-12">
+                                          <textarea type="text" class="form-control col-form-label" name="ekspedisi_terusan" id="ekspedisi_terusan"></textarea>
+                                          <div class="invalid-feedback" id="msgnama_pengirim"></div>
+                                        </div>
+                                      </div>
+                                    <div class="form-group row">
+                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
+                                          <div class="col-lg-6 col-md-12 col-form-label">
+                                            <div class="form-check form-check-inline">
+                                              <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pilihan_pengiriman0" value="penjualan" />
+                                              <label for="pengiriman0" class="form-check-label">Sama dengan Penjualan</label>
+                                          </div>
+                                          <div class="form-check form-check-inline">
+                                              <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pilihan_pengiriman1" value="lainnya" />
+                                              <label for="pengiriman1" class="form-check-label">Ubah Alamat</label>
+                                          </div>
+                                          <input type="text" name="perusahaan_pengiriman" id="perusahaan_pengiriman" class="form-control col-form-label" readonly>
+                                          <input type="text"
+                                              class="form-control col-form-label mt-2" name="alamat_pengiriman" id="alamat_pengiriman" readonly/>
+                                          <div class="invalid-feedback"
+                                              id="msg_alamat_pengiriman">
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="form-group row">
+                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
+                                        <div class="col-lg-6 col-md-12 col-form-label">
+
+                                          <div class="form-check form-check-inline">
+                                              <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti" />
+                                              <label for="kemasan0" class="form-check-label">PETI</label>
+                                          </div>
+                                          <div class="form-check form-check-inline">
+                                              <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti" />
+                                              <label for="kemasan1" class="form-check-label">NON PETI</label>
+                                          </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="dimensi" class="col-form-label col-lg-5 col-md-12 labelket">Dimensi</label>
+                                        <div class="col-lg-7 col-md-12">
+                                          <textarea type="text" class="form-control col-form-label" name="dimensi" id="dimensi"></textarea>
+                                          <div class="invalid-feedback" id="msgnama_pengirim"></div>
+                                        </div>
+                                      </div>
+                                    <div class="form-group row">
+                                      <label class="col-form-label col-lg-5 col-md-12 labelket"
+                                          for="nama_pengirim">Keterangan Pengiriman</label>
+                                      <div class="col-lg-7 col-md-12">
+                                          <select name="keterangan_pengiriman" id="keterangan_pengiriman" class="form-control">
+                                            <option value="bayar_tujuan">BAYAR TUJUAN</option>
+                                            <option value="bayar_sinko">BAYAR SINKO</option>
+                                            <option value="non_bayar">NON BAYAR</option>
+                                          </select>
+                                      </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -169,9 +242,19 @@
                         <button type="submit" class="btn btn-info float-right" id="btnsimpan" disabled>Simpan</button>
                     </div>
                 </div>
-                {{-- </div> --}}
             </div>
-            {{-- </div> --}}
         </div>
     </div>
 </form>
+<script>
+    function isNumberKey(event) {
+        var charCode = (event.which) ? event.which : event.keyCode
+        if (charCode == 13) {
+            return true;
+        } else if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+</script>

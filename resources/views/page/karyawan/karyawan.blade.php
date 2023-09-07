@@ -107,7 +107,7 @@
                     <div class='table-responsive'>
                         <table id="tabel" class="table table-hover">
                             <thead style="text-align: center;">
-                                @if (Auth::user()->Karyawan->divisi_id == '28')
+                                @if (Auth::user()->divisi_id == '28')
                                     <tr>
                                         <th colspan="14">
                                             <a href="/karyawan/create" style="color: white;"><button type="button"
@@ -323,7 +323,7 @@
 @section('adminlte_js')
     <script>
         $(function() {
-            var divisi = "{{ Auth::user()->Karyawan->divisi_id }}";
+            var divisi = "{{ Auth::user()->divisi_id }}";
             var tabel = $('#tabel').DataTable({
                 processing: true,
                 serverSide: true,

@@ -10,9 +10,9 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '15')
+                    @if (Auth::user()->divisi_id == '15')
                         <li class="breadcrumb-item"><a href="{{ route('logistik.dashboard') }}">Beranda</a></li>
-                    @elseif(Auth::user()->Karyawan->divisi_id == '2')
+                    @elseif(Auth::user()->divisi_id == '2')
                         <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                     @endif
                     <li class="breadcrumb-item active">Sales Order</li>
@@ -113,11 +113,27 @@
                                                     <div class="dropdown-menu">
                                                         <div class="px-3 py-3">
                                                             <div class="form-group">
+                                                                <label for="jenis_penjualan">Database</label>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                {{-- show 5 years from now to old --}}
+                                                                @for ($i = date('Y'); $i >= date('Y') - 1; $i--)
+                                                                <div class="form-check">
+                                                                    {{-- checked if years equals now --}}
+                                                                    <input class="form-check-input" type="radio"
+                                                                        value="{{ $i }}" name="tahun" id="defaultCheck{{ $i }}" {{ $i == date('Y') ? 'checked' : '' }} />
+                                                                    <label class="form-check-label" for="defaultCheck{{ $i }}">
+                                                                        {{ $i }}
+                                                                    </label>
+                                                                </div>
+                                                                @endfor
+                                                            </div>
+                                                            <div class="form-group">
                                                                 <label for="jenis_penjualan">Pengiriman</label>
                                                             </div>
                                                             <div class="form-group">
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="checkbox"
+                                                                    <input class="form-check-input" name="pengiriman" type="checkbox"
                                                                         value="belum_kirim" id="defaultCheck1" />
                                                                     <label class="form-check-label" for="defaultCheck1">
                                                                         Belum Dikirim
@@ -126,7 +142,7 @@
                                                             </div>
                                                             <div class="form-group">
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="checkbox"
+                                                                    <input class="form-check-input" name="pengiriman" type="checkbox"
                                                                         value="sebagian_kirim" id="defaultCheck2" />
                                                                     <label class="form-check-label" for="defaultCheck2">
                                                                         Sebagian Dikirim
@@ -169,6 +185,45 @@
                                 </div>
                                 <div class="tab-pane fade show" id="pills-selesai_kirim" role="tabpanel"
                                     aria-labelledby="pills-selesai_kirim-tab">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span class="float-right filter">
+                                                <button class="btn btn-outline-secondary" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-filter"></i> Filter
+                                                </button>
+                                                <form id="filterSelesaiProses">
+                                                    <div class="dropdown-menu">
+                                                        <div class="px-3 py-3">
+                                                            <div class="form-group">
+                                                                <label for="jenis_penjualan">Database</label>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                {{-- show 5 years from now to old --}}
+                                                                @for ($i = date('Y'); $i >= date('Y') - 1; $i--)
+                                                                <div class="form-check">
+                                                                    {{-- checked if years equals now --}}
+                                                                    <input class="form-check-input" type="radio"
+                                                                        value="{{ $i }}" name="tahunSelesaiProses" id="defaultCheck{{ $i }}" {{ $i == date('Y') ? 'checked' : '' }} />
+                                                                    <label class="form-check-label" for="defaultCheck{{ $i }}">
+                                                                        {{ $i }}
+                                                                    </label>
+                                                                </div>
+                                                                @endfor
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <span class="float-right">
+                                                                    <button class="btn btn-primary">
+                                                                        Cari
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </span>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="table-responsive">
@@ -252,17 +307,19 @@
             </div>
 
         </div>
+        @include('page.logistik.so.modalsj')
     </section>
 @stop
 @section('adminlte_js')
     <script>
+        let yearsNow = new Date().getFullYear();
         $(function() {
             var showtable = $('#showtable').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/logistik/so/data/semua',
+                    'url': `/logistik/so/data/semua/${yearsNow}`,
                     'dataType': 'json',
                     'type': 'POST',
                     'headers': {
@@ -363,6 +420,10 @@
                             className: 'align-center nowrap-text'
                         },
                         {
+                            data: 'detail_pesanan_id',
+                            className: 'hide'
+                        },
+                        {
                             data: 'nama_produk',
                         },
                         {
@@ -395,7 +456,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        'url': '/api/logistik/so/data/selesai',
+                        'url': `/api/logistik/so/data/selesai/${yearsNow}`,
                         'dataType': 'json',
                         'type': 'GET',
                         'headers': {
@@ -488,20 +549,319 @@
                 });
             }
 
+            $('#filterSelesaiProses').submit(function() {
+                let years = $('input[name="tahunSelesaiProses"]:checked').val() ?? yearsNow
+
+                $('#selesaitable').DataTable().ajax.url('/api/logistik/so/data/selesai/' + years).load();
+                return false;
+            })
+
 
             $('#filter').submit(function() {
-                var values = [];
-                $("input:checked").each(function() {
-                    values.push($(this).val());
-                });
-                if (values != 0) {
-                    var x = values;
-                } else {
-                    var x = ['semua'];
-                }
-                $('#showtable').DataTable().ajax.url('/logistik/so/data/' + x).load();
+                let pengiriman = $('input[name="pengiriman"]:checked').val() ?? 'semua'
+                let years = $('input[name="tahun"]:checked').val() ?? yearsNow
+
+                $('#showtable').DataTable().ajax.url('/logistik/so/data/' + pengiriman + '/' + years).load();
                 return false;
+
             });
+
+            const ekspedisi = (provinsi) => {
+                $('#ekspedisi_id').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + provinsi,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
+
+            const sjlama = (sjlama) => {
+                $('#sj-lama').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: false,
+                    autowidth: true,
+                    responsive: true,
+                    data: sjlama,
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [
+                        {
+                            data: null,
+                            render: function(data, type, row, meta) {
+                                return meta.row + 1;
+                            }
+                        },
+                        {
+                            data: 'sj'
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, row, meta) {
+                                return '<a target="_blank" href="/logistik/pengiriman/prints/' + data.id + '" class="btn btn-sm btn-primary"><i class="fa fa-print"></i></a>'
+                            }
+                        }
+                    ]
+                })
+            }
+
+            const header = (header) => {
+                if(header.jenis_pesanan == 'ekatalog') {
+                    $('.form-provinsi').removeClass('hide')
+
+                    $('.dataprovinsiekat').val(header.provinsi)
+                    if(header.provinsi.instansi){
+                        // checked instansi
+                        $('#provinsi2').prop('checked', true)
+                        let selectElement = $('.provinsi_pengiriman');
+                        // select instansi
+                        let option = $('<option>', {
+                            value: header.provinsi.instansi.id,
+                            text: header.provinsi.instansi.nama
+                        })
+                        // reset select
+                        selectElement.empty()
+                        selectElement.append(option)
+                        selectElement.val(header.provinsi.instansi.id)
+                        $('input[name="provinsi_id"]').val(header.provinsi.instansi.id)
+                        ekspedisi(header.provinsi.instansi.id)
+                    } else {
+                        $('#provinsi1').prop('checked', true)
+                        let selectElement = $('.provinsi_pengiriman');
+                        // select instansi
+                        let option = $('<option>', {
+                            value: header.provinsi.dsb.id,
+                            text: header.provinsi.dsb.nama
+                        })
+                        selectElement.empty()
+                        selectElement.append(option)
+                        selectElement.val(header.provinsi.dsb.id)
+                        $('input[name="provinsi_id"]').val(header.provinsi.dsb.id)
+                        ekspedisi(header.provinsi.dsb.id)
+                    }
+
+                    let id = $('.provinsi_pengiriman').val()
+
+                    $('.ekspedisi_id').select2({
+                        ajax: {
+                        minimumResultsForSearch: 20,
+                        placeholder: "Pilih Ekspedisi",
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + id,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+                }else{
+                    // add hidden
+                    $('.form-provinsi').addClass('hide')
+
+                    $('.provinsi_pengiriman').val(header.provinsi.id)
+                    $('.provinsi_pengiriman').text(header.provinsi.nama)
+                    $('input[name="provinsi_id"]').val(header.provinsi.id)
+                    ekspedisi(header.provinsi.id)
+                }
+
+                if(header.ekspedisi) {
+                    $('#pengiriman1').prop('checked', true)
+                    $('#ekspedisi').removeClass('hide')
+                    $('#nonekspedisi').addClass('hide')
+
+                    let selectElement = $('.ekspedisi_id');
+                    let option = $('<option>', {
+                        value: header.ekspedisi.id,
+                        text: header.ekspedisi.nama
+                    })
+                    selectElement.empty()
+                    selectElement.append(option)
+                    selectElement.val(header.ekspedisi.id)
+                } else {
+                    $('#pengiriman2').prop('checked', true)
+                    $('#ekspedisi').addClass('hide')
+                    $('#nonekspedisi').removeClass('hide')
+                    let selectElement = $('.ekspedisi_id');
+                    selectElement.empty()
+                }
+
+                if(header.perusahaan_pengiriman && header.alamat_pengiriman) {
+                    // pilihan pengiriman == penjualan
+                    $('#pilihan_pengiriman0').prop('checked', true)
+                    $('#perusahaan_pengiriman').attr('readonly', true);
+                    $('#alamat_pengiriman').attr('readonly', true);
+                    $('input[name="perusahaan_pengiriman"]').val(header.perusahaan_pengiriman)
+                    $('input[name="alamat_pengiriman"]').val(header.alamat_pengiriman)
+                }else{
+                    $('#pilihan_pengiriman1').prop('checked', true)
+                    $('input[name="perusahaan_pengiriman"]').val('')
+                    $('input[name="alamat_pengiriman"]').val('')
+                    $('#perusahaan_pengiriman').attr('readonly', false);
+                    $('#alamat_pengiriman').attr('readonly', false);
+                }
+
+                if(header.kemasan == 'peti') {
+                    $('input[name="kemasan"]').val('peti').prop('checked', true)
+                } else {
+                    $('input[name="kemasan"]').val('nonpeti').prop('checked', true)
+                }
+
+                $('input[name="pesanan_id"]').val(header.pesanan_id)
+                $('input[name="so"]').val(header.so)
+                $('input[name="no_po"]').val(header.no_po)
+                $('input[name="tgl_po"]').val(header.tgl_po)
+                $('input[name="nama_customer"]').val(header.customer.nama)
+                $('input[name="alamat_customer"]').val(header.customer.alamat)
+
+                $.ajax({
+                    'url': '/api/logistik/so/data/sj_draft/' + header.pesanan_id,
+                    'dataType': 'json',
+                    success: function (data) {
+                        sjlama(data.data)
+                    }
+                });
+
+            }
+
+            const tableproduk = (produk) => {
+                $('.tableproduk').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: false,
+                    autowidth: true,
+                    responsive: true,
+                    data: produk,
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            // checkbox
+                            return '<input type="checkbox" class="check_detail" value="' + data.id + '" />';
+                        }
+                    }, {
+                        data: 'nama',
+                    },
+                    {
+                        data: 'jumlah',
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            var rowIndex = meta.row;
+                            return '<input type="text" class="form-control form-control-sm jumlah'+rowIndex+'" name="jumlah[' + rowIndex + ']" id="jumlah[' + rowIndex + ']" value="0" disabled/>';
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            var rowIndex = meta.row;
+                            return '<button class="btn btn-outline-primary btn-sm noseri" data-index="' + rowIndex + '">No Seri</button>';
+                        }
+                    },
+                    {
+                        // hidden text
+                        data: 'noseri_selected',
+                        className: 'd-none',
+                        render: function(data, type, row, meta) {
+                            var rowIndex = meta.row;
+
+                            return '<div class="keterangannoseri'+ rowIndex+'" name="keterangan[' + rowIndex + ']" id="keterangan[' + rowIndex + ']"></div>';
+                        }
+                    },
+                    ]
+                })
+            }
+
+            const tablepart = (part) => {
+                $('.tablepart').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: false,
+                    autowidth: true,
+                    responsive: true,
+                    data: part,
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            // checkbox
+                            return '<input type="checkbox" class="check_detail_part" value="' + data.id + '" />';
+                        }
+                    }, {
+                        data: 'nama',
+                    },
+                    {
+                        data: 'jumlah',
+                    },
+                    ]
+                })
+            }
+
+            $(document).on('click', '.cetaksj', function(event) {
+                event.preventDefault();
+                let data_x = $(this).data('x');
+                let data_y = $(this).data('y');
+
+                // open modal
+                $('#cetaksjmodal').modal('show');
+                $('#cetaksjmodal').data('data_y', data_y);
+            });
+            $('#cetaksjmodal').on('shown.bs.modal', function() {
+                $(this).find('form').trigger('reset');
+                let data_y = $(this).data('data_y');
+                $.ajax({
+                    'url': '/api/logistik/so/data/detail/item/' + data_y,
+                    'dataType': 'json',
+                    success: function (data) {
+                        header(data.header)
+                        tableproduk(data.item.produk)
+                        tablepart(data.item.part)
+                    }
+                });
+            })
 
         })
     </script>

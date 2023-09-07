@@ -11,10 +11,10 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '8')
+                    @if (Auth::user()->divisi_id == '8')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item active">Sales Order</li>
-                    @elseif(Auth::user()->Karyawan->divisi_id == '2')
+                    @elseif(Auth::user()->divisi_id == '2')
                         <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item active">Penjualan</li>
                     @endif
@@ -202,49 +202,49 @@
                                                     </thead>
                                                     <tbody>
                                                         <!-- <tr>
-                                                    <td>1</td>
-                                                    <td>SO/EKAT/X/02/98</td>
-                                                    <td>
-                                                        31-10-2021
-                                                    </td>
-                                                    <td>CV. Cipta Jaya Mandiri</td>
-                                                    <td>Jl Dr Wahidin Sudirohusodo</td>
-                                                    <td>0841641741979</td>
+                                                        <td>1</td>
+                                                        <td>SO/EKAT/X/02/98</td>
+                                                        <td>
+                                                            31-10-2021
+                                                        </td>
+                                                        <td>CV. Cipta Jaya Mandiri</td>
+                                                        <td>Jl Dr Wahidin Sudirohusodo</td>
+                                                        <td>0841641741979</td>
 
-                                                    <td><span class="badge green-text">Selesai</span></td>
-                                                    <td>-</td>
-                                                    <td>
-                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{ route('as.so.list', ['id' => '1']) }}" data-id="1">
-                                                            <i class="fas fa-search"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>SO/SPA/X/02/75</td>
-                                                    <td>
-                                                        08-11-2021
-                                                    </td>
-                                                    <td>PT. Emiindo Jaya Bersama</td>
-                                                    <td>Jl Jaksa Agung Suprapto</td>
-                                                    <td>0841641741979</td>
+                                                        <td><span class="badge green-text">Selesai</span></td>
+                                                        <td>-</td>
+                                                        <td>
+                                                            <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{ route('as.so.list', ['id' => '1']) }}" data-id="1">
+                                                                <i class="fas fa-search"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td>SO/SPA/X/02/75</td>
+                                                        <td>
+                                                            08-11-2021
+                                                        </td>
+                                                        <td>PT. Emiindo Jaya Bersama</td>
+                                                        <td>Jl Jaksa Agung Suprapto</td>
+                                                        <td>0841641741979</td>
 
-                                                    <td><span class="badge green-text">Selesai</span></td>
-                                                    <td>-</td>
-                                                    <td><a href=""></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>SO/SPB/X/21/75</td>
-                                                    <td>03-11-2021</td>
-                                                    <td>Bapak Muhajir</td>
-                                                    <td>Jl RA Kartini</td>
-                                                    <td>0841641741979</td>
+                                                        <td><span class="badge green-text">Selesai</span></td>
+                                                        <td>-</td>
+                                                        <td><a href=""></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>3</td>
+                                                        <td>SO/SPB/X/21/75</td>
+                                                        <td>03-11-2021</td>
+                                                        <td>Bapak Muhajir</td>
+                                                        <td>Jl RA Kartini</td>
+                                                        <td>0841641741979</td>
 
-                                                    <td><span class="badge green-text">Selesai</span></td>
-                                                    <td>-</td>
-                                                    <td><a href=""></td>
-                                                </tr> -->
+                                                        <td><span class="badge green-text">Selesai</span></td>
+                                                        <td>-</td>
+                                                        <td><a href=""></td>
+                                                    </tr> -->
                                                     </tbody>
                                                 </table>
                                             </div>

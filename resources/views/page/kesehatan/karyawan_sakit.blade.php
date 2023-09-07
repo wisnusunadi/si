@@ -102,7 +102,7 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-9">
-                            <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                            {{-- <ul class="nav nav-pills" id="pills-tab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link active" id="pills-berobat-tab" data-toggle="pill"
                                         href="#pills-berobat" role="tab" aria-controls="pills-berobat"
@@ -112,20 +112,19 @@
                                     <a class="nav-link" id="pills-sakit-tab" data-toggle="pill" href="#pills-sakit"
                                         role="tab" aria-controls="pills-sakit" aria-selected="false">Sakit</a>
                                 </li>
-                            </ul>
+                            </ul> --}}
                         </div>
-                        @if(Auth::user()->divisi_id == '28')
-                        <div class="col-3">
-                            <a href="/karyawan/sakit/tambah" style="color: white;"><button type="button"
-                                    class="btn btn-md btn-success btn-sm float-right"><i class="fas fa-plus"></i>&nbsp;
-                                    Tambah Karyawan Sakit</i></button></a>
-                        </div>
+                        @if (Auth::user()->divisi_id == '28')
+                            <div class="col-3">
+                                <a href="/karyawan/sakit/tambah" style="color: white;"><button type="button"
+                                        class="btn btn-md btn-success btn-sm float-right"><i class="fas fa-plus"></i>&nbsp;
+                                        Tambah Karyawan Sakit</i></button></a>
+                            </div>
                         @endif
                     </div>
 
                     <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane fade show active" id="pills-berobat" role="tabpanel"
-                            aria-labelledby="pills-berobat-tab">
+
                             <div class='table-responsive'>
                                 <table id="tabel_obat" class="table table-hover styled-table table-striped" width="100%">
                                     <thead style="text-align: center;">
@@ -137,8 +136,7 @@
                                             <th>Pemeriksa</th>
                                             <th>Analisa</th>
                                             <th>Diagnosa</th>
-                                            <th>Tindak Lanjut</th>
-                                            <th>Hasil</th>
+                                            <th>Catatan</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -146,9 +144,9 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                        <div class="tab-pane fade" id="pills-sakit" role="tabpanel" aria-labelledby="pills-sakit-tab">
-                            <div class='table-responsive'>
+
+
+                            {{-- <div class='table-responsive'>
                                 <table id="tabel_sakit" class="table table-hover styled-table table-striped" width="100%">
                                     <thead style="text-align: center;">
                                         <tr>
@@ -167,8 +165,8 @@
                                     <tbody style="text-align: center;">
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
+                            </div> --}}
+
                     </div>
                 </div>
             </div>
@@ -194,7 +192,6 @@
                             <div class="row">
                                 <div class="col-lg-3">
                                     <div class="card">
-
                                         <div class="card-body">
                                             <dl>
                                                 <dt>Nama Pasien</dt>
@@ -207,11 +204,9 @@
                                                 <dd id="pemeriksa"></dd>
                                             </dl>
                                         </div>
-
                                     </div>
                                 </div>
                                 <div class="col-lg-9">
-
                                     <div class="row equal">
                                         <div class="col-6">
                                             <div class="callout callout-warning" height="100%">
@@ -243,7 +238,7 @@
                                                                     <th>Jumlah</th>
                                                                     <th>Aturan</th>
                                                                     <th>Konsumsi</th>
-                                                                    <th></th>
+
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -272,7 +267,7 @@
 @section('adminlte_js')
     <script>
         $(function() {
-            var divisi_id = '{{ Auth::user()->Karyawan->divisi_id }}';
+            var divisi_id = '{{ Auth::user()->divisi_id }}';
             $('#tabel_obat > tbody').on('click', '#delete', function() {
                 var data_id = $(this).attr('data-id');
                 Swal.fire({
@@ -293,6 +288,7 @@
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 },
                                 success: function(response) {
+                                    console.log(response)
                                     if (response['data'] == "success") {
                                         swal.fire(
                                             'Berhasil',
@@ -300,6 +296,7 @@
                                             'success'
                                         );
                                         $('#tabel_detail').DataTable().ajax.reload();
+                                        $('#tabel_obat').DataTable().ajax.reload();
                                         $("#hapusmodal").modal('hide');
                                     } else if (response['data'] == "error") {
                                         swal.fire(
@@ -400,32 +397,23 @@
                         className: 'minimizechar'
                     },
                     {
-                        data: 'detail_button'
+                        data: 'terapi'
                     },
                     {
                         data: null,
-                        render: function(data, type, row){
-                            var btn = '';
-                            if (row.keputusan == "Lanjut bekerja") {
-                                btn += '<span class="badge green-text">';
-                            } else {
-                                btn += '<span class="badge red-text">';
-                            }
-                            btn += row.keputusan + '</span>';
-                            return btn;
-                        }
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, row){
-                            var btn = '<div class="btn-group"><span><button type="button" id="detail_tindakan"  class="btn btn-xs btn-outline-info m-1"><i class="fas fa-eye"></i> Detail</button></span>';
+                        render: function(data, type, row) {
+                            var btn =
+                                '<div class="btn-group"><span><button type="button" id="detail_tindakan"  class="btn btn-xs btn-outline-info m-1"><i class="fas fa-eye"></i> Detail</button></span>';
                             if (data.keputusan == 'Dipulangkan') {
-                                if(divisi_id == '28'){
-                                    btn += '<a href="/karyawan/sakit/cetak/' + row.id + '" target="_break"><button type="button" class="btn btn-xs btn-warning m-1" id="cetak_gcu"><i class="fas fa-print"></i> Cetak</button></a>';
+                                if (divisi_id == '28') {
+                                    btn += '<a href="/karyawan/sakit/cetak/' + row.id +
+                                        '" target="_break"><button type="button" class="btn btn-xs btn-warning m-1" id="cetak_gcu"><i class="fas fa-print"></i> Cetak</button></a>';
                                 }
                             }
-                            if(divisi_id == '28'){
-                                btn += '<span><button type="button" id="delete"  data-id="' + row.id + '" class="btn btn-xs btn-danger m-1"><i class="fas fa-trash"></i> Hapus</button></span>';
+                            if (divisi_id == '28') {
+                                btn += '<span><button type="button" id="delete"  data-id="' + row
+                                    .id +
+                                    '" class="btn btn-xs btn-danger m-1"><i class="fas fa-trash"></i> Hapus</button></span>';
                             }
                             btn += '</div>';
                             // btn = '<div class="inline-flex"><a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" id="cetak_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-print"></i></button></a></div>';
@@ -476,10 +464,7 @@
                             {
                                 data: 'konsumsi',
                             },
-                            {
-                                data: 'aksi',
-                                visible: divisi_id == '28' ? true : false
-                            },
+
                         ],
                     });
                 } else {
@@ -494,200 +479,204 @@
                 // $('input[id="konsumsi"]').val(rows[0]['e']);
                 // $('input[id="terapi"]').val(rows[0]['f']);
             });
-            $('#tabel_sakit > tbody').on('click', '#delete', function() {
-                var data_id = $(this).attr('data-id');
-                Swal.fire({
-                        title: 'Hapus Data',
-                        text: 'Yakin ingin menghapus data ini?',
-                        icon: 'warning',
-                        confirmButtonText: 'Ya',
-                        cancelButtonText: 'Tidak',
-                        showCancelButton: true,
-                        showCloseButton: true
-                    })
-                    .then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                url: '/karyawan/sakit/delete/' + data_id,
-                                type: 'DELETE',
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                },
-                                success: function(response) {
-                                    if (response['data'] == "success") {
-                                        swal.fire(
-                                            'Berhasil',
-                                            'Berhasil melakukan Hapus Data',
-                                            'success'
-                                        );
-                                        $('#tabel_detail').DataTable().ajax.reload();
-                                        $("#hapusmodal").modal('hide');
-                                    } else if (response['data'] == "error") {
-                                        swal.fire(
-                                            'Gagal',
-                                            'Data telah digunakan dalam Transaksi Lain',
-                                            'error'
-                                        );
-                                    } else {
-                                        swal.fire(
-                                            'Error',
-                                            'Data telah digunakan dalam Transaksi Lain',
-                                            'warning'
-                                        );
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    swal.fire(
-                                        'Error',
-                                        'Data telah digunakan dalam Transaksi Lain',
-                                        'warning'
-                                    );
-                                }
-                            });
-                        } else if (result.dismiss === Swal.DismissReason.cancel) {
-                            Swal.fire({
-                                title: 'Gagal',
-                                text: 'Gagal menghapus data',
-                                icon: 'error',
-                                showCloseButton: true
-                            });
-                        }
-                    });
-            });
-            var tabel_sakit = $('#tabel_sakit').DataTable({
-                processing: true,
-                serverSide: true,
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                ajax: {
-                    'url': '/karyawan/sakit/data/sakit',
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'tgl_cek'
-                    },
-                    {
-                        data: 'x',
-                    },
-                    {
-                        data: 'y',
-                    },
-                    {
-                        data: 'z'
-                    },
-                    {
-                        data: 'analisa',
-                        className: 'minimizechar'
-                    },
-                    {
-                        data: 'diagnosa',
-                        className: 'minimizechar'
-                    },
-                    {
-                        data: 'detail_button'
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, row){
-                            var btn = '';
-                            if (row.keputusan == "Lanjut bekerja") {
-                                btn += '<span class="badge green-text">';
-                            } else {
-                                btn += '<span class="badge red-text">';
-                            }
-                            btn += row.keputusan + '</span>';
-                            return btn;
-                        }
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, row){
-                            var btn = '<div class="btn-group"><span><button type="button" id="detail_tindakan"  class="btn btn-xs btn-outline-info m-1"><i class="fas fa-eye"></i> Detail</button></span>';
-                            if (row.keputusan == 'Dipulangkan') {
-                                if(divisi_id == '28'){
-                                btn += '<a href="/karyawan/sakit/cetak/' + row.id + '" target="_break"><button type="button" class="btn btn-xs btn-warning m-1" id="cetak_gcu"><i class="fas fa-print"></i> Cetak</button></a>';
-                                }
-                            }
-                            if(divisi_id == '28'){
-                                btn += '<span><button type="button" id="delete"  data-id="' + row.id + '" class="btn btn-xs btn-danger m-1"><i class="fas fa-trash"></i> Hapus</button></span>';
-                            }
-                            btn += '</div>';
-                            // btn = '<div class="inline-flex"><a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" id="cetak_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-print"></i></button></a></div>';
-                            return btn;
-                        }
-                    }
-                ]
-            });
-            $('#tabel_sakit > tbody').on('click', '#detail_tindakan', function() {
-                var rows = tabel_sakit.rows($(this).parents('tr')).data();
-                var keputusan = rows[0]['tindakan'] == "Lanjut Bekerja" ? 'Karyawan Berobat' :
-                    'Karyawan Sakit';
-                $('.data_detail_head').html(
-                    "Karyawan Sakit"
-                );
-                var diagnosa = rows[0]['diagnosa'] != null ? rows[0]['diagnosa'] :
-                    '<i>Tidak Ada Diagnosa</i>';
-                var analisa = rows[0]['analisa'] != null ? rows[0]['analisa'] : '<i>Tidak Ada Analisa</i>'
-                $('#analisa').html(analisa);
-                $('#diagnosa').html(diagnosa);
-                $('#pasien').html(rows[0]['y']);
-                $('#divisi').html(rows[0]['x']);
-                $('#pemeriksa').html(rows[0]['z']);
-                $('#tanggal').html(rows[0]['tgl_cek']);
-                if (rows[0]['tindakan'] == "Pengobatan") {
-                    $('#detail_obat').removeClass('d-none');
-                    $('#detail_terapi').addClass('d-none');
-                    $('#tabel_detail_obat').DataTable({
-                        processing: true,
-                        destroy: true,
-                        serverSide: false,
-                        language: {
-                            processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                        },
-                        ajax: '/karyawan/sakit/obat/detail/' + rows[0]['id'],
-                        columns: [{
-                                data: 'DT_RowIndex',
-                                orderable: false,
-                                searchable: false
-                            },
-                            {
-                                data: 'x',
-                            },
-                            {
-                                data: 'jumlah',
-                            },
-                            {
-                                data: 'aturan',
-                            },
-                            {
-                                data: 'konsumsi',
-                            },
-                            {
-                                data: 'aksi',
-                                visible: divisi_id == '28' ? true : false
-                            },
-                        ],
-                    });
-                } else {
-                    $('#detail_obat').addClass('d-none');
-                    $('#detail_terapi').removeClass('d-none');
-                    $('#terapi').html(rows[0]['terapi']);
-                }
-                $('#detail_mod').modal('show');
-                // $('input[id="nama_obat"]').val(rows[0]['o']);
-                // $('input[id="aturan"]').val(rows[0]['d']);
-                // $('input[id="konsumsi"]').val(rows[0]['e']);
-                // $('input[id="terapi"]').val(rows[0]['f']);
-            });
+            // $('#tabel_sakit > tbody').on('click', '#delete', function() {
+            //     var data_id = $(this).attr('data-id');
+            //     Swal.fire({
+            //             title: 'Hapus Data',
+            //             text: 'Yakin ingin menghapus data ini?',
+            //             icon: 'warning',
+            //             confirmButtonText: 'Ya',
+            //             cancelButtonText: 'Tidak',
+            //             showCancelButton: true,
+            //             showCloseButton: true
+            //         })
+            //         .then((result) => {
+            //             if (result.isConfirmed) {
+            //                 $.ajax({
+            //                     url: '/karyawan/sakit/delete/' + data_id,
+            //                     type: 'DELETE',
+            //                     headers: {
+            //                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //                     },
+            //                     success: function(response) {
+            //                         if (response['data'] == "success") {
+            //                             swal.fire(
+            //                                 'Berhasil',
+            //                                 'Berhasil melakukan Hapus Data',
+            //                                 'success'
+            //                             );
+            //                             $('#tabel_detail').DataTable().ajax.reload();
+            //                             $("#hapusmodal").modal('hide');
+            //                         } else if (response['data'] == "error") {
+            //                             swal.fire(
+            //                                 'Gagal',
+            //                                 'Data telah digunakan dalam Transaksi Lain',
+            //                                 'error'
+            //                             );
+            //                         } else {
+            //                             swal.fire(
+            //                                 'Error',
+            //                                 'Data telah digunakan dalam Transaksi Lain',
+            //                                 'warning'
+            //                             );
+            //                         }
+            //                     },
+            //                     error: function(xhr, status, error) {
+            //                         swal.fire(
+            //                             'Error',
+            //                             'Data telah digunakan dalam Transaksi Lain',
+            //                             'warning'
+            //                         );
+            //                     }
+            //                 });
+            //             } else if (result.dismiss === Swal.DismissReason.cancel) {
+            //                 Swal.fire({
+            //                     title: 'Gagal',
+            //                     text: 'Gagal menghapus data',
+            //                     icon: 'error',
+            //                     showCloseButton: true
+            //                 });
+            //             }
+            //         });
+            // });
+            // var tabel_sakit = $('#tabel_sakit').DataTable({
+            //     processing: true,
+            //     serverSide: true,
+            //     language: {
+            //         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            //     },
+            //     ajax: {
+            //         'url': '/karyawan/sakit/data/sakit',
+            //         'type': 'POST',
+            //         'headers': {
+            //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            //         }
+            //     },
+            //     columns: [{
+            //             data: 'DT_RowIndex',
+            //             orderable: false,
+            //             searchable: false
+            //         },
+            //         {
+            //             data: 'tgl_cek'
+            //         },
+            //         {
+            //             data: 'x',
+            //         },
+            //         {
+            //             data: 'y',
+            //         },
+            //         {
+            //             data: 'z'
+            //         },
+            //         {
+            //             data: 'analisa',
+            //             className: 'minimizechar'
+            //         },
+            //         {
+            //             data: 'diagnosa',
+            //             className: 'minimizechar'
+            //         },
+            //         {
+            //             data: 'detail_button'
+            //         },
+            //         {
+            //             data: null,
+            //             render: function(data, type, row) {
+            //                 var btn = '';
+            //                 if (row.keputusan == "Lanjut bekerja") {
+            //                     btn += '<span class="badge green-text">';
+            //                 } else {
+            //                     btn += '<span class="badge red-text">';
+            //                 }
+            //                 btn += row.keputusan + '</span>';
+            //                 return btn;
+            //             }
+            //         },
+            //         {
+            //             data: null,
+            //             render: function(data, type, row) {
+            //                 var btn =
+            //                     '<div class="btn-group"><span><button type="button" id="detail_tindakan"  class="btn btn-xs btn-outline-info m-1"><i class="fas fa-eye"></i> Detail</button></span>';
+            //                 if (row.keputusan == 'Dipulangkan') {
+            //                     if (divisi_id == '28') {
+            //                         btn += '<a href="/karyawan/sakit/cetak/' + row.id +
+            //                             '" target="_break"><button type="button" class="btn btn-xs btn-warning m-1" id="cetak_gcu"><i class="fas fa-print"></i> Cetak</button></a>';
+            //                     }
+            //                 }
+            //                 if (divisi_id == '28') {
+            //                     btn += '<span><button type="button" id="delete"  data-id="' + row
+            //                         .id +
+            //                         '" class="btn btn-xs btn-danger m-1"><i class="fas fa-trash"></i> Hapus</button></span>';
+            //                 }
+            //                 btn += '</div>';
+            //                 // btn = '<div class="inline-flex"><a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" id="cetak_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-print"></i></button></a></div>';
+            //                 return btn;
+            //             }
+            //         }
+            //     ]
+            // });
+            // $('#tabel_sakit > tbody').on('click', '#detail_tindakan', function() {
+            //     var rows = tabel_sakit.rows($(this).parents('tr')).data();
+            //     var keputusan = rows[0]['tindakan'] == "Lanjut Bekerja" ? 'Karyawan Berobat' :
+            //         'Karyawan Sakit';
+            //     $('.data_detail_head').html(
+            //         "Karyawan Sakit"
+            //     );
+            //     var diagnosa = rows[0]['diagnosa'] != null ? rows[0]['diagnosa'] :
+            //         '<i>Tidak Ada Diagnosa</i>';
+            //     var analisa = rows[0]['analisa'] != null ? rows[0]['analisa'] : '<i>Tidak Ada Analisa</i>'
+            //     $('#analisa').html(analisa);
+            //     $('#diagnosa').html(diagnosa);
+            //     $('#pasien').html(rows[0]['y']);
+            //     $('#divisi').html(rows[0]['x']);
+            //     $('#pemeriksa').html(rows[0]['z']);
+            //     $('#tanggal').html(rows[0]['tgl_cek']);
+            //     if (rows[0]['tindakan'] == "Pengobatan") {
+            //         $('#detail_obat').removeClass('d-none');
+            //         $('#detail_terapi').addClass('d-none');
+            //         $('#tabel_detail_obat').DataTable({
+            //             processing: true,
+            //             destroy: true,
+            //             serverSide: false,
+            //             language: {
+            //                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            //             },
+            //             ajax: '/karyawan/sakit/obat/detail/' + rows[0]['id'],
+            //             columns: [{
+            //                     data: 'DT_RowIndex',
+            //                     orderable: false,
+            //                     searchable: false
+            //                 },
+            //                 {
+            //                     data: 'x',
+            //                 },
+            //                 {
+            //                     data: 'jumlah',
+            //                 },
+            //                 {
+            //                     data: 'aturan',
+            //                 },
+            //                 {
+            //                     data: 'konsumsi',
+            //                 },
+            //                 {
+            //                     data: 'aksi',
+            //                     visible: divisi_id == '28' ? true : false
+            //                 },
+            //             ],
+            //         });
+            //     } else {
+            //         $('#detail_obat').addClass('d-none');
+            //         $('#detail_terapi').removeClass('d-none');
+            //         $('#terapi').html(rows[0]['terapi']);
+            //     }
+            //     $('#detail_mod').modal('show');
+            //     // $('input[id="nama_obat"]').val(rows[0]['o']);
+            //     // $('input[id="aturan"]').val(rows[0]['d']);
+            //     // $('input[id="konsumsi"]').val(rows[0]['e']);
+            //     // $('input[id="terapi"]').val(rows[0]['f']);
+            // });
         });
     </script>
 @endsection

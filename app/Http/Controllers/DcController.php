@@ -17,7 +17,9 @@ use PDF;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\SystemLog;
+use App\Models\User;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DcController extends Controller
@@ -640,6 +642,11 @@ class DcController extends Controller
                         Coo + Background + Ttd + Stamp
                     </button>
                             </a>
+
+                        <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="'.$data->id.'"><i class="fas fa-times text-danger"></i>
+                       <b class="text-danger">Batal</b>
+                    </button>
+
                     </div>';
                 } else {
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -672,7 +679,9 @@ class DcController extends Controller
                                     Coo + Background + Ttd + Stamp
                                 </button>
                             </a>
-
+                                <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="'.$data->id.'"><i class="fas fa-times "></i>
+                                <b class="text-danger">Batal</b>
+                                </button>
                     </div>';
                 }
             })
@@ -847,6 +856,9 @@ class DcController extends Controller
                         Coo + Background + Ttd + Stamp
                     </button>
                             </a>
+                            <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="'.$data->id.'"><i class="fas fa-times "></i>
+                            <b class="text-danger">Batal</b>
+                            </button>
                     </div>';
                 } else {
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -879,6 +891,9 @@ class DcController extends Controller
                                     Coo + Background + Ttd + Stamp
                                 </button>
                             </a>
+                            <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="'.$data->id.'"><i class="fas fa-times "></i>
+                            <b class="text-danger">Batal</b>
+                            </button>
 
                     </div>';
                 }
@@ -1275,6 +1290,7 @@ class DcController extends Controller
     // $check = Pesanan::whereYear('created_at', $this->getYear())->where('so', 'like', '%' . $this->getYear() . '%')->get('so');
     public function store_coo(Request $request, $value)
     {
+
         if ($request->diketahui == 'spa') {
             $nama = NULL;
             $jabatan = NULL;
@@ -2417,4 +2433,97 @@ class DcController extends Controller
         }
         return Carbon::parse($value)->subDays($days);
     }
+
+    public function cancel_so(Request $request)
+    {
+       $user = User::find($request->user);
+
+       $cek =  str_word_count($request->alasan);
+       if($cek < 5){
+        return response()->json([
+            'data' => 'alasan_salah',
+            'message' => 'Alasan yang dimasukkan minimal 5 kata',
+        ], 200);
+       }
+
+       $get = DB::select('
+       select  p.no_po , group_concat(nc.id) as coo_id, group_concat(nc.tahun) as tahun , group_concat(nc.no_coo) as coo_no ,  group_concat(nbj.noseri) as seri  from noseri_coo nc
+       left join  noseri_logistik nl on nc.noseri_logistik_id = nl.id
+       left join noseri_detail_pesanan ndp on ndp.id = nl.noseri_detail_pesanan_id
+       left join t_gbj_noseri tgn on tgn.id = ndp.t_tfbj_noseri_id
+       left join noseri_barang_jadi nbj on nbj.id = tgn.noseri_id
+       left join t_gbj_detail tgd on tgd.id = tgn.t_gbj_detail_id
+       left join t_gbj tg on tg.id = tgd.t_gbj_id
+       left join pesanan p on p.id = tg.pesanan_id
+       where p.id = ?', [$request->id]);
+
+
+    $id =  explode(',', $get[0]->coo_id);
+    $seri =  explode(',', $get[0]->seri);
+    $coo_no =  explode(',', $get[0]->coo_no);
+    $tahun =  explode(',', $get[0]->tahun);
+
+    if(count($seri) > 0){
+
+        try {
+            NoseriCoo::whereIn('id', $id)->delete();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Ada kesalahan, batal transaksi gagal',
+            ], 500);
+        }
+
+        $save =   SystemLog::create([
+            'tipe' => 'DC',
+            'subjek' => 'Batalkan Transaksi',
+            'user_id' => $user->id
+        ]);
+
+        foreach ($seri as $key_c => $coo)
+        {
+            $seri[$key_c] = array(
+                'coo_no' =>   $coo_no[$key_c],
+                'tahun' =>   $tahun[$key_c],
+                'noseri' =>   $seri[$key_c]
+
+            );
+        }
+
+        $data = array(
+            'po' => $get[0]->no_po,
+            'alasan' => $request->alasan,
+            'noseri' => $seri
+        );
+
+        $data = json_encode($data);
+        $get_response = SystemLog::find($save->id);
+        $get_response->response = $data;
+        $get_response->save();
+
+
+        return response()->json([
+            'data' => 'berhasil',
+            'message' => 'Data berhasil dibatalkan',
+        ], 200);
+
+    }
+
+    return response()->json([
+        'message' => 'Ada kesalahan, batal transaksi gagal',
+    ], 500);
+
+
+    return response()->json([
+        'data' => 'berhasil',
+        'message' => 'Data berhasil dibatalkan',
+    ], 200);
+
+    }
+
+    public function cancel_so_view($id)
+    {
+        $data = Pesanan::find($id);
+        return view('page.dc.so.cancel',['id' => $id,'data' => $data]);
+    }
+
 }

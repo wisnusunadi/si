@@ -11,7 +11,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '26')
+                    @if (Auth::user()->divisi_id == '26')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.penjualan.show') }}">Penjualan</a></li>
                         <li class="breadcrumb-item active">Edit Ekatalog</li>
@@ -94,13 +94,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                .row {
-                                                                                                                                                                                                                                                                                                    font-size: 12px;
-                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                            .row {
+                                                                                                                                                                                                                                                                                                                font-size: 12px;
+                                                                                                                                                                                                                                                                                                            }
 
-                                                                                                                                                                                                                                                                                                h4 {
-                                                                                                                                                                                                                                                                                                    font-size: 20px;
-                                                                                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                            h4 {
+                                                                                                                                                                                                                                                                                                                font-size: 20px;
+                                                                                                                                                                                                                                                                                                            } */
             body {
                 font-size: 12px;
             }
@@ -121,13 +121,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                .row {
-                                                                                                                                                                                                                                                                                                    font-size: 12px;
-                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                            .row {
+                                                                                                                                                                                                                                                                                                                font-size: 12px;
+                                                                                                                                                                                                                                                                                                            }
 
-                                                                                                                                                                                                                                                                                                h4 {
-                                                                                                                                                                                                                                                                                                    font-size: 20px;
-                                                                                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                            h4 {
+                                                                                                                                                                                                                                                                                                                font-size: 20px;
+                                                                                                                                                                                                                                                                                                            } */
             body {
                 font-size: 12px;
             }
@@ -358,7 +358,7 @@
                             @endif
                             <div class="content">
                                 <form method="post" autocomplete="off"
-                                    action="{{ route('penjualan.penjualan.update_ekatalog', ['id' => $e->id]) }}">
+                                    action="{{ route('penjualan.penjualan.update_ekatalog', ['id' => $e->id]) }}" id="edit_penjualan">
                                     {{ csrf_field() }}
                                     {{ method_field('PUT') }}
                                     <div class="row d-flex justify-content-center">
@@ -455,6 +455,12 @@
                                                                 data-toggle="pill" href="#pills-instansi" role="tab"
                                                                 aria-controls="pills-instansi"
                                                                 aria-selected="false">Instansi</a>
+                                                        </li>
+                                                        <li class="nav-item" role="presentation">
+                                                            <a class="nav-link disabled" id="pills-pengiriman-tab"
+                                                                data-toggle="pill" href="#pills-pengiriman" role="tab"
+                                                                aria-controls="pills-pengiriman"
+                                                                aria-selected="false">Pengiriman</a>
                                                         </li>
                                                         <li class="nav-item" role="presentation">
                                                             <a class="nav-link" id="pills-produk-tab" data-toggle="pill"
@@ -554,9 +560,9 @@
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
                                                                             <div class="col-lg-5 col-md-12 col-form-label">
                                                                                 <!-- <div class="form-check form-check-inline">
-                                                                                                                                                                                                                                                                                                                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
-                                                                                                                                                                                                                                                                                                                                                                        <label class="form-check-label" for="status_akn4">Draft</label>
-                                                                                                                                                                                                                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                    <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
+                                                                                                                                                                                                                                                                                                                                                                                    <label class="form-check-label" for="status_akn4">Draft</label>
+                                                                                                                                                                                                                                                                                                                                                                                </div> -->
                                                                                 <div class="form-check form-check-inline">
                                                                                     <input class="form-check-input"
                                                                                         type="radio" name="status_akn"
@@ -744,7 +750,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="form-group row @if ($e->Pesanan->tgl_do == null) checked @endif"
+                                                                        <div class="form-group row @if ($e->Pesanan->tgl_do == null) hide @endif"
                                                                             id="do_detail_tgl_ekat">
                                                                             <label for=""
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
@@ -832,7 +838,7 @@
                                                                                 <select name="provinsi" id="provinsi"
                                                                                     class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror"
                                                                                     style="width: 100%;">
-                                                                                    @if (!empty($e->provinsi_id))
+                                                                                    @if ($e->provinsi_id != NULL || $e->provinsi_id != "" )
                                                                                         <option
                                                                                             value="{{ $e->provinsi_id }}"
                                                                                             selected>
@@ -866,6 +872,83 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="tab-pane fade" id="pills-pengiriman" role="tabpanel"
+                                                        aria-labelledby="pills-pengiriman-tab">
+                                                            <div class="card removeshadow">
+                                                                <div class="card-header">
+                                                                    <h6>Pengiriman</h6>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="form-group row">
+                                                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pengiriman0" value="distributor" />
+                                                                                <label for="pengiriman0" class="form-check-label">Sama dengan Distributor</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="pengiriman1" value="instansi" />
+                                                                                <label for="pengiriman1" class="form-check-label">Sama dengan Instansi</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="pilihan_pengiriman" id="lainnya" value="lainnya" />
+                                                                                <label for="lainnya" class="form-check-label">Lainnya</label>
+                                                                            </div>
+                                                                            <input type="text" name="perusahaan_pengiriman"
+                                                                            value="{{ $e->pesanan->tujuan_kirim }}"
+                                                                            id="perusahaan_pengiriman" class="form-control col-form-label" readonly>
+                                                                            <input type="text"
+                                                                            value="{{ $e->pesanan->alamat_kirim }}"
+                                                                                class="form-control col-form-label mt-2" name="alamat_pengiriman" id="alamat_pengiriman" readonly/>
+                                                                            <div class="invalid-feedback"
+                                                                                id="msg_alamat_pengiriman">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti"
+                                                                                @if ($e->pesanan->kemasan == "peti")
+                                                                                    checked
+                                                                                @endif
+                                                                                />
+                                                                                <label for="kemasan0" class="form-check-label">PETI</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti"
+                                                                                @if ($e->pesanan->kemasan == "nonpeti")
+                                                                                    checked
+                                                                                @endif
+                                                                                />
+                                                                                <label for="kemasan1" class="form-check-label">NON PETI</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Ekspedisi</label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <select name="ekspedisi" id="ekspedisi" class="form-control">
+                                                                                @if ($e->pesanan->ekspedisi_id != NULL || $e->pesanan->ekspedisi_id != "" )
+                                                                                <option
+                                                                                    value="{{ $e->pesanan->ekspedisi_id }}"
+                                                                                    selected>
+                                                                                    {{ $e->pesanan->Ekspedisi->nama }}
+                                                                                </option>
+                                                                            @endif
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row d-none">
+                                                                        <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <textarea class="form-control col-form-label" name="keterangan_pengiriman">{{ $e->pesanan->ket_kirim }}</textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                             <div class="tab-pane fade show" id="pills-produk"
                                                                 role="tabpanel" aria-labelledby="pills-produk-tab">
                                                                 <div class="card removeshadow">
@@ -984,7 +1067,7 @@
                                                                                                                     data-id="{{ $variasi }}">
                                                                                                                     <option
                                                                                                                         value="{{ $g->GudangBarangJadi->id }}">
-                                                                                                                        @if (!empty($g->GudangBarangJadi->nama))
+                                                                                                                        @if (!empty(trim($g->GudangBarangJadi->nama)))
                                                                                                                             {{ $g->GudangBarangJadi->nama }}
                                                                                                                         @else
                                                                                                                             {{ $g->GudangBarangJadi->Produk->nama }}
@@ -1068,19 +1151,24 @@
                                                                                             </div>
                                                                                         </td>
                                                                                         <td>
-                                                                                            <div
-                                                                                                class="form-group d-flex align-items-center">
-                                                                                                <input type="checkbox"
-                                                                                                    class="stok_distributor"
-                                                                                                    name="stok_distributor[{{ $produkpenjualan }}]"
-                                                                                                    id="stok_distributor[{{ $produkpenjualan }}]"
-                                                                                                    {{-- checked if 1 --}}
-                                                                                                    @if ($f->stok_distributor == 1)
-                                                                                                        checked
-                                                                                                    @endif
-                                                                                                    value="{{ $produkpenjualan }}"
-                                                                                                    style="width:100%;" />
-                                                                                            </div>
+                                                                                            <div class="custom-control custom-switch">
+                                                                                                <input type="checkbox" class="custom-control-input produk_ppn"
+                                                                                                id="produk_ppn{{ $produkpenjualan }}"
+                                                                                                name="produk_ppn[{{ $produkpenjualan }}]"
+                                                                                                value="{{ $f->ppn }}"
+                                                                                                @if ($f->ppn == 1)
+                                                                                                    checked
+                                                                                                @endif
+                                                                                                >
+
+                                                                                                <label class="custom-control-label produk_ppn_label" for="produk_ppn{{ $produkpenjualan }}">
+                                                                                                @if ($f->ppn == 1)
+                                                                                                    PPN
+                                                                                                @else
+                                                                                                    Non PPN
+                                                                                                @endif
+                                                                                                </label>
+                                                                                              </div>
                                                                                         </td>
                                                                                         <td hidden><input type="hidden"
                                                                                                 class="rencana_id"
@@ -1177,17 +1265,12 @@
                                                                                                 readonly />
                                                                                         </div>
                                                                                     </td>
-                                                                                    {{-- checkbox distributor --}}
                                                                                     <td>
-                                                                                        <div
-                                                                                            class="form-group d-flex align-items-center">
-                                                                                            <input type="checkbox"
-                                                                                                class="stok_distributor"
-                                                                                                name="stok_distributor[]"
-                                                                                                id="stok_distributor0"
-                                                                                                value="0"
-                                                                                                style="width:100%;" />
-                                                                                        </div>
+                                                                                        <div class="custom-control custom-switch">
+                                                                                            <input type="checkbox" class="custom-control-input produk_ppn"
+                                                                                            id="produk_ppn0" name="produk_ppn[0]" value="1" checked>
+                                                                                            <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
+                                                                                          </div>
                                                                                     </td>
                                                                                     <td hidden><input type="hidden"
                                                                                             class="rencana_id"
@@ -1279,6 +1362,13 @@
                                                                                             readonly />
                                                                                     </div>
                                                                                 </td>
+                                                                                <td>
+                                                                                    <div class="custom-control custom-switch">
+                                                                                        <input type="checkbox" class="custom-control-input produk_ppn"
+                                                                                        id="produk_ppn0" name="produk_ppn[0]" value="1" checked>
+                                                                                        <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
+                                                                                      </div>
+                                                                                </td>
                                                                                 <td hidden><input type="hidden"
                                                                                         class="rencana_id"
                                                                                         name="rencana_id[]"
@@ -1344,7 +1434,107 @@
 
 @section('adminlte_js')
     <script>
+          $(document).on('submit', '#edit_penjualan', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $(this).serialize(),
+                dataType: 'JSON',
+                beforeSend: function() {
+                    $('#btnsimpan').attr('disabled', true);
+                    $('#btnsimpan').html('<i class="fa fa-spin fa-spinner"></i>');
+                },
+                success: function(response) {
+                    // console.log(response)
+                    swal.fire(
+                        'Berhasil',
+                        'Data Berhasil di Update',
+                        'success'
+                    ).then(function() {
+                        window.location.href = '/penjualan/penjualan/edit_ekatalog/' + {{ $e->id }} + '/ekatalog';
+                    });
+                },
+                error: function(xhr, status, error, response) {
+                    // console.log(response)
+                    $('#btnsimpan').attr('disabled', false);
+                    $('#btnsimpan').html('Simpan');
+                    swal.fire(
+                        'Gagal',
+                        'Cek Form Kembali',
+                        'error'
+                    );
+                }
+            });
+          });
         $(function() {
+            // check input[type="radio"][name="status_akn"]:checked == sepakat
+            if ($('input[type="radio"][name="status_akn"]:checked').val() == "sepakat") {
+                $('#pills-pengiriman-tab').removeClass('disabled');
+            }
+
+            const ekspedisi = (provinsi) => {
+                $('#ekspedisi').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + provinsi,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
+
+            const getekspedisiall = () => {
+                $('#ekspedisi').select2({
+                    placeholder: "Pilih Ekspedisi",
+                    ajax: {
+                        minimumResultsForSearch: 20,
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/all',
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+            }
+
             $('#jenis_paket').select2();
             var nopaketdb = "{{ str_replace(['AK1-', 'FKS-', 'KLK-'], '', $e->no_paket) }}";
             var nopaketubah = false;
@@ -1360,8 +1550,8 @@
             // var instansi_array = [];
 
 
-            $("#tgl_edit").attr("max", today);
-            $("#batas_kontrak").attr("min", today);
+            // $("#tgl_edit").attr("max", today);
+            // $("#batas_kontrak").attr("min", today);
 
             loop();
             load_variasi();
@@ -1370,9 +1560,29 @@
             var variasi = false;
             var produk_jumlah = false;
             var produk_harga = false;
+            let nama_customer = '';
+            let provinsi_customer = null;
+            let provinsi_instansi = $('#provinsi').val();
+
+            let alamat_pengiriman = $('#alamat_pengiriman').val().replace(/\s/g, '');
+            let alamat_customer = $('#alamat_customer').val().replace(/\s/g, '');
+            let alamat_instansi = $('#alamatinstansi').val().replace(/\s/g, '');
+
+            if (alamat_pengiriman == alamat_customer) {
+                $('input[value="distributor"]').prop('checked', true);
+                getekspedisiall();
+            } else if (alamat_pengiriman == alamat_instansi) {
+                $('input[value="instansi"]').prop('checked', true);
+                // ekspedisi(provinsi_instansi)
+                getekspedisiall();
+            } else {
+                $('input[value="lainnya"]').prop('checked', true);
+                $('#perusahaan_pengiriman').attr('readonly', false);
+                $('#alamat_pengiriman').attr('readonly', false);
+                getekspedisiall();
+            }
 
             function checkvalidasi() {
-
                 $('#produktable').find('.penjualan_produk_id').each(function() {
                     if ($(this).val() != "") {
                         penjualan_produk_id = true;
@@ -1589,8 +1799,15 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
+                        nama_customer = data[0].nama;
+                        provinsi_customer = data[0].id_provinsi;
                         $('#alamat_customer').val(data[0].alamat);
                         $('#telepon_customer').val(data[0].telp);
+
+                        if($('input[type="radio"][name="pilihan_pengiriman"]:checked').val() == 'distributor'){
+                            $('#perusahaan_pengiriman').val(data[0].nama);
+                            $('#alamat_pengiriman').val(data[0].alamat);
+                        }
                     }
                 });
 
@@ -1623,18 +1840,77 @@
                         };
                     },
                 }
-            })
+            }).change(function() {
+                if ($(this).val() != "") {
+                    $("#msgprovinsi").text("");
+                    $("#provinsi").removeClass('is-invalid');
+                    $('#alamat_pengiriman').removeClass('is-invalid');
+                    $('#msg_alamat_pengiriman').text('');
+                }
+                else{
+                    $("#msgprovinsi").text("Provinsi harus diisi");
+                    $("#provinsi").addClass('is-invalid');
+                    $('#btntambah').attr("disabled", true);
+                    $('#alamat_pengiriman').addClass('is-invalid');
+                    $('#msg_alamat_pengiriman').text('Provinsi instansi harus diisi');
+                }
+            });
+
+            fetch('/api/customer/select/'+$('#customer_id').val())
+                .then(response => response.json())
+                .then(data => {
+                    nama_customer = data[0].nama;
+                    provinsi_customer = data[0].id_provinsi;
+                });
+
+            $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function () {
+                let pilihan_pengiriman = $(this).val();
+                let provinsi_instansi = $('#provinsi').val();
+                $('#perusahaan_pengiriman').attr('readonly', true);
+                $('#alamat_pengiriman').attr('readonly', true);
+                $('#perusahaan_pengiriman').val('');
+                // add placeholder
+                $('#perusahaan_pengiriman').attr('placeholder', 'Masukkan Nama Perusahaan');
+                $('#alamat_pengiriman').val('');
+                $('#alamat_pengiriman').removeClass('is-invalid');
+                // add placeholder
+                $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
+                $('#msg_alamat_pengiriman').text('');
+
+                const checkValidasi = (msg) => {
+                    $('#alamat_pengiriman').addClass('is-invalid');
+                    $('#msg_alamat_pengiriman').text(msg);
+                }
+
+                if(pilihan_pengiriman == 'distributor'){
+                    $('#perusahaan_pengiriman').val(nama_customer);
+                    $('#alamat_pengiriman').val($('#alamat_customer').val());
+                    provinsi_customer ? ekspedisi(provinsi_customer) : checkValidasi('Provinsi Customer harus diisi');
+                }else if (pilihan_pengiriman == 'instansi'){
+                    $('#perusahaan_pengiriman').val($('#satuan_kerja').val());
+                    $('#alamat_pengiriman').val($('#alamatinstansi').val());
+                    provinsi_instansi != 'NULL' ? ekspedisi(provinsi_instansi) : checkValidasi('Provinsi Instansi harus diisi');
+                }else{
+                    $('#perusahaan_pengiriman').attr('readonly', false);
+                    $('#alamat_pengiriman').attr('readonly', false);
+                    ekspedisi(provinsi_instansi);
+                }
+            });
 
             if ('{{ $e->customer_id }}' == 484) {
                 var cust_id = 'belum';
                 $("#customer_id").attr('disabled', true);
-                $("#customer_id").empty().trigger('change');
-                $("#provinsi").attr('disabled', true);
-                $("#provinsi").empty().trigger('change');
+                $("#customer_id").val("484").trigger('change');
                 $("#alamat").val("");
                 $("#telepon").val("");
             } else {
                 var cust_id = 'sudah';
+            }
+            if ('{{ $e->provinsi_id }}' == "") {
+                $('.provinsi').append($('<option>', {
+                    value: 'NULL',
+                    text: 'Pilih Provinsi'
+                }));
             }
 
             if (status_akn != 'sepakat') {
@@ -1643,8 +1919,8 @@
                     if (jum_produk <= 0) {
                         $("#dataproduk").addClass("hide");
                     }
-                    $("#provinsi").attr('disabled', true);
-                    $("#provinsi").empty().trigger('change')
+                    // $("#provinsi").attr('disabled', true);
+                    // $("#provinsi").empty().trigger('change')
                     $("#batas_kontrak").attr('disabled', true);
                 }
             }
@@ -1653,9 +1929,14 @@
                 if ($(this).val() != "") {
                     if ($(this).val() == "sudah") {
                         $("#customer_id").attr('disabled', false);
+                        var $newOption = $("<option selected='selected'></option>").val("213").text(
+                            "PT. EMIINDO Jaya Bersama")
+                        $(".customer_id").append($newOption).trigger('change');
                     } else {
                         $("#customer_id").attr('disabled', true);
-                        $("#customer_id").empty().trigger('change')
+                        var $newOption = $("<option selected='selected'></option>").val("484").text(
+                            "BELUM DIKETAHUI")
+                        $(".customer_id").append($newOption).trigger('change');
                         $("#alamat").val("");
                         $("#telepon").val("");
                     }
@@ -1690,9 +1971,9 @@
                         $("#dataproduk").removeClass("hide");
                         $("#batas_kontrak").attr('disabled', false);
                         $("#provinsi").attr('disabled', false);
-                        var $newOption = $("<option selected='selected'></option>").val("11").text(
-                            "Jawa Timur")
-                        $(".provinsi").append($newOption).trigger('change');
+                        // var $newOption = $("<option selected='selected'></option>").val("11").text(
+                        //     "Jawa Timur")
+                        // $(".provinsi").append($newOption).trigger('change');
                         if (nopaketubah == false) {
                             $('#no_paket').val(nopaketdb);
                         }
@@ -1701,14 +1982,15 @@
                             $('#produktablve tbody').append(trproduktable());
                         }
                         numberRowsProduk($("#produktable"));
+                        $('#pills-pengiriman-tab').removeClass('disabled');
                     } else if ($(this).val() == "draft" || $(this).val() == "batal") {
                         $('#isi_produk_input').removeClass('hide');
                         $('#checkbox_nopaket').removeClass('hide');
                         // $('#no_paket').val("");
                         // $('#no_paket').attr('readonly', true);
                         $("#batas_kontrak").attr('disabled', true);
-                        $("#provinsi").attr('disabled', true);
-                        $("#provinsi").empty().trigger('change');
+                        // $("#provinsi").attr('disabled', true);
+                        // $("#provinsi").empty().trigger('change');
 
                         if ($('#no_paket').val() != '') {
                             $('#no_paket').attr('readonly', false);
@@ -1729,6 +2011,7 @@
                         if ($('input[type="checkbox"][name="isi_produk"]:checked').length <= 0) {
                             $("#dataproduk").addClass("hide");
                         }
+                        $('#pills-pengiriman-tab').addClass('disabled');
                     } else if ($(this).val() == "negosiasi") {
                         $('#checkbox_nopaket').addClass('hide');
                         $('#isi_nopaket').prop("checked", false);
@@ -1736,8 +2019,8 @@
                         $("#batas_kontrak").val("");
                         $("#batas_kontrak").attr('disabled', true);
                         $("#dataproduk").removeClass("hide");
-                        $("#provinsi").attr('disabled', true);
-                        $("#provinsi").empty().trigger('change')
+                        // $("#provinsi").attr('disabled', true);
+                        // $("#provinsi").empty().trigger('change')
                         if (nopaketubah == false) {
                             $('#no_paket').val(nopaketdb);
                         }
@@ -1746,6 +2029,7 @@
                             $('#produktable tbody').append(trproduktable());
                         }
                         numberRowsProduk($("#produktable"));
+                        $('#pills-pengiriman-tab').addClass('disabled');
                     }
                 } else {
                     $('#checkbox_nopaket').addClass('hide');
@@ -1970,6 +2254,9 @@
                     $(el).find('.produk_ongkir').attr('name', 'produk_ongkir[' + j + ']');
                     $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
                     $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
+                    $(el).find('.produk_ppn').attr('id', 'produk_ppn' + j);
+                    $(el).find('.produk_ppn').attr('name', 'produk_ppn[' + j + ']');
+                    $(el).find('.produk_ppn_label').attr('for', 'produk_ppn' + j);
                     $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
                     $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
                     $(el).find('.stok_distributor').attr('id', 'stok_distributor' + j);
@@ -2055,17 +2342,17 @@
                 id = $('select[name="' + name + '"]').attr('data-id');
                 vals = $('select[name="' + name + '"]').select2('data')[0];
                 var kebutuhan = jumlah * vals.jumlah;
-                if (cek_stok(vals.id) < kebutuhan) {
+                if (vals.stok < kebutuhan) {
                     var jumlah_kekurangan = 0;
-                    if (cek_stok(vals.id) < 0) {
+                    if (vals.stok < 0) {
                         jumlah_kekurangan = kebutuhan;
                     } else {
-                        jumlah_kekurangan = Math.abs(cek_stok(vals.id) - kebutuhan);
+                        jumlah_kekurangan = Math.abs(vals.stok - kebutuhan);
                     }
                     $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass('is-invalid');
                     $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang ' +
                         jumlah_kekurangan + ' dari Permintaan');
-                } else if (cek_stok(vals.id) >= kebutuhan) {
+                } else if (vals.stok >= kebutuhan) {
                     $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
                     $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
                 }
@@ -2152,14 +2439,9 @@
                         </div>
                     </td>
                     <td>
-                        <div
-                            class="form-group d-flex align-items-center">
-                            <input type="checkbox"
-                                class="stok_distributor"
-                                name="stok_distributor[]"
-                                id="stok_distributor0"
-                                value="0"
-                                style="width:100%;" />
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="1" checked>
+                            <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
                         </div>
                     </td>
                     <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly></td>
@@ -2253,7 +2535,7 @@
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi
                                     .length; y++) {
                                     var nama_var = "";
-                                    if (res[0].produk[x].gudang_barang_jadi[y].nama != "") {
+                                    if (res[0].produk[x].gudang_barang_jadi[y].nama.trim() != "") {
                                         nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
                                     } else {
                                         nama_var = res[0].produk[x].nama;
@@ -2262,8 +2544,8 @@
                                         id: res[0].produk[x].gudang_barang_jadi[y].id,
                                         text: nama_var,
                                         jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: cek_stok(res[0].produk[x]
-                                            .gudang_barang_jadi[y].id)
+                                        qt: res[0].produk[x]
+                                            .gudang_barang_jadi[y].stok
                                     });
                                 }
 
@@ -2328,7 +2610,7 @@
                                     for (var y = 0; y < res[0].produk[x].gudang_barang_jadi
                                         .length; y++) {
                                         var nama_var = "";
-                                        if (res[0].produk[x].gudang_barang_jadi[y].nama != "") {
+                                        if (res[0].produk[x].gudang_barang_jadi[y].nama.trim() != "") {
                                             nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
                                         } else {
                                             nama_var = res[0].produk[x].nama;
@@ -2337,8 +2619,8 @@
                                             id: res[0].produk[x].gudang_barang_jadi[y].id,
                                             text: nama_var,
                                             jumlah: res[0].produk[x].pivot.jumlah,
-                                            qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y]
-                                                .id)
+                                            qt: res[0].produk[x].gudang_barang_jadi[y]
+                                                .stok
                                         });
                                     }
 
@@ -2546,6 +2828,12 @@
                     `" style="width:100%;" readonly/>
                             </div>
                         </td>
+                        <td>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[]" value="1" checked>
+                                <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
+                            </div>
+                        </td>
                         <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly value="` +
                     id + `"></td>
                         <td>
@@ -2589,7 +2877,7 @@
 
                             for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
                                 var nama_var = "";
-                                if (res[0].produk[x].gudang_barang_jadi[y].nama != "") {
+                                if (res[0].produk[x].gudang_barang_jadi[y].nama.trim() != "") {
                                     nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
                                 } else {
                                     nama_var = res[0].produk[x].nama;
@@ -2598,7 +2886,7 @@
                                     id: res[0].produk[x].gudang_barang_jadi[y].id,
                                     text: nama_var,
                                     jumlah: res[0].produk[x].pivot.jumlah,
-                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
+                                    qt: res[0].produk[x].gudang_barang_jadi[y].stok
                                 });
                             }
 
@@ -2629,14 +2917,23 @@
                     }
                 });
             }
-        });
 
-        $('.checkAllDistributor').click(function() {
-            if ($(this).is(':checked')) {
-                $('.stok_distributor').prop('checked', true);
-            } else {
-                $('.stok_distributor').prop('checked', false);
-            }
+            $(document).on('change', '.custom-control-input', function() {
+                var labelElement = $(this).closest('tr').find('.custom-control-label')
+                var label = labelElement.text();
+                // not checked
+
+                if ($(this).val() == '0' || $(this).val() == '' || $(this).val() == null) {
+                    $(this).val('1');
+                    // change label text
+                    label = label.replace('Non PPN', 'PPN');
+                } else {
+                    $(this).val('0');
+                    // change label text
+                    label = label.replace('PPN', 'Non PPN');
+                }
+                labelElement.text(label);
+            });
         });
     </script>
 @stop

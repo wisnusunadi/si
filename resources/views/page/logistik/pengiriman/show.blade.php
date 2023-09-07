@@ -9,10 +9,10 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->Karyawan->divisi_id == '15')
+                    @if (Auth::user()->divisi_id == '15')
                         <li class="breadcrumb-item"><a href="{{ route('logistik.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item active">Pengiriman</li>
-                    @elseif(Auth::user()->Karyawan->divisi_id == '2')
+                    @elseif(Auth::user()->divisi_id == '2')
                         <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item active">Pengiriman</li>
                     @endif
@@ -316,6 +316,22 @@
                                                     <div class="dropdown-menu">
                                                         <div class="px-3 py-3">
                                                             <div class="form-group">
+                                                                <label for="jenis_penjualan">Database</label>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                {{-- show 5 years from now to old --}}
+                                                                @for ($i = date('Y'); $i >= date('Y') - 1; $i--)
+                                                                <div class="form-check">
+                                                                    {{-- checked if years equals now --}}
+                                                                    <input class="form-check-input" type="radio"
+                                                                        value="{{ $i }}" name="tahunSelesaiProses" id="defaultCheck{{ $i }}" {{ $i == date('Y') ? 'checked' : '' }} />
+                                                                    <label class="form-check-label" for="defaultCheck{{ $i }}">
+                                                                        {{ $i }}
+                                                                    </label>
+                                                                </div>
+                                                                @endfor                                                                
+                                                            </div>
+                                                            <div class="form-group">
                                                                 <label for="pengiriman_riwayat">Pengiriman</label>
                                                             </div>
                                                             <div class="form-group">
@@ -472,13 +488,15 @@
                 selesai_kirim();
             });
 
+            const yearsNow = new Date().getFullYear();
+
             function selesai_kirim() {
                 $('#riwayattable').DataTable({
                     destroy: true,
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        'url': '/api/logistik/pengiriman/riwayat/data/semua/semua/semua',
+                        'url': `/api/logistik/pengiriman/riwayat/data/semua/semua/semua/${yearsNow}`,
                         'dataType': 'json',
                         'type': 'POST',
                         'headers': {
@@ -561,8 +579,10 @@
                     var z = ['semua'];
                 }
 
+                let years = $('input[name="tahunSelesaiProses"]:checked').val() ?? yearsNow
+
                 $('#riwayattable').DataTable().ajax.url('/api/logistik/pengiriman/riwayat/data/' + x + '/' +
-                    y + '/' + z).load();
+                    y + '/' + z + '/' + years).load();
                 return false;
             });
 

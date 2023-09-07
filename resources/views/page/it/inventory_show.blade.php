@@ -34,7 +34,7 @@
                             <thead style="text-align: center;">
                                 <tr>
                                     <th colspan="20">
-                                        <a href="{{ route('inventory.create', ['divisi_id' => Auth::user()->Karyawan->divisi_id]) }}"
+                                        <a href="{{ route('inventory.create', ['divisi_id' => Auth::user()->divisi_id]) }}"
                                             style="color: white;"><button type="button"
                                                 class="btn btn-block btn-success btn-sm" style="width: 200px;"><i
                                                     class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>

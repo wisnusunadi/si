@@ -1034,13 +1034,13 @@
                                         confirmButtonText: 'OK'
                                     })
                                 }
-                                axios.post('https://sinko.api.hyperdatasystem.com/api/deliveryorder/save', datado, {
-                                            headers: {
-                                                Authorization: 'Bearer ' + sessionStorage.getItem('token')
-                                            },
-                                         }).then(response => {
-                                            this.loadData();
-                                        })
+                                // axios.post('https://sinko.api.hyperdatasystem.com/api/deliveryorder/save', datado, {
+                                //             headers: {
+                                //                 Authorization: 'Bearer ' + sessionStorage.getItem('token')
+                                //             },
+                                //          }).then(response => {
+                                //             this.loadData();
+                                //         })
                             } else {
                                 this.$swal({
                                     title: 'Gagal!',

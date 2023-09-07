@@ -29,8 +29,8 @@
             left: 20%;
         }
 
-        .history_filter {
-            display: block;
+        #history_filter {
+            display: none;
         }
 
         #gudang-salesorder_filter {
@@ -41,16 +41,16 @@
             width: 500px !important;
         }
 
-        th.prev.available {
+        /* th.prev.available {
             visibility: hidden;
         }
 
         th.next.available {
             visibility: hidden;
-        }
+        } */
     </style>
     <div class="content-header">
-        <input type="hidden" name="" id="authid" value="{{ Auth::user()->Karyawan->divisi_id }}">
+        <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id }}">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
@@ -84,77 +84,52 @@
                     <div class="tab-content card" id="myTabContent">
                         <div class="tab-pane fade show active card-body" id="semua-produk" role="tabpanel"
                             aria-labelledby="semua-produk-tab">
-                            <div class="row">
-                                <div class="col-sm-8">
-                                    <div class="row align-items-center">
-                                        <div class="col-lg-9 col-xl-8">
-                                            <div class="row align-items-center">
-                                                <div class="col-md-4 my-2 my-md-0">
-                                                    <div class="input-icon">
-                                                        <input type="text" class="form-control" placeholder="Cari..."
-                                                            id="kt_datatable_search_query">
-                                                        <span>
-                                                            <i class="flaticon2-search-1 text-muted"></i>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 my-2 my-md-0">
-                                                    <div class="d-flex align-items-center">
-                                                        <label class="mr-3 mb-0 d-none d-md-block"
-                                                            for="">Dari</label>
-                                                        <select name="" id="divisi" class="form-control ">
-                                                            <option value="">All</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 my-2 my-md-0">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="dropdown">
-                                                            <button class="btn btn-outline-secondary dropdown-toggle"
-                                                                type="button" id="dropdownMenuButton"
-                                                                data-toggle="dropdown" aria-expanded="false">
-                                                                Filter Tanggal
-                                                            </button>
-                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <div class="row m-0">
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label for="kt_datepicker_1">Tanggal
-                                                                                Masuk</label>
-                                                                            <input type="text" class="form-control"
-                                                                                id="kt_datepicker_1">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label for="kt_datepicker_2">Tanggal
-                                                                                Keluar</label>
-                                                                            <input type="text" class="form-control"
-                                                                                id="kt_datepicker_2">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                            <div class="row align-items-center">
+                                <div class="col-2 my-2 my-md-0">
+                                    <div class="input-icon">
+                                        <input type="text" class="form-control" placeholder="Cari..."
+                                            id="kt_datatable_search_query">
+                                        <span>
+                                            <i class="flaticon2-search-1 text-muted"></i>
+                                        </span>
                                     </div>
                                 </div>
-                                {{-- <div class="col-sm-4">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <p class="card-text">Keterangan Kolom <b>Dari/Ke:</b></p>
-                                        <p class="card-text">
-                                            <div class="foo green"></div> : Dari
-                                        </p>
-                                        <p class="card-text">
-                                            <div class="foo blue"></div> : Ke
-                                        </p>
+                                <div class="col-2 my-2 my-md-0">
+                                    <div class="d-flex align-items-center">
+                                        <label class="mr-3 mb-0 d-none d-md-block"
+                                            for="">Dari</label>
+                                        <select name="" id="divisi" class="form-control ">
+                                            <option value="">All</option>
+                                        </select>
                                     </div>
                                 </div>
-                            </div> --}}
+                                <div class="col-2 my-2 my-md-0">
+                                    <div class="d-flex align-items-center">
+                                        <label class="mr-3 mb-0 d-none d-md-block"
+                                            for="">Tujuan</label>
+                                        <select name="" id="divisitujuan" class="form-control">
+                                            <option value="">All</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-3 my-2 my-md-0">
+                                    <div class="d-flex align-items-center">
+                                        <label class="mr-3 mb-0 d-none d-md-block"
+                                            for="">Tanggal Masuk</label>
+                                            <input type="text" class="form-control"
+                                            id="kt_datepicker_1">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-3 my-2 my-md-0">
+                                    <div class="d-flex align-items-center">
+                                        <label class="mr-3 mb-0 d-none d-md-block"
+                                            for="">Tanggal Keluar</label>
+                                            <input type="text" class="form-control"
+                                            id="kt_datepicker_2">
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
@@ -371,6 +346,10 @@
             placeholder: "Choose...",
             allowClear: true
         })
+        $('#divisitujuan').select2({
+            placeholder: "Choose...",
+            allowClear: true
+        })
         $.ajax({
             url: '/api/gbj/sel-divisi',
             type: 'GET',
@@ -382,13 +361,20 @@
                 if (res) {
                     console.log(res);
                     $("#divisi").empty();
+                    $('#divisitujuan').empty();
                     $("#divisi").append('<option selected></option>');
+                    $('#divisitujuan').append('<option selected></option>');
                     $.each(res, function(key, value) {
                         $("#divisi").append('<option value="' + value.nama + '">' + value.nama +
                             '</option');
                     });
+                    $.each(res, function(key, value) {
+                        $("#divisitujuan").append('<option value="' + value.nama + '">' + value
+                            .nama + '</option');
+                    });
                 } else {
                     $("#divisi").empty();
+                    $('#divisitujuan').empty();
                 }
             }
         });
@@ -455,7 +441,7 @@
         var DateFilterFunction3 = (function(oSettings, aData, iDataIndex) {
             var dateStart = parseDateValue3(start_date3);
             var dateEnd = parseDateValue3(end_date3);
-            var evalDate = parseDateValue3(aData[3]);
+            var evalDate = parseDateValue3(aData[4]);
             if ((isNaN(dateStart) && isNaN(dateEnd)) ||
                 (isNaN(dateStart) && evalDate <= dateEnd) ||
                 (dateStart <= evalDate && isNaN(dateEnd)) ||
@@ -477,7 +463,6 @@
             processing: true,
             autoWidth: false,
             deferRender: true,
-            searching: false,
             ordering: false,
             ajax: {
                 url: "/api/transaksi/all",
@@ -523,8 +508,8 @@
             "language": {
                 // "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                 processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                        </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
             },
             order: [
                 [0, 'desc']
@@ -577,7 +562,11 @@
 
         $("#divisi").on("change", function() {
             console.log($(this).val());
-            $dTable.columns(1).search($(this).val()).draw();
+            $dTable.columns(2).search($(this).val()).draw();
+        });
+        $("#divisitujuan").on("change", function() {
+            console.log($(this).val());
+            $dTable.columns(3).search($(this).val()).draw();
         });
 
         $("#kt_datatable_search_query").on("keyup", function() {
@@ -625,8 +614,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                                                                                                                                                                </span>&emsp;Mohon Tunggu ...",
                 },
             });
             $(document).on("click", "#semua-produk-tab", function() {
@@ -644,10 +633,11 @@
 
         $(document).on('click', '.editmodal', function() {
             var id = $(this).data('id');
+            var tanggal = $(this).data('tanggal');
             console.log(id);
 
             $.ajax({
-                url: "/api/transaksi/all-detail/" + id,
+                url: "/api/transaksi/all-detail/" + id +"/" + tanggal ,
                 success: function(res) {
                     console.log(res);
                     $('span#title').text(res.data[0].title);
@@ -659,7 +649,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    url: "/api/transaksi/all-detail/" + id,
+                    url: "/api/transaksi/all-detail/"  + id +"/" + tanggal ,
                 },
                 columns: [{
                         data: 'seri',
@@ -731,8 +721,8 @@
             ],
             language: {
                 processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                                                                                                                                                                </span>&emsp;Mohon Tunggu ...",
             }
         });
         // Sales Order Cetak

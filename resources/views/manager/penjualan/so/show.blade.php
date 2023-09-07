@@ -270,7 +270,7 @@
         <div class="container-fluid">
             <div class="col-12">
                 <div class="row">
-                    <div id="auth" class="hide">{{ Auth::user()->Karyawan->divisi_id }}</div>
+                    <div id="auth" class="hide">{{ Auth::user()->divisi_id }}</div>
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
@@ -298,7 +298,7 @@
                                         aria-labelledby="semua-penjualan-tab">
                                         <div class="row">
                                             <div class="col-12">
-                                                @if (Auth::user()->Karyawan->divisi_id == '26')
+                                                @if (Auth::user()->divisi_id == '26')
                                                     <span class="float-right filter">
                                                         <a href="{{ route('penjualan.penjualan.create') }}"><button
                                                                 class="btn btn-outline-info">
@@ -856,7 +856,7 @@
                     "scrollX": false
                 });
             }
-            var divisi_id = "{{ Auth::user()->Karyawan->divisi_id }}";
+            var divisi_id = "{{ Auth::user()->divisi_id }}";
 
             function p_show() {
                 var penjualantable = $('#penjualantable').DataTable({
@@ -1697,7 +1697,7 @@
                 }
                 console.log(x);
                 $('#ekatalogtable').DataTable().ajax.url('/manager/penjualan/show_data/ekatalog/' + x)
-                .load();
+                    .load();
                 return false;
             });
             $('#filter_spa').submit(function() {

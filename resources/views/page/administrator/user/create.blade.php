@@ -45,6 +45,21 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="nama_produk" class="col-4 col-form-label" style="text-align: right">Akses
+                                    ERP</label>
+                                <div class="col-4">
+                                    <select type="text" class="form-control karyawan" name="akses_divisi">
+                                        @foreach ($divisi as $d)
+                                            <option value="{{ $d->id }}">
+                                                {{ $d->nama }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback" id="msgkaryawan">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="nama_produk" class="col-4 col-form-label" style="text-align: right"></label>
                                 <div class="col-4">
                                     <p form-control>*Password default :sinkoprima</p>
