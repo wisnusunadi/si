@@ -1081,7 +1081,7 @@
                                                                 id="produktable">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th colspan="7">
+                                                                        <th colspan="9">
                                                                             <button type="button"
                                                                                 class="btn btn-primary float-right"
                                                                                 id="addrowproduk">
@@ -1175,6 +1175,19 @@
                                                                                 <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
                                                                               </div>
                                                                         </td>
+                                                                        <td>
+                                                                            <div
+                                                                                class="form-group d-flex align-items-center">
+                                                                                <input type="checkbox"
+                                                                                    class="stok_distributor"
+                                                                                    name="stok_distributor[0]"
+                                                                                    id="stok_distributor0"
+                                                                                    value="0"
+                                                                                    style="width:100%;" />
+                                                                            </div>
+                                                                            <button type="button" class="btn btn-sm btn-outline-primary btnNoSeri" hidden>No Seri</button>
+                                                                            <input type="text" name="noSeriDistributor[0]" class="noSeriDistributor">
+                                                                        </td>
                                                                         <td hidden><input type="hidden"
                                                                                 class="rencana_id" name="rencana_id[]"
                                                                                 id="rencana_id0" readonly></td>
@@ -1187,9 +1200,9 @@
                                                                 </tbody>
                                                                 <tfoot>
                                                                     <tr>
-                                                                        <th colspan="6" style="text-align:right;">Total
+                                                                        <th colspan="7" style="text-align:right;">Total
                                                                             Harga</th>
-                                                                        <th id="totalhargaprd" class="align-right">Rp. 0
+                                                                        <th colspan="2" id="totalhargaprd" class="align-left">Rp. 0
                                                                         </th>
                                                                     </tr>
                                                                 </tfoot>
@@ -1415,6 +1428,25 @@
                                 </div>
                             </form>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade modalDistributor" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Nomor Seri Distributor</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea class="form-control nomorSeriDistributor"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                        <button type="button simpanSeriDistributor" class="btn btn-primary">Simpan</button>
                     </div>
                 </div>
             </div>
@@ -3100,6 +3132,19 @@
                             <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
                             </div>
                     </td>
+                    <td>
+                        <div
+                            class="form-group d-flex align-items-center">
+                            <input type="checkbox"
+                                class="stok_distributor"
+                                name="stok_distributor[0]"
+                                id="stok_distributor0"
+                                value="0"
+                                style="width:100%;" />
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary btnNoSeri" hidden>No Seri</button>
+                        <input type="text" name="noSeriDistributor[0]" class="noSeriDistributor">
+                    </td>
                     <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly value="` +
                     id + `"></td>
                     <td>
@@ -3218,10 +3263,9 @@
                     $(el).find('.produk_ppn_label').attr('for', 'produk_ppn' + j);
                     $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
                     $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
-                    $(el).find('.stok_distributor').attr('id', 'stok_distributor' + j);
                     $(el).find('.stok_distributor').attr('name', 'stok_distributor[' + j + ']');
-                    // value
-                    $(el).find('.stok_distributor').attr('value', j);
+                    $(el).find('.stok_distributor').attr('id', 'stok_distributor' + j);
+                    $(el).find('.noSeriDistributor').attr('name', 'noSeriDistributor[' + j + ']');
                     $(el).find('.rencana_id').attr('id', 'rencana_id' + j);
                     $(el).find('.rencana_id').attr('name', 'rencana_id[' + j + ']');
                     $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
@@ -3274,6 +3318,19 @@
                         <input type="checkbox" class="custom-control-input produk_ppn" id="produk_ppn0" name="produk_ppn[0]" value="1" checked>
                         <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
                         </div>
+                </td>
+                <td>
+                    <div
+                        class="form-group d-flex align-items-center">
+                        <input type="checkbox"
+                            class="stok_distributor"
+                            name="stok_distributor[0]"
+                            id="stok_distributor0"
+                            value="0"
+                            style="width:100%;" />
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary btnNoSeri" hidden>No Seri</button>
+                    <input type="text" name="noSeriDistributor[0]" class="noSeriDistributor">
                 </td>
                 <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly></td>
                 <td>
@@ -4072,6 +4129,37 @@
                 }
                 labelElement.text(label);
             });
+
+            $('.checkAllDistributor').click(function() {
+                if ($(this).is(':checked')) {
+                    $('.stok_distributor').prop('checked', true);
+                } else {
+                    $('.stok_distributor').prop('checked', false);
+                }
+            });
+
+            $(document).on('click', '.stok_distributor', function() {
+                // check if checkbox is checked
+                if ($(this).is(':checked')) {
+                    // check if all checkboxes are selected find button hidden false
+                    $(this).closest('td').find('button').prop('hidden', false);
+                } else {
+                    // check if all checkboxes are selected find button hidden true
+                    $(this).closest('td').find('button').prop('hidden', true);
+                }
+                
+
+            });
+
+            let indexDistributor = 0;
+
+            $(document).on('click', '.btnNoSeri', function() {
+                indexDistributor = $(this).closest('tr').index()
+                // find index by indexDistributor class noSeriDistributor
+                let noSeri = $('.noSeriDistributor').eq(indexDistributor).val();
+                console.log(noSeri);
+
+            })
 
         });
     </script>
