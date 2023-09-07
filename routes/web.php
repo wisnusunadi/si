@@ -62,13 +62,13 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function () 
         Route::post('/update/{jenis}/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_update_user']);
         Route::post('/reset_pwd/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'reset_pwd_user'])->name('user.resetpwd');
     });
-    Route::view('/{any?}', 'page.it.produk');
+    Route::view('/{any?}', 'page.it.produk')->where('any', '.*');
     Route::group(['prefix' => 'part', 'middleware' => 'auth'], function () {
         Route::view('/', 'page.administrator.part.show');
     });
 });
 Route::group(['prefix' => 'ppic', 'middleware' => 'auth'], function () {
-    Route::view('/{any?}', 'spa.ppic.spa')->middleware('divisi:ppic');
+    Route::view('/{any?}', 'spa.ppic.spa')->middleware('divisi:ppic')->where('any', '.*');
     Route::group(['middleware' => ['divisi:jual,dirut,ppic']], function () {
         Route::view('/master_stok/show', 'spa.ppic.master_stok.show');
         Route::view('/master_pengiriman/show', 'spa.ppic.master_pengiriman.show');
@@ -89,17 +89,17 @@ Route::group(['prefix' => 'ppic', 'middleware' => 'auth'], function () {
 // Route::view('/test', 'spa.ppic');
 //});
 Route::middleware('auth')->prefix('/ppic_direksi')->group(function () {
-    Route::view('/{any?}', 'page.direksi.perencanaan');
+    Route::view('/{any?}', 'page.direksi.perencanaan')->where('any', '.*');
 });
 Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
-    Route::view('/{any?}', 'spa.manager_teknik.spa')->middleware('divisi:dirtek');
+    Route::view('/{any?}', 'spa.manager_teknik.spa')->middleware('divisi:dirtek')->where('any', '.*');
 });
 
 Route::group(['prefix' => '/gbj', 'middleware' => ['auth', 'divisi:gbj,mgrgdg,dirut']], function () {
-    Route::view('/stok/{any?}', 'page.gbj.stok');
+    Route::view('/stok/{any?}', 'page.gbj.stok')->where('any', '.*');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
-    Route::view('/produk/{any?}', 'page.gbj.produk');
-    Route::view('/so/{any?}', 'page.gbj.so');
+    Route::view('/produk/{any?}', 'page.gbj.produk')->where('any', '.*');
+    Route::view('/so/{any?}', 'page.gbj.so')->where('any', '.*');
     Route::view('/transferproduk', 'page.gbj.transferproduk');
     Route::view('/transferproduk', 'page.gbj.transferproduk');
     Route::view('/bso', 'page.gbj.bso');
