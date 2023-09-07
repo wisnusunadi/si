@@ -1432,25 +1432,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade modalDistributor" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Nomor Seri Distributor</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                    </div>
-                    <div class="modal-body">
-                        <textarea class="form-control nomorSeriDistributor"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                        <button type="button simpanSeriDistributor" class="btn btn-primary">Simpan</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('page.penjualan.penjualan.modalSeriDistributor')
     </section>
 @stop
 
@@ -4151,13 +4133,13 @@
 
             });
 
-            let indexDistributor = 0;
 
             $(document).on('click', '.btnNoSeri', function() {
-                indexDistributor = $(this).closest('tr').index()
+                let indexDistributor = $(this).closest('tr').index();
+                $('.indexSeriDistributor').val(indexDistributor);
                 // find index by indexDistributor class noSeriDistributor
                 let noSeri = $('.noSeriDistributor').eq(indexDistributor).val();
-                console.log(noSeri);
+                // split noSeri
 
             })
 
