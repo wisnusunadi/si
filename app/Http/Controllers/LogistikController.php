@@ -3714,23 +3714,23 @@ class LogistikController extends Controller
 
         if ($request->no_sj_exist == 'baru') {
 
-            // if($request->perusahaan_pengiriman == NULL || $request->alamat_pengiriman == NULL || $request->kemasan == NULL || $request->keterangan_pengiriman == NULL){
-            //     return response()->json(['data' => 'error']);
-            // }
+            if($request->perusahaan_pengiriman == NULL || $request->alamat_pengiriman == NULL || $request->kemasan == NULL || $request->keterangan_pengiriman == NULL){
+                return response()->json(['data' => 'error']);
+            }
             if ($request->pengiriman == 'ekspedisi') {
                 $Logistik = Logistik::create([
                     'ekspedisi_id' => $request->ekspedisi_id,
                     'nosurat' => $kodesj . $request->no_invoice,
                     'tgl_kirim' => $request->tgl_kirim,
                     'nama_pengirim' => $request->nama_pengirim,
-                    // 'nama_up' => $request->nama_pic,
-                    // 'telp_up' => $request->telp_pic,
-                    // 'ekspedisi_terusan' => $request->ekspedisi_terusan,
-                    // 'dimensi' => $request->dimensi,
-                    // 'tujuan_pengiriman' => $request->perusahaan_pengiriman,
-                    // 'alamat_pengiriman' => $request->alamat_pengiriman,
-                    // 'kemasan' => $request->kemasan,
-                    // 'ket' => $request->keterangan_pengiriman,
+                    'nama_up' => $request->nama_pic,
+                    'telp_up' => $request->telp_pic,
+                    'ekspedisi_terusan' => $request->ekspedisi_terusan,
+                    'dimensi' => $request->dimensi,
+                    'tujuan_pengiriman' => $request->perusahaan_pengiriman,
+                    'alamat_pengiriman' => $request->alamat_pengiriman,
+                    'kemasan' => $request->kemasan,
+                    'ket' => $request->keterangan_pengiriman,
                     'status_id' => '11'
                 ]);
             } else {
@@ -3738,14 +3738,14 @@ class LogistikController extends Controller
                     'nosurat' => $kodesj . $request->no_invoice,
                     'tgl_kirim' => $request->tgl_kirim,
                     'nama_pengirim' => $request->nama_pengirim,
-                    // 'nama_up' => $request->nama_pic,
-                    // 'telp_up' => $request->telp_pic,
-                    // 'ekspedisi_terusan' => $request->ekspedisi_terusan,
-                    // 'dimensi' => $request->dimensi,
-                    // 'tujuan_pengiriman' => $request->perusahaan_pengiriman,
-                    // 'alamat_pengiriman' => $request->alamat_pengiriman,
-                    // 'kemasan' => $request->kemasan,
-                    // 'ket' => $request->keterangan_pengiriman,
+                    'nama_up' => $request->nama_pic,
+                    'telp_up' => $request->telp_pic,
+                    'ekspedisi_terusan' => $request->ekspedisi_terusan,
+                    'dimensi' => $request->dimensi,
+                    'tujuan_pengiriman' => $request->perusahaan_pengiriman,
+                    'alamat_pengiriman' => $request->alamat_pengiriman,
+                    'kemasan' => $request->kemasan,
+                    'ket' => $request->keterangan_pengiriman,
                     'status_id' => '11'
                 ]);
             }
