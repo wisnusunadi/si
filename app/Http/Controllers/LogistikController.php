@@ -5260,6 +5260,14 @@ class LogistikController extends Controller
                     'nama'=> $pesanan->Ekatalog->Customer->nama,
                     'alamat'=> $pesanan->Ekatalog->Customer->alamat
                 );
+
+                if ($pesanan->tujuan_kirim != NULL) {
+                    $tujuan_kirim = $pesanan->tujuan_kirim;
+                    $alamat_kirim = $pesanan->alamat_kirim;
+                }else{
+                    $tujuan_kirim =  $pesanan->Ekatalog->instansi;
+                    $alamat_kirim =  $pesanan->Ekatalog->alamat;
+                }
                 $jenis_pesanan = 'ekatalog';
 
             }elseif($pesanan->Spa){
@@ -5271,6 +5279,15 @@ class LogistikController extends Controller
                     'nama'=> $pesanan->Spa->Customer->nama,
                     'alamat'=> $pesanan->Spa->Customer->alamat
                 );
+
+                if ($pesanan->tujuan_kirim != NULL) {
+                    $tujuan_kirim = $pesanan->tujuan_kirim;
+                    $alamat_kirim = $pesanan->alamat_kirim;
+                }else{
+                    $tujuan_kirim =   $pesanan->Spa->Customer->nama;
+                    $alamat_kirim =    $pesanan->Spa->Customer->alamat;
+                }
+
                 $jenis_pesanan = 'spa';
             }else{
                 $provinsi =  array(
@@ -5281,6 +5298,16 @@ class LogistikController extends Controller
                     'nama'=> $pesanan->Spb->Customer->nama,
                     'alamat'=> $pesanan->Spb->Customer->alamat
                 );
+
+                if ($pesanan->tujuan_kirim != NULL) {
+                    $tujuan_kirim = $pesanan->tujuan_kirim;
+                    $alamat_kirim = $pesanan->alamat_kirim;
+                }else{
+                    $tujuan_kirim =   $pesanan->Spb->Customer->nama;
+                    $alamat_kirim =    $pesanan->Spb->Customer->alamat;
+                }
+
+
                 $jenis_pesanan = 'spb';
             }
 
@@ -5304,8 +5331,9 @@ class LogistikController extends Controller
                     'provinsi' =>   $provinsi,
                     'ekspedisi' => $ekspedisi,
                     'customer' => $dsb_nama,
-                    'perusahaan_pengiriman' => $pesanan->tujuan_kirim,
-                    'alamat_pengiriman' => $pesanan->alamat_kirim,
+                    'cek_alamat' => $pesanan->tujuan_kirim != NULL ? 1 : 0 ,
+                    'perusahaan_pengiriman' => $tujuan_kirim,
+                    'alamat_pengiriman' => $alamat_kirim,
                 ),
                 'item' => array(
                     'produk' => $prd,
