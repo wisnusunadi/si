@@ -1497,12 +1497,20 @@ class LogistikController extends Controller
                         ->whereRaw('m_sparepart.kode LIKE "%JASA%"')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                         ->limit(1);
-                }
+                },
+                //Baru
+                          'cpoprd' => function ($q) {
+                            $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                                ->from('detail_pesanan')
+                                ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                                ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                                ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                        },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
             ->whereNotIn('log_id', ['10','20'])
             ->whereNotNull('no_po')
             ->whereYear('created_at',  $years)
-            ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
+            ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0  ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
             ->orderBydesc('created_at')
             ->get();
         } else if ($value == "sebagian_kirim") {
@@ -1647,7 +1655,7 @@ class LogistikController extends Controller
                 ->whereNotIn('log_id', ['10','20'])
                 ->whereNotNull('no_po')
                 ->whereYear('created_at',  $years)
-                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  (((ctfjasa > 0 AND clogjasa < ctfjasa )OR clogjasa = 0 ) AND ctfjasa > 0 )')
+                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 OR (cpoprd > clogprd ) ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  (((ctfjasa > 0 AND clogjasa < ctfjasa )OR clogjasa = 0 ) AND ctfjasa > 0 )')
                 ->orderBydesc('created_at')
                 ->get();
         }
