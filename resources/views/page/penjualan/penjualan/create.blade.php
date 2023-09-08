@@ -1186,7 +1186,7 @@
                                                                                     style="width:100%;" />
                                                                             </div>
                                                                             <button type="button" class="btn btn-sm btn-outline-primary btnNoSeri" hidden>No Seri</button>
-                                                                            <input type="text" name="noSeriDistributor[0]" class="noSeriDistributor">
+                                                                            <input type="hidden" name="noSeriDistributor[0]" class="noSeriDistributor">
                                                                         </td>
                                                                         <td hidden><input type="hidden"
                                                                                 class="rencana_id" name="rencana_id[]"
@@ -3125,7 +3125,7 @@
                                 style="width:100%;" />
                         </div>
                         <button type="button" class="btn btn-sm btn-outline-primary btnNoSeri" hidden>No Seri</button>
-                        <input type="text" name="noSeriDistributor[0]" class="noSeriDistributor">
+                        <input type="hidden" name="noSeriDistributor[0]" class="noSeriDistributor">
                     </td>
                     <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly value="` +
                     id + `"></td>
@@ -3247,6 +3247,7 @@
                     $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
                     $(el).find('.stok_distributor').attr('name', 'stok_distributor[' + j + ']');
                     $(el).find('.stok_distributor').attr('id', 'stok_distributor' + j);
+                    $(el).find('.stok_distributor').attr('value', j);
                     $(el).find('.noSeriDistributor').attr('name', 'noSeriDistributor[' + j + ']');
                     $(el).find('.rencana_id').attr('id', 'rencana_id' + j);
                     $(el).find('.rencana_id').attr('name', 'rencana_id[' + j + ']');
@@ -3312,7 +3313,7 @@
                             style="width:100%;" />
                     </div>
                     <button type="button" class="btn btn-sm btn-outline-primary btnNoSeri" hidden>No Seri</button>
-                    <input type="text" name="noSeriDistributor[0]" class="noSeriDistributor">
+                    <input type="hidden" name="noSeriDistributor[0]" class="noSeriDistributor">
                 </td>
                 <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly></td>
                 <td>
@@ -4115,8 +4116,12 @@
             $('.checkAllDistributor').click(function() {
                 if ($(this).is(':checked')) {
                     $('.stok_distributor').prop('checked', true);
+                    // show all button
+                    $('.btnNoSeri').prop('hidden', false);
                 } else {
                     $('.stok_distributor').prop('checked', false);
+                    // hide all button
+                    $('.btnNoSeri').prop('hidden', true);
                 }
             });
 
@@ -4139,7 +4144,17 @@
                 $('.indexSeriDistributor').val(indexDistributor);
                 // find index by indexDistributor class noSeriDistributor
                 let noSeri = $('.noSeriDistributor').eq(indexDistributor).val();
-                // split noSeri
+                $('.indexSeriDistributor').val(indexDistributor);
+                // change array to string with comma
+                let noSeriArray = noSeri.split(',');
+                // remove empty string
+                noSeriArray = noSeriArray.filter(function (el) {
+                    return el != '';
+                });
+                // set value to input
+                $('.nomorSeriDistributor').val(noSeriArray);
+                // open modal Distributor
+                $('.modalDistributor').modal('show');
 
             })
 

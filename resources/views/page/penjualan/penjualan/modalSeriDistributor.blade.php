@@ -10,12 +10,35 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" class="indexSeriDistributor">
-                <textarea class="form-control nomorSeriDistributor"></textarea>
+                <textarea class="form-control nomorSeriDistributor"
+                onkeyup="textToUppercase(this)"
+                ></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button simpanSeriDistributor" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary simpanSeriDistributor">Simpan</button>
             </div>
         </div>
     </div>
 </div>
+<script>
+    $(document).on('click', '.simpanSeriDistributor', function () {
+        let index = $('.indexSeriDistributor').val();
+        let nomor_seri = $('.nomorSeriDistributor').val().split(/[\n, \t]/);
+        nomor_seri = nomor_seri.map(function (item) {
+            return item.trim();
+        });
+        nomor_seri = nomor_seri.filter(function (el) {
+            return el != '';
+        });
+        nomor_seri = [...new Set(nomor_seri)];
+        $('.noSeriDistributor').eq(index).val(nomor_seri);
+        console.log(nomor_seri);
+        // close modal
+        $('.modalDistributor').modal('hide');
+    })
+
+    const textToUppercase = (element) => {
+        $(element).val($(element).val().toUpperCase());
+    }
+</script>

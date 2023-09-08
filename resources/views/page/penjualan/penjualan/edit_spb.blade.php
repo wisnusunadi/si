@@ -756,6 +756,22 @@
                                                                                                   </div>
                                                                                             </td>
                                                                                             <td>
+                                                                                                <div
+                                                                                                    class="form-group d-flex align-items-center">
+                                                                                                    <input type="checkbox"
+                                                                                                        class="stok_distributor"
+                                                                                                        name="stok_distributor[{{ $produkpenjualan }}]"
+                                                                                                        id="stok_distributor{{ $produkpenjualan }}"
+                                                                                                        value="{{ $produkpenjualan }}"
+                                                                                                        @if ($f->distributor == 1)
+                                                                                                            checked
+                                                                                                        @endif
+                                                                                                        style="width:100%;" />
+                                                                                                </div>
+                                                                                                <button type="button" class="btn btn-sm btn-outline-primary btnNoSeri" hidden>No Seri</button>
+                                                                                                <input type="hidden" name="noSeriDistributor[{{ $produkpenjualan }}]" class="noSeriDistributor">
+                                                                                            </td>
+                                                                                            <td>
                                                                                                 <a id="removerowproduk"><i
                                                                                                         class="fas fa-minus"
                                                                                                         style="color: red"></i></a>
@@ -850,6 +866,19 @@
                                                                                                 id="produk_ppn0" name="produk_ppn[0]" value="1">
                                                                                                 <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
                                                                                               </div>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <div
+                                                                                                class="form-group d-flex align-items-center">
+                                                                                                <input type="checkbox"
+                                                                                                    class="stok_distributor"
+                                                                                                    name="stok_distributor[0]"
+                                                                                                    id="stok_distributor0"
+                                                                                                    value="0"
+                                                                                                    style="width:100%;" />
+                                                                                            </div>
+                                                                                            <button type="button" class="btn btn-sm btn-outline-primary btnNoSeri" hidden>No Seri</button>
+                                                                                            <input type="hidden" name="noSeriDistributor[0]" class="noSeriDistributor">
                                                                                         </td>
                                                                                         <td>
                                                                                             <a id="removerowproduk"><i
@@ -1176,6 +1205,7 @@
                 </div>
             @endforeach
         </div>
+        @include('page.penjualan.penjualan.modalSeriDistributor')
     </section>
 @stop
 
@@ -1788,9 +1818,10 @@
                     $(el).find('.produk_ppn_label').attr('for', 'produk_ppn' + j);
                     $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
                     $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
-                    $(el).find('.stok_distributor').attr('id', 'stok_distributor' + j);
                     $(el).find('.stok_distributor').attr('name', 'stok_distributor[' + j + ']');
+                    $(el).find('.stok_distributor').attr('id', 'stok_distributor' + j);
                     $(el).find('.stok_distributor').attr('value', j);
+                    $(el).find('.noSeriDistributor').attr('name', 'noSeriDistributor[' + j + ']');
                     $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
                     select_data($(el).find('.penjualan_produk_id').attr('id'));
                 });
@@ -1941,6 +1972,20 @@
                         <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
                     </div>
                 </td>
+                <td>
+                        <div
+                            class="form-group d-flex align-items-center">
+                            <input type="checkbox"
+                                class="stok_distributor"
+                                name="stok_distributor[0]"
+                                id="stok_distributor0"
+                                value="0"
+                                style="width:100%;" />
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary btnNoSeri" hidden>No Seri</button>
+                        <input type="hidden" name="noSeriDistributor[0]" class="noSeriDistributor">
+                    </td>
+                <td>
                 <td>
                     <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
                 </td>
@@ -2361,6 +2406,52 @@
 
 
         });
+
+        $('.checkAllDistributor').click(function() {
+                if ($(this).is(':checked')) {
+                    $('.stok_distributor').prop('checked', true);
+                    // show all button
+                    $('.btnNoSeri').prop('hidden', false);
+                } else {
+                    $('.stok_distributor').prop('checked', false);
+                    // hide all button
+                    $('.btnNoSeri').prop('hidden', true);
+                }
+            });
+
+            $(document).on('click', '.stok_distributor', function() {
+                // check if checkbox is checked
+                if ($(this).is(':checked')) {
+                    // check if all checkboxes are selected find button hidden false
+                    $(this).closest('td').find('button').prop('hidden', false);
+                } else {
+                    // check if all checkboxes are selected find button hidden true
+                    $(this).closest('td').find('button').prop('hidden', true);
+                }
+                
+
+            });
+
+
+            $(document).on('click', '.btnNoSeri', function() {
+                let indexDistributor = $(this).closest('tr').index();
+                $('.indexSeriDistributor').val(indexDistributor);
+                // find index by indexDistributor class noSeriDistributor
+                let noSeri = $('.noSeriDistributor').eq(indexDistributor).val();
+                $('.indexSeriDistributor').val(indexDistributor);
+                // change array to string with comma
+                let noSeriArray = noSeri.split(',');
+                // remove empty string
+                noSeriArray = noSeriArray.filter(function (el) {
+                    return el != '';
+                });
+                // set value to input
+                $('.nomorSeriDistributor').val(noSeriArray);
+                // open modal Distributor
+                $('.modalDistributor').modal('show');
+
+            })
+
 
         $(function () {
             let customer = $('#customer_id').val();
