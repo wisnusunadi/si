@@ -5090,7 +5090,7 @@ class LogistikController extends Controller
     {
 
         $items = array();
-        // dd($result->all());
+      //   dd($request->all());
         if (isset($request->part)) {
         foreach($request->part as $key_p => $i){
             $part[$key_p]= array(
@@ -5149,10 +5149,22 @@ class LogistikController extends Controller
                     "satuan"=> 'Unit',
                     "noseri"=> $item['noseri_selected']
                 );
+                if( $item["penjualan_produk_id"] == 5){
+                    $produk[$id]["detail"][] = array(
+                        "kode"=> "-",
+                        "nama"=>  "TAS ANTROPOMETRI KIT ",
+                        "jumlah"=> $item['jumlah'],
+                        "jumlah_noseri" =>  $item['jumlah_noseri'],
+                        "satuan" => 'Unit',
+                        "noseri"=> array('-')
+                    );
+                }
+
+
             }
             $items = array_merge($items,$produk);
         }
-        // dd($produk);
+        //dd($produk);
 
         $p = Pesanan::find($request->dataform['pesanan_id']);
         if($p->Ekatalog){
@@ -5215,7 +5227,7 @@ class LogistikController extends Controller
     {
             $data_prd = DetailPesananProduk::with(['GudangBarangJadi.Produk','DetailPesanan'])->whereHas('DetailPesanan',function($q) use ($id){
                 $q->where('pesanan_id',$id);
-            })->get();
+            })->whereNotIn('gudang_barang_jadi_id',[190])->get();
             $data_part = DetailPesananPart::with(['Sparepart'])->where('pesanan_id',$id)->get();
             $pesanan = Pesanan::find($id);
             if(count($data_part) > 0){
@@ -5234,6 +5246,7 @@ class LogistikController extends Controller
                 foreach ($data_prd as $key => $d){
                     $prd[$key] = array(
                         'id' => $d->id,
+                        'penjualan_produk_id' =>  $d->DetailPesanan->PenjualanProduk->id,
                         'detail_pesanan_id' => $d->detail_pesanan_id,
                         'nama_alias' => $d->DetailPesanan->PenjualanProduk->nama_alias != NULL ? $d->DetailPesanan->PenjualanProduk->nama_alias  : $d->GudangBarangJadi->Produk->nama,
                         'nama' => $d->GudangBarangJadi->Produk->nama.' '.$d->GudangBarangJadi->nama,
