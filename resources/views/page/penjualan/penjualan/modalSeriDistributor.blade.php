@@ -10,6 +10,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" class="indexSeriDistributor">
+                <input type="hidden" class="jumlahSeriDistributor">
                 <textarea class="form-control nomorSeriDistributor"
                 onkeyup="textToUppercase(this)"
                 ></textarea>
