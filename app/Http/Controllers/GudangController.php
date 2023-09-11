@@ -2037,7 +2037,8 @@ class GudangController extends Controller
             $validation->setPromptTitle('Pick from list');
             $validation->setPrompt('Please pick a value from the drop-down list.');
 
-            $validation->setFormula1('\'Produk\'!$C$2:$C$288');
+            // $validation->setFormula1('\'Produk\'!$C$2:$C$288');
+            $validation->setFormula1('\'Produk\'!$C:$C');
             // $validation->setFormula1('"Item A,Item B,Item C"');
             $validation->setSqref('B2:B10000');
 
