@@ -4143,8 +4143,8 @@
                 let indexDistributor = $(this).closest('tr').index();
                 // find produk_jumlah class by index
                 let jumlah = $('.produk_jumlah').eq(indexDistributor).val();
-                $('.indexSeriDistributor').val(indexDistributor);
                 $('.jumlahSeriDistributor').val(jumlah);
+                $('.indexSeriDistributor').val(indexDistributor);
                 // find index by indexDistributor class noSeriDistributor
                 let noSeri = $('.noSeriDistributor').eq(indexDistributor).val();
                 $('.indexSeriDistributor').val(indexDistributor);

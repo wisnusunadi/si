@@ -2439,6 +2439,8 @@
                 // find index by indexDistributor class noSeriDistributor
                 let noSeri = $('.noSeriDistributor').eq(indexDistributor).val();
                 $('.indexSeriDistributor').val(indexDistributor);
+                let jumlah = $('.produk_jumlah').eq(indexDistributor).val();
+                $('.jumlahSeriDistributor').val(jumlah);
                 // change array to string with comma
                 let noSeriArray = noSeri.split(',');
                 // remove empty string

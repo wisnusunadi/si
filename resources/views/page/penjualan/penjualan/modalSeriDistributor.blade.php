@@ -1,4 +1,5 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <div class="modal fade modalDistributor" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -25,6 +26,7 @@
 <script>
     $(document).on('click', '.simpanSeriDistributor', function () {
         let index = $('.indexSeriDistributor').val();
+        let jumlah = $('.jumlahSeriDistributor').val();
         let nomor_seri = $('.nomorSeriDistributor').val().split(/[\n, \t]/);
         nomor_seri = nomor_seri.map(function (item) {
             return item.trim();
@@ -33,8 +35,25 @@
             return el != '';
         });
         nomor_seri = [...new Set(nomor_seri)];
+
+        if(jumlah == ''){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Jumlah barang tidak boleh kosong!',
+            })
+            return
+        }
+
+        if(jumlah != nomor_seri.length){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Jumlah nomor seri tidak sesuai!',
+            })
+            return
+        }
         $('.noSeriDistributor').eq(index).val(nomor_seri);
-        console.log(nomor_seri);
         // close modal
         $('.modalDistributor').modal('hide');
     })
