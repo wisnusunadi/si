@@ -1,3 +1,4 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <html>
     <head>
         <style>
@@ -345,3 +346,12 @@
         </main>
     </body>
 </html>
+<script>
+  $(document).ready(function() {
+    window.print();
+  });
+  // click cancel close window
+  window.onafterprint = function(){
+    window.close();
+  }
+</script>
