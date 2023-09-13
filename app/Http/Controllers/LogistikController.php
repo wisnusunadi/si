@@ -5149,10 +5149,10 @@ class LogistikController extends Controller
                     "satuan"=> 'Unit',
                     "noseri"=> $item['noseri_selected']
                 );
-                if( $item["penjualan_produk_id"] == 5){
+                if( $item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 ){
                     $produk[$id]["detail"][] = array(
                         "kode"=> "-",
-                        "nama"=>  "TAS ANTROPOMETRI KIT ",
+                        "nama"=>  "TAS ANTROPOMETRI KIT",
                         "jumlah"=> $item['jumlah'],
                         "jumlah_noseri" =>  $item['jumlah_noseri'],
                         "satuan" => 'Unit',
