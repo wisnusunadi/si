@@ -596,6 +596,7 @@
 
                                                                                     <th width="20%">Harga</th>
                                                                                     <th width="20%">Subtotal</th>
+                                                                                    <th width="20%">PPN</th>
                                                                                     <th width="10%">
                                                                                         Stok Distributor <br>
                                                                                         <input type="checkbox" class="checkAllDistributor">
