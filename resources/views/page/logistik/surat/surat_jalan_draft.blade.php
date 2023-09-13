@@ -5,7 +5,7 @@
 
             /** Define the margins of your page **/
             @page {
-                margin: 100px 30px 0px 13px;
+                margin: 5px 30px 0px 13px;
                 /* page-break-inside: avoid !important; */
             }
 
@@ -15,19 +15,15 @@
 
             main {
                 position: relative;
-                top: 140px;
+                top: 5px;
                 width: 100%;
                 padding-bottom: 300px;
                 font-size: 14px;
             }
 
             header {
-                position: fixed;
-                top: -80px;
                 left: 0px;
                 right: 0px;
-                height: 250px;
-                margin-bottom: 110px;
                 /** Extra personal styles **/
                 background-color: #ffffff;
                 color: rgb(0, 0, 0);
@@ -36,13 +32,8 @@
             }
 
             footer {
-
                 position: fixed;
-                bottom: -10px;
-                left: 0px;
-                right: 0px;
-                height: 50px;
-                top: 690px;
+                bottom: 0px;
                 /** Extra personal styles **/
                 background-color: #ffffff;
                 color: rgb(0, 0, 0);
