@@ -276,10 +276,9 @@ class LogistikController extends Controller
         if($name[1] == 'SPB'){
             return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log]);
         }else{
-            // $customPaper = array(0,0,605.44,788.031);
-            // $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft',['data' => $log])->setPaper($customPaper);
-            //  return $pdf->stream('');
-            return view('page.logistik.surat.surat_jalan_draft', ['data' => $log]);
+            $customPaper = array(0,0,605.44,788.031);
+            $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft',['data' => $log])->setPaper($customPaper);
+             return $pdf->stream('');
         }
 
 

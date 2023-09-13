@@ -1,11 +1,10 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <html>
     <head>
         <style>
 
             /** Define the margins of your page **/
             @page {
-                margin: 5px 30px 0px 13px;
+                margin: 100px 30px 0px 13px;
                 /* page-break-inside: avoid !important; */
             }
 
@@ -15,15 +14,19 @@
 
             main {
                 position: relative;
-                top: 5px;
+                top: 185px;
                 width: 100%;
                 padding-bottom: 300px;
                 font-size: 14px;
             }
 
             header {
+                position: fixed;
+                top: -80px;
                 left: 0px;
                 right: 0px;
+                height: 250px;
+                margin-bottom: 110px;
                 /** Extra personal styles **/
                 background-color: #ffffff;
                 color: rgb(0, 0, 0);
@@ -32,8 +35,13 @@
             }
 
             footer {
+
                 position: fixed;
-                bottom: 0px;
+                bottom: -10px;
+                left: 0px;
+                right: 0px;
+                height: 50px;
+                top: 690px;
                 /** Extra personal styles **/
                 background-color: #ffffff;
                 color: rgb(0, 0, 0);
@@ -337,12 +345,3 @@
         </main>
     </body>
 </html>
-<script>
-  $(document).ready(function() {
-    window.print();
-  });
-  // click cancel close window
-  window.onafterprint = function(){
-    window.close();
-  }
-</script>
