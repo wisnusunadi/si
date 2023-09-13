@@ -254,7 +254,7 @@
                             <th>Jumlah</th>
                             <th>Jumlah No Seri Diinput</th>
                             <th>Aksi</th>
-                            <th class="hidden"></th>
+                            <th>test</th>
                           </tr>
                         </thead>
                         <tbody></tbody>
@@ -337,7 +337,7 @@
   <script>
     $(document).on('click', '.noseri', function(){
       let index = $(this).data('index');
-      let noseri = $('.keterangannoseri'+index).val();
+      let noseri = $('.keterangannoseri'+index).val().split(/[\n, \t]/);
       //  change array to text with comma
       if (noseri != '') {
         noseri = noseri.join(', ');
@@ -440,28 +440,24 @@
         })
     }
 
+    let produk = [];
 
     $(document).on('click', '#check_all', function () {
       if (this.checked) {
-        $(document).find('.check_detail').each(function () {
-          this.checked = true;
-        });
+        // checked all data on datatable column 0
+        $('.tableproduk').DataTable().column(0).nodes().to$().find(':checkbox').prop('checked', true);
       } else {
-        $(document).find('.check_detail').each(function () {
-          this.checked = false;
-        });
+        $('.tableproduk').DataTable().column(0).nodes().to$().find(':checkbox').prop('checked', false);
       }
     });
 
+    let part = [];
+
     $(document).on('click', '#check_all_part', function () {
       if (this.checked) {
-        $(document).find('.check_detail_part').each(function () {
-          this.checked = true;
-        });
+        $('.tablepart').DataTable().column(0).nodes().to$().find(':checkbox').prop('checked', true);
       } else {
-        $(document).find('.check_detail_part').each(function () {
-          this.checked = false;
-        });
+        $('.tablepart').DataTable().column(0).nodes().to$().find(':checkbox').prop('checked', true);
       }
     });
 
@@ -525,19 +521,19 @@
           return false;
         }
     // find data on datatable is checked
-        let produk = [];
         let table = $('.tableproduk').DataTable();
-        let check = $(document).find('.check_detail');
+        let check = table.column(0).nodes().to$().find(':checkbox:checked');
 
         // push data to array
         for (let i = 0; i < check.length; i++) {
             if (check[i].checked) {
                 let row = table.row(i).node(); // Get the row node directly
                 let rowIndex = table.row(i).index();
-                let jumlahValue = $('.jumlah' + rowIndex).val(); // Access the input value directly
-                let keteranganValue = $('.keterangannoseri' + rowIndex).val(); // Access the hidden input value directly
+                let jumlahValue = table.cell(rowIndex, 2).data(); // Access the input value directly
+                // Access the hidden input value directly find .keterangannoseri
+                let keteranganValue = $('.keterangannoseri' + rowIndex).val();
 
-                let rowData = table.row(row).data();
+                let rowData = table.row(i).data();
                 rowData['jumlah_noseri'] = jumlahValue; // Update the 'jumlah_noseri' property with the input value
                 rowData['noseri_selected'] = keteranganValue; // Update the 'noseri_selected' property with the hidden input value
 
@@ -554,9 +550,11 @@
             }
         }
 
-        let part = [];
+        // remove duplicate produk with Set
+        produk = [...new Set(produk)];
+
         let table_part = $('.tablepart').DataTable();
-        let check_part = $(document).find('.check_detail_part');
+        let check_part = table_part.column(0).nodes().to$().find(':checkbox:checked');
 
         // push data to array
         for (let i = 0; i < check_part.length; i++) {
@@ -566,6 +564,9 @@
                 part.push(rowData);
             }
         }
+
+        // remove duplicate part with Set
+        part = [...new Set(part)];
 
         if(table.data().length > 0) {
           if(produk.length == 0 && part.length == 0){
@@ -597,36 +598,36 @@
         console.log(kirim);
 
         // post data
-        $.ajax({
-          url: '/api/logistik/so/create_draft',
-          type: 'POST',
-          data: kirim,
-          success: function (res) {
-            if (res.messages == 'berhasil') {
-              Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  window.open(`/logistik/pengiriman/prints/${res.id}`, '_blank')
-                }
-              })
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: res.message,
-              })
-            }
-          },
-          error: function (err) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: err.message,
-            })
-          }
-        })
+        // $.ajax({
+        //   url: '/api/logistik/so/create_draft',
+        //   type: 'POST',
+        //   data: kirim,
+        //   success: function (res) {
+        //     if (res.messages == 'berhasil') {
+        //       Swal.fire({
+        //         icon: 'success',
+        //         title: 'Berhasil',
+        //       }).then((result) => {
+        //         if (result.isConfirmed) {
+        //           window.open(`/logistik/pengiriman/prints/${res.id}`, '_blank')
+        //         }
+        //       })
+        //     } else {
+        //       Swal.fire({
+        //         icon: 'error',
+        //         title: 'Oops...',
+        //         text: res.message,
+        //       })
+        //     }
+        //   },
+        //   error: function (err) {
+        //     Swal.fire({
+        //       icon: 'error',
+        //       title: 'Oops...',
+        //       text: err.message,
+        //     })
+        //   }
+        // })
 
     });
 
