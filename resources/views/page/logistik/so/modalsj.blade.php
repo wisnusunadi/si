@@ -254,7 +254,7 @@
                             <th>Jumlah</th>
                             <th>Jumlah No Seri Diinput</th>
                             <th>Aksi</th>
-                            <th>test</th>
+                            <th class="hidden"></th>
                           </tr>
                         </thead>
                         <tbody></tbody>
@@ -337,7 +337,7 @@
   <script>
     $(document).on('click', '.noseri', function(){
       let index = $(this).data('index');
-      let noseri = $('.keterangannoseri'+index).val().split(/[\n, \t]/);
+      let noseri = $('.keterangannoseri'+index).val()
       //  change array to text with comma
       if (noseri != '') {
         noseri = noseri.join(', ');
@@ -510,7 +510,6 @@
           return el != '';
         });
 
-        console.log(dataform)
 
         if (cek.length != Object.keys(dataform).length) {
           Swal.fire({
@@ -525,30 +524,31 @@
         let check = table.column(0).nodes().to$().find(':checkbox:checked');
 
         // push data to array
-        for (let i = 0; i < check.length; i++) {
-            if (check[i].checked) {
-                let row = table.row(i).node(); // Get the row node directly
-                let rowIndex = table.row(i).index();
-                let jumlahValue = table.cell(rowIndex, 2).data(); // Access the input value directly
-                // Access the hidden input value directly find .keterangannoseri
-                let keteranganValue = table.cell(rowIndex, 5).data();
+        check.each(function () {
+          let row = table.row($(this).closest('tr'))
+          let rowData = row.data();
+          let rowIndex = row.index()
 
-                let rowData = table.row(i).data();
-                rowData['jumlah_noseri'] = jumlahValue; // Update the 'jumlah_noseri' property with the input value
-                rowData['noseri_selected'] = keteranganValue; // Update the 'noseri_selected' property with the hidden input value
+          let jumlahValue = $(this).closest('tr').find('.jumlah'+rowIndex).val();
+          let keteranganValue = $(this).closest('tr').find('.keterangannoseri'+rowIndex).val();
 
-                if (rowData['noseri_selected'] == '') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Nomor seri belum diisi!',
-                    })
-                    return false;
-                }
+          rowData['jumlah_noseri'] = jumlahValue;
+          rowData['noseri_selected'] = keteranganValue;
 
-                produk.push(rowData);
-            }
-        }
+          
+          if (rowData['noseri_selected'] == '') {
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Nomor seri belum diisi!',
+              })
+              return false;
+          }
+
+          
+          produk.push(rowData);
+
+        });
 
         // remove duplicate produk with Set
         produk = [...new Set(produk)];
@@ -595,39 +595,38 @@
           part: part,
           dataform: dataform
         }
-        console.log(kirim);
 
         // post data
-        // $.ajax({
-        //   url: '/api/logistik/so/create_draft',
-        //   type: 'POST',
-        //   data: kirim,
-        //   success: function (res) {
-        //     if (res.messages == 'berhasil') {
-        //       Swal.fire({
-        //         icon: 'success',
-        //         title: 'Berhasil',
-        //       }).then((result) => {
-        //         if (result.isConfirmed) {
-        //           window.open(`/logistik/pengiriman/prints/${res.id}`, '_blank')
-        //         }
-        //       })
-        //     } else {
-        //       Swal.fire({
-        //         icon: 'error',
-        //         title: 'Oops...',
-        //         text: res.message,
-        //       })
-        //     }
-        //   },
-        //   error: function (err) {
-        //     Swal.fire({
-        //       icon: 'error',
-        //       title: 'Oops...',
-        //       text: err.message,
-        //     })
-        //   }
-        // })
+        $.ajax({
+          url: '/api/logistik/so/create_draft',
+          type: 'POST',
+          data: kirim,
+          success: function (res) {
+            if (res.messages == 'berhasil') {
+              Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.open(`/logistik/pengiriman/prints/${res.id}`, '_blank')
+                }
+              })
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: res.message,
+              })
+            }
+          },
+          error: function (err) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: err.message,
+            })
+          }
+        })
 
     });
 

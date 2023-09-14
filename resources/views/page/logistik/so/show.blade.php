@@ -799,11 +799,11 @@
                     },
                     {
                         // hidden text
-                        data: 'noseri_selected',
+                        data: null,
                         render: function(data, type, row, meta) {
                             var rowIndex = meta.row;
 
-                            return '<input type="text" class="keterangannoseri'+rowIndex+'" name="keterangan[' + rowIndex + ']" id="keterangan[' + rowIndex + ']" />';
+                            return '<div class="keterangannoseri'+rowIndex+'" name="keterangan[' + rowIndex + ']" id="keterangan[' + rowIndex + ']"></div>';
                             
                         }
                     },
