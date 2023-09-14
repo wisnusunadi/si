@@ -531,7 +531,7 @@
                 let rowIndex = table.row(i).index();
                 let jumlahValue = table.cell(rowIndex, 2).data(); // Access the input value directly
                 // Access the hidden input value directly find .keterangannoseri
-                let keteranganValue = $('.keterangannoseri' + rowIndex).val();
+                let keteranganValue = table.cell(rowIndex, 5).data();
 
                 let rowData = table.row(i).data();
                 rowData['jumlah_noseri'] = jumlahValue; // Update the 'jumlah_noseri' property with the input value
