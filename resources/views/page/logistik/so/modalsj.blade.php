@@ -522,8 +522,8 @@
     // find data on datatable is checked
         let table = $('.tableproduk').DataTable();
         let check = table.column(0).nodes().to$().find(':checkbox:checked');
-
-        // push data to array
+        produk = [];
+        // // push data to array
         check.each(function () {
           let row = table.row($(this).closest('tr'))
           let rowData = row.data();
@@ -596,37 +596,39 @@
           dataform: dataform
         }
 
+        console.log(kirim);
+
         // post data
-        $.ajax({
-          url: '/api/logistik/so/create_draft',
-          type: 'POST',
-          data: kirim,
-          success: function (res) {
-            if (res.messages == 'berhasil') {
-              Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  window.open(`/logistik/pengiriman/prints/${res.id}`, '_blank')
-                }
-              })
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: res.message,
-              })
-            }
-          },
-          error: function (err) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: err.message,
-            })
-          }
-        })
+        // $.ajax({
+        //   url: '/api/logistik/so/create_draft',
+        //   type: 'POST',
+        //   data: kirim,
+        //   success: function (res) {
+        //     if (res.messages == 'berhasil') {
+        //       Swal.fire({
+        //         icon: 'success',
+        //         title: 'Berhasil',
+        //       }).then((result) => {
+        //         if (result.isConfirmed) {
+        //           window.open(`/logistik/pengiriman/prints/${res.id}`, '_blank')
+        //         }
+        //       })
+        //     } else {
+        //       Swal.fire({
+        //         icon: 'error',
+        //         title: 'Oops...',
+        //         text: res.message,
+        //       })
+        //     }
+        //   },
+        //   error: function (err) {
+        //     Swal.fire({
+        //       icon: 'error',
+        //       title: 'Oops...',
+        //       text: err.message,
+        //     })
+        //   }
+        // })
 
     });
 
