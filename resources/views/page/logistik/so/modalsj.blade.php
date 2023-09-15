@@ -337,7 +337,7 @@
   <script>
     $(document).on('click', '.noseri', function(){
       let index = $(this).data('index');
-      let noseri = $('.keterangannoseri'+index).val();
+      let noseri = $('.keterangannoseri'+index).val()
       //  change array to text with comma
       if (noseri != '') {
         noseri = noseri.join(', ');
@@ -440,28 +440,24 @@
         })
     }
 
+    let produk = [];
 
     $(document).on('click', '#check_all', function () {
       if (this.checked) {
-        $(document).find('.check_detail').each(function () {
-          this.checked = true;
-        });
+        // checked all data on datatable column 0
+        $('.tableproduk').DataTable().column(0).nodes().to$().find(':checkbox').prop('checked', true);
       } else {
-        $(document).find('.check_detail').each(function () {
-          this.checked = false;
-        });
+        $('.tableproduk').DataTable().column(0).nodes().to$().find(':checkbox').prop('checked', false);
       }
     });
 
+    let part = [];
+
     $(document).on('click', '#check_all_part', function () {
       if (this.checked) {
-        $(document).find('.check_detail_part').each(function () {
-          this.checked = true;
-        });
+        $('.tablepart').DataTable().column(0).nodes().to$().find(':checkbox').prop('checked', true);
       } else {
-        $(document).find('.check_detail_part').each(function () {
-          this.checked = false;
-        });
+        $('.tablepart').DataTable().column(0).nodes().to$().find(':checkbox').prop('checked', true);
       }
     });
 
@@ -514,7 +510,6 @@
           return el != '';
         });
 
-        console.log(dataform)
 
         if (cek.length != Object.keys(dataform).length) {
           Swal.fire({
@@ -525,38 +520,41 @@
           return false;
         }
     // find data on datatable is checked
-        let produk = [];
         let table = $('.tableproduk').DataTable();
-        let check = $(document).find('.check_detail');
+        let check = table.column(0).nodes().to$().find(':checkbox:checked');
 
         // push data to array
-        for (let i = 0; i < check.length; i++) {
-            if (check[i].checked) {
-                let row = table.row(i).node(); // Get the row node directly
-                let rowIndex = table.row(i).index();
-                let jumlahValue = $('.jumlah' + rowIndex).val(); // Access the input value directly
-                let keteranganValue = $('.keterangannoseri' + rowIndex).val(); // Access the hidden input value directly
+        check.each(function () {
+          let row = table.row($(this).closest('tr'))
+          let rowData = row.data();
+          let rowIndex = row.index()
 
-                let rowData = table.row(row).data();
-                rowData['jumlah_noseri'] = jumlahValue; // Update the 'jumlah_noseri' property with the input value
-                rowData['noseri_selected'] = keteranganValue; // Update the 'noseri_selected' property with the hidden input value
+          let jumlahValue = $(this).closest('tr').find('.jumlah'+rowIndex).val();
+          let keteranganValue = $(this).closest('tr').find('.keterangannoseri'+rowIndex).val();
 
-                if (rowData['noseri_selected'] == '') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Nomor seri belum diisi!',
-                    })
-                    return false;
-                }
+          rowData['jumlah_noseri'] = jumlahValue;
+          rowData['noseri_selected'] = keteranganValue;
 
-                produk.push(rowData);
-            }
-        }
+          
+          if (rowData['noseri_selected'] == '') {
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Nomor seri belum diisi!',
+              })
+              return false;
+          }
 
-        let part = [];
+          
+          produk.push(rowData);
+
+        });
+
+        // remove duplicate produk with Set
+        produk = [...new Set(produk)];
+
         let table_part = $('.tablepart').DataTable();
-        let check_part = $(document).find('.check_detail_part');
+        let check_part = table_part.column(0).nodes().to$().find(':checkbox:checked');
 
         // push data to array
         for (let i = 0; i < check_part.length; i++) {
@@ -566,6 +564,9 @@
                 part.push(rowData);
             }
         }
+
+        // remove duplicate part with Set
+        part = [...new Set(part)];
 
         if(table.data().length > 0) {
           if(produk.length == 0 && part.length == 0){
@@ -594,7 +595,6 @@
           part: part,
           dataform: dataform
         }
-        console.log(kirim);
 
         // post data
         $.ajax({
