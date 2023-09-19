@@ -901,6 +901,57 @@
                 $('#modalEdit').modal('hide');
             })
 
+            $(document).on('submit', '#form-update-draft', function (e) {
+                $('.btnSimpanSuratJalan').attr('disabled', true)
+
+                let id = $('input[name="ideditsj"]').val()
+                let sj = $('input[name="no_invoice_sj_edit"]').val()
+                let tgl_sj = $('input[name="no_invoice_sj_edit"]').val()
+
+                // validasi not null
+                if(sj == '' || tgl_sj == '') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'No Surat Jalan dan Tanggal Surat Jalan tidak boleh kosong!',
+                    })
+                    $('.btnSimpanSuratJalan').attr('disabled', false)
+                    return false
+                }
+
+                let action = $(this).attr('action');
+                $.ajax({
+                    type: "POST",
+                    url: action,
+                    data: {
+                        id,
+                        sj,
+                        tgl_sj
+                    },
+                    dataType: "json",
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message,
+                        })
+                        $('#modalEdit').modal('hide');
+                        $('#sj-lama').DataTable().ajax.reload();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: error,
+                        })
+                        $('#loader').hide();
+                    },
+                })
+            })
+
         })
     </script>
 @stop

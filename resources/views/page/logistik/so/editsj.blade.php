@@ -1,7 +1,7 @@
-<form id="formcetaksj" method="POST" action="/api/logistik/so/create_draft">
+<form id="formcetaksj" method="POST" action="/api/logistik/so/update_draft" id="#form-update-draft">
     <div class="card">
         <div class="hide">
-          <input type="text" name="id" id="" value="{{ $data->id }}">
+          <input type="text" name="ideditsj" id="" value="{{ $data->id }}">
         </div>
       <div class="card-body">
         <h5>Data Pengiriman</h5>
@@ -27,7 +27,7 @@
                             <option value="NBT" {{ $first == 'NBT' ? 'selected' : '' }}>NBT</option>
                         </select>
                     </div>
-                    <input type="text" class="form-control col-form-label" name="no_invoice"
+                    <input type="text" class="form-control col-form-label" name="no_invoice_sj_edit"
                         value="{{ $last }}"
                         id="no_invoice">
                     <div class="invalid-feedback" id="msgnoinvoice"></div>
@@ -57,12 +57,12 @@
       <div class="card-footer">
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
-                <button class="btn btn-danger batalEdit">
+                <button type="button" class="btn btn-danger batalEdit">
                     Batal
                 </button>
             </div>
             <div class="p-2 bd-highlight">
-                <button class="btn btn-primary">
+                <button type="submit" class="btn btn-primary btnSimpanSuratJalan">
                     Simpan
                 </button>
             </div>
