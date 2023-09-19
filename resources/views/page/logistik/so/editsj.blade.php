@@ -1,4 +1,4 @@
-<form id="formcetaksj">
+<form id="formcetaksj" method="POST" action="/api/logistik/so/create_draft">
     <div class="card">
         <div class="hide">
           <input type="text" name="id" id="" value="{{ $data->id }}">
