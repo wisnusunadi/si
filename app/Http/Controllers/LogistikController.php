@@ -346,6 +346,13 @@ class LogistikController extends Controller
     //     return $pdf->stream('');
     // }
 
+    public function edit_sj($id) 
+    {
+        $data = LogistikDraft::find($id);
+        
+        return view('page.logistik.so.editsj', ['data' => $data]);
+    }
+
     public function get_data_select_produk(Request $r, $jenis)
     {
         if ($jenis == 'EKAT') {

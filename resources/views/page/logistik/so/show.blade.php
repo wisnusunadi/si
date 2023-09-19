@@ -305,9 +305,23 @@
                     </div>
                 </div>
             </div>
-
         </div>
         @include('page.logistik.so.modalsj')
+
+        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Surat Jalan</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
+                    <div class="modal-body" id="editsj">
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 @stop
 @section('adminlte_js')
@@ -867,8 +881,25 @@
                 event.preventDefault();
                 let id = $(this).data('id');
                 // open modal
-                console.log(id)
+                $.ajax({
+                    url: "/logistik/pengiriman/edit_sj_draft/"+id,
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    success: function(result){
+                        $('#modalEdit').modal('show');
+                        $('#editsj').html(result).show();
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    },
+                })
             });
+
+            $(document).on('click', '.batalEdit', function (event) {
+                event.preventDefault();
+                $('#modalEdit').modal('hide');
+            })
 
         })
     </script>
