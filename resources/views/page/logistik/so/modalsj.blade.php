@@ -12,7 +12,7 @@
     display: none;
   }
 </style>
-<div class="modal fade" id="cetaksjmodal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="cetaksjmodal" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">

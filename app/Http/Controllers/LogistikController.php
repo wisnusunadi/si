@@ -346,6 +346,13 @@ class LogistikController extends Controller
     //     return $pdf->stream('');
     // }
 
+    public function edit_sj($id)
+    {
+        $data = LogistikDraft::find($id);
+
+        return view('page.logistik.so.editsj', ['data' => $data]);
+    }
+
     public function get_data_select_produk(Request $r, $jenis)
     {
         if ($jenis == 'EKAT') {
@@ -5084,6 +5091,33 @@ class LogistikController extends Controller
         $logistik = LogistikDraft::find($id);
         $log = json_decode($logistik->isi);
         return response()->json(['data' => $log]);
+    }
+    public function update_logistik_draft(Request $request)
+    {
+        if ($request->sj == "" || $request->tgl_sj == "" || $request->id == "" ){
+            return response()->json([
+                'status' => 404,
+                'message' => 'Gagal',
+            ], 200);
+        }else{
+            $data = LogistikDraft::find($request->id);
+
+            $getData = json_decode($data->isi, true);
+            $getData['nosj'] = $request->sj;
+            $getData['tgl_sj'] = $request->tgl_sj;
+            $saveData = json_encode($getData);
+
+            $data->sj = $request->sj;
+            $data->isi = $saveData;
+            $data->save();
+
+            return response()->json([
+             'status' => 200,
+             'message' => 'Berhasil',
+             'pesanan_id' => $data->pesanan_id,
+         ], 200);
+        }
+
     }
 
     public function create_logistik_draft(Request $request)
