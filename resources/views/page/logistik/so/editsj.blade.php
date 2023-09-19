@@ -1,4 +1,4 @@
-<form id="formcetaksj" method="POST" action="/api/logistik/so/update_draft" id="#form-update-draft">
+<form id="formcetaksjeditdraft" method="POST" action="/api/logistik/so/update_draft" id="form-update-draft">
     <div class="card">
         <div class="hide">
           <input type="text" name="ideditsj" id="" value="{{ $data->id }}">
@@ -21,7 +21,7 @@
             <div class="col-lg-6 col-md-12">
                 <div class="input-group mb-3 sj_baru" id="sj_baru" name="sj_baru">
                     <div class="input-group-prepend">
-                        <select class="form-control jenis_sj" name="jenis_sj" id="jenis_sj">
+                        <select class="form-control jenis_sj" name="jenis_sj_edit" id="jenis_sj_edit">
                             <option value="SPA-" {{ $first == 'SPA' ? 'selected' : '' }}>SPA</option>
                             <option value="B." {{ $first == 'B' ? 'selected' : '' }}>B</option>
                             <option value="NBT" {{ $first == 'NBT' ? 'selected' : '' }}>NBT</option>
@@ -47,7 +47,7 @@
             <label class="col-form-label col-lg-5 col-md-12 labelket"
                 for="tgl_kirim">Tanggal Pengiriman</label>
             <div class="col-lg-4 col-md-6">
-                <input type="date" class="form-control col-form-label" name="tgl_kirim" value="{{ $isiData->tgl_sj }}"
+                <input type="date" class="form-control col-form-label" name="tgl_kirim_edit_sj" value="{{ $isiData->tgl_sj }}"
                     id="tgl_kirim">
                 <div class="invalid-feedback" id="msgtgl_kirim"></div>
             </div>
@@ -62,7 +62,7 @@
                 </button>
             </div>
             <div class="p-2 bd-highlight">
-                <button type="submit" class="btn btn-primary btnSimpanSuratJalan">
+                <button type="button" class="btn btn-primary btnSimpanSuratJalan">
                     Simpan
                 </button>
             </div>

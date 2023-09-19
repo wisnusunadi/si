@@ -5114,6 +5114,7 @@ class LogistikController extends Controller
             return response()->json([
              'status' => 200,
              'message' => 'Berhasil',
+             'pesanan_id' => $data->pesanan_id,
          ], 200);
         }
 

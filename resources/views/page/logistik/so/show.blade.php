@@ -901,15 +901,17 @@
                 $('#modalEdit').modal('hide');
             })
 
-            $(document).on('submit', '#form-update-draft', function (e) {
+            $(document).on('click', '.btnSimpanSuratJalan', function (e) {
                 $('.btnSimpanSuratJalan').attr('disabled', true)
 
                 let id = $('input[name="ideditsj"]').val()
-                let sj = $('input[name="no_invoice_sj_edit"]').val()
-                let tgl_sj = $('input[name="no_invoice_sj_edit"]').val()
+                let jenis_sj_edit = $('select[name="jenis_sj_edit"]').val()
+                let no_invoice_sj_edit = $('input[name="no_invoice_sj_edit"]').val()
+                let tgl_sj = $('input[name="tgl_kirim_edit_sj"]').val()
+                let sj = jenis_sj_edit + '' + no_invoice_sj_edit
 
                 // validasi not null
-                if(sj == '' || tgl_sj == '') {
+                if(sj == null || tgl_sj == null) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -919,7 +921,7 @@
                     return false
                 }
 
-                let action = $(this).attr('action');
+                let action = $('form[id="formcetaksjeditdraft"]').attr('action')
                 $.ajax({
                     type: "POST",
                     url: action,
@@ -939,7 +941,15 @@
                             text: response.message,
                         })
                         $('#modalEdit').modal('hide');
-                        $('#sj-lama').DataTable().ajax.reload();
+                        $('#loader').hide();
+                        $.ajax({
+                            'url': '/api/logistik/so/data/sj_draft/' + response.pesanan_id,
+                            'dataType': 'json',
+                            success: function (data) {
+                                sjlama(data.data)
+                            }
+                        });
+                        // $('#sj-lama').DataTable().ajax.reload();
                     },
                     error: function(jqXHR, testStatus, error) {
                         Swal.fire({
