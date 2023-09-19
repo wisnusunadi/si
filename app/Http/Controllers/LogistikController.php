@@ -5094,22 +5094,29 @@ class LogistikController extends Controller
     }
     public function update_logistik_draft(Request $request)
     {
-           $data = LogistikDraft::find($request->id);
+        if ($request->sj == "" || $request->tgl_sj == "" || $request->id == "" ){
+            return response()->json([
+                'status' => 404,
+                'message' => 'Gagal',
+            ], 200);
+        }else{
+            $data = LogistikDraft::find($request->id);
 
+            $getData = json_decode($data->isi, true);
+            $getData['nosj'] = $request->sj;
+            $getData['tgl_sj'] = $request->tgl_sj;
+            $saveData = json_encode($getData);
 
-           $getData = json_decode($data->isi, true);
-           $getData['nosj'] = $request->sj;
-           $getData['tgl_sj'] = $request->tgl_sj;
-           $saveData = json_encode($getData);
+            $data->sj = $request->sj;
+            $data->isi = $saveData;
+            $data->save();
 
-           $data->sj = $request->sj;
-           $data->isi = $saveData;
-           $data->save();
+            return response()->json([
+             'status' => 200,
+             'message' => 'Berhasil',
+         ], 200);
+        }
 
-           return response()->json([
-            'status' => 200,
-            'message' => 'Berhasil',
-        ], 200);
     }
 
     public function create_logistik_draft(Request $request)
