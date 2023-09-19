@@ -387,7 +387,8 @@ class GudangController extends Controller
                 })
                 ->addColumn('jumlah', function ($data) {
                     //   $this->updateStokGudang($data->id);
-                    return $data->stok . ' ' . $data->satuan . '<br><span class="badge badge-dark">Stok Siap: ' . $data->stok_siap . ' ' . $data->satuan . '</span>';
+                    // return $data->stok . ' ' . $data->satuan . '<br><span class="badge badge-dark">Stok Siap: ' . $data->count_barang . ' ' . $data->satuan . '</span>';
+                    return $data->count_barang;
                 })
                 ->addColumn('jumlah1', function ($data) {
                     $ss = $data->count_ekat_sepakat + $data->count_ekat_nego + $data->count_ekat_draft + $data->count_spa_po + $data->count_spb_po + $data->count_ekat_po;
