@@ -7,6 +7,7 @@ use App\Exports\LaporanPenjualanAll;
 use App\Models\Customer;
 use App\Models\DetailEkatalog;
 use App\Models\DetailPesanan;
+use App\Models\DetailPesananDsb;
 use App\Models\DetailPesananPart;
 use App\Models\DetailPesananProduk;
 use App\Models\DetailPesananProdukDsb;
@@ -3697,6 +3698,7 @@ class PenjualanController extends Controller
     // Create
     public function create_penjualan(Request $request)
     {
+    // dd($request->all());
 
         if ($request->jenis_penjualan == 'ekatalog') {
             if ($request->status == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL") ) {
@@ -3925,6 +3927,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                     'ket' => $request->keterangan,
                     'log' => 'po'
                 ]);
+               // $p = 'a';
             } else if ($request->jenis_penjualan == 'spb') {
                 $p = Spb::create([
                     'customer_id' => $request->customer_id,
@@ -3936,26 +3939,99 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             $bool = true;
             if ($p) {
                 if (in_array("produk", $request->jenis_pen)) {
-                    for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-                        $dspa = DetailPesanan::create([
-                            'pesanan_id' => $x,
-                            'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                            'jumlah' => $request->produk_jumlah[$i],
-                            'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
-                            'harga' => str_replace('.', "", $request->produk_harga[$i]),
-                            'ongkir' => 0,
-                        ]);
+                        if(isset($request->stok_distributor)){
+                          $penjualan_produk_id  = array_values(array_diff_key($request->penjualan_produk_id, $request->stok_distributor));
+                          $variasi  = array_values(array_diff_key($request->variasi, $request->stok_distributor));
+                          $produk_jumlah  = array_values(array_diff_key($request->produk_jumlah, $request->stok_distributor));
+                          $produk_harga  = array_values(array_diff_key($request->produk_harga, $request->stok_distributor));
+                          $produk_ongkir  = array_values(array_diff_key($request->produk_ongkir, $request->stok_distributor));
+                          $produk_ppn  = array_values(array_diff_key($request->produk_ppn, $request->stok_distributor));
 
-                        for ($j = 0; $j < count($request->variasi[$i]); $j++) {
-                            $dspap = DetailPesananProduk::create([
-                                'detail_pesanan_id' => $dspa->id,
-                                'gudang_barang_jadi_id' => $request->variasi[$i][$j]
-                            ]);
-                            if (!$dspap) {
-                                $bool = false;
+                          foreach ($request->stok_distributor as $key) {
+                            if (isset($request->penjualan_produk_id[$key])) {
+                                $penjualan_produk_id_dsb[] = $request->penjualan_produk_id[$key];
+                            }
+                            if (isset($request->variasi[$key])) {
+                                $variasi_dsb[] = $request->variasi[$key];
+                            }
+                            if (isset($request->produk_jumlah[$key])) {
+                                $produk_jumlah_dsb[] = $request->produk_jumlah[$key];
+                            }
+                            if (isset($request->produk_harga[$key])) {
+                                $produk_harga_dsb[] = $request->produk_harga[$key];
+                            }
+                            if (isset($request->produk_ongkir[$key])) {
+                                $produk_ongkir_dsb[] = $request->produk_ongkir[$key];
+                            }
+                            if (isset($request->produk_ppn[$key])) {
+                                $produk_ppn_dsb[] = $request->produk_ppn[$key];
                             }
                         }
-                    }
+                        // dd($penjualan_produk_id_dsb);
+                            for ($i = 0; $i < count($penjualan_produk_id); $i++) {
+                                $dspa = DetailPesanan::create([
+                                    'pesanan_id' => $x,
+                                    'penjualan_produk_id' => $penjualan_produk_id[$i],
+                                    'jumlah' => $produk_jumlah[$i],
+                                    'ppn' => isset($produk_ppn[$i]) ? $produk_ppn[$i] : 0,
+                                    'harga' => str_replace('.', "", $produk_harga[$i]),
+                                    'ongkir' =>  str_replace('.', "", $produk_ongkir[$i]),
+                                ]);
+
+                                for ($j = 0; $j < count($variasi[$i]); $j++) {
+                                     DetailPesananProduk::create([
+                                    'detail_pesanan_id' => $dspa->id,
+                                    'gudang_barang_jadi_id' => $variasi[$i][$j]
+                                ]);
+                                }
+                            }
+
+                            for ($i = 0; $i < count($penjualan_produk_id_dsb); $i++) {
+                                  $dsb = DetailPesananDsb::create([
+                                'pesanan_id' => $x,
+                                'penjualan_produk_id' => $penjualan_produk_id_dsb[$i],
+                                'jumlah' => $produk_jumlah_dsb[$i],
+                                'ppn' => isset($produk_ppn_dsb[$i]) ? $produk_ppn_dsb[$i] : 0,
+                                'harga' => str_replace('.', "", $produk_harga_dsb[$i]),
+                                'ongkir' => str_replace('.', "", $produk_ongkir_dsb[$i]),
+                            ]);
+
+                                for ($j = 0; $j < count($variasi_dsb[$i]); $j++) {
+                                     DetailPesananProdukDsb::create([
+                                    'detail_pesanan_dsb_id' => $dsb->id,
+                                    'gudang_barang_jadi_id' => $variasi_dsb[$i][$j]
+                                ]);
+                                }
+
+
+                            }
+
+
+
+                        }else{
+                            for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                            $dspa = DetailPesanan::create([
+                                'pesanan_id' => $x,
+                                'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                                'jumlah' => $request->produk_jumlah[$i],
+                                'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
+                                'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                                'ongkir' => 0,
+                            ]);
+
+                            for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                                $dspap = DetailPesananProduk::create([
+                                    'detail_pesanan_id' => $dspa->id,
+                                    'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                                ]);
+                                if (!$dspap) {
+                                    $bool = false;
+                                }
+                             }
+                            }
+                        }
+
+
                 }
                 if (in_array("sparepart", $request->jenis_pen)) {
                     for ($i = 0; $i < count($request->part_id); $i++) {
@@ -4015,8 +4091,10 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
         return response()->json([
             'message' => 'Cek Form Kembali',
         ], 500);
+
     }
     }
+
 
     public function view_so_ekatalog($value)
     {

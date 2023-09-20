@@ -240,7 +240,7 @@
                                     <i class="fas fa-print"></i>
                                     Cetak SPPB
                                 </button>
-                                
+
                             </div>
                           </div>
                       </div>
@@ -1459,7 +1459,7 @@
                 resetAllForm();
                 $('.alert-success').removeClass('hide')
             }
-        
+
             $(document).on('click', '.cetaksppb', function(e) {
                 e.preventDefault();
                 // open blank new tab /penjualan/penjualan/cetak_surat_perintah/{pesanan_id}
@@ -1480,20 +1480,20 @@
                 dataType: 'JSON',
                 // loading
                 beforeSend: function() {
-                    $('#btntambah').attr('disabled', true);
-                    $('#btntambah').html('<i class="fas fa-spinner fa-spin"></i>');
+                    // $('#btntambah').attr('disabled', true);
+                    // $('#btntambah').html('<i class="fas fa-spinner fa-spin"></i>');
                 },
                 success: function(response) {
-                    swal.fire(
-                        'Berhasil',
-                        'Data Berhasil Ditambahkan',
-                        'success'
-                    ).then(function() {
-                        response.pesanan_id != 'refresh' ? showalertcetaksppb(response.pesanan_id) : window.location.reload();
-                        $('#btntambah').attr('disabled', false);
-                        $('#btntambah').html('Simpan');
-                        pesanan_id_cetak = response.pesanan_id;
-                    });
+                    // swal.fire(
+                    //     'Berhasil',
+                    //     'Data Berhasil Ditambahkan',
+                    //     'success'
+                    // ).then(function() {
+                    //     response.pesanan_id != 'refresh' ? showalertcetaksppb(response.pesanan_id) : window.location.reload();
+                    //     $('#btntambah').attr('disabled', false);
+                    //     $('#btntambah').html('Simpan');
+                    //     pesanan_id_cetak = response.pesanan_id;
+                    // });
                 },
                 error: function(xhr, status, error, response) {
                     $('#btntambah').attr('disabled', false);
@@ -4134,7 +4134,7 @@
                     // check if all checkboxes are selected find button hidden true
                     $(this).closest('td').find('button').prop('hidden', true);
                 }
-                
+
 
             });
 
