@@ -68,13 +68,20 @@
       width: 40%;
     }
 
-    main>table{
-      page-break-inside: avoid !important;
+    main table{
+      table-layout: fixed;
+      width: 100%;
+      border-collapse: collapse;
+      overflow-x: auto;
+      page-break-inside: auto;
       border-top: 1px solid #000000;
-      border-bottom: 1px solid #000000
+      border-bottom: 1px solid #000000;
     }
-    table{
-      table-layout: fixed; width: 100%; border-collapse: collapse;
+    table {
+      table-layout: fixed;
+      width: 100%;
+      border-collapse: collapse;
+      overflow-x: auto;
     }
         </style>
     </head>
