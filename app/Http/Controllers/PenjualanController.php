@@ -3872,7 +3872,7 @@ class PenjualanController extends Controller
                               'ongkir' => str_replace('.', "", $produk_ongkir_dsb[$i]),
                           ]);
 
-                          if($noseri_dsb[$i] != null){
+                          if(isset ($noseri_dsb[$i])){
                               $noseri = explode(',', $noseri_dsb[$i]);
                               for ($j = 0; $j < count($noseri); $j++) {
                                   NoseriDsb::create([
@@ -4036,7 +4036,7 @@ class PenjualanController extends Controller
                                   'ongkir' => str_replace('.', "", $produk_ongkir_dsb[$i]),
                               ]);
 
-                              if($noseri_dsb[$i] != null){
+                              if(isset ($noseri_dsb[$i])){
                                   $noseri = explode(',', $noseri_dsb[$i]);
                                   for ($j = 0; $j < count($noseri); $j++) {
                                       NoseriDsb::create([
@@ -4204,7 +4204,17 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                                 'ongkir' => str_replace('.', "", $produk_ongkir_dsb[$i]),
                             ]);
 
-                            if($noseri_dsb[$i] != null){
+                            // if($noseri_dsb[$i] != null){
+                            //     $noseri = explode(',', $noseri_dsb[$i]);
+                            //     for ($j = 0; $j < count($noseri); $j++) {
+                            //         NoseriDsb::create([
+                            //             'detail_pesanan_dsb' => $dsb->id,
+                            //             'noseri' => $noseri[$j]
+                            //         ]);
+                            //     }
+
+                            // }
+                            if(isset ($noseri_dsb[$i])){
                                 $noseri = explode(',', $noseri_dsb[$i]);
                                 for ($j = 0; $j < count($noseri); $j++) {
                                     NoseriDsb::create([
@@ -4612,7 +4622,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                       'ongkir' =>  str_replace('.', "", $produk_ongkir_dsb[$i])
                   ]);
 
-                  if($noseri_dsb[$i] != null){
+                  if(isset ($noseri_dsb[$i])){
                       $noseri = explode(',', $noseri_dsb[$i]);
                       for ($j = 0; $j < count($noseri); $j++) {
                           NoseriDsb::create([
@@ -4970,7 +4980,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                           'harga' => str_replace('.', "", $produk_harga_dsb[$i]),
                       ]);
 
-                      if($noseri_dsb[$i] != null){
+                      if(isset ($noseri_dsb[$i])){
                           $noseri = explode(',', $noseri_dsb[$i]);
                           for ($j = 0; $j < count($noseri); $j++) {
                               NoseriDsb::create([
@@ -5225,7 +5235,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                           'harga' => str_replace('.', "", $produk_harga_dsb[$i]),
                       ]);
 
-                      if($noseri_dsb[$i] != null){
+                      if(isset ($noseri_dsb[$i])){
                           $noseri = explode(',', $noseri_dsb[$i]);
                           for ($j = 0; $j < count($noseri); $j++) {
                               NoseriDsb::create([
