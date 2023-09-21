@@ -12,4 +12,5 @@ class NoseriDsb extends Model
     protected $table = 'noseri_dsb';
     protected $fillable = ['detail_pesanan_dsb', 'noseri'];
 
+
 }
