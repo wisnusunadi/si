@@ -1480,20 +1480,20 @@
                 dataType: 'JSON',
                 // loading
                 beforeSend: function() {
-                    // $('#btntambah').attr('disabled', true);
-                    // $('#btntambah').html('<i class="fas fa-spinner fa-spin"></i>');
+                    $('#btntambah').attr('disabled', true);
+                    $('#btntambah').html('<i class="fas fa-spinner fa-spin"></i>');
                 },
                 success: function(response) {
-                    // swal.fire(
-                    //     'Berhasil',
-                    //     'Data Berhasil Ditambahkan',
-                    //     'success'
-                    // ).then(function() {
-                    //     response.pesanan_id != 'refresh' ? showalertcetaksppb(response.pesanan_id) : window.location.reload();
-                    //     $('#btntambah').attr('disabled', false);
-                    //     $('#btntambah').html('Simpan');
-                    //     pesanan_id_cetak = response.pesanan_id;
-                    // });
+                    swal.fire(
+                        'Berhasil',
+                        'Data Berhasil Ditambahkan',
+                        'success'
+                    ).then(function() {
+                        response.pesanan_id != 'refresh' ? showalertcetaksppb(response.pesanan_id) : window.location.reload();
+                        $('#btntambah').attr('disabled', false);
+                        $('#btntambah').html('Simpan');
+                        pesanan_id_cetak = response.pesanan_id;
+                    });
                 },
                 error: function(xhr, status, error, response) {
                     $('#btntambah').attr('disabled', false);
