@@ -708,12 +708,7 @@
                     id="produk_jumlah{{ $produkpenjualan }}"
                     style="width:100%;"
                     value="{{ $f->jumlah }}">
-                <div
-                    class="input-group-append">
-                    <span
-                        class="input-group-text"
-                        id="produk_satuan">pcs</span>
-                </div>
+
             </div>
             <small
                 id="produk_ketersediaan"></small>
@@ -723,12 +718,7 @@
     <td>
         <div
             class="form-group d-flex justify-content-center">
-            <div
-                class="input-group-prepend">
-                <span
-                    class="input-group-text"
-                    id="prdhrg">Rp</span>
-            </div>
+
             <input type="text"
                 class="form-control produk_harga"
                 name="produk_harga[{{ $produkpenjualan }}]"
@@ -909,12 +899,7 @@
                                                                                                             id="produk_jumlah{{ $produkpenjualan }}"
                                                                                                             style="width:100%;"
                                                                                                             value="{{ $f->jumlah }}">
-                                                                                                        <div
-                                                                                                            class="input-group-append">
-                                                                                                            <span
-                                                                                                                class="input-group-text"
-                                                                                                                id="produk_satuan">pcs</span>
-                                                                                                        </div>
+
                                                                                                     </div>
                                                                                                     <small
                                                                                                         id="produk_ketersediaan"></small>
@@ -924,12 +909,7 @@
                                                                                             <td>
                                                                                                 <div
                                                                                                     class="form-group d-flex justify-content-center">
-                                                                                                    <div
-                                                                                                        class="input-group-prepend">
-                                                                                                        <span
-                                                                                                            class="input-group-text"
-                                                                                                            id="prdhrg">Rp</span>
-                                                                                                    </div>
+
                                                                                                     <input type="text"
                                                                                                         class="form-control produk_harga"
                                                                                                         name="produk_harga[{{ $produkpenjualan }}]"
@@ -943,12 +923,7 @@
                                                                                             <td>
                                                                                                 <div
                                                                                                     class="form-group d-flex justify-content-center">
-                                                                                                    <div
-                                                                                                        class="input-group-prepend">
-                                                                                                        <span
-                                                                                                            class="input-group-text"
-                                                                                                            id="prdsub">Rp</span>
-                                                                                                    </div>
+
                                                                                                     <input type="text"
                                                                                                         class="form-control produk_subtotal"
                                                                                                         name="produk_subtotal[{{ $produkpenjualan }}]"
@@ -1034,12 +1009,7 @@
                                                                                                         id="produk_jumlah"
                                                                                                         style="width:100%;"
                                                                                                         value="">
-                                                                                                    <div
-                                                                                                        class="input-group-append">
-                                                                                                        <span
-                                                                                                            class="input-group-text"
-                                                                                                            id="produk_satuan">pcs</span>
-                                                                                                    </div>
+
                                                                                                 </div>
                                                                                                 <small
                                                                                                     id="produk_ketersediaan"></small>
@@ -1049,12 +1019,7 @@
                                                                                         <td>
                                                                                             <div
                                                                                                 class="form-group d-flex justify-content-center">
-                                                                                                <div
-                                                                                                    class="input-group-prepend">
-                                                                                                    <span
-                                                                                                        class="input-group-text"
-                                                                                                        id="prdhrg">Rp</span>
-                                                                                                </div>
+
                                                                                                 <input type="text"
                                                                                                     class="form-control produk_harga"
                                                                                                     name="produk_harga[0]"
@@ -1068,12 +1033,7 @@
                                                                                         <td>
                                                                                             <div
                                                                                                 class="form-group d-flex justify-content-center">
-                                                                                                <div
-                                                                                                    class="input-group-prepend">
-                                                                                                    <span
-                                                                                                        class="input-group-text"
-                                                                                                        id="prdsub">Rp</span>
-                                                                                                </div>
+
                                                                                                 <input type="text"
                                                                                                     class="form-control produk_subtotal"
                                                                                                     name="produk_subtotal[0]"
@@ -2156,9 +2116,7 @@
                     <div class="form-group d-flex justify-content-center">
                         <div class="input-group">
                             <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="produk_satuan">pcs</span>
-                            </div>
+
                         </div>
                         <small id="produk_ketersediaan"></small>
                     </div>
@@ -2166,17 +2124,13 @@
 
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Rp</span>
-                        </div>
+
                         <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;"/>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Rp</span>
-                        </div>
+
                         <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
                     </div>
                 </td>
