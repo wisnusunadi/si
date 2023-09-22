@@ -204,6 +204,7 @@ Route::group(['prefix' => 'penjualan'], function () {
             Route::get('/detail/ekatalog_ppic/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog_ppic']);
             Route::get('/detail/spa/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spa'])->name('penjualan.penjualan.detail.spa');
             Route::get('/detail/spb/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spb'])->name('penjualan.penjualan.detail.spb');
+            Route::get('/cancel_po/{id}', [App\Http\Controllers\PenjualanController::class, 'cancel_po']);
         });
 
         Route::group(['middleware' => ['divisi:jual,dirut,ppic']], function () {
