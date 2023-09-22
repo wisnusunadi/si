@@ -5207,7 +5207,7 @@ class LogistikController extends Controller
             }
             $items = array_merge($items,$produk);
         }
-        dd($items);
+       // dd($items);
 
         $p = Pesanan::find($request->dataform['pesanan_id']);
         if($p->Ekatalog){
