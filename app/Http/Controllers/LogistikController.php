@@ -5182,7 +5182,7 @@ class LogistikController extends Controller
                     "satuan"=> 'Unit',
                     "noseri"=> $item['noseri_selected']
                 );
-                if( $item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 ){
+                if( $item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363){
                     $produk[$id]["detail"][] = array(
                         "kode"=> "-",
                         "nama"=>  "TAS ANTROPOMETRI KIT",
