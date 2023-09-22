@@ -2898,7 +2898,7 @@ class PenjualanController extends Controller
                             </a>';
                             if ($data->cseri <= 0) {
                                 $return .= '<hr class="separator">
-                                <a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="' . $data->id . '" data-jenis="EKAT" data-provinsi="">
+                                <a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="' . $data->id . '" data-jenis="EKAT"   data-pesanan-id="' . $data->Pesanan->id . '" data-provinsi="">
                                     <button class="dropdown-item" type="button">
                                         <i class="fas fa-times"></i>
                                         Batal
@@ -3254,7 +3254,7 @@ class PenjualanController extends Controller
                             $jumkirim = ($data->ckirimprd + $data->ckirimpart);
                             if ($jumkirim <= 0) {
                                 $return .= '<hr class="separator">
-                                <a data-toggle="modal" data-jenis="SPA" class="batalmodal" data-id="' . $data->id . '">
+                                <a data-toggle="modal" data-jenis="SPA" class="batalmodal" data-id="' . $data->id . '"  data-pesanan-id="' . $data->Pesanan->id . '" >
                                     <button class="dropdown-item" type="button" >
                                     <i class="fas fa-times"></i>
                                     Batal
@@ -3617,7 +3617,7 @@ class PenjualanController extends Controller
                             $jumkirim = ($data->ckirimprd + $data->ckirimpart);
                             if ($jumkirim <= 0) {
                                 $return .= '<hr class="separator">
-                                <a data-toggle="modal" data-jenis="SPA" class="batalmodal" data-id="' . $data->id . '">
+                                <a data-toggle="modal" data-jenis="SPA" class="batalmodal" data-id="' . $data->id . '"  data-pesanan-id="' . $data->Pesanan->id . '" >
                                     <button class="dropdown-item" type="button" >
                                     <i class="fas fa-times"></i>
                                     Batal
@@ -7461,6 +7461,18 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             'status' => 200,
             'message' =>  'Berhasil',
             'data'    =>  $json_array
+        ], 200);
+    }
+    public function cancel_po($id)
+    {
+
+        $po = Pesanan::find($id);
+        $po->log_id = 20;
+        $po->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' =>  'Berhasil'
         ], 200);
     }
 
