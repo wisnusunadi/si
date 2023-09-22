@@ -5204,13 +5204,10 @@ class LogistikController extends Controller
                     "satuan"=> 'Unit',
                     "noseri"=> $item['noseri_selected']
                 );
-
-
             }
-
-
             $items = array_merge($items,$produk);
         }
+        dd($items);
 
         $p = Pesanan::find($request->dataform['pesanan_id']);
         if($p->Ekatalog){
@@ -5290,11 +5287,16 @@ class LogistikController extends Controller
             }
             if(count($data_prd) > 0){
                 foreach ($data_prd as $key => $d){
+                    if($d->GudangBarangJadi->id == 380){
+                        $v = 'BLUETOOTH';
+                    }else{
+                        $v = '';
+                    }
                     $prd[$key] = array(
                         'id' => $d->id,
                         'penjualan_produk_id' =>  $d->DetailPesanan->PenjualanProduk->id,
                         'detail_pesanan_id' => $d->detail_pesanan_id,
-                        'nama_alias' => $d->DetailPesanan->PenjualanProduk->nama_alias != NULL ? $d->DetailPesanan->PenjualanProduk->nama_alias  : $d->GudangBarangJadi->Produk->nama,
+                        'nama_alias' => $d->DetailPesanan->PenjualanProduk->nama_alias != NULL ? $d->DetailPesanan->PenjualanProduk->nama_alias .' '.$v : $d->GudangBarangJadi->Produk->nama,
                         'nama' => $d->GudangBarangJadi->Produk->nama.' '.$d->GudangBarangJadi->nama,
                         'jumlah' => $d->DetailPesanan->jumlah
                     );
