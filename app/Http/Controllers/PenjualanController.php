@@ -4489,6 +4489,9 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
              return view('page.penjualan.penjualan.edit_ekatalog', ['e' => $ekatalog,'item' => $data]);
         } else if ($jenis == 'spa') {
             $spa = Spa::find($id);
+            if($spa->Pesanan->DetailPesananDsb->isEmpty() && $spa->Pesanan->DetailPesanan->isEmpty() ){
+                $data = array();
+            }else{
             foreach($spa->Pesanan->DetailPesanan as $key_paket => $d){
                 $item[$key_paket] = array(
                     'jenis' => 'po',
@@ -4550,10 +4553,14 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 }
                 $data = array_merge($item, $item_dsb);
             }
+        }
           //  return response()->json($data);
             return view('page.penjualan.penjualan.edit_spa', ['e' => $spa ,'item' => $data]);
         } else {
             $spb = Spb::find($id);
+            if($spb->Pesanan->DetailPesananDsb->isEmpty() && $spb->Pesanan->DetailPesanan->isEmpty() ){
+                $data = array();
+            }else{
             foreach($spb->Pesanan->DetailPesanan as $key_paket => $d){
                 $item[$key_paket] = array(
                     'jenis' => 'po',
@@ -4615,8 +4622,9 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 }
                 $data = array_merge($item, $item_dsb);
             }
-            $spb = Spb::where('id', $id)->get();
-            return view('page.penjualan.penjualan.edit_spb', ['spb' => $spb,'item' => $data]);
+            }
+
+            return view('page.penjualan.penjualan.edit_spb', ['e' => $spb,'item' => $data]);
         }
     }
     public function update_ekatalog(Request $request, $id)
