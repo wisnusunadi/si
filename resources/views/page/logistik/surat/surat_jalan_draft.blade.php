@@ -7,7 +7,6 @@
             margin: 150px 25px;
         }
 
-
         body {
             font-family: sans-serif;
         }
@@ -76,6 +75,10 @@
             border-collapse: collapse;
             border-top: 1px solid #000000;
             border-bottom: 1px solid #000000;
+        }
+
+        main table tbody {
+            page-break-after: all;
         }
 
         table {
@@ -254,9 +257,9 @@
                     </td>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($data->item as $key => $item)
-                    <tr @if (!isset($item->detail)) style="border-bottom: 1px solid black; page-break-inside: avoid;" @endif>
+            @foreach ($data->item as $key => $item)
+                <tbody style="clear: both;">
+                    <tr @if (!isset($item->detail)) style="border-bottom: 1px solid black;" @endif>
                         <td class="vera align-center">
                             {{ $key + 1 }}
                         </td>
@@ -286,7 +289,7 @@
                         </td>
                     </tr>
                     @if (isset($item->detail))
-                        <tr style="border-bottom: 1px solid black; page-break-inside: avoid;">
+                        <tr style="border-bottom: 1px solid black;">
                             <td></td>
                             <td class="vera" colspan="4">
                                 <b>No Seri</b> :
@@ -300,8 +303,8 @@
                             </td>
                         </tr>
                     @endif
-                @endforeach
-            </tbody>
+                </tbody>
+            @endforeach
         </table>
         @if ($data->dimensi != '')
             <div style="margin: 10px 0px;">
