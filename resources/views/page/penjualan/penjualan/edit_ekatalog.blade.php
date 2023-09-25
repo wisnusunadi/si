@@ -2650,7 +2650,7 @@
             function load_variasi() {
                 produk = [];
                 produk = <?php  echo json_encode($item)?>;
-                console.log(produk)
+                // console.log(produk)
                 if (produk.length > 0) {
                     for (var w = 0; w < produk.length; w++) {
                         $.ajax({

@@ -4428,7 +4428,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 $item[$key_paket] = array(
                     'jenis' => 'po',
                     'id' => $d->id,
-                    'detail_rencana_penjualan_id' => $d->detail_rencana_penjualan_id,
+                    'detail_rencana_penjualan_id' => 0,
                     'penjualan_produk_id' => $d->penjualan_produk_id,
                     'nama' => $d->PenjualanProduk->nama,
                     'jumlah' => $d->jumlah,
@@ -4485,16 +4485,73 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 }
                 $data = array_merge($item, $item_dsb);
             }
-
-
-
            //return response()->json($data);
-
              return view('page.penjualan.penjualan.edit_ekatalog', ['e' => $ekatalog,'item' => $data]);
         } else if ($jenis == 'spa') {
-            $spa = Spa::where('id', $id)->get();
-            dd($spa);
-            return view('page.penjualan.penjualan.edit_spa', ['spa' => $spa]);
+            $spa = Spa::find($id);
+            foreach($spa->Pesanan->DetailPesanan as $key_paket => $d){
+                $item[$key_paket] = array(
+                    'jenis' => 'po',
+                    'id' => $d->id,
+                    'detail_rencana_penjualan_id' => 0,
+                    'penjualan_produk_id' => $d->penjualan_produk_id,
+                    'nama' => $d->PenjualanProduk->nama,
+                    'jumlah' => $d->jumlah,
+                    'harga' => $d->harga,
+                    'ongkir' => $d->ongkir,
+                    'ppn' => $d->ppn,
+                    'detail' => array(),
+                    'seri' =>  ""
+                );
+                foreach ($d->DetailPesananProduk as $key_prd => $e) {
+                    $item[$key_paket]['detail'][$key_prd] = array(
+                        'id' => $e->id,
+                        'gbj_id' => $e->GudangBarangJadi->id,
+                        'nama' => $e->GudangBarangJadi->Produk->nama,
+                        'variasi' => $e->GudangBarangJadi->nama,
+
+                    );
+                }
+            }
+
+
+            if($spa->Pesanan->DetailPesananDsb->isEmpty()){
+                $data = $item;
+            }else{
+                foreach($spa->Pesanan->DetailPesananDsb as $key_paket => $d){
+                    if($d->NoseriDsb->isEmpty()){
+                        $seri =    "";
+                    }else{
+                        $seri =    implode(',', collect($d->NoseriDsb->pluck("noseri"))->toArray());
+                    }
+
+                    $item_dsb[$key_paket] = array(
+                        'jenis' => 'dsb',
+                        'id' => $d->id,
+                        'detail_rencana_penjualan_id' => 0,
+                        'penjualan_produk_id' => $d->penjualan_produk_id,
+                        'nama' => $d->PenjualanProduk->nama,
+                        'jumlah' => $d->jumlah,
+                        'harga' => $d->harga,
+                        'ongkir' => $d->ongkir,
+                        'ppn' => $d->ppn,
+                        'detail' => array(),
+                        'seri' => $seri
+                    );
+
+                    foreach ($d->DetailPesananProdukDsb as $key_prd => $e) {
+                        $item_dsb[$key_paket]['detail'][$key_prd] = array(
+                            'id' => $e->id,
+                            'gbj_id' => $e->GudangBarangJadi->id,
+                            'nama' => $e->GudangBarangJadi->Produk->nama,
+                            'variasi' => $e->GudangBarangJadi->nama,
+                        );
+                    }
+                }
+                $data = array_merge($item, $item_dsb);
+            }
+          //  return response()->json($data);
+            return view('page.penjualan.penjualan.edit_spa', ['e' => $spa ,'item' => $data]);
         } else {
             $spb = Spb::where('id', $id)->get();
             return view('page.penjualan.penjualan.edit_spb', ['spb' => $spb]);
@@ -4722,7 +4779,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                                 'jumlah' => $request->produk_jumlah[$i],
                                 'harga' => str_replace('.', "", $request->produk_harga[$i]),
                                 'ongkir' => $ongkir[$i],
-                                'detail_rencana_penjualan_id' => $request->rencana_id[$i],
+                                'detail_rencana_penjualan_id' => 0,
                                 'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                             ]);
                             if ($c) {
@@ -4872,7 +4929,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                                 'jumlah' => $request->produk_jumlah[$i],
                                 'harga' => str_replace('.', "", $request->produk_harga[$i]),
                                 'ongkir' => $ongkir[$i],
-                                'detail_rencana_penjualan_id' => $request->rencana_id[$i],
+                                'detail_rencana_penjualan_id' => 0,
                                 'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
                             ]);
                             if ($c) {

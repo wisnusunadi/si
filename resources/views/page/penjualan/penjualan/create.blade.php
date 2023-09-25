@@ -428,7 +428,7 @@
                                                                 aria-selected="false">Pengiriman</a>
                                                         </li>
                                                         <li class="nav-item" role="presentation">
-                                                            <a class="nav-link disabled" id="pills-produk-tab"
+                                                            <a class="nav-link disabled d-none" id="pills-produk-tab"
                                                                 data-toggle="pill" href="#pills-produk" role="tab"
                                                                 aria-controls="pills-produk" aria-selected="false">Rencana
                                                                 Penjualan</a>
