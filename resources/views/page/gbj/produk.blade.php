@@ -110,7 +110,7 @@
                                         <th>Merk</th>
                                         <th>Nama Produk</th>
                                         <th>Stok Gudang</th>
-                                        <th>Stok Penjualan</th>
+                                        {{-- <th>Stok Penjualan</th> --}}
                                         <th>Kelompok</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -803,9 +803,9 @@
                     {
                         data: 'jumlah'
                     },
-                    {
-                        data: 'jumlah1'
-                    },
+                    // {
+                    //     data: 'jumlah1'
+                    // },
                     {
                         data: 'kelompok'
                     },

@@ -1376,7 +1376,15 @@ class ProduksiController extends Controller
     // check
     function checkStok(Request $request)
     {
-        $gdg = GudangBarangJadi::where('id', $request->gdg_brg_jadi_id)->first();
+        $gdg = GudangBarangJadi::addSelect([
+            'jumlah' => function ($q) {
+                $q->selectRaw('coalesce(count(noseri_barang_jadi.id), 0)')
+                    ->from('noseri_barang_jadi')
+                    ->where('noseri_barang_jadi.is_ready', '0')
+                    ->whereColumn('noseri_barang_jadi.gdg_barang_jadi_id', 'gdg_barang_jadi.id')
+                    ->limit(1);
+            },
+        ])->where('id', $request->gdg_brg_jadi_id)->first();
         return $gdg;
     }
 

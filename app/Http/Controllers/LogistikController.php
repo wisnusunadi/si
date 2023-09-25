@@ -346,6 +346,13 @@ class LogistikController extends Controller
     //     return $pdf->stream('');
     // }
 
+    public function edit_sj($id)
+    {
+        $data = LogistikDraft::find($id);
+
+        return view('page.logistik.so.editsj', ['data' => $data]);
+    }
+
     public function get_data_select_produk(Request $r, $jenis)
     {
         if ($jenis == 'EKAT') {
@@ -1497,12 +1504,20 @@ class LogistikController extends Controller
                         ->whereRaw('m_sparepart.kode LIKE "%JASA%"')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                         ->limit(1);
-                }
+                },
+                //Baru
+                          'cpoprd' => function ($q) {
+                            $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                                ->from('detail_pesanan')
+                                ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                                ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                                ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                        },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
             ->whereNotIn('log_id', ['10','20'])
             ->whereNotNull('no_po')
             ->whereYear('created_at',  $years)
-            ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
+            ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0  ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
             ->orderBydesc('created_at')
             ->get();
         } else if ($value == "sebagian_kirim") {
@@ -1647,7 +1662,7 @@ class LogistikController extends Controller
                 ->whereNotIn('log_id', ['10','20'])
                 ->whereNotNull('no_po')
                 ->whereYear('created_at',  $years)
-                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  (((ctfjasa > 0 AND clogjasa < ctfjasa )OR clogjasa = 0 ) AND ctfjasa > 0 )')
+                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 OR (cpoprd > clogprd ) ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  (((ctfjasa > 0 AND clogjasa < ctfjasa )OR clogjasa = 0 ) AND ctfjasa > 0 )')
                 ->orderBydesc('created_at')
                 ->get();
         }
@@ -5077,12 +5092,38 @@ class LogistikController extends Controller
         $log = json_decode($logistik->isi);
         return response()->json(['data' => $log]);
     }
+    public function update_logistik_draft(Request $request)
+    {
+        if ($request->sj == "" || $request->tgl_sj == "" || $request->id == "" ){
+            return response()->json([
+                'status' => 404,
+                'message' => 'Gagal',
+            ], 200);
+        }else{
+            $data = LogistikDraft::find($request->id);
+
+            $getData = json_decode($data->isi, true);
+            $getData['nosj'] = $request->sj;
+            $getData['tgl_sj'] = $request->tgl_sj;
+            $saveData = json_encode($getData);
+
+            $data->sj = $request->sj;
+            $data->isi = $saveData;
+            $data->save();
+
+            return response()->json([
+             'status' => 200,
+             'message' => 'Berhasil',
+             'pesanan_id' => $data->pesanan_id,
+         ], 200);
+        }
+
+    }
 
     public function create_logistik_draft(Request $request)
     {
-
         $items = array();
-        // dd($result->all());
+      //   dd($request->all());
         if (isset($request->part)) {
         foreach($request->part as $key_p => $i){
             $part[$key_p]= array(
@@ -5132,6 +5173,28 @@ class LogistikController extends Controller
                         "jumlah" =>  max($maxJumlah, $jumlahs),
                         "detail" => array()
                     );
+
+                    if( $item["penjualan_produk_id"] == 183 ){
+                        $produk[$id]["detail"][] = array(
+                            "kode"=> "-",
+                            "nama"=>  "POWER ADAPTOR",
+                            "jumlah"=> $item['jumlah'],
+                            "jumlah_noseri" =>  $item['jumlah_noseri'],
+                            "satuan" => 'Unit',
+                            "noseri"=> array('-')
+                        );
+                    }
+
+                    if( $item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363){
+                        $produk[$id]["detail"][] = array(
+                            "kode"=> "-",
+                            "nama"=>  "TAS ANTROPOMETRI KIT",
+                            "jumlah"=> $item['jumlah'],
+                            "jumlah_noseri" =>  $item['jumlah_noseri'],
+                            "satuan" => 'Unit',
+                            "noseri"=> array('-')
+                        );
+                    }
                 }
                 $produk[$id]["detail"][] = array(
                     "kode"=> $item['kode'] ?? "",
@@ -5144,7 +5207,7 @@ class LogistikController extends Controller
             }
             $items = array_merge($items,$produk);
         }
-        // dd($produk);
+       // dd($items);
 
         $p = Pesanan::find($request->dataform['pesanan_id']);
         if($p->Ekatalog){
@@ -5207,7 +5270,7 @@ class LogistikController extends Controller
     {
             $data_prd = DetailPesananProduk::with(['GudangBarangJadi.Produk','DetailPesanan'])->whereHas('DetailPesanan',function($q) use ($id){
                 $q->where('pesanan_id',$id);
-            })->get();
+            })->whereNotIn('gudang_barang_jadi_id',[190,149,139])->get();
             $data_part = DetailPesananPart::with(['Sparepart'])->where('pesanan_id',$id)->get();
             $pesanan = Pesanan::find($id);
             if(count($data_part) > 0){
@@ -5224,10 +5287,16 @@ class LogistikController extends Controller
             }
             if(count($data_prd) > 0){
                 foreach ($data_prd as $key => $d){
+                    if($d->GudangBarangJadi->id == 380){
+                        $v = 'BLUETOOTH';
+                    }else{
+                        $v = '';
+                    }
                     $prd[$key] = array(
                         'id' => $d->id,
+                        'penjualan_produk_id' =>  $d->DetailPesanan->PenjualanProduk->id,
                         'detail_pesanan_id' => $d->detail_pesanan_id,
-                        'nama_alias' => $d->DetailPesanan->PenjualanProduk->nama_alias != NULL ? $d->DetailPesanan->PenjualanProduk->nama_alias  : $d->GudangBarangJadi->Produk->nama,
+                        'nama_alias' => $d->DetailPesanan->PenjualanProduk->nama_alias != NULL ? $d->DetailPesanan->PenjualanProduk->nama_alias .' '.$v : $d->GudangBarangJadi->Produk->nama,
                         'nama' => $d->GudangBarangJadi->Produk->nama.' '.$d->GudangBarangJadi->nama,
                         'jumlah' => $d->DetailPesanan->jumlah
                     );
