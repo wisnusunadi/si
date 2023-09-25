@@ -1945,7 +1945,7 @@
                         <button type="button" class="btn btn-sm btn-outline-primary btnNoSeri" hidden>No Seri</button>
                         <input type="hidden" name="noSeriDistributor[0]" class="noSeriDistributor">
                     </td>
-                <td>
+
                 <td>
                     <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
                 </td>
