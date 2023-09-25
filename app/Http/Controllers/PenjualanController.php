@@ -4553,8 +4553,70 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
           //  return response()->json($data);
             return view('page.penjualan.penjualan.edit_spa', ['e' => $spa ,'item' => $data]);
         } else {
+            $spb = Spb::find($id);
+            foreach($spb->Pesanan->DetailPesanan as $key_paket => $d){
+                $item[$key_paket] = array(
+                    'jenis' => 'po',
+                    'id' => $d->id,
+                    'detail_rencana_penjualan_id' => 0,
+                    'penjualan_produk_id' => $d->penjualan_produk_id,
+                    'nama' => $d->PenjualanProduk->nama,
+                    'jumlah' => $d->jumlah,
+                    'harga' => $d->harga,
+                    'ongkir' => $d->ongkir,
+                    'ppn' => $d->ppn,
+                    'detail' => array(),
+                    'seri' =>  ""
+                );
+                foreach ($d->DetailPesananProduk as $key_prd => $e) {
+                    $item[$key_paket]['detail'][$key_prd] = array(
+                        'id' => $e->id,
+                        'gbj_id' => $e->GudangBarangJadi->id,
+                        'nama' => $e->GudangBarangJadi->Produk->nama,
+                        'variasi' => $e->GudangBarangJadi->nama,
+
+                    );
+                }
+            }
+
+
+            if($spb->Pesanan->DetailPesananDsb->isEmpty()){
+                $data = $item;
+            }else{
+                foreach($spb->Pesanan->DetailPesananDsb as $key_paket => $d){
+                    if($d->NoseriDsb->isEmpty()){
+                        $seri =    "";
+                    }else{
+                        $seri =    implode(',', collect($d->NoseriDsb->pluck("noseri"))->toArray());
+                    }
+
+                    $item_dsb[$key_paket] = array(
+                        'jenis' => 'dsb',
+                        'id' => $d->id,
+                        'detail_rencana_penjualan_id' => 0,
+                        'penjualan_produk_id' => $d->penjualan_produk_id,
+                        'nama' => $d->PenjualanProduk->nama,
+                        'jumlah' => $d->jumlah,
+                        'harga' => $d->harga,
+                        'ongkir' => $d->ongkir,
+                        'ppn' => $d->ppn,
+                        'detail' => array(),
+                        'seri' => $seri
+                    );
+
+                    foreach ($d->DetailPesananProdukDsb as $key_prd => $e) {
+                        $item_dsb[$key_paket]['detail'][$key_prd] = array(
+                            'id' => $e->id,
+                            'gbj_id' => $e->GudangBarangJadi->id,
+                            'nama' => $e->GudangBarangJadi->Produk->nama,
+                            'variasi' => $e->GudangBarangJadi->nama,
+                        );
+                    }
+                }
+                $data = array_merge($item, $item_dsb);
+            }
             $spb = Spb::where('id', $id)->get();
-            return view('page.penjualan.penjualan.edit_spb', ['spb' => $spb]);
+            return view('page.penjualan.penjualan.edit_spb', ['spb' => $spb,'item' => $data]);
         }
     }
     public function update_ekatalog(Request $request, $id)
