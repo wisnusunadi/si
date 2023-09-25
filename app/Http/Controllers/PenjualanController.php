@@ -2492,7 +2492,7 @@ class PenjualanController extends Controller
                 ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                 ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id')
                 ->limit(1);
-        }])->orderBy('tgl_kontrak_custom', 'ASC')->limit(20)->get();
+        }])->with(['Pesanan','Customer'])->orderBy('tgl_kontrak_custom', 'ASC')->limit(20)->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
