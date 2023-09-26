@@ -5160,6 +5160,8 @@ class LogistikController extends Controller
             //     );
             // }
             $maxJumlah = 0;
+            $tas = false;
+            $adaptor = false;
             foreach ($request->produk as $item) {
                 $id = $item["detail_pesanan_id"];
                 $nama_paket = $item["nama_alias"];
@@ -5168,6 +5170,7 @@ class LogistikController extends Controller
                 if (!isset($produk[$id])) {
                     $produk[$id] = array(
                         "id" => $id,
+                        "penjualan_produk_id" =>$item["penjualan_produk_id"],
                         "jenis" => 'produk',
                         "nama" => $nama_paket,
                         "jumlah" =>  max($maxJumlah, $jumlahs),
@@ -5175,39 +5178,108 @@ class LogistikController extends Controller
                     );
 
                     if( $item["penjualan_produk_id"] == 183 ){
-                        $produk[$id]["detail"][] = array(
+                        $adaptor = true;
+                    }
+                    if( $item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363){
+                        $tas = true;
+                    }
+                    // if( $item["penjualan_produk_id"] == 183 ){
+                    //     $produk[$id]["detail"][] = array(
+                    //         "kode"=> "-",
+                    //         "nama"=>  "POWER ADAPTOR",
+                    //         "jumlah"=> $item['jumlah'],
+                    //         "jumlah_noseri" =>  $item['jumlah_noseri'],
+                    //         "satuan" => 'Unit',
+                    //         "noseri"=> array('-')
+                    //     );
+                    // }
+
+                    // if( $item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363){
+                    //     $produk[$id]["detail"][$maxJumlah+1] = array(
+                    //         "kode"=> "-",
+                    //         "nama"=>  "TAS ANTROPOMETRI KIT",
+                    //         "jumlah"=> $item['jumlah'],
+                    //         "jumlah_noseri" =>  $item['jumlah_noseri'],
+                    //         "satuan" => 'Unit',
+                    //         "noseri"=> array('-')
+                    //     );
+                    // }
+                }
+
+                if( $item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363){
+                    $produk[$id]["detail"][0] = array(
+                        "kode"=> $item['kode'] ?? "",
+                        "nama"=>  $item['nama'],
+                        "jumlah"=> $item['jumlah'],
+                        "jumlah_noseri"=> $item['jumlah_noseri'],
+                        "satuan"=> 'Unit',
+                        "noseri"=> $item['noseri_selected']
+                    );
+                }else{
+                    $produk[$id]["detail"][] = array(
+                        "kode"=> $item['kode'] ?? "",
+                        "nama"=>  $item['nama'],
+                        "jumlah"=> $item['jumlah'],
+                        "jumlah_noseri"=> $item['jumlah_noseri'],
+                        "satuan"=> 'Unit',
+                        "noseri"=> $item['noseri_selected']
+                    );
+                }
+            }
+
+            if($tas){
+             $itemIndex = array();
+                foreach ($produk as $index => $item) {
+                    if ($item['penjualan_produk_id'] === "5"|| $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363) {
+                     $itemIndex[] = $index;
+                    // break;
+                    }
+                }
+
+                if (count ($itemIndex) > 0) {
+                    for ($i = 0; $i < count($itemIndex); $i++) {
+                        $newDetail = [
+                            "kode"=> "-",
+                            "nama"=>  "TAS ANTROPOMETRI KIT",
+                            "jumlah"=>   $produk[$itemIndex[$i]]['jumlah'],
+                            "jumlah_noseri" =>  0,
+                            "satuan" => 'Unit',
+                            "noseri"=> array('-')
+                        ];
+                        $produk[$itemIndex[$i]]["detail"][] = $newDetail;
+                    }
+
+                }
+            }
+
+
+
+            if($adaptor){
+                $itemIndex = array();
+                   foreach ($produk as $index => $item) {
+                       if ($item['penjualan_produk_id'] === "183") {
+                        $itemIndex[] = $index;
+                       }
+                   }
+
+                   if (count ($itemIndex) > 0) {
+                       for ($i = 0; $i < count($itemIndex); $i++) {
+                           $newDetail = [
                             "kode"=> "-",
                             "nama"=>  "POWER ADAPTOR",
                             "jumlah"=> $item['jumlah'],
-                            "jumlah_noseri" =>  $item['jumlah_noseri'],
+                            "jumlah_noseri" =>  $produk[$itemIndex[$i]]['jumlah'],
                             "satuan" => 'Unit',
                             "noseri"=> array('-')
-                        );
-                    }
+                           ];
+                           $produk[$itemIndex[$i]]["detail"][] = $newDetail;
+                       }
 
-                    if( $item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363){
-                        $produk[$id]["detail"][] = array(
-                            "kode"=> "-",
-                            "nama"=>  "TAS ANTROPOMETRI KIT",
-                            "jumlah"=> $item['jumlah'],
-                            "jumlah_noseri" =>  $item['jumlah_noseri'],
-                            "satuan" => 'Unit',
-                            "noseri"=> array('-')
-                        );
-                    }
-                }
-                $produk[$id]["detail"][] = array(
-                    "kode"=> $item['kode'] ?? "",
-                    "nama"=>  $item['nama'],
-                    "jumlah"=> $item['jumlah'],
-                    "jumlah_noseri"=> $item['jumlah_noseri'],
-                    "satuan"=> 'Unit',
-                    "noseri"=> $item['noseri_selected']
-                );
-            }
+                   }
+               }
             $items = array_merge($items,$produk);
         }
-       // dd($items);
+    //   dd($items);
 
         $p = Pesanan::find($request->dataform['pesanan_id']);
         if($p->Ekatalog){
