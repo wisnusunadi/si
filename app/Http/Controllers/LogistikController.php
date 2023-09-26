@@ -289,7 +289,7 @@ class LogistikController extends Controller
                 ->setOptions($options); // Use setOptions() to set PDF options
 
             // return $pdf->stream();
-            return view('page.logistik.surat.surat_jalan_draft', ['data' => $log]);
+            return view('page.logistik.surat.surat_jalan_draft_test', ['data' => $log]);
         }
 
 //         foreach ($log->item as $key => $item) {
