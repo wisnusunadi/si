@@ -1,24 +1,31 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <html>
 
 <head>
+    <script defer src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
     <style>
         /** Define the margins of your page **/
         body {
-            padding-top: 50px;
             /* Add padding equal to the height of the header */
-            padding-bottom: 50px;
             /** Extra personal styles **/
             font-size: 14px;
             font-family: sans-serif;
+            width: 100%;
         }
 
         @media print {
             @page {
-                size: auto;
-                margin: 30px 25px;
+                margin: 60px 25px;
+
+                @bottom-center {
+                    content: 'Hal. ' counter(page);
+                }
             }
+
+            main table thead {
+                display: table-header-group;
+            }
+
         }
 
         header {
@@ -26,7 +33,7 @@
             color: rgb(0, 0, 0);
             line-height: 20px;
             font-size: 14px;
-            margin-top: -50px;
+            margin-top: -32px;
         }
 
 
@@ -75,27 +82,6 @@
             overflow-x: auto;
         }
 
-        #content {
-            display: table;
-            position: fixed;
-        }
-
-        #pageFooter {
-            page-break-after: always;
-        }
-
-        #pageFooter {
-            position: fixed;
-            text-align: center;
-            font-size: 10pt;
-        }
-
-        #page-number:after {
-            counter-increment: page;
-            margin-top: 100px;
-            padding-top: 100px;
-            content: "Page " counter(page);
-        }
     </style>
 </head>
 
@@ -278,7 +264,7 @@
         @endif
     </main>
 
-    <footer id="footer">
+    <footer>
         {{-- show when end page --}}
         <table>
             </tr>
@@ -336,40 +322,17 @@
                 </tr>
         </table>
     </footer>
-
-    <footer id="pageFooter">
-        <div id="page-number"></div>
-    </footer>
 </body>
 
 </html>
 <script>
     $(document).ready(function() {
-        window.print();
+        setTimeout(() => {
+            window.print();
+        }, 100);
     });
     // click cancel close window
     window.onafterprint = function() {
         window.close();
-    }
-</script>
-
-<script>
-    // deteksi jumlah page yang di print
-    var beforePrint = function() {
-        console.log('Functionality to run before printing.');
-    };
-    var afterPrint = function() {
-        console.log('Functionality to run after printing');
-    };
-
-    if (window.matchMedia) {
-        var mediaQueryList = window.matchMedia('print');
-        mediaQueryList.addListener(function(mql) {
-            if (mql.matches) {
-                beforePrint();
-            } else {
-                afterPrint();
-            }
-        });
     }
 </script>
