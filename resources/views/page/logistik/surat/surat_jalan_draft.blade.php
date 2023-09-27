@@ -4,43 +4,36 @@
     <style>
         /** Define the margins of your page **/
         body {
+            padding-top: 50px;
+            /* Add padding equal to the height of the header */
+            padding-bottom: 50px;
+            /** Extra personal styles **/
+            font-size: 14px;
             font-family: sans-serif;
         }
 
-        @page {
-            margin: 150px 25px;
-        }
-
-        main {
-            position: relative;
-            top: 145px;
-            width: 100%;
-            padding-bottom: 200px;
-            font-size: 14px;
+        @media print {
+            @page {
+                size: auto;
+                margin: 30px 25px;
+            }
         }
 
         header {
-            position: fixed;
-            top: -120px;
-            left: 0px;
-            right: 0px;
-            height: 250px;
-            margin-bottom: 110px;
-            /** Extra personal styles **/
             background-color: #ffffff;
             color: rgb(0, 0, 0);
             line-height: 20px;
             font-size: 14px;
+            margin-top: -50px;
         }
+
 
         footer {
             /** Extra personal styles **/
-            position: fixed;
-            bottom: -10px;
+            margin-top: 50px;
+            bottom: 0;
             left: 0px;
             right: 0px;
-            height: 50px;
-            top: 690px;
             background-color: #ffffff;
             color: rgb(0, 0, 0);
             line-height: 20px;
@@ -62,10 +55,6 @@
             text-align: center;
         }
 
-        .page-break {
-            page-break-after: always;
-        }
-
         .td-width-header {
             width: 40%;
         }
@@ -77,16 +66,13 @@
             border-bottom: 1px solid #000000;
         }
 
-        main table tbody {
-            page-break-after: all;
-        }
-
         table {
             table-layout: fixed;
             width: 100%;
             border-collapse: collapse;
             overflow-x: auto;
         }
+
     </style>
 </head>
 
@@ -174,81 +160,6 @@
             </tr>
         </table>
     </header>
-
-    <script type="text/php">
-        if ( isset($pdf) ) { 
-            $pdf->page_script('
-              if($PAGE_NUM == $PAGE_COUNT) {
-                $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
-                $size = 12;
-                $pageText = "Halaman $PAGE_NUM dari $PAGE_COUNT";
-                $y = 15;
-                $x = 520;
-                $pdf->text($x, $y, $pageText, $font, $size);
-              }
-            ');
-        }
-      </script>
-
-
-      <footer>
-          {{-- show when end page --}}
-          <table>
-              </tr>
-              <tr>
-                  <td class="align-left vera" width="12%">
-                      <b>Keterangan : </b><br>
-                      {{ $data->paket }}
-                      @if ($data->ket != null)
-                          - {{ $data->ket }}
-                      @else
-                          <br>
-                      @endif
-                  </td>
-              </tr>
-          </table>
-          <hr>
-          <table>
-              <tr>
-                  <td class="align-center">
-                      Diterima Oleh,
-                  </td>
-                  <td class="align-center">
-                      Dibawa Oleh,
-                  </td>
-                  <td class="align-center">
-                      Dibuat Oleh,
-                  </td>
-              </tr>
-              <td class="align-right" colspan="2">
-                  <br>
-                  <br>
-                  <br>
-
-                  <tr>
-                      <td class="align-center">
-                          <hr style="width:30%">
-
-                      </td>
-                      <td class="align-center">
-                          <hr style="width:40%">
-                          {{-- KURIR --}}
-                      </td>
-                      <td class="align-center">
-                          <hr style="width:30%">
-                          {{-- LOGISTIK --}}
-                      </td>
-                  </tr>
-              <td class="align-right" colspan="3">
-                  <br>
-                  <tr>
-                  <tr>
-                      <td class="align-right" colspan="3" style="font-size: 12px">
-                          <i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
-                      </td>
-                  </tr>
-          </table>
-      </footer>
     <!-- Wrap the content of your PDF inside a main tag -->
     <main>
         {{-- Hal -1 --}}
@@ -342,6 +253,79 @@
         </div>
         @endif
     </main>
+
+    <script type="text/php">
+        if ( isset($pdf) ) { 
+            $pdf->page_script('
+                $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
+                $size = 8;
+                $pageText = "Halaman $PAGE_NUM dari $PAGE_COUNT";
+                $y = 15;
+                $x = 520;
+                $pdf->text($x, $y, $pageText, $font, $size);
+            ');
+        }
+      </script>
+
+
+    <footer>
+        {{-- show when end page --}}
+        <table>
+            </tr>
+            <tr>
+                <td class="align-left vera" width="12%">
+                    <b>Keterangan : </b><br>
+                    {{ $data->paket }}
+                    @if ($data->ket != null)
+                        - {{ $data->ket }}
+                    @else
+                        <br>
+                    @endif
+                </td>
+            </tr>
+        </table>
+        <hr>
+        <table>
+            <tr>
+                <td class="align-center">
+                    Diterima Oleh,
+                </td>
+                <td class="align-center">
+                    Dibawa Oleh,
+                </td>
+                <td class="align-center">
+                    Dibuat Oleh,
+                </td>
+            </tr>
+            <td class="align-right" colspan="2">
+                <br>
+                <br>
+                <br>
+
+                <tr>
+                    <td class="align-center">
+                        <hr style="width:30%">
+
+                    </td>
+                    <td class="align-center">
+                        <hr style="width:40%">
+                        {{-- KURIR --}}
+                    </td>
+                    <td class="align-center">
+                        <hr style="width:30%">
+                        {{-- LOGISTIK --}}
+                    </td>
+                </tr>
+            <td class="align-right" colspan="3">
+                <br>
+                <tr>
+                <tr>
+                    <td class="align-right" colspan="3" style="font-size: 12px">
+                        <i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
+                    </td>
+                </tr>
+        </table>
+    </footer>
 </body>
 
 </html>

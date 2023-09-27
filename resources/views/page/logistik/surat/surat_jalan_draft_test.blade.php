@@ -14,13 +14,10 @@
             font-family: sans-serif;
         }
 
-        @page {
-            margin: 20px 25px;
-        }
-
         @media print {
-            .pagebreak {
-                page-break-before: always;
+            @page {
+                size: auto;
+                margin: 30px 25px;
             }
         }
 
@@ -32,6 +29,7 @@
             margin-top: -50px;
         }
 
+
         footer {
             /** Extra personal styles **/
             margin-top: 50px;
@@ -41,12 +39,6 @@
             background-color: #ffffff;
             color: rgb(0, 0, 0);
             line-height: 20px;
-            visibility: hidden;
-        }
-
-        footer.show{
-            visibility: visible;
-            display: block;
         }
 
         .vera {
@@ -81,6 +73,28 @@
             width: 100%;
             border-collapse: collapse;
             overflow-x: auto;
+        }
+
+        #content {
+            display: table;
+            position: fixed;
+        }
+
+        #pageFooter {
+            page-break-after: always;
+        }
+
+        #pageFooter {
+            position: fixed;
+            text-align: center;
+            font-size: 10pt;
+        }
+
+        #page-number:after {
+            counter-increment: page;
+            margin-top: 100px;
+            padding-top: 100px;
+            content: "Page " counter(page);
         }
     </style>
 </head>
@@ -322,6 +336,10 @@
                 </tr>
         </table>
     </footer>
+
+    <footer id="pageFooter">
+        <div id="page-number"></div>
+    </footer>
 </body>
 
 </html>
@@ -336,30 +354,22 @@
 </script>
 
 <script>
-    // Get all the pages in the main content
-    var pages = document.querySelectorAll('main>table>tbody>tr.last-data:last-child');
-    var footer = document.getElementById('footer');
+    // deteksi jumlah page yang di print
+    var beforePrint = function() {
+        console.log('Functionality to run before printing.');
+    };
+    var afterPrint = function() {
+        console.log('Functionality to run after printing');
+    };
 
-    // Create a media query to detect when the last page is being rendered
-    var mediaQueryList = window.matchMedia('print');
-    mediaQueryList.addListener(function(mql) {
-        if (mql.matches) {
-            // Iterate through all the pages
-            for (var i = 0; i < pages.length; i++) {
-                if (i === pages.length - 1) {
-                    // It's the last page, so show the footer
-                    footer.classList.add('show');
-                } else {
-                    // Hide the footer on other pages
-                    footer.classList.remove('show');
-                }
+    if (window.matchMedia) {
+        var mediaQueryList = window.matchMedia('print');
+        mediaQueryList.addListener(function(mql) {
+            if (mql.matches) {
+                beforePrint();
+            } else {
+                afterPrint();
             }
-        } else {
-            // Media query doesn't match
-            // Hide footer with page number on all pages
-            pages.forEach(function(page) {
-                page.classList.remove('show');
-            });
-        }
-    });
+        });
+    }
 </script>
