@@ -21,6 +21,7 @@ use App\Models\NoseriDetailPesanan;
 use Illuminate\Http\Request;
 use PDF;
 use DB;
+use DomPDF\Options;
 use App\Models\Pesanan;
 use App\Models\TFProduksi;
 use App\Models\TFProduksiDetail;
@@ -277,13 +278,19 @@ class LogistikController extends Controller
             return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log]);
         }else{
             $customPaper = array(0,0,605.44,788.031);
-            $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft',['data' => $log])->setPaper($customPaper);
-             return $pdf->stream('');
+            $options = [
+                'isPhpEnabled' => true, // Allow PHP code in the view
+                'isHtml5ParserEnabled' => true, // Enable HTML5 parser
+                'isFontSubsettingEnabled' => true, // Enable font subsetting
+            ];
+
+            $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft', ['data' => $log])
+                ->setPaper($customPaper)
+                ->setOptions($options); // Use setOptions() to set PDF options
+
+            // return $pdf->stream();
+            return view('page.logistik.surat.surat_jalan_draft_test', ['data' => $log]);
         }
-
-
-
-
 
 //         foreach ($log->item as $key => $item) {
 

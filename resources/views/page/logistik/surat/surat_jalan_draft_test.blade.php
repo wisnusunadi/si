@@ -1,46 +1,48 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <html>
 
 <head>
+    <script defer src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
     <style>
         /** Define the margins of your page **/
-        @page {
-            margin: 150px 25px;
-        }
-
-
         body {
+            /* Add padding equal to the height of the header */
+            /** Extra personal styles **/
+            font-size: 14px;
             font-family: sans-serif;
+            width: 100%;
         }
 
-        main {
-            position: relative;
-            top: 145px;
-            width: 100%;
-            padding-bottom: 200px;
-            font-size: 14px;
+        @media print {
+            @page {
+                margin: 60px 25px;
+
+                @bottom-center {
+                    content: 'Hal. ' counter(page);
+                }
+            }
+
+            main table thead {
+                display: table-header-group;
+            }
+
         }
 
         header {
-            position: fixed;
-            top: -120px;
-            left: 0px;
-            right: 0px;
-            height: 250px;
-            margin-bottom: 110px;
-            /** Extra personal styles **/
             background-color: #ffffff;
             color: rgb(0, 0, 0);
             line-height: 20px;
             font-size: 14px;
+            margin-top: -32px;
         }
 
+
         footer {
-            bottom: -10px;
+            /** Extra personal styles **/
+            margin-top: 50px;
+            bottom: 0;
             left: 0px;
             right: 0px;
-            height: 50px;
-            top: 690px;
-            /** Extra personal styles **/
             background-color: #ffffff;
             color: rgb(0, 0, 0);
             line-height: 20px;
@@ -62,10 +64,6 @@
             text-align: center;
         }
 
-        .page-break {
-            page-break-after: always;
-        }
-
         .td-width-header {
             width: 40%;
         }
@@ -83,6 +81,7 @@
             border-collapse: collapse;
             overflow-x: auto;
         }
+
     </style>
 </head>
 
@@ -170,7 +169,6 @@
             </tr>
         </table>
     </header>
-
     <!-- Wrap the content of your PDF inside a main tag -->
     <main>
         {{-- Hal -1 --}}
@@ -194,10 +192,9 @@
                     </td>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($data->item as $key => $item)
-                    <tr
-                        @if (!isset($item->detail)) style="border-bottom: 1px solid black; page-break-inside: avoid;" @endif>
+            @foreach ($data->item as $key => $item)
+                <tbody>
+                    <tr @if (!isset($item->detail)) style="border-bottom: 1px solid black;" @endif>
                         <td class="vera align-center">
                             {{ $key + 1 }}
                         </td>
@@ -227,7 +224,7 @@
                         </td>
                     </tr>
                     @if (isset($item->detail))
-                        <tr style="border-bottom: 1px solid black; page-break-inside: avoid;">
+                        <tr style="border-bottom: 1px solid black;" class="last-data">
                             <td></td>
                             <td class="vera" colspan="4">
                                 <b>No Seri</b> :
@@ -241,8 +238,9 @@
                             </td>
                         </tr>
                     @endif
-                @endforeach
-            </tbody>
+                </tbody>
+            @endforeach
+
         </table>
         @if ($data->dimensi != '')
             <div style="margin: 10px 0px;">
@@ -267,6 +265,7 @@
     </main>
 
     <footer>
+        {{-- show when end page --}}
         <table>
             </tr>
             <tr>
@@ -320,10 +319,20 @@
                     <td class="align-right" colspan="3" style="font-size: 12px">
                         <i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
                     </td>
-
                 </tr>
         </table>
     </footer>
 </body>
 
 </html>
+<script>
+    $(document).ready(function() {
+        setTimeout(() => {
+            window.print();
+        }, 100);
+    });
+    // click cancel close window
+    window.onafterprint = function() {
+        window.close();
+    }
+</script>
