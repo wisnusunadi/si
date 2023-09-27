@@ -287,9 +287,17 @@ class LogistikController extends Controller
             $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft', ['data' => $log])
                 ->setPaper($customPaper)
                 ->setOptions($options); // Use setOptions() to set PDF options
+            $pdf->stream();
 
-            return $pdf->stream();
-            // return view('page.logistik.surat.surat_jalan_draft_test', ['data' => $log]);
+            // check amount of pages
+            $pageAmount = $pdf->getDomPDF()->getCanvas()->get_page_count();
+
+            if($pageAmount > 1){
+                return view('page.logistik.surat.surat_jalan_draft_test', ['data' => $log]);
+            }else{
+                return $pdf->stream();
+            }
+
         }
 
 //         foreach ($log->item as $key => $item) {
