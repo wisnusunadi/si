@@ -175,22 +175,6 @@
         </table>
     </header>
 
-    <script type="text/php">
-        if ( isset($pdf) ) { 
-            $pdf->page_script('
-              if($PAGE_NUM == $PAGE_COUNT) {
-                $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
-                $size = 12;
-                $pageText = "Halaman $PAGE_NUM dari $PAGE_COUNT";
-                $y = 15;
-                $x = 520;
-                $pdf->text($x, $y, $pageText, $font, $size);
-              }
-            ');
-        }
-      </script>
-
-
       <footer>
           {{-- show when end page --}}
           <table>
