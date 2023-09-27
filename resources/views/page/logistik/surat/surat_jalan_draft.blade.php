@@ -3,13 +3,12 @@
 <head>
     <style>
         /** Define the margins of your page **/
-        @page {
-            margin: 150px 25px;
-        }
-
-
         body {
             font-family: sans-serif;
+        }
+
+        @page {
+            margin: 150px 25px;
         }
 
         main {
@@ -35,12 +34,13 @@
         }
 
         footer {
+            /** Extra personal styles **/
+            position: fixed;
             bottom: -10px;
             left: 0px;
             right: 0px;
             height: 50px;
             top: 690px;
-            /** Extra personal styles **/
             background-color: #ffffff;
             color: rgb(0, 0, 0);
             line-height: 20px;
@@ -75,6 +75,10 @@
             border-collapse: collapse;
             border-top: 1px solid #000000;
             border-bottom: 1px solid #000000;
+        }
+
+        main table tbody {
+            page-break-after: all;
         }
 
         table {
@@ -171,6 +175,80 @@
         </table>
     </header>
 
+    <script type="text/php">
+        if ( isset($pdf) ) { 
+            $pdf->page_script('
+              if($PAGE_NUM == $PAGE_COUNT) {
+                $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
+                $size = 12;
+                $pageText = "Halaman $PAGE_NUM dari $PAGE_COUNT";
+                $y = 15;
+                $x = 520;
+                $pdf->text($x, $y, $pageText, $font, $size);
+              }
+            ');
+        }
+      </script>
+
+
+      <footer>
+          {{-- show when end page --}}
+          <table>
+              </tr>
+              <tr>
+                  <td class="align-left vera" width="12%">
+                      <b>Keterangan : </b><br>
+                      {{ $data->paket }}
+                      @if ($data->ket != null)
+                          - {{ $data->ket }}
+                      @else
+                          <br>
+                      @endif
+                  </td>
+              </tr>
+          </table>
+          <hr>
+          <table>
+              <tr>
+                  <td class="align-center">
+                      Diterima Oleh,
+                  </td>
+                  <td class="align-center">
+                      Dibawa Oleh,
+                  </td>
+                  <td class="align-center">
+                      Dibuat Oleh,
+                  </td>
+              </tr>
+              <td class="align-right" colspan="2">
+                  <br>
+                  <br>
+                  <br>
+
+                  <tr>
+                      <td class="align-center">
+                          <hr style="width:30%">
+
+                      </td>
+                      <td class="align-center">
+                          <hr style="width:40%">
+                          {{-- KURIR --}}
+                      </td>
+                      <td class="align-center">
+                          <hr style="width:30%">
+                          {{-- LOGISTIK --}}
+                      </td>
+                  </tr>
+              <td class="align-right" colspan="3">
+                  <br>
+                  <tr>
+                  <tr>
+                      <td class="align-right" colspan="3" style="font-size: 12px">
+                          <i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
+                      </td>
+                  </tr>
+          </table>
+      </footer>
     <!-- Wrap the content of your PDF inside a main tag -->
     <main>
         {{-- Hal -1 --}}
@@ -194,10 +272,9 @@
                     </td>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($data->item as $key => $item)
-                    <tr
-                        @if (!isset($item->detail)) style="border-bottom: 1px solid black; page-break-inside: avoid;" @endif>
+            @foreach ($data->item as $key => $item)
+                <tbody>
+                    <tr @if (!isset($item->detail)) style="border-bottom: 1px solid black;" @endif>
                         <td class="vera align-center">
                             {{ $key + 1 }}
                         </td>
@@ -227,7 +304,7 @@
                         </td>
                     </tr>
                     @if (isset($item->detail))
-                        <tr style="border-bottom: 1px solid black; page-break-inside: avoid;">
+                        <tr style="border-bottom: 1px solid black;">
                             <td></td>
                             <td class="vera" colspan="4">
                                 <b>No Seri</b> :
@@ -241,8 +318,8 @@
                             </td>
                         </tr>
                     @endif
-                @endforeach
-            </tbody>
+                </tbody>
+            @endforeach
         </table>
         @if ($data->dimensi != '')
             <div style="margin: 10px 0px;">
@@ -265,65 +342,6 @@
         </div>
         @endif
     </main>
-
-    <footer>
-        <table>
-            </tr>
-            <tr>
-                <td class="align-left vera" width="12%">
-                    <b>Keterangan : </b><br>
-                    {{ $data->paket }}
-                    @if ($data->ket != null)
-                        - {{ $data->ket }}
-                    @else
-                        <br>
-                    @endif
-                </td>
-            </tr>
-        </table>
-        <hr>
-        <table>
-            <tr>
-                <td class="align-center">
-                    Diterima Oleh,
-                </td>
-                <td class="align-center">
-                    Dibawa Oleh,
-                </td>
-                <td class="align-center">
-                    Dibuat Oleh,
-                </td>
-            </tr>
-            <td class="align-right" colspan="2">
-                <br>
-                <br>
-                <br>
-
-                <tr>
-                    <td class="align-center">
-                        <hr style="width:30%">
-
-                    </td>
-                    <td class="align-center">
-                        <hr style="width:40%">
-                        {{-- KURIR --}}
-                    </td>
-                    <td class="align-center">
-                        <hr style="width:30%">
-                        {{-- LOGISTIK --}}
-                    </td>
-                </tr>
-            <td class="align-right" colspan="3">
-                <br>
-                <tr>
-                <tr>
-                    <td class="align-right" colspan="3" style="font-size: 12px">
-                        <i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
-                    </td>
-
-                </tr>
-        </table>
-    </footer>
 </body>
 
 </html>
