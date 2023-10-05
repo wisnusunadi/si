@@ -8,7 +8,7 @@
         body {
             /* Add padding equal to the height of the header */
             /** Extra personal styles **/
-            font-size: 9px;
+            font-size: 12px;
             font-family: sans-serif;
             width: 100%;
         }
@@ -19,6 +19,14 @@
 
                 @bottom-center {
                     content: 'Hal. ' counter(page);
+                }
+
+                body {
+                    /* Add padding equal to the height of the header */
+                    /** Extra personal styles **/
+                    font-size: 12px;
+                    font-family: sans-serif;
+                    width: 100%;
                 }
             }
 
@@ -81,7 +89,6 @@
             border-collapse: collapse;
             overflow-x: auto;
         }
-
     </style>
 </head>
 
