@@ -4,29 +4,12 @@
 <head>
     <script defer src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
     <style>
-        /** Define the margins of your page **/
-        body {
-            /* Add padding equal to the height of the header */
-            /** Extra personal styles **/
-            font-size: 12px;
-            font-family: sans-serif;
-            width: 100%;
-        }
-
         @media print {
             @page {
                 margin: 60px 25px;
 
                 @bottom-center {
                     content: 'Hal. ' counter(page);
-                }
-
-                body {
-                    /* Add padding equal to the height of the header */
-                    /** Extra personal styles **/
-                    font-size: 12px;
-                    font-family: sans-serif;
-                    width: 100%;
                 }
             }
 
@@ -81,6 +64,8 @@
             border-collapse: collapse;
             border-top: 1px solid #000000;
             border-bottom: 1px solid #000000;
+            font-size: 13px;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         table {
