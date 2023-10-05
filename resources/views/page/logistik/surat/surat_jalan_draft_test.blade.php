@@ -64,7 +64,7 @@
             border-collapse: collapse;
             border-top: 1px solid #000000;
             border-bottom: 1px solid #000000;
-            font-size: 13px;
+            font-size: 12px;
             font-family: Arial, Helvetica, sans-serif;
         }
 
