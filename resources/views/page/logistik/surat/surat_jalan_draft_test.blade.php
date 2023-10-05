@@ -11,6 +11,13 @@
                 @bottom-center {
                     content: 'Hal. ' counter(page);
                 }
+
+                @bottom-right {
+                    content: 'SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02';
+                    /* style */
+                    font-size: 10px;
+                    font-style: italic;
+                }
             }
 
             main table thead {
@@ -64,7 +71,7 @@
             border-collapse: collapse;
             border-top: 1px solid #000000;
             border-bottom: 1px solid #000000;
-            font-size: 12px;
+            font-size: 13px;
             font-family: Arial, Helvetica, sans-serif;
         }
 
@@ -302,14 +309,6 @@
                     <td class="align-center">
                         <hr style="width:30%">
                         {{-- LOGISTIK --}}
-                    </td>
-                </tr>
-            <td class="align-right" colspan="3">
-                <br>
-                <tr>
-                <tr>
-                    <td class="align-right" colspan="3" style="font-size: 12px">
-                        <i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
                     </td>
                 </tr>
         </table>
