@@ -8,7 +8,7 @@
         body {
             /* Add padding equal to the height of the header */
             /** Extra personal styles **/
-            font-size: 12px;
+            font-size: 9px;
             font-family: sans-serif;
             width: 100%;
         }
