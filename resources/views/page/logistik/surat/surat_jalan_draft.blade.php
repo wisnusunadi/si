@@ -294,9 +294,20 @@
                                 <b>No Seri</b> :
                                 @foreach ($item->detail as $key => $detail)
                                     @if ($key == count($item->detail) - 1)
-                                        {{ $detail->nama }} : {{ implode(', ', $detail->noseri) }}
+                                        {{ $detail->nama }} : 
+                                        @if($detail->noseri == null)
+                                            -
+                                        @else
+                                        {{ implode(', ', $detail->noseri) }}
+                                        @endif
                                     @else
-                                        {{ $detail->nama }} : {{ implode(', ', $detail->noseri) }} <br>
+                                        {{ $detail->nama }} : 
+                                        @if($detail->noseri == null)
+                                            -
+                                        @else
+                                        {{ implode(', ', $detail->noseri) }} 
+                                        @endif
+                                        <br>
                                     @endif
                                 @endforeach
                             </td>
