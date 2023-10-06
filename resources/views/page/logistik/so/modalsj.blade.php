@@ -142,7 +142,7 @@
                         <div class="col-lg-7 col-md-12">
                             <select class="select2 select-info form-control ekspedisi_id"
                                 name="ekspedisi" id="ekspedisi_id" style="width: 100%;">
-  
+
                             </select>
                             <div class="invalid-feedback" id="msgekspedisi_id"></div>
                             <label for="" id="ekspedisi_nama" class="col-form-label hide"></label>
@@ -195,7 +195,7 @@
                       <div class="form-group row">
                         <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
                         <div class="col-lg-6 col-md-12 col-form-label">
-  
+
                           <div class="form-check form-check-inline">
                               <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti" />
                               <label for="kemasan0" class="form-check-label">PETI</label>
@@ -535,17 +535,17 @@
           rowData['jumlah_noseri'] = jumlahValue;
           rowData['noseri_selected'] = keteranganValue;
 
-          
-          if (rowData['noseri_selected'] == '') {
-              Swal.fire({
-                  icon: 'error',
-                  title: 'Oops...',
-                  text: 'Nomor seri belum diisi!',
-              })
-              return false;
-          }
 
-          
+        //   if (rowData['noseri_selected'] == '') {
+        //       Swal.fire({
+        //           icon: 'error',
+        //           title: 'Oops...',
+        //           text: 'Nomor seri belum diisi!',
+        //       })
+        //       return false;
+        //   }
+
+
           produk.push(rowData);
 
         });

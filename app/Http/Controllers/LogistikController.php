@@ -5138,7 +5138,7 @@ class LogistikController extends Controller
     public function create_logistik_draft(Request $request)
     {
         $items = array();
-      //   dd($request->all());
+
         if (isset($request->part)) {
         foreach($request->part as $key_p => $i){
             $part[$key_p]= array(
@@ -5163,6 +5163,7 @@ class LogistikController extends Controller
 
         // $items = $parts;
         if (isset($request->produk )) {
+       // dd($request->produk);
             // foreach($request->produk as $key_pr => $i){
             //     $produk[$key_pr]= array(
             //         "jenis"=> 'produk',
@@ -5180,7 +5181,13 @@ class LogistikController extends Controller
             foreach ($request->produk as $item) {
                 $id = $item["detail_pesanan_id"];
                 $nama_paket = $item["nama_alias"];
-                $jumlahs = intval($item['jumlah_noseri']);
+                if($item["jumlah_noseri"] == 0){
+                    $item['noseri_selected'] = [];
+                    $jumlahs = intval($item['jumlah']);
+                }else{
+                    $jumlahs = intval($item['jumlah_noseri']);
+                }
+
 
                 if (!isset($produk[$id])) {
                     $produk[$id] = array(
@@ -5294,7 +5301,7 @@ class LogistikController extends Controller
                }
             $items = array_merge($items,$produk);
         }
-    //   dd($items);
+   //dd($items);
 
         $p = Pesanan::find($request->dataform['pesanan_id']);
         if($p->Ekatalog){
@@ -5304,8 +5311,6 @@ class LogistikController extends Controller
             $paket = 'OFFLINE';
             $ket = '';
         }
-
-
         $isi = array(
             "pesanan_id" => $request->dataform['pesanan_id'],
             "customer" => $request->dataform['nama_customer'],

@@ -223,15 +223,26 @@
                         </td>
                     </tr>
                     @if (isset($item->detail))
-                        <tr style="border-bottom: 1px solid black;" class="last-data">
+                        <tr style="border-bottom: 1px solid black;">
                             <td></td>
                             <td class="vera" colspan="4">
                                 <b>No Seri</b> :
                                 @foreach ($item->detail as $key => $detail)
                                     @if ($key == count($item->detail) - 1)
-                                        {{ $detail->nama }} : {{ implode(', ', $detail->noseri) }}
+                                        {{ $detail->nama }} :
+                                        @if($detail->noseri == null)
+                                            -
+                                        @else
+                                        {{ implode(', ', $detail->noseri) }}
+                                        @endif
                                     @else
-                                        {{ $detail->nama }} : {{ implode(', ', $detail->noseri) }} <br>
+                                        {{ $detail->nama }} :
+                                        @if($detail->noseri == null)
+                                            -
+                                        @else
+                                        {{ implode(', ', $detail->noseri) }}
+                                        @endif
+                                        <br>
                                     @endif
                                 @endforeach
                             </td>

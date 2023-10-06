@@ -2810,6 +2810,7 @@ class GudangController extends Controller
             } else {
                 Pesanan::find($request->soid)->update(['log_id' => 6]);
             }
+
             $del = new Filesystem;
             $del->cleanDirectory(public_path('upload/so/'));
             File::delete(public_path('upload/so/' . $request->namafile));
