@@ -12,6 +12,8 @@ import LaporanPenjualan from "../views/LaporanPenjualan.vue"
 import ProsesPesanan from "../views/ProsesPesanan.vue"
 import JadwalPerencanaan from "../views/JadwalPerencanaan.vue"
 import JadwalPelaksanaan from "../views/JadwalPelaksanaan.vue"
+import JadwalPerencanaanRework from "../views/JadwalPerencanaanRework"
+import JadwalPelaksanaanRework from "../views/JadwalPelaksanaan.vue"
 import ChangePassword from "../views/ChangePassword.vue"
 
 // Detail
@@ -70,6 +72,16 @@ const routes = [
     },
     {
         path: '/ppic/jadwal_pelaksanaan',
+        name: 'JadwalPelaksanaan',
+        component: JadwalPelaksanaan,
+    },
+    {
+        path: '/ppic/jadwal_perencanaan_rework',
+        name: 'JadwalPerencanaan',
+        component: JadwalPerencanaan,
+    },
+    {
+        path: '/ppic/jadwal_pelaksanaan_rework',
         name: 'JadwalPelaksanaan',
         component: JadwalPelaksanaan,
     },
