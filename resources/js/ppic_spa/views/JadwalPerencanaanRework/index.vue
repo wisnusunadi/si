@@ -14,7 +14,7 @@ export default {
                 {
                     nama_produk: 'Produk 1',
                     jumlah: 10,
-                    tanggal_mulai: '2023-10-01',
+                    tanggal_mulai: '2023-10-03',
                     tanggal_selesai: '2023-11-10',
                 },
                 {
@@ -35,14 +35,332 @@ export default {
                     tanggal_mulai: '2023-10-01',
                     tanggal_selesai: '2023-11-10',
                 }
+                , {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },{
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },{
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },{
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },{
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },{
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }, {
+                    nama_produk: 'Produk 1',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                },
+                {
+                    nama_produk: 'Produk 2',
+                    jumlah: 10,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-11-10',
+                }
             ],
             renderPaginate: [],
+            monthYears: moment().add(1, 'month').format('MMMM YYYY'),
         }
     },
     methods: {
-        getMonthYears() {
-            return moment().add(1, 'month').format('MMMM YYYY')
-        },
         updateFilteredDalamProses(filteredDalamProses) {
             this.renderPaginate = filteredDalamProses
         }
@@ -67,7 +385,7 @@ export default {
         <div class="card">
             <div class="card-content">
                 <h1 class="subtitle">
-                    {{ getMonthYears() }}
+                    {{ monthYears }}
                 </h1>
 
                 <div class="columns">
@@ -80,6 +398,9 @@ export default {
                         <input type="text" class="input" v-model="search" placeholder="Cari">
                     </div>
                 </div>
+
+                <TableKalender :dataTable="renderPaginate" :monthYears="monthYears" />
+
                 <pagination :filteredDalamProses="filteredData" @updateFilteredDalamProses="updateFilteredDalamProses" />
             </div>
         </div>
