@@ -33,7 +33,11 @@ export default {
             renderPaginate: [],
         }
     },
-
+    methods: {
+        updateFilteredDalamProses(value) {
+            this.renderPaginate = value;
+        },
+    },
     computed: {
         filteredDalamProses() {
             return this.dataTable.filter((data) => {
@@ -53,6 +57,6 @@ export default {
                 <input type="text" v-model="search">
             </div>
         </div>
-        <!-- <pagination :filteredDalamProses="filteredDalamProses" -->
+        <pagination :filteredDalamProses="filteredDalamProses" :updateFilteredDalamProses="updateFilteredDalamProses" />
     </div>
 </template>
