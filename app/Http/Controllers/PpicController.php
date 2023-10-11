@@ -733,7 +733,7 @@ class PpicController extends Controller
      *
      * @return array collections of data perakitan after new data added
      */
-    public function create_data_perakitan_rework(Request $request)
+    public function create_data_perakitan_rework_perencanaan(Request $request)
     {
         try {
             $detail = DetailProdukRw::where('produk_parent_id',$request->produk_id)->get();
@@ -757,8 +757,47 @@ class PpicController extends Controller
                     'jumlah' => $request->jumlah,
                     'tanggal_mulai' => $request->tanggal_mulai,
                     'tanggal_selesai' => $request->tanggal_selesai,
-                    'status' => $status,
-                    'state' => $state,
+                    'status' => NULL,
+                    'state' => 17,
+                    'konfirmasi' => $request->konfirmasi,
+                    'warna' => $selected_color,
+                    'status_tf' => 11,
+                ]);
+            }
+            return response()->json('ok');
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json($th);
+        }
+
+
+    }
+    public function create_data_perakitan_rework_pelaksanaan(Request $request)
+    {
+        try {
+            $detail = DetailProdukRw::where('produk_parent_id',$request->produk_id)->get();
+
+
+            //code...
+            $status = $this->change_status($request->status);
+            $state = $this->change_state($request->state);
+
+            $color = ["#007bff", "#6c757d", "#28a745", "#dc3545", "#ffc107", "#17a2b8"];
+            $selected_color = $color[array_rand($color)];
+
+           $cek = JadwalPerakitanRw::max('urutan');
+
+            foreach($detail as $d){
+                JadwalPerakitanRw::create([
+                    'no_bppb' => $request->no_bppb,
+                    'urutan' => $cek + 1,
+                    'produk_reworks_id' => $request->produk_id,
+                    'produk_id' => $d->produk_id,
+                    'jumlah' => $request->jumlah,
+                    'tanggal_mulai' => $request->tanggal_mulai,
+                    'tanggal_selesai' => $request->tanggal_selesai,
+                    'status' => NULL,
+                    'state' => 18,
                     'konfirmasi' => $request->konfirmasi,
                     'warna' => $selected_color,
                     'status_tf' => 11,

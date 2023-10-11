@@ -25,6 +25,10 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ProduksiController extends Controller
 {
+    function belum_kirim_rw()
+    {
+        dd('a');
+    }
     function CreateTFItem(Request $request)
     {
         try {

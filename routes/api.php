@@ -36,7 +36,8 @@ Route::prefix('/master')->group(function () {
 
 Route::prefix('/ppic')->group(function () {
     Route::prefix('/jadwal_rework')->group(function () {
-        Route::post('/', [App\Http\Controllers\PpicController::class, 'create_data_perakitan_rework']);
+        Route::post('/perencanaan', [App\Http\Controllers\PpicController::class, 'create_data_perakitan_rework_perencanaan']);
+        Route::post('/pelaksanaan', [App\Http\Controllers\PpicController::class, 'create_data_perakitan_rework_pelaksanaan']);
     });
     Route::post('/update_pwd', [App\Http\Controllers\Auth\ResetPasswordController::class, 'updatePwd'])->middleware('jwt.verify');
     Route::post('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data'])->middleware('jwt.verify');
@@ -301,6 +302,9 @@ Route::prefix('/tfp')->group(function () {
 });
 
 Route::prefix('/prd')->group(function () {
+    Route::prefix('/rw')->group(function () {
+        Route::get('/belum_kirim', [ProduksiController::class, 'belum_kirim_rw']);
+    });
     Route::get('/dashboard', [ProduksiController::class, 'dashboard']);
     Route::get('/allproduk', [ProduksiController::class, 'getAllProduk']);
     Route::post('/grafikproduk', [ProduksiController::class, 'getGrafikProduk']);
