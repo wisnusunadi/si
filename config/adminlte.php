@@ -1202,6 +1202,12 @@ return [
             'auth' => [13],
         ],
         [
+            'text' => 'Permintaan Rework',
+            'url' => '/gbj/rework/permintaan-rework',
+            'icon' => 'fas fa-exclamation-circle',
+            'auth' => [13],
+        ],
+        [
             'text' => 'Lacak',
             'url'  => '/penjualan/lacak/show',
             'icon' => 'fas fa-search',

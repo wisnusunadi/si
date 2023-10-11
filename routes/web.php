@@ -96,6 +96,7 @@ Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
 });
 
 Route::group(['prefix' => '/gbj', 'middleware' => ['auth', 'divisi:gbj,mgrgdg,dirut']], function () {
+    Route::view('/rework/{any?}', 'page.gbj.gbj_rework')->where('any', '.*');
     Route::view('/stok/{any?}', 'page.gbj.stok')->where('any', '.*');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
     Route::view('/produk/{any?}', 'page.gbj.produk')->where('any', '.*');
