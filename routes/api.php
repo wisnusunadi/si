@@ -35,6 +35,9 @@ Route::prefix('/master')->group(function () {
 });
 
 Route::prefix('/ppic')->group(function () {
+    Route::prefix('/jadwal_rework')->group(function () {
+        Route::post('/', [App\Http\Controllers\PpicController::class, 'create_data_perakitan_rework']);
+    });
     Route::post('/update_pwd', [App\Http\Controllers\Auth\ResetPasswordController::class, 'updatePwd'])->middleware('jwt.verify');
     Route::post('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data'])->middleware('jwt.verify');
     Route::post('/master_stok/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_stok'])->middleware('jwt.verify');
@@ -89,6 +92,11 @@ Route::prefix('/customer')->group(function () {
 });
 
 Route::prefix('/produk')->group(function () {
+    Route::prefix('/rw')->group(function () {
+        Route::get('/select', [App\Http\Controllers\MasterController::class, 'select_parent_rw']);
+        Route::get('/select/{id}', [App\Http\Controllers\MasterController::class, 'select_item_rw']);
+        });
+
     Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_produk']);
     Route::get('variasi', [App\Http\Controllers\MasterController::class, 'get_data_produk_variasi']);
     Route::post('create', [App\Http\Controllers\MasterController::class, 'create_produk']);
@@ -173,7 +181,6 @@ Route::prefix('/gbj')->group(function () {
     Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
     Route::post('/get', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
     Route::post('data-so', [GudangController::class, 'getSODone']);
-
     Route::get('/modal_data/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj']);
     Route::get('/modal_data_non/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj_non']);
     Route::get('/modal_data_seri/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj_seri']);
@@ -227,7 +234,6 @@ Route::prefix('/dashboard-gbj')->group(function () {
     Route::get('/stok/1020', [GudangController::class, 'getProdukstok1020'])->middleware('jwt.verify');
     Route::get('/stok/59', [GudangController::class, 'getProdukstok59'])->middleware('jwt.verify');
     Route::get('/stok/14', [GudangController::class, 'getProdukstok14'])->middleware('jwt.verify');
-
     Route::post('/in/36/h', [GudangController::class, 'h4']);
     Route::post('/in/612/h', [GudangController::class, 'h5']);
     Route::post('/in/1236/h', [GudangController::class, 'h6']);
