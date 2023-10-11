@@ -77,10 +77,13 @@ export default {
             } catch (error) {
                 console.log(error)
             }
-        }
+        },
     },
     mounted() {
         this.getProduk()
+        if (this.dataProduk.produk_id?.id != undefined) {
+            this.getStok(this.dataProduk.produk_id.id)
+        }
     },
     computed: {
         tanggalMulaiError() {
@@ -156,7 +159,7 @@ export default {
                         <div class="field-body">
                             <div class="field">
                                 <p class="control">
-                                    <v-select :options="produk" label="label" v-model="dataProduk.nama_produk" :reduce="option => option.id" @input="getStok(dataProduk.nama_produk)"/>
+                                    <v-select :options="produk" label="label" v-model="dataProduk.produk_id" :reduce="option => option.id" @input="getStok(dataProduk.produk_id)"/>
                                 </p>
                             </div>
                         </div>

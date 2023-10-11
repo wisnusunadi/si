@@ -89,9 +89,14 @@ class PpicController extends Controller
             foreach($data as $d){
                 $obj[] = array(
                     'id' => $d->id,
-                    'tgl_mulai' => $d->tanggal_mulai,
-                    'tgl_selesai' => $d->tanggal_selesai,
-                    'nama' => $d->ProdukRw->nama,
+                    'urutan' => $d->urutan,
+                    'produk_reworks_id' => $d->produk_reworks_id,
+                    'tanggal_mulai' => $d->tanggal_mulai,
+                    'tanggal_selesai' => $d->tanggal_selesai,
+                    'produk_id' => [
+                        'id' => $d->ProdukRw->id,
+                        'label' => $d->ProdukRw->nama,
+                    ],
                     'jumlah' => $d->jumlah
                 );
             }
@@ -110,8 +115,8 @@ class PpicController extends Controller
             foreach($data as $d){
                 $obj[] = array(
                     'id' => $d->id,
-                    'tgl_mulai' => $d->tanggal_mulai,
-                    'tgl_selesai' => $d->tanggal_selesai,
+                    'tanggal_mulai' => $d->tanggal_mulai,
+                    'tanggal_selesai' => $d->tanggal_selesai,
                     'nama' => $d->ProdukRw->nama,
                     'jumlah' => $d->jumlah
                 );
@@ -860,8 +865,8 @@ class PpicController extends Controller
                     'produk_reworks_id' => $request->produk_id,
                     'produk_id' => $d->produk_id,
                     'jumlah' => $request->jumlah,
-                    'tanggal_mulai' => $request->tgl_mulai,
-                    'tanggal_selesai' => $request->tgl_selesai,
+                    'tanggal_mulai' => $request->tanggal_mulai,
+                    'tanggal_selesai' => $request->tanggal_selesai,
                     'status' => NULL,
                     'state' => 17,
                     'konfirmasi' => $request->konfirmasi,
@@ -903,8 +908,8 @@ class PpicController extends Controller
                     'produk_reworks_id' => $request->produk_id,
                     'produk_id' => $d->produk_id,
                     'jumlah' => $request->jumlah,
-                    'tanggal_mulai' => $request->tgl_mulai,
-                    'tanggal_selesai' => $request->tgl_selesai,
+                    'tanggal_mulai' => $request->tanggal_mulai,
+                    'tanggal_selesai' => $request->tanggal_selesai,
                     'status' => NULL,
                     'state' => 18,
                     'konfirmasi' => $request->konfirmasi,

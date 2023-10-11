@@ -75,10 +75,10 @@ export default {
             }
 
             try {
-                const { data } = await axios.post('/api/ppic/jadwal_rework/pelaksanaan', data).then(success).catch(error)
+               await axios.post('/api/ppic/jadwal_rework/pelaksanaan', data).then(success).catch(error)
             } catch (error) {
                 console.log(error)
-            } z
+            }
         },
         simpanedit(data) {
             this.showModal = false
@@ -92,7 +92,7 @@ export default {
         },
         tambah() {
             this.dataProduk = {
-                nama_produk: '',
+                produk_id: '',
                 jumlah: '',
                 tanggal_mulai: '',
                 tanggal_selesai: '',

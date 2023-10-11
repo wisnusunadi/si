@@ -12,14 +12,17 @@ export default {
             // check if the date is within the range of tanggal_mulai and tanggal_selesai
             let tanggalMulai = moment(data.tanggal_mulai, "YYYY-MM-DD");
             let tanggalSelesai = moment(data.tanggal_selesai, "YYYY-MM-DD");
-            date = moment(date, "D-MM-YYYY");
             if (this.isWeekend(date)) {
                 return false;
             }
-            return date.isBetween(tanggalMulai, tanggalSelesai, null, '[]');
+            // set date with monthYears
+            let dateWithMonthYears = moment(`${date}-${this.monthYears}`, "D-MMMM YYYY");
+            // check if dateWithMonthYears is between tanggalMulai and tanggalSelesai
+            return dateWithMonthYears.isBetween(tanggalMulai, tanggalSelesai, null, '[]');
+            
         },
-        edit(id) {
-            this.$emit('edit', id)
+        edit(data) {
+            this.$emit('edit', data)
         },
         hapus(id) {
             this.$emit('hapus', id)
@@ -54,13 +57,13 @@ export default {
                     <th v-for="date in getDatesMonthNow" :key="date">{{ date }}</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, index) in dataTable" :key="index">
-                    <td>{{ data.nama_produk }}</td>
+                    <td>{{ data?.produk_id.label }}</td>
                     <td>{{ data.jumlah }}</td>
                     <td>
                         <span>
-                            <i class="fas fa-edit pointerHand" @click="edit(data.id)"></i>
+                            <i class="fas fa-edit pointerHand" @click="edit(data)"></i>
                         </span>
                         &nbsp;
                         <span>
@@ -70,6 +73,11 @@ export default {
                     <td v-for="date in getDatesMonthNow" :key="date"
                         :class="{ 'yellow-bg': isInRange(date, data), 'black-bg': isWeekend(date) }">
                     </td>
+                </tr>
+            </tbody>
+            <tbody v-else>
+                <tr>
+                    <td colspan="100%">Tidak ada data</td>
                 </tr>
             </tbody>
         </table>

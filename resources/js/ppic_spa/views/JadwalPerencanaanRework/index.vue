@@ -13,22 +13,7 @@ export default {
     data() {
         return {
             search: '',
-            dataTable: [
-                {
-                    id: 1,
-                    nama_produk: 'Produk 1',
-                    jumlah: 10,
-                    tanggal_mulai: '2023-10-03',
-                    tanggal_selesai: '2023-10-10',
-                },
-                {
-                    id: 2,
-                    nama_produk: 'Produk 2',
-                    jumlah: 10,
-                    tanggal_mulai: '2023-10-01',
-                    tanggal_selesai: '2023-11-10',
-                }
-            ],
+            dataTable: [],
             renderPaginate: [],
             monthYears: moment().add(1, 'month').format('MMMM YYYY'),
             showModal: false,
@@ -39,8 +24,8 @@ export default {
         updateFilteredDalamProses(filteredDalamProses) {
             this.renderPaginate = filteredDalamProses
         },
-        edit(id) {
-            this.dataProduk = JSON.parse(JSON.stringify(this.dataTable.find((data) => data.id === id)))
+        edit(data) {
+            this.dataProduk = JSON.parse(JSON.stringify(data))
             this.showModal = true
         },
         hapus(id) {
@@ -68,6 +53,7 @@ export default {
             const success = () => {
                 this.$swal('Berhasil!', 'Data berhasil disimpan!', 'success')
                 this.showModal = false
+                this.getData()
             }
 
             const error = () => {
@@ -75,7 +61,7 @@ export default {
             }
 
             try {
-                const { data } = await axios.post('/api/ppic/jadwal_rework/perencanaan', data).then(success).catch(error)
+                await axios.post('/api/ppic/jadwal_rework/perencanaan', data).then(success).catch(error)
             } catch (error) {
                 console.log(error)
             }
@@ -93,12 +79,23 @@ export default {
         },
         tambah() {
             this.dataProduk = {
-                nama_produk: '',
                 jumlah: '',
                 tanggal_mulai: '',
                 tanggal_selesai: '',
             }
             this.showModal = true
+        },
+        async getData() {
+            try {
+                this.$store.commit('setIsLoading', true)
+                const { data } = await axios.get('/api/ppic/jadwal_rework/perencanaan')
+                this.dataTable = data
+                this.renderPaginate = data
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.commit('setIsLoading', false)
+            }
         }
     },
     computed: {
@@ -109,11 +106,14 @@ export default {
                 })
             })
         }
+    },
+    created() {
+        this.getData()
     }
 }
 </script>
 <template>
-    <div>
+    <div v-if="!this.$store.state.isLoading">
         <modalRework v-if="showModal" :dataProduk="dataProduk" :showModal="showModal" @closeModal="showModal = false"
             @tambah="simpan" @edit="simpanedit" :maxDate="monthYears" />
         <h1 class="title">Perencanaan Jadwal Perakitan Rework</h1>
