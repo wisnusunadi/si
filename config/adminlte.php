@@ -840,6 +840,12 @@ return [
                 ],
                 [
                     'icon' => 'far fa-circle',
+                    'text' => 'Permintaan Perakitan',
+                    'url' => '/produksi/permintaanreworks',
+                    'auth' => [17],
+                ],
+                [
+                    'icon' => 'far fa-circle',
                     'text' => 'Riwayat Perakitan',
                     'url' => 'produksi/riwayat_perakitan',
                     'auth' => [17],
