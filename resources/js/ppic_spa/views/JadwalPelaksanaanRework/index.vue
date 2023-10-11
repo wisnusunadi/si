@@ -3,6 +3,7 @@ import moment from 'moment'
 import pagination from '../../components/pagination.vue'
 import TableKalender from '../../components/TableKalender.vue'
 import modalRework from '../modalRework/index.vue'
+import axios from 'axios'
 export default {
     components: {
         pagination,
@@ -63,7 +64,23 @@ export default {
                 }
             })
         },
-        simpan() {
+        async simpan(data) {
+            const success = () => {
+                this.$swal('Berhasil!', 'Data berhasil disimpan!', 'success')
+                this.showModal = false
+            }
+
+            const error = () => {
+                this.$swal('Gagal!', 'Data gagal disimpan!', 'error')
+            }
+
+            try {
+                const { data } = await axios.post('/api/ppic/jadwal_rework/pelaksanaan', data).then(success).catch(error)
+            } catch (error) {
+                console.log(error)
+            } z
+        },
+        simpanedit(data) {
             this.showModal = false
             this.$swal({
                 title: 'Berhasil!',
@@ -97,7 +114,7 @@ export default {
 <template>
     <div>
         <modalRework v-if="showModal" :dataProduk="dataProduk" :showModal="showModal" @closeModal="showModal = false"
-            @simpan="simpan" />
+            :maxDate="monthYears" @tambah="simpan" @edit="simpanedit" />
         <h1 class="title">Perencanaan Jadwal Perakitan Rework</h1>
         <div class="notification is-primary">
             Penyusunan jadwal perakitan rework
