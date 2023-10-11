@@ -846,6 +846,12 @@ return [
                 ],
                 [
                     'icon' => 'far fa-circle',
+                    'text' => 'Set Produk Reworks',
+                    'url' => '/produksi/prosesSetReworks',
+                    'auth' => [17],
+                ],
+                [
+                    'icon' => 'far fa-circle',
                     'text' => 'Riwayat Perakitan',
                     'url' => 'produksi/riwayat_perakitan',
                     'auth' => [17],
