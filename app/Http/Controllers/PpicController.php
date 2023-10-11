@@ -79,6 +79,113 @@ class PpicController extends Controller
      * @param string $status status string
      * @return array collection of data
      */
+    public function show_perencanaan_rework()
+    {
+        $data = JadwalPerakitanRw::where('state', 17)->groupBy('urutan')->get();
+        if($data->isempty()){
+           $obj = array();
+
+        }else{
+            foreach($data as $d){
+                $obj[] = array(
+                    'id' => $d->id,
+                    'tgl_mulai' => $d->tanggal_mulai,
+                    'tgl_selesai' => $d->tanggal_selesai,
+                    'nama' => $d->ProdukRw->nama,
+                    'jumlah' => $d->jumlah
+                );
+            }
+        }
+
+        return response()->json($obj);
+    }
+
+    public function show_pelaksanaan_rework()
+    {
+        $data = JadwalPerakitanRw::where('state', 18)->groupBy('urutan')->get();
+        if($data->isempty()){
+           $obj = array();
+
+        }else{
+            foreach($data as $d){
+                $obj[] = array(
+                    'id' => $d->id,
+                    'tgl_mulai' => $d->tanggal_mulai,
+                    'tgl_selesai' => $d->tanggal_selesai,
+                    'nama' => $d->ProdukRw->nama,
+                    'jumlah' => $d->jumlah
+                );
+            }
+        }
+
+        return response()->json($obj);
+    }
+
+    public function delete_ppic_rework(Request $request)
+    {
+        $jumlah_tf = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
+        if($jumlah_tf > 0){
+            return response()->json([
+                'status' => 200,
+                'message' => 'Gagal Di ubah',
+            ], 500);
+        }else{
+            $data = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->delete();
+        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Berhasil',
+        ], 200);
+    }
+    public function update_ppic_rework(Request $request)
+    {
+        $jumlah_tf = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
+        $data = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->get();
+
+        if($jumlah_tf > 0){
+            return response()->json([
+                'status' => 200,
+                'message' => 'Gagal Di ubah',
+            ], 500);
+        }else{
+            foreach($data as $d){
+                JadwalPerakitanRw::where('id', $d->id)
+                            ->update([
+                                'tanggal_mulai' => $request->tgl_mulai,
+                                'tanggal_selesai' => $request->tgl_selesai,
+                                'jumlah' => $request->jumlah
+                        ]);
+            }
+        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Berhasil',
+        ], 200);
+
+    }
+
+
+    public function edit_ppic_rework($id)
+    {
+        $data = JadwalPerakitanRw::where('id', $id)->groupBy('urutan')->get();
+        if($data->isempty()){
+           $obj = array();
+        }else{
+            foreach($data as $d){
+                $obj[] = array(
+                    'id' => $d->id,
+                    'urutan' => $d->urutan,
+                    'produk_reworks_id' => $d->produk_reworks_id,
+                    'tgl_mulai' => $d->tanggal_mulai,
+                    'tgl_selesai' => $d->tanggal_selesai,
+                    'nama' => $d->ProdukRw->nama,
+                    'jumlah' => $d->jumlah
+                );
+            }
+        }
+        return response()->json($obj);
+    }
+
     public function get_data_perakitan($status = "all")
     {
         $this->update_perakitan_status();
@@ -737,8 +844,6 @@ class PpicController extends Controller
     {
         try {
             $detail = DetailProdukRw::where('produk_parent_id',$request->produk_id)->get();
-
-
             //code...
             $status = $this->change_status($request->status);
             $state = $this->change_state($request->state);
@@ -755,8 +860,8 @@ class PpicController extends Controller
                     'produk_reworks_id' => $request->produk_id,
                     'produk_id' => $d->produk_id,
                     'jumlah' => $request->jumlah,
-                    'tanggal_mulai' => $request->tanggal_mulai,
-                    'tanggal_selesai' => $request->tanggal_selesai,
+                    'tanggal_mulai' => $request->tgl_mulai,
+                    'tanggal_selesai' => $request->tgl_selesai,
                     'status' => NULL,
                     'state' => 17,
                     'konfirmasi' => $request->konfirmasi,
@@ -764,10 +869,16 @@ class PpicController extends Controller
                     'status_tf' => 11,
                 ]);
             }
-            return response()->json('ok');
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil Ditambahkan',
+            ], 200);
         } catch (\Throwable $th) {
             //throw $th;
-            return response()->json($th);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Gagal Ditambahkan',
+            ], 500);
         }
 
 
@@ -776,8 +887,6 @@ class PpicController extends Controller
     {
         try {
             $detail = DetailProdukRw::where('produk_parent_id',$request->produk_id)->get();
-
-
             //code...
             $status = $this->change_status($request->status);
             $state = $this->change_state($request->state);
@@ -794,8 +903,8 @@ class PpicController extends Controller
                     'produk_reworks_id' => $request->produk_id,
                     'produk_id' => $d->produk_id,
                     'jumlah' => $request->jumlah,
-                    'tanggal_mulai' => $request->tanggal_mulai,
-                    'tanggal_selesai' => $request->tanggal_selesai,
+                    'tanggal_mulai' => $request->tgl_mulai,
+                    'tanggal_selesai' => $request->tgl_selesai,
                     'status' => NULL,
                     'state' => 18,
                     'konfirmasi' => $request->konfirmasi,
@@ -803,10 +912,16 @@ class PpicController extends Controller
                     'status_tf' => 11,
                 ]);
             }
-            return response()->json('ok');
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil Ditambahkan',
+            ], 200);
         } catch (\Throwable $th) {
             //throw $th;
-            return response()->json($th);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Gagal Ditambahhkan',
+            ], 500);
         }
 
 

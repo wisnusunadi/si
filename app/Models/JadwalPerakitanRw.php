@@ -12,4 +12,8 @@ class JadwalPerakitanRw extends Model
     protected $table = 'jadwal_perakitan_rw';
     protected $fillable = ['produk_id','no_bppb', 'jumlah', 'tanggal_mulai', 'tanggal_selesai', 'status', 'state', 'konfirmasi', 'warna', 'status_tf', 'created_at', 'keterangan', 'keterangan_transfer', 'evaluasi','urutan','produk_reworks_id'];
 
+    public function ProdukRw()
+    {
+        return $this->belongsTo(Produk::class, 'produk_reworks_id');
+    }
 }

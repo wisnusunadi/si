@@ -8,13 +8,12 @@ class JadwalPerakitan extends Model
 {
     protected $connection = 'erp';
     protected $table = 'jadwal_perakitan';
-    protected $fillable = ['produk_reworks_id','produk_id','no_bppb', 'jumlah', 'tanggal_mulai', 'tanggal_selesai', 'status', 'state', 'konfirmasi', 'warna', 'status_tf', 'created_at', 'keterangan', 'keterangan_transfer', 'evaluasi'];
+    protected $fillable = ['produk_id','no_bppb', 'jumlah', 'tanggal_mulai', 'tanggal_selesai', 'status', 'state', 'konfirmasi', 'warna', 'status_tf', 'created_at', 'keterangan', 'keterangan_transfer', 'evaluasi'];
 
     public function Produk()
     {
         return $this->belongsTo(GudangBarangJadi::class, 'produk_id');
     }
-
     function noseri()
     {
         return $this->hasMany(JadwalRakitNoseri::class, 'jadwal_id');

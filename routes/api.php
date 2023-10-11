@@ -36,8 +36,22 @@ Route::prefix('/master')->group(function () {
 
 Route::prefix('/ppic')->group(function () {
     Route::prefix('/jadwal_rework')->group(function () {
-        Route::post('/perencanaan', [App\Http\Controllers\PpicController::class, 'create_data_perakitan_rework_perencanaan']);
-        Route::post('/pelaksanaan', [App\Http\Controllers\PpicController::class, 'create_data_perakitan_rework_pelaksanaan']);
+        Route::prefix('/perencanaan')->group(function () {
+            Route::post('/', [App\Http\Controllers\PpicController::class, 'create_data_perakitan_rework_perencanaan']);
+            Route::get('/', [App\Http\Controllers\PpicController::class, 'show_perencanaan_rework']);
+            Route::get('/{id}', [App\Http\Controllers\PpicController::class, 'edit_ppic_rework']);
+            Route::put('/', [App\Http\Controllers\PpicController::class, 'update_ppic_rework']);
+            Route::delete('/', [App\Http\Controllers\PpicController::class, 'delete_ppic_rework']);
+        });
+
+        Route::prefix('/pelaksanaan')->group(function () {
+            Route::post('/', [App\Http\Controllers\PpicController::class, 'create_data_perakitan_rework_pelaksanaan']);
+            Route::get('/', [App\Http\Controllers\PpicController::class, 'show_pelaksanaan_rework']);
+            Route::get('/{id}', [App\Http\Controllers\PpicController::class, 'edit_ppic_rework']);
+            Route::put('/', [App\Http\Controllers\PpicController::class, 'update_ppic_rework']);
+            Route::delete('/', [App\Http\Controllers\PpicController::class, 'delete_ppic_rework']);
+        });
+
     });
     Route::post('/update_pwd', [App\Http\Controllers\Auth\ResetPasswordController::class, 'updatePwd'])->middleware('jwt.verify');
     Route::post('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data'])->middleware('jwt.verify');
