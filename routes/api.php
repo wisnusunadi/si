@@ -44,7 +44,8 @@ Route::prefix('/ppic')->group(function () {
     Route::get('/datatables/perakitan', [App\Http\Controllers\PpicController::class, 'get_datatables_data_perakitan']);
     Route::get('/datatables/perakitandetail/{id}', [App\Http\Controllers\PpicController::class, 'get_datatables_data_perakitan_detail'])->middleware('jwt.verify');
     Route::get('/data/rencana_perakitan', [App\Http\Controllers\PpicController::class, 'get_data_perakitan_rencana'])->middleware('jwt.verify');
-    Route::get('/data/gbj', [App\Http\Controllers\PpicController::class, 'get_data_barang_jadi'])->middleware('jwt.verify');
+    Route::get('/data/gbj', [App\Http\Controllers\PpicController::class, 'get_data_barang_jadi']);
+    Route::get('/data/produkidgbj', [App\Http\Controllers\PpicController::class, 'get_data_produk_id_gbj']);
     Route::get('/data/so', [App\Http\Controllers\PpicController::class, 'get_data_so']);
     Route::get('/data/so2', [PpicController::class, 'get_data_so2']);
     Route::get('/data/so/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_data_so_detail']);

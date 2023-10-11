@@ -2516,4 +2516,32 @@ class PpicController extends Controller
         $data = Pesanan::where('id', $id)->with(['Ekatalog.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->first();
         echo json_encode($data);
     }
+
+    public function get_data_produk_id_gbj()
+    {
+        try {
+            $produk = Produk::all()->map(function ($item) {
+                return [
+                    // jika array ada satu get 0 jika lebih dari satu get 1
+                    'id' => count($item->GudangBarangJadi) > 0 ? $item->GudangBarangJadi[0]->id : null,
+                    'label' => $item->nama,
+                    'stok' => count($item->GudangBarangJadi) > 0 ? $item->GudangBarangJadi[0]->stok : 0,
+                    'gbj' => $item->GudangBarangJadi->map(function ($gbj) use ($item) {
+                        return [
+                            'id' => $gbj['id'],
+                            'label' => !empty($item->nama) ? $item->nama . ' ' . $gbj['nama'] : $gbj['nama'],
+                            'stok' => $gbj['stok'],
+                        ];
+                    }),
+                ];
+            });
+
+            return response()->json($produk);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
 }

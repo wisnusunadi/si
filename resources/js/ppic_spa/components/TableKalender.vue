@@ -5,7 +5,7 @@ export default {
     methods: {
         isWeekend(date) {
             // check if the date is a Saturday or Sunday
-            let dayOfWeek = moment(`${date}-${this.monthYears}`, "D-MMMM YYYY").format("dddd");
+            let dayOfWeek = moment(`${date}-${this.monthYears}`, "D-MMMM YYYY").format("dddd")
             return dayOfWeek === "Saturday" || dayOfWeek === "Sunday";
         },
         isInRange(date, data) {
@@ -13,7 +13,16 @@ export default {
             let tanggalMulai = moment(data.tanggal_mulai, "YYYY-MM-DD");
             let tanggalSelesai = moment(data.tanggal_selesai, "YYYY-MM-DD");
             date = moment(date, "D-MM-YYYY");
+            if (this.isWeekend(date)) {
+                return false;
+            }
             return date.isBetween(tanggalMulai, tanggalSelesai, null, '[]');
+        },
+        edit(id) {
+            this.$emit('edit', id)
+        },
+        hapus(id) {
+            this.$emit('hapus', id)
         }
     },
     computed: {
@@ -32,8 +41,8 @@ export default {
 }
 </script>
 <template>
-    <div>
-        <table class="table is-bordered">
+    <div class="table-container">
+        <table class="table is-bordered has-text-centered" style="white-space: nowrap;">
             <thead>
                 <tr>
                     <th rowspan="2">Nama Produk</th>
@@ -51,15 +60,15 @@ export default {
                     <td>{{ data.jumlah }}</td>
                     <td>
                         <span>
-                            <i class="fas fa-edit pointerHand"></i>
+                            <i class="fas fa-edit pointerHand" @click="edit(data.id)"></i>
                         </span>
                         &nbsp;
                         <span>
-                            <i class="fas fa-trash pointerHand"></i>
+                            <i class="fas fa-trash pointerHand" @click="hapus(data.id)"></i>
                         </span>
                     </td>
                     <td v-for="date in getDatesMonthNow" :key="date"
-                         :class="{ 'yellow-bg': isInRange(date, data), 'black-bg': isWeekend(date) }">
+                        :class="{ 'yellow-bg': isInRange(date, data), 'black-bg': isWeekend(date) }">
                     </td>
                 </tr>
             </tbody>
