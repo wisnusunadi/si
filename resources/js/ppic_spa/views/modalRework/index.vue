@@ -3,7 +3,7 @@ import axios from 'axios';
 import detailProduk from './detailproduk.vue';
 import moment from 'moment';
 export default {
-    props: ['showModal', 'dataProduk'],
+    props: ['showModal', 'dataProduk', 'maxDate'],
     components: {
         detailProduk
     },
@@ -13,6 +13,10 @@ export default {
             produk: [],
             showDetailProduk: false,
             showModalNow: false,
+            // get first date of month
+            minDateConversion: moment(this.maxDate).format('YYYY-MM-DD'),
+            maxDateConversion: moment(this.maxDate).endOf('month').format('YYYY-MM-DD'),
+            stokGBJ: 0,
         }
     },
     methods: {
@@ -20,11 +24,11 @@ export default {
             this.$emit('closeModal')
         },
         async getProduk() {
-            const { data } = await axios.get('/api/ppic/data/gbj')
+            const { data } = await axios.get('/api/produk/rw/select')
             this.produk = data.map((item) => {
                 return {
                     id: item.id,
-                    label: `${item.produk.nama} ${item.nama}`
+                    label: item.nama
                 }
             })
             this.showModalNow = true
@@ -48,8 +52,32 @@ export default {
             })
         },
         simpan() {
-            this.$emit('simpan')
+            const ceknull = Object.values(this.dataProduk).filter((item) => item === null || item === '')
+            if(this.tanggalMulaiError || this.tanggalSelesaiError || this.stokGBJError || ceknull.length > 0) {
+                this.$swal({
+                    title: 'Gagal!',
+                    text: 'Data yang anda masukkan tidak valid',
+                    icon: 'error',
+                    confirmButtonColor: '#00d1b2',
+                    confirmButtonText: 'OK'
+                })
+                return
+            }
+
+            if (this.dataProduk.id) {
+                this.$emit('edit', this.dataProduk)
+            } else {
+                this.$emit('tambah', this.dataProduk)
+            }
         },
+        async getStok(id) {
+            try {
+                const { data } = await axios.get(`/api/produk/rw/select/${id}`)
+                this.stokGBJ = data.jumlah
+            } catch (error) {
+                console.log(error)
+            }
+        }
     },
     mounted() {
         this.getProduk()
@@ -67,6 +95,12 @@ export default {
             const tanggal_mulai = moment(this.dataProduk.tanggal_mulai)
             const tanggal_selesai = moment(this.dataProduk.tanggal_selesai)
             if (tanggal_selesai.isBefore(tanggal_mulai)) {
+                return true
+            }
+            return false
+        },
+        stokGBJError() {
+            if (this.stokGBJ < this.dataProduk.jumlah) {
                 return true
             }
             return false
@@ -92,6 +126,7 @@ export default {
                                 <label class="label">Tanggal Mulai</label>
                                 <div class="control">
                                     <input class="input" type="date" placeholder="Text input"
+                                        :min="minDateConversion" :max="maxDateConversion"
                                         :class="{ 'is-danger': tanggalMulaiError }" v-model="dataProduk.tanggal_mulai">
                                     <p class="help is-danger" v-if="tanggalMulaiError">
                                         Tanggal mulai harus lebih kecil dari tanggal selesai
@@ -104,6 +139,7 @@ export default {
                                 <label class="label">Tanggal Selesai</label>
                                 <div class="control">
                                     <input class="input" type="date" placeholder="Text input"
+                                        :min="minDateConversion" :max="maxDateConversion"
                                         :class="{ 'is-danger': tanggalSelesaiError }"
                                         v-model="dataProduk.tanggal_selesai">
                                     <p class="help is-danger" v-if="tanggalSelesaiError">
@@ -120,7 +156,7 @@ export default {
                         <div class="field-body">
                             <div class="field">
                                 <p class="control">
-                                    <v-select :options="produk" label="label" v-model="dataProduk.nama_produk" />
+                                    <v-select :options="produk" label="label" v-model="dataProduk.nama_produk" :reduce="option => option.id" @input="getStok(dataProduk.nama_produk)"/>
                                 </p>
                             </div>
                         </div>
@@ -131,10 +167,13 @@ export default {
                         </div>
                         <div class="field-body">
                             <div class="field">
-                                <p class="control">
-                                    <input class="input" type="text" placeholder="Jumlah" v-model="dataProduk.jumlah"
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Jumlah" v-model="dataProduk.jumlah" :class="{ 'is-danger': stokGBJError }"
                                         @keypress="numberOnly($event)">
-                                </p>
+                                    <p v-if="stokGBJError" class="help is-danger">
+                                        Jumlah tidak boleh melebihi stok
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -145,8 +184,8 @@ export default {
                         <div class="field-body">
                             <div class="field">
                                 <p class="control">
-                                    <input class="input" type="text" placeholder="Stok GBJ" v-model="dataProduk.stok_gbj"
-                                        @keypress="numberOnly($event)" disabled>
+                                    <input class="input" type="text" placeholder="Stok GBJ" v-model.number="stokGBJ" disabled
+                                        @keypress="numberOnly($event)">
                                 </p>
                             </div>
                         </div>
