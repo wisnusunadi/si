@@ -30,6 +30,7 @@ use App\Models\JadwalPerakitanRencana;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\DetailLogistikPart;
 use App\Models\DetailPesananPart;
+use App\Models\DetailProdukRw;
 use App\Models\JadwalPerakitanRw;
 use App\Models\SystemLog;
 
@@ -734,25 +735,42 @@ class PpicController extends Controller
      */
     public function create_data_perakitan_rework(Request $request)
     {
-        $status = $this->change_status($request->status);
-        $state = $this->change_state($request->state);
+        try {
+            $detail = DetailProdukRw::where('produk_parent_id',$request->produk_id)->get();
 
-        $color = ["#007bff", "#6c757d", "#28a745", "#dc3545", "#ffc107", "#17a2b8"];
-        $selected_color = $color[array_rand($color)];
 
-        JadwalPerakitanRw::create([
-            'no_bppb' => $request->no_bppb,
-            'produk_id' => Produk::find(GudangBarangJadi::find($request->produk_id)->produk_id)->nama . ' ' . GudangBarangJadi::find($request->produk_id)->nama,
-            'jumlah' => $request->jumlah,
-            'tanggal_mulai' => $request->tanggal_mulai,
-            'tanggal_selesai' => $request->tanggal_selesai,
-            'status' => $status,
-            'state' => $state,
-            'konfirmasi' => $request->konfirmasi,
-            'warna' => $selected_color,
-            'status_tf' => 11,
-        ]);
-        dd($request->all());
+            //code...
+            $status = $this->change_status($request->status);
+            $state = $this->change_state($request->state);
+
+            $color = ["#007bff", "#6c757d", "#28a745", "#dc3545", "#ffc107", "#17a2b8"];
+            $selected_color = $color[array_rand($color)];
+
+           $cek = JadwalPerakitanRw::max('urutan');
+
+            foreach($detail as $d){
+                JadwalPerakitanRw::create([
+                    'no_bppb' => $request->no_bppb,
+                    'urutan' => $cek + 1,
+                    'produk_reworks_id' => $request->produk_id,
+                    'produk_id' => $d->produk_id,
+                    'jumlah' => $request->jumlah,
+                    'tanggal_mulai' => $request->tanggal_mulai,
+                    'tanggal_selesai' => $request->tanggal_selesai,
+                    'status' => $status,
+                    'state' => $state,
+                    'konfirmasi' => $request->konfirmasi,
+                    'warna' => $selected_color,
+                    'status_tf' => 11,
+                ]);
+            }
+            return response()->json('ok');
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json($th);
+        }
+
+
     }
 
 
