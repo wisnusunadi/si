@@ -23,9 +23,19 @@ export default {
             ],
             dataTable: [
                 {
+                    id: 1,
                     tanggal_mulai: '2023-10-01',
                     tanggal_selesai: '2023-10-31',
                     nama_produk: 'Produk 1',
+                    status: 'menunggu',
+                    jumlah: 100,
+                },
+                {
+                    id: 2,
+                    tanggal_mulai: '2023-10-01',
+                    tanggal_selesai: '2023-10-31',
+                    nama_produk: 'Produk 2',
+                    status: 'new',
                     jumlah: 100,
                 }
             ],
@@ -34,8 +44,8 @@ export default {
         }
     },
     methods: {
-        updateFilteredDalamProses(value) {
-            this.renderPaginate = value;
+        updateFilteredDalamProses(data) {
+            this.renderPaginate = data;
         },
     },
     computed: {
@@ -52,11 +62,17 @@ export default {
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
-        <div class="d-flex flex-row-reverse bd-highlight">
-            <div class="p-2 bd-highlight">
-                <input type="text" v-model="search">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-row-reverse bd-highlight">
+                    <div class="p-2 bd-highlight">
+                        <input type="text" v-model="search" class="form-control" placeholder="Cari...">
+                    </div>
+                </div>
+                <Table :dataTable="renderPaginate" />
+                <pagination :filteredDalamProses="filteredDalamProses"
+                    @updateFilteredDalamProses="updateFilteredDalamProses" />
             </div>
         </div>
-        <pagination :filteredDalamProses="filteredDalamProses" :updateFilteredDalamProses="updateFilteredDalamProses" />
     </div>
 </template>
