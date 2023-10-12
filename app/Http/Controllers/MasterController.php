@@ -28,6 +28,7 @@ use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananPart;
 use App\Models\DetailPesananProduk;
+use App\Models\DetailProdukRw;
 use App\Models\Ekspedisi;
 use App\Models\Logistik;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -54,6 +55,28 @@ use function PHPUnit\Framework\returnValueMap;
 
 class MasterController extends Controller
 {
+    public function select_parent_rw()
+    {
+        $prd = Produk::select('id','nama')->has("DetailProdukRw")->get();
+
+        return response()->json($prd);
+    }
+    public function select_item_rw($id)
+    {
+        $prd = DetailProdukRw::
+        addSelect([
+                'ckirimprd' => function ($q) {
+                    $q->selectRaw('coalesce(count(noseri_barang_jadi.id),0)')
+                        ->from('noseri_barang_jadi')
+                        ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                        ->where('noseri_barang_jadi.is_ready', '0')
+                        ->whereNull('noseri_barang_jadi.used_by')
+                        ->whereColumn('gdg_barang_jadi.produk_id', 'detail_produks_rw.produk_id');
+                },])
+        ->where('produk_parent_id',$id)->get();
+
+        return response()->json(['jumlah'=>$prd->min('ckirimprd')]);
+    }
     public function get_all_past_no_seri(Request $r)
     {
         $si_ekat21 = DB::connection('si_21')->table('seri_on')
