@@ -28,8 +28,7 @@ export default {
         <table class="table text-center">
             <thead>
                 <tr>
-                    <th rowspan="2">Tanggal Mulai</th>
-                    <th rowspan="2">Tanggal Selesai</th>
+                    <th rowspan="2">No Urut</th>
                     <th rowspan="2">Nama Produk</th>
                     <th colspan="2">Jumlah</th>
                     <th rowspan="2">Aksi</th>
@@ -41,11 +40,10 @@ export default {
             </thead>
             <tbody>
                 <tr v-for="(data, index) in dataTable" :key="index">
-                    <td>{{ dateFormat(data.tanggal_mulai) }}</td>
-                    <td>{{ dateFormat(data.tanggal_selesai) }}</td>
-                    <td>{{ data.nama_produk }}</td>
-                    <td>{{ data.jumlah_selesai }}</td>
-                    <td>{{ data.jumlah_belum_selesai }}</td>
+                    <td>PRD-{{ data.urutan }}</td>
+                    <td>{{ data.nama }}</td>
+                    <td>{{ data.selesai }}</td>
+                    <td>{{ data.belum }}</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary" @click="detail(data)">
                             <i class="fas fa-eye"></i>

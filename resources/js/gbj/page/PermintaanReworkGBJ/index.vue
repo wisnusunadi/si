@@ -2,6 +2,7 @@
 import Header from '../../components/header.vue';
 import pagination from '../../components/pagination.vue';
 import Table from './table.vue';
+import axios from 'axios';
 export default {
     components: {
         Header,
@@ -22,24 +23,7 @@ export default {
                 }
             ],
             search: '',
-            dataTable: [
-                {
-                    id: 1,
-                    tanggal_mulai: '2023-10-01',
-                    tanggal_selesai: '2023-10-31',
-                    nama_produk: 'Produk 1',
-                    jumlah_selesai: 50,
-                    jumlah_belum_selesai: 22,
-                },
-                {
-                    id: 2,
-                    tanggal_mulai: '2023-10-01',
-                    tanggal_selesai: '2023-10-31',
-                    nama_produk: 'Produk 2',
-                    jumlah_selesai: 50,
-                    jumlah_belum_selesai: 26,
-                }
-            ],
+            dataTable: [],
             renderPaginate: [],
         }
     },
@@ -47,6 +31,17 @@ export default {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true);
+                const { data } = await axios.get('/api/gbj/rw/belum_kirim');
+                this.dataTable = data;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.$store.dispatch('setLoading', false);
+            }
+        }
     },
     computed: {
         filteredDalamProses() {
@@ -57,10 +52,13 @@ export default {
             });
         },
     },
+    mounted() {
+        this.getData();
+    },
 }
 </script>
 <template>
-    <div>
+    <div v-if="!$store.state.loading">
         <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="card">
             <div class="card-body">
