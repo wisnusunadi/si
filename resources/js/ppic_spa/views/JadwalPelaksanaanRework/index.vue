@@ -13,22 +13,7 @@ export default {
     data() {
         return {
             search: '',
-            dataTable: [
-                {
-                    id: 1,
-                    nama_produk: 'Produk 1',
-                    jumlah: 10,
-                    tanggal_mulai: '2023-10-03',
-                    tanggal_selesai: '2023-10-10',
-                },
-                {
-                    id: 2,
-                    nama_produk: 'Produk 2',
-                    jumlah: 10,
-                    tanggal_mulai: '2023-10-01',
-                    tanggal_selesai: '2023-11-10',
-                }
-            ],
+            dataTable: [],
             renderPaginate: [],
             monthYears: moment().format('MMMM YYYY'),
             showModal: false,
@@ -39,11 +24,20 @@ export default {
         updateFilteredDalamProses(filteredDalamProses) {
             this.renderPaginate = filteredDalamProses
         },
-        edit(id) {
-            this.dataProduk = JSON.parse(JSON.stringify(this.dataTable.find((data) => data.id === id)))
+        edit(data) {
+            this.dataProduk = JSON.parse(JSON.stringify(data))
             this.showModal = true
         },
-        hapus(id) {
+        hapus(data) {
+            const success = () => {
+                this.$swal('Berhasil!', 'Data berhasil dihapus!', 'success')
+                this.showModal = false
+                this.getData()
+            }
+
+            const error = () => {
+                this.$swal('Gagal!', 'Data gagal dihapus!', 'error')
+            }
             this.$swal({
                 title: 'Apakah anda yakin?',
                 text: "Data yang dihapus tidak dapat dikembalikan!",
@@ -55,12 +49,11 @@ export default {
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.dataTable = this.dataTable.filter((data) => data.id !== id)
-                    this.$swal(
-                        'Terhapus!',
-                        'Data berhasil dihapus.',
-                        'success'
-                    )
+                    try {
+                        axios.post('/api/ppic/jadwal_rework/pelaksanaan/delete', data).then(success).catch(error)
+                    } catch (error) {
+                        console.log(error)
+                    }
                 }
             })
         },
@@ -68,6 +61,7 @@ export default {
             const success = () => {
                 this.$swal('Berhasil!', 'Data berhasil disimpan!', 'success')
                 this.showModal = false
+                this.getData()
             }
 
             const error = () => {
@@ -75,20 +69,27 @@ export default {
             }
 
             try {
-               await axios.post('/api/ppic/jadwal_rework/pelaksanaan', data).then(success).catch(error)
+                await axios.post('/api/ppic/jadwal_rework/pelaksanaan', data).then(success).catch(error)
             } catch (error) {
                 console.log(error)
             }
         },
-        simpanedit(data) {
-            this.showModal = false
-            this.$swal({
-                title: 'Berhasil!',
-                text: "Data berhasil disimpan!",
-                icon: 'success',
-                confirmButtonColor: '#00d1b2',
-                confirmButtonText: 'OK'
-            })
+        async simpanedit(data) {
+            const success = () => {
+                this.$swal('Berhasil!', 'Data berhasil disimpan!', 'success')
+                this.showModal = false
+                this.getData()
+            }
+
+            const error = () => {
+                this.$swal('Gagal!', 'Data gagal disimpan!', 'error')
+            }
+
+            try {
+                await axios.put(`/api/ppic/jadwal_rework/pelaksanaan/`, data).then(success).catch(error)
+            } catch (error) {
+                console.log(error)
+            }
         },
         tambah() {
             this.dataProduk = {
@@ -98,6 +99,18 @@ export default {
                 tanggal_selesai: '',
             }
             this.showModal = true
+        },
+        async getData() {
+            try {
+                this.$store.commit('setIsLoading', true)
+                const { data } = await axios.get('/api/ppic/jadwal_rework/pelaksanaan')
+                this.dataTable = data
+                this.renderPaginate = data
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.commit('setIsLoading', false)
+            }
         }
     },
     computed: {
@@ -108,6 +121,9 @@ export default {
                 })
             })
         }
+    },
+    mounted() {
+        this.getData()
     }
 }
 </script>
@@ -115,7 +131,7 @@ export default {
     <div>
         <modalRework v-if="showModal" :dataProduk="dataProduk" :showModal="showModal" @closeModal="showModal = false"
             :maxDate="monthYears" @tambah="simpan" @edit="simpanedit" />
-        <h1 class="title">Perencanaan Jadwal Perakitan Rework</h1>
+        <h1 class="title">Pelaksanaan Jadwal Perakitan Rework</h1>
         <div class="notification is-primary">
             Penyusunan jadwal perakitan rework
         </div>

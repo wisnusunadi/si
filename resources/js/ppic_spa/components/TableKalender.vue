@@ -24,8 +24,8 @@ export default {
         edit(data) {
             this.$emit('edit', data)
         },
-        hapus(id) {
-            this.$emit('hapus', id)
+        hapus(data) {
+            this.$emit('hapus', data)
         }
     },
     computed: {
@@ -67,7 +67,7 @@ export default {
                         </span>
                         &nbsp;
                         <span>
-                            <i class="fas fa-trash pointerHand" @click="hapus(data.id)"></i>
+                            <i class="fas fa-trash pointerHand" @click="hapus(data)"></i>
                         </span>
                     </td>
                     <td v-for="date in getDatesMonthNow" :key="date"

@@ -115,9 +115,14 @@ class PpicController extends Controller
             foreach($data as $d){
                 $obj[] = array(
                     'id' => $d->id,
+                    'urutan' => $d->urutan,
+                    'produk_reworks_id' => $d->produk_reworks_id,
                     'tanggal_mulai' => $d->tanggal_mulai,
                     'tanggal_selesai' => $d->tanggal_selesai,
-                    'nama' => $d->ProdukRw->nama,
+                    'produk_id' => [
+                        'id' => $d->ProdukRw->id,
+                        'label' => $d->ProdukRw->nama,
+                    ],
                     'jumlah' => $d->jumlah
                 );
             }
@@ -156,8 +161,8 @@ class PpicController extends Controller
             foreach($data as $d){
                 JadwalPerakitanRw::where('id', $d->id)
                             ->update([
-                                'tanggal_mulai' => $request->tgl_mulai,
-                                'tanggal_selesai' => $request->tgl_selesai,
+                                'tanggal_mulai' => $request->tanggal_mulai,
+                                'tanggal_selesai' => $request->tanggal_selesai,
                                 'jumlah' => $request->jumlah
                         ]);
             }

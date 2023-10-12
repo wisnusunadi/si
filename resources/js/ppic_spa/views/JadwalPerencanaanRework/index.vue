@@ -65,17 +65,24 @@ export default {
             } catch (error) {
                 console.log(error)
             }
-            
+
         },
-        simpanedit(data) {
-            this.showModal = false
-            this.$swal({
-                title: 'Berhasil!',
-                text: "Data berhasil disimpan!",
-                icon: 'success',
-                confirmButtonColor: '#00d1b2',
-                confirmButtonText: 'OK'
-            })
+        async simpanedit(data) {
+            const success = () => {
+                this.$swal('Berhasil!', 'Data berhasil disimpan!', 'success')
+                this.showModal = false
+                this.getData()
+            }
+
+            const error = () => {
+                this.$swal('Gagal!', 'Data gagal disimpan!', 'error')
+            }
+
+            try {
+                await axios.put(`/api/ppic/jadwal_rework/perencanaan/`, data).then(success).catch(error)
+            } catch (error) {
+                console.log(error)
+            }
         },
         tambah() {
             this.dataProduk = {
@@ -84,6 +91,35 @@ export default {
                 tanggal_selesai: '',
             }
             this.showModal = true
+        },
+        hapus(data) {
+            const success = () => {
+                this.$swal('Berhasil!', 'Data berhasil dihapus!', 'success')
+                this.showModal = false
+                this.getData()
+            }
+
+            const error = () => {
+                this.$swal('Gagal!', 'Data gagal dihapus!', 'error')
+            }
+            this.$swal({
+                title: 'Apakah anda yakin?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#00d1b2',
+                cancelButtonColor: '#ff3860',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    try {
+                        axios.post('/api/ppic/jadwal_rework/perencanaan/delete', data).then(success).catch(error)
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+            })
         },
         async getData() {
             try {
@@ -115,7 +151,7 @@ export default {
 <template>
     <div v-if="!this.$store.state.isLoading">
         <modalRework v-if="showModal" :dataProduk="dataProduk" :showModal="showModal" @closeModal="showModal = false"
-            @tambah="simpan" @edit="simpanedit" :maxDate="monthYears" />
+            @tambah="simpan" @edit="simpanedit" @hapus="hapus(data)" :maxDate="monthYears" />
         <h1 class="title">Perencanaan Jadwal Perakitan Rework</h1>
         <div class="notification is-primary">
             Penyusunan jadwal perakitan rework
