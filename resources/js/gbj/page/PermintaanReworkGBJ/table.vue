@@ -1,18 +1,42 @@
 <script>
+import formPermintaan from './formPermintaan'
 export default {
-    props: ['dataTable']
+    components: {
+        formPermintaan,
+    },
+    props: ['dataTable'],
+    data() {
+        return {
+            dataSelected: {},
+            showModal: false,
+        }
+    },
+    methods: {
+        detail(data) {
+            this.dataSelected = JSON.parse(JSON.stringify(data));
+            this.showModal = true;
+            this.$nextTick(() => {
+                $('.modalPermintaanRework').modal('show');
+            });
+        }
+    },
 }
 </script>
 <template>
     <div>
-        <table class="table">
+        <formPermintaan v-if="showModal" :headerData="dataSelected" @closeModal="showModal = false" />
+        <table class="table text-center">
             <thead>
                 <tr>
-                    <th>Tanggal Mulai</th>
-                    <th>Tanggal Selesai</th>
-                    <th>Nama Produk</th>
-                    <th>Jumlah</th>
-                    <th>Aksi</th>
+                    <th rowspan="2">Tanggal Mulai</th>
+                    <th rowspan="2">Tanggal Selesai</th>
+                    <th rowspan="2">Nama Produk</th>
+                    <th colspan="2">Jumlah</th>
+                    <th rowspan="2">Aksi</th>
+                </tr>
+                <tr>
+                    <th>Selesai</th>
+                    <th>Belum Selesai</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,9 +44,10 @@ export default {
                     <td>{{ dateFormat(data.tanggal_mulai) }}</td>
                     <td>{{ dateFormat(data.tanggal_selesai) }}</td>
                     <td>{{ data.nama_produk }}</td>
-                    <td>{{ data.jumlah }}</td>
+                    <td>{{ data.jumlah_selesai }}</td>
+                    <td>{{ data.jumlah_belum_selesai }}</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary">
+                        <button class="btn btn-sm btn-outline-primary" @click="detail(data)">
                             <i class="fas fa-eye"></i>
                             Detail
                         </button>

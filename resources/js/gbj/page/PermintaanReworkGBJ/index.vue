@@ -28,14 +28,16 @@ export default {
                     tanggal_mulai: '2023-10-01',
                     tanggal_selesai: '2023-10-31',
                     nama_produk: 'Produk 1',
-                    jumlah: 100,
+                    jumlah_selesai: 50,
+                    jumlah_belum_selesai: 22,
                 },
                 {
                     id: 2,
                     tanggal_mulai: '2023-10-01',
                     tanggal_selesai: '2023-10-31',
                     nama_produk: 'Produk 2',
-                    jumlah: 100,
+                    jumlah_selesai: 50,
+                    jumlah_belum_selesai: 26,
                 }
             ],
             renderPaginate: [],
