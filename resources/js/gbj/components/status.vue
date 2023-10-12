@@ -4,10 +4,10 @@ export default {
     methods: {
         statusProses(status) {
             switch (status) {
-                case 'Proses':
+                case 'menunggu':
                     return 'badge-warning'
                     break;
-            
+
                 default:
                     return 'badge-primary'
                     break;
@@ -15,10 +15,10 @@ export default {
         },
         statusText(status) {
             switch (status) {
-                case 'Proses':
+                case 'menunggu':
                     return 'Menunggu Proses Gudang'
                     break;
-            
+
                 default:
                     return 'Permintaan Baru'
                     break;

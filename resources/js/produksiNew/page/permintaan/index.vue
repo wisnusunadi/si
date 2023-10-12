@@ -2,6 +2,7 @@
 import Header from '../../components/header.vue'
 import Table from './table.vue';
 import Pagination from '../../components/pagination.vue';
+import axios from 'axios';
 export default {
     components: {
         Table,
@@ -21,24 +22,7 @@ export default {
                     link: '#'
                 },
             ],
-            dataTable: [
-                {
-                    id: 1,
-                    tanggal_mulai: '2023-10-01',
-                    tanggal_selesai: '2023-10-31',
-                    nama_produk: 'Produk 1',
-                    status: 'menunggu',
-                    jumlah: 100,
-                },
-                {
-                    id: 2,
-                    tanggal_mulai: '2023-10-01',
-                    tanggal_selesai: '2023-10-31',
-                    nama_produk: 'Produk 2',
-                    status: 'new',
-                    jumlah: 100,
-                }
-            ],
+            dataTable: [],
             search: '',
             renderPaginate: [],
         }
@@ -47,6 +31,17 @@ export default {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true);
+                const { data } = await axios.get('/api/prd/rw/belum_kirim');
+                this.dataTable = data;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.$store.dispatch('setLoading', false);
+            }
+        }
     },
     computed: {
         filteredDalamProses() {
@@ -57,10 +52,13 @@ export default {
             });
         },
     },
+    mounted() {
+        this.getData();
+    }
 }
 </script>
 <template>
-    <div>
+    <div v-if="!this.$store.state.loading">
         <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="card">
             <div class="card-body">
@@ -69,7 +67,7 @@ export default {
                         <input type="text" v-model="search" class="form-control" placeholder="Cari...">
                     </div>
                 </div>
-                <Table :dataTable="renderPaginate" />
+                <Table :dataTable="renderPaginate" @refresh="getData"/>
                 <pagination :filteredDalamProses="filteredDalamProses"
                     @updateFilteredDalamProses="updateFilteredDalamProses" />
             </div>

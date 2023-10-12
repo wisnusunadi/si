@@ -1,10 +1,28 @@
 <script>
+import modalDetailSeri from '../modalDetail'
 export default {
+    components: {
+        modalDetailSeri
+    },
+    data() {
+        return {
+            detailSeri: false,
+        }
+    },
     props: ['dataTable'],
+    methods: {
+        detailNoseriProduk(id) {
+            this.detailSeri = true;
+            this.$nextTick(() => {
+                $('.modalDetailSeri').modal('show');
+            });
+        }
+    },
 }
 </script>
 <template>
     <div>
+        <modalDetailSeri v-if="detailSeri" @closeModal="detailSeri = false" />
         <table class="table">
             <thead>
                 <tr>
@@ -20,26 +38,26 @@ export default {
                     <td>{{ dateFormat(data.tanggal) }}</td>
                     <td>{{ data.checker }}</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-info" @click="detailNoseriProduk(data.noseri)">
+                        <button class="btn btn-sm btn-outline-info" @click="detailNoseriProduk(data.id)">
                             <i class="fa fa-info-circle"></i> Detail No. Seri Produk
                         </button>
-                        <button class="btn btn-sm btn-outline-warning" @click="editNoseriProduk(data.noseri)">
+                        <button class="btn btn-sm btn-outline-warning" @click="editNoseriProduk(data.id)">
                             <i class="fa fa-pencil"></i> Edit No. Seri Produk
                         </button>
-                        <button class="btn btn-sm btn-outline-danger" @click="detailNoseriProduk(data.noseri)">
+                        <button class="btn btn-sm btn-outline-danger" >
                             <i class="fa fa-trash"></i> Hapus No. Seri Produk
                         </button>
                         <br>
-                        <button class="btn btn-sm btn-outline-info my-1" @click="lihatNoseri(data.noseri)">
+                        <button class="btn btn-sm btn-outline-info my-1" >
                             <i class="fa fa-eye"></i> Lihat No. Seri
                         </button>
-                        <button class="btn btn-sm btn-outline-primary my-1" @click="cetakNoseri(data.noseri)">
+                        <button class="btn btn-sm btn-outline-primary my-1" @click="cetakNoseri(data.id)">
                             <i class="fa fa-print"></i> Cetak No. Seri
                         </button> <br>
-                        <button class="btn btn-sm btn-outline-info" @click="lihatNoseri(data.noseri)">
+                        <button class="btn btn-sm btn-outline-info" @click="lihatNoseri(data.id)">
                             <i class="fa fa-eye"></i> Lihat Packing List
                         </button>
-                        <button class="btn btn-sm btn-outline-primary" @click="cetakPackingList(data.noseri)">
+                        <button class="btn btn-sm btn-outline-primary" @click="cetakPackingList(data.id)">
                             <i class="fa fa-print"></i> Cetak Packing List
                         </button>
                     </td>
