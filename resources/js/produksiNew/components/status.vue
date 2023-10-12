@@ -4,7 +4,7 @@ export default {
     methods: {
         statusProses(status) {
             switch (status) {
-                case 'menunggu':
+                case 'Proses':
                     return 'badge-warning'
                     break;
             
@@ -15,7 +15,7 @@ export default {
         },
         statusText(status) {
             switch (status) {
-                case 'menunggu':
+                case 'Proses':
                     return 'Menunggu Proses Gudang'
                     break;
             

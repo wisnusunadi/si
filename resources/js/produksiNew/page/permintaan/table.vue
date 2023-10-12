@@ -46,16 +46,16 @@ export default {
             </thead>
             <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, index) in dataTable" :key="index">
-                    <td>{{ dateFormat(data.tanggal_mulai) }}</td>
-                    <td>{{ dateFormat(data.tanggal_selesai) }}</td>
-                    <td>{{ data.nama_produk }}</td>
-                    <td>{{ data.jumlah_selesai }}</td>
-                    <td>{{ data.jumlah_belum_selesai }}</td>
+                    <td>{{ dateFormat(data.tgl_mulai) }}</td>
+                    <td>{{ dateFormat(data.tgl_selesai) }}</td>
+                    <td>{{ data.nama }}</td>
+                    <td>{{ data.selesai }}</td>
+                    <td>{{ data.belum }}</td>
                     <td>
                         <status :status="data.status" />
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-outline-info" v-if="data.status != 'menunggu'"
+                        <button class="btn btn-sm btn-outline-info" v-if="data.status != 'Proses'"
                             @click="kirim(data.id)">
                             <i class="fas fa-paper-plane"></i>
                             Kirim
