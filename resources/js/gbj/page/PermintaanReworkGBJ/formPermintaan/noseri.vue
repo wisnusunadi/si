@@ -23,9 +23,9 @@ export default {
         },
         selectNoSeri(noseri) {
             if (this.produk.noseri) {
-                if (this.produk.noseri.find((data) => data.no_seri === noseri.no_seri)) {
+                if (this.produk.noseri.find((data) => data.noseri === noseri.noseri)) {
                     this.produk.noseri = this.produk.noseri.filter(
-                        (data) => data.no_seri !== noseri.no_seri
+                        (data) => data.noseri !== noseri.noseri
                     );
                     this.$refs.checkAll.checked = false;
                 } else {
@@ -90,7 +90,7 @@ export default {
             if (this.produk.noseri.length > this.produk.belum) {
                 this.$swal(
                     "Peringatan",
-                    "Jumlah nomor seri tidak boleh lebih dari jumlah produk",
+                    "Jumlah nomor seri tidak boleh lebih dari jumlah produk yang belum dikirim",
                     "warning"
                 );
                 return;
@@ -139,44 +139,52 @@ export default {
                     <div class="spinner-border" role="status" v-if="loading">
                         <span class="sr-only">Loading...</span>
                     </div>
-                    <table class="table" v-else>
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input type="checkbox" @click="checkAll" ref="checkAll" />
-                                </th>
-                                <th>No. Seri</th>
-                                <th>Variasi</th>
-                            </tr>
-                        </thead>
-                        <tbody v-if="renderPaginate.length > 0">
-                            <tr v-for="(data, index) in renderPaginate" :key="index">
-                                <td>
-                                    <input type="checkbox" ref="noseri" :checked="produk.noseri &&
-                                        produk.noseri.find(
-                                            (item) =>
-                                                item.no_seri == data.no_seri
-                                        )
-                                        " @click="selectNoSeri(data)" />
-                                </td>
-                                <td>{{ data.noseri }}</td>
-                                <td>{{ data.variasi }}</td>
-                            </tr>
-                        </tbody>
-                        <tbody v-else>
-                            <tr>
-                                <td colspan="5" class="text-center">
-                                    Data tidak ditemukan
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses
-                        " />
+                    <div v-else>
+                        <div class="d-flex bd-highlight">
+                            <div class="p-2 flex-grow-1 bd-highlight"><button class="btn btn-primary">Pilih No Seri Via Text</button></div>
+                            <div class="p-2 bd-highlight">
+                                <input type="text" class="form-control" v-model="search" placeholder="Cari No Seri" />
+                            </div>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" @click="checkAll" ref="checkAll" />
+                                    </th>
+                                    <th>No. Seri</th>
+                                    <th>Variasi</th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="renderPaginate.length > 0">
+                                <tr v-for="(data, index) in renderPaginate" :key="index">
+                                    <td>
+                                        <input type="checkbox" ref="noseri" :checked="produk.noseri &&
+                                            produk.noseri.find(
+                                                (item) =>
+                                                    item.noseri == data.noseri
+                                            )
+                                            " @click="selectNoSeri(data)" />
+                                    </td>
+                                    <td>{{ data.noseri }}</td>
+                                    <td>{{ data.variasi }}</td>
+                                </tr>
+                            </tbody>
+                            <tbody v-else>
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        Data tidak ditemukan
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses
+                            " />
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-primary" @click="simpan">Simpan</button>
                 </div>
             </div>
         </div>

@@ -40,6 +40,16 @@ export default {
                 console.log(error);
             }
         },
+        simpanSeri(produk) {
+            let index = this.dataTable.findIndex((data) => data.nama === produk.nama);
+            this.dataTable[index] = JSON.parse(JSON.stringify(produk));
+            this.closeModalSeri();
+            // make spacing on this.search
+            this.search = "&nbsp;";
+            setTimeout(() => {
+                this.search = "";
+            }, 1);
+        },
         selectProduk(data) {
             this.produkSelected = JSON.parse(JSON.stringify(data));
             this.showSeri = true;
@@ -65,9 +75,9 @@ export default {
 </script>
 <template>
     <div>
-        <noseri :produk="produkSelected" v-if="showSeri" @closeModal="closeModalSeri" />
-        <div class="modal fade modalPermintaanRework" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
-            aria-labelledby="modelTitleId" aria-hidden="true">
+        <noseri :produk="produkSelected" v-if="showSeri" @closeModal="closeModalSeri" @simpan="simpanSeri" />
+        <div class="modal fade modalPermintaanRework" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -136,8 +146,7 @@ export default {
                                             <td>{{ data.jumlah }}</td>
                                             <td>{{ data.belum }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-primary"
-                                                    @click="selectProduk(data)">
+                                                <button type="button" class="btn btn-primary" @click="selectProduk(data)">
                                                     <i class="fa fa-qrcode"></i>
                                                     Nomor Seri
                                                 </button>
