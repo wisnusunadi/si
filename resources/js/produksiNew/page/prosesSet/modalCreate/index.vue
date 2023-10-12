@@ -4,6 +4,7 @@ export default {
         return {
             noseri: [],
             hasilGenerate: null,
+            isDisable: false,
         }
     },
     methods: {
@@ -25,7 +26,17 @@ export default {
             }
         },
         generateSeri() {
-            this.hasilGenerate = Math.floor(Math.random() * 10000000000000000);
+            if (!this.isDisable) {
+                this.hasilGenerate = Math.floor(Math.random() * 10000000000000000);
+                this.isDisable = true;
+            }
+            
+        },
+        resetModal() {
+            this.noseri = [];
+            this.generateNoSeri();
+            this.hasilGenerate = null;
+            this.isDisable = false;
         }
     },
     mounted() {
@@ -70,7 +81,7 @@ export default {
                                         <tr v-for="(data, idx) in noseri" :key="idx">
                                             <td>
                                                 <input type="text" class="form-control" v-model="data.seri"
-                                                    @input="autoTab($event, idx)" ref="noseri">
+                                                    @input="autoTab($event, idx)" ref="noseri" :disabled="isDisable">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -125,7 +136,7 @@ export default {
                         <button class="btn btn-success" @click="generateSeri">Generate</button>
                     </div>
                     <div class="p-2 bd-highlight ml-auto">
-                        <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
+                        <button type="button" class="btn btn-danger" @click="resetModal">Reset</button>
                     </div>
                 </div>
             </div>

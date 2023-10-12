@@ -2,7 +2,7 @@
 import Header from '../../../components/header.vue';
 import pagination from '../../../components/pagination.vue';
 import Table from './table.vue';
-import ModalCreate from '../modal';
+import ModalCreate from '../modalCreate';
 export default {
     components: {
         Header,
