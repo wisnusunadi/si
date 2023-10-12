@@ -1,9 +1,11 @@
 <script>
 import pagination from "../../../components/pagination.vue";
 import axios from "axios";
+import seriviatext from "./seriviatext.vue";
 export default {
     components: {
         pagination,
+        seriviatext,
     },
     props: ['produk'],
     data() {
@@ -12,6 +14,8 @@ export default {
             renderPaginate: [],
             noseri: [],
             loading: false,
+            showmodalviatext: false,
+            isScan: false,
         }
     },
     methods: {
@@ -108,6 +112,65 @@ export default {
             } finally {
                 this.checkNoSeriCheckAll();
             }
+        },
+        showSeriText() {
+            this.showmodalviatext = true
+            this.$nextTick(() => {
+                $('.modalChecked').modal('show')
+                $('.modalSeri').modal('hide')
+            })
+        },
+        closeModalViaText() {
+            this.showmodalviatext = false
+            this.$nextTick(() => {
+                $('.modalSeri').modal('show')
+            })
+        },
+        submit(noseri) {
+            // split noseri by comma or space or tab
+            if (this.produk.noseri == undefined) {
+                this.produk.noseri = [];
+            }
+            let noseriarray = noseri.split(/[\n, \t]/);
+            for (let i = 0; i < noseriarray.length; i++) {
+                this.noseri.find((x) => {
+                    if (x.noseri == noseriarray[i]) {
+                        this.produk.noseri.push(x);
+                    }
+                });
+            }
+            if (this.produk.noseri.length == this.noseri.length) {
+                this.checkallvalue = true;
+            } else {
+                this.checkallvalue = false;
+            }
+        },
+        autoSelect() {
+            if (this.isScan) {
+                if (this.produk.noseri == undefined) {
+                    this.produk.noseri = [];
+                }
+
+                this.noseri.find((x) => {
+                    if (x.noseri == this.search) {
+                        if (this.produk.noseri.find((y) => y.noseri == this.search)) {
+                            this.produk.noseri = this.produk.noseri.filter(
+                                (y) => y.noseri !== this.search
+                            );
+                        } else {
+                            this.produk.noseri.push(x);
+                        }
+                    }
+                });
+
+                this.search = "";
+
+                if (this.produk.noseri.length == this.noseri.length) {
+                    this.checkallvalue = true;
+                } else {
+                    this.checkallvalue = false;
+                }
+            }
         }
     },
     computed: {
@@ -125,66 +188,80 @@ export default {
 }
 </script>
 <template>
-    <div class="modal fade modalSeri" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detail Produk</h5>
-                    <button type="button" class="close" @click="closeModal">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="spinner-border" role="status" v-if="loading">
-                        <span class="sr-only">Loading...</span>
+    <div>
+        <seriviatext v-if="showmodalviatext" @close="closeModalViaText" @submit="submit" />
+        <div class="modal fade modalSeri" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detail Produk</h5>
+                        <button type="button" class="close" @click="closeModal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div v-else>
-                        <div class="d-flex bd-highlight">
-                            <div class="p-2 flex-grow-1 bd-highlight"><button class="btn btn-primary">Pilih No Seri Via Text</button></div>
-                            <div class="p-2 bd-highlight">
-                                <input type="text" class="form-control" v-model="search" placeholder="Cari No Seri" />
-                            </div>
+                    <div class="modal-body">
+                        <div class="spinner-border" role="status" v-if="loading">
+                            <span class="sr-only">Loading...</span>
                         </div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <input type="checkbox" @click="checkAll" ref="checkAll" />
-                                    </th>
-                                    <th>No. Seri</th>
-                                    <th>Variasi</th>
-                                </tr>
-                            </thead>
-                            <tbody v-if="renderPaginate.length > 0">
-                                <tr v-for="(data, index) in renderPaginate" :key="index">
-                                    <td>
-                                        <input type="checkbox" ref="noseri" :checked="produk.noseri &&
-                                            produk.noseri.find(
-                                                (item) =>
-                                                    item.noseri == data.noseri
-                                            )
-                                            " @click="selectNoSeri(data)" />
-                                    </td>
-                                    <td>{{ data.noseri }}</td>
-                                    <td>{{ data.variasi }}</td>
-                                </tr>
-                            </tbody>
-                            <tbody v-else>
-                                <tr>
-                                    <td colspan="5" class="text-center">
-                                        Data tidak ditemukan
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses
-                            " />
+                        <div v-else>
+                            <div class="d-flex bd-highlight">
+                                <div class="p-2 flex-grow-1 bd-highlight"><button class="btn btn-primary"
+                                        @click="showSeriText">Pilih No Seri Via
+                                        Text</button>
+                                    <br>
+                                    <div class="custom-control custom-switch my-3">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch1"
+                                            :checked="isScan" @click="isScan = !isScan">
+                                        <label class="custom-control-label" for="customSwitch1">Scan Nomor Seri
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="p-2 bd-highlight">
+                                    <input type="text" class="form-control" v-model="search" placeholder="Cari No Seri"
+                                        @keyup="autoSelect" />
+                                </div>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" @click="checkAll" ref="checkAll" />
+                                        </th>
+                                        <th>No. Seri</th>
+                                        <th>Variasi</th>
+                                    </tr>
+                                </thead>
+                                <tbody v-if="renderPaginate.length > 0">
+                                    <tr v-for="(data, index) in renderPaginate" :key="index">
+                                        <td>
+                                            <input type="checkbox" ref="noseri" :checked="produk.noseri &&
+                                                produk.noseri.find(
+                                                    (item) =>
+                                                        item.noseri == data.noseri
+                                                )
+                                                " @click="selectNoSeri(data)" />
+                                        </td>
+                                        <td>{{ data.noseri }}</td>
+                                        <td>{{ data.variasi }}</td>
+                                    </tr>
+                                </tbody>
+                                <tbody v-else>
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            Data tidak ditemukan
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses
+                                " />
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                    <button type="button" class="btn btn-primary" @click="simpan">Simpan</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
+                        <button type="button" class="btn btn-primary" @click="simpan">Simpan</button>
+                    </div>
                 </div>
             </div>
         </div>
