@@ -324,7 +324,7 @@ Route::prefix('/tfp')->group(function () {
 Route::prefix('/prd')->group(function () {
     Route::prefix('/rw')->group(function () {
         Route::get('/belum_kirim', [ProduksiController::class, 'belum_kirim_rw']);
-        Route::get('/sudah_kirim', [ProduksiController::class, 'sudah_kirim_rw']);
+        Route::get('/proses', [ProduksiController::class, 'proses_rw']);
         Route::post('/permintaan', [ProduksiController::class, 'permintaan_rw']);
     });
     Route::get('/dashboard', [ProduksiController::class, 'dashboard']);
