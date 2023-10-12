@@ -18,6 +18,7 @@ use App\Models\GudangBarangJadiHis;
 use App\Models\JadwalPerakitan;
 use App\Models\JadwalPerakitanRw;
 use App\Models\JadwalRakitNoseri;
+use App\Models\JadwalRakitNoseriRw;
 use App\Models\Layout;
 use App\Models\LogSurat;
 use App\Models\NoseriBarangJadi;
@@ -59,29 +60,67 @@ use Illuminate\Support\Str;
 use Mockery\Undefined;
 use stdClass;
 
+
 class GudangController extends Controller
 {
+    function kirim_permintaan(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+           // dd($obj);
+            foreach($obj->produk as $p){
+                for ($j = 0; $j < count($p->seri); $j++) {
+                    JadwalRakitNoseriRw::create([
+                        'jadwal_id' => $p->id,
+                        'noseri_id' => $p->seri[$j]->id,
+                        'noseri' => $p->seri[$j]->noseri,
+                        'status' => 11
+                    ]);
+
+                    NoseriBarangJadi::where('id',  $p->seri[$j]->id)
+                    ->update([
+                        'is_ready' => 1,
+                        'used_by' => $p->id,
+                    ]);
+                }
+            }
+
+            SystemLog::create([
+                'tipe' => 'GBJ',
+                'subjek' => 'Kirim Permintaan Rework',
+                'response' => json_encode($request->all())
+            ]);
+
+
+
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 404,
+                'message' => 'Transaksi Update Gagal' . $th,
+            ], 500);
+        }
+
+    }
+
     function belum_kirim_rw_seri($id)
     {
 
-        $data = NoseriBarangJadi::whereHas('gudang',function($q) use($id){
-            $q->where('produk_id',$id);
-        })
+        $data = NoseriBarangJadi::
+        select('noseri_barang_jadi.id','noseri_barang_jadi.noseri','gdg_barang_jadi.nama as variasi')
+        ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
         ->where('noseri_barang_jadi.is_ready', '0')
+        ->where('gdg_barang_jadi.produk_id', $id)
         ->whereNull('noseri_barang_jadi.used_by')
         ->get();
-        // $jumlah_tf = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
-        // $data = JadwalPerakitanRw::
-        // addSelect([
-        //     'ctfgbj' => function ($q) {
-        //         $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
-        //             ->from('jadwal_rakit_noseri_rw')
-        //             ->whereColumn('jadwal_rakit_noseri_rw.jadwal_id', 'jadwal_perakitan_rw.id');
-        //     },
-        //         ])
-        // ->havingRaw('ctfgbj != jadwal_perakitan_rw.jumlah')
-        // ->where('urutan',$request->urutan)
-        // ->where('produk_reworks_id',$request->produk_reworks_id)->get();
 
         if($data->isEmpty()){
           $obj = array();
@@ -90,7 +129,7 @@ class GudangController extends Controller
               $obj[] = array(
                 'id' => $d->id,
                 'noseri' => $d->noseri,
-                'variasi' => $d->gudang->nama
+                'variasi' => $d->variasi
 
               );
             }
