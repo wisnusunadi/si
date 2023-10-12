@@ -16,6 +16,7 @@ use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
 use App\Models\JadwalPerakitan;
+use App\Models\JadwalPerakitanRw;
 use App\Models\JadwalRakitNoseri;
 use App\Models\Layout;
 use App\Models\LogSurat;
@@ -60,6 +61,132 @@ use stdClass;
 
 class GudangController extends Controller
 {
+    function belum_kirim_rw_seri($id)
+    {
+
+        $data = NoseriBarangJadi::whereHas('gudang',function($q) use($id){
+            $q->where('produk_id',$id);
+        })
+        ->where('noseri_barang_jadi.is_ready', '0')
+        ->whereNull('noseri_barang_jadi.used_by')
+        ->get();
+        // $jumlah_tf = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
+        // $data = JadwalPerakitanRw::
+        // addSelect([
+        //     'ctfgbj' => function ($q) {
+        //         $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
+        //             ->from('jadwal_rakit_noseri_rw')
+        //             ->whereColumn('jadwal_rakit_noseri_rw.jadwal_id', 'jadwal_perakitan_rw.id');
+        //     },
+        //         ])
+        // ->havingRaw('ctfgbj != jadwal_perakitan_rw.jumlah')
+        // ->where('urutan',$request->urutan)
+        // ->where('produk_reworks_id',$request->produk_reworks_id)->get();
+
+        if($data->isEmpty()){
+          $obj = array();
+        }else{
+            foreach($data as $d){
+              $obj[] = array(
+                'id' => $d->id,
+                'noseri' => $d->noseri,
+                'variasi' => $d->gudang->nama
+
+              );
+            }
+        }
+       return response()->json($obj);
+
+    }
+    function belum_kirim_rw_produk(Request $request)
+    {
+        $jumlah_tf = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
+        $data = JadwalPerakitanRw::
+        addSelect([
+            'ctfgbj' => function ($q) {
+                $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
+                    ->from('jadwal_rakit_noseri_rw')
+                    ->whereColumn('jadwal_rakit_noseri_rw.jadwal_id', 'jadwal_perakitan_rw.id');
+            },
+                ])
+        ->havingRaw('ctfgbj != jadwal_perakitan_rw.jumlah')
+        ->where('urutan',$request->urutan)
+        ->where('produk_reworks_id',$request->produk_reworks_id)->get();
+
+        if($data->isEmpty()){
+          $obj = array();
+        }else{
+            foreach($data as $d){
+              $obj[] = array(
+                'id' => $d->id,
+                'produk_id' => $d->produk_id,
+                'nama' => $d->Produk->nama,
+                'belum' => $d->jumlah - $d->ctfgbj,
+                'jumlah' => $d->jumlah
+              );
+            }
+        }
+        return response()->json($obj);
+
+    }
+    function belum_kirim_rw()
+    {
+        $data = JadwalPerakitanRw::
+        addSelect([
+         'ctfgbj' => function ($q) {
+             $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
+                 ->from('jadwal_perakitan_rw as jp')
+                 ->leftJoin('jadwal_rakit_noseri_rw', 'jp.id', '=', 'jadwal_rakit_noseri_rw.jadwal_id')
+                 ->whereColumn('jp.urutan', 'jadwal_perakitan_rw.urutan')
+                 ->whereColumn('jp.produk_reworks_id', 'jadwal_perakitan_rw.produk_reworks_id');
+         },
+         'cset' => function ($q) {
+             $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) * jadwal_perakitan_rw.jumlah ')
+                 ->from('detail_produks_rw')
+                 ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
+         },
+             ])
+            ->havingRaw('ctfgbj != cset')
+             ->where('state', 18)
+             ->where('status_tf', 16)
+             ->groupBy('urutan')->get();
+         if($data->isempty()){
+            $obj = array();
+
+         }else{
+
+
+             foreach($data as $d){
+
+                 switch ($d->status_tf) {
+                     case "11":
+                         $status =  "Belum Dikirim";
+                         break;
+                     case "16":
+                         $status = "Proses";
+                         break;
+                     default:
+                         $status = "Error";
+                 }
+
+
+                 $obj[] = array(
+                     'id' => $d->id,
+                     'urutan' => $d->urutan,
+                     'produk_reworks_id' => $d->produk_reworks_id,
+                     'tgl_mulai' => $d->tanggal_mulai,
+                     'tgl_selesai' => $d->tanggal_selesai,
+                     'nama' => $d->ProdukRw->nama,
+                     'jumlah' => $d->jumlah,
+                     'status' => $status,
+                     'belum' => $d->cset - $d->ctfgbj,
+                     'selesai' => $d->ctfgbj
+                 );
+             }
+         }
+
+         return response()->json($obj);
+    }
     function updateStokGudang()
     {
         // $d = NoseriBarangJadi::whereHas('gudang', function ($q) use ($id) {

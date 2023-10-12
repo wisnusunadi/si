@@ -9,6 +9,7 @@ use App\Models\Divisi;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
 use App\Models\JadwalPerakitan;
+use App\Models\JadwalPerakitanRw;
 use App\Models\JadwalRakitNoseri;
 use App\Models\NoseriBarangJadi;
 use App\Models\NoseriTGbj;
@@ -25,6 +26,87 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ProduksiController extends Controller
 {
+    function permintaan_rw(Request $request)
+    {
+        $jumlah_tf = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
+        $data = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->get();
+
+        if($jumlah_tf > 0){
+            return response()->json([
+                'status' => 200,
+                'message' => 'Gagal Di ubah',
+            ], 500);
+        }else{
+            foreach($data as $d){
+                JadwalPerakitanRw::where('id', $d->id)
+                            ->update([
+                                'status_tf' => 16
+                        ]);
+            }
+        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Berhasil',
+        ], 200);
+
+    }
+
+    function belum_kirim_rw()
+    {
+        $data = JadwalPerakitanRw::
+       addSelect([
+        'ctfgbj' => function ($q) {
+            $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
+                ->from('jadwal_perakitan_rw as jp')
+                ->leftJoin('jadwal_rakit_noseri_rw', 'jp.id', '=', 'jadwal_rakit_noseri_rw.jadwal_id')
+                ->whereColumn('jp.urutan', 'jadwal_perakitan_rw.urutan')
+                ->whereColumn('jp.produk_reworks_id', 'jadwal_perakitan_rw.produk_reworks_id');
+        },
+        'cset' => function ($q) {
+            $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) * jadwal_perakitan_rw.jumlah ')
+                ->from('detail_produks_rw')
+                ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
+        },
+            ])
+           ->havingRaw('ctfgbj != cset')
+            ->where('state', 18)->groupBy('urutan')->get();
+        if($data->isempty()){
+           $obj = array();
+
+        }else{
+
+
+            foreach($data as $d){
+
+                switch ($d->status_tf) {
+                    case "11":
+                        $status =  "Belum Dikirim";
+                        break;
+                    case "16":
+                        $status = "Proses";
+                        break;
+                    default:
+                        $status = "Error";
+                }
+
+
+                $obj[] = array(
+                    'id' => $d->id,
+                    'urutan' => $d->urutan,
+                    'produk_reworks_id' => $d->produk_reworks_id,
+                    'tgl_mulai' => $d->tanggal_mulai,
+                    'tgl_selesai' => $d->tanggal_selesai,
+                    'nama' => $d->ProdukRw->nama,
+                    'jumlah' => $d->jumlah,
+                    'status' => $status,
+                    'belum' => $d->cset - $d->ctfgbj,
+                    'selesai' => $d->ctfgbj
+                );
+            }
+        }
+
+        return response()->json($obj);
+    }
     function CreateTFItem(Request $request)
     {
         try {

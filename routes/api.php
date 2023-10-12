@@ -35,6 +35,24 @@ Route::prefix('/master')->group(function () {
 });
 
 Route::prefix('/ppic')->group(function () {
+    Route::prefix('/jadwal_rework')->group(function () {
+        Route::prefix('/perencanaan')->group(function () {
+            Route::post('/', [App\Http\Controllers\PpicController::class, 'create_data_perakitan_rework_perencanaan']);
+            Route::get('/', [App\Http\Controllers\PpicController::class, 'show_perencanaan_rework']);
+            Route::get('/{id}', [App\Http\Controllers\PpicController::class, 'edit_ppic_rework']);
+            Route::put('/', [App\Http\Controllers\PpicController::class, 'update_ppic_rework']);
+            Route::post('/delete', [App\Http\Controllers\PpicController::class, 'delete_ppic_rework']);
+        });
+
+        Route::prefix('/pelaksanaan')->group(function () {
+            Route::post('/', [App\Http\Controllers\PpicController::class, 'create_data_perakitan_rework_pelaksanaan']);
+            Route::get('/', [App\Http\Controllers\PpicController::class, 'show_pelaksanaan_rework']);
+            Route::get('/{id}', [App\Http\Controllers\PpicController::class, 'edit_ppic_rework']);
+            Route::put('/', [App\Http\Controllers\PpicController::class, 'update_ppic_rework']);
+            Route::post('/delete', [App\Http\Controllers\PpicController::class, 'delete_ppic_rework']);
+        });
+
+    });
     Route::post('/update_pwd', [App\Http\Controllers\Auth\ResetPasswordController::class, 'updatePwd'])->middleware('jwt.verify');
     Route::post('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data'])->middleware('jwt.verify');
     Route::post('/master_stok/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_stok'])->middleware('jwt.verify');
@@ -44,7 +62,8 @@ Route::prefix('/ppic')->group(function () {
     Route::get('/datatables/perakitan', [App\Http\Controllers\PpicController::class, 'get_datatables_data_perakitan']);
     Route::get('/datatables/perakitandetail/{id}', [App\Http\Controllers\PpicController::class, 'get_datatables_data_perakitan_detail'])->middleware('jwt.verify');
     Route::get('/data/rencana_perakitan', [App\Http\Controllers\PpicController::class, 'get_data_perakitan_rencana'])->middleware('jwt.verify');
-    Route::get('/data/gbj', [App\Http\Controllers\PpicController::class, 'get_data_barang_jadi'])->middleware('jwt.verify');
+    Route::get('/data/gbj', [App\Http\Controllers\PpicController::class, 'get_data_barang_jadi']);
+    Route::get('/data/produkidgbj', [App\Http\Controllers\PpicController::class, 'get_data_produk_id_gbj']);
     Route::get('/data/so', [App\Http\Controllers\PpicController::class, 'get_data_so']);
     Route::get('/data/so2', [PpicController::class, 'get_data_so2']);
     Route::get('/data/so/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_data_so_detail']);
@@ -89,6 +108,11 @@ Route::prefix('/customer')->group(function () {
 });
 
 Route::prefix('/produk')->group(function () {
+    Route::prefix('/rw')->group(function () {
+        Route::get('/select', [App\Http\Controllers\MasterController::class, 'select_parent_rw']);
+        Route::get('/select/{id}', [App\Http\Controllers\MasterController::class, 'select_item_rw']);
+        });
+
     Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_produk']);
     Route::get('variasi', [App\Http\Controllers\MasterController::class, 'get_data_produk_variasi']);
     Route::post('create', [App\Http\Controllers\MasterController::class, 'create_produk']);
@@ -166,6 +190,11 @@ Route::prefix('/laporan')->group(function () {
 });
 
 Route::prefix('/gbj')->group(function () {
+    Route::prefix('/rw')->group(function () {
+        Route::get('/belum_kirim', [GudangController::class, 'belum_kirim_rw']);
+        Route::get('/belum_kirim/produk/', [GudangController::class, 'belum_kirim_rw_produk']);
+        Route::get('/belum_kirim/seri/{id}', [GudangController::class, 'belum_kirim_rw_seri']);
+    });
     Route::post('update_stok', [App\Http\Controllers\GudangController::class, 'updateStokGudang']);
     Route::post('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
     Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
@@ -173,7 +202,6 @@ Route::prefix('/gbj')->group(function () {
     Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
     Route::post('/get', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
     Route::post('data-so', [GudangController::class, 'getSODone']);
-
     Route::get('/modal_data/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj']);
     Route::get('/modal_data_non/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj_non']);
     Route::get('/modal_data_seri/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj_seri']);
@@ -227,7 +255,6 @@ Route::prefix('/dashboard-gbj')->group(function () {
     Route::get('/stok/1020', [GudangController::class, 'getProdukstok1020'])->middleware('jwt.verify');
     Route::get('/stok/59', [GudangController::class, 'getProdukstok59'])->middleware('jwt.verify');
     Route::get('/stok/14', [GudangController::class, 'getProdukstok14'])->middleware('jwt.verify');
-
     Route::post('/in/36/h', [GudangController::class, 'h4']);
     Route::post('/in/612/h', [GudangController::class, 'h5']);
     Route::post('/in/1236/h', [GudangController::class, 'h6']);
@@ -294,6 +321,10 @@ Route::prefix('/tfp')->group(function () {
 });
 
 Route::prefix('/prd')->group(function () {
+    Route::prefix('/rw')->group(function () {
+        Route::get('/belum_kirim', [ProduksiController::class, 'belum_kirim_rw']);
+        Route::post('/permintaan', [ProduksiController::class, 'permintaan_rw']);
+    });
     Route::get('/dashboard', [ProduksiController::class, 'dashboard']);
     Route::get('/allproduk', [ProduksiController::class, 'getAllProduk']);
     Route::post('/grafikproduk', [ProduksiController::class, 'getGrafikProduk']);

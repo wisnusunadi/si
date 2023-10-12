@@ -31,6 +31,10 @@ mix.js('resources/js/direksi/index.js', 'public/native/js/direksi.js').vue();
 mix.js('resources/js/produksi/app.js', 'public/native/js/produksi.js').vue();
 mix.js('resources/js/emiindo/index.js', 'public/native/js/emiindo.js').vue();
 mix.js('resources/js/it/app.js', 'public/native/js/it.js').vue();
+<<<<<<< HEAD
 mix.js('resources/js/gbj/app.js', 'public/native/js/gbj.js').vue();
+=======
+mix.js('resources/js/produksiNew/app.js', 'public/native/js/produksinew.js').vue();
+>>>>>>> 8021e3b714c250bfd2951dfe51d957c293b57945
 
 // mix.browserSync("http://localhost:8000")
