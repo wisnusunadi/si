@@ -63,6 +63,9 @@ export default {
         cetakSeri() {
             // open new tab
             window.open(`/test/cetakseri/${this.hasilGenerate}`, '_blank');
+        },
+        viewPackingList() {
+            window.open(`/test/cetakpackinglist/1`, '_blank');
         }
     },
     mounted() {
@@ -148,7 +151,7 @@ export default {
                                             </div>
                                             <div class="p-2 bd-highlight">
                                                 <!-- bentuk pdf untuk view nya -->
-                                                <button class="btn btn-sm btn-outline-info">
+                                                <button class="btn btn-sm btn-outline-info" @click="viewPackingList">
                                                     View Packing List <i class="fa fa-eye"></i>
                                                 </button>
                                             </div>
