@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\NoseriRakitExport;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
+use App\Models\DetailProdukRw;
 use App\Models\Divisi;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
@@ -26,6 +27,52 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ProduksiController extends Controller
 {
+    function generate_rw(Request $request)
+    {
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+
+       // Extract 'seri' values using array_map
+        $seriValues = array_map(function ($item) {
+            return $item->seri;
+        }, $obj->noseri);
+
+        $getIdSeri = NoseriBarangJadi::whereIN('noseri',$seriValues)->pluck('id')->toArray();
+        //Cek Noseri Ada
+        if(count($getIdSeri) == count($seriValues)){
+
+        $prdValues = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+        ->whereIN('noseri_barang_jadi.id', $getIdSeri)
+        ->pluck('gdg_barang_jadi.produk_id')->toArray();
+
+        $getIdprd = DetailProdukRw::where('detail_produks_rw.produk_parent_id', $request->produk_reworks_id)
+        ->pluck('detail_produks_rw.produk_id')->toArray();
+            //Cek Produk yang Diinput Sesuai
+            if(in_array($getIdprd,$prdValues)){
+            //Cek Noseri Sudah Pernah Diinput
+            //Cek Maksimal Noseri
+            //Generate
+                    dd('gagal');
+
+            }else{
+
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  'Gagal Ditambahkan',
+                ], 200);
+
+
+            }
+
+
+        }else{
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Gagal Ditambahkan',
+            ], 200);
+        }
+
+    }
+
     function permintaan_rw(Request $request)
     {
         $jumlah_tf = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
@@ -136,6 +183,11 @@ class ProduksiController extends Controller
                 ->from('detail_produks_rw')
                 ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
         },
+        'set' => function ($q) {
+            $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) ')
+                ->from('detail_produks_rw')
+                ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
+        },
             ])
            ->havingRaw('cset != csiap and cproses > 0')
             ->where('state', 18)->groupBy('urutan')->get();
@@ -165,7 +217,8 @@ class ProduksiController extends Controller
                     'status' => $status,
                     'jumlah' => $d->cset,
                     'belum' => $d->cset - $d->csiap,
-                    'selesai' => $d->csiap
+                    'selesai' => $d->csiap,
+                    'set' => $d->set
                 );
             }
         }
