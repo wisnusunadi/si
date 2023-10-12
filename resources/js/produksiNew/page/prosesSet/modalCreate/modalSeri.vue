@@ -5,6 +5,11 @@ export default {
     components: {
         barcode,
     },
+    methods: {
+        closeModal() {
+            $('.modalSeri').modal('hide');
+        }
+    },
 }
 </script>
 <template>
@@ -13,20 +18,21 @@ export default {
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
+                    <h5 class="modal-title">Nomor Seri</h5>
                     <button type="button" class="close" @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <!-- generate seri with barcode -->
-                    <barcode :text="hasilGenerate">
-                        Show this if the rendering fails.
-                    </barcode>
+                    <div class="d-flex justify-content-center">
+                        <barcode :text="hasilGenerate">
+                            Show this if the rendering fails.
+                        </barcode>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="closeModal">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                 </div>
             </div>
         </div>

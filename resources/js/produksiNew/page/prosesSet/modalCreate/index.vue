@@ -48,16 +48,16 @@ export default {
             this.isDisable = false;
         },
         lihatSeri() {
-            $('.modalSeri').modal('hide');
             this.detailSeri = true;
+            $('.modalSet').modal('hide');
             this.$nextTick(() => {
-                $('.modalDetailSeri').modal('show');
+                $('.modalSeri').modal('show');
             });
         },
         closeModalSeri() {
             this.detailSeri = false;
             this.$nextTick(() => {
-                $('.modalSeri').modal('show');
+                $('.modalSet').modal('show');
             });
         }
     },
