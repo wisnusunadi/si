@@ -57,6 +57,37 @@ export default {
                 $(".modalPermintaanRework").modal("hide");
                 $(".modalSeri").modal("show");
             });
+        },
+        transfer() {
+            const dataKirim = []
+            // push datatable contains object key noseri
+            this.dataTable.forEach((data) => {
+                if (data.noseri) {
+                    dataKirim.push(data);
+                }
+            });
+
+            if (dataKirim.length === 0) {
+                return this.$swal('Gagal', 'Data tidak ada yang dipilih nomor seri', 'error');
+            }
+
+            const success = () => {
+                this.$swal('Berhasil', 'Data berhasil ditransfer', 'success');
+                this.closeModal();
+                this.$emit('refresh');
+            }
+
+            const error = () => {
+                this.$swal('Gagal', 'Data gagal ditransfer', 'error');
+            }
+            try {
+                axios.post('/api/gbj/rw/belum_kirim', {
+                    ...this.headerData,
+                    produk: dataKirim
+                }).then(success).catch(error);
+            } catch (error) {
+                console.log(error);
+            }
         }
     },
     computed: {
@@ -161,7 +192,7 @@ export default {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                        <button type="button" class="btn btn-success">Transfer</button>
+                        <button type="button" class="btn btn-success" @click="transfer">Transfer</button>
                     </div>
                 </div>
             </div>

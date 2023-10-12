@@ -18,13 +18,16 @@ export default {
             this.$nextTick(() => {
                 $('.modalPermintaanRework').modal('show');
             });
-        }
+        },
+        refresh() {
+            this.$emit('refresh');
+        },
     },
 }
 </script>
 <template>
     <div>
-        <formPermintaan v-if="showModal" :headerData="dataSelected" @closeModal="showModal = false" />
+        <formPermintaan v-if="showModal" :headerData="dataSelected" @closeModal="showModal = false" @refresh="refresh" />
         <table class="table text-center">
             <thead>
                 <tr>
