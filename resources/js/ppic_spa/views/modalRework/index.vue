@@ -209,7 +209,9 @@ export default {
                     </div> -->
                 </section>
                 <footer class="modal-card-foot">
-                    <button class="button is-success" @click="simpan">Tambah</button>
+                    <button class="button is-success" @click="simpan">
+                        Simpan
+                    </button>
                 </footer>
             </div>
         </div>

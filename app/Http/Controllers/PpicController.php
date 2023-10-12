@@ -156,8 +156,8 @@ class PpicController extends Controller
             foreach($data as $d){
                 JadwalPerakitanRw::where('id', $d->id)
                             ->update([
-                                'tanggal_mulai' => $request->tgl_mulai,
-                                'tanggal_selesai' => $request->tgl_selesai,
+                                'tanggal_mulai' => $request->tanggal_mulai,
+                                'tanggal_selesai' => $request->tanggal_selesai,
                                 'jumlah' => $request->jumlah
                         ]);
             }
