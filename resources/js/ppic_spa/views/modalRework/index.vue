@@ -53,7 +53,7 @@ export default {
         },
         simpan() {
             const ceknull = Object.values(this.dataProduk).filter((item) => item === null || item === '')
-            if(this.tanggalMulaiError || this.tanggalSelesaiError || this.stokGBJError || ceknull.length > 0) {
+            if(this.tanggalMulaiError || this.tanggalSelesaiError || ceknull.length > 0) {
                 this.$swal({
                     title: 'Gagal!',
                     text: 'Data yang anda masukkan tidak valid',
