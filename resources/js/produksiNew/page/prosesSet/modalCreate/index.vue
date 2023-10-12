@@ -1,8 +1,8 @@
 <script>
-import ModalDetailSeri from '../modalDetail'
+import modalSeri from './modalSeri.vue'
 export default {
     components: {
-        ModalDetailSeri,
+        modalSeri,
     },
     data() {
         return {
@@ -48,7 +48,7 @@ export default {
             this.isDisable = false;
         },
         lihatSeri() {
-            $('.modalSet').modal('hide');
+            $('.modalSeri').modal('hide');
             this.detailSeri = true;
             this.$nextTick(() => {
                 $('.modalDetailSeri').modal('show');
@@ -57,7 +57,7 @@ export default {
         closeModalSeri() {
             this.detailSeri = false;
             this.$nextTick(() => {
-                $('.modalSet').modal('show');
+                $('.modalSeri').modal('show');
             });
         }
     },
@@ -79,7 +79,7 @@ export default {
 </script>
 <template>
     <div>
-        <modalDetailSeri v-if="detailSeri" @closeModal="closeModalSeri" />
+        <modalSeri v-if="detailSeri" @closeModal="closeModalSeri" :hasilGenerate="hasilGenerate" />
         <div class="modal fade modalSet" data-backdrop="static" data-keyboard="false" id="modelId" tabindex="-1"
             role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
