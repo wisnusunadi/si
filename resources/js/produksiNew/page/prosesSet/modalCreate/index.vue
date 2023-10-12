@@ -135,7 +135,7 @@ export default {
                                         </div>
 
                                         <!-- dokumen -->
-                                        <label for="">Dokumen Packing List Hasil Generate</label>
+                                        <label for="">Dokumen Packing List</label>
                                         <div class="d-flex bd-highlight">
                                             <div class="p-2 flex-grow-1 bd-highlight">
                                                 <button class="btn btn-sm btn-outline-primary">

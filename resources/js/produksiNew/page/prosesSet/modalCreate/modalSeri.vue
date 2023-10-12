@@ -8,6 +8,9 @@ export default {
     methods: {
         closeModal() {
             $('.modalSeri').modal('hide');
+            this.$nextTick(() => {
+                this.$emit('closeModal');
+            });
         }
     },
 }
