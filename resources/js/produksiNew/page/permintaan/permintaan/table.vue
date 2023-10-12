@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios';
-import status from '../../components/status.vue';
+import status from '../../../components/status.vue';
 export default {
     props: ['dataTable'],
     components: {
