@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import status from '../../components/status.vue';
 export default {
     props: ['dataTable'],
@@ -6,7 +7,16 @@ export default {
         status,
     },
     methods: {
-        kirim(id) {
+        kirim(data) {
+            const success = () => {
+                this.$swal('Berhasil!', 'Data berhasil dikirim', 'success')
+                this.$emit('refresh')
+            }
+
+            const error = () => {
+                this.$swal('Gagal!', 'Data gagal dikirim', 'error')
+            }
+
             this.$swal({
                 title: 'Apakah anda yakin?',
                 text: "Anda akan mengirim data permintaan ini",
@@ -16,10 +26,10 @@ export default {
                 cancelButtonColor: '#d33'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.$swal({
-                        title: 'Berhasil!',
-                        text: 'Data berhasil dikirim',
-                        icon: 'success',
+                    axios.post('/api/prd/rw/permintaan', data).then(() => {
+                        success()
+                    }).catch(() => {
+                        error()
                     })
                 }
             })
@@ -56,7 +66,7 @@ export default {
                     </td>
                     <td>
                         <button class="btn btn-sm btn-outline-info" v-if="data.status != 'Proses'"
-                            @click="kirim(data.id)">
+                            @click="kirim(data)">
                             <i class="fas fa-paper-plane"></i>
                             Kirim
                         </button>
