@@ -107,7 +107,7 @@ class ProduksiController extends Controller
 
         return response()->json($obj);
     }
-    function sudah_kirim_rw()
+    function proses_rw()
     {
         $data = JadwalPerakitanRw::
        addSelect([
@@ -118,13 +118,26 @@ class ProduksiController extends Controller
                 ->whereColumn('jp.urutan', 'jadwal_perakitan_rw.urutan')
                 ->whereColumn('jp.produk_reworks_id', 'jadwal_perakitan_rw.produk_reworks_id');
         },
+        'csiap' => function ($q) {
+            $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
+                ->from('jadwal_perakitan_rw as jp')
+                ->leftJoin('jadwal_rakit_noseri_rw', 'jp.id', '=', 'jadwal_rakit_noseri_rw.jadwal_id')
+                ->where('jadwal_rakit_noseri_rw.status', 12)
+                ->whereColumn('jp.urutan', 'jadwal_perakitan_rw.urutan')
+                ->whereColumn('jp.produk_reworks_id', 'jadwal_perakitan_rw.produk_reworks_id');
+        },
+        'cproses' => function ($q) {
+            $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
+                ->from('jadwal_rakit_noseri_rw')
+                ->where('jadwal_rakit_noseri_rw.status', 11);
+        },
         'cset' => function ($q) {
             $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) * jadwal_perakitan_rw.jumlah ')
                 ->from('detail_produks_rw')
                 ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
         },
             ])
-        //    ->havingRaw('ctfgbj != cset')
+           ->havingRaw('cset != csiap and cproses > 0')
             ->where('state', 18)->groupBy('urutan')->get();
         if($data->isempty()){
            $obj = array();
@@ -142,7 +155,6 @@ class ProduksiController extends Controller
                         $status = "Error";
                 }
 
-
                 $obj[] = array(
                     'id' => $d->id,
                     'urutan' => $d->urutan,
@@ -150,10 +162,10 @@ class ProduksiController extends Controller
                     'tgl_mulai' => $d->tanggal_mulai,
                     'tgl_selesai' => $d->tanggal_selesai,
                     'nama' => $d->ProdukRw->nama,
-                    'jumlah' => $d->jumlah,
                     'status' => $status,
-                    'belum' => $d->cset - $d->ctfgbj,
-                    'selesai' => $d->ctfgbj
+                    'jumlah' => $d->cset,
+                    'belum' => $d->cset - $d->csiap,
+                    'selesai' => $d->csiap
                 );
             }
         }
