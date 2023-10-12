@@ -16,4 +16,8 @@ class JadwalPerakitanRw extends Model
     {
         return $this->belongsTo(Produk::class, 'produk_reworks_id');
     }
+    public function Produk()
+    {
+        return $this->belongsTo(Produk::class, 'produk_id');
+    }
 }
