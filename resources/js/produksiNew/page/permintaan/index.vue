@@ -28,7 +28,8 @@ export default {
                     tanggal_selesai: '2023-10-31',
                     nama_produk: 'Produk 1',
                     status: 'menunggu',
-                    jumlah: 100,
+                                        jumlah_selesai: 50,
+                    jumlah_belum_selesai: 50,
                 },
                 {
                     id: 2,
@@ -36,7 +37,8 @@ export default {
                     tanggal_selesai: '2023-10-31',
                     nama_produk: 'Produk 2',
                     status: 'new',
-                    jumlah: 100,
+                                        jumlah_selesai: 50,
+                    jumlah_belum_selesai: 50,
                 }
             ],
             search: '',

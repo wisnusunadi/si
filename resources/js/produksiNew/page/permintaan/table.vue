@@ -29,15 +29,19 @@ export default {
 </script>
 <template>
     <div>
-        <table class="table">
+        <table class="table text-center">
             <thead>
                 <tr>
-                    <th>Tanggal Mulai</th>
-                    <th>Tanggal Selesai</th>
-                    <th>Nama Produk</th>
-                    <th>Jumlah</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
+                    <th rowspan="2">Tanggal Mulai</th>
+                    <th rowspan="2">Tanggal Selesai</th>
+                    <th rowspan="2">Nama Produk</th>
+                    <th colspan="2">Jumlah</th>
+                    <th rowspan="2">Status</th>
+                    <th rowspan="2">Aksi</th>
+                </tr>
+                <tr>
+                    <th>Selesai</th>
+                    <th>Belum Selesai</th>
                 </tr>
             </thead>
             <tbody v-if="dataTable.length > 0">
@@ -45,12 +49,14 @@ export default {
                     <td>{{ dateFormat(data.tanggal_mulai) }}</td>
                     <td>{{ dateFormat(data.tanggal_selesai) }}</td>
                     <td>{{ data.nama_produk }}</td>
-                    <td>{{ data.jumlah }}</td>
+                    <td>{{ data.jumlah_selesai }}</td>
+                    <td>{{ data.jumlah_belum_selesai }}</td>
                     <td>
                         <status :status="data.status" />
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-outline-info" v-if="data.status != 'menunggu'" @click="kirim(data.id)">
+                        <button class="btn btn-sm btn-outline-info" v-if="data.status != 'menunggu'"
+                            @click="kirim(data.id)">
                             <i class="fas fa-paper-plane"></i>
                             Kirim
                         </button>

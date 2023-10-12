@@ -63,7 +63,6 @@ export default {
 </script>
 <template>
     <div>
-        <Modal
         <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="card">
             <div class="card-body">
