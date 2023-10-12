@@ -28,11 +28,10 @@ export default {
                 </div>
                 <div class="modal-body">
                     <!-- generate seri with barcode -->
-                    <div class="d-flex justify-content-center">
-                        <barcode :text="hasilGenerate">
-                            Show this if the rendering fails.
-                        </barcode>
-                    </div>
+                    <span class="company">Elitech</span>
+                    <barcode :text="hasilGenerate">
+                        Show this if the rendering fails.
+                    </barcode>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
@@ -41,3 +40,10 @@ export default {
         </div>
     </div>
 </template>
+<style>
+.company {
+    font-family: monospace;
+    font-size: 20px;
+    margin-bottom: -5px;
+}
+</style>

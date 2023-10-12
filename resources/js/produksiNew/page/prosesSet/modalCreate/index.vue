@@ -59,6 +59,10 @@ export default {
             this.$nextTick(() => {
                 $('.modalSet').modal('show');
             });
+        },
+        cetakSeri() {
+            // open new tab
+            window.open(`/test/cetakseri/${this.hasilGenerate}`, '_blank');
         }
     },
     mounted() {
@@ -122,7 +126,7 @@ export default {
                                         </div>
                                         <div class="d-flex bd-highlight">
                                             <div class="p-2 flex-grow-1 bd-highlight">
-                                                <button class="btn btn-sm btn-outline-primary">
+                                                <button class="btn btn-sm btn-outline-primary" @click="cetakSeri">
                                                     Cetak No. Seri <i class="fa fa-print"></i>
                                                 </button>
                                             </div>
