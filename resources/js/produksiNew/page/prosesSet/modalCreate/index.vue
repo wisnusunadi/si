@@ -26,7 +26,11 @@ export default {
             }
         },
         generateSeri() {
-            if (!this.isDisable) {
+            const cek = this.noseri.filter((data) => {
+                return data.seri.trim() === '';
+            });
+
+            if (!this.isDisable && cek.length === 0) {
                 this.hasilGenerate = Math.floor(Math.random() * 10000000000000000);
                 this.isDisable = true;
             }
@@ -53,7 +57,6 @@ export default {
             deep: true
         }
     }
-
 }
 </script>
 <template>
@@ -136,7 +139,7 @@ export default {
                         <button class="btn btn-success" @click="generateSeri">Generate</button>
                     </div>
                     <div class="p-2 bd-highlight ml-auto">
-                        <button type="button" class="btn btn-danger" @click="resetModal">Reset</button>
+                        <button type="button" class="btn btn-primary" @click="resetModal">Reset</button>
                     </div>
                 </div>
             </div>
