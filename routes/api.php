@@ -49,7 +49,7 @@ Route::prefix('/ppic')->group(function () {
             Route::get('/', [App\Http\Controllers\PpicController::class, 'show_pelaksanaan_rework']);
             Route::get('/{id}', [App\Http\Controllers\PpicController::class, 'edit_ppic_rework']);
             Route::put('/', [App\Http\Controllers\PpicController::class, 'update_ppic_rework']);
-            Route::delete('/', [App\Http\Controllers\PpicController::class, 'delete_ppic_rework']);
+            Route::post('/delete', [App\Http\Controllers\PpicController::class, 'delete_ppic_rework']);
         });
 
     });

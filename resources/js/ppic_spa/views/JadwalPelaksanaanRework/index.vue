@@ -24,11 +24,20 @@ export default {
         updateFilteredDalamProses(filteredDalamProses) {
             this.renderPaginate = filteredDalamProses
         },
-        edit(id) {
-            this.dataProduk = JSON.parse(JSON.stringify(this.dataTable.find((data) => data.id === id)))
+        edit(data) {
+            this.dataProduk = JSON.parse(JSON.stringify(data))
             this.showModal = true
         },
-        hapus(id) {
+        hapus(data) {
+            const success = () => {
+                this.$swal('Berhasil!', 'Data berhasil dihapus!', 'success')
+                this.showModal = false
+                this.getData()
+            }
+
+            const error = () => {
+                this.$swal('Gagal!', 'Data gagal dihapus!', 'error')
+            }
             this.$swal({
                 title: 'Apakah anda yakin?',
                 text: "Data yang dihapus tidak dapat dikembalikan!",
@@ -40,12 +49,11 @@ export default {
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.dataTable = this.dataTable.filter((data) => data.id !== id)
-                    this.$swal(
-                        'Terhapus!',
-                        'Data berhasil dihapus.',
-                        'success'
-                    )
+                    try {
+                        axios.post('/api/ppic/jadwal_rework/pelaksanaan/delete', data).then(success).catch(error)
+                    } catch (error) {
+                        console.log(error)
+                    }
                 }
             })
         },
@@ -66,15 +74,22 @@ export default {
                 console.log(error)
             }
         },
-        simpanedit(data) {
-            this.showModal = false
-            this.$swal({
-                title: 'Berhasil!',
-                text: "Data berhasil disimpan!",
-                icon: 'success',
-                confirmButtonColor: '#00d1b2',
-                confirmButtonText: 'OK'
-            })
+        async simpanedit(data) {
+            const success = () => {
+                this.$swal('Berhasil!', 'Data berhasil disimpan!', 'success')
+                this.showModal = false
+                this.getData()
+            }
+
+            const error = () => {
+                this.$swal('Gagal!', 'Data gagal disimpan!', 'error')
+            }
+
+            try {
+                await axios.put(`/api/ppic/jadwal_rework/pelaksanaan/`, data).then(success).catch(error)
+            } catch (error) {
+                console.log(error)
+            }
         },
         tambah() {
             this.dataProduk = {
