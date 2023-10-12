@@ -9,6 +9,7 @@ use App\Models\Divisi;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
 use App\Models\JadwalPerakitan;
+use App\Models\JadwalPerakitanRw;
 use App\Models\JadwalRakitNoseri;
 use App\Models\NoseriBarangJadi;
 use App\Models\NoseriTGbj;
@@ -27,7 +28,45 @@ class ProduksiController extends Controller
 {
     function belum_kirim_rw()
     {
-        dd('a');
+        $data = JadwalPerakitanRw::where('state', 18)->groupBy('urutan')->get();
+        if($data->isempty()){
+           $obj = array();
+
+        }else{
+
+
+            foreach($data as $d){
+
+                switch ($d->status_tf) {
+                    case "11":
+                        $status =  "Belum Dikirim";
+                        break;
+                    case "16":
+                        $status = "Proses";
+                        break;
+                    case "12":
+                        $status = "Terisi Sebagian";
+                        break;
+                    case "15":
+                        $status = "Terisi No Seri";
+                        break;
+                    default:
+                        $status = "Error";
+                }
+
+
+                $obj[] = array(
+                    'id' => $d->id,
+                    'tgl_mulai' => $d->tanggal_mulai,
+                    'tgl_selesai' => $d->tanggal_selesai,
+                    'nama' => $d->ProdukRw->nama,
+                    'jumlah' => $d->jumlah,
+                    'status' => $status
+                );
+            }
+        }
+
+        return response()->json($obj);
     }
     function CreateTFItem(Request $request)
     {
