@@ -131,7 +131,7 @@ export default {
     <div>
         <modalRework v-if="showModal" :dataProduk="dataProduk" :showModal="showModal" @closeModal="showModal = false"
             :maxDate="monthYears" @tambah="simpan" @edit="simpanedit" />
-        <h1 class="title">Perencanaan Jadwal Perakitan Rework</h1>
+        <h1 class="title">Pelaksanaan Jadwal Perakitan Rework</h1>
         <div class="notification is-primary">
             Penyusunan jadwal perakitan rework
         </div>
