@@ -22,7 +22,6 @@ export default {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
-
         closeModal() {
             this.$emit("closeModal");
         },
