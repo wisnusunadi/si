@@ -23,7 +23,16 @@ export default {
             })
         },
         closeModalSeri() {
-
+            this.modalSeri = false
+            $('.modalProduk').modal('show')
+        },
+        detailSeri(data) {
+            this.dataSeriSelected = JSON.parse(JSON.stringify(data))
+            this.modalSeri = true
+            $('.modalProduk').modal('hide')
+            this.$nextTick(() => {
+                $('.modalSeri').modal('show')
+            })
         },
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
@@ -50,7 +59,7 @@ export default {
 </script>
 <template>
     <div>
-        <noseri v-if="noseri" :dataSelected="noseri" @closeModal="closeModalSeri" />
+        <noseri v-if="modalSeri" :seriSelected="dataSeriSelected" @closeModal="closeModalSeri" />
         <div class="modal fade modalProduk" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
@@ -111,7 +120,7 @@ export default {
                                             <td>{{ data.nama }}</td>
                                             <td>{{ data.noseri.length }}</td>
                                             <td>
-                                                <button class="btn btn-sm btn-outline-info">
+                                                <button class="btn btn-sm btn-outline-info" @click="detailSeri(data.noseri)">
                                                     <i class="fas fa-qrcode"></i>
                                                     Detail Nomor Seri
                                                 </button>
