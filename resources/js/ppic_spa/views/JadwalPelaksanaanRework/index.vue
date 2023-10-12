@@ -13,22 +13,7 @@ export default {
     data() {
         return {
             search: '',
-            dataTable: [
-                {
-                    id: 1,
-                    nama_produk: 'Produk 1',
-                    jumlah: 10,
-                    tanggal_mulai: '2023-10-03',
-                    tanggal_selesai: '2023-10-10',
-                },
-                {
-                    id: 2,
-                    nama_produk: 'Produk 2',
-                    jumlah: 10,
-                    tanggal_mulai: '2023-10-01',
-                    tanggal_selesai: '2023-11-10',
-                }
-            ],
+            dataTable: [],
             renderPaginate: [],
             monthYears: moment().format('MMMM YYYY'),
             showModal: false,
@@ -68,6 +53,7 @@ export default {
             const success = () => {
                 this.$swal('Berhasil!', 'Data berhasil disimpan!', 'success')
                 this.showModal = false
+                this.getData()
             }
 
             const error = () => {
@@ -75,7 +61,7 @@ export default {
             }
 
             try {
-               await axios.post('/api/ppic/jadwal_rework/pelaksanaan', data).then(success).catch(error)
+                await axios.post('/api/ppic/jadwal_rework/pelaksanaan', data).then(success).catch(error)
             } catch (error) {
                 console.log(error)
             }
@@ -98,6 +84,18 @@ export default {
                 tanggal_selesai: '',
             }
             this.showModal = true
+        },
+        async getData() {
+            try {
+                this.$store.commit('setIsLoading', true)
+                const { data } = await axios.get('/api/ppic/jadwal_rework/pelaksanaan')
+                this.dataTable = data
+                this.renderPaginate = data
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.commit('setIsLoading', false)
+            }
         }
     },
     computed: {
@@ -108,6 +106,9 @@ export default {
                 })
             })
         }
+    },
+    mounted() {
+        this.getData()
     }
 }
 </script>
