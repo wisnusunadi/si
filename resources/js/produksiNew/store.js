@@ -2,7 +2,7 @@ export default {
     // State
     state: {
         loading: false,
-        setSeri: 0,
+        setSeri: null,
     },
     // Mutations
     mutations: {

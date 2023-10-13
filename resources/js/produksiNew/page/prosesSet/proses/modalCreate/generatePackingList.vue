@@ -47,8 +47,8 @@ export default {
                 <tbody v-if="renderPaginate.length > 0">
                     <tr v-for="(data, idx) in renderPaginate" :key="idx">
                         <td>{{ idx + 1 }}</td>
-                        <td>{{ data.nama }}</td>
-                        <td>{{ data.qty }}</td>
+                        <td>{{ `${data.produk} ${data.varian}` }}</td>
+                        <td>1</td>
                         <td>{{ data.noseri }}</td>
                     </tr>
                 </tbody>

@@ -53,7 +53,6 @@ export default {
                     id: id,
                 },
             });
-            this.$store.dispatch('setSeri', set);
         },
         statusReworks(belum, selesai) {
             if (selesai == 0) {
@@ -96,7 +95,7 @@ export default {
                     <td>{{ data.belum }}</td>
                     <td><status :status="statusReworks(data.belum, data.selesai)" /></td>
                     <td>
-                        <button class="btn btn-sm btn-outline-info" @click="detailRework(data.id, data.set)">
+                        <button class="btn btn-sm btn-outline-info" @click="detailRework(data.urutan, data.set)">
                             <i class="fas fa-eye"></i>
                             Detail
                         </button>

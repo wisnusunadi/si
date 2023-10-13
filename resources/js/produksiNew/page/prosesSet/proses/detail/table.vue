@@ -68,8 +68,8 @@ export default {
             <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, idx) in dataTable" :key="idx">
                     <td>{{ data.noseri }}</td>
-                    <td>{{ dateFormat(data.tanggal) }}</td>
-                    <td>{{ data.checker }}</td>
+                    <td>{{ dateFormat(data.tgl_buat) }}</td>
+                    <td>{{ data.packer }}</td>
                     <td>
                         <button class="btn btn-sm btn-outline-info" @click="detailNoseriProduk(data.id)">
                             <i class="fa fa-info-circle"></i> Detail No. Seri Produk
