@@ -55,8 +55,11 @@ export default {
         },
         autoTab(e, idx) {
             if (e.target.value) {
-                if (idx < this.noseri.length - 1) {
-                    this.$refs.noseri[idx + 1].focus();
+                // jika value nya ada 13 digit, maka akan otomatis ke inputan selanjutnya
+                if (e.target.value.length === 13) {
+                    if (idx < this.noseri.length - 1) {
+                        this.$refs.noseri[idx + 1].focus();
+                    }
                 }
             }
         },
@@ -117,6 +120,9 @@ export default {
             if (this.selectSeri?.id) {
                 this.hasilGenerate = this.selectSeri.noseri
             }
+        },
+        enterTest() {
+            console.log('enter');
         }
     },
     mounted() {
@@ -126,8 +132,9 @@ export default {
     watch: {
         noseri: {
             handler(newVal) {
+                // jika inputan terakhir sudah di isi dengan 13 digit, maka akan generate no seri
                 const lastInput = newVal[newVal.length - 1].seri;
-                if (lastInput && lastInput.trim() !== '') {
+                if (lastInput.length === 13) {
                     this.generateSeri();
                 }
             },
@@ -153,7 +160,7 @@ export default {
                         <div class="scrollable">
                             <div class="row">
                                 <div class="col">
-                                    <form @keypress.enter="generateSeri">
+                                    <form @keypress.enter="enterTest">
                                         <table class="table">
                                             <thead>
                                                 <tr>
