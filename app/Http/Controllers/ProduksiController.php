@@ -12,6 +12,7 @@ use App\Models\GudangBarangJadiHis;
 use App\Models\JadwalPerakitan;
 use App\Models\JadwalPerakitanRw;
 use App\Models\JadwalRakitNoseri;
+use App\Models\JadwalRakitNoseriRw;
 use App\Models\NoseriBarangJadi;
 use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
@@ -36,7 +37,12 @@ class ProduksiController extends Controller
             return $item->seri;
         }, $obj->noseri);
 
-        $getIdSeri = NoseriBarangJadi::whereIN('noseri',$seriValues)->pluck('id')->toArray();
+       $getIdSeri = NoseriBarangJadi::
+       Join('jadwal_rakit_noseri_rw', 'jadwal_rakit_noseri_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+       ->where('jadwal_rakit_noseri_rw.status',11)
+       ->whereIN('noseri_barang_jadi.noseri',$seriValues)
+        ->pluck('noseri_barang_jadi.id')->toArray();
+
         //Cek Noseri Ada
         if(count($getIdSeri) == count($seriValues)){
 
@@ -47,23 +53,43 @@ class ProduksiController extends Controller
         $getIdprd = DetailProdukRw::where('detail_produks_rw.produk_parent_id', $request->produk_reworks_id)
         ->pluck('detail_produks_rw.produk_id')->toArray();
             //Cek Produk yang Diinput Sesuai
-            if(in_array($getIdprd,$prdValues)){
-            //Cek Noseri Sudah Pernah Diinput
+                if (empty(array_diff($getIdprd, $prdValues)) && empty(array_diff($prdValues, $getIdprd))) {
             //Cek Maksimal Noseri
             //Generate
-                    dd('gagal');
+            $produk_id = Produk::find($request->produk_reworks_id);
+            $date = Carbon::now();
+            $bulan = strtoupper(dechex($date->format('m')));
+            $tahun = $date->format('Y') % 100;
+
+
+            $max = NoseriBarangJadi::
+            Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+            ->where('gdg_barang_jadi.produk_id',$obj->produk_reworks_id)
+            ->where('noseri_barang_jadi.unit',$produk_id->kode)
+            ->where('noseri_barang_jadi.th',$tahun)
+             ->latest('noseri_barang_jadi.id')->value('noseri_barang_jadi.urut');
+            $max_no = $max + 1;
+
+             $urutan = str_pad($max_no, 6, '0', STR_PAD_LEFT);
+
+                NoseriBarangJadi::create([
+                'gdg_barang_jadi_id' => $produk_id->GudangBarangJadi->first()->id,
+                'unit' => $produk_id->kode,
+                'th' =>   $tahun,
+                'urut' => $max_no,
+                'noseri' => $produk_id->kode.$tahun.$bulan.$urutan,
+                'is_ready' => 0,
+                'is_aktif' => 1
+                ]);
+
+                JadwalRakitNoseriRw::whereIn('noseri_id', $getIdSeri)->update(['status' => 12]);
 
             }else{
-
                 return response()->json([
                     'status' => 200,
                     'message' =>  'Gagal Ditambahkan',
                 ], 200);
-
-
-            }
-
-
+             }
         }else{
             return response()->json([
                 'status' => 200,
@@ -122,9 +148,7 @@ class ProduksiController extends Controller
 
         }else{
 
-
             foreach($data as $d){
-
                 switch ($d->status_tf) {
                     case "11":
                         $status =  "Belum Dikirim";
