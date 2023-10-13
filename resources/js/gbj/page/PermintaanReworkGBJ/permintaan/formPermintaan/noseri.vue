@@ -1,5 +1,5 @@
 <script>
-import pagination from "../../../components/pagination.vue";
+import pagination from "../../../../components/pagination.vue";
 import axios from "axios";
 import seriviatext from "./seriviatext.vue";
 export default {

@@ -1,6 +1,6 @@
 <script>
 import formPermintaan from './formPermintaan'
-import status from '../../components/status.vue';
+import status from '../../../components/status.vue';
 export default {
     components: {
         formPermintaan,
@@ -53,7 +53,7 @@ export default {
                     <th>Belum Selesai</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, index) in dataTable" :key="index">
                     <td>PRD-{{ data.urutan }}</td>
                     <td>{{ data.nama }}</td>
@@ -66,6 +66,11 @@ export default {
                             Detail
                         </button>
                     </td>
+                </tr>
+            </tbody>
+            <tbody v-else>
+                <tr>
+                    <td colspan="6">Tidak ada data</td>
                 </tr>
             </tbody>
         </table>
