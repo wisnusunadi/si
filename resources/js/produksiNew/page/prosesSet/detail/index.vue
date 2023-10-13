@@ -37,13 +37,14 @@ export default {
                 },
                 {
                     id: 2,
-                    noseri: '123456789',
+                    noseri: '987654321',
                     tanggal: '2023-01-01',
                     checker: 'Siska',
                 }
             ],
             renderPaginate: [],
             showModal: false,
+            selectSeri: {},
         }
     },
     methods: {
@@ -52,18 +53,26 @@ export default {
         },
         showModalCreate() {
             this.showModal = true;
+            this.selectSeri = {}
             this.$nextTick(() => {
                 $('.modalSet').modal('show');
             });
         },
         closeModalCreate() {
-                $('.modalSet').modal('hide');
+            $('.modalSet').modal('hide');
 
             this.$nextTick(() => {
-            this.showModal = false;
+                this.showModal = false;
 
             });
         },
+        editNoseriProduk(data) {
+            this.selectSeri = data
+            this.showModal = true;
+            this.$nextTick(() => {
+                $('.modalSet').modal('show');
+            });
+        }
     },
     computed: {
         filteredDalamProses() {
@@ -78,21 +87,21 @@ export default {
 </script>
 <template>
     <div>
-        <ModalCreate v-if="showModal" @closeModal="closeModalCreate" />
+        <ModalCreate v-if="showModal" @closeModal="closeModalCreate" :selectSeri="selectSeri" />
         <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex bd-highlight">
                     <div class="p-2 flex-grow-1 bd-highlight">
                         <button class="btn btn-primary" @click="showModalCreate">
-                            Tambah <i class="fa fa-plus"></i> 
+                            Tambah <i class="fa fa-plus"></i>
                         </button>
                     </div>
                     <div class="p-2 bd-highlight"> <input type="text" v-model="search" class="form-control"
                             placeholder="Cari...">
                     </div>
                 </div>
-                <Table :dataTable="renderPaginate" />
+                <Table :dataTable="renderPaginate" @editNoseriProduk="editNoseriProduk" />
                 <pagination :filteredDalamProses="filteredDalamProses"
                     @updateFilteredDalamProses="updateFilteredDalamProses" />
             </div>

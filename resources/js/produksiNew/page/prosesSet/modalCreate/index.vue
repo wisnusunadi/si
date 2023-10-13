@@ -1,9 +1,10 @@
 <script>
-import ModalDetailSeri from '../modalDetail'
+import modalSeri from './modalSeri.vue'
 export default {
     components: {
-        ModalDetailSeri,
+        modalSeri,
     },
+    props: ['selectSeri'],
     data() {
         return {
             noseri: [],
@@ -48,10 +49,10 @@ export default {
             this.isDisable = false;
         },
         lihatSeri() {
-            $('.modalSet').modal('hide');
             this.detailSeri = true;
+            $('.modalSet').modal('hide');
             this.$nextTick(() => {
-                $('.modalDetailSeri').modal('show');
+                $('.modalSeri').modal('show');
             });
         },
         closeModalSeri() {
@@ -59,10 +60,23 @@ export default {
             this.$nextTick(() => {
                 $('.modalSet').modal('show');
             });
+        },
+        cetakSeri() {
+            // open new tab
+            window.open(`/test/cetakseri/${this.hasilGenerate}`, '_blank');
+        },
+        viewPackingList() {
+            window.open(`/test/cetakpackinglist/1`, '_blank');
+        },
+        mappingEdit() {
+            if (this.selectSeri?.id) {
+                this.hasilGenerate = this.selectSeri.noseri
+            }
         }
     },
     mounted() {
         this.generateNoSeri();
+        this.mappingEdit();
     },
     watch: {
         noseri: {
@@ -79,7 +93,7 @@ export default {
 </script>
 <template>
     <div>
-        <modalDetailSeri v-if="detailSeri" @closeModal="closeModalSeri" />
+        <modalSeri v-if="detailSeri" @closeModal="closeModalSeri" :hasilGenerate="hasilGenerate" />
         <div class="modal fade modalSet" data-backdrop="static" data-keyboard="false" id="modelId" tabindex="-1"
             role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -122,7 +136,7 @@ export default {
                                         </div>
                                         <div class="d-flex bd-highlight">
                                             <div class="p-2 flex-grow-1 bd-highlight">
-                                                <button class="btn btn-sm btn-outline-primary">
+                                                <button class="btn btn-sm btn-outline-primary" @click="cetakSeri">
                                                     Cetak No. Seri <i class="fa fa-print"></i>
                                                 </button>
                                             </div>
@@ -135,7 +149,7 @@ export default {
                                         </div>
 
                                         <!-- dokumen -->
-                                        <label for="">Dokumen Packing List Hasil Generate</label>
+                                        <label for="">Dokumen Packing List</label>
                                         <div class="d-flex bd-highlight">
                                             <div class="p-2 flex-grow-1 bd-highlight">
                                                 <button class="btn btn-sm btn-outline-primary">
@@ -144,7 +158,7 @@ export default {
                                             </div>
                                             <div class="p-2 bd-highlight">
                                                 <!-- bentuk pdf untuk view nya -->
-                                                <button class="btn btn-sm btn-outline-info">
+                                                <button class="btn btn-sm btn-outline-info" @click="viewPackingList">
                                                     View Packing List <i class="fa fa-eye"></i>
                                                 </button>
                                             </div>
@@ -156,7 +170,9 @@ export default {
                     </div>
                     <div class="d-flex bd-highlight mb-3 mx-3">
                         <div class="mr-auto p-2 bd-highlight">
-                            <button class="btn btn-success" @click="generateSeri">Generate</button>
+                            <button class="btn btn-success" @click="generateSeri">
+                                {{ selectSeri?.id ? 'Simpan' : 'Generate' }}
+                            </button>
                         </div>
                         <div class="p-2 bd-highlight ml-auto">
                             <button type="button" class="btn btn-primary" @click="resetModal">Reset</button>

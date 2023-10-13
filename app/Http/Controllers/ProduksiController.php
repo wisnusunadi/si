@@ -24,6 +24,7 @@ use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use PDF;
 
 class ProduksiController extends Controller
 {
@@ -3385,5 +3386,19 @@ class ProduksiController extends Controller
     function export_noseri_produksi(Request $request)
     {
         return Excel::download(new NoseriRakitExport(), 'NoseriPerakitan.xlsx');
+    }
+
+    function cetak_seri($seri) 
+    {
+        // $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper('a4', 'landscape');
+        // return $pdf->stream();
+
+        return view('page.produksi.printreworks.cetakseri', compact('seri'));
+    }
+
+    function cetak_packing_list($id) 
+    {
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakpackinglist', compact('id'))->setPaper('a5', 'portrait');
+        return $pdf->stream();
     }
 }
