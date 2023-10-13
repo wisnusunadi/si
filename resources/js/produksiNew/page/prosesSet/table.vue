@@ -54,7 +54,7 @@ export default {
                 }
             });
         },
-        statusReworks(belum, selesai, jumlah) {
+        statusReworks(belum, selesai) {
             if (selesai == 0) {
                 return 'belum_dikerjakan'
             } else if (selesai > 1) {
@@ -93,7 +93,7 @@ export default {
                     <td>{{ data.nama }}</td>
                     <td>{{ data.selesai }}</td>
                     <td>{{ data.belum }}</td>
-                    <td><status :status="statusReworks(data.belum, data.selesai, data.jumlah)" /></td>
+                    <td><status :status="statusReworks(data.belum, data.selesai)" /></td>
                     <td>
                         <button class="btn btn-sm btn-outline-info" @click="detailRework(data.id)">
                             <i class="fas fa-eye"></i>
