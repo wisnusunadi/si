@@ -4,6 +4,7 @@ export default {
     components: {
         modalSeri,
     },
+    props: ['selectSeri'],
     data() {
         return {
             noseri: [],
@@ -66,10 +67,16 @@ export default {
         },
         viewPackingList() {
             window.open(`/test/cetakpackinglist/1`, '_blank');
+        },
+        mappingEdit() {
+            if (this.selectSeri?.id) {
+                this.hasilGenerate = this.selectSeri.noseri
+            }
         }
     },
     mounted() {
         this.generateNoSeri();
+        this.mappingEdit();
     },
     watch: {
         noseri: {
@@ -163,7 +170,9 @@ export default {
                     </div>
                     <div class="d-flex bd-highlight mb-3 mx-3">
                         <div class="mr-auto p-2 bd-highlight">
-                            <button class="btn btn-success" @click="generateSeri">Generate</button>
+                            <button class="btn btn-success" @click="generateSeri">
+                                {{ selectSeri?.id ? 'Simpan' : 'Generate' }}
+                            </button>
                         </div>
                         <div class="p-2 bd-highlight ml-auto">
                             <button type="button" class="btn btn-primary" @click="resetModal">Reset</button>

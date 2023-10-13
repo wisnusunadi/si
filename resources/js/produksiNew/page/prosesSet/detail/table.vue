@@ -16,7 +16,28 @@ export default {
             this.$nextTick(() => {
                 $('.modalDetailSeri').modal('show');
             });
-        }
+        },
+        hapusNoseriProduk(id) {
+            this.$swal({
+                title: 'Apakah anda yakin?',
+                text: "Anda akan menghapus data no. seri produk ini",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$swal({
+                        title: 'Berhasil!',
+                        text: 'Data berhasil dihapus',
+                        icon: 'success',
+                    })
+                }
+            })
+        },
+        editNoseriProduk(data) {
+            this.$emit('editNoseriProduk', data)
+        },
     },
 }
 </script>
@@ -41,10 +62,10 @@ export default {
                         <button class="btn btn-sm btn-outline-info" @click="detailNoseriProduk(data.id)">
                             <i class="fa fa-info-circle"></i> Detail No. Seri Produk
                         </button>
-                        <button class="btn btn-sm btn-outline-warning" @click="editNoseriProduk(data.id)">
+                        <button class="btn btn-sm btn-outline-warning" @click="editNoseriProduk(data)">
                             <i class="fa fa-pencil"></i> Edit No. Seri Produk
                         </button>
-                        <button class="btn btn-sm btn-outline-danger" >
+                        <button class="btn btn-sm btn-outline-danger" @click="hapusNoseriProduk(data.id)">
                             <i class="fa fa-trash"></i> Hapus No. Seri Produk
                         </button>
                         <br>

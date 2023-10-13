@@ -36,6 +36,7 @@ export default {
         <table class="table text-center">
             <thead>
                 <tr>
+                    <th>No Urut</th>
                     <th>Tanggal Mulai</th>
                     <th>Tanggal Selesai</th>
                     <th>Nama Produk</th>
@@ -46,6 +47,7 @@ export default {
             </thead>
             <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, idx) in dataTable" :key="idx">
+                    <td>PRD-{{ data.urutan }}</td>
                     <td>{{ dateFormat(data.tgl_mulai) }}</td>
                     <td>{{ dateFormat(data.tgl_selesai) }}</td>
                     <td>{{ data.nama }}</td>
