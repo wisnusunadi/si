@@ -61,7 +61,7 @@ export default {
                 <tr>
                     <th>No. Seri</th>
                     <th>Tanggal Dibuat</th>
-                    <th>Checker</th>
+                    <th>Packer</th>
                     <th>Aksi</th>
                 </tr>
             </thead>

@@ -46,13 +46,14 @@ export default {
 
             });
         },
-        detailRework(id) {
+        detailRework(id, set) {
             this.$router.push({
                 name: 'prosesSetReworksDetail',
                 params: {
                     id: id,
-                }
+                },
             });
+            this.$store.dispatch('setSeri', set);
         },
         statusReworks(belum, selesai) {
             if (selesai == 0) {
@@ -95,7 +96,7 @@ export default {
                     <td>{{ data.belum }}</td>
                     <td><status :status="statusReworks(data.belum, data.selesai)" /></td>
                     <td>
-                        <button class="btn btn-sm btn-outline-info" @click="detailRework(data.id)">
+                        <button class="btn btn-sm btn-outline-info" @click="detailRework(data.id, data.set)">
                             <i class="fas fa-eye"></i>
                             Detail
                         </button>

@@ -47,7 +47,7 @@ export default {
             this.$emit('closeModal');
         },
         generateNoSeri() {
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < this.$store.state.setSeri; i++) {
                 this.noseri.push({
                     seri: '',
                 })
