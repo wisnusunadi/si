@@ -28,6 +28,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
+use stdClass;
 
 class ProduksiController extends Controller
 {
@@ -58,6 +59,11 @@ class ProduksiController extends Controller
         return response()->json($obj);
     }
 
+    function hapus_rw($id)
+    {
+        dd('s');
+
+    }
     function generate_rw(Request $request)
     {
          DB::beginTransaction();
@@ -146,6 +152,7 @@ class ProduksiController extends Controller
                     DB::commit();
                     return response()->json([
                         'status' => 200,
+                        'id' =>  $nbj->id,
                         'message' =>  $item,
                     ], 200);
 
@@ -259,7 +266,13 @@ class ProduksiController extends Controller
     function proses_rw_produk($id)
     {
         $data = SeriDetailRw::where('urutan',$id)->get();
-
+        $jadwal = JadwalPerakitanRw::addSelect([
+            'set' => function ($q) {
+                $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) ')
+                    ->from('detail_produks_rw')
+                    ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
+            },
+        ])->where('urutan',$id)->first();
         if($data->isEmpty()){
             $obj = array();
         }else{
@@ -273,8 +286,12 @@ class ProduksiController extends Controller
                 );
             }
         }
-
-        return response()->json($obj);
+        $object = new stdClass();
+        $object->produk_reworks_id = $jadwal->produk_reworks_id;
+        $object->set = $jadwal->set;
+        $object->urutan = $jadwal->id;
+        $object->item = $obj;
+        return response()->json($object);
     }
 
     function proses_rw()
@@ -3510,7 +3527,7 @@ class ProduksiController extends Controller
         return Excel::download(new NoseriRakitExport(), 'NoseriPerakitan.xlsx');
     }
 
-    function cetak_seri($seri) 
+    function cetak_seri($seri)
     {
         // $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper('a4', 'landscape');
         // return $pdf->stream();
@@ -3518,7 +3535,7 @@ class ProduksiController extends Controller
         return view('page.produksi.printreworks.cetakseri', compact('seri'));
     }
 
-    function view_packing_list($id) 
+    function view_packing_list($id)
     {
         // $pdf = PDF::loadview('page.produksi.printreworks.cetakpackinglist', compact('id'))->setPaper('a5', 'portrait');
         // return $pdf->stream();

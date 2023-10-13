@@ -329,6 +329,7 @@ Route::prefix('/prd')->group(function () {
         Route::get('/proses/produk/{id}', [ProduksiController::class, 'proses_rw_produk']);
         Route::post('/permintaan', [ProduksiController::class, 'permintaan_rw']);
         Route::post('/gen', [ProduksiController::class, 'generate_rw']);
+        Route::delete('/hapus/{id}', [ProduksiController::class, 'hapus_rw']);
         Route::get('/pack/{id}', [ProduksiController::class, 'packing_list_rw']);
     });
 
