@@ -1,5 +1,5 @@
 <script>
-import status from '../../components/status.vue';
+import status from '../../../components/status.vue';
 import ModalGenerate from './modalDetail';
 export default {
     props: ['dataTable'],
@@ -53,6 +53,15 @@ export default {
                     id: id,
                 }
             });
+        },
+        statusReworks(belum, selesai) {
+            if (selesai == 0) {
+                return 'belum_dikerjakan'
+            } else if (selesai > 0) {
+                return 'sedang_dikerjakan'
+            } else if (belum == 0) {
+                return 'selesai'
+            }
         }
     },
 }
@@ -63,10 +72,12 @@ export default {
         <table class="table text-center">
             <thead>
                 <tr>
+                    <th rowspan="2">No Urut</th>
                     <th rowspan="2">Tanggal Mulai</th>
                     <th rowspan="2">Tanggal Selesai</th>
                     <th rowspan="2">Nama Produk</th>
                     <th colspan="2">Jumlah</th>
+                    <th rowspan="2">Status</th>
                     <th rowspan="2">Aksi</th>
                 </tr>
                 <tr>
@@ -76,11 +87,13 @@ export default {
             </thead>
             <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, index) in dataTable" :key="index">
-                    <td>{{ dateFormat(data.tanggal_mulai) }}</td>
-                    <td>{{ dateFormat(data.tanggal_selesai) }}</td>
-                    <td>{{ data.nama_produk }}</td>
-                    <td>{{ data.jumlah_selesai }}</td>
-                    <td>{{ data.jumlah_belum_selesai }}</td>
+                    <td>PRD-{{ data.urutan }}</td>
+                    <td>{{ dateFormat(data.tgl_mulai) }}</td>
+                    <td>{{ dateFormat(data.tgl_selesai) }}</td>
+                    <td>{{ data.nama }}</td>
+                    <td>{{ data.selesai }}</td>
+                    <td>{{ data.belum }}</td>
+                    <td><status :status="statusReworks(data.belum, data.selesai)" /></td>
                     <td>
                         <button class="btn btn-sm btn-outline-info" @click="detailRework(data.id)">
                             <i class="fas fa-eye"></i>
