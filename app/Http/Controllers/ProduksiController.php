@@ -3396,9 +3396,17 @@ class ProduksiController extends Controller
         return view('page.produksi.printreworks.cetakseri', compact('seri'));
     }
 
-    function cetak_packing_list($id) 
+    function view_packing_list($id) 
     {
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakpackinglist', compact('id'))->setPaper('a5', 'portrait');
-        return $pdf->stream();
+        // $pdf = PDF::loadview('page.produksi.printreworks.cetakpackinglist', compact('id'))->setPaper('a5', 'portrait');
+        // return $pdf->stream();
+        return view('page.produksi.printreworks.viewpackinglist', compact('id'));
+    }
+
+    function cetak_packing_list($id)
+    {
+        // $pdf = PDF::loadview('page.produksi.printreworks.cetakpackinglist', compact('id'))->setPaper('a5', 'portrait');
+        // return $pdf->stream();
+        return view('page.produksi.printreworks.cetakpackinglist', compact('id'));
     }
 }

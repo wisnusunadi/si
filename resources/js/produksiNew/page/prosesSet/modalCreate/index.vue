@@ -1,8 +1,10 @@
 <script>
 import modalSeri from './modalSeri.vue'
+import generatePackingList from './generatePackingList.vue';
 export default {
     components: {
         modalSeri,
+        generatePackingList
     },
     props: ['selectSeri'],
     data() {
@@ -11,6 +13,33 @@ export default {
             hasilGenerate: null,
             isDisable: false,
             detailSeri: false,
+            noseriGeneratePackingList: [
+                {
+                    nama: 'DIGIT PRO BABY',
+                    qty: 1,
+                    noseri: 'TD90909'
+                },
+                {
+                    nama: 'USB CABLE',
+                    qty: 1,
+                    noseri: 'TD90909'
+                },
+                {
+                    nama: 'DIGIT PRO BABY',
+                    qty: 1,
+                    noseri: 'TD90909'
+                },
+                {
+                    nama: 'USB CABLE',
+                    qty: 1,
+                    noseri: 'TD90909'
+                },
+                {
+                    nama: 'USB CABLE',
+                    qty: 1,
+                    noseri: 'TD90909'
+                }
+            ]
         }
     },
     methods: {
@@ -36,7 +65,20 @@ export default {
                 return data.seri.trim() === '';
             });
 
-            if (!this.isDisable && cek.length === 0) {
+            const noSeriUnique = this.noseri.filter((data, idx) => {
+                return this.noseri.findIndex((data2) => data2.seri === data.seri) === idx;
+            });
+
+            if (noSeriUnique.length !== this.noseri.length) {
+                this.$swal({
+                    title: 'Gagal!',
+                    text: 'No. Seri tidak boleh sama',
+                    icon: 'error',
+                })
+                return;
+            }
+
+            if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
                 this.hasilGenerate = Math.floor(Math.random() * 10000000000000000);
                 this.isDisable = true;
             }
@@ -66,6 +108,9 @@ export default {
             window.open(`/test/cetakseri/${this.hasilGenerate}`, '_blank');
         },
         viewPackingList() {
+            window.open(`/test/viewpackinglist/1`, '_blank');
+        },
+        cetakPackingList() {
             window.open(`/test/cetakpackinglist/1`, '_blank');
         },
         mappingEdit() {
@@ -105,62 +150,68 @@ export default {
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="col">
-                                <form @keypress.enter="generateSeri">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>No. Seri</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(data, idx) in noseri" :key="idx">
-                                                <td>
-                                                    <input type="text" class="form-control" v-model="data.seri"
-                                                        @input="autoTab($event, idx)" ref="noseri" :disabled="isDisable">
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </form>
-                            </div>
-                            <div class="col" v-if="hasilGenerate">
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="">Nomor Seri</label>
-                                        <div class="card nomor-so">
-                                            <div class="card-body">
-                                                <span id="so">{{ hasilGenerate }}</span>
+                        <div class="scrollable">
+                            <div class="row">
+                                <div class="col">
+                                    <form @keypress.enter="generateSeri">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>No. Seri</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(data, idx) in noseri" :key="idx">
+                                                    <td>
+                                                        <input type="text" class="form-control" v-model="data.seri"
+                                                            @input="autoTab($event, idx)" ref="noseri"
+                                                            :disabled="isDisable">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </div>
+                                <div class="col" v-if="hasilGenerate">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="">Nomor Seri</label>
+                                            <div class="card nomor-so">
+                                                <div class="card-body">
+                                                    <span id="so">{{ hasilGenerate }}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="d-flex bd-highlight">
-                                            <div class="p-2 flex-grow-1 bd-highlight">
-                                                <button class="btn btn-sm btn-outline-primary" @click="cetakSeri">
-                                                    Cetak No. Seri <i class="fa fa-print"></i>
-                                                </button>
+                                            <div class="d-flex bd-highlight">
+                                                <div class="p-2 flex-grow-1 bd-highlight">
+                                                    <button class="btn btn-sm btn-outline-primary" @click="cetakSeri">
+                                                        Cetak No. Seri <i class="fa fa-print"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="p-2 bd-highlight">
+                                                    <!-- bentuk modal untuk view nya -->
+                                                    <button class="btn btn-sm btn-outline-info" @click="lihatSeri">
+                                                        View No. Seri <i class="fa fa-eye"></i>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div class="p-2 bd-highlight">
-                                                <!-- bentuk modal untuk view nya -->
-                                                <button class="btn btn-sm btn-outline-info" @click="lihatSeri">
-                                                    View No. Seri <i class="fa fa-eye"></i>
-                                                </button>
-                                            </div>
-                                        </div>
 
-                                        <!-- dokumen -->
-                                        <label for="">Dokumen Packing List</label>
-                                        <div class="d-flex bd-highlight">
-                                            <div class="p-2 flex-grow-1 bd-highlight">
-                                                <button class="btn btn-sm btn-outline-primary">
-                                                    Cetak Packing List <i class="fa fa-print"></i>
-                                                </button>
-                                            </div>
-                                            <div class="p-2 bd-highlight">
-                                                <!-- bentuk pdf untuk view nya -->
-                                                <button class="btn btn-sm btn-outline-info" @click="viewPackingList">
-                                                    View Packing List <i class="fa fa-eye"></i>
-                                                </button>
+                                            <!-- dokumen -->
+                                            <label for="">Dokumen Packing List</label>
+                                            <generatePackingList :dataTable="noseriGeneratePackingList" />
+
+                                            <div class="d-flex bd-highlight">
+                                                <div class="p-2 flex-grow-1 bd-highlight">
+                                                    <button class="btn btn-sm btn-outline-primary"
+                                                        @click="cetakPackingList">
+                                                        Cetak Packing List <i class="fa fa-print"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="p-2 bd-highlight">
+                                                    <!-- bentuk pdf untuk view nya -->
+                                                    <button class="btn btn-sm btn-outline-info" @click="viewPackingList">
+                                                        View Packing List <i class="fa fa-eye"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -210,5 +261,10 @@ export default {
     color: #fff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 18px
+}
+
+.scrollable {
+    height: 500px;
+    overflow-y: scroll;
 }
 </style>

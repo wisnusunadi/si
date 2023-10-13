@@ -505,4 +505,5 @@ Route::view('/uit', 'page.login_page.index');
 Route::namespace('v2')->group(__DIR__ . '/kesehatan/kesehatan.php');
 Route::namespace('lab')->group(__DIR__ . '/inventory/web.php');
 Route::get('/test/cetakseri/{seri}', [ProduksiController::class, 'cetak_seri']);
+Route::get('/test/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);
 Route::get('/test/cetakpackinglist/{id}', [ProduksiController::class, 'cetak_packing_list']);
