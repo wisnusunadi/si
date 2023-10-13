@@ -1,5 +1,5 @@
 <script>
-import status from '../../components/status.vue';
+import status from '../../../components/status.vue';
 import ModalGenerate from './modalDetail';
 export default {
     props: ['dataTable'],

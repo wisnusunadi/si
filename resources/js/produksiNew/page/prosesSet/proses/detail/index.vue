@@ -1,8 +1,8 @@
 <script>
-import Header from '../../../components/header.vue';
-import pagination from '../../../components/pagination.vue';
+import Header from '../../../../components/header.vue';
+import pagination from '../../../../components/pagination.vue';
 import Table from './table.vue';
-import ModalCreate from '../modalCreate';
+import ModalCreate from '../modalCreate/';
 export default {
     components: {
         Header,

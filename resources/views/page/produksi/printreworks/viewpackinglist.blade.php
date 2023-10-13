@@ -1,11 +1,15 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <title>Cetak Packing List</title>
+    <title>View Packing List</title>
 
     <style>
+        body {
+            margin-left: 30%;
+            margin-right: 30%;
+        }
+
         .judul {
             font-family: 'Book Antiqua';
             font-size: 16pt;
@@ -203,14 +207,3 @@
 </body>
 
 </html>
-<script>
-    $(document).ready(function() {
-        setTimeout(() => {
-            window.print();
-        }, 100);
-    });
-    // click cancel close window
-    window.onafterprint = function() {
-        window.close();
-    }
-</script>
