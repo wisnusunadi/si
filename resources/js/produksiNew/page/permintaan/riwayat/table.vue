@@ -13,7 +13,16 @@ export default {
     props: ['dataTable'],
     methods: {
         detail(data) {
-            this.dataSelected = JSON.parse(JSON.stringify(data))
+            const mapArray = data.produk.flatMap(product => product.noseri.map(noseri => ({
+                ...noseri,
+                nama: product.nama
+            })));
+
+            this.dataSelected = {
+                header: data,
+                data: mapArray
+            }
+            
             this.showModal = true
             this.$nextTick(() => {
                 $('.modalProduk').modal('show')

@@ -1,12 +1,16 @@
 <script>
 import modalDetailSeri from '../modalDetail'
+import LihatSeri from '../modalCreate/modalSeri.vue'
 export default {
     components: {
-        modalDetailSeri
+        modalDetailSeri,
+        LihatSeri
     },
     data() {
         return {
             detailSeri: false,
+            dataLihatNoSeri: null,
+            showModalNoSeri: false,
         }
     },
     props: ['dataTable'],
@@ -16,6 +20,13 @@ export default {
             this.$nextTick(() => {
                 $('.modalDetailSeri').modal('show');
             });
+        },
+        lihatNoseri(noseri) {
+            this.dataLihatNoSeri = noseri
+            this.showModalNoSeri = true
+            this.$nextTick(() => {
+                $('.modalSeri').modal('show')
+            })
         },
         hapusNoseriProduk(id) {
             this.$swal({
@@ -44,6 +55,7 @@ export default {
 <template>
     <div>
         <modalDetailSeri v-if="detailSeri" @closeModal="detailSeri = false" />
+        <LihatSeri v-if="showModalNoSeri" :hasilGenerate="dataLihatNoSeri" @closeModal = "showModalNoSeri = false" />
         <table class="table">
             <thead>
                 <tr>
@@ -69,13 +81,13 @@ export default {
                             <i class="fa fa-trash"></i> Hapus No. Seri Produk
                         </button>
                         <br>
-                        <button class="btn btn-sm btn-outline-info my-1" >
+                        <button class="btn btn-sm btn-outline-info my-1" @click="lihatNoseri(data.noseri)">
                             <i class="fa fa-eye"></i> Lihat No. Seri
                         </button>
                         <button class="btn btn-sm btn-outline-primary my-1" @click="cetakNoseri(data.id)">
                             <i class="fa fa-print"></i> Cetak No. Seri
                         </button> <br>
-                        <button class="btn btn-sm btn-outline-info" @click="lihatNoseri(data.id)">
+                        <button class="btn btn-sm btn-outline-info" @click="lihatPackingList(data.id)">
                             <i class="fa fa-eye"></i> Lihat Packing List
                         </button>
                         <button class="btn btn-sm btn-outline-primary" @click="cetakPackingList(data.id)">

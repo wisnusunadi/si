@@ -37,18 +37,10 @@ export default {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
-        produkTransfer(data) {
-            let result = 0
-            // cek jumlah noseri every produk
-            data.produk.forEach((produk) => {
-                result += produk.noseri.length
-            })
-            return result
-        }
     },
     computed: {
         filteredDalamProses() {
-            return this.dataSelected.produk.filter((data) => {
+            return this.dataSelected.data.filter((data) => {
                 return Object.keys(data).some((key) => {
                     return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
                 });
@@ -77,7 +69,7 @@ export default {
                                         <label for="">Nama Produk</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                <span id="so">{{ dataSelected.nama }}</span>
+                                                <span id="so">{{ dataSelected.header.nama }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -85,7 +77,7 @@ export default {
                                         <label for="">Jumlah Transfer</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                <span id="akn">{{ produkTransfer(dataSelected) }}</span>
+                                                <span id="akn">{{ dataSelected.data.length }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -93,7 +85,7 @@ export default {
                                         <label for="">Tanggal Transfer</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                <span id="po">{{ dateFormat(dataSelected.tgl_transfer) }}</span>
+                                                <span id="po">{{ dateFormat(dataSelected.header.tgl_transfer) }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -109,21 +101,23 @@ export default {
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>No. Seri</th>
                                             <th>Nama Produk</th>
-                                            <th>Jumlah</th>
-                                            <th>Aksi</th>
+                                            <th>Variasi</th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="renderPaginate.length > 0">
                                         <tr v-for="(data, index) in renderPaginate" :key="index">
-                                            <th>{{ index + 1 }}</th>
+                                            <td>{{ index + 1 }}</td>
+                                            <td>{{ data.noseri }}</td>
                                             <td>{{ data.nama }}</td>
-                                            <td>{{ data.noseri.length }}</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-info" @click="detailSeri(data.noseri)">
-                                                    <i class="fas fa-qrcode"></i>
-                                                    Detail Nomor Seri
-                                                </button>
+                                            <td>{{ data.variasi }}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else>
+                                        <tr>
+                                            <td colspan="4" class="text-center">
+                                                Tidak ada data
                                             </td>
                                         </tr>
                                     </tbody>

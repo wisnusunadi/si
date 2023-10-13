@@ -37,7 +37,7 @@ export default {
                 },
                 {
                     id: 2,
-                    noseri: '123456789',
+                    noseri: '987654321',
                     tanggal: '2023-01-01',
                     checker: 'Siska',
                 }
