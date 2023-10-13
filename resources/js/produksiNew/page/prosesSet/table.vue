@@ -57,7 +57,7 @@ export default {
         statusReworks(belum, selesai) {
             if (selesai == 0) {
                 return 'belum_dikerjakan'
-            } else if (selesai > 1) {
+            } else if (selesai > 0) {
                 return 'sedang_dikerjakan'
             } else if (belum == 0) {
                 return 'selesai'
