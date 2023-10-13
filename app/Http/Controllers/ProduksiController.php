@@ -30,6 +30,33 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ProduksiController extends Controller
 {
+    function packing_list_rw($id){
+        $data = SeriDetailRw::
+        select('seri_detail_rw.noseri','seri_detail_rw.created_at','packer','noseri_id','isi','produk.nama as model','m_produk.nama as produk')
+        ->leftjoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
+        ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+        ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+        ->leftjoin('m_produk', 'm_produk.id', '=', 'produk.produk_id')
+        ->where('seri_detail_rw.noseri_id',$id)->get();
+
+        if($data->isEmpty()){
+            $obj = array();
+        }else{
+            foreach($data as $d){
+                $obj[] = array(
+                    'id' => $d->noseri_id,
+                    'produk' => $d->produk,
+                    'model' => $d->model,
+                    'noseri' => $d->noseri,
+                    'tgl_buat' => $d->created_at->format('Y-m-d'),
+                    'packer' => $d->packer,
+                    'seri' => json_decode($d->isi)
+                );
+            }
+        }
+        return response()->json($obj);
+    }
+
     function generate_rw(Request $request)
     {
          DB::beginTransaction();
@@ -106,11 +133,11 @@ class ProduksiController extends Controller
                        'varian' => $i->varian,
                        'produk' => $i->prd
                    );
-
                 }
-
                        SeriDetailRw::create([
                         'urutan' => $obj->urutan,
+                               // 'checker' =>auth()->user()->nama
+                              'packer' => '-',
                         'noseri_id' => $nbj->id,
                         'noseri' =>  $produk_id->kode.$tahun.$bulan.$urutan,
                         'isi' => json_encode($item)
@@ -227,6 +254,28 @@ class ProduksiController extends Controller
 
         return response()->json($obj);
     }
+
+    function proses_rw_produk($id)
+    {
+        $data = SeriDetailRw::where('urutan',$id)->get();
+
+        if($data->isEmpty()){
+            $obj = array();
+        }else{
+            foreach($data as $d){
+                $obj[] = array(
+                    'id' => $d->noseri_id,
+                    'noseri' => $d->noseri,
+                    'tgl_buat' => $d->created_at->format('Y-m-d'),
+                    'packer' => $d->packer,
+                    'seri' => json_decode($d->isi)
+                );
+            }
+        }
+
+        return response()->json($obj);
+    }
+
     function proses_rw()
     {
         $data = JadwalPerakitanRw::
@@ -262,7 +311,7 @@ class ProduksiController extends Controller
                 ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
         },
             ])
-           ->havingRaw('cset != csiap and cproses > 0')
+           ->havingRaw('cset != csiap ')
             ->where('state', 18)->groupBy('urutan')->get();
         if($data->isempty()){
            $obj = array();
