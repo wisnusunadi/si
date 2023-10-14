@@ -164,6 +164,83 @@ class GudangController extends Controller
         }
         return response()->json($obj);
     }
+    function riwayat_rw_permintaan_detail($id)
+    {
+        $data = SystemLog::where(['tipe'=>'GBJ','subjek' => 'Kirim Permintaan Rework','id' => $id])->orderBy('created_at','DESC')->get();
+
+        if($data->isEmpty()){
+            $obj = array();
+        }else{
+            foreach($data as $d){
+                $x = json_decode($d->response);
+                foreach ($x->produk as $produk) {
+                    if (isset($produk->noseri) && is_array($produk->noseri)) {
+                        foreach ($produk->noseri as $noseri) {
+                            if (isset($noseri->noseri)) {
+                                $noseriArray[] = array(
+                                    'noseri' => $noseri->noseri,
+                                    'nama' => $produk->nama
+                                );
+                            }
+                        }
+                    }
+
+
+
+                    // $obj[] = array(
+                    //     'id' => $->id,
+                    //     'urutan' => $x->urutan,
+                    //     'nama' => $x->nama,
+                    //     'tgl_mulai' => $x->tgl_mulai,
+                    //     'tgl_selesai' => $x->tgl_selesai,
+                    //     'jumlah' => $noseriCount
+                    // );
+                }
+            }
+        }
+        return response()->json($noseriArray);
+    }
+    function riwayat_rw_permintaan()
+    {
+        $data = SystemLog::where(['tipe'=>'GBJ','subjek' => 'Kirim Permintaan Rework'])->orderBy('created_at','DESC')->get();
+
+        if($data->isEmpty()){
+            $obj = array();
+        }else{
+            foreach($data as $d){
+                $noseriCount = 0;
+                $x = json_decode($d->response);
+                foreach ($x->produk as $produk) {
+                    // Check if the "noseri" key exists and is an array
+                    if (isset($produk->noseri) && is_array($produk->noseri)) {
+                        // Increment the noseri count by the number of entries in the "noseri" array
+                        $noseriCount += count($produk->noseri);
+                    }
+                }
+
+                $obj[] = array(
+                    'id' => $d->id,
+                    'urutan' => $x->urutan,
+                    'nama' => $x->nama,
+                    'tgl_mulai' => $x->tgl_mulai,
+                    'tgl_selesai' => $x->tgl_selesai,
+                    'tgl_tf' => $d->created_at->format('Y-m-d'),
+                    'jumlah' => $noseriCount
+                );
+
+
+            }
+        }
+
+
+
+        // $object = new stdClass();
+        // $object->produk_reworks_id = $jadwal->produk_reworks_id;
+        // $object->set = $jadwal->set;
+
+
+        return response()->json($obj);
+    }
     function belum_kirim_rw()
     {
         $data = JadwalPerakitanRw::addSelect([

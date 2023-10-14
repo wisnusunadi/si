@@ -58,13 +58,17 @@ export default {
                 },
             });
         },
-        statusReworks(belum, selesai) {
-            if (selesai == 0) {
-                return 'belum_dikerjakan'
-            } else if (selesai > 0) {
-                return 'sedang_dikerjakan'
-            } else if (belum == 0) {
+        statusReworks(belum, selesai, jumlah) {
+            if(selesai == jumlah) {
                 return 'selesai'
+            }
+
+            if(selesai == 0){
+                return 'belum_dikerjakan'
+            }
+
+            if(selesai != jumlah && belum !=0) {
+                return 'sedang_dikerjakan'
             }
         },
         transferRework(id) {
@@ -106,7 +110,7 @@ export default {
                     <td>{{ data.selesai }}</td>
                     <td>{{ data.belum }}</td>
                     <td>
-                        <status :status="statusReworks(data.belum, data.selesai)" />
+                        <status :status="statusReworks(data.belum, data.selesai, data.jumlah)" />
                     </td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary" @click="transferRework(data.urutan)">
