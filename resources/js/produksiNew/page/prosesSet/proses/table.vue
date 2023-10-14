@@ -53,7 +53,6 @@ export default {
                     id: id,
                 },
             });
-            this.$store.dispatch('setSeri', set);
         },
         statusReworks(belum, selesai) {
             if (selesai == 0) {
@@ -98,6 +97,7 @@ export default {
                         <status :status="statusReworks(data.belum, data.selesai)" />
                     </td>
                     <td>
+                        <button class="btn btn-sm btn-outline-info" @click="detailRework(data.urutan, data.set)">
                         <button class="btn btn-sm btn-outline-primary" @click="transferRework(data.id)">
                             <i class="fas fa-paper-plane"></i>
                             Transfer

@@ -3,6 +3,7 @@ import Header from '../../../../components/header.vue';
 import pagination from '../../../../components/pagination.vue';
 import Table from './table.vue';
 import ModalCreate from '../modalCreate/';
+import axios from 'axios';
 export default {
     components: {
         Header,
@@ -28,20 +29,7 @@ export default {
                 },
             ],
             search: '',
-            dataTable: [
-                {
-                    id: 1,
-                    noseri: '123456789',
-                    tanggal: '2023-01-01',
-                    checker: 'Siska',
-                },
-                {
-                    id: 2,
-                    noseri: '987654321',
-                    tanggal: '2023-01-01',
-                    checker: 'Siska',
-                }
-            ],
+            dataTable: [],
             renderPaginate: [],
             showModal: false,
             selectSeri: {},
@@ -72,6 +60,25 @@ export default {
             this.$nextTick(() => {
                 $('.modalSet').modal('show');
             });
+        },
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true);
+                const id = this.$route.params.id;
+                const { data } = await axios.get(`/api/prd/rw/proses/produk/${id}`);
+                const { produk_reworks_id, set, urutan, item } = data
+                this.dataTable = item
+                let header = {
+                    produk_reworks_id,
+                    set,
+                    urutan,
+                }
+                this.$store.dispatch('setSeri', header);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.$store.dispatch('setLoading', false);
+            }
         }
     },
     computed: {
@@ -83,10 +90,13 @@ export default {
             });
         },
     },
+    mounted() {
+        this.getData();
+    },
 }
 </script>
 <template>
-    <div>
+    <div v-if="!$store.state.loading">
         <ModalCreate v-if="showModal" @closeModal="closeModalCreate" :selectSeri="selectSeri" />
         <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="card">

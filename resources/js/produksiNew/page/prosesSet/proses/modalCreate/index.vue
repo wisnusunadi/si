@@ -1,6 +1,7 @@
 <script>
 import modalSeri from './modalSeri.vue'
 import generatePackingList from './generatePackingList.vue';
+import axios from 'axios';
 export default {
     components: {
         modalSeri,
@@ -13,33 +14,7 @@ export default {
             hasilGenerate: null,
             isDisable: false,
             detailSeri: false,
-            noseriGeneratePackingList: [
-                {
-                    nama: 'DIGIT PRO BABY',
-                    qty: 1,
-                    noseri: 'TD90909'
-                },
-                {
-                    nama: 'USB CABLE',
-                    qty: 1,
-                    noseri: 'TD90909'
-                },
-                {
-                    nama: 'DIGIT PRO BABY',
-                    qty: 1,
-                    noseri: 'TD90909'
-                },
-                {
-                    nama: 'USB CABLE',
-                    qty: 1,
-                    noseri: 'TD90909'
-                },
-                {
-                    nama: 'USB CABLE',
-                    qty: 1,
-                    noseri: 'TD90909'
-                }
-            ]
+            noseriGeneratePackingList: []
         }
     },
     methods: {
@@ -47,7 +22,7 @@ export default {
             this.$emit('closeModal');
         },
         generateNoSeri() {
-            for (let i = 0; i < this.$store.state.setSeri; i++) {
+            for (let i = 0; i < this.$store.state.setSeri.set; i++) {
                 this.noseri.push({
                     seri: '',
                 })
@@ -63,7 +38,7 @@ export default {
                 }
             }
         },
-        generateSeri() {
+        async generateSeri() {
             const cek = this.noseri.filter((data) => {
                 return data.seri.trim() === '';
             });
@@ -82,8 +57,22 @@ export default {
             }
 
             if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
-                this.hasilGenerate = Math.floor(Math.random() * 10000000000000000);
-                this.isDisable = true;
+                try {
+                    this.isDisable = true;
+                    const { data } = await axios.post('/api/prd/rw/gen', {
+                        ...this.$store.state.setSeri,
+                        noseri: this.noseri
+                    })
+
+                    const { noseri, itemnoseri } = data
+                    this.hasilGenerate = noseri
+                    this.noseriGeneratePackingList = itemnoseri
+                    this.$swal('Berhasil', 'Berhasil generate no seri', 'success')
+                } catch (error) {
+                    console.log(error);
+                    this.$swal('Gagal', 'Gagal generate no seri', 'error')
+                    this.isDisable = false
+                }
             }
 
         },

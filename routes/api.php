@@ -193,9 +193,10 @@ Route::prefix('/gbj')->group(function () {
     Route::prefix('/rw')->group(function () {
         Route::get('/belum_kirim', [GudangController::class, 'belum_kirim_rw']);
         Route::post('/belum_kirim', [GudangController::class, 'kirim_permintaan']);
-        Route::get('/belum_kirim/produk/', [GudangController::class, 'belum_kirim_rw_produk']);
+        Route::post('/belum_kirim/produk/', [GudangController::class, 'belum_kirim_rw_produk']);
         Route::get('/belum_kirim/seri/{id}', [GudangController::class, 'belum_kirim_rw_seri']);
     });
+
     Route::post('update_stok', [App\Http\Controllers\GudangController::class, 'updateStokGudang']);
     Route::post('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
     Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
@@ -325,9 +326,13 @@ Route::prefix('/prd')->group(function () {
     Route::prefix('/rw')->group(function () {
         Route::get('/belum_kirim', [ProduksiController::class, 'belum_kirim_rw']);
         Route::get('/proses', [ProduksiController::class, 'proses_rw']);
+        Route::get('/proses/produk/{id}', [ProduksiController::class, 'proses_rw_produk']);
         Route::post('/permintaan', [ProduksiController::class, 'permintaan_rw']);
         Route::post('/gen', [ProduksiController::class, 'generate_rw']);
+        Route::delete('/hapus/{id}', [ProduksiController::class, 'hapus_rw']);
+        Route::get('/pack/{id}', [ProduksiController::class, 'packing_list_rw']);
     });
+
     Route::get('/dashboard', [ProduksiController::class, 'dashboard']);
     Route::get('/allproduk', [ProduksiController::class, 'getAllProduk']);
     Route::post('/grafikproduk', [ProduksiController::class, 'getGrafikProduk']);
