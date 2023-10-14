@@ -1,16 +1,20 @@
 <script>
 import status from '../../../components/status.vue';
 import ModalGenerate from './modalDetail';
+import ModalTransfer from './modalTransfer';
 export default {
     props: ['dataTable'],
     components: {
         status,
         ModalGenerate,
+        ModalTransfer,
     },
     data() {
         return {
             showModal: false,
             dataGenerate: {},
+            showModalTransfer: false,
+            idTransfer: null,
         }
     },
     methods: {
@@ -62,6 +66,13 @@ export default {
             } else if (belum == 0) {
                 return 'selesai'
             }
+        },
+        transferRework(id) {
+            this.idTransfer = id
+            this.showModalTransfer = true
+            this.$nextTick(() => {
+                $('.modalTransfer').modal('show')
+            })
         }
     },
 }
@@ -69,6 +80,7 @@ export default {
 <template>
     <div>
         <ModalGenerate v-if="showModal" :dataGenerate="dataGenerate" @closeModal="closeModalSeri" />
+        <ModalTransfer v-if="showModalTransfer" :id="idTransfer" @closeModal="showModalTransfer = false" />
         <table class="table text-center">
             <thead>
                 <tr>
@@ -93,8 +105,14 @@ export default {
                     <td>{{ data.nama }}</td>
                     <td>{{ data.selesai }}</td>
                     <td>{{ data.belum }}</td>
-                    <td><status :status="statusReworks(data.belum, data.selesai)" /></td>
                     <td>
+                        <status :status="statusReworks(data.belum, data.selesai)" />
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" @click="transferRework(data.urutan)">
+                            <i class="fas fa-paper-plane"></i>
+                            Transfer
+                        </button>
                         <button class="btn btn-sm btn-outline-info" @click="detailRework(data.urutan, data.set)">
                             <i class="fas fa-eye"></i>
                             Detail

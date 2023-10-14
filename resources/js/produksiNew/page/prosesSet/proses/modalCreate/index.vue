@@ -14,7 +14,9 @@ export default {
             hasilGenerate: null,
             isDisable: false,
             detailSeri: false,
-            noseriGeneratePackingList: []
+            noseriGeneratePackingList: [],
+            isError: false,
+            errorValue: '',
         }
     },
     methods: {
@@ -37,8 +39,23 @@ export default {
                     }
                 }
             }
+
+            // jika ada object key error true, maka akan di hapus
+            if (this.noseri[idx].error) {
+                delete this.noseri[idx].error
+            }
+
+            // jika tidak ada object key error, maka isError false
+            if (!this.noseri.find((data) => data.error)) {
+                this.isError = false
+            }
         },
         async generateSeri() {
+            // hapus semua object key error
+            this.noseri = this.noseri.map((data) => {
+                delete data.error
+                return data
+            })
             const cek = this.noseri.filter((data) => {
                 return data.seri.trim() === '';
             });
@@ -69,8 +86,28 @@ export default {
                     this.noseriGeneratePackingList = itemnoseri
                     this.$swal('Berhasil', 'Berhasil generate no seri', 'success')
                 } catch (error) {
-                    console.log(error);
-                    this.$swal('Gagal', 'Gagal generate no seri', 'error')
+                    const { message, values } = error.response.data
+                    this.$swal('Gagal', `${message}`, 'error')
+                    this.errorValue = message
+                    this.isError = true
+
+                    if (error.response.data?.values) {
+                        console.log('masuk');
+                        // tambahkan object key error true pada noseri yang gagal
+                        this.noseri = this.noseri.map((data) => {
+                            // trim no seri
+                            data.seri = data.seri.trim();
+                            const find = values.find((data2) => data2 === data.seri);
+                            if (find) {
+                                return {
+                                    ...data,
+                                    error: true
+                                }
+                            }
+                            return data
+                        })
+                    }
+                    
                     this.isDisable = false
                 }
             }
@@ -124,7 +161,10 @@ export default {
                 // jika inputan terakhir sudah di isi dengan 13 digit, maka akan generate no seri
                 const lastInput = newVal[newVal.length - 1].seri;
                 if (lastInput.length === 13) {
-                    this.generateSeri();
+                    // deteksi apakah di seri apakah ada object key error true
+                    if (!this.isError) {
+                        this.generateSeri();
+                    }
                 }
             },
             deep: true
@@ -160,8 +200,12 @@ export default {
                                                 <tr v-for="(data, idx) in noseri" :key="idx">
                                                     <td>
                                                         <input type="text" class="form-control" v-model="data.seri"
+                                                            :class="data.error ? 'is-invalid' : ''"
                                                             @input="autoTab($event, idx)" ref="noseri"
                                                             :disabled="isDisable">
+                                                        <div class="invalid-feedback">
+                                                            Nomor Seri {{ errorValue }}
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </tbody>

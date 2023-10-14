@@ -1,16 +1,18 @@
 <script>
-import modalDetailSeri from '../modalDetail'
+import modalDetail from '../modalDetail'
 import LihatSeri from '../modalCreate/modalSeri.vue'
 export default {
     components: {
-        modalDetailSeri,
+        modalDetail,
         LihatSeri
     },
     data() {
         return {
             detailSeri: false,
+            dataModalDetail: null,
+            showModalDetail: false,
             dataLihatNoSeri: null,
-            showModalNoSeri: false,
+            showModalNoSeri: false
         }
     },
     props: ['dataTable'],
@@ -21,7 +23,15 @@ export default {
                 $('.modalDetailSeri').modal('show');
             });
         },
-        lihatNoseri(noseri) {
+        detailProdukSeri(data) {
+            this.dataModalDetail = JSON.parse(JSON.stringify(data))
+            this.showModalDetail = true
+
+            this.$nextTick(() => {
+                $('.modalDetailSeri').modal('show')
+            })
+        },
+                lihatNoseri(noseri) {
             this.dataLihatNoSeri = noseri
             this.showModalNoSeri = true
             this.$nextTick(() => {
@@ -54,8 +64,8 @@ export default {
 </script>
 <template>
     <div>
-        <modalDetailSeri v-if="detailSeri" @closeModal="detailSeri = false" />
         <LihatSeri v-if="showModalNoSeri" :hasilGenerate="dataLihatNoSeri" @closeModal = "showModalNoSeri = false" />
+        <modalDetail v-if="showModalDetail" @closeModal="showModalDetail = false" :dataModalDetailSeri="dataModalDetail" />
         <table class="table">
             <thead>
                 <tr>
@@ -71,7 +81,7 @@ export default {
                     <td>{{ dateFormat(data.tgl_buat) }}</td>
                     <td>{{ data.packer }}</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-info" @click="detailNoseriProduk(data.id)">
+                        <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(data)">
                             <i class="fa fa-info-circle"></i> Detail No. Seri Produk
                         </button>
                         <button class="btn btn-sm btn-outline-warning" @click="editNoseriProduk(data)">
