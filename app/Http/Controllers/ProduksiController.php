@@ -185,7 +185,7 @@ class ProduksiController extends Controller
                     'status' => 200,
                     'message' =>  'Duplikasi Produk',
                     'values' =>  $noseriValues,
-                ], 200);
+                ], 500);
              }
         }else{
             DB::rollBack();
@@ -201,7 +201,7 @@ class ProduksiController extends Controller
                 'status' => 200,
                 'message' =>  'Tidak ditemukan',
                 'values' =>  $missingIds,
-            ], 200);
+            ], 500);
         }
 
     } catch (\Throwable $th) {
