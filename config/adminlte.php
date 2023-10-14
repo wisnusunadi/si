@@ -1214,18 +1214,27 @@ return [
             'auth' => [13],
         ],
         [
-            'text' => 'Permintaan Rework',
-            'url' => '/gbj/rework/permintaan-rework',
-            'icon' => 'fas fa-exclamation-circle',
-            'auth' => [13],
-        ],
-        [
             'text' => 'Lacak',
             'url'  => '/penjualan/lacak/show',
             'icon' => 'fas fa-search',
             'auth' => [13]
         ],
-
+        [
+            'header' => 'Rework',
+            'auth' => [13]
+        ],
+        [
+            'text' => 'Permintaan Rework',
+            'url' => '/gbj/rework/permintaan-rework',
+            'icon' => 'fas fa-wrench',
+            'auth' => [13],
+        ],
+        [
+            'text' => 'Penerimaan Rework',
+            'url' => '/gbj/rework/penerimaan-rework',
+            'icon' => 'fas fa-check-circle',
+            'auth' => [13],
+        ],
         [
             'header' => 'Penjualan',
             'auth' => [13, 17, 31]
