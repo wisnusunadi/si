@@ -4,27 +4,9 @@ export default {
     components: {
         pagination
     },
+    props: ['dataModalDetailSeri'],
     data() {
         return {
-            headerSeri: {
-                noseri: 'TD202200001',
-                tanggal_dibuat: '2023-01-01',
-                checker: 'Siska',
-            },
-            noserirework: [
-                {
-                    nama_produk: 'DIGIT PRO',
-                    varian: 'PUTIH',
-                    noseri: 'TR202200001',
-
-                },
-                {
-                    nama_produk: 'PTB',
-                    varian: '-',
-                    noseri: 'TR202200002',
-
-                }
-            ],
             search: '',
             renderPaginate: []
         }
@@ -42,7 +24,7 @@ export default {
     },
     computed: {
         filteredDalamProses() {
-            return this.noserirework.filter((data) => {
+            return this.dataModalDetailSeri.seri.filter((data) => {
                 return Object.keys(data).some((key) => {
                     return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
                 });
@@ -68,7 +50,7 @@ export default {
                             <div class="card nomor-so">
                                 <div class="card-body">
                                     <span id="so">
-                                        {{ headerSeri.noseri }}
+                                        {{ dataModalDetailSeri.noseri }}
                                     </span>
                                 </div>
                             </div>
@@ -78,17 +60,17 @@ export default {
                             <div class="card nomor-akn">
                                 <div class="card-body">
                                     <span id="akn">
-                                        {{ dateFormat(headerSeri.tanggal_dibuat) }}
+                                        {{ dateFormat(dataModalDetailSeri.tgl_buat) }}
                                     </span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm">
-                            <label for="">Checker</label>
+                            <label for="">Packer</label>
                             <div class="card nomor-po">
                                 <div class="card-body">
                                     <span id="po">
-                                        {{ headerSeri.checker }}
+                                        {{ dataModalDetailSeri.packer ?? '-' }}
                                     </span>
                                 </div>
                             </div>
@@ -104,15 +86,13 @@ export default {
                             <tr>
                                 <th>No</th>
                                 <th>Nama Produk</th>
-                                <th>Varian</th>
                                 <th>Nomor Seri</th>
                             </tr>
                         </thead>
                         <tbody v-if="renderPaginate.length > 0">
                             <tr v-for="(data, index) in renderPaginate" :key="index">
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ data.nama_produk }}</td>
-                                <td>{{ data.varian }}</td>
+                                <td>{{ `${data.produk} ${data.varian}` }}</td>
                                 <td>{{ data.noseri }}</td>
                             </tr>
                         </tbody>
