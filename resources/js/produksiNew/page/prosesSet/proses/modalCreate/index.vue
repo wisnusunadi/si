@@ -51,6 +51,11 @@ export default {
             }
         },
         async generateSeri() {
+            // hapus semua object key error
+            this.noseri = this.noseri.map((data) => {
+                delete data.error
+                return data
+            })
             const cek = this.noseri.filter((data) => {
                 return data.seri.trim() === '';
             });
