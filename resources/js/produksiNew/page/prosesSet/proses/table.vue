@@ -94,8 +94,14 @@ export default {
                     <td>{{ data.nama }}</td>
                     <td>{{ data.selesai }}</td>
                     <td>{{ data.belum }}</td>
-                    <td><status :status="statusReworks(data.belum, data.selesai)" /></td>
                     <td>
+                        <status :status="statusReworks(data.belum, data.selesai)" />
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" @click="transferRework(data.id)">
+                            <i class="fas fa-paper-plane"></i>
+                            Transfer
+                        </button>
                         <button class="btn btn-sm btn-outline-info" @click="detailRework(data.id, data.set)">
                             <i class="fas fa-eye"></i>
                             Detail
