@@ -211,7 +211,7 @@ class ProduksiController extends Controller
             'status' => 200,
             'message' =>  'Gagal Ditambahkan',
             'values' =>  '-',
-        ], 200);
+        ], 500);
      }
 
     }
