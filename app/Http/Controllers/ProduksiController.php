@@ -59,9 +59,164 @@ class ProduksiController extends Controller
         return response()->json($obj);
     }
 
+    function update_rw(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+         $seriValues = array_map(function ($item) {
+             return $item->seri;
+         }, $obj->noseri);
+
+        $seri = SeriDetailRw::where('noseri_id',$id)->first()->isi;
+        $data =  collect(json_decode($seri))->pluck('noseri')->toArray();
+
+        $newId = array_values(array_diff($seriValues, $data));
+        $currentId = array_values(array_diff($data, $seriValues));
+
+        if($newId){
+            $seriAvailable = NoseriBarangJadi::
+            Join('jadwal_rakit_noseri_rw', 'jadwal_rakit_noseri_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+            ->where('jadwal_rakit_noseri_rw.status',11)
+            ->whereIN('noseri_barang_jadi.noseri',$seriValues)
+            ->pluck('noseri_barang_jadi.noseri')->toArray();
+
+            if(count($seriAvailable) == count($newId)){
+            $newValues = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+             ->whereIN('noseri_barang_jadi.noseri', $newId)
+            ->pluck('gdg_barang_jadi.produk_id')->toArray();
+
+            $curValues = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+             ->whereIN('noseri_barang_jadi.noseri', $currentId)
+            ->pluck('gdg_barang_jadi.produk_id')->toArray();
+
+                if (empty(array_diff($newValues, $curValues)) && empty(array_diff($curValues, $newValues))) {
+                    $curValuesId = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                    ->whereIN('noseri_barang_jadi.noseri', $currentId)
+                   ->pluck('noseri_barang_jadi.id')->toArray();
+
+                   $newValuesId = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                   ->whereIN('noseri_barang_jadi.noseri', $newId)
+                  ->pluck('noseri_barang_jadi.id')->toArray();
+
+                    JadwalRakitNoseriRw::where('noseri_id', $curValuesId )
+                    ->update([
+                        'status' => 11
+                     ]);
+
+                    JadwalRakitNoseriRw::where('noseri_id', $newValuesId )
+                    ->update([
+                        'status' => 12
+                     ]);
+
+                     $items = NoseriBarangJadi::
+                     select('produk.nama as prd','gdg_barang_jadi.nama as varian','noseri_barang_jadi.id','noseri_barang_jadi.noseri')
+                    ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                     ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                    ->whereIN('noseri_barang_jadi.noseri' ,$seriValues)->get();
+
+                    foreach($items as $i){
+                        $item[] = array(
+                            'id' => $i->id,
+                            'noseri' => $i->noseri,
+                            'varian' => $i->varian,
+                            'produk' => $i->prd
+                        );
+                     }
+
+                    $seriRw = SeriDetailRw::where('noseri_id',$id)->first();
+                    SeriDetailRw::where('noseri_id', $id)
+                    ->update([
+                        'isi' => $item
+                     ]);
+
+                     DB::commit();
+                    return response()->json([
+                        'status' => 200,
+                        'id' =>  $seriRw->id,
+                        'noseri' =>   $seriRw->noseri,
+                        'message' =>  $item,
+                    ], 200);
+
+                }else{
+                    DB::rollBack();
+                    return response()->json([
+                        'status' => 200,
+                        'message' =>  'Produk Tidak Sesuai',
+                        'values' =>   $newId,
+                    ], 500);
+                }
+            }else{
+                DB::rollBack();
+                $missingIds = array_values(array_diff($newId, $seriAvailable));
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  'Tidak Ditemukan',
+                    'values' =>   $missingIds,
+                ], 500);
+            }
+        }else{
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Tidak ada perubahan',
+                'values' =>  $seriValues,
+            ], 500);
+        }
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+        return response()->json([
+            'status' => 200,
+            'message' =>  'Gagal Ditambahkan',
+            'values' =>  '-',
+        ], 500);
+        }
+
+    }
     function hapus_rw($id)
     {
-        dd('s');
+        DB::beginTransaction();
+        try {
+            //code...
+            $cekSeri = NoseriBarangJadi::where('id', $id)
+            ->where('is_ready', 0)
+            ->where('is_aktif', 0)
+            ->whereNull('used_by')
+            ->first();
+
+            if($cekSeri){
+                $seri = SeriDetailRw::where('noseri_id',$id)->first()->isi;
+                $data =  collect(json_decode($seri))->pluck('id')->toArray();
+
+                $seriPrd = JadwalRakitNoseriRw::whereIn('noseri_id',$data)
+                ->update([
+                    'status' => 11
+                ]);
+
+                NoseriBarangJadi::find($id)->delete();
+
+                DB::commit();
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  'Berhasil Dihapus',
+                ], 200);
+            }else{
+                DB::rollBack();
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  'Gagal Dihapus',
+                ], 500);
+        }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            //throw $th;
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Gagal Dihapus',
+            ], 500);
+        }
 
     }
     function generate_rw(Request $request)
