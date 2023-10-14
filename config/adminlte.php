@@ -1196,16 +1196,16 @@ return [
             'icon' => 'fas fa-history',
             'auth' => [13],
         ],
+        [
+            'text' => 'Permintaan Rework',
+            'url' => '/gbj/rework/permintaan-rework',
+            'icon' => 'fas fa-wrench',
+            'auth' => [13],
+        ],
 
         [
             'header' => 'Data',
             'auth' => [13]
-        ],
-        [
-            'text' => 'Dalam Perakitan',
-            'url' => '/gbj/dp',
-            'icon' => 'fas fa-truck-loading',
-            'auth' => [13],
         ],
         [
             'text' => 'Selain Perakitan',
@@ -1220,13 +1220,13 @@ return [
             'auth' => [13]
         ],
         [
-            'header' => 'Rework',
+            'header' => 'Penerimaan Barang',
             'auth' => [13]
         ],
         [
-            'text' => 'Permintaan Rework',
-            'url' => '/gbj/rework/permintaan-rework',
-            'icon' => 'fas fa-wrench',
+            'text' => 'Penerimaan Finish Goods',
+            'url' => '/gbj/dp',
+            'icon' => 'fas fa-truck-loading',
             'auth' => [13],
         ],
         [

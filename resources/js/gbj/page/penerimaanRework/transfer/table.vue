@@ -65,33 +65,18 @@ export default {
             <thead>
                 <tr>
                     <th rowspan="2">No Urut</th>
-                    <th rowspan="2">Tanggal Mulai</th>
-                    <th rowspan="2">Tanggal Selesai</th>
                     <th rowspan="2">Nama Produk</th>
-                    <th colspan="2">Jumlah</th>
-                    <th rowspan="2">Status</th>
                     <th rowspan="2">Aksi</th>
-                </tr>
-                <tr>
-                    <th>Selesai</th>
-                    <th>Belum Selesai</th>
                 </tr>
             </thead>
             <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, index) in dataTable" :key="index">
                     <td>PRD-{{ data.urutan }}</td>
-                    <td>{{ dateFormat(data.tgl_mulai) }}</td>
-                    <td>{{ dateFormat(data.tgl_selesai) }}</td>
                     <td>{{ data.nama }}</td>
-                    <td>{{ data.selesai }}</td>
-                    <td>{{ data.belum }}</td>
-                    <td>
-                        <status :status="statusReworks(data.belum, data.selesai)" />
-                    </td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary" @click="transferRework(data.urutan)">
-                            <i class="fas fa-paper-plane"></i>
-                            Transfer
+                            <i class="fas fa-check"></i>
+                            Terima
                         </button>
                     </td>
                 </tr>
