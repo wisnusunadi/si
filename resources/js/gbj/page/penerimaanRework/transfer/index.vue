@@ -20,7 +20,6 @@ export default {
                     status: "Proses",
                     belum: 1,
                     selesai: 24,
-                    tgl_transfer: "2023-09-11",
                     noseri: [
                         {
                             id: 195516,

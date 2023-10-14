@@ -94,9 +94,9 @@
         ];
 
         // jika dataItem kurang dari 16, maka tambahkan dataNull hingga 16
-        if (count($dataItem) < 6) {
+        if (count($dataItem) < 10) {
             $dataNullIsi = [];
-            for ($i = 0; $i < 6 - count($dataItem); $i++) {
+            for ($i = 0; $i < 10 - count($dataItem); $i++) {
                 $dataNullIsi[] = $dataNull;
             }
             $dataItem = array_merge($dataItem, $dataNullIsi);
@@ -185,14 +185,7 @@
                 <td>Packer</td>
                 <td>:</td>
                 <td>Orang Login</td>
-                <td class="text-center">Checker</td>
-            </tr>
-            <tr>
-                <td colspan="3"></td>
-                <td class="text-center">
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/assets/image/accepted.png'))) }}"
-                        width="125">
-                </td>
+                <td class="text-center">Checker :</td>
             </tr>
             <tr>
                 <td colspan="3"></td>

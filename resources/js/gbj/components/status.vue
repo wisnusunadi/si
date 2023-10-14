@@ -8,6 +8,18 @@ export default {
                     return 'badge-warning'
                     break;
 
+                case 'belum_dikerjakan':
+                    return 'badge-danger'
+                    break;
+
+                case 'sedang_dikerjakan':
+                    return 'badge-warning'
+                    break;
+
+                case 'selesai':
+                    return 'badge-success'
+                    break;
+
                 default:
                     return 'badge-primary'
                     break;
@@ -17,6 +29,16 @@ export default {
             switch (status) {
                 case 'menunggu':
                     return 'Menunggu Proses Gudang'
+                    break;
+
+                case 'belum_dikerjakan':
+                    return 'Belum Dikerjakan'
+                    break;
+                case 'sedang_dikerjakan':
+                    return 'Sedang Dikerjakan'
+                    break;
+                case 'selesai':
+                    return 'Selesai'
                     break;
 
                 default:

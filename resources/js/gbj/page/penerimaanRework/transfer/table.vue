@@ -1,18 +1,14 @@
 <script>
 import status from '../../../components/status.vue';
-import ModalGenerate from './modalDetail';
 import ModalTransfer from './modalTransfer';
 export default {
     props: ['dataTable'],
     components: {
         status,
-        ModalGenerate,
         ModalTransfer,
     },
     data() {
         return {
-            showModal: false,
-            dataGenerate: {},
             showModalTransfer: false,
             idTransfer: null,
         }
@@ -36,26 +32,11 @@ export default {
                 }
             })
         },
-        generateSeri(data) {
-            this.dataGenerate = JSON.parse(JSON.stringify(data));
-            this.showModal = true;
-            this.$nextTick(() => {
-                $('.modalSet').modal('show');
-            });
-        },
         closeModalSeri() {
             $('.modalSet').modal('hide');
             this.$nextTick(() => {
                 this.showModal = false;
 
-            });
-        },
-        detailRework(id, set) {
-            this.$router.push({
-                name: 'prosesSetReworksDetail',
-                params: {
-                    id: id,
-                },
             });
         },
         statusReworks(belum, selesai) {
@@ -79,43 +60,23 @@ export default {
 </script>
 <template>
     <div>
-        <ModalGenerate v-if="showModal" :dataGenerate="dataGenerate" @closeModal="closeModalSeri" />
         <ModalTransfer v-if="showModalTransfer" :id="idTransfer" @closeModal="showModalTransfer = false" />
         <table class="table text-center">
             <thead>
                 <tr>
                     <th rowspan="2">No Urut</th>
-                    <th rowspan="2">Tanggal Mulai</th>
-                    <th rowspan="2">Tanggal Selesai</th>
                     <th rowspan="2">Nama Produk</th>
-                    <th colspan="2">Jumlah</th>
-                    <th rowspan="2">Status</th>
                     <th rowspan="2">Aksi</th>
-                </tr>
-                <tr>
-                    <th>Selesai</th>
-                    <th>Belum Selesai</th>
                 </tr>
             </thead>
             <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, index) in dataTable" :key="index">
                     <td>PRD-{{ data.urutan }}</td>
-                    <td>{{ dateFormat(data.tgl_mulai) }}</td>
-                    <td>{{ dateFormat(data.tgl_selesai) }}</td>
                     <td>{{ data.nama }}</td>
-                    <td>{{ data.selesai }}</td>
-                    <td>{{ data.belum }}</td>
-                    <td>
-                        <status :status="statusReworks(data.belum, data.selesai)" />
-                    </td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary" @click="transferRework(data.urutan)">
-                            <i class="fas fa-paper-plane"></i>
-                            Transfer
-                        </button>
-                        <button class="btn btn-sm btn-outline-info" @click="detailRework(data.urutan, data.set)">
-                            <i class="fas fa-eye"></i>
-                            Detail
+                            <i class="fas fa-check"></i>
+                            Terima
                         </button>
                     </td>
                 </tr>

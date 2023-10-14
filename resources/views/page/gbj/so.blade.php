@@ -935,6 +935,12 @@
                             {
                                 "data": "status"
                             },
+                            {
+                                data: null,
+                                render: `
+                                <button class
+                                `
+                            }
                         ],
                         "drawCallback": function(settings) {
                             var api = this.api();

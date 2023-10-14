@@ -13,13 +13,29 @@ export default {
     props: ['dataTable'],
     methods: {
         detail(data) {
-            this.dataSelected = JSON.parse(JSON.stringify(data))
+            const mapArray = data.produk.flatMap(product => product.noseri.map(noseri => ({
+                ...noseri,
+                nama: product.nama
+            })));
+
+            this.dataSelected = {
+                header: data,
+                data: mapArray
+            }
             
             this.showModal = true
             this.$nextTick(() => {
                 $('.modalProduk').modal('show')
             })
         },
+        produkTransfer(data) {
+            let result = 0
+            // cek jumlah noseri every produk
+            data.produk.forEach((produk) => {
+                result += produk.noseri.length
+            })
+            return result
+        }
     },
 }
 </script>
@@ -44,7 +60,7 @@ export default {
                     <td>{{ dateFormat(data.tgl_mulai) }}</td>
                     <td>{{ dateFormat(data.tgl_selesai) }}</td>
                     <td>{{ data.nama }}</td>
-                    <td>{{ data.noseri.length }}</td>
+                    <td>{{ produkTransfer(data) }}</td>
                     <td>{{ dateFormat(data.tgl_transfer) }}</td>
                     <td>
                         <button class="btn btn-sm btn-outline-info" @click="detail(data)">

@@ -21,42 +21,37 @@ export default {
                     belum: 1,
                     selesai: 24,
                     tgl_transfer: "2023-09-11",
-                    noseri: [
+                    produk: [
                         {
-                            id: 195516,
-                            noseri: "AK1023A000003",
-                            tgl_buat: "2023-10-13",
-                            packer: null,
-                            seri: [
+                            id: 80,
+                            produk_id: 188,
+                            nama: "MTR-BABY 002",
+                            belum: 1,
+                            jumlah: 5,
+                            noseri: [
                                 {
-                                    id: 7079,
-                                    noseri: "TD1621AA8268",
-                                    varian: "",
-                                    produk: "MTB-2MTR"
-                                },
-                                {
-                                    id: 26885,
-                                    noseri: "TD09202B0484",
-                                    varian: "COKLAT",
-                                    produk: "DIGIT PRO IDA"
+                                    id: 81872,
+                                    noseri: "TD17227A00077",
+                                    variasi: null
                                 },
                                 {
                                     id: 81872,
                                     noseri: "TD17227A00077",
-                                    varian: "",
-                                    produk: "MTR-BABY 002"
-                                },
+                                    variasi: null
+                                }
+                            ]
+                        },
+                        {
+                            id: 80,
+                            produk_id: 188,
+                            nama: "MTR-BABY 002",
+                            belum: 1,
+                            jumlah: 5,
+                            noseri: [
                                 {
-                                    id: 114347,
-                                    noseri: "TD15229A0049",
-                                    varian: "",
-                                    produk: "PTB-2in1 "
-                                },
-                                {
-                                    id: 166263,
-                                    noseri: "TD21237A00153",
-                                    varian: "",
-                                    produk: "DIGIT-PRO BABY"
+                                    id: 81872,
+                                    noseri: "TD17227A00077",
+                                    variasi: null
                                 }
                             ]
                         }

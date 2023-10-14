@@ -1,5 +1,5 @@
 <script>
-import pagination from "../../../components/pagination.vue";
+import pagination from "../../../../components/pagination.vue";
 import axios from "axios";
 import seriviatext from "./seriviatext.vue";
 export default {
@@ -71,14 +71,17 @@ export default {
             }
         },
         checkNoSeriCheckAll() {
-            if (this.produk.noseri) {
-                if (this.produk.noseri.length === this.noseri.length) {
-                    this.$refs.checkAll.checked = true;
+            if (!this.loading) {
+                if (this.produk?.noseri) {
+                    if (this.produk.noseri.length === this.noseri.length) {
+                        this.$refs.checkAll.checked = true;
+                    } else {
+                        this.$refs.checkAll.checked = false;
+                    }
                 } else {
                     this.$refs.checkAll.checked = false;
                 }
-            } else {
-                this.$refs.checkAll.checked = false;
+                this.$refs.checkAll
             }
         },
         simpan() {
@@ -110,7 +113,7 @@ export default {
             } catch (error) {
                 console.log(error);
             } finally {
-                this.checkNoSeriCheckAll();
+                this.loading = false;
             }
         },
         showSeriText() {
@@ -127,22 +130,45 @@ export default {
             })
         },
         submit(noseri) {
-            // split noseri by comma or space or tab
             if (this.produk.noseri == undefined) {
                 this.produk.noseri = [];
             }
-            let noseriarray = noseri.split(/[\n, \t]/);
+
+            let noserinotfound = []
+
+            let noseriarray = noseri.split(/[\n, \t]/)
+
             for (let i = 0; i < noseriarray.length; i++) {
-                this.noseri.find((x) => {
-                    if (x.noseri == noseriarray[i]) {
-                        this.produk.noseri.push(x);
+                let found = false
+                for (let j = 0; j < this.noseri.length; j++) {
+                    if (this.noseri[j].noseri == noseriarray[i]) {
+                        if (this.produk.noseri.find((y) => y.noseri == noseriarray[i])) {
+                        } else {
+                            this.produk.noseri.push(this.noseri[j])
+                        }
+                        found = true
+                        break
                     }
-                });
+                }
+                if (!found) {
+                    noserinotfound.push(noseriarray[i])
+                }
             }
+
             if (this.produk.noseri.length == this.noseri.length) {
                 this.checkallvalue = true;
             } else {
                 this.checkallvalue = false;
+            }
+
+            noserinotfound = [...new Set(noserinotfound)]
+
+            if (noserinotfound.length > 0 && noserinotfound != "") {
+                this.$swal(
+                    "Peringatan",
+                    "Nomor seri " + noserinotfound.join(", ") + " tidak ditemukan",
+                    "warning"
+                );
             }
         },
         autoSelect() {
@@ -151,17 +177,26 @@ export default {
                     this.produk.noseri = [];
                 }
 
-                this.noseri.find((x) => {
-                    if (x.noseri == this.search) {
-                        if (this.produk.noseri.find((y) => y.noseri == this.search)) {
-                            this.produk.noseri = this.produk.noseri.filter(
-                                (y) => y.noseri !== this.search
-                            );
-                        } else {
-                            this.produk.noseri.push(x);
+                let noserinotfound = []
+
+                let noseriarray = this.search.split(/[\n, \t]/)
+                for (let i = 0; i < noseriarray.length; i++) {
+                    let found = false
+                    for (let j = 0; j < this.noseri.length; j++) {
+                        if (this.noseri[j].noseri == noseriarray[i]) {
+                            if (this.produk.noseri.find((y) => y.noseri == noseriarray[i])) {
+                            } else {
+                                this.produk.noseri.push(this.noseri[j])
+                            }
+                            found = true
+                            break
                         }
                     }
-                });
+
+                    if (!found) {
+                        noserinotfound.push(noseriarray[i])
+                    }
+                }
 
                 this.search = "";
 
@@ -169,6 +204,16 @@ export default {
                     this.checkallvalue = true;
                 } else {
                     this.checkallvalue = false;
+                }
+
+                noserinotfound = [...new Set(noserinotfound)]
+
+                if (noserinotfound.length > 0 && noserinotfound != "") {
+                    this.$swal(
+                        "Peringatan",
+                        "Nomor seri " + noserinotfound.join(", ") + " tidak ditemukan",
+                        "warning"
+                    );
                 }
             }
         }
@@ -185,6 +230,9 @@ export default {
     created() {
         this.getData();
     },
+    mounted() {
+        this.checkNoSeriCheckAll();
+    }
 }
 </script>
 <template>

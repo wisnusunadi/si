@@ -1,11 +1,11 @@
 <script>
 import pagination from '../../../../components/pagination.vue';
-import modalDetail from '../../proses/modalDetail'
+import noseri from './noseri.vue';
 export default {
     props: ['dataSelected'],
     components: {
         pagination,
-        modalDetail,
+        noseri
     },
     data() {
         return {
@@ -13,8 +13,6 @@ export default {
             renderPaginate: [],
             modalSeri: false,
             dataSeriSelected: null,
-            dataModalDetail: null,
-            showModalDetail: false,
         }
     },
     methods: {
@@ -39,25 +37,10 @@ export default {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
-        detailProdukSeri(data) {
-            this.dataModalDetail = JSON.parse(JSON.stringify(data))
-            this.showModalDetail = true
-
-            this.$nextTick(() => {
-                $('.modalProduk').modal('hide')
-                $('.modalDetailSeri').modal('show')
-            })
-        },
-        closeModalDetail() {
-            this.showModalDetail = false
-            this.$nextTick(() => {
-                $('.modalProduk').modal('show')
-            })
-        },
     },
     computed: {
         filteredDalamProses() {
-            return this.dataSelected.noseri.filter((data) => {
+            return this.dataSelected.data.filter((data) => {
                 return Object.keys(data).some((key) => {
                     return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
                 });
@@ -68,7 +51,7 @@ export default {
 </script>
 <template>
     <div>
-        <modalDetail v-if="showModalDetail" @closeModal="closeModalDetail" :dataModalDetailSeri="dataModalDetail" />
+        <noseri v-if="modalSeri" :seriSelected="dataSeriSelected" @closeModal="closeModalSeri" />
         <div class="modal fade modalProduk" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
@@ -86,7 +69,7 @@ export default {
                                         <label for="">Nama Produk</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                <span id="so">{{ dataSelected.nama }}</span>
+                                                <span id="so">{{ dataSelected.header.nama }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -94,7 +77,7 @@ export default {
                                         <label for="">Jumlah Transfer</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                <span id="akn">{{ dataSelected.noseri.length }}</span>
+                                                <span id="akn">{{ dataSelected.data.length }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -102,7 +85,7 @@ export default {
                                         <label for="">Tanggal Transfer</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                <span id="po">{{ dateFormat(dataSelected.tgl_transfer) }}</span>
+                                                <span id="po">{{ dateFormat(dataSelected.header.tgl_transfer) }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -118,23 +101,17 @@ export default {
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Nomor Seri</th>
-                                            <th>Tanggal Dibuat</th>
-                                            <th>Packer</th>
-                                            <th>Aksi</th>
+                                            <th>No. Seri</th>
+                                            <th>Nama Produk</th>
+                                            <th>Variasi</th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="renderPaginate.length > 0">
                                         <tr v-for="(data, index) in renderPaginate" :key="index">
                                             <td>{{ index + 1 }}</td>
                                             <td>{{ data.noseri }}</td>
-                                            <td>{{ dateFormat(data.tgl_buat) }}</td>
-                                            <td>{{ data.packer ?? '-' }}</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(data)">
-                                                    <i class="fa fa-info-circle"></i> Detail No. Seri Produk
-                                                </button>
-                                            </td>
+                                            <td>{{ data.nama }}</td>
+                                            <td>{{ data.variasi }}</td>
                                         </tr>
                                     </tbody>
                                     <tbody v-else>

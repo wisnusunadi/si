@@ -1,6 +1,6 @@
 <script>
 import pagination from '../../../../components/pagination.vue';
-import modalDetail from '../../proses/modalDetail'
+import modalDetail from './noseri.vue'
 export default {
     props: ['dataSelected'],
     components: {
@@ -133,6 +133,12 @@ export default {
                                             <td>
                                                 <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(data)">
                                                     <i class="fa fa-info-circle"></i> Detail No. Seri Produk
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-success"><i class="fa fa-eye"></i> Lihat
+                                                    Packing List
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fa fa-print"></i>
+                                                    Cetak Packing List
                                                 </button>
                                             </td>
                                         </tr>

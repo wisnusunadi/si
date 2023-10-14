@@ -34,7 +34,7 @@ export default {
                     <th>Tanggal Selesai</th>
                     <th>Nama Produk</th>
                     <th>Jumlah Transfer</th>
-                    <th>Tanggal Transfer</th>
+                    <th>Tanggal Penerimaan</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -45,7 +45,7 @@ export default {
                     <td>{{ dateFormat(data.tgl_selesai) }}</td>
                     <td>{{ data.nama }}</td>
                     <td>{{ data.noseri.length }}</td>
-                    <td>{{ dateFormat(data.tgl_transfer) }}</td>
+                    <td>{{ dateFormat(data.tgl_terima) }}</td>
                     <td>
                         <button class="btn btn-sm btn-outline-info" @click="detail(data)">
                             <i class="fas fa-info-circle"></i>

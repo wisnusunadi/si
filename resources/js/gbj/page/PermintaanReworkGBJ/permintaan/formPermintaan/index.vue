@@ -1,5 +1,5 @@
 <script>
-import pagination from '../../../components/pagination.vue';
+import pagination from '../../../../components/pagination.vue';
 import axios from 'axios';
 import noseri from './noseri.vue';
 export default {
@@ -160,31 +160,35 @@ export default {
                                         <input type="text" v-model="search" class="form-control" placeholder="Cari...">
                                     </div>
                                 </div>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nama Produk</th>
-                                            <th>Jumlah</th>
-                                            <th>Belum Transfer</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody v-if="renderPaginate.length > 0">
-                                        <tr v-for="(data, idx) in renderPaginate" :key="idx">
-                                            <td>{{ idx + 1 }}</td>
-                                            <td>{{ data.nama }}</td>
-                                            <td>{{ data.jumlah }}</td>
-                                            <td>{{ data.belum }}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary" @click="selectProduk(data)">
-                                                    <i class="fa fa-qrcode"></i>
-                                                    Nomor Seri
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="scrollable">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Produk</th>
+                                                <th>Jumlah</th>
+                                                <th>Belum Transfer</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody v-if="renderPaginate.length > 0">
+                                            <tr v-for="(data, idx) in renderPaginate" :key="idx">
+                                                <td>{{ idx + 1 }}</td>
+                                                <td>{{ data.nama }}</td>
+                                                <td>{{ data.jumlah }}</td>
+                                                <td>{{ data.belum }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary"
+                                                        @click="selectProduk(data)">
+                                                        <i class="fa fa-qrcode"></i>
+                                                        Nomor Seri
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
                                 <pagination :filteredDalamProses="filteredDalamProses"
                                     @updateFilteredDalamProses="updateFilteredDalamProses" />
                             </div>
@@ -226,5 +230,10 @@ export default {
     color: #fff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 18px
+}
+
+.scrollable {
+    height: 300px;
+    overflow-y: auto;
 }
 </style>

@@ -1,6 +1,7 @@
 <script>
 import modalSeri from './modalSeri.vue'
 import generatePackingList from './generatePackingList.vue';
+import axios from 'axios';
 export default {
     components: {
         modalSeri,
@@ -13,33 +14,9 @@ export default {
             hasilGenerate: null,
             isDisable: false,
             detailSeri: false,
-            noseriGeneratePackingList: [
-                {
-                    nama: 'DIGIT PRO BABY',
-                    qty: 1,
-                    noseri: 'TD90909'
-                },
-                {
-                    nama: 'USB CABLE',
-                    qty: 1,
-                    noseri: 'TD90909'
-                },
-                {
-                    nama: 'DIGIT PRO BABY',
-                    qty: 1,
-                    noseri: 'TD90909'
-                },
-                {
-                    nama: 'USB CABLE',
-                    qty: 1,
-                    noseri: 'TD90909'
-                },
-                {
-                    nama: 'USB CABLE',
-                    qty: 1,
-                    noseri: 'TD90909'
-                }
-            ]
+            noseriGeneratePackingList: [],
+            isError: false,
+            errorValue: '',
         }
     },
     methods: {
@@ -47,7 +24,7 @@ export default {
             this.$emit('closeModal');
         },
         generateNoSeri() {
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < this.$store.state.setSeri.set; i++) {
                 this.noseri.push({
                     seri: '',
                 })
@@ -55,12 +32,30 @@ export default {
         },
         autoTab(e, idx) {
             if (e.target.value) {
-                if (idx < this.noseri.length - 1) {
-                    this.$refs.noseri[idx + 1].focus();
+                // jika value nya ada 13 digit, maka akan otomatis ke inputan selanjutnya
+                if (e.target.value.length === 13) {
+                    if (idx < this.noseri.length - 1) {
+                        this.$refs.noseri[idx + 1].focus();
+                    }
                 }
             }
+
+            // jika ada object key error true, maka akan di hapus
+            if (this.noseri[idx].error) {
+                delete this.noseri[idx].error
+            }
+
+            // jika tidak ada object key error, maka isError false
+            if (!this.noseri.find((data) => data.error)) {
+                this.isError = false
+            }
         },
-        generateSeri() {
+        async generateSeri() {
+            // hapus semua object key error
+            this.noseri = this.noseri.map((data) => {
+                delete data.error
+                return data
+            })
             const cek = this.noseri.filter((data) => {
                 return data.seri.trim() === '';
             });
@@ -79,8 +74,42 @@ export default {
             }
 
             if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
-                this.hasilGenerate = Math.floor(Math.random() * 10000000000000000);
-                this.isDisable = true;
+                try {
+                    this.isDisable = true;
+                    const { data } = await axios.post('/api/prd/rw/gen', {
+                        ...this.$store.state.setSeri,
+                        noseri: this.noseri
+                    })
+
+                    const { noseri, itemnoseri } = data
+                    this.hasilGenerate = noseri
+                    this.noseriGeneratePackingList = itemnoseri
+                    this.$swal('Berhasil', 'Berhasil generate no seri', 'success')
+                } catch (error) {
+                    const { message, values } = error.response.data
+                    this.$swal('Gagal', `${message}`, 'error')
+                    this.errorValue = message
+                    this.isError = true
+
+                    if (error.response.data?.values) {
+                        console.log('masuk');
+                        // tambahkan object key error true pada noseri yang gagal
+                        this.noseri = this.noseri.map((data) => {
+                            // trim no seri
+                            data.seri = data.seri.trim();
+                            const find = values.find((data2) => data2 === data.seri);
+                            if (find) {
+                                return {
+                                    ...data,
+                                    error: true
+                                }
+                            }
+                            return data
+                        })
+                    }
+                    
+                    this.isDisable = false
+                }
             }
 
         },
@@ -117,6 +146,9 @@ export default {
             if (this.selectSeri?.id) {
                 this.hasilGenerate = this.selectSeri.noseri
             }
+        },
+        enterTest() {
+            console.log('enter');
         }
     },
     mounted() {
@@ -126,9 +158,13 @@ export default {
     watch: {
         noseri: {
             handler(newVal) {
+                // jika inputan terakhir sudah di isi dengan 13 digit, maka akan generate no seri
                 const lastInput = newVal[newVal.length - 1].seri;
-                if (lastInput && lastInput.trim() !== '') {
-                    this.generateSeri();
+                if (lastInput.length === 13) {
+                    // deteksi apakah di seri apakah ada object key error true
+                    if (!this.isError) {
+                        this.generateSeri();
+                    }
                 }
             },
             deep: true
@@ -153,7 +189,7 @@ export default {
                         <div class="scrollable">
                             <div class="row">
                                 <div class="col">
-                                    <form @keypress.enter="generateSeri">
+                                    <form @keypress.enter="enterTest">
                                         <table class="table">
                                             <thead>
                                                 <tr>
@@ -164,8 +200,12 @@ export default {
                                                 <tr v-for="(data, idx) in noseri" :key="idx">
                                                     <td>
                                                         <input type="text" class="form-control" v-model="data.seri"
+                                                            :class="data.error ? 'is-invalid' : ''"
                                                             @input="autoTab($event, idx)" ref="noseri"
                                                             :disabled="isDisable">
+                                                        <div class="invalid-feedback">
+                                                            Nomor Seri {{ errorValue }}
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </tbody>
