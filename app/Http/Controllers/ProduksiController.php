@@ -32,6 +32,9 @@ use stdClass;
 
 class ProduksiController extends Controller
 {
+    function riwayat_rw(){
+
+    }
     function packing_list_rw($id){
         $data = SeriDetailRw::
         select('seri_detail_rw.noseri','seri_detail_rw.created_at','packer','noseri_id','isi','produk.nama as model','m_produk.nama as produk')

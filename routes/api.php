@@ -331,6 +331,7 @@ Route::prefix('/prd')->group(function () {
         Route::post('/gen', [ProduksiController::class, 'generate_rw']);
         Route::put('/gen/{id}', [ProduksiController::class, 'update_rw']);
         Route::delete('/gen/{id}', [ProduksiController::class, 'hapus_rw']);
+        Route::get('/riwayat', [ProduksiController::class, 'riwayat_rw']);
         Route::get('/pack/{id}', [ProduksiController::class, 'packing_list_rw']);
 
     });
