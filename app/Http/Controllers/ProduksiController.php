@@ -159,16 +159,48 @@ class ProduksiController extends Controller
 
             }else{
                 DB::rollBack();
+                $getSeriByseri = NoseriBarangJadi::
+                select('noseri_barang_jadi.noseri','gdg_barang_jadi.produk_id')
+                ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                ->whereIN('noseri',$seriValues)
+                ->get();
+
+                // Group data by 'produk_id'
+                $groupedData = collect($getSeriByseri)->groupBy('produk_id');
+
+                $duplicateGroups = $groupedData->filter(function ($group) {
+                    return count($group) > 1;
+                });
+
+                $duplicates = $duplicateGroups->flatMap(function ($group) {
+                    return $group;
+                });
+
+                $getDuplicates = json_decode($duplicates, true);
+                $noseriValues = array_map(function($item) {
+                    return $item['noseri'];
+                }, $getDuplicates);
+
                 return response()->json([
                     'status' => 200,
-                    'message' =>  'Gagal Ditambahkan',
+                    'message' =>  'Duplikasi Produk',
+                    'values' =>  $noseriValues,
                 ], 200);
              }
         }else{
             DB::rollBack();
+           $seriGagal = NoseriBarangJadi::
+           Join('jadwal_rakit_noseri_rw', 'jadwal_rakit_noseri_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+           ->where('jadwal_rakit_noseri_rw.status',11)
+           ->whereIN('noseri_barang_jadi.noseri',$seriValues)
+            ->pluck('noseri_barang_jadi.noseri')->toArray();
+
+            $missingIds = array_values(array_diff($seriValues, $seriGagal));
+
             return response()->json([
                 'status' => 200,
-                'message' =>  'Gagal Ditambahkan',
+                'message' =>  'Tidak ditemukan',
+                'values' =>  $missingIds,
             ], 200);
         }
 
@@ -178,6 +210,7 @@ class ProduksiController extends Controller
         return response()->json([
             'status' => 200,
             'message' =>  'Gagal Ditambahkan',
+            'values' =>  '-',
         ], 200);
      }
 
