@@ -71,14 +71,17 @@ export default {
             }
         },
         checkNoSeriCheckAll() {
-            if (this.produk.noseri) {
-                if (this.produk.noseri.length === this.noseri.length) {
-                    this.$refs.checkAll.checked = true;
+            if (!this.loading) {
+                if (this.produk?.noseri) {
+                    if (this.produk.noseri.length === this.noseri.length) {
+                        this.$refs.checkAll.checked = true;
+                    } else {
+                        this.$refs.checkAll.checked = false;
+                    }
                 } else {
                     this.$refs.checkAll.checked = false;
                 }
-            } else {
-                this.$refs.checkAll.checked = false;
+                this.$refs.checkAll
             }
         },
         simpan() {
@@ -110,7 +113,7 @@ export default {
             } catch (error) {
                 console.log(error);
             } finally {
-                this.checkNoSeriCheckAll();
+                this.loading = false;
             }
         },
         showSeriText() {
@@ -227,6 +230,9 @@ export default {
     created() {
         this.getData();
     },
+    mounted() {
+        this.checkNoSeriCheckAll();
+    }
 }
 </script>
 <template>
