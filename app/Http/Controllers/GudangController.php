@@ -28,6 +28,7 @@ use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\Satuan;
+use App\Models\SeriDetailRw;
 use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\SystemLog;
@@ -111,6 +112,49 @@ class GudangController extends Controller
         }
     }
 
+    function terima_perakitan_detail_rw($id)
+    {
+        $data = SeriDetailRw::
+        select('seri_detail_rw.noseri as noseri','seri_detail_rw.noseri_id','produk.nama as nama','seri_detail_rw.created_at','seri_detail_rw.packer','seri_detail_rw.isi')
+        ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
+        ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+        ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+        ->where('noseri_barang_jadi.is_prd',0)
+        ->where('noseri_barang_jadi.is_aktif',0)
+        ->where('noseri_barang_jadi.is_ready',0)
+       ->where('seri_detail_rw.urutan',$id)
+        ->get();
+
+        foreach($data as $d){
+            $obj[] = array(
+                'id' => $d->noseri_id,
+                'produk' => $d->nama,
+                'noseri' => $d->noseri,
+                'tgl_buat' => $d->created_at->format('Y-m-d'),
+                'packer' => $d->packer,
+                'seri' => json_decode($d->isi)
+            );
+        }
+
+        return response()->json($obj);
+    }
+    function terima_perakitan_rw()
+    {
+
+        $data = SeriDetailRw::
+        select('seri_detail_rw.urutan as id','produk.nama as nama')
+        ->selectRaw('COUNT(*) as jumlah')
+        ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
+        ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+        ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+        ->where('noseri_barang_jadi.is_prd',0)
+        ->where('noseri_barang_jadi.is_aktif',0)
+        ->where('noseri_barang_jadi.is_ready',0)
+       ->groupBy('seri_detail_rw.urutan')
+        ->get();
+        return response()->json($data);
+
+    }
     function belum_kirim_rw_seri($id)
     {
 

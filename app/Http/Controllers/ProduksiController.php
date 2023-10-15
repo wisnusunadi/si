@@ -33,6 +33,83 @@ use stdClass;
 class ProduksiController extends Controller
 {
 
+    function tf_riwayat_rw(){
+        $data = SystemLog::where(['tipe'=>'Produksi' , 'subjek' => 'Kirim Reworks'])->get();
+
+        if($data->isEmpty()){
+            $obj = array();
+        }else{
+            foreach($data as $d){
+                $x = json_decode($d->response);
+                $obj[] = array(
+                    'id' => $d->id,
+                    'urutan' => $x->urutan,
+                    'tgl_mulai' => $x->tanggal_mulai,
+                    'tgl_selesai' => $x->tanggal_selesai,
+                    'tgl_tf' => $d->created_at->format('Y-m-d'),
+                    'jumlah' => $x->jumlah,
+                    'item' => $x->item
+                );
+            }
+        }
+
+        return response()->json($obj);
+    }
+
+    function tf_rw(Request $request){
+        DB::beginTransaction();
+        try {
+            //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+
+            $collection = collect($obj);
+            $firstIdSeri = $collection->first()->id;
+            $getUrut = SeriDetailRw::where('noseri_id',$firstIdSeri)->first()->urutan;
+            $jadwal = JadwalPerakitanRw::where('urutan',$getUrut)->first();
+        //     dd($jadwal);
+
+
+         foreach($obj as $o){
+            NoseriBarangJadi::where('id',$o->id)
+            ->update([
+                'is_prd' => 0,
+                'is_aktif' => 0
+            ]);
+         }
+
+         $riwayat = new stdClass();
+            $riwayat->urutan = $jadwal->urutan;
+            $riwayat->tanggal_mulai = $jadwal->tanggal_mulai;
+            $riwayat->tanggal_selesai = $jadwal->tanggal_selesai;
+            $riwayat->tanggal_tf = Carbon::now()->format('Y-m-d');
+            $riwayat->jumlah = count($obj);
+            $riwayat->item = $obj;
+
+
+
+         SystemLog::create([
+            'tipe' => 'Produksi',
+            'subjek' => 'Kirim Reworks',
+            'response' => json_encode($riwayat)
+         ]);
+         DB::commit();
+
+         return response()->json([
+            'status' => 200,
+            'message' =>  'Berhasil Transfer',
+        ], 200);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Gagal Transfer',
+            ], 500);
+        }
+
+    }
+
     function packing_list_rw($id){
         $data = SeriDetailRw::
         select('seri_detail_rw.noseri','seri_detail_rw.created_at','packer','noseri_id','isi','produk.nama as model','m_produk.nama as produk')
@@ -184,6 +261,7 @@ class ProduksiController extends Controller
             $cekSeri = NoseriBarangJadi::where('id', $id)
             ->where('is_ready', 0)
             ->where('is_aktif', 0)
+            ->where('is_prd', 1)
             ->whereNull('used_by')
             ->first();
 
