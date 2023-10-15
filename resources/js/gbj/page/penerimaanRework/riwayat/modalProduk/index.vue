@@ -57,7 +57,7 @@ export default {
     },
     computed: {
         filteredDalamProses() {
-            return this.dataSelected.noseri.filter((data) => {
+            return this.dataSelected.item.filter((data) => {
                 return Object.keys(data).some((key) => {
                     return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
                 });
@@ -94,7 +94,7 @@ export default {
                                         <label for="">Jumlah Transfer</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                <span id="akn">{{ dataSelected.noseri.length }}</span>
+                                                <span id="akn">{{ dataSelected.item.length }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -102,7 +102,7 @@ export default {
                                         <label for="">Tanggal Transfer</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                <span id="po">{{ dateFormat(dataSelected.tgl_transfer) }}</span>
+                                                <span id="po">{{ dateFormat(dataSelected.tgl_tf) }}</span>
                                             </div>
                                         </div>
                                     </div>

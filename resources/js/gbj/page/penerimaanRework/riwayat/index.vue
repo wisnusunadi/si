@@ -21,10 +21,13 @@ export default {
         },
         async getData() {
             try {
+                this.$store.dispatch('setLoading', true)
                 const { data } = await axios.get('/api/gbj/rw/riwayat_penerimaan')
                 this.dataTable = data
             } catch (error) {
                 console.log(error)
+            } finally {
+                this.$store.dispatch('setLoading', false)
             }
         }
     },
@@ -43,7 +46,7 @@ export default {
 }
 </script>
 <template>
-    <div>
+    <div v-if="!$store.state.loading">
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
