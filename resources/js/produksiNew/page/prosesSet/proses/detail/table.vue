@@ -75,6 +75,9 @@ export default {
         cetakPackingList(id) {
             window.open(`/produksiReworks/cetakpackinglist/${id}`, '_blank');
         },
+        cetakNoseri(noseri) {
+            window.open(`/produksiReworks/cetakseri/${noseri}`, '_blank');
+        }
     },
 }
 </script>
@@ -110,7 +113,7 @@ export default {
                         <button class="btn btn-sm btn-outline-info my-1" @click="lihatNoseri(data.noseri)">
                             <i class="fa fa-eye"></i> Lihat No. Seri
                         </button>
-                        <button class="btn btn-sm btn-outline-primary my-1" @click="cetakNoseri(data.id)">
+                        <button class="btn btn-sm btn-outline-primary my-1" @click="cetakNoseri(data.noseri)">
                             <i class="fa fa-print"></i> Cetak No. Seri
                         </button> <br>
                         <button class="btn btn-sm btn-outline-info" @click="lihatPackingList(data.id)">

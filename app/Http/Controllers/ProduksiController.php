@@ -3832,10 +3832,8 @@ class ProduksiController extends Controller
 
     function cetak_seri($seri)
     {
-        // $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper('a4', 'landscape');
-        // return $pdf->stream();
-
-        return view('page.produksi.printreworks.cetakseri', compact('seri'));
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper('a4', 'portrait');
+        return $pdf->stream();
     }
 
     function view_packing_list($id)
