@@ -103,7 +103,7 @@ export default {
                                             <th>No</th>
                                             <th>No. Seri</th>
                                             <th>Nama Produk</th>
-                                            <th>Variasi</th>
+                                            <th>Varian</th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="renderPaginate.length > 0">
