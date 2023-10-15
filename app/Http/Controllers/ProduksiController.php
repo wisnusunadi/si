@@ -33,19 +33,96 @@ use stdClass;
 class ProduksiController extends Controller
 {
 
-    function packing_list_rw($id)
-    {
-        $data = SeriDetailRw::select('seri_detail_rw.noseri', 'seri_detail_rw.created_at', 'packer', 'noseri_id', 'isi', 'produk.nama as model', 'm_produk.nama as produk')
-            ->leftjoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
-            ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-            ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-            ->leftjoin('m_produk', 'm_produk.id', '=', 'produk.produk_id')
-            ->where('seri_detail_rw.noseri_id', $id)->get();
+    function tf_riwayat_rw(){
+        $data = SystemLog::where(['tipe'=>'Produksi' , 'subjek' => 'Kirim Reworks'])->get();
 
         if ($data->isEmpty()) {
             $obj = array();
-        } else {
-            foreach ($data as $d) {
+        }else{
+            foreach($data as $d){
+                $x = json_decode($d->response);
+                $obj[] = array(
+                    'id' => $d->id,
+                    'urutan' => $x->urutan,
+                    'tgl_mulai' => $x->tanggal_mulai,
+                    'tgl_selesai' => $x->tanggal_selesai,
+                    'tgl_tf' => $d->created_at->format('Y-m-d'),
+                    'jumlah' => $x->jumlah,
+                    'item' => $x->item
+                );
+            }
+        }
+
+        return response()->json($obj);
+    }
+
+    function tf_rw(Request $request){
+        DB::beginTransaction();
+        try {
+            //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+
+            $collection = collect($obj);
+            $firstIdSeri = $collection->first()->id;
+            $getUrut = SeriDetailRw::where('noseri_id',$firstIdSeri)->first()->urutan;
+            $jadwal = JadwalPerakitanRw::where('urutan',$getUrut)->first();
+        //     dd($jadwal);
+
+
+         foreach($obj as $o){
+            NoseriBarangJadi::where('id',$o->id)
+            ->update([
+                'is_prd' => 0,
+                'is_aktif' => 0
+            ]);
+         }
+
+         $riwayat = new stdClass();
+            $riwayat->urutan = $jadwal->urutan;
+            $riwayat->tanggal_mulai = $jadwal->tanggal_mulai;
+            $riwayat->tanggal_selesai = $jadwal->tanggal_selesai;
+            $riwayat->tanggal_tf = Carbon::now()->format('Y-m-d');
+            $riwayat->jumlah = count($obj);
+            $riwayat->item = $obj;
+
+
+
+         SystemLog::create([
+            'tipe' => 'Produksi',
+            'subjek' => 'Kirim Reworks',
+            'response' => json_encode($riwayat)
+         ]);
+         DB::commit();
+
+         return response()->json([
+            'status' => 200,
+            'message' =>  'Berhasil Transfer',
+        ], 200);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Gagal Transfer',
+            ], 500);
+        }
+
+    }
+
+    function packing_list_rw($id){
+        $data = SeriDetailRw::
+        select('seri_detail_rw.noseri','seri_detail_rw.created_at','packer','noseri_id','isi','produk.nama as model','m_produk.nama as produk')
+        ->leftjoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
+        ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+        ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+        ->leftjoin('m_produk', 'm_produk.id', '=', 'produk.produk_id')
+        ->where('seri_detail_rw.noseri_id',$id)->get();
+
+        if($data->isEmpty()){
+            $obj = array();
+        }else{
+            foreach($data as $d){
                 $obj[] = array(
                     'id' => $d->noseri_id,
                     'produk' => $d->produk,
@@ -57,19 +134,19 @@ class ProduksiController extends Controller
                 );
             }
         }
-        return $obj;
+        return response()->json($obj);
     }
-
     function hapus_rw($id)
     {
         DB::beginTransaction();
         try {
             //code...
             $cekSeri = NoseriBarangJadi::where('id', $id)
-                ->where('is_ready', 0)
-                ->where('is_aktif', 0)
-                ->whereNull('used_by')
-                ->first();
+            ->where('is_ready', 0)
+            ->where('is_aktif', 0)
+            ->where('is_prd', 1)
+            ->whereNull('used_by')
+            ->first();
 
             if ($cekSeri) {
                 $seri = SeriDetailRw::where('noseri_id', $id)->first()->isi;
@@ -117,8 +194,8 @@ class ProduksiController extends Controller
             }, $obj->noseri);
 
             $getIdSeri = NoseriBarangJadi::Join('jadwal_rakit_noseri_rw', 'jadwal_rakit_noseri_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-                ->where('jadwal_rakit_noseri_rw.status', 11)
-                ->whereIN('noseri_barang_jadi.noseri', $seriValues)
+            ->where('jadwal_rakit_noseri_rw.status', 11)
+            ->whereIN('noseri_barang_jadi.noseri', $seriValues)
                 ->pluck('noseri_barang_jadi.id')->toArray();
 
 
@@ -126,7 +203,7 @@ class ProduksiController extends Controller
             if (count($getIdSeri) == count($seriValues)) {
 
                 $prdValues = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                    ->whereIN('noseri_barang_jadi.id', $getIdSeri)
+                ->whereIN('noseri_barang_jadi.id', $getIdSeri)
                     ->pluck('gdg_barang_jadi.produk_id')->toArray();
 
                 $getIdprd = DetailProdukRw::where('detail_produks_rw.produk_parent_id', $request->produk_reworks_id)
@@ -142,7 +219,7 @@ class ProduksiController extends Controller
 
 
                     $max = NoseriBarangJadi::Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                        ->where('gdg_barang_jadi.produk_id', $obj->produk_reworks_id)
+                    ->where('gdg_barang_jadi.produk_id', $obj->produk_reworks_id)
                         ->where('noseri_barang_jadi.unit', $produk_id->kode)
                         ->where('noseri_barang_jadi.th', $tahun)
                         ->latest('noseri_barang_jadi.id')->value('noseri_barang_jadi.urut');
@@ -166,9 +243,9 @@ class ProduksiController extends Controller
 
 
                     $items = NoseriBarangJadi::select('produk.nama as prd', 'gdg_barang_jadi.nama as varian', 'noseri_barang_jadi.id', 'noseri_barang_jadi.noseri')
-                        ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                        ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-                        ->whereIN('noseri_barang_jadi.id', $getIdSeri)->get();
+                    ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                    ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                    ->whereIN('noseri_barang_jadi.id', $getIdSeri)->get();
 
                     foreach ($items as $i) {
                         $item[] = array(
@@ -196,8 +273,8 @@ class ProduksiController extends Controller
                 } else {
                     DB::rollBack();
                     $getSeriByseri = NoseriBarangJadi::select('noseri_barang_jadi.noseri', 'gdg_barang_jadi.produk_id')
-                        ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                        ->whereIN('noseri', $seriValues)
+                    ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                    ->whereIN('noseri', $seriValues)
                         ->get();
 
                     // Group data by 'produk_id'
@@ -225,8 +302,8 @@ class ProduksiController extends Controller
             } else {
                 DB::rollBack();
                 $seriGagal = NoseriBarangJadi::Join('jadwal_rakit_noseri_rw', 'jadwal_rakit_noseri_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-                    ->where('jadwal_rakit_noseri_rw.status', 11)
-                    ->whereIN('noseri_barang_jadi.noseri', $seriValues)
+                ->where('jadwal_rakit_noseri_rw.status', 11)
+                ->whereIN('noseri_barang_jadi.noseri', $seriValues)
                     ->pluck('noseri_barang_jadi.noseri')->toArray();
 
                 $missingIds = array_values(array_diff($seriValues, $seriGagal));
@@ -266,26 +343,26 @@ class ProduksiController extends Controller
 
             if ($newId) {
                 $seriAvailable = NoseriBarangJadi::Join('jadwal_rakit_noseri_rw', 'jadwal_rakit_noseri_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-                    ->where('jadwal_rakit_noseri_rw.status', 11)
-                    ->whereIN('noseri_barang_jadi.noseri', $seriValues)
+                ->where('jadwal_rakit_noseri_rw.status', 11)
+                ->whereIN('noseri_barang_jadi.noseri', $seriValues)
                     ->pluck('noseri_barang_jadi.noseri')->toArray();
 
                 if (count($seriAvailable) == count($newId)) {
                     $newValues = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                        ->whereIN('noseri_barang_jadi.noseri', $newId)
+                    ->whereIN('noseri_barang_jadi.noseri', $newId)
                         ->pluck('gdg_barang_jadi.produk_id')->toArray();
 
                     $curValues = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                        ->whereIN('noseri_barang_jadi.noseri', $currentId)
+                    ->whereIN('noseri_barang_jadi.noseri', $currentId)
                         ->pluck('gdg_barang_jadi.produk_id')->toArray();
 
                     if (empty(array_diff($newValues, $curValues)) && empty(array_diff($curValues, $newValues))) {
                         $curValuesId = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                            ->whereIN('noseri_barang_jadi.noseri', $currentId)
+                        ->whereIN('noseri_barang_jadi.noseri', $currentId)
                             ->pluck('noseri_barang_jadi.id')->toArray();
 
                         $newValuesId = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                            ->whereIN('noseri_barang_jadi.noseri', $newId)
+                        ->whereIN('noseri_barang_jadi.noseri', $newId)
                             ->pluck('noseri_barang_jadi.id')->toArray();
 
                         JadwalRakitNoseriRw::where('noseri_id', $curValuesId)
@@ -299,9 +376,9 @@ class ProduksiController extends Controller
                             ]);
 
                         $items = NoseriBarangJadi::select('produk.nama as prd', 'gdg_barang_jadi.nama as varian', 'noseri_barang_jadi.id', 'noseri_barang_jadi.noseri')
-                            ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                            ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-                            ->whereIN('noseri_barang_jadi.noseri', $seriValues)->get();
+                        ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                        ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                        ->whereIN('noseri_barang_jadi.noseri', $seriValues)->get();
 
                         foreach ($items as $i) {
                             $item[] = array(
@@ -314,9 +391,9 @@ class ProduksiController extends Controller
 
                         $seriRw = SeriDetailRw::where('noseri_id', $id)->first();
                         SeriDetailRw::where('noseri_id', $id)
-                            ->update([
-                                'isi' => $item
-                            ]);
+                        ->update([
+                            'isi' => $item
+                        ]);
 
                         DB::commit();
                         return response()->json([
