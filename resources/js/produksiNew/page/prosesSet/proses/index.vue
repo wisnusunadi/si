@@ -52,7 +52,7 @@ export default {
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
             </div>
         </div>
-        <Table :dataTable="renderPaginate" />
+        <Table :dataTable="renderPaginate" @refresh="getData" />
         <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses" />
     </div>
 </template>

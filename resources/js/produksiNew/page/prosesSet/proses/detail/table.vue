@@ -1,6 +1,7 @@
 <script>
 import modalDetail from '../modalDetail'
 import LihatSeri from '../modalCreate/modalSeri.vue'
+import axios from 'axios'
 export default {
     components: {
         modalDetail,
@@ -48,16 +49,31 @@ export default {
                 cancelButtonColor: '#d33'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.$swal({
-                        title: 'Berhasil!',
-                        text: 'Data berhasil dihapus',
-                        icon: 'success',
+                    axios.delete(`/api/prd/rw/gen/${id}`).then(() => {
+                        this.$swal({
+                            title: 'Berhasil!',
+                            text: 'Data berhasil dihapus',
+                            icon: 'success',
+                        })
+                        this.$emit('refresh')
+                    }).catch((err) => {
+                        this.$swal({
+                            title: 'Gagal!',
+                            text: 'Data gagal dihapus',
+                            icon: 'error',
+                        })
                     })
                 }
             })
         },
         editNoseriProduk(data) {
             this.$emit('editNoseriProduk', data)
+        },
+        lihatPackingList(id) {
+            window.open(`/produksiReworks/viewpackinglist/${id}`, '_blank');
+        },
+        cetakPackingList(id) {
+            window.open(`/produksiReworks/cetakpackinglist/${id}`, '_blank');
         },
     },
 }
@@ -84,10 +100,10 @@ export default {
                         <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(data)">
                             <i class="fa fa-info-circle"></i> Detail No. Seri Produk
                         </button>
-                        <button class="btn btn-sm btn-outline-warning" @click="editNoseriProduk(data)">
+                        <button class="btn btn-sm btn-outline-warning" @click="editNoseriProduk(data)" v-if="data.status != 'Transfer'">
                             <i class="fa fa-pencil"></i> Edit No. Seri Produk
                         </button>
-                        <button class="btn btn-sm btn-outline-danger" @click="hapusNoseriProduk(data.id)">
+                        <button class="btn btn-sm btn-outline-danger" @click="hapusNoseriProduk(data.id)" v-if="data.status != 'Transfer'">
                             <i class="fa fa-trash"></i> Hapus No. Seri Produk
                         </button>
                         <br>

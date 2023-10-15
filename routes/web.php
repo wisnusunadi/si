@@ -132,6 +132,12 @@ Route::group(['prefix' => '/produksi', 'middleware' => ['auth', 'divisi:prd,diru
     Route::view('/{any?}', 'page.produksi.new_produksi')->where('any', '.*');
 });
 
+Route::group(['prefix' => '/produksiReworks'], function () {
+    Route::get('/cetakseri/{seri}', [ProduksiController::class, 'cetak_seri']);
+    Route::get('/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);
+    Route::get('/cetakpackinglist/{id}', [ProduksiController::class, 'cetak_packing_list']);
+});
+
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {
 //     Route::view('/produk/{any?}', 'page.penjualan.produk');
 //     Route::view('/customer/{any?}', 'page.penjualan.customer');
@@ -505,6 +511,3 @@ Route::view('/uit', 'page.login_page.index');
 
 Route::namespace('v2')->group(__DIR__ . '/kesehatan/kesehatan.php');
 Route::namespace('lab')->group(__DIR__ . '/inventory/web.php');
-Route::get('/test/cetakseri/{seri}', [ProduksiController::class, 'cetak_seri']);
-Route::get('/test/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);
-Route::get('/test/cetakpackinglist/{id}', [ProduksiController::class, 'cetak_packing_list']);
