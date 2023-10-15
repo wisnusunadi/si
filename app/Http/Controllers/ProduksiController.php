@@ -35,7 +35,10 @@ class ProduksiController extends Controller
 
     function tf_riwayat_rw(){
         $data = SystemLog::where(['tipe'=>'Produksi' , 'subjek' => 'Kirim Reworks'])->get();
-
+        $res = $data->first()->response;
+        $getUrut = json_decode($res);
+        $jadwal = JadwalPerakitanRw::where('urutan',$getUrut->urutan)->first()->produk_reworks_id;
+        $produk = Produk::find($jadwal);
         if ($data->isEmpty()) {
             $obj = array();
         }else{
@@ -44,6 +47,7 @@ class ProduksiController extends Controller
                 $obj[] = array(
                     'id' => $d->id,
                     'urutan' => $x->urutan,
+                    'nama' => $produk->nama,
                     'tgl_mulai' => $x->tanggal_mulai,
                     'tgl_selesai' => $x->tanggal_selesai,
                     'tgl_tf' => $d->created_at->format('Y-m-d'),
