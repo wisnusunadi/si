@@ -122,19 +122,28 @@ class ProduksiController extends Controller
         if($data->isEmpty()){
             $obj = array();
         }else{
-            foreach($data as $d){
-                $obj[] = array(
-                    'id' => $d->noseri_id,
-                    'produk' => $d->produk,
-                    'model' => $d->model,
-                    'noseri' => $d->noseri,
-                    'tgl_buat' => $d->created_at->format('Y-m-d'),
-                    'packer' => $d->packer,
-                    'seri' => json_decode($d->isi)
-                );
-            }
+
+            $obj = new stdClass();
+            $obj->id = $data[0]->noseri_id;
+            $obj->produk =  $data[0]->produk;
+            $obj->model =  $data[0]->model;
+            $obj->noseri = $data[0]->noseri;
+            $obj->tgl_buat = $data[0]->created_at->format('Y-m-d');
+            $obj->packer = $data[0]->packer;
+            $obj->seri = json_decode($data[0]->isi);
+            // foreach($data as $d){
+            //     $obj[] = array(
+            //         'id' => $d->noseri_id,
+            //         'produk' => $d->produk,
+            //         'model' => $d->model,
+            //         'noseri' => $d->noseri,
+            //         'tgl_buat' => $d->created_at->format('Y-m-d'),
+            //         'packer' => $d->packer,
+            //         'seri' => json_decode($d->isi)
+            //     );
+            // }
         }
-        return response()->json($obj);
+        return $obj;
     }
     function hapus_rw($id)
     {
@@ -3831,8 +3840,7 @@ class ProduksiController extends Controller
         // return $pdf->stream();
         $data = $this->packing_list_rw($id);
         // change array to object
-        dd($data);
-        $dataview = $data[0];
+        $dataview = $data;
         return view('page.produksi.printreworks.viewpackinglist', compact('dataview'));
     }
 
@@ -3842,9 +3850,8 @@ class ProduksiController extends Controller
         // return $pdf->stream();
         $data = $this->packing_list_rw($id);
         // change array to object
-        $data = json_decode(json_encode($data));
-        $dataview = $data[0];
-        
+        $dataview = $data;
+
         return view('page.produksi.printreworks.cetakpackinglist', compact('dataview'));
     }
 }
