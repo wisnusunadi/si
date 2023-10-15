@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import Pagination from '../../../components/pagination.vue';
 import Table from './table.vue';
 export default {
@@ -8,56 +9,7 @@ export default {
     },
     data() {
         return {
-            dataTable: [
-                {
-                    id: 76,
-                    urutan: 1,
-                    produk_reworks_id: 329,
-                    tgl_mulai: "2023-09-07",
-                    tgl_selesai: "2023-09-11",
-                    nama: "TAS ANTROPOMETRI KIT-10",
-                    jumlah: 5,
-                    status: "Proses",
-                    belum: 1,
-                    selesai: 24,
-                    tgl_transfer: "2023-09-11",
-                    produk: [
-                        {
-                            id: 80,
-                            produk_id: 188,
-                            nama: "MTR-BABY 002",
-                            belum: 1,
-                            jumlah: 5,
-                            noseri: [
-                                {
-                                    id: 81872,
-                                    noseri: "TD17227A00077",
-                                    variasi: null
-                                },
-                                {
-                                    id: 81872,
-                                    noseri: "TD17227A00077",
-                                    variasi: null
-                                }
-                            ]
-                        },
-                        {
-                            id: 80,
-                            produk_id: 188,
-                            nama: "MTR-BABY 002",
-                            belum: 1,
-                            jumlah: 5,
-                            noseri: [
-                                {
-                                    id: 81872,
-                                    noseri: "TD17227A00077",
-                                    variasi: null
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ],
+            dataTable: [],
             search: '',
             renderPaginate: [
             ],
@@ -67,6 +19,17 @@ export default {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true)
+                const { data } = await axios.get('/api/gbj/rw/riwayat_permintaan')
+                this.dataTable = data
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.dispatch('setLoading', false)
+            }
+        }
     },
     computed: {
         filteredDalamProses() {
@@ -77,10 +40,13 @@ export default {
             });
         },
     },
+    mounted() {
+        this.getData()
+    }
 }
 </script>
 <template>
-    <div>
+    <div v-if="!$store.state.loading">
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">

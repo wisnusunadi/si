@@ -22,11 +22,21 @@ export default {
     methods: {
         closeModal() {
             this.$emit('closeModal');
+            this.$emit('refresh')
         },
         generateNoSeri() {
-            for (let i = 0; i < this.$store.state.setSeri.set; i++) {
-                this.noseri.push({
-                    seri: '',
+            if (!this.selectSeri?.id) {
+                for (let i = 0; i < this.$store.state.setSeri.set; i++) {
+                    this.noseri.push({
+                        seri: '',
+                    })
+                }
+            } else {
+                // get noseri from array selectSeri.seri and mapping to noseri
+                this.noseri = this.selectSeri.seri.map((data) => {
+                    return {
+                        seri: data.noseri
+                    }
                 })
             }
         },
@@ -73,6 +83,17 @@ export default {
                 return;
             }
 
+            // jika ada nomor seri yang kosong atau null muncul error
+            if (cek.length > 0) {
+                this.$swal({
+                    title: 'Gagal!',
+                    text: 'No. Seri tidak boleh kosong',
+                    icon: 'error',
+                })
+                return;
+            }
+
+
             if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
                 try {
                     this.isDisable = true;
@@ -92,26 +113,98 @@ export default {
                     this.isError = true
 
                     if (error.response.data?.values) {
-                        console.log('masuk');
+                        console.log('masuk', values);
                         // tambahkan object key error true pada noseri yang gagal
                         this.noseri = this.noseri.map((data) => {
                             // trim no seri
-                            data.seri = data.seri.trim();
-                            const find = values.find((data2) => data2 === data.seri);
+                            data.seri = data?.seri.trim();
+                            const find = values.find((data2) => data2 == data?.seri);
+                            console.log('find', find);
                             if (find) {
                                 return {
                                     ...data,
                                     error: true
-                                }
+                                };
                             }
-                            return data
-                        })
+                        });
                     }
-                    
+
                     this.isDisable = false
                 }
             }
 
+        },
+        async updateSeri() {
+            // hapus semua object key error
+            this.noseri = this.noseri.map((data) => {
+                delete data.error
+                return data
+            })
+            const cek = this.noseri.filter((data) => {
+                return data.seri.trim() === '';
+            });
+
+            const noSeriUnique = this.noseri.filter((data, idx) => {
+                return this.noseri.findIndex((data2) => data2.seri === data.seri) === idx;
+            });
+
+            if (noSeriUnique.length !== this.noseri.length) {
+                this.$swal({
+                    title: 'Gagal!',
+                    text: 'No. Seri tidak boleh sama',
+                    icon: 'error',
+                })
+                return;
+            }
+
+            // jika ada nomor seri yang kosong atau null muncul error
+            if (cek.length > 0) {
+                this.$swal({
+                    title: 'Gagal!',
+                    text: 'No. Seri tidak boleh kosong',
+                    icon: 'error',
+                })
+                return;
+            }
+
+
+            if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
+                try {
+                    this.isDisable = true;
+                    const { data } = await axios.put(`/api/prd/rw/gen/${this.selectSeri.id}`, {
+                        noseri: this.noseri
+                    })
+
+                    const { noseri, itemnoseri } = data
+                    this.hasilGenerate = noseri
+                    this.noseriGeneratePackingList = itemnoseri
+                    this.$swal('Berhasil', 'Berhasil update no seri', 'success')
+                } catch (error) {
+                    const { message, values } = error.response.data
+                    this.$swal('Gagal', `${message}`, 'error')
+                    this.errorValue = message
+                    this.isError = true
+
+                    if (error.response.data?.values) {
+                        console.log('masuk', values);
+                        // tambahkan object key error true pada noseri yang gagal
+                        this.noseri = this.noseri.map((data) => {
+                            // trim no seri
+                            data.seri = data?.seri.trim();
+                            const find = values.find((data2) => data2 == data?.seri);
+                            console.log('find', find);
+                            if (find) {
+                                return {
+                                    ...data,
+                                    error: true
+                                };
+                            }
+                        });
+                    }
+
+                    this.isDisable = false
+                }
+            }
         },
         resetModal() {
             this.noseri = [];
@@ -145,6 +238,7 @@ export default {
         mappingEdit() {
             if (this.selectSeri?.id) {
                 this.hasilGenerate = this.selectSeri.noseri
+                this.noseriGeneratePackingList = this.selectSeri.seri
             }
         },
         enterTest() {
@@ -157,12 +251,12 @@ export default {
     },
     watch: {
         noseri: {
-            handler(newVal) {
+            handler(newVal, oldVal) {
                 // jika inputan terakhir sudah di isi dengan 13 digit, maka akan generate no seri
                 const lastInput = newVal[newVal.length - 1].seri;
                 if (lastInput.length === 13) {
                     // deteksi apakah di seri apakah ada object key error true
-                    if (!this.isError) {
+                    if (!this.isError && !this.selectSeri?.id) {
                         this.generateSeri();
                     }
                 }
@@ -261,7 +355,7 @@ export default {
                     </div>
                     <div class="d-flex bd-highlight mb-3 mx-3">
                         <div class="mr-auto p-2 bd-highlight">
-                            <button class="btn btn-success" @click="generateSeri">
+                            <button class="btn btn-success" @click="selectSeri?.id ? updateSeri() : generateSeri()">
                                 {{ selectSeri?.id ? 'Simpan' : 'Generate' }}
                             </button>
                         </div>

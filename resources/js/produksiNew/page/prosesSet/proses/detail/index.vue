@@ -97,7 +97,7 @@ export default {
 </script>
 <template>
     <div v-if="!$store.state.loading">
-        <ModalCreate v-if="showModal" @closeModal="closeModalCreate" :selectSeri="selectSeri" />
+        <ModalCreate v-if="showModal" @closeModal="closeModalCreate" :selectSeri="selectSeri" @refresh="getData" />
         <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="card">
             <div class="card-body">
@@ -111,7 +111,7 @@ export default {
                             placeholder="Cari...">
                     </div>
                 </div>
-                <Table :dataTable="renderPaginate" @editNoseriProduk="editNoseriProduk" />
+                <Table :dataTable="renderPaginate" @editNoseriProduk="editNoseriProduk" @refresh="getData"/>
                 <pagination :filteredDalamProses="filteredDalamProses"
                     @updateFilteredDalamProses="updateFilteredDalamProses" />
             </div>
