@@ -39,13 +39,17 @@ export default {
 
             });
         },
-        statusReworks(belum, selesai) {
-            if (selesai == 0) {
-                return 'belum_dikerjakan'
-            } else if (selesai > 0) {
-                return 'sedang_dikerjakan'
-            } else if (belum == 0) {
+        statusReworks(belum, selesai, jumlah) {
+            if(selesai == jumlah) {
                 return 'selesai'
+            }
+
+            if(selesai == 0){
+                return 'belum_dikerjakan'
+            }
+
+            if(selesai != jumlah && belum !=0) {
+                return 'sedang_dikerjakan'
             }
         },
         transferRework(id) {
