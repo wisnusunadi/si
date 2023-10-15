@@ -44,8 +44,8 @@ export default {
                     <td>{{ dateFormat(data.tgl_mulai) }}</td>
                     <td>{{ dateFormat(data.tgl_selesai) }}</td>
                     <td>{{ data.nama }}</td>
-                    <td>{{ data.noseri.length }}</td>
-                    <td>{{ dateFormat(data.tgl_transfer) }}</td>
+                    <td>{{ data.item.length }}</td>
+                    <td>{{ dateFormat(data.tgl_tf) }}</td>
                     <td>
                         <button class="btn btn-sm btn-outline-info" @click="detail(data)">
                             <i class="fas fa-info-circle"></i>
