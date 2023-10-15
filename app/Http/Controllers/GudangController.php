@@ -5706,6 +5706,29 @@ class GudangController extends Controller
         return Excel::download(new NoseriGudangExport(), 'NoseriBarangJadi.xlsx');
     }
 
+    function history_modal_data_seri_tf($id)
+    {
+        $data = NoseriBarangJadi::
+        select('noseri_barang_jadi.id','noseri_barang_jadi.noseri','seri_detail_rw.isi')
+        ->leftjoin('t_gbj_noseri', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+        ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+        ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+        ->where('t_gbj_detail.detail_pesanan_produk_id',$id)->get();
+
+        if($data->isEmpty()){
+            $obj = array();
+        }else{
+            foreach ($data as $d) {
+                $obj[] = array(
+                    'id' => $d->id,
+                    'noseri' => $d->noseri,
+                    'item' => $d->isi == null ? array(): json_decode($d->isi)
+                );
+            }
+        }
+
+        return response()->json($obj);
+    }
     function history_modal_gbj($id)
     {
         $data = Pesanan::find($id);

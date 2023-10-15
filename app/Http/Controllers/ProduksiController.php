@@ -634,7 +634,9 @@ class ProduksiController extends Controller
                     ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
             },
         ])
-            ->where('state', 18)->groupBy('urutan')->get();
+            ->where('state', 18)
+            ->where('status_tf', 16)
+            ->groupBy('urutan')->get();
         if ($data->isempty()) {
             $obj = array();
         } else {

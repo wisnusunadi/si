@@ -203,6 +203,7 @@ Route::prefix('/gbj')->group(function () {
         Route::get('/riwayat_penerimaan', [GudangController::class, 'riwayat_rw_penerimaan']);
     });
 
+
     Route::post('update_stok', [App\Http\Controllers\GudangController::class, 'updateStokGudang']);
     Route::post('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
     Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
@@ -210,6 +211,7 @@ Route::prefix('/gbj')->group(function () {
     Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
     Route::post('/get', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
     Route::post('data-so', [GudangController::class, 'getSODone']);
+    Route::get('modal_data_seri_tf/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_data_seri_tf']);
     Route::get('/modal_data/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj']);
     Route::get('/modal_data_non/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj_non']);
     Route::get('/modal_data_seri/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj_seri']);
