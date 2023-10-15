@@ -70,15 +70,17 @@ export default {
                 <tr>
                     <th rowspan="2">No Urut</th>
                     <th rowspan="2">Nama Produk</th>
+                    <th rowspan="2">Jumlah</th>
                     <th rowspan="2">Aksi</th>
                 </tr>
             </thead>
             <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, index) in dataTable" :key="index">
-                    <td>PRD-{{ data.urutan }}</td>
+                    <td>PRD-{{ data.id }}</td>
                     <td>{{ data.nama }}</td>
+                    <td>{{ data.jumlah }}</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary" @click="transferRework(data.urutan)">
+                        <button class="btn btn-sm btn-outline-primary" @click="transferRework(data.id)">
                             <i class="fas fa-check"></i>
                             Terima
                         </button>

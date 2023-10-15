@@ -35,9 +35,8 @@ export default {
         },
         async getData() {
             try {
-                const { data } = await axios.get(`/api/prd/rw/proses/produk/${this.id}`);
-                const { produk_reworks_id, set, urutan, item } = data
-                this.dataTable = item
+                const { data } = await axios.get(`/api/gbj/rw/dp/seri/${this.id}`);
+                this.dataTable = data;
             } catch (error) {
                 console.log(error);
             }
@@ -92,7 +91,7 @@ export default {
             noserinotfound = [...new Set(noserinotfound)]
 
             if (noserinotfound.length > 0 && noserinotfound != "") {
-                this.$swal('Peringatan', `Nomor Seri ${noserinotfound.join(', ')} tidak ditemukan`, 'warning')
+                this.$swal('Peringatan', `Nomor Seri ${noserinotfound.join(', ')} tidx1ak ditemukan`, 'warning')
             }
         },
         autoSelect() {
