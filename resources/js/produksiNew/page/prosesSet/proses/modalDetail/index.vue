@@ -92,7 +92,7 @@ export default {
                         <tbody v-if="renderPaginate.length > 0">
                             <tr v-for="(data, index) in renderPaginate" :key="index">
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ `${data.produk} ${data.varian}` }}</td>
+                                <td>{{ data.produk }} {{ data.varian }}</td>
                                 <td>{{ data.noseri }}</td>
                             </tr>
                         </tbody>
