@@ -41,26 +41,30 @@
         $('#nomor-seri-reworks').html(data.noseri);
         $('#tgl-dibuat-reworks').html(dateIndo(data.tgl_dibuat));
         $('#packer-reworks').html(data.packer);
-        console.log(data.item)
+        $('.tableprodukreworks').DataTable().clear().destroy();
 
+        let dataJson = data.item;
         if (data.item) {
             $('.tableprodukreworks').DataTable({
+                data: dataJson,
+                destroy: true,
                 processing: true,
-                serverSide: true,
-                data: data.item,
-                columns: [
-                    // {
-                    //     data: null,
-                    //     render: function(data, type, row, meta) {
-                    //         return meta.row + 1;
-                    //     }
-                    // },
-                    // {
-                    //     data: null,
-                    //     render: function(data, type, row) {
-                    //         return data.produk + ' ' + data.varian;
-                    //     }
-                    // },
+                serverSide: false,
+                ordering: false,
+                autoWidth: false,
+                columns: [{
+                        data: null,
+                        // buat index
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            return data.produk + ' ' + data.varian;
+                        }
+                    },
                     {
                         data: 'noseri',
                     }

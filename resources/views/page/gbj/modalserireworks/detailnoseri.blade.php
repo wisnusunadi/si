@@ -45,8 +45,8 @@
                 <table class="table tableprodukreworks">
                     <thead>
                         <tr>
-                            {{-- <th>No</th>
-                            <th>Nama Produk</th> --}}
+                            <th>No</th>
+                            <th>Nama Produk</th>
                             <th>Nomor Seri</th>
                         </tr>
                     </thead>

@@ -1467,33 +1467,32 @@
                     noseri: '1234567890',
                     tgl_dibuat: '2021-09-01',
                     packer: 'Packer 1',
-                    item: [{
-                        "id": 7079,
-                        "noseri": "TD1621AA8268",
-                        "varian": "",
-                        "produk": "MTB-2MTR"
+                     item: [{
+                        id: 7079,
+                        noseri: "TD1621AA8268",
+                        varian: "",
+                        produk: "MTB-2MTR"
                     }, {
-                        "id": 26885,
-                        "noseri": "TD09202B0484",
-                        "varian": "COKLAT",
-                        "produk": "DIGIT PRO IDA"
+                        id: 26885,
+                        noseri: "TD09202B0484",
+                        varian: "COKLAT",
+                        produk: "DIGIT PRO IDA"
                     }, {
-                        "id": 81872,
-                        "noseri": "TD17227A00077",
-                        "varian": "",
-                        "produk": "MTR-BABY 002"
+                        id: 81872,
+                        noseri: "TD17227A00077",
+                        varian: "",
+                        produk: "MTR-BABY 002"
                     }, {
-                        "id": 114347,
-                        "noseri": "TD15229A0049",
-                        "varian": "",
-                        "produk": "PTB-2in1 "
+                        id: 114347,
+                        noseri: "TD15229A0049",
+                        varian: "",
+                        produk: "PTB-2in1 "
                     }, {
-                        "id": 166263,
-                        "noseri": "TD21237A00153",
-                        "varian": "",
-                        "produk": "DIGIT-PRO BABY"
-                    },
-                ]
+                        id: 166263,
+                        noseri: "TD21237A00153",
+                        varian: "",
+                        produk: "DIGIT-PRO BABY"
+                    }]
                 },
                 {
                     id: 2,
@@ -1589,7 +1588,7 @@
                             <button class="btn btn-sm btn-outline-info detailnoseriproduk"><i class="fa fa-info-circle"></i> Detail No. Seri Produk
                             </button>
                             <button class="btn btn-sm btn-outline-primary my-1 noseriproduk"><i class="fa fa-eye"></i> Lihat No. Seri</button>
-                            <a href="/test/viewpackinglist/${data.id}" target="_blank" class="btn btn-sm btn-outline-warning"><i class="fa fa-eye"></i> Lihat Packing List
+                            <a href="/produksiReworks/viewpackinglist/${data.id}" target="_blank" class="btn btn-sm btn-outline-warning"><i class="fa fa-eye"></i> Lihat Packing List
                             </a>                            
                         `
                         } else {
