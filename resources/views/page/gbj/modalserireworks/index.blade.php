@@ -47,13 +47,12 @@
         if (data.item) {
             $('.tableprodukreworks').DataTable({
                 data: dataJson,
-                                destroy: true,
+                destroy: true,
                 processing: true,
                 serverSide: false,
                 ordering: false,
                 autoWidth: false,
-                columns: [
-                    {
+                columns: [{
                         data: null,
                         // buat index
                         render: function(data, type, row, meta) {

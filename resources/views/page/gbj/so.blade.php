@@ -1588,7 +1588,7 @@
                             <button class="btn btn-sm btn-outline-info detailnoseriproduk"><i class="fa fa-info-circle"></i> Detail No. Seri Produk
                             </button>
                             <button class="btn btn-sm btn-outline-primary my-1 noseriproduk"><i class="fa fa-eye"></i> Lihat No. Seri</button>
-                            <a href="/test/viewpackinglist/${data.id}" target="_blank" class="btn btn-sm btn-outline-warning"><i class="fa fa-eye"></i> Lihat Packing List
+                            <a href="/produksiReworks/viewpackinglist/${data.id}" target="_blank" class="btn btn-sm btn-outline-warning"><i class="fa fa-eye"></i> Lihat Packing List
                             </a>                            
                         `
                         } else {
