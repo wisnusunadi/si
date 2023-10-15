@@ -634,7 +634,9 @@ class ProduksiController extends Controller
                     ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
             },
         ])
-            ->where('state', 18)->groupBy('urutan')->get();
+            ->where('state', 18)
+            ->where('status_tf', 16)
+            ->groupBy('urutan')->get();
         if ($data->isempty()) {
             $obj = array();
         } else {
@@ -1591,6 +1593,7 @@ class ProduksiController extends Controller
                     } else {
                         return '<input type="text" disabled class="form-control jumlah" name="qty[]" id="qty" value="' . $x . '">';
                     }
+
                 })
                 ->addColumn('jumlah', function ($data) {
                     $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($data) {
@@ -1953,11 +1956,20 @@ class ProduksiController extends Controller
     function getNoseriSO(Request $request)
     {
         try {
-            $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->where('is_aktif', 1)->get();
+            $data = NoseriBarangJadi::
+              addSelect([
+                'cek_rw' => function ($q) {
+                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                        ->from('seri_detail_rw')
+                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+        }])->where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->where('is_aktif', 1)->get();
             $i = 0;
             return datatables()->of($data)
                 ->addColumn('ids', function ($d) {
                     return $d->id;
+                })
+                ->addColumn('isaktif', function ($d) {
+                    return $d->cek_rw;
                 })
                 ->addColumn('ischange', function ($d) {
                     return $d->is_change;

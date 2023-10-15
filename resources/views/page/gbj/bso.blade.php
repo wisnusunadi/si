@@ -835,13 +835,15 @@
                         }
                     },
                     {
-                        'data': null,
-                        'render': function(data, type, row) {
-                            if(data.is_aktif == 1){
-                                return `<a class="btn btn-sm btn-info" href="/test/cetakpackinglist/${data.id}" target="_blank">
+                        data: null,
+                        render: function(data, type, row) {
+                            if(data.isaktif == 1){
+                                return `<a class="btn btn-sm btn-info" href="/produksiReworks/viewpackinglist/${data.id}" target="_blank">
                                     <i class="fas fa-eye"></i>
                                     View Packing List
                                     </a>`
+                            } else {
+                                return ''
                             }
                         }
                     }
