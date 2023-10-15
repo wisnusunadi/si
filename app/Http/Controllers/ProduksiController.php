@@ -3831,7 +3831,7 @@ class ProduksiController extends Controller
         // return $pdf->stream();
         $data = $this->packing_list_rw($id);
         // change array to object
-        $data = json_decode(json_encode($data));
+        dd($data);
         $dataview = $data[0];
         return view('page.produksi.printreworks.viewpackinglist', compact('dataview'));
     }

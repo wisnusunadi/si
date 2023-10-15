@@ -100,7 +100,7 @@ export default {
                         <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(data)">
                             <i class="fa fa-info-circle"></i> Detail No. Seri Produk
                         </button>
-                        <button class="btn btn-sm btn-outline-warning" @click="editNoseriProduk(data)" >
+                        <button class="btn btn-sm btn-outline-warning" @click="editNoseriProduk(data)" v-if="data.status != 'Transfer'">
                             <i class="fa fa-pencil"></i> Edit No. Seri Produk
                         </button>
                         <button class="btn btn-sm btn-outline-danger" @click="hapusNoseriProduk(data.id)" v-if="data.status != 'Transfer'">

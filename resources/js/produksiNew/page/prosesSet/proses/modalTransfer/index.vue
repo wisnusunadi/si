@@ -37,7 +37,7 @@ export default {
         },
         async getData() {
             try {
-                const { data } = await axios.get(`/api/prd/rw/proses/produk/${this.id}`);
+                const { data } = await axios.get(`/api/prd/rw/siap/produk/${this.id}`);
                 const { produk_reworks_id, set, urutan, item } = data
                 this.dataTable = item
             } catch (error) {
