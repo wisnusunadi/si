@@ -165,15 +165,21 @@ export default {
         },
         async simpan() {
             try {
-                await axios.post('/api/gbj/rw/terima')
+                await axios.post('/api/gbj/rw/terima', this.noSeriSelected)
                 this.$swal({
                     title: 'Berhasil!',
                     text: 'Data berhasil disimpan',
                     icon: 'success',
                 })
                 this.$emit('refresh')
+                this.closeModal()
             } catch (error) {
                 console.log(error);
+                this.$swal({
+                    title: 'Gagal!',
+                    text: 'Data gagal disimpan',
+                    icon: 'error',
+                })
             }
         }
     },
