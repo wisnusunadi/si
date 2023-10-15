@@ -3844,6 +3844,7 @@ class ProduksiController extends Controller
         // change array to object
         $data = json_decode(json_encode($data));
         $dataview = $data[0];
+        
         return view('page.produksi.printreworks.cetakpackinglist', compact('dataview'));
     }
 }
