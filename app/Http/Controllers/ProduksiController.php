@@ -104,7 +104,7 @@ class ProduksiController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 200,
-                'message' =>  'Gagal Transfer',
+                'message' =>  $th->getMessage(),
             ], 500);
         }
 

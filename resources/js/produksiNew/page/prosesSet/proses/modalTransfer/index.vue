@@ -162,7 +162,7 @@ export default {
         },
         async simpan() {
             try {
-                await axios.post('/api/prd/rw/tf').then(() => {
+                await axios.post('/api/prd/rw/tf', this.noSeriSelected).then(() => {
                     this.$swal({
                         title: 'Berhasil!',
                         text: 'Data berhasil disimpan',
