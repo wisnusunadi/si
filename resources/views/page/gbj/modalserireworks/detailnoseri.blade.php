@@ -1,5 +1,6 @@
 <!-- Modal -->
-<div class="modal fade modalDetailNoSeri" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade modalDetailNoSeri" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+    aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -41,10 +42,17 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <table class="table tableprodukreworks">
+                    <thead>
+                        <tr>
+                            {{-- <th>No</th>
+                            <th>Nama Produk</th> --}}
+                            <th>Nomor Seri</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
             </div>
         </div>
     </div>

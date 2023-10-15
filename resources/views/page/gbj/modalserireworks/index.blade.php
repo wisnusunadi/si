@@ -25,14 +25,50 @@
 </div>
 @include('page/gbj/modalserireworks/detailnoseri')
 <script>
+    const dateIndo = (date) => {
+        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
+        const d = new Date(date);
+        return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
     $(document).on('click', '.detailnoseriproduk', function() {
         var table = $('.tableDetailNoSeri').DataTable();
         var data = table.row($(this).closest('tr')).data();
         var index = table.row($(this).closest('tr')).index();
-        console.log('Row data:', data);
-        console.log('Row index:', index);
 
-        
+        $('#nomor-seri-reworks').html(data.noseri);
+        $('#tgl-dibuat-reworks').html(dateIndo(data.tgl_dibuat));
+        $('#packer-reworks').html(data.packer);
+        console.log(data.item)
+
+        if (data.item) {
+            $('.tableprodukreworks').DataTable({
+                processing: true,
+                serverSide: true,
+                data: data.item,
+                columns: [
+                    // {
+                    //     data: null,
+                    //     render: function(data, type, row, meta) {
+                    //         return meta.row + 1;
+                    //     }
+                    // },
+                    // {
+                    //     data: null,
+                    //     render: function(data, type, row) {
+                    //         return data.produk + ' ' + data.varian;
+                    //     }
+                    // },
+                    {
+                        data: 'noseri',
+                    }
+                ]
+            });
+        }
+
+        $('.modalDetailNoSeri').modal('show');
         // Do something with the data
     });
 </script>
