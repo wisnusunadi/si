@@ -312,6 +312,10 @@ class GudangController extends Controller
     function riwayat_rw_penerimaan()
     {
         $data = SystemLog::where(['tipe'=>'GBJ' , 'subjek' => 'Terima Reworks'])->get();
+        $res = $data->first()->response;
+        $getUrut = json_decode($res);
+        $jadwal = JadwalPerakitanRw::where('urutan',$getUrut->urutan)->first()->produk_reworks_id;
+        $produk = Produk::find($jadwal);
 
         if($data->isEmpty()){
             $obj = array();
@@ -321,6 +325,7 @@ class GudangController extends Controller
                 $obj[] = array(
                     'id' => $d->id,
                     'urutan' => $x->urutan,
+                    'nama' => $produk->nama,
                     'tgl_mulai' => $x->tanggal_mulai,
                     'tgl_selesai' => $x->tanggal_selesai,
                     'tgl_tf' => $d->created_at->format('Y-m-d'),
