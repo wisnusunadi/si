@@ -102,7 +102,7 @@ export default {
                                         <label for="">Tanggal Transfer</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                <span id="po">{{ dateFormat(dataSelected.tgl_transfer) }}</span>
+                                                <span id="po">{{ dateFormat(dataSelected.tgl_tf) }}</span>
                                             </div>
                                         </div>
                                     </div>
