@@ -160,6 +160,27 @@ export default {
                 $('.modalTransfer').modal('show')
             })
         },
+        async simpan() {
+            try {
+                await axios.post('/api/prd/rw/tf').then(() => {
+                    this.$swal({
+                        title: 'Berhasil!',
+                        text: 'Data berhasil disimpan',
+                        icon: 'success',
+                    })
+                    this.$emit('refresh')
+                    this.closeModal()
+                }).catch((err) => {
+                    this.$swal({
+                        title: 'Gagal!',
+                        text: 'Data gagal disimpan',
+                        icon: 'error',
+                    })
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }
     },
     computed: {
         filteredDalamProses() {
@@ -244,7 +265,7 @@ export default {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                        <button type="button" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-success" @click="simpan">Transfer</button>
                     </div>
                 </div>
             </div>

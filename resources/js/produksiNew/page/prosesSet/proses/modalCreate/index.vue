@@ -17,6 +17,7 @@ export default {
             noseriGeneratePackingList: [],
             isError: false,
             errorValue: '',
+            idGenerate: null
         }
     },
     methods: {
@@ -102,8 +103,9 @@ export default {
                         noseri: this.noseri
                     })
 
-                    const { noseri, itemnoseri } = data
+                    const { id, noseri, itemnoseri } = data
                     this.hasilGenerate = noseri
+                    this.idGenerate = id
                     this.noseriGeneratePackingList = itemnoseri
                     this.$swal('Berhasil', 'Berhasil generate no seri', 'success')
                 } catch (error) {
@@ -230,13 +232,15 @@ export default {
         },
         cetakSeri() {
             // open new tab
-            window.open(`/test/cetakseri/${this.hasilGenerate}`, '_blank');
+            window.open(`/produksiReworks/cetakseri/${this.hasilGenerate}`, '_blank');
         },
         viewPackingList() {
-            window.open(`/test/viewpackinglist/1`, '_blank');
+            let id = this.selectSeri?.id ? this.selectSeri.id : this.idGenerate;
+            window.open(`/produksiReworks/viewpackinglist/${id}`, '_blank');
         },
         cetakPackingList() {
-            window.open(`/test/cetakpackinglist/1`, '_blank');
+            let id = this.selectSeri?.id ? this.selectSeri.id : this.idGenerate;
+            window.open(`/produksiReworks/cetakpackinglist/${id}`, '_blank');
         },
         mappingEdit() {
             if (this.selectSeri?.id) {

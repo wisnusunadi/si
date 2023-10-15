@@ -66,28 +66,7 @@
 <body>
     <p class="judul">Packing List</p>
     @php
-        $dataItem = [
-            [
-                'product_name' => 'DIGIT PRO BABY',
-                'quantity' => 1,
-                'serial_number' => 'SN12345678',
-            ],
-            [
-                'product_name' => 'USB CABLE',
-                'quantity' => 1,
-                'serial_number' => 'SN12345678',
-            ],
-            [
-                'product_name' => 'CD',
-                'quantity' => 1,
-                'serial_number' => 'SN12345678',
-            ],
-            [
-                'product_name' => 'CD',
-                'quantity' => 1,
-                'serial_number' => 'SN12345678',
-            ],
-        ];
+        $dataItem = $dataview->seri;
 
         $dataNull = [
             [
@@ -118,20 +97,20 @@
             <tr>
                 <td class="width-table">Product Name</td>
                 <td>:</td>
-                <td>Antropometri</td>
+                <td>{{ $dataview->produk }}</td>
                 <td colspan="3"></td>
             </tr>
             <tr>
                 <td>Model</td>
                 <td>:</td>
-                <td>Antropometri KIT 10</td>
+                <td>{{ $dataview->model }}</td>
                 <td colspan="3"></td>
             </tr>
 
             <tr>
                 <td>Serial Number</td>
                 <td>:</td>
-                <td>TAS9898989898</td>
+                <td>{{ $dataview->noseri }}</td>
                 <td colspan="3"></td>
             </tr>
         </table>
@@ -155,9 +134,9 @@
                 @foreach ($dataItem as $item)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ isset($item['product_name']) ? $item['product_name'] : '' }}</td>
-                        <td class="text-center">{{ isset($item['quantity']) ? $item['quantity'] : '' }}</td>
-                        <td>{{ isset($item['serial_number']) ? $item['serial_number'] : '' }}</td>
+                        <td>{{ isset($item->produk) ? $item->produk : '' }} {{ isset($item->varian) ? $item->varian : '' }}</td>
+                        <td class="text-center">{{ isset($item->produk) ? '1' : '' }}</td>
+                        <td>{{ isset($item->noseri) ? $item->noseri : '' }}</td>
                     </tr>
                 @endforeach
                 <tr>
@@ -178,17 +157,46 @@
         <p class="dokumen">Nomor Dokumen: SPA-FR/QC-13, Tanggal Terbit : 04 Oktober 2018, Revisi : 00</p>
     </main>
 
+    @php
+        function date_format_indo($date)
+        {
+            $BulanIndo = [
+                'Januari',
+                'Februari',
+                'Maret',
+                'April',
+                'Mei',
+                'Juni',
+                'Juli',
+                'Agustus',
+                'September',
+                'Oktober',
+                'November',
+                'Desember',
+            ];
+
+            $tahun = substr($date, 0, 4);
+            $bulan = substr($date, 5, 2);
+            $tgl = substr($date, 8, 2);
+
+            $result = $tgl . ' ' . $BulanIndo[(int) $bulan - 1] . ' ' . $tahun;
+
+            return ($result);
+        }
+
+    @endphp
+
     <footer>
         <table>
             <tr>
                 <td class="width-table">Packing Date</td>
                 <td>:</td>
-                <td>12 Oktober 2023</td>
+                <td>{{ date_format_indo($dataview->tgl_buat) }}</td>
             </tr>
             <tr>
                 <td>Packer</td>
                 <td>:</td>
-                <td>Orang Login</td>
+                <td>{{ $dataview->packer }}</td>
                 <td class="text-center">Checker :</td>
             </tr>
             <tr>

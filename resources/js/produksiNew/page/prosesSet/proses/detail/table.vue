@@ -69,6 +69,12 @@ export default {
         editNoseriProduk(data) {
             this.$emit('editNoseriProduk', data)
         },
+        lihatPackingList(id) {
+            window.open(`/produksiReworks/viewpackinglist/${id}`, '_blank');
+        },
+        cetakPackingList(id) {
+            window.open(`/produksiReworks/cetakpackinglist/${id}`, '_blank');
+        },
     },
 }
 </script>

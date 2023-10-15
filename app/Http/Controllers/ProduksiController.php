@@ -57,7 +57,7 @@ class ProduksiController extends Controller
                 );
             }
         }
-        return response()->json($obj);
+        return $obj;
     }
 
     function update_rw(Request $request, $id)
@@ -3772,13 +3772,21 @@ class ProduksiController extends Controller
     {
         // $pdf = PDF::loadview('page.produksi.printreworks.cetakpackinglist', compact('id'))->setPaper('a5', 'portrait');
         // return $pdf->stream();
-        return view('page.produksi.printreworks.viewpackinglist', compact('id'));
+        $data = $this->packing_list_rw($id);
+        // change array to object
+        $data = json_decode(json_encode($data));
+        $dataview = $data[0];
+        return view('page.produksi.printreworks.viewpackinglist', compact('dataview'));
     }
 
     function cetak_packing_list($id)
     {
         // $pdf = PDF::loadview('page.produksi.printreworks.cetakpackinglist', compact('id'))->setPaper('a5', 'portrait');
         // return $pdf->stream();
-        return view('page.produksi.printreworks.cetakpackinglist', compact('id'));
+        $data = $this->packing_list_rw($id);
+        // change array to object
+        $data = json_decode(json_encode($data));
+        $dataview = $data[0];
+        return view('page.produksi.printreworks.cetakpackinglist', compact('dataview'));
     }
 }
