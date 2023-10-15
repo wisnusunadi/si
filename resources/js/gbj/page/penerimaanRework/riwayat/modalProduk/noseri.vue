@@ -95,7 +95,6 @@ export default {
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ data.produk }} {{ data.varian }}</td>
                                 <td>{{ data.noseri }}</td>
-                                
                             </tr>
                         </tbody>
                         <tbody v-else>
