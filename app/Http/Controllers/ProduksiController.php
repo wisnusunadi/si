@@ -60,118 +60,6 @@ class ProduksiController extends Controller
         return $obj;
     }
 
-    function update_rw(Request $request, $id)
-    {
-        DB::beginTransaction();
-        try {
-            //code...
-            $obj =  json_decode(json_encode($request->all()), FALSE);
-            $seriValues = array_map(function ($item) {
-                return $item->seri;
-            }, $obj->noseri);
-
-            $seri = SeriDetailRw::where('noseri_id', $id)->first()->isi;
-            $data =  collect(json_decode($seri))->pluck('noseri')->toArray();
-
-            $newId = array_values(array_diff($seriValues, $data));
-            $currentId = array_values(array_diff($data, $seriValues));
-
-            if ($newId) {
-                $seriAvailable = NoseriBarangJadi::Join('jadwal_rakit_noseri_rw', 'jadwal_rakit_noseri_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-                    ->where('jadwal_rakit_noseri_rw.status', 11)
-                    ->whereIN('noseri_barang_jadi.noseri', $seriValues)
-                    ->pluck('noseri_barang_jadi.noseri')->toArray();
-
-                if (count($seriAvailable) == count($newId)) {
-                    $newValues = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                        ->whereIN('noseri_barang_jadi.noseri', $newId)
-                        ->pluck('gdg_barang_jadi.produk_id')->toArray();
-
-                    $curValues = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                        ->whereIN('noseri_barang_jadi.noseri', $currentId)
-                        ->pluck('gdg_barang_jadi.produk_id')->toArray();
-
-                    if (empty(array_diff($newValues, $curValues)) && empty(array_diff($curValues, $newValues))) {
-                        $curValuesId = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                            ->whereIN('noseri_barang_jadi.noseri', $currentId)
-                            ->pluck('noseri_barang_jadi.id')->toArray();
-
-                        $newValuesId = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                            ->whereIN('noseri_barang_jadi.noseri', $newId)
-                            ->pluck('noseri_barang_jadi.id')->toArray();
-
-                        JadwalRakitNoseriRw::where('noseri_id', $curValuesId)
-                            ->update([
-                                'status' => 11
-                            ]);
-
-                        JadwalRakitNoseriRw::where('noseri_id', $newValuesId)
-                            ->update([
-                                'status' => 12
-                            ]);
-
-                        $items = NoseriBarangJadi::select('produk.nama as prd', 'gdg_barang_jadi.nama as varian', 'noseri_barang_jadi.id', 'noseri_barang_jadi.noseri')
-                            ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                            ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-                            ->whereIN('noseri_barang_jadi.noseri', $seriValues)->get();
-
-                        foreach ($items as $i) {
-                            $item[] = array(
-                                'id' => $i->id,
-                                'noseri' => $i->noseri,
-                                'varian' => $i->varian,
-                                'produk' => $i->prd
-                            );
-                        }
-
-                        $seriRw = SeriDetailRw::where('noseri_id', $id)->first();
-                        SeriDetailRw::where('noseri_id', $id)
-                            ->update([
-                                'isi' => $item
-                            ]);
-
-                        DB::commit();
-                        return response()->json([
-                            'status' => 200,
-                            'id' =>  $seriRw->id,
-                            'noseri' =>   $seriRw->noseri,
-                            'itemnoseri' =>  $item,
-                        ], 200);
-                    } else {
-                        DB::rollBack();
-                        return response()->json([
-                            'status' => 200,
-                            'message' =>  'Produk Tidak Sesuai',
-                            'values' =>   $newId,
-                        ], 500);
-                    }
-                } else {
-                    DB::rollBack();
-                    $missingIds = array_values(array_diff($newId, $seriAvailable));
-                    return response()->json([
-                        'status' => 200,
-                        'message' =>  'Tidak Ditemukan',
-                        'values' =>   $missingIds,
-                    ], 500);
-                }
-            } else {
-                DB::rollBack();
-                return response()->json([
-                    'status' => 200,
-                    'message' =>  'Tidak ada perubahan',
-                    'values' =>  $seriValues,
-                ], 500);
-            }
-        } catch (\Throwable $th) {
-            //throw $th;
-            DB::rollBack();
-            return response()->json([
-                'status' => 200,
-                'message' =>  'Gagal Ditambahkan',
-                'values' =>  '-',
-            ], 500);
-        }
-    }
     function hapus_rw($id)
     {
         DB::beginTransaction();
@@ -360,6 +248,119 @@ class ProduksiController extends Controller
         }
     }
 
+    function update_rw(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+            $seriValues = array_map(function ($item) {
+                return $item->seri;
+            }, $obj->noseri);
+
+            $seri = SeriDetailRw::where('noseri_id', $id)->first()->isi;
+            $data =  collect(json_decode($seri))->pluck('noseri')->toArray();
+
+            $newId = array_values(array_diff($seriValues, $data));
+            $currentId = array_values(array_diff($data, $seriValues));
+
+            if ($newId) {
+                $seriAvailable = NoseriBarangJadi::Join('jadwal_rakit_noseri_rw', 'jadwal_rakit_noseri_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                    ->where('jadwal_rakit_noseri_rw.status', 11)
+                    ->whereIN('noseri_barang_jadi.noseri', $seriValues)
+                    ->pluck('noseri_barang_jadi.noseri')->toArray();
+
+                if (count($seriAvailable) == count($newId)) {
+                    $newValues = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                        ->whereIN('noseri_barang_jadi.noseri', $newId)
+                        ->pluck('gdg_barang_jadi.produk_id')->toArray();
+
+                    $curValues = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                        ->whereIN('noseri_barang_jadi.noseri', $currentId)
+                        ->pluck('gdg_barang_jadi.produk_id')->toArray();
+
+                    if (empty(array_diff($newValues, $curValues)) && empty(array_diff($curValues, $newValues))) {
+                        $curValuesId = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                            ->whereIN('noseri_barang_jadi.noseri', $currentId)
+                            ->pluck('noseri_barang_jadi.id')->toArray();
+
+                        $newValuesId = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                            ->whereIN('noseri_barang_jadi.noseri', $newId)
+                            ->pluck('noseri_barang_jadi.id')->toArray();
+
+                        JadwalRakitNoseriRw::where('noseri_id', $curValuesId)
+                            ->update([
+                                'status' => 11
+                            ]);
+
+                        JadwalRakitNoseriRw::where('noseri_id', $newValuesId)
+                            ->update([
+                                'status' => 12
+                            ]);
+
+                        $items = NoseriBarangJadi::select('produk.nama as prd', 'gdg_barang_jadi.nama as varian', 'noseri_barang_jadi.id', 'noseri_barang_jadi.noseri')
+                            ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                            ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                            ->whereIN('noseri_barang_jadi.noseri', $seriValues)->get();
+
+                        foreach ($items as $i) {
+                            $item[] = array(
+                                'id' => $i->id,
+                                'noseri' => $i->noseri,
+                                'varian' => $i->varian,
+                                'produk' => $i->prd
+                            );
+                        }
+
+                        $seriRw = SeriDetailRw::where('noseri_id', $id)->first();
+                        SeriDetailRw::where('noseri_id', $id)
+                            ->update([
+                                'isi' => $item
+                            ]);
+
+                        DB::commit();
+                        return response()->json([
+                            'status' => 200,
+                            'id' =>  $seriRw->id,
+                            'noseri' =>   $seriRw->noseri,
+                            'itemnoseri' =>  $item,
+                        ], 200);
+                    } else {
+                        DB::rollBack();
+                        return response()->json([
+                            'status' => 200,
+                            'message' =>  'Produk Tidak Sesuai',
+                            'values' =>   $newId,
+                        ], 500);
+                    }
+                } else {
+                    DB::rollBack();
+                    $missingIds = array_values(array_diff($newId, $seriAvailable));
+                    return response()->json([
+                        'status' => 200,
+                        'message' =>  'Tidak Ditemukan',
+                        'values' =>   $missingIds,
+                    ], 500);
+                }
+            } else {
+                DB::rollBack();
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  'Tidak ada perubahan',
+                    'values' =>  $seriValues,
+                ], 500);
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Gagal Ditambahkan',
+                'values' =>  '-',
+            ], 500);
+        }
+    }
+
     function permintaan_rw(Request $request)
     {
         $jumlah_tf = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
@@ -387,19 +388,19 @@ class ProduksiController extends Controller
     function belum_kirim_rw()
     {
         $data = JadwalPerakitanRw::addSelect([
-                'ctfgbj' => function ($q) {
-                    $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
-                        ->from('jadwal_perakitan_rw as jp')
-                        ->leftJoin('jadwal_rakit_noseri_rw', 'jp.id', '=', 'jadwal_rakit_noseri_rw.jadwal_id')
-                        ->whereColumn('jp.urutan', 'jadwal_perakitan_rw.urutan')
-                        ->whereColumn('jp.produk_reworks_id', 'jadwal_perakitan_rw.produk_reworks_id');
-                },
-                'cset' => function ($q) {
-                    $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) * jadwal_perakitan_rw.jumlah ')
-                        ->from('detail_produks_rw')
-                        ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
-                },
-            ])
+            'ctfgbj' => function ($q) {
+                $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
+                    ->from('jadwal_perakitan_rw as jp')
+                    ->leftJoin('jadwal_rakit_noseri_rw', 'jp.id', '=', 'jadwal_rakit_noseri_rw.jadwal_id')
+                    ->whereColumn('jp.urutan', 'jadwal_perakitan_rw.urutan')
+                    ->whereColumn('jp.produk_reworks_id', 'jadwal_perakitan_rw.produk_reworks_id');
+            },
+            'cset' => function ($q) {
+                $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) * jadwal_perakitan_rw.jumlah ')
+                    ->from('detail_produks_rw')
+                    ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
+            },
+        ])
             ->havingRaw('ctfgbj != cset')
             ->where('state', 18)->groupBy('urutan')->get();
         if ($data->isempty()) {
@@ -507,42 +508,42 @@ class ProduksiController extends Controller
     function proses_rw()
     {
         $data = JadwalPerakitanRw::addSelect([
-                'ctfgbj' => function ($q) {
-                    $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
-                        ->from('jadwal_perakitan_rw as jp')
-                        ->leftJoin('jadwal_rakit_noseri_rw', 'jp.id', '=', 'jadwal_rakit_noseri_rw.jadwal_id')
-                        ->whereColumn('jp.urutan', 'jadwal_perakitan_rw.urutan')
-                        ->whereColumn('jp.produk_reworks_id', 'jadwal_perakitan_rw.produk_reworks_id');
-                },
-                'csiap' => function ($q) {
-                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
-                        ->from('seri_detail_rw')
-                        ->whereColumn('seri_detail_rw.urutan', 'jadwal_perakitan_rw.urutan');
-                },
-                // 'csiap' => function ($q) {
-                //     $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
-                //         ->from('jadwal_perakitan_rw as jp')
-                //         ->leftJoin('jadwal_rakit_noseri_rw', 'jp.id', '=', 'jadwal_rakit_noseri_rw.jadwal_id')
-                //         ->where('jadwal_rakit_noseri_rw.status', 12)
-                //         ->whereColumn('jp.urutan', 'jadwal_perakitan_rw.urutan')
-                //         ->whereColumn('jp.produk_reworks_id', 'jadwal_perakitan_rw.produk_reworks_id');
-                // },
-                'cproses' => function ($q) {
-                    $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
-                        ->from('jadwal_rakit_noseri_rw')
-                        ->where('jadwal_rakit_noseri_rw.status', 11);
-                },
-                'cset' => function ($q) {
-                    $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) * jadwal_perakitan_rw.jumlah ')
-                        ->from('detail_produks_rw')
-                        ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
-                },
-                'set' => function ($q) {
-                    $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) ')
-                        ->from('detail_produks_rw')
-                        ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
-                },
-            ])
+            'ctfgbj' => function ($q) {
+                $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
+                    ->from('jadwal_perakitan_rw as jp')
+                    ->leftJoin('jadwal_rakit_noseri_rw', 'jp.id', '=', 'jadwal_rakit_noseri_rw.jadwal_id')
+                    ->whereColumn('jp.urutan', 'jadwal_perakitan_rw.urutan')
+                    ->whereColumn('jp.produk_reworks_id', 'jadwal_perakitan_rw.produk_reworks_id');
+            },
+            'csiap' => function ($q) {
+                $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                    ->from('seri_detail_rw')
+                    ->whereColumn('seri_detail_rw.urutan', 'jadwal_perakitan_rw.urutan');
+            },
+            // 'csiap' => function ($q) {
+            //     $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
+            //         ->from('jadwal_perakitan_rw as jp')
+            //         ->leftJoin('jadwal_rakit_noseri_rw', 'jp.id', '=', 'jadwal_rakit_noseri_rw.jadwal_id')
+            //         ->where('jadwal_rakit_noseri_rw.status', 12)
+            //         ->whereColumn('jp.urutan', 'jadwal_perakitan_rw.urutan')
+            //         ->whereColumn('jp.produk_reworks_id', 'jadwal_perakitan_rw.produk_reworks_id');
+            // },
+            'cproses' => function ($q) {
+                $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
+                    ->from('jadwal_rakit_noseri_rw')
+                    ->where('jadwal_rakit_noseri_rw.status', 11);
+            },
+            'cset' => function ($q) {
+                $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) * jadwal_perakitan_rw.jumlah ')
+                    ->from('detail_produks_rw')
+                    ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
+            },
+            'set' => function ($q) {
+                $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) ')
+                    ->from('detail_produks_rw')
+                    ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
+            },
+        ])
             ->where('state', 18)->groupBy('urutan')->get();
         if ($data->isempty()) {
             $obj = array();
