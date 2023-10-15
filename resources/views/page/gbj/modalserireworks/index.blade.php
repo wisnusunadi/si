@@ -1,4 +1,5 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 <div class="modal fade" id="modaldetailserisudahproses" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
     aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -24,6 +25,7 @@
     </div>
 </div>
 @include('page/gbj/modalserireworks/detailnoseri')
+@include('page/gbj/modalserireworks/showseribarcode')
 <script>
     const dateIndo = (date) => {
         const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -75,4 +77,19 @@
         $('.modalDetailNoSeri').modal('show');
         // Do something with the data
     });
+
+    $(document).on('click', '.noseriprodukbarcode', function() {
+        let noseri = $(this).data('noseri');
+        try {
+            JsBarcode("#barcode", noseri, {
+                format: "CODE128",
+                text: noseri,
+                margin: 1,
+                width: 1,
+                height: 60,
+                textMargin: 1
+            });
+        } catch (e) {}
+        $('.modalshowseribarcode').modal('show');
+    })
 </script>
