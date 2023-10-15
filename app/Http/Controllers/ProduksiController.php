@@ -310,7 +310,8 @@ class ProduksiController extends Controller
                     return response()->json([
                         'status' => 200,
                         'id' =>  $nbj->id,
-                        'message' =>  $item,
+                        'noseri' =>  $produk_id->kode.$tahun.$bulan.$urutan,
+                        'itemnoseri' =>  $item,
                     ], 200);
 
 
@@ -517,7 +518,7 @@ class ProduksiController extends Controller
         $object = new stdClass();
         $object->produk_reworks_id = $jadwal->produk_reworks_id;
         $object->set = $jadwal->set;
-        $object->urutan = $jadwal->id;
+        $object->urutan = $jadwal->urutan;
         $object->item = $obj;
         return response()->json($object);
     }

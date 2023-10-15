@@ -126,6 +126,7 @@ export default {
                                     error: true
                                 };
                             }
+                            return data;
                         });
                     }
 
@@ -199,6 +200,7 @@ export default {
                                     error: true
                                 };
                             }
+                            return data
                         });
                     }
 
@@ -211,6 +213,7 @@ export default {
             this.generateNoSeri();
             this.hasilGenerate = null;
             this.isDisable = false;
+            this.isError = false;
         },
         lihatSeri() {
             this.detailSeri = true;
@@ -255,8 +258,11 @@ export default {
                 // jika inputan terakhir sudah di isi dengan 13 digit, maka akan generate no seri
                 const lastInput = newVal[newVal.length - 1].seri;
                 if (lastInput.length === 13) {
-                    // deteksi apakah di seri apakah ada object key error true
-                    if (!this.isError && !this.selectSeri?.id) {
+                    // deteksi apakah di seri apakah ada yang kosong
+                    const cek = newVal.filter((data) => {
+                        return data.seri.trim() === '';
+                    });
+                    if (!this.isError && !this.selectSeri?.id && cek.length === 0) {
                         this.generateSeri();
                     }
                 }
