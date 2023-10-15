@@ -157,6 +157,25 @@ export default {
                 $('.modalTransfer').modal('show')
             })
         },
+                lihatPackingList(id) {
+            window.open(`/produksiReworks/viewpackinglist/${id}`, '_blank');
+        },
+        cetakPackingList(id) {
+            window.open(`/produksiReworks/cetakpackinglist/${id}`, '_blank');
+        },
+        async simpan() {
+            try {
+                await axios.post('/api/gbj/rw/terima')
+                this.$swal({
+                    title: 'Berhasil!',
+                    text: 'Data berhasil disimpan',
+                    icon: 'success',
+                })
+                this.$emit('refresh')
+            } catch (error) {
+                console.log(error);
+            }
+        }
     },
     computed: {
         filteredDalamProses() {
@@ -226,10 +245,10 @@ export default {
                                         <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(data)">
                                             <i class="fa fa-info-circle"></i> Detail No. Seri Produk
                                         </button>
-                                        <button class="btn btn-sm btn-outline-success"><i class="fa fa-eye"></i> Lihat
+                                        <button class="btn btn-sm btn-outline-success"  @click="lihatPackingList(data.id)"><i class="fa fa-eye"></i> Lihat
                                             Packing List
                                         </button>
-                                        <button class="btn btn-sm btn-outline-primary"><i class="fa fa-print"></i>
+                                        <button class="btn btn-sm btn-outline-primary" @click="cetakPackingList(data.id)"><i class="fa fa-print"></i>
                                             Cetak Packing List
                                         </button>
                                     </td>
@@ -247,7 +266,7 @@ export default {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                        <button type="button" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-success" @click="simpan">Transfer</button>
                     </div>
                 </div>
             </div>

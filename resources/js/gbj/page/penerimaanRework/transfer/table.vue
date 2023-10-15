@@ -58,13 +58,16 @@ export default {
             this.$nextTick(() => {
                 $('.modalTransfer').modal('show')
             })
+        },
+        refresh() {
+            this.$emit('refresh')
         }
     },
 }
 </script>
 <template>
     <div>
-        <ModalTransfer v-if="showModalTransfer" :id="idTransfer" @closeModal="showModalTransfer = false" />
+        <ModalTransfer v-if="showModalTransfer" :id="idTransfer" @closeModal="showModalTransfer = false" @refresh="refresh"/>
         <table class="table text-center">
             <thead>
                 <tr>
