@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import Pagination from '../../../components/pagination.vue';
 import Table from './table.vue';
 export default {
@@ -8,61 +9,7 @@ export default {
     },
     data() {
         return {
-            dataTable: [
-                {
-                    id: 76,
-                    urutan: 1,
-                    produk_reworks_id: 329,
-                    tgl_mulai: "2023-09-07",
-                    tgl_selesai: "2023-09-11",
-                    nama: "TAS ANTROPOMETRI KIT-10",
-                    jumlah: 5,
-                    status: "Proses",
-                    belum: 1,
-                    selesai: 24,
-                    tgl_transfer: "2023-09-11",
-                    noseri: [
-                        {
-                            id: 195516,
-                            noseri: "AK1023A000003",
-                            tgl_buat: "2023-10-13",
-                            packer: null,
-                            seri: [
-                                {
-                                    id: 7079,
-                                    noseri: "TD1621AA8268",
-                                    varian: "",
-                                    produk: "MTB-2MTR"
-                                },
-                                {
-                                    id: 26885,
-                                    noseri: "TD09202B0484",
-                                    varian: "COKLAT",
-                                    produk: "DIGIT PRO IDA"
-                                },
-                                {
-                                    id: 81872,
-                                    noseri: "TD17227A00077",
-                                    varian: "",
-                                    produk: "MTR-BABY 002"
-                                },
-                                {
-                                    id: 114347,
-                                    noseri: "TD15229A0049",
-                                    varian: "",
-                                    produk: "PTB-2in1 "
-                                },
-                                {
-                                    id: 166263,
-                                    noseri: "TD21237A00153",
-                                    varian: "",
-                                    produk: "DIGIT-PRO BABY"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ],
+            dataTable: [],
             search: '',
             renderPaginate: [
             ],
@@ -72,6 +19,17 @@ export default {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true)
+                const { data } = await axios.get('/api/prd/rw/tf/riwayat')
+                this.dataTable = data
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.dispatch('setLoading', false)
+            }
+        }
     },
     computed: {
         filteredDalamProses() {
@@ -82,10 +40,13 @@ export default {
             });
         },
     },
+    mounted() {
+        this.getData()
+    },
 }
 </script>
 <template>
-    <div>
+    <div v-if="!$store.state.loading">
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
