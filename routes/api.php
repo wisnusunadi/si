@@ -198,7 +198,9 @@ Route::prefix('/gbj')->group(function () {
         Route::post('/belum_kirim/produk/', [GudangController::class, 'belum_kirim_rw_produk']);
         Route::get('/belum_kirim/seri/{id}', [GudangController::class, 'belum_kirim_rw_seri']);
         Route::get('/dp/seri/', [GudangController::class, 'terima_perakitan_rw']);
+        Route::post('/terima', [GudangController::class, 'store_perakitan_rw']);
         Route::get('/dp/seri/{id}', [GudangController::class, 'terima_perakitan_detail_rw']);
+        Route::get('/riwayat_penerimaan', [GudangController::class, 'riwayat_rw_penerimaan']);
     });
 
     Route::post('update_stok', [App\Http\Controllers\GudangController::class, 'updateStokGudang']);

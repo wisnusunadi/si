@@ -125,19 +125,80 @@ class GudangController extends Controller
        ->where('seri_detail_rw.urutan',$id)
         ->get();
 
-        foreach($data as $d){
-            $obj[] = array(
-                'id' => $d->noseri_id,
-                'produk' => $d->nama,
-                'noseri' => $d->noseri,
-                'tgl_buat' => $d->created_at->format('Y-m-d'),
-                'packer' => $d->packer,
-                'seri' => json_decode($d->isi)
-            );
+        if ($data->isEmpty()) {
+            $obj = array();
+        } else {
+            foreach($data as $d){
+                $obj[] = array(
+                    'id' => $d->noseri_id,
+                    'produk' => $d->nama,
+                    'noseri' => $d->noseri,
+                    'tgl_buat' => $d->created_at->format('Y-m-d'),
+                    'packer' => $d->packer,
+                    'seri' => json_decode($d->isi)
+                );
+            }
         }
+
+
 
         return response()->json($obj);
     }
+    function store_perakitan_rw(Request $request)
+    {
+        DB::beginTransaction();
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+       // dd($obj);
+        try {
+            //code...
+
+
+            $collection = collect($obj);
+            $firstIdSeri = $collection->first()->id;
+            $getUrut = SeriDetailRw::where('noseri_id',$firstIdSeri)->first()->urutan;
+            $jadwal = JadwalPerakitanRw::where('urutan',$getUrut)->first();
+
+            foreach($obj as $o){
+                NoseriBarangJadi::where('id',$o->id)
+                ->update([
+                    'is_prd' => 0,
+                    'is_aktif' => 1
+                ]);
+             }
+
+             $riwayat = new stdClass();
+             $riwayat->urutan = $jadwal->urutan;
+             $riwayat->tanggal_mulai = $jadwal->tanggal_mulai;
+             $riwayat->tanggal_selesai = $jadwal->tanggal_selesai;
+             $riwayat->tanggal_tf = Carbon::now()->format('Y-m-d');
+             $riwayat->jumlah = count($obj);
+             $riwayat->item = $obj;
+
+
+         SystemLog::create([
+            'tipe' => 'GBJ',
+            'subjek' => 'Terima Reworks',
+            'response' => json_encode($riwayat)
+         ]);
+
+
+            DB::commit();
+
+            return response()->json([
+               'status' => 200,
+               'message' =>  'Berhasil Diterima',
+           ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Gagal Diterima',
+            ], 500);
+        }
+
+    }
+
     function terima_perakitan_rw()
     {
 
@@ -152,6 +213,10 @@ class GudangController extends Controller
         ->where('noseri_barang_jadi.is_ready',0)
        ->groupBy('seri_detail_rw.urutan')
         ->get();
+
+        if ($data->isEmpty()) {
+            $data = array();
+        }
         return response()->json($data);
 
     }
@@ -243,6 +308,29 @@ class GudangController extends Controller
             }
         }
         return response()->json($noseriArray);
+    }
+    function riwayat_rw_penerimaan()
+    {
+        $data = SystemLog::where(['tipe'=>'GBJ' , 'subjek' => 'Terima Reworks'])->get();
+
+        if($data->isEmpty()){
+            $obj = array();
+        }else{
+            foreach($data as $d){
+                $x = json_decode($d->response);
+                $obj[] = array(
+                    'id' => $d->id,
+                    'urutan' => $x->urutan,
+                    'tgl_mulai' => $x->tanggal_mulai,
+                    'tgl_selesai' => $x->tanggal_selesai,
+                    'tgl_tf' => $d->created_at->format('Y-m-d'),
+                    'jumlah' => $x->jumlah,
+                    'item' => $x->item
+                );
+            }
+        }
+
+        return response()->json($obj);
     }
     function riwayat_rw_permintaan()
     {
