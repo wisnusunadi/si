@@ -282,8 +282,8 @@ class ProduksiController extends Controller
                     }
                     SeriDetailRw::create([
                         'urutan' => $obj->urutan,
-                        // 'checker' =>auth()->user()->nama
-                        'packer' => '-',
+                        'packer' =>auth()->user()->nama,
+                        //'packer' => '-',
                         'noseri_id' => $nbj->id,
                         'noseri' =>  $produk_id->kode . $tahun . $bulan . $urutan,
                         'isi' => json_encode($item)

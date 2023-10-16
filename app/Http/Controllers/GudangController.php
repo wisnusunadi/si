@@ -288,7 +288,8 @@ class GudangController extends Controller
                             if (isset($noseri->noseri)) {
                                 $noseriArray[] = array(
                                     'noseri' => $noseri->noseri,
-                                    'nama' => $produk->nama
+                                    'nama' => $produk->nama,
+                                    'varian' => $noseri->variasi
                                 );
                             }
                         }
