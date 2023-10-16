@@ -338,7 +338,7 @@ class ProduksiController extends Controller
                     return response()->json([
                         'status' => 200,
                         'message' =>  'Melebihi Batas Permintaan',
-                        'values' =>  '-',
+                        'values' =>   $seriValues,
                     ], 500);
 
                 }
@@ -354,7 +354,7 @@ class ProduksiController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' =>  'Gagal Ditambahkan',
-                'values' =>  '-',
+                'values' =>  $seriValues,
             ], 500);
         }
     }
