@@ -157,7 +157,7 @@ export default {
                 $('.modalTransfer').modal('show')
             })
         },
-                lihatPackingList(id) {
+        lihatPackingList(id) {
             window.open(`/produksiReworks/viewpackinglist/${id}`, '_blank');
         },
         cetakPackingList(id) {
@@ -181,6 +181,13 @@ export default {
                     icon: 'error',
                 })
             }
+        },
+        scanSeri() {
+            this.isScan = !this.isScan
+            this.search = ""
+            this.$nextTick(() => {
+                this.$refs.search.focus()
+            })
         }
     },
     computed: {
@@ -219,14 +226,14 @@ export default {
                                 <br>
                                 <div class="custom-control custom-switch my-3">
                                     <input type="checkbox" class="custom-control-input" id="customSwitch1" :checked="isScan"
-                                        @click="isScan = !isScan">
+                                        @click="scanSeri">
                                     <label class="custom-control-label" for="customSwitch1">Scan Nomor Seri
                                     </label>
                                 </div>
                             </div>
                             <div class="p-2 bd-highlight">
                                 <input type="text" class="form-control" v-model="search" placeholder="Cari No Seri"
-                                    @keyup.enter="autoSelect" />
+                                    ref="search" @keyup.enter="autoSelect" />
                             </div>
                         </div>
                         <table class="table">
@@ -251,10 +258,12 @@ export default {
                                         <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(data)">
                                             <i class="fa fa-info-circle"></i> Detail No. Seri Produk
                                         </button>
-                                        <button class="btn btn-sm btn-outline-success"  @click="lihatPackingList(data.id)"><i class="fa fa-eye"></i> Lihat
+                                        <button class="btn btn-sm btn-outline-success" @click="lihatPackingList(data.id)"><i
+                                                class="fa fa-eye"></i> Lihat
                                             Packing List
                                         </button>
-                                        <button class="btn btn-sm btn-outline-primary" @click="cetakPackingList(data.id)"><i class="fa fa-print"></i>
+                                        <button class="btn btn-sm btn-outline-primary" @click="cetakPackingList(data.id)"><i
+                                                class="fa fa-print"></i>
                                             Cetak Packing List
                                         </button>
                                     </td>
