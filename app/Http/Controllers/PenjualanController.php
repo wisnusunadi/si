@@ -4630,7 +4630,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
     public function update_ekatalog(Request $request, $id)
     {
 
-           //dd($request->all());
+          // dd($request->all());
            if ($request->status_akn == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL")) {
             return response()->json([
                 'message' => 'Cek Form Kembali',
@@ -4661,7 +4661,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
 
             $akn = $c_akn;
         } else {
-            $akn = $ekatalog->no_paket;
+            $akn = $request->jenis_paket . $request->no_paket;
         }
 
 
