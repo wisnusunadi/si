@@ -226,7 +226,7 @@ export default {
                             </div>
                             <div class="p-2 bd-highlight">
                                 <input type="text" class="form-control" v-model="search" placeholder="Cari No Seri"
-                                    @keyup="autoSelect" />
+                                    @keyup.enter="autoSelect" />
                             </div>
                         </div>
                         <table class="table">
