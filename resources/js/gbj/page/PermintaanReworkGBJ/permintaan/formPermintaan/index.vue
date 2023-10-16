@@ -168,6 +168,7 @@ export default {
                                                 <th>Nama Produk</th>
                                                 <th>Jumlah</th>
                                                 <th>Belum Transfer</th>
+                                                <th>Jumlah No Seri Dipilih</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -177,6 +178,7 @@ export default {
                                                 <td>{{ data.nama }}</td>
                                                 <td>{{ data.jumlah }}</td>
                                                 <td>{{ data.belum }}</td>
+                                                <td>{{ data?.noseri ? data.noseri.length : 0 }}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary"
                                                         @click="selectProduk(data)">
