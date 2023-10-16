@@ -262,7 +262,7 @@ export default {
                                     <td>{{ dateFormat(data.tgl_buat) }}</td>
                                     <td>{{ data.packer ?? '-' }}</td>
                                     <td>
-                                        <v-select :options="layout" v-model="data.layout"></v-select>
+                                        <v-select :options="layout" v-model="data.layout" placeholder="Pilih Layout"></v-select>
                                     </td>
                                     <td>
                                         <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(data)">
