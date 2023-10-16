@@ -19,7 +19,6 @@
         header table {
             font-family: 'Times New Roman';
             font-size: 12pt;
-            font-weight: bold;
         }
 
         header table tr {
@@ -34,6 +33,8 @@
             /* all bordered */
             border-collapse: collapse;
             border: 1px solid black;
+            outline: 1px double black;
+            outline-offset: -3px;
             font-family: 'Times New Roman';
             font-size: 10pt;
         }
@@ -50,15 +51,17 @@
         .dokumen {
             text-align: right;
             font-family: 'Times New Roman';
-            font-size: 8pt;
-        }
-
-        footer table {
-            font-weight: bold;
+            font-size: 12pt;
+            margin-top: 2px;
         }
 
         .width-table {
             width: 150px;
+        }
+
+        .text-bold {
+            /* set semi bold */
+            font-weight: 500;
         }
     </style>
 </head>
@@ -77,9 +80,9 @@
         ];
 
         // jika dataItem kurang dari 16, maka tambahkan dataNull hingga 16
-        if (count($dataItem) < 10) {
+        if (count($dataItem) < 6) {
             $dataNullIsi = [];
-            for ($i = 0; $i < 10 - count($dataItem); $i++) {
+            for ($i = 0; $i < 6 - count($dataItem); $i++) {
                 $dataNullIsi[] = $dataNull;
             }
             $dataItem = array_merge($dataItem, $dataNullIsi);
@@ -88,14 +91,14 @@
         $optionsConfiguration = [];
 
         //
-        for ($o = 0; $o < 6; $o++) {
+        for ($o = 0; $o < 3; $o++) {
             $optionsConfiguration[] = $dataNull;
         }
     @endphp
     <header>
         <table>
             <tr>
-                <td class="width-table">Product Name</td>
+                <td class="width-table text-bold">Product Name</td>
                 <td>:</td>
                 <td>{{ $dataview->produk }}</td>
                 <td colspan="3"></td>
@@ -129,19 +132,20 @@
             </thead>
             <tbody>
                 <tr>
-                    <td rowspan="{{ count($dataItem) + 1 }}" class="text-center"><b>Standart Configuration</b></td>
+                    <td rowspan="{{ count($dataItem) + 1 }}" class="text-center">Standart Configuration</td>
                 </tr>
                 @foreach ($dataItem as $item)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ isset($item->produk) ? $item->produk : '' }} {{ isset($item->varian) ? $item->varian : '' }}</td>
+                        <td>{{ isset($item->produk) ? $item->produk : '' }}
+                            {{ isset($item->varian) ? $item->varian : '' }}</td>
                         <td class="text-center">{{ isset($item->produk) ? '1' : '' }}</td>
                         <td>{{ isset($item->noseri) ? $item->noseri : '' }}</td>
                     </tr>
                 @endforeach
                 <tr>
-                    <td rowspan="{{ count($optionsConfiguration) + 1 }}" class="text-center"><b>Options
-                            Configuration</b>
+                    <td rowspan="{{ count($optionsConfiguration) + 1 }}" class="text-center">Options
+                            Configuration
                     </td>
                     @foreach ($optionsConfiguration as $options)
                 <tr>
@@ -160,20 +164,7 @@
     @php
         function date_format_indo($date)
         {
-            $BulanIndo = [
-                'Januari',
-                'Februari',
-                'Maret',
-                'April',
-                'Mei',
-                'Juni',
-                'Juli',
-                'Agustus',
-                'September',
-                'Oktober',
-                'November',
-                'Desember',
-            ];
+            $BulanIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
             $tahun = substr($date, 0, 4);
             $bulan = substr($date, 5, 2);
@@ -181,7 +172,7 @@
 
             $result = $tgl . ' ' . $BulanIndo[(int) $bulan - 1] . ' ' . $tahun;
 
-            return ($result);
+            return $result;
         }
 
     @endphp
@@ -197,11 +188,12 @@
                 <td>Packer</td>
                 <td>:</td>
                 <td>{{ $dataview->packer }}</td>
-                <td class="text-center">Checker :</td>
+                <td></td>
+                <td>Checker :</td>
             </tr>
             <tr>
                 <td colspan="3"></td>
-                <td class="text-center">PT Sinko Prima Alloy</td>
+                <td>PT Sinko Prima Alloy</td>
             </tr>
         </table>
     </footer>

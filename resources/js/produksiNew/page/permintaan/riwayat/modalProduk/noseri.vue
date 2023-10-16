@@ -62,7 +62,7 @@ export default {
                             <tr v-for="(data, index) in renderPaginate" :key="index">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ data.noseri }}</td>
-                                <td>{{ data.variasi }}</td>
+                                <td>{{ data.varian }}</td>
                             </tr>
                         </tbody>
                         <tbody v-else>

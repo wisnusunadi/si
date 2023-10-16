@@ -32,8 +32,21 @@ export default {
                 this.$store.dispatch('setLoading', true)
                 const { data: proses } = await axios.get('/api/prd/rw/proses')
                 const { data:riwayat } = await axios.get('/api/prd/rw/tf/riwayat')
-                this.proses = proses
-                this.riwayat = riwayat
+                this.proses = proses.map(item => {
+                    return {
+                        no_urut: `PRD-${item.urutan}`,
+                        ...item,
+                        tgl_mulai: this.dateFormat(item.tgl_mulai),
+                        tgl_selesai: this.dateFormat(item.tgl_selesai),
+                    }
+                })
+                this.riwayat = riwayat.map(item => {
+                    return {
+                        no_urut: `PRD-${item.urutan}`,
+                        ...item,
+                        tgl_tf: this.dateFormat(item.tgl_tf),
+                    }
+                })
             } catch (error) {
                 console.log(error)
             } finally {

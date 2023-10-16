@@ -48,10 +48,10 @@ export default {
             </thead>
             <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, idx) in dataTable" :key="idx">
-                    <td>PRD-{{ data.urutan }}</td>
+                    <td>{{ data.no_urut }}</td>
                     <td>{{ data.nama }}</td>
                     <td>{{ data.jumlah }}</td>
-                    <td>{{ dateFormat(data.tgl_tf) }}</td>
+                    <td>{{ data.tgl_tf }}</td>
                     <td>
                         <button class="btn btn-sm btn-outline-info" @click="detail(data)">
                             <i class="fas fa-info-circle"></i>

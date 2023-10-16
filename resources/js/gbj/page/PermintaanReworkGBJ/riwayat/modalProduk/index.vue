@@ -85,7 +85,7 @@ export default {
                                         <label for="">Tanggal Transfer</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                <span id="po">{{ dateFormat(dataSelected.header.tgl_transfer) }}</span>
+                                                <span id="po">{{ dataSelected.header.tgl_tf }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -103,7 +103,7 @@ export default {
                                             <th>No</th>
                                             <th>No. Seri</th>
                                             <th>Nama Produk</th>
-                                            <th>Varian</th>
+                                            <th>Variasi</th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="renderPaginate.length > 0">

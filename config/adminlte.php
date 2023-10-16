@@ -1197,13 +1197,6 @@ return [
             'auth' => [13],
         ],
         [
-            'text' => 'Permintaan Rework',
-            'url' => '/gbj/rework/permintaan-rework',
-            'icon' => 'fas fa-wrench',
-            'auth' => [13],
-        ],
-
-        [
             'header' => 'Data',
             'auth' => [13]
         ],
@@ -1259,6 +1252,12 @@ return [
             'text' => 'Berdasarkan SO',
             'url' => '/gbj/bso',
             'icon' => 'fas fa-swatchbook',
+            'auth' => [13],
+        ],
+        [
+            'text' => 'Permintaan Rework',
+            'url' => '/gbj/rework/permintaan-rework',
+            'icon' => 'fas fa-wrench',
             'auth' => [13],
         ],
         [

@@ -329,7 +329,7 @@ class GudangController extends Controller
                     'nama' => $produk->nama,
                     'tgl_mulai' => $x->tanggal_mulai,
                     'tgl_selesai' => $x->tanggal_selesai,
-                    'tgl_tf' => $d->created_at->format('Y-m-d'),
+                    'tgl_tf' => $d->created_at,
                     'jumlah' => $x->jumlah,
                     'item' => $x->item
                 );
@@ -362,7 +362,7 @@ class GudangController extends Controller
                     'nama' => $x->nama,
                     'tgl_mulai' => $x->tgl_mulai,
                     'tgl_selesai' => $x->tgl_selesai,
-                    'tgl_tf' => $d->created_at->format('Y-m-d'),
+                    'tgl_tf' => $d->created_at,
                     'jumlah' => $noseriCount
                 );
 

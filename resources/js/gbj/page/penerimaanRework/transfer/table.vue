@@ -79,7 +79,7 @@ export default {
             </thead>
             <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, index) in dataTable" :key="index">
-                    <td>PRD-{{ data.id }}</td>
+                    <td>{{ data.no_urut }}</td>
                     <td>{{ data.nama }}</td>
                     <td>{{ data.jumlah }}</td>
                     <td>

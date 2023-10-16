@@ -32,8 +32,21 @@ export default {
                 this.$store.dispatch('setLoading', true);
                 const { data:permintaan } = await axios.get('/api/prd/rw/belum_kirim');
                 const { data:riwayat } = await axios.get('/api/gbj/rw/riwayat_permintaan')
-                this.permintaan = permintaan;
-                this.riwayat = riwayat;
+                this.permintaan = permintaan.map(item => {
+                    return {
+                        no_urut: `PRD-${item.urutan}`,
+                        ...item,
+                        tgl_mulai: this.dateFormat(item.tgl_mulai),
+                        tgl_selesai: this.dateFormat(item.tgl_selesai),
+                    }
+                });
+                this.riwayat = riwayat.map(item => {
+                    return {
+                        no_urut: `PRD-${item.urutan}`,
+                        ...item,
+                        tgl_tf: this.dateFormat(item.tgl_tf),
+                    }
+                });
             } catch (error) {
                 console.log(error);
             } finally {

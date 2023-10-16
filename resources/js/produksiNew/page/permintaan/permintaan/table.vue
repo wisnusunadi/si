@@ -58,9 +58,9 @@ export default {
             </thead>
             <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, index) in dataTable" :key="index">
-                    <td>PRD-{{ data.urutan }}</td>
-                    <td>{{ dateFormat(data.tgl_mulai) }}</td>
-                    <td>{{ dateFormat(data.tgl_selesai) }}</td>
+                    <td>{{ data.no_urut }}</td>
+                    <td>{{ data.tgl_mulai }}</td>
+                    <td>{{ data.tgl_selesai }}</td>
                     <td>{{ data.nama }}</td>
                     <td>{{ data.jumlah }}</td>
                     <td>{{ data.selesai }}</td>

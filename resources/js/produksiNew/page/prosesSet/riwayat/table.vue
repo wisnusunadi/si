@@ -41,7 +41,7 @@ export default {
                     <td>PRD-{{ data.urutan }}</td>
                     <td>{{ data.nama }}</td>
                     <td>{{ data.item.length }}</td>
-                    <td>{{ dateFormat(data.tgl_tf) }}</td>
+                    <td>{{ data.tgl_tf }}</td>
                     <td>
                         <button class="btn btn-sm btn-outline-info" @click="detail(data)">
                             <i class="fas fa-info-circle"></i>
