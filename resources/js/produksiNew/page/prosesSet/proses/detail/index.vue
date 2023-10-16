@@ -33,6 +33,7 @@ export default {
             renderPaginate: [],
             showModal: false,
             selectSeri: {},
+            showTambah: false,
         }
     },
     methods: {
@@ -66,8 +67,9 @@ export default {
                 this.$store.dispatch('setLoading', true);
                 const id = this.$route.params.id;
                 const { data } = await axios.get(`/api/prd/rw/proses/produk/${id}`);
-                const { produk_reworks_id, set, urutan, item } = data
+                const { produk_reworks_id, set, urutan, item, belum } = data
                 this.dataTable = item
+                this.showTambah = belum == 0 ? true : false
                 let header = {
                     produk_reworks_id,
                     set,
@@ -103,7 +105,7 @@ export default {
             <div class="card-body">
                 <div class="d-flex bd-highlight">
                     <div class="p-2 flex-grow-1 bd-highlight">
-                        <button class="btn btn-primary" @click="showModalCreate">
+                        <button class="btn btn-primary" @click="showModalCreate" v-if="!showTambah">
                             Tambah <i class="fa fa-plus"></i>
                         </button>
                     </div>
