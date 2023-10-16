@@ -42,15 +42,6 @@ export default {
             }
         },
         autoTab(e, idx) {
-            if (e.target.value) {
-                // jika value nya ada 13 digit, maka akan otomatis ke inputan selanjutnya
-                // if (e.target.value.length === 13) {
-                if (idx < this.noseri.length - 1) {
-                    this.$refs.noseri[idx + 1].focus();
-                }
-                // }
-            }
-
             // jika ada object key error true, maka akan di hapus
             if (this.noseri[idx].error) {
                 delete this.noseri[idx].error
@@ -67,6 +58,15 @@ export default {
 
             if (!this.isError && !this.selectSeri?.id && cek.length === 0) {
                 this.generateSeri();
+            }
+
+            if (e.target.value) {
+                // jika value nya ada 13 digit, maka akan otomatis ke inputan selanjutnya
+                // if (e.target.value.length === 13) {
+                if (idx < this.noseri.length - 1) {
+                    this.$refs.noseri[idx + 1].focus();
+                }
+                // }
             }
         },
         async generateSeri() {
@@ -271,8 +271,8 @@ export default {
 <template>
     <div>
         <modalSeri v-if="detailSeri" @closeModal="closeModalSeri" :hasilGenerate="hasilGenerate" />
-        <div class="modal fade modalSet" data-backdrop="static" id="modelId"
-            role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal fade modalSet" data-backdrop="static" id="modelId" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
