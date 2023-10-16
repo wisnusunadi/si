@@ -3844,6 +3844,7 @@ class ProduksiController extends Controller
 
     function cetak_seri($seri)
     {
+        // buat 10cm x 2cm
         $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper('a4', 'portrait');
         return $pdf->stream();
     }
