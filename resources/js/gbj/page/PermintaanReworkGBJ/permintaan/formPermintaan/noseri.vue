@@ -216,6 +216,13 @@ export default {
                     );
                 }
             }
+        },
+        scanSeri() {
+            this.isScan = !this.isScan
+            this.search = ""
+            this.$nextTick(() => {
+                this.$refs.search.focus()
+            })
         }
     },
     computed: {
@@ -259,15 +266,15 @@ export default {
                                         Text</button>
                                     <br>
                                     <div class="custom-control custom-switch my-3">
-                                        <input type="checkbox" class="custom-control-input" id="customSwitch1"
-                                            :checked="isScan" @click="isScan = !isScan">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch1" :checked="isScan"
+                                            @click="scanSeri">
                                         <label class="custom-control-label" for="customSwitch1">Scan Nomor Seri
                                         </label>
                                     </div>
                                 </div>
                                 <div class="p-2 bd-highlight">
-                                    <input type="text" class="form-control" v-model="search" placeholder="Cari No Seri"
-                                        @keyup.enter="autoSelect">
+                                    <input type="text" class="form-control" v-model="search" placeholder="Cari No Seri" ref="search"
+                                        @keyup.enter="autoSelect" />
                                 </div>
                             </div>
                             <table class="table">

@@ -180,6 +180,13 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+        scanSeri() {
+            this.isScan = !this.isScan
+            this.search = ""
+            this.$nextTick(() => {
+                this.$refs.search.focus()
+            })
         }
     },
     computed: {
@@ -199,7 +206,7 @@ export default {
 <template>
     <div>
         <seriviatext v-if="showmodalviatext" @close="closeModalSeriviatext" @submit="submit" />
-        <modalDetail v-if="showModalDetail" @closeModal="closeModalDetail" :dataModalDetailSeri="dataModalDetail"/>
+        <modalDetail v-if="showModalDetail" @closeModal="closeModalDetail" :dataModalDetailSeri="dataModalDetail" />
         <div class="modal fade modalTransfer" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
             role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -218,14 +225,14 @@ export default {
                                 <br>
                                 <div class="custom-control custom-switch my-3">
                                     <input type="checkbox" class="custom-control-input" id="customSwitch1" :checked="isScan"
-                                        @click="isScan = !isScan">
+                                        @click="scanSeri">
                                     <label class="custom-control-label" for="customSwitch1">Scan Nomor Seri
                                     </label>
                                 </div>
                             </div>
                             <div class="p-2 bd-highlight">
                                 <input type="text" class="form-control" v-model="search" placeholder="Cari No Seri"
-                                    @keyup.enter="autoSelect" />
+                                    ref="search" @keyup.enter="autoSelect" />
                             </div>
                         </div>
                         <table class="table">
