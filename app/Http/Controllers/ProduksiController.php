@@ -637,6 +637,13 @@ class ProduksiController extends Controller
                     ->from('seri_detail_rw')
                     ->whereColumn('seri_detail_rw.urutan', 'jadwal_perakitan_rw.urutan');
             },
+            'csiaptf' => function ($q) {
+                $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                    ->from('seri_detail_rw')
+                    ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
+                    ->where('noseri_barang_jadi.is_prd', 1)
+                    ->whereColumn('seri_detail_rw.urutan', 'jadwal_perakitan_rw.urutan');
+            },
             // 'csiap' => function ($q) {
             //     $q->selectRaw('coalesce(count(jadwal_rakit_noseri_rw.id), 0)')
             //         ->from('jadwal_perakitan_rw as jp')
@@ -690,7 +697,8 @@ class ProduksiController extends Controller
                     'jumlah' => $d->jumlah,
                     'belum' => $d->jumlah - $d->csiap,
                     'selesai' => $d->csiap,
-                    'set' => $d->set
+                    'set' => $d->set,
+                    'csiaptf' => $d->csiaptf
                 );
             }
         }

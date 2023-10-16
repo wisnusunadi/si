@@ -42,19 +42,17 @@ export default {
       }
     },
     autoTab(e, idx) {
-      // jika ada object key error true, maka akan di hapus
-      if (this.noseri[idx].error) {
-        delete this.noseri[idx].error;
-      }
-
-      // jika tidak ada object key error, maka isError false
-      if (!this.noseri.find((data) => data.error)) {
-        this.isError = false;
-      }
-
       if (e.target.value) {
-        // jika value nya ada 13 digit, maka akan otomatis ke inputan selanjutnya
-        // if (e.target.value.length === 13) {
+        // jika ada object key error true, maka akan di hapus
+        if (this.noseri[idx].error) {
+          delete this.noseri[idx].error;
+        }
+
+        // jika tidak ada object key error, maka isError false
+        if (!this.noseri.find((data) => data.error)) {
+          this.isError = false;
+        }
+
         const cek = this.noseri.filter((data) => {
           return data.seri.trim() === "";
         });
@@ -62,11 +60,10 @@ export default {
         if (!this.isError && !this.selectSeri?.id && cek.length === 0) {
           this.generateSeri();
         }
+
         if (idx < this.noseri.length - 1) {
           this.$refs.noseri[idx + 1].focus();
         }
-        }
-        // }
       }
     },
     async generateSeri() {
