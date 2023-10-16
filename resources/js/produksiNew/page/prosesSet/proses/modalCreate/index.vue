@@ -45,9 +45,9 @@ export default {
             if (e.target.value) {
                 // jika value nya ada 13 digit, maka akan otomatis ke inputan selanjutnya
                 // if (e.target.value.length === 13) {
-                    if (idx < this.noseri.length - 1) {
-                        this.$refs.noseri[idx + 1].focus();
-                    }
+                if (idx < this.noseri.length - 1) {
+                    this.$refs.noseri[idx + 1].focus();
+                }
                 // }
             }
 
@@ -256,20 +256,22 @@ export default {
                 this.noseriGeneratePackingList = this.selectSeri.seri
             }
         },
-        enterTest() {
-            console.log('enter');
-        }
     },
     mounted() {
         this.generateNoSeri();
         this.mappingEdit();
+        this.$nextTick(() => {
+            setTimeout(() => {
+                this.$refs.noseri[0].focus();
+            }, 100);
+        });
     },
 }
 </script>
 <template>
     <div>
         <modalSeri v-if="detailSeri" @closeModal="closeModalSeri" :hasilGenerate="hasilGenerate" />
-        <div class="modal fade modalSet" data-backdrop="static" data-keyboard="false" id="modelId" tabindex="-1"
+        <div class="modal fade modalSet" data-backdrop="static" id="modelId"
             role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
@@ -283,7 +285,7 @@ export default {
                         <div class="scrollable">
                             <div class="row">
                                 <div class="col">
-                                    <form @keypress.enter="enterTest">
+                                    <form>
                                         <table class="table">
                                             <thead>
                                                 <tr>
