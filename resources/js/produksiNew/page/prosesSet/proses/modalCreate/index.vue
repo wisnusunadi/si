@@ -263,7 +263,7 @@ export default {
         this.$nextTick(() => {
             setTimeout(() => {
                 this.$refs.noseri[0].focus();
-            }, 100);
+            }, 200);
         });
     },
 }

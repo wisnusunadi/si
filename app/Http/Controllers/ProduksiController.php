@@ -21,10 +21,9 @@ use App\Models\SeriDetailRw;
 use App\Models\SystemLog;
 use App\Models\TFProduksi;
 use App\Models\TFProduksiDetail;
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
@@ -206,6 +205,19 @@ class ProduksiController extends Controller
                 return $item->seri;
             }, $obj->noseri);
 
+
+         $jadwal = JadwalPerakitanRw::addSelect([
+            'csiap' => function ($q) {
+                $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                    ->from('seri_detail_rw')
+                    ->whereColumn('seri_detail_rw.urutan', 'jadwal_perakitan_rw.urutan');
+            }
+            ])->where('urutan', $obj->urutan)->first();
+
+
+            $belum = $jadwal->jumlah - $jadwal->csiap;
+
+
             $getIdSeri = NoseriBarangJadi::Join('jadwal_rakit_noseri_rw', 'jadwal_rakit_noseri_rw.noseri_id', '=', 'noseri_barang_jadi.id')
             ->where('jadwal_rakit_noseri_rw.status', 11)
             ->whereIN('noseri_barang_jadi.noseri', $seriValues)
@@ -213,7 +225,7 @@ class ProduksiController extends Controller
 
 
             //Cek Noseri Ada
-            if (count($getIdSeri) == count($seriValues)) {
+            if ((count($getIdSeri) == count($seriValues)) && $belum > 0) {
 
                 $prdValues = NoseriBarangJadi::leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
                 ->whereIN('noseri_barang_jadi.id', $getIdSeri)
@@ -321,6 +333,15 @@ class ProduksiController extends Controller
 
                 $missingIds = array_values(array_diff($seriValues, $seriGagal));
 
+                if($belum == 0){
+
+                    return response()->json([
+                        'status' => 200,
+                        'message' =>  'Melebihi Batas Permintaan',
+                        'values' =>  '-',
+                    ], 500);
+
+                }
                 return response()->json([
                     'status' => 200,
                     'message' =>  'Tidak ditemukan',
@@ -572,6 +593,11 @@ class ProduksiController extends Controller
                     ->from('detail_produks_rw')
                     ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
             },
+            'csiap' => function ($q) {
+                $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                    ->from('seri_detail_rw')
+                    ->whereColumn('seri_detail_rw.urutan', 'jadwal_perakitan_rw.urutan');
+            },
         ])->where('urutan', $id)->first();
         if ($data->isEmpty()) {
             $obj = array();
@@ -591,6 +617,7 @@ class ProduksiController extends Controller
         $object->produk_reworks_id = $jadwal->produk_reworks_id;
         $object->set = $jadwal->set;
         $object->urutan = $jadwal->urutan;
+        $object->belum = $jadwal->jumlah - $jadwal->csiap;
         $object->item = $obj;
         return response()->json($object);
     }
