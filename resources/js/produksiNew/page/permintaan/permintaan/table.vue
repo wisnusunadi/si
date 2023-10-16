@@ -46,7 +46,8 @@ export default {
                     <th rowspan="2">Tanggal Mulai</th>
                     <th rowspan="2">Tanggal Selesai</th>
                     <th rowspan="2">Nama Produk</th>
-                    <th colspan="2">Jumlah</th>
+                    <th rowspan="2">Jumlah Permintaan</th>
+                    <th colspan="2">Jumlah Produk</th>
                     <th rowspan="2">Status</th>
                     <th rowspan="2">Aksi</th>
                 </tr>
@@ -61,6 +62,7 @@ export default {
                     <td>{{ dateFormat(data.tgl_mulai) }}</td>
                     <td>{{ dateFormat(data.tgl_selesai) }}</td>
                     <td>{{ data.nama }}</td>
+                    <td>{{ data.jumlah }}</td>
                     <td>{{ data.selesai }}</td>
                     <td>{{ data.belum }}</td>
                     <td>

@@ -1,5 +1,4 @@
 <script>
-import axios from 'axios';
 import Pagination from '../../../components/pagination.vue';
 import Table from './table.vue';
 export default {
@@ -7,9 +6,9 @@ export default {
         Pagination,
         Table,
     },
+    props: ['dataTable'],
     data() {
         return {
-            dataTable: [],
             search: '',
             renderPaginate: [
             ],
@@ -19,17 +18,6 @@ export default {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
-        async getData() {
-            try {
-                this.$store.dispatch('setLoading', true)
-                const { data } = await axios.get('/api/prd/rw/tf/riwayat')
-                this.dataTable = data
-            } catch (error) {
-                console.log(error)
-            } finally {
-                this.$store.dispatch('setLoading', false)
-            }
-        }
     },
     computed: {
         filteredDalamProses() {
@@ -39,9 +27,6 @@ export default {
                 });
             });
         },
-    },
-    mounted() {
-        this.getData()
     },
 }
 </script>

@@ -840,7 +840,7 @@ return [
                 ],
                 [
                     'icon' => 'far fa-circle',
-                    'text' => 'Permintaan Perakitan',
+                    'text' => 'Permintaan Reworks',
                     'url' => '/produksi/permintaanreworks',
                     'auth' => [17],
                 ],

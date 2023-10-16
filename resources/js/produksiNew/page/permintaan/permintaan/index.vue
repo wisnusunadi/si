@@ -1,15 +1,14 @@
 <script>
 import Table from '../permintaan/table.vue';
 import Pagination from '../../../components/pagination.vue';
-import axios from 'axios';
 export default {
     components: {
         Table,
         Pagination,
     },
+    props: ['dataTable'],
     data() {
         return {
-            dataTable: [],
             search: '',
             renderPaginate: [],
         }
@@ -18,17 +17,9 @@ export default {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
-        async getData() {
-            try {
-                this.$store.dispatch('setLoading', true);
-                const { data } = await axios.get('/api/prd/rw/belum_kirim');
-                this.dataTable = data;
-            } catch (error) {
-                console.log(error);
-            } finally {
-                this.$store.dispatch('setLoading', false);
-            }
-        }
+        refresh() {
+            this.$emit('refresh');
+        },
     },
     computed: {
         filteredDalamProses() {
@@ -39,9 +30,6 @@ export default {
             });
         },
     },
-    mounted() {
-        this.getData();
-    }
 }
 </script>
 <template>
@@ -51,7 +39,7 @@ export default {
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
             </div>
         </div>
-        <Table :dataTable="renderPaginate" @refresh="getData" />
+        <Table :dataTable="renderPaginate" @refresh="refresh" />
         <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses" />
     </div>
 </template>

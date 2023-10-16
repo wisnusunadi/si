@@ -2,6 +2,7 @@
 import Header from '../../components/header.vue'
 import proses from './proses'
 import riwayat from './riwayat'
+import axios from 'axios'
 export default {
     components: {
         Header,
@@ -21,8 +22,28 @@ export default {
                     link: '#'
                 },
             ],
+            proses: [],
+            riwayat: [],
         }
     },
+    methods: {
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true)
+                const { data: proses } = await axios.get('/api/prd/rw/proses')
+                const { data:riwayat } = await axios.get('/api/prd/rw/tf/riwayat')
+                this.proses = proses
+                this.riwayat = riwayat
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.dispatch('setLoading', false)
+            }
+        }
+    },
+    mounted() {
+        this.getData()
+    }
 }
 </script>
 <template>
@@ -42,10 +63,10 @@ export default {
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                        <proses />
+                        <proses :dataTable="proses" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <riwayat />
+                        <riwayat :dataTable="riwayat" />
                     </div>
                 </div>
             </div>
