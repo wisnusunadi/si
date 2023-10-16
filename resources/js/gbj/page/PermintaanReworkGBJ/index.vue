@@ -2,6 +2,7 @@
 import Header from '../../components/header.vue';
 import Permintaan from './permintaan';
 import Riwayat from './riwayat';
+import axios from 'axios';
 export default {
     components: {
         Header,
@@ -21,8 +22,28 @@ export default {
                     link: '/permintaan-rework'
                 }
             ],
+            permintaan: [],
+            riwayat: [],
         }
     },
+    methods: {
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true);
+                const { data: permintaan } = await axios.get('/api/gbj/rw/belum_kirim');
+                const { data: riwayat } = await axios.get('/api/gbj/rw/riwayat_permintaan')
+                this.permintaan = permintaan;
+                this.riwayat = riwayat;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.$store.dispatch('setLoading', false);
+            }
+        }
+    },
+    mounted() {
+        this.getData();
+    }
 }
 </script>
 <template>
@@ -43,12 +64,13 @@ export default {
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                        <Permintaan />
+                        <Permintaan :dataTable="permintaan" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <Riwayat />
+                        <Riwayat :dataTable="riwayat" />
                     </div>
                 </div>
             </div>
+        </div>
     </div>
-</div></template>
+</template>

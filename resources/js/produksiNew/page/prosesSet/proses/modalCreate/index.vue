@@ -52,19 +52,21 @@ export default {
                 this.isError = false
             }
 
-            const cek = this.noseri.filter((data) => {
-                return data.seri.trim() === '';
-            });
-
-            if (!this.isError && !this.selectSeri?.id && cek.length === 0) {
-                this.generateSeri();
-            }
-
             if (e.target.value) {
                 // jika value nya ada 13 digit, maka akan otomatis ke inputan selanjutnya
                 // if (e.target.value.length === 13) {
                 if (idx < this.noseri.length - 1) {
-                    this.$refs.noseri[idx + 1].focus();
+                    
+                    const cek = this.noseri.filter((data) => {
+                        return data.seri.trim() === '';
+                    });
+
+                    if (!this.isError && !this.selectSeri?.id && cek.length === 0) {
+                        this.generateSeri();
+                    } else {
+                        this.$refs.noseri[idx + 1].focus();
+                    }
+                    
                 }
                 // }
             }

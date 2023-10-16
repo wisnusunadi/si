@@ -7,9 +7,9 @@ export default {
         Pagination,
         Table,
     },
+    props: ['dataTable'],
     data() {
         return {
-            dataTable: [],
             search: '',
             renderPaginate: [
             ],
@@ -19,17 +19,9 @@ export default {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
-        async getData() {
-            try {
-                this.$store.dispatch('setLoading', true);
-                const { data } = await axios.get(`/api/gbj/rw/dp/seri`);
-                this.dataTable = data;
-            } catch (error) {
-                console.log(error);
-            } finally {
-                this.$store.dispatch('setLoading', false);
-            }
-        }
+        refresh() {
+            this.$emit('refresh');
+        },
     },
     computed: {
         filteredDalamProses() {
@@ -40,9 +32,6 @@ export default {
             });
         },
     },
-    mounted() {
-        this.getData();
-    }
 }
 </script>
 <template>
@@ -52,7 +41,7 @@ export default {
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
             </div>
         </div>
-        <Table :dataTable="renderPaginate" @refresh="getData"></Table>
+        <Table :dataTable="renderPaginate" @refresh="refresh"></Table>
         <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses" />
     </div>
 </template>
