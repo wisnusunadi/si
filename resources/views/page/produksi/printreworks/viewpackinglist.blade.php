@@ -51,7 +51,7 @@
         .dokumen {
             text-align: right;
             font-family: 'Times New Roman';
-            font-size: 12pt;
+            font-size: 10pt;
             margin-top: 2px;
         }
 
@@ -192,7 +192,7 @@
                 <td>Checker :</td>
             </tr>
             <tr>
-                <td colspan="3"></td>
+                <td colspan="4"></td>
                 <td>PT Sinko Prima Alloy</td>
             </tr>
         </table>
