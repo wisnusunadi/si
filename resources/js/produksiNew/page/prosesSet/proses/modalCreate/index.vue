@@ -44,11 +44,11 @@ export default {
         autoTab(e, idx) {
             if (e.target.value) {
                 // jika value nya ada 13 digit, maka akan otomatis ke inputan selanjutnya
-                if (e.target.value.length === 13) {
+                // if (e.target.value.length === 13) {
                     if (idx < this.noseri.length - 1) {
                         this.$refs.noseri[idx + 1].focus();
                     }
-                }
+                // }
             }
 
             // jika ada object key error true, maka akan di hapus
@@ -261,7 +261,7 @@ export default {
             handler(newVal, oldVal) {
                 // jika inputan terakhir sudah di isi dengan 13 digit, maka akan generate no seri
                 const lastInput = newVal[newVal.length - 1].seri;
-                if (lastInput.length === 13) {
+                // if (lastInput.length === 13) {
                     // deteksi apakah di seri apakah ada yang kosong
                     const cek = newVal.filter((data) => {
                         return data.seri.trim() === '';
@@ -269,7 +269,7 @@ export default {
                     if (!this.isError && !this.selectSeri?.id && cek.length === 0) {
                         this.generateSeri();
                     }
-                }
+                // }
             },
             deep: true
         }
@@ -305,7 +305,7 @@ export default {
                                                     <td>
                                                         <input type="text" class="form-control" v-model="data.seri"
                                                             :class="data.error ? 'is-invalid' : ''"
-                                                            @input="autoTab($event, idx)" ref="noseri"
+                                                            @keyup.enter="autoTab($event, idx)" ref="noseri"
                                                             :disabled="isDisable">
                                                         <div class="invalid-feedback">
                                                             Nomor Seri {{ errorValue }}
