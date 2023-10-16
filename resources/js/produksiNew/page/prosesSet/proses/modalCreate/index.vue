@@ -60,6 +60,14 @@ export default {
             if (!this.noseri.find((data) => data.error)) {
                 this.isError = false
             }
+
+            const cek = this.noseri.filter((data) => {
+                return data.seri.trim() === '';
+            });
+
+            if (!this.isError && !this.selectSeri?.id && cek.length === 0) {
+                this.generateSeri();
+            }
         },
         async generateSeri() {
             // hapus semua object key error
@@ -256,24 +264,6 @@ export default {
         this.generateNoSeri();
         this.mappingEdit();
     },
-    watch: {
-        noseri: {
-            handler(newVal, oldVal) {
-                // jika inputan terakhir sudah di isi dengan 13 digit, maka akan generate no seri
-                const lastInput = newVal[newVal.length - 1].seri;
-                // if (lastInput.length === 13) {
-                    // deteksi apakah di seri apakah ada yang kosong
-                    const cek = newVal.filter((data) => {
-                        return data.seri.trim() === '';
-                    });
-                    if (!this.isError && !this.selectSeri?.id && cek.length === 0) {
-                        this.generateSeri();
-                    }
-                // }
-            },
-            deep: true
-        }
-    }
 }
 </script>
 <template>
