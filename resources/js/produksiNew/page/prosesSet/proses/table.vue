@@ -116,7 +116,7 @@ export default {
                         <status :status="statusReworks(data.belum, data.selesai, data.jumlah)" />
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary" @click="transferRework(data.urutan)">
+                        <button class="btn btn-sm btn-outline-primary" @click="transferRework(data.urutan)" v-if="data.selesai != 0">
                             <i class="fas fa-paper-plane"></i>
                             Transfer
                         </button>
