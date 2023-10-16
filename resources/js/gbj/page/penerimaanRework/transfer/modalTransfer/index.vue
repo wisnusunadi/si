@@ -21,6 +21,12 @@ export default {
             noSeriSelected: [],
             showModalDetail: false,
             dataModalDetail: null,
+            layout: [
+                'Blok B',
+                'Blok D',
+                'E10',
+                'E7'
+            ]
         }
     },
     methods: {
@@ -243,6 +249,7 @@ export default {
                                     <th>Nomor Seri</th>
                                     <th>Tanggal Dibuat</th>
                                     <th>Packer</th>
+                                    <th>Layout</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -254,6 +261,9 @@ export default {
                                     <td>{{ data.noseri }}</td>
                                     <td>{{ dateFormat(data.tgl_buat) }}</td>
                                     <td>{{ data.packer ?? '-' }}</td>
+                                    <td>
+                                        <v-select :options="layout" v-model="data.layout"></v-select>
+                                    </td>
                                     <td>
                                         <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(data)">
                                             <i class="fa fa-info-circle"></i> Detail No. Seri Produk
@@ -281,7 +291,7 @@ export default {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                        <button type="button" class="btn btn-success" @click="simpan">Transfer</button>
+                        <button type="button" class="btn btn-primary" @click="simpan">Simpan</button>
                     </div>
                 </div>
             </div>
