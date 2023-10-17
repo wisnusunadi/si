@@ -169,6 +169,11 @@ class ProduksiController extends Controller
                         'status' => 11
                     ]);
 
+                    NoseriBarangJadi::whereIN('id', $data)
+                    ->update([
+                        'reworks_id' => NULL
+                    ]);
+
                 NoseriBarangJadi::find($id)->delete();
 
                 DB::commit();
@@ -279,11 +284,16 @@ class ProduksiController extends Controller
                             'varian' => $i->varian,
                             'produk' => $i->prd
                         );
+                        NoseriBarangJadi::where('id', $i->id)
+                        ->update([
+                            'reworks_id' =>  $produk_id->kode . $tahun . $bulan . $urutan
+                        ]);
+
                     }
                     SeriDetailRw::create([
                         'urutan' => $obj->urutan,
-                        'packer' =>auth()->user()->nama,
-                        //'packer' => '-',
+                        // 'packer' =>auth()->user()->nama,
+                        'packer' => '-',
                         'noseri_id' => $nbj->id,
                         'noseri' =>  $produk_id->kode . $tahun . $bulan . $urutan,
                         'isi' => json_encode($item)
@@ -399,14 +409,19 @@ class ProduksiController extends Controller
                         ->whereIN('noseri_barang_jadi.noseri', $newId)
                             ->pluck('noseri_barang_jadi.id')->toArray();
 
-                        JadwalRakitNoseriRw::where('noseri_id', $curValuesId)
+                        JadwalRakitNoseriRw::whereIN('noseri_id', $curValuesId)
                             ->update([
                                 'status' => 11
                             ]);
 
-                        JadwalRakitNoseriRw::where('noseri_id', $newValuesId)
+                        JadwalRakitNoseriRw::whereIN('noseri_id', $newValuesId)
                             ->update([
                                 'status' => 12
+                            ]);
+
+                            NoseriBarangJadi::whereIN('id', $curValuesId)
+                            ->update([
+                                'reworks_id' => NULL
                             ]);
 
                         $items = NoseriBarangJadi::select('produk.nama as prd', 'gdg_barang_jadi.nama as varian', 'noseri_barang_jadi.id', 'noseri_barang_jadi.noseri')
@@ -428,6 +443,12 @@ class ProduksiController extends Controller
                         ->update([
                             'isi' => $item
                         ]);
+
+                        NoseriBarangJadi::whereIN('id', $newValuesId)
+                        ->update([
+                            'reworks_id' => $seriRw->noseri
+                        ]);
+
 
                         DB::commit();
                         return response()->json([

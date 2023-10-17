@@ -875,17 +875,14 @@ class GudangController extends Controller
     function getNoseriDone(Request $request, $id)
     {
         try {
-            $data = NoseriBarangJadi::whereHas('gudang', function ($d) use ($id) {
-                $d->where('id', $id);
-            })->where([
+
+            $data = NoseriBarangJadi::where([
                 'is_aktif' => 1,
                 'is_ready' => 1,
                 'is_change' => 1,
                 'is_delete' => 0
-            ])->get();
+            ])->with(['Pesanan'])->where('gdg_barang_jadi_id',$id)->get();
 
-
-            $layout = Layout::where('jenis_id', 1)->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('ids', function ($d) {
@@ -898,11 +895,17 @@ class GudangController extends Controller
                     return $d->noseri;
                 })
                 ->addColumn('used', function ($d) {
-                    if (isset($d->pesanan->so)) {
-                        return $d->pesanan->no_po;
-                    } else {
-                        return '-';
+                    if($d->reworks_id != NULL){
+                        return 'Perakitan Rework '.$d->reworks_id;
+                    }else{
+                        if (isset($d->Pesanan->so)) {
+                            return $d->Pesanan->no_po;
+                        } else {
+                           return '-';
+                        }
                     }
+
+
                 })
                 ->addColumn('aksi', function ($d) {
                     return '<a data-toggle="modal" data-target="#viewStock" class="viewStock" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
