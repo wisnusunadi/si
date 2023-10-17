@@ -110,6 +110,10 @@ export default {
                     const { data } = await axios.post('/api/prd/rw/gen', {
                         ...this.$store.state.setSeri,
                         noseri: this.noseri
+                    }, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
+                        }
                     })
 
                     const { id, noseri, itemnoseri } = data
@@ -185,6 +189,10 @@ export default {
                     this.isDisable = true;
                     const { data } = await axios.put(`/api/prd/rw/gen/${this.selectSeri.id}`, {
                         noseri: this.noseri
+                    }, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
+                        }
                     })
 
                     const { noseri, itemnoseri } = data

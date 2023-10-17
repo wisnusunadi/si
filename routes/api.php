@@ -337,8 +337,8 @@ Route::prefix('/prd')->group(function () {
         Route::get('/proses/produk/{id}', [ProduksiController::class, 'proses_rw_produk']);
         Route::get('/siap/produk/{id}', [ProduksiController::class, 'siap_tf_rw_produk']);
         Route::post('/permintaan', [ProduksiController::class, 'permintaan_rw']);
-        Route::post('/gen', [ProduksiController::class, 'generate_rw']);
-        Route::put('/gen/{id}', [ProduksiController::class, 'update_rw']);
+        Route::post('/gen', [ProduksiController::class, 'generate_rw'])->middleware('jwt.verify');
+        Route::put('/gen/{id}', [ProduksiController::class, 'update_rw'])->middleware('jwt.verify');
         Route::delete('/gen/{id}', [ProduksiController::class, 'hapus_rw']);
         Route::get('/riwayat', [ProduksiController::class, 'riwayat_rw']);
         Route::get('/pack/{id}', [ProduksiController::class, 'packing_list_rw']);

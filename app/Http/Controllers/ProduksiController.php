@@ -300,8 +300,8 @@ class ProduksiController extends Controller
                     }
                     SeriDetailRw::create([
                         'urutan' => $obj->urutan,
-                        // 'packer' =>auth()->user()->nama,
-                        'packer' => '-',
+                        'packer' =>auth()->user()->karyawan->nama,
+                        // 'packer' => '-',
                         'noseri_id' => $nbj->id,
                         'noseri' =>  $produk_id->kode . $tahun . $bulan . $urutan,
                         'isi' => json_encode($item)
@@ -449,7 +449,8 @@ class ProduksiController extends Controller
                         $seriRw = SeriDetailRw::where('noseri_id', $id)->first();
                         SeriDetailRw::where('noseri_id', $id)
                         ->update([
-                            'isi' => $item
+                            'isi' => $item,
+                            'packer' => auth()->user()->karyawan->nama,
                         ]);
 
                         NoseriBarangJadi::whereIN('id', $newValuesId)
