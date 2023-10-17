@@ -535,6 +535,8 @@
             </div>
         </div>
     </section>
+    @include('page/gbj/modalserireworks/detailnoseri')
+
 @stop
 @section('adminlte_js')
     <script>
@@ -1647,6 +1649,54 @@
                     validasi();
                 });
             }
+
+                        $(document).on('click', '.buttonNoSeriDetail', function() {
+                console.log('test');
+                var table = $('#noseritable').DataTable();
+                var data = table.row($(this).closest('tr')).data();
+                var index = table.row($(this).closest('tr')).index();
+                const dateIndo = (date) => {
+                    const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                    ];
+                    const d = new Date(date);
+                    return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+                }
+
+                $('#nomor-seri-reworks').html(data.noseri);
+                $('#tgl-dibuat-reworks').html(dateIndo(data.created_at));
+                $('#packer-reworks').html(data.packer);
+                $('.tableprodukreworks').DataTable().clear().destroy();
+
+                let dataJson = data.item;
+
+                $('.tableprodukreworks').DataTable({
+                    data: dataJson,
+                    destroy: true,
+                    processing: true,
+                    serverSide: false,
+                    ordering: false,
+                    autoWidth: false,
+                    columns: [{
+                            data: null,
+                            // buat index
+                            render: function(data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, row) {
+                                return data.produk + ' ' + data.varian;
+                            }
+                        },
+                        {
+                            data: 'noseri',
+                        }
+                    ]
+                });
+                $('.modalDetailNoSeri').modal('show');
+            });
         })
     </script>
 @stop
