@@ -858,13 +858,6 @@ class GudangController extends Controller
                             ' . $opt . '
                             </select>';
                 })
-                ->addColumn('aksi', function ($d) {
-                    return '<a data-toggle="modal" data-target="#viewStock" class="viewStock" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
-                            <button class="btn btn-outline-info btn-sm" type="button" >
-                            <i class="far fa-eye"></i>&nbsp;Detail
-                            </button>
-                        </a>';
-                })
                 ->rawColumns(['ids', 'Layout', 'aksi', 'seri'])
                 ->make(true);
         } catch (\Exception $e) {

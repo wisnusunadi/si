@@ -636,6 +636,8 @@
             width: 100%;
         }
     </style>
+    @include('page/gbj/modalserireworks/detailnoseri')
+
 @stop
 
 @section('adminlte_js')
@@ -1289,7 +1291,15 @@
                         data: 'Layout'
                     },
                     {
-                        data: 'aksi'
+                        data: null,
+                        render: function(data, type, row) {
+                            return `
+                            <button class="btn btn-sm btn-outline-info detailnoseriproduk"><i class="fa fa-info-circle"></i> Detail No. Seri Produk
+                            </button>
+                            <a href="/produksiReworks/viewpackinglist/${data.id}" target="_blank" class="btn btn-sm btn-outline-warning"><i class="fa fa-eye"></i> Lihat Packing List
+                            </a> 
+                            `
+                        }
                     }
                 ],
                 "aoColumnDefs": [{
@@ -1869,6 +1879,49 @@
             });
             $('.edit-stok').modal('hide');
         }
+
+        $(document).on('click', '.detailnoseriproduk', function() {
+            var table = $('.tableDetailNoSeri').DataTable();
+            var data = table.row($(this).closest('tr')).data();
+            var index = table.row($(this).closest('tr')).index();
+
+            $('#nomor-seri-reworks').html(data.noseri);
+            $('#tgl-dibuat-reworks').html(dateIndo(data.tgl_dibuat));
+            $('#packer-reworks').html(data.packer);
+            $('.tableprodukreworks').DataTable().clear().destroy();
+
+            let dataJson = data.item;
+            if (data.item) {
+                $('.tableprodukreworks').DataTable({
+                    data: dataJson,
+                    destroy: true,
+                    processing: true,
+                    serverSide: false,
+                    ordering: false,
+                    autoWidth: false,
+                    columns: [{
+                            data: null,
+                            // buat index
+                            render: function(data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, row) {
+                                return data.produk + ' ' + data.varian;
+                            }
+                        },
+                        {
+                            data: 'noseri',
+                        }
+                    ]
+                });
+            }
+
+            $('.modalDetailNoSeri').modal('show');
+            // Do something with the data
+        });
     </script>
 
 @stop
