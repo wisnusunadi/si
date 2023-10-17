@@ -1291,21 +1291,20 @@
                         data: 'Layout'
                     },
                     {
-                            data: null,
-                            render: function(data, type, row) {
-                                if (data.item.length > 0) {
-                                    return `
-                            <button class="btn btn-sm btn-outline-info detailnoseriproduk"><i class="fa fa-info-circle"></i> Detail No. Seri Produk
+                        data: null,
+                        render: function(data, type, row) {
+                            if (data.item.length > 0) {
+                                return `
+                            <button type="button" class="btn btn-sm btn-outline-info detailnoseriproduk"><i class="fa fa-info-circle"></i> Detail No. Seri Produk
                             </button>
-                            <button class="btn btn-sm btn-outline-primary my-1 noseriprodukbarcode" data-noseri="${data.noseri}"><i class="fa fa-eye"></i> Lihat No. Seri</button>
                             <a href="/produksiReworks/viewpackinglist/${data.id}" target="_blank" class="btn btn-sm btn-outline-warning"><i class="fa fa-eye"></i> Lihat Packing List
                             </a>
                         `
-                                } else {
-                                    return ''
-                                }
+                            } else {
+                                return ''
                             }
                         }
+                    }
 
                 ],
                 "aoColumnDefs": [{
@@ -1887,12 +1886,20 @@
         }
 
         $(document).on('click', '.detailnoseriproduk', function() {
-            var table = $('.tableDetailNoSeri').DataTable();
+            var table = $('.scan-produk').DataTable();
             var data = table.row($(this).closest('tr')).data();
             var index = table.row($(this).closest('tr')).index();
 
+            const dateIndo = (date) => {
+                const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                ];
+                const d = new Date(date);
+                return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+            }
+
             $('#nomor-seri-reworks').html(data.noseri);
-            $('#tgl-dibuat-reworks').html(dateIndo(data.tgl_dibuat));
+            $('#tgl-dibuat-reworks').html(dateIndo(data.created_at));
             $('#packer-reworks').html(data.packer);
             $('.tableprodukreworks').DataTable().clear().destroy();
 

@@ -88,18 +88,18 @@
 
         /* @media screen and (min-width: 1440px) {
 
-                            section {
-                                font-size: 14px;
-                            }
+                                section {
+                                    font-size: 14px;
+                                }
 
-                            #detailmodal {
-                                font-size: 14px;
-                            }
+                                #detailmodal {
+                                    font-size: 14px;
+                                }
 
-                            .btn {
-                                font-size: 14px;
-                            }
-                        } */
+                                .btn {
+                                    font-size: 14px;
+                                }
+                            } */
 
         @media screen and (min-width: 993px) {
 
@@ -390,7 +390,7 @@
             </div>
         </div>
     </section>
-    @include('page.qc.so.detailnoseri')
+    @include('page/gbj/modalserireworks/detailnoseri')
 
 @stop
 @section('adminlte_js')
@@ -665,7 +665,7 @@
                         render: function(data, type, row) {
                             if (data.cek_rw == 1) {
                                 return `
-                        <button class="btn btn-sm btn-outline-info buttonNoSeriDetail">
+                        <button type="button" class="btn btn-sm btn-outline-info buttonNoSeriDetail">
                             <i class="fa fa-info-circle"></i>
                             Detail No. Seri Produk
                         </button> &nbsp;
@@ -1025,8 +1025,11 @@
 
             });
 
+            
             $(document).on('click', '.buttonNoSeriDetail', function() {
-                
+                var table = $('#noseritable').DataTable();
+                var data = table.row($(this).closest('tr')).data();
+                var index = table.row($(this).closest('tr')).index();
                 const dateIndo = (date) => {
                     const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
                         "Juli", "Agustus", "September", "Oktober", "November", "Desember"
@@ -1036,7 +1039,7 @@
                 }
 
                 $('#nomor-seri-reworks').html(data.noseri);
-                $('#tgl-dibuat-reworks').html(dateIndo(data.tgl_dibuat));
+                $('#tgl-dibuat-reworks').html(dateIndo(data.created_at));
                 $('#packer-reworks').html(data.packer);
                 $('.tableprodukreworks').DataTable().clear().destroy();
 

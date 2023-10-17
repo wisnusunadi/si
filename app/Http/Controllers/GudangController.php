@@ -834,7 +834,7 @@ class GudangController extends Controller
     {
         try {
             $data = NoseriBarangJadi::
-            select('noseri_barang_jadi.id','noseri_barang_jadi.noseri','seri_detail_rw.isi as isi')
+            select('noseri_barang_jadi.id','noseri_barang_jadi.noseri','seri_detail_rw.isi as isi', 'seri_detail_rw.created_at', 'seri_detail_rw.packer')
             ->addSelect([
                 'cek_rw' => function ($q) {
                     $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
@@ -869,7 +869,7 @@ class GudangController extends Controller
                     if($d->isi == null){
                         return  array();
                     }else{
-                        return $d->isi;
+                        return json_decode($d->isi);
                     }
                 })
                 ->addColumn('Layout', function ($d) use ($layout) {
