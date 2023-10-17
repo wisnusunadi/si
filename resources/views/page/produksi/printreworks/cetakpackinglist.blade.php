@@ -6,7 +6,7 @@
     <title>Cetak Packing List</title>
 
     <style>
-         .judul {
+        .judul {
             font-family: 'Book Antiqua';
             font-size: 16pt;
             text-align: center;
@@ -17,8 +17,10 @@
             font-size: 12pt;
         }
 
-        header table tr {
-            padding: 40px 0;
+        header table tr td,
+        footer table tr td
+         {
+            padding: 10px 0px;
         }
 
         .text-center {
@@ -52,7 +54,7 @@
         }
 
         .width-table {
-            width: 150px;
+            width: 120px;
         }
 
         .text-bold {
@@ -185,11 +187,11 @@
                 <td>:</td>
                 <td>{{ $dataview->packer }}</td>
                 <td></td>
-                <td>Checker :</td>
-            </tr>
-            <tr>
-                <td colspan="4"></td>
-                <td>PT Sinko Prima Alloy</td>
+                <td>Checker :
+                    <br>
+                    PT Sinko Prima Alloy
+
+                </td>
             </tr>
         </table>
     </footer>

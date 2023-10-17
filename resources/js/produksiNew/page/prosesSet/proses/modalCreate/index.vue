@@ -368,7 +368,7 @@ export default {
                             </button>
                         </div>
                         <div class="p-2 bd-highlight ml-auto">
-                            <button type="button" class="btn btn-primary" @click="resetModal">Reset</button>
+                            <button type="button" class="btn btn-primary" @click="resetModal" v-if="!selectSeri?.id">Reset</button>
                         </div>
                     </div>
                 </div>
