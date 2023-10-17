@@ -1038,7 +1038,8 @@
                         {
                             data: null,
                             render: function(data, type, row) {
-                                return `
+                                if(data.cek_rw == 1){
+                                    return `
                                     <button class="btn btn-sm btn-outline-info buttonNoSeriDetail">
                                         <i class="fa fa-info-circle"></i>
                                         Detail No. Seri Produk
@@ -1048,6 +1049,9 @@
                                         Lihat Packing List
                                     </a>
                                 `
+                                }else {
+                                    return ''
+                                }
                             }
                         }
                     ]
@@ -1651,7 +1655,6 @@
             }
 
                         $(document).on('click', '.buttonNoSeriDetail', function() {
-                console.log('test');
                 var table = $('#noseritable').DataTable();
                 var data = table.row($(this).closest('tr')).data();
                 var index = table.row($(this).closest('tr')).index();
