@@ -77,6 +77,7 @@ class ApiController extends Controller
  		//Token created, return with success response and jwt token
         return response()->json([
             'success' => true,
+           'nama' => 'a',
             'token' => $token,
         ]);
     }

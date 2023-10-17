@@ -127,6 +127,7 @@
                 },
                 success: function(response) {
                     location.reload();
+                    // console.log(response);
 
                 },
                 error: function(xhr, status, error) {

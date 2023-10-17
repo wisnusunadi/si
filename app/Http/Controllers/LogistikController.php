@@ -16,6 +16,7 @@ use App\Models\Spb;
 use App\Models\Ekspedisi;
 use App\Models\Logistik;
 use App\Models\LogistikDraft;
+use App\Models\NoseriBarangJadi;
 use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriDetailPesanan;
 use Illuminate\Http\Request;
@@ -846,29 +847,59 @@ class LogistikController extends Controller
         //     ->rawColumns(['checkbox'])
         //     ->make(true);
 
-        $data = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $id, 'status' => 'ok'])->doesntHave('NoseriDetailLogistik')->get();
+        // $data = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $id, 'status' => 'ok'])->doesntHave('NoseriDetailLogistik')->get();
+        $data = NoseriBarangJadi::select('noseri_detail_pesanan.id as ndp_id','seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id')
+        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+        ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+        ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+        ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+        ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+        ->addSelect([
+            'cek_rw' => function ($q) {
+                $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                    ->from('seri_detail_rw')
+                    ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+            },
+            'cek_logistik' => function ($q) {
+                $q->selectRaw('coalesce(count(noseri_logistik.id), 0)')
+                    ->from('noseri_logistik')
+                    ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                    ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+            }
+        ])
+        ->havingRaw( 'cek_logistik = 0')
+        ->where('noseri_detail_pesanan.detail_pesanan_produk_id', $id)
+        ->where('noseri_detail_pesanan.status','ok')
+        ->get();
+
+
+        // $data = NoseriDetailPesanan::
+        //         where(['detail_pesanan_produk_id' => $id, 'status' => 'ok'])->doesntHave('NoseriDetailLogistik')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) use ($arr) {
                 $checked = "";
-                if (in_array($data->id, $arr)) {
+                if (in_array($data->ndp_id, $arr)) {
                     $checked = "checked";
                 }
                 return '<div class="form-check">
-                    <input class=" form-check-input yet noseri_checkbox check_noseri"  data-id="' . $data->id . '" type="checkbox" data-value="' . $data->id . '" ' . $checked . '  />
+                    <input class=" form-check-input yet noseri_checkbox check_noseri"  data-id="' . $data->ndp_id . '" type="checkbox" data-value="' . $data->ndp_id . '" ' . $checked . '  />
                 </div>';
             })
+            ->addColumn('item', function ($d) {
+                if ($d->isi == null) {
+                    return  array();
+                } else {
+                    return json_decode($d->isi);
+                }
+            })
             ->addColumn('no_seri', function ($data) {
-                return $data->NoseriTGbj->NoseriBarangJadi->noseri;
+                return $data->noseri;
             })
             ->rawColumns(['checkbox'])
             ->make(true);
     }
-
-
-
-
-
 
     public function get_data_detail_selesai_kirim_so($id, $jenis)
     {
