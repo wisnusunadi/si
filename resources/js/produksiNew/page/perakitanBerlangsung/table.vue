@@ -23,7 +23,7 @@ export default {
                 if (selisih > 0) {
                     return `<span class="badge badge-danger">Lebih ${selisih} hari</span>`
                 } else if (selisih < 0) {
-                    return `<span class="badge badge-warning">Kurang ${selisih} hari</span>`
+                    return `<span class="badge badge-warning">Kurang ${selisih * -1} hari</span>`
                 } else {
                     return `<span class="badge badge-success">Tepat Waktu</span>`
                 }
@@ -41,7 +41,7 @@ export default {
 </script>
 <template>
     <div>
-        <modalGenerate v-if="showModal" :dataGenerate="detailData" @close="showModal = false"></modalGenerate>
+        <modalGenerate v-if="showModal" :dataGenerate="detailData" @closeModal="showModal = false"></modalGenerate>
         <table class="table">
             <thead>
                 <tr>

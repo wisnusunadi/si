@@ -4,8 +4,8 @@
 <head>
     <title>Cetak Seri</title>
     <style>
-        .barcode-text {
-            padding-left: 100px;
+        .text-center {
+            text-align: center;
         }
     </style>
 </head>
@@ -19,7 +19,7 @@
         <span>Elitech</span><br>
         <img
             src="data:image/png;base64,{{ base64_encode($generator->getBarcode($seri, $generator::TYPE_CODE_128, 2, 50)) }}" />
-        <div class="barcode-text">{{ $seri }}</div>
+        <div class="text-center">{{ $seri }}</div>
     </div>
 </body>
 

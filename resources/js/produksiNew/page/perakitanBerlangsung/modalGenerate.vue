@@ -3,23 +3,62 @@ export default {
     props: ['dataGenerate'],
     data() {
         return {
-
+            showModal: false,
+            form: {
+                tgl_kedatangan: '',
+                jml_noseri: 0,
+                no_urut_terakhir: 0,
+            },
+            loading: false,
         }
     },
     methods: {
         keyUpperCase(e) {
             e.target.value = e.target.value.toUpperCase();
         },
+        closeModal() {
+            $('.modalGenerate').modal('hide')
+            this.$nextTick(() => {
+                this.$emit('closeModal')
+            })
+        },
+        simpan() {
+            const ceknotnull = Object.values(this.form).every(x => x !== null && x !== '' && x !== 0)
+            const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-'
+            if (ceknotnull && cekbppb) {
+                this.loading = true
+                const data = {
+                    no_bppb: this.dataGenerate.no_bppb,
+                    tgl_kedatangan: this.form.tgl_kedatangan,
+                    jml_noseri: this.form.jml_noseri,
+                    no_urut_terakhir: this.form.no_urut_terakhir,
+                }
+                this.$emit('generate', data)
+                window.open(`/produksiReworks/cetakseri/12345678012`, '_blank');
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Data tidak boleh kosong!',
+                })
+            }
+        }
     },
+    computed: {
+        jumlahRakit() {
+            return this.dataGenerate.jumlah > this.form.jml_noseri ? true : false
+        },
+    }
 }
 </script>
 <template>
-    <div class="modal fade modalGenerate" id="modelId" data-backdrop="static" data-keyboard="false"  tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade modalGenerate" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Form Generate Seri</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -82,14 +121,29 @@ export default {
                             </div>
                         </div>
                         <div class="card-body">
-                            <h4 class="card-title">Title</h4>
-                            <p class="card-text">Text</p>
+                            <form>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Tanggal Kedatangan</label>
+                                    <input type="date" class="form-control" v-model="form.tgl_kedatangan">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Jumlah Noseri yang dibuat</label>
+                                    <input type="text" class="form-control" :class="jumlahRakit ? 'is-valid' : 'is-invalid'" @keypress="numberOnly($event)" v-model.number="form.jml_noseri">
+                                    <div class="invalid-feedback" v-if="!jumlahRakit">
+                                        Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">No Urut Terakhir</label>
+                                    <input type="text" class="form-control" @keypress="numberOnly($event)" v-model.number="form.no_urut_terakhir">
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
+                    <button type="button" class="btn btn-success" :disabled="loading" @click="simpan">Generate</button>
                 </div>
             </div>
         </div>
