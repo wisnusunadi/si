@@ -141,18 +141,18 @@ class ProduksiController extends Controller
             $obj->noseri = $data[0]->noseri;
             $obj->tgl_buat = $data[0]->created_at->format('Y-m-d');
             $obj->packer = $data[0]->packer;
-            $obj->seri = json_decode($data[0]->isi);
-            // foreach($data as $d){
-            //     $obj[] = array(
-            //         'id' => $d->noseri_id,
-            //         'produk' => $d->produk,
-            //         'model' => $d->model,
-            //         'noseri' => $d->noseri,
-            //         'tgl_buat' => $d->created_at->format('Y-m-d'),
-            //         'packer' => $d->packer,
-            //         'seri' => json_decode($d->isi)
-            //     );
-            // }
+            $items = json_decode($data[0]->isi);
+
+            $tas = new stdClass();
+            $tas->id = 666;
+            $tas->noseri = '';
+            $tas->varian = '';
+            $tas->produk = 'TAS';
+
+
+                $items[] = $tas;
+                $obj->seri = $items;
+
         }
         return $obj;
     }
@@ -298,6 +298,8 @@ class ProduksiController extends Controller
                         ]);
 
                     }
+
+
                     SeriDetailRw::create([
                         'urutan' => $obj->urutan,
                         'packer' =>auth()->user()->karyawan->nama,
@@ -3951,6 +3953,7 @@ class ProduksiController extends Controller
         $customPaper = array(0, 0, 143.46, 220.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper($customPaper, 'landscape');
         return $pdf->stream();
+
     }
 
     function cetak_seri_finish_goods($seri)
@@ -3982,3 +3985,4 @@ class ProduksiController extends Controller
         return view('page.produksi.printreworks.cetakpackinglist', compact('dataview'));
     }
 }
+
