@@ -123,7 +123,6 @@ Route::group(['prefix' => '/gbj', 'middleware' => ['auth', 'divisi:gbj,mgrgdg,di
 Route::group(['prefix' => '/produksi', 'middleware' => ['auth', 'divisi:prd,dirut']], function () {
     Route::view('/dashboard', 'page.produksi.dashboard');
     Route::view('/so', 'page.produksi.so');
-    Route::view('/jadwal_perakitan', 'page.produksi.jadwal_perakitan');
     Route::view('/perencanaan_perakitan', 'page.produksi.perencanaan_perakitan');
     Route::get('/riwayat_perakitan', [ProduksiController::class, 'his_rakit']);
     Route::get('/export_noseri', [ProduksiController::class, 'export_noseri_produksi'])->name('export.rakitseri');
