@@ -64,6 +64,10 @@
             /* set semi bold */
             font-weight: 500;
         }
+
+        .text-uppercase {
+            text-transform: uppercase;
+        }
     </style>
 </head>
 
@@ -137,7 +141,7 @@
                     <td rowspan="{{ count($dataItem) + 1 }}" class="text-center">Standart Configuration</td>
                 </tr>
                 @foreach ($dataItem as $item)
-                    <tr>
+                    <tr class="text-uppercase">
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ isset($item->produk) ? $item->produk : '' }}
                             {{ isset($item->varian) ? $item->varian : '' }}</td>
