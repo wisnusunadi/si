@@ -612,7 +612,23 @@
                 },
                 columns: [{
                     data: 'no_seri'
-                }, ]
+                },
+                                        {
+                            data: null,
+                            render: function(data, type, row) {
+                                return `
+                                    <button class="btn btn-sm btn-outline-info buttonNoSeriDetail">
+                                        <i class="fa fa-info-circle"></i>
+                                        Detail No. Seri Produk
+                                    </button> &nbsp;
+                                    <a class="btn btn-sm btn-outline-primary" target="_blank" href="/produksiReworks/viewpackinglist/${data.id}">
+                                        <i class="fa fa-eye"></i>
+                                        Lihat Packing List
+                                    </a>
+                                `
+                            }
+                        }
+            ]
             })
         }
 

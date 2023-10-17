@@ -88,18 +88,18 @@
 
         /* @media screen and (min-width: 1440px) {
 
-                        section {
-                            font-size: 14px;
-                        }
+                            section {
+                                font-size: 14px;
+                            }
 
-                        #detailmodal {
-                            font-size: 14px;
-                        }
+                            #detailmodal {
+                                font-size: 14px;
+                            }
 
-                        .btn {
-                            font-size: 14px;
-                        }
-                    } */
+                            .btn {
+                                font-size: 14px;
+                            }
+                        } */
 
         @media screen and (min-width: 993px) {
 
@@ -663,16 +663,20 @@
                     {
                         data: null,
                         render: function(data, type, row) {
-                            return `
+                            if (data.cek_rw == 1) {
+                                return `
                         <button class="btn btn-sm btn-outline-info buttonNoSeriDetail">
                             <i class="fa fa-info-circle"></i>
                             Detail No. Seri Produk
                         </button> &nbsp;
-                        <a class="btn btn-sm btn-outline-primary" href="/produksiReworks/viewpackinglist/1">
+                        <a class="btn btn-sm btn-outline-primary" target="_blank" href="/produksiReworks/viewpackinglist/${data.id}">
                             <i class="fa fa-eye"></i>
                             Lihat Packing List
                         </a>
                         `
+                            } else {
+                                return ''
+                            }
                         },
                     }
                 ]
@@ -1022,39 +1026,7 @@
             });
 
             $(document).on('click', '.buttonNoSeriDetail', function() {
-                let data = {
-                    id: 1,
-                    noseri: '1234567890',
-                    tgl_dibuat: '2021-09-01',
-                    packer: 'Packer 1',
-                    item: [{
-                        id: 7079,
-                        noseri: "TD1621AA8268",
-                        varian: "",
-                        produk: "MTB-2MTR"
-                    }, {
-                        id: 26885,
-                        noseri: "TD09202B0484",
-                        varian: "COKLAT",
-                        produk: "DIGIT PRO IDA"
-                    }, {
-                        id: 81872,
-                        noseri: "TD17227A00077",
-                        varian: "",
-                        produk: "MTR-BABY 002"
-                    }, {
-                        id: 114347,
-                        noseri: "TD15229A0049",
-                        varian: "",
-                        produk: "PTB-2in1 "
-                    }, {
-                        id: 166263,
-                        noseri: "TD21237A00153",
-                        varian: "",
-                        produk: "DIGIT-PRO BABY"
-                    }]
-                }
-
+                
                 const dateIndo = (date) => {
                     const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
                         "Juli", "Agustus", "September", "Oktober", "November", "Desember"
