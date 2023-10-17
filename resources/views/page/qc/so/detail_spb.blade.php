@@ -352,7 +352,8 @@
             </div>
         </div>
     </section>
-    @include('page.qc.so.detailnoseri')
+        @include('page/gbj/modalserireworks/detailnoseri')
+
 @stop
 @section('adminlte_js')
     <script>
@@ -972,39 +973,9 @@
             });
 
             $(document).on('click', '.buttonNoSeriDetail', function() {
-                let data = {
-                    id: 1,
-                    noseri: '1234567890',
-                    tgl_dibuat: '2021-09-01',
-                    packer: 'Packer 1',
-                    item: [{
-                        id: 7079,
-                        noseri: "TD1621AA8268",
-                        varian: "",
-                        produk: "MTB-2MTR"
-                    }, {
-                        id: 26885,
-                        noseri: "TD09202B0484",
-                        varian: "COKLAT",
-                        produk: "DIGIT PRO IDA"
-                    }, {
-                        id: 81872,
-                        noseri: "TD17227A00077",
-                        varian: "",
-                        produk: "MTR-BABY 002"
-                    }, {
-                        id: 114347,
-                        noseri: "TD15229A0049",
-                        varian: "",
-                        produk: "PTB-2in1 "
-                    }, {
-                        id: 166263,
-                        noseri: "TD21237A00153",
-                        varian: "",
-                        produk: "DIGIT-PRO BABY"
-                    }]
-                }
-
+                var table = $('#noseritable').DataTable();
+                var data = table.row($(this).closest('tr')).data();
+                var index = table.row($(this).closest('tr')).index();
                 const dateIndo = (date) => {
                     const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
                         "Juli", "Agustus", "September", "Oktober", "November", "Desember"
@@ -1014,7 +985,7 @@
                 }
 
                 $('#nomor-seri-reworks').html(data.noseri);
-                $('#tgl-dibuat-reworks').html(dateIndo(data.tgl_dibuat));
+                $('#tgl-dibuat-reworks').html(dateIndo(data.created_at));
                 $('#packer-reworks').html(data.packer);
                 $('.tableprodukreworks').DataTable().clear().destroy();
 

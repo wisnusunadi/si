@@ -118,17 +118,14 @@
                                                             <div class="form-group">
                                                                 {{-- show 5 years from now to old --}}
                                                                 @for ($i = date('Y'); $i >= date('Y') - 1; $i--)
-                                                                    <div class="form-check">
-                                                                        {{-- checked if years equals now --}}
-                                                                        <input class="form-check-input" type="radio"
-                                                                            value="{{ $i }}" name="tahun"
-                                                                            id="defaultCheck{{ $i }}"
-                                                                            {{ $i == date('Y') ? 'checked' : '' }} />
-                                                                        <label class="form-check-label"
-                                                                            for="defaultCheck{{ $i }}">
-                                                                            {{ $i }}
-                                                                        </label>
-                                                                    </div>
+                                                                <div class="form-check">
+                                                                    {{-- checked if years equals now --}}
+                                                                    <input class="form-check-input" type="radio"
+                                                                        value="{{ $i }}" name="tahun" id="defaultCheck{{ $i }}" {{ $i == date('Y') ? 'checked' : '' }} />
+                                                                    <label class="form-check-label" for="defaultCheck{{ $i }}">
+                                                                        {{ $i }}
+                                                                    </label>
+                                                                </div>
                                                                 @endfor
                                                             </div>
                                                             <div class="form-group">
@@ -136,9 +133,8 @@
                                                             </div>
                                                             <div class="form-group">
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" name="pengiriman"
-                                                                        type="checkbox" value="belum_kirim"
-                                                                        id="defaultCheck1" />
+                                                                    <input class="form-check-input" name="pengiriman" type="checkbox"
+                                                                        value="belum_kirim" id="defaultCheck1" />
                                                                     <label class="form-check-label" for="defaultCheck1">
                                                                         Belum Dikirim
                                                                     </label>
@@ -146,9 +142,8 @@
                                                             </div>
                                                             <div class="form-group">
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" name="pengiriman"
-                                                                        type="checkbox" value="sebagian_kirim"
-                                                                        id="defaultCheck2" />
+                                                                    <input class="form-check-input" name="pengiriman" type="checkbox"
+                                                                        value="sebagian_kirim" id="defaultCheck2" />
                                                                     <label class="form-check-label" for="defaultCheck2">
                                                                         Sebagian Dikirim
                                                                     </label>
@@ -206,18 +201,14 @@
                                                             <div class="form-group">
                                                                 {{-- show 5 years from now to old --}}
                                                                 @for ($i = date('Y'); $i >= date('Y') - 1; $i--)
-                                                                    <div class="form-check">
-                                                                        {{-- checked if years equals now --}}
-                                                                        <input class="form-check-input" type="radio"
-                                                                            value="{{ $i }}"
-                                                                            name="tahunSelesaiProses"
-                                                                            id="defaultCheck{{ $i }}"
-                                                                            {{ $i == date('Y') ? 'checked' : '' }} />
-                                                                        <label class="form-check-label"
-                                                                            for="defaultCheck{{ $i }}">
-                                                                            {{ $i }}
-                                                                        </label>
-                                                                    </div>
+                                                                <div class="form-check">
+                                                                    {{-- checked if years equals now --}}
+                                                                    <input class="form-check-input" type="radio"
+                                                                        value="{{ $i }}" name="tahunSelesaiProses" id="defaultCheck{{ $i }}" {{ $i == date('Y') ? 'checked' : '' }} />
+                                                                    <label class="form-check-label" for="defaultCheck{{ $i }}">
+                                                                        {{ $i }}
+                                                                    </label>
+                                                                </div>
                                                                 @endfor
                                                             </div>
                                                             <div class="form-group">
@@ -317,15 +308,14 @@
         </div>
         @include('page.logistik.so.modalsj')
 
-        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-            aria-hidden="true">
+        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Edit Surat Jalan</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                     </div>
                     <div class="modal-body" id="editsj">
                     </div>
@@ -585,8 +575,7 @@
                 let pengiriman = $('input[name="pengiriman"]:checked').val() ?? 'semua'
                 let years = $('input[name="tahun"]:checked').val() ?? yearsNow
 
-                $('#showtable').DataTable().ajax.url('/logistik/so/data/' + pengiriman + '/' + years)
-            .load();
+                $('#showtable').DataTable().ajax.url('/logistik/so/data/' + pengiriman + '/' + years).load();
                 return false;
 
             });
@@ -631,7 +620,8 @@
                     language: {
                         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                     },
-                    columns: [{
+                    columns: [
+                        {
                             data: null,
                             render: function(data, type, row, meta) {
                                 return meta.row + 1;
@@ -643,10 +633,7 @@
                         {
                             data: null,
                             render: function(data, type, row, meta) {
-                                return '<button data-id="' + data.id +
-                                    '" class="btn btn-warning btn-sm btnEditSJ"><i class="fa fa-pen"></i></button> <a target="_blank" href="/logistik/pengiriman/prints/' +
-                                    data.id +
-                                    '" class="btn btn-sm btn-primary"><i class="fa fa-print"></i></a>'
+                                return '<button data-id="'+data.id+'" class="btn btn-warning btn-sm btnEditSJ"><i class="fa fa-pen"></i></button> <a target="_blank" href="/logistik/pengiriman/prints/' + data.id + '" class="btn btn-sm btn-primary"><i class="fa fa-print"></i></a>'
                             }
                         }
                     ]
@@ -654,11 +641,11 @@
             }
 
             const header = (header) => {
-                if (header.jenis_pesanan == 'ekatalog') {
+                if(header.jenis_pesanan == 'ekatalog') {
                     $('.form-provinsi').removeClass('hide')
 
                     $('.dataprovinsiekat').val(header.provinsi)
-                    if (header.provinsi.instansi) {
+                    if(header.provinsi.instansi){
                         // checked instansi
                         $('#provinsi2').prop('checked', true)
                         let selectElement = $('.provinsi_pengiriman');
@@ -692,31 +679,31 @@
 
                     $('.ekspedisi_id').select2({
                         ajax: {
-                            minimumResultsForSearch: 20,
-                            placeholder: "Pilih Ekspedisi",
-                            dataType: 'json',
-                            theme: "bootstrap",
-                            delay: 250,
-                            type: 'GET',
-                            url: '/api/logistik/ekspedisi/select/' + id,
-                            data: function(params) {
-                                return {
-                                    term: params.term
-                                }
-                            },
-                            processResults: function(data) {
-                                return {
-                                    results: $.map(data, function(obj) {
-                                        return {
-                                            id: obj.id,
-                                            text: obj.nama
-                                        };
-                                    })
-                                };
-                            },
-                        }
-                    })
-                } else {
+                        minimumResultsForSearch: 20,
+                        placeholder: "Pilih Ekspedisi",
+                        dataType: 'json',
+                        theme: "bootstrap",
+                        delay: 250,
+                        type: 'GET',
+                        url: '/api/logistik/ekspedisi/select/' + id,
+                        data: function(params) {
+                            return {
+                                term: params.term
+                            }
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.nama
+                                    };
+                                })
+                            };
+                        },
+                    }
+                })
+                }else{
                     // add hidden
                     $('.form-provinsi').addClass('hide')
 
@@ -726,7 +713,7 @@
                     ekspedisi(header.provinsi.id)
                 }
 
-                if (header.ekspedisi) {
+                if(header.ekspedisi) {
                     $('#pengiriman1').prop('checked', true)
                     $('#ekspedisi').removeClass('hide')
                     $('#nonekspedisi').addClass('hide')
@@ -747,14 +734,14 @@
                     selectElement.empty()
                 }
 
-                if (header.perusahaan_pengiriman && header.alamat_pengiriman) {
+                if(header.perusahaan_pengiriman && header.alamat_pengiriman) {
                     // pilihan pengiriman == penjualan
                     $('#pilihan_pengiriman0').prop('checked', true)
                     $('#perusahaan_pengiriman').attr('readonly', true);
                     $('#alamat_pengiriman').attr('readonly', true);
                     $('input[name="perusahaan_pengiriman"]').val(header.perusahaan_pengiriman)
                     $('input[name="alamat_pengiriman"]').val(header.alamat_pengiriman)
-                } else {
+                }else{
                     $('#pilihan_pengiriman1').prop('checked', true)
                     $('input[name="perusahaan_pengiriman"]').val('')
                     $('input[name="alamat_pengiriman"]').val('')
@@ -762,7 +749,7 @@
                     $('#alamat_pengiriman').attr('readonly', false);
                 }
 
-                if (header.kemasan == 'peti') {
+                if(header.kemasan == 'peti') {
                     $('input[name="kemasan"]').val('peti').prop('checked', true)
                 } else {
                     $('input[name="kemasan"]').val('nonpeti').prop('checked', true)
@@ -778,7 +765,7 @@
                 $.ajax({
                     'url': '/api/logistik/so/data/sj_draft/' + header.pesanan_id,
                     'dataType': 'json',
-                    success: function(data) {
+                    success: function (data) {
                         sjlama(data.data)
                     }
                 });
@@ -797,57 +784,43 @@
                         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                     },
                     columns: [{
-                            data: null,
-                            orderable: false,
-                            searchable: false,
-                            render: function(data, type, row, meta) {
-                                // checkbox
-                                return '<input type="checkbox" class="check_detail" value="' +
-                                    data.id + '" />';
-                            }
-                        }, {
-                            data: 'nama',
-                        },
-                        {
-                            data: 'jumlah',
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, row, meta) {
-                                var rowIndex = meta.row;
-                                return '<input type="text" class="form-control form-control-sm jumlah' +
-                                    rowIndex + '" name="jumlah[' + rowIndex + ']" id="jumlah[' +
-                                    rowIndex + ']" value="0" disabled/>';
-                            }
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, row, meta) {
-                                var rowIndex = meta.row;
-                                return `<button class="btn btn-outline-primary btn-sm noseri" data-index="${rowIndex}">No Seri</button>
-                                    <button class="btn btn-sm btn-outline-info buttonNoSeriDetail">
-                                        <i class="fa fa-info-circle"></i>
-                                        Detail No. Seri Produk
-                                    </button> &nbsp;
-                                    <a class="btn btn-sm btn-outline-warning" target="_blank" href="/produksiReworks/viewpackinglist/${data.id}">
-                                        <i class="fa fa-eye"></i>
-                                        Lihat Packing List
-                                    </a>
-                            `;
-                            }
-                        },
-                        {
-                            // hidden text
-                            data: null,
-                            render: function(data, type, row, meta) {
-                                var rowIndex = meta.row;
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            // checkbox
+                            return '<input type="checkbox" class="check_detail" value="' + data.id + '" />';
+                        }
+                    }, {
+                        data: 'nama',
+                    },
+                    {
+                        data: 'jumlah',
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            var rowIndex = meta.row;
+                            return '<input type="text" class="form-control form-control-sm jumlah'+rowIndex+'" name="jumlah[' + rowIndex + ']" id="jumlah[' + rowIndex + ']" value="0" disabled/>';
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            var rowIndex = meta.row;
+                            return '<button class="btn btn-outline-primary btn-sm noseri" data-index="' + rowIndex + '">No Seri</button>';
+                        }
+                    },
+                    {
+                        // hidden text
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            var rowIndex = meta.row;
 
-                                return '<div class="keterangannoseri' + rowIndex +
-                                    '" name="keterangan[' + rowIndex + ']" id="keterangan[' +
-                                    rowIndex + ']"></div>';
-
-                            }
-                        },
+                            return '<div class="keterangannoseri'+rowIndex+'" name="keterangan[' + rowIndex + ']" id="keterangan[' + rowIndex + ']"></div>';
+                            
+                        }
+                    },
                     ]
                 })
             }
@@ -864,20 +837,19 @@
                         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                     },
                     columns: [{
-                            data: null,
-                            orderable: false,
-                            searchable: false,
-                            render: function(data, type, row, meta) {
-                                // checkbox
-                                return '<input type="checkbox" class="check_detail_part" value="' +
-                                    data.id + '" />';
-                            }
-                        }, {
-                            data: 'nama',
-                        },
-                        {
-                            data: 'jumlah',
-                        },
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            // checkbox
+                            return '<input type="checkbox" class="check_detail_part" value="' + data.id + '" />';
+                        }
+                    }, {
+                        data: 'nama',
+                    },
+                    {
+                        data: 'jumlah',
+                    },
                     ]
                 })
             }
@@ -897,7 +869,7 @@
                 $.ajax({
                     'url': '/api/logistik/so/data/detail/item/' + data_y,
                     'dataType': 'json',
-                    success: function(data) {
+                    success: function (data) {
                         header(data.header)
                         tableproduk(data.item.produk)
                         tablepart(data.item.part)
@@ -910,11 +882,11 @@
                 let id = $(this).data('id');
                 // open modal
                 $.ajax({
-                    url: "/logistik/pengiriman/edit_sj_draft/" + id,
+                    url: "/logistik/pengiriman/edit_sj_draft/"+id,
                     beforeSend: function() {
                         $('#loader').show();
                     },
-                    success: function(result) {
+                    success: function(result){
                         $('#modalEdit').modal('show');
                         $('#editsj').html(result).show();
                     },
@@ -924,12 +896,12 @@
                 })
             });
 
-            $(document).on('click', '.batalEdit', function(event) {
+            $(document).on('click', '.batalEdit', function (event) {
                 event.preventDefault();
                 $('#modalEdit').modal('hide');
             })
 
-            $(document).on('click', '.btnSimpanSuratJalan', function(e) {
+            $(document).on('click', '.btnSimpanSuratJalan', function (e) {
                 $('.btnSimpanSuratJalan').attr('disabled', true)
 
                 let id = $('input[name="ideditsj"]').val()
@@ -939,7 +911,7 @@
                 let sj = jenis_sj_edit + '' + no_invoice_sj_edit
 
                 // validasi not null
-                if (sj == null || tgl_sj == null) {
+                if(sj == null || tgl_sj == null) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -971,10 +943,9 @@
                         $('#modalEdit').modal('hide');
                         $('#loader').hide();
                         $.ajax({
-                            'url': '/api/logistik/so/data/sj_draft/' + response
-                                .pesanan_id,
+                            'url': '/api/logistik/so/data/sj_draft/' + response.pesanan_id,
                             'dataType': 'json',
-                            success: function(data) {
+                            success: function (data) {
                                 sjlama(data.data)
                             }
                         });
