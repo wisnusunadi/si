@@ -1462,11 +1462,17 @@
             let json = [];
             let id = $(this).data('id');
             console.log(id);
-
             $.ajax({
                 url: "/api/gbj/modal_data_seri_tf/" + id,
-                beforeSend: function(xhr) {
-                    json = [];
+                // before loaded
+                beforeSend: function () {
+                    // sweetalert loading
+                    swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
                 },
                 success: function(res) {
                     console.log(res);
@@ -1508,6 +1514,9 @@
                 error: function(xhr) {
                     console.log(xhr);
                     json = []
+                },
+                complete: function() {
+                    swal.close();
                 }
             })
 
