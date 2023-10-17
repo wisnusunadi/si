@@ -120,8 +120,8 @@ export default {
                                             <th>No</th>
                                             <th>Nomor Seri</th>
                                             <th>Tanggal Dibuat</th>
+                                            <th>Layout</th>
                                             <th>Packer</th>
-                                            <th></th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -130,7 +130,7 @@ export default {
                                             <td>{{ index + 1 }}</td>
                                             <td>{{ data.noseri }}</td>
                                             <td>{{ dateFormat(data.tgl_buat) }}</td>
-                                            <td>{{ data.layout }}</td>
+                                            <td>{{ data.layout?.label }}</td>
                                             <td>{{ data.packer ?? '-' }}</td>
                                             <td>
                                                 <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(data)">

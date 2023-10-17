@@ -84,68 +84,179 @@ class QcController extends Controller
 
     public function get_data_seri_ekatalog($status, $id, $idpesanan)
     {
-        if ($status == 'semua') {
-            $data = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
-                $q->where(['gdg_brg_jadi_id' => $id]);
-            })->whereHas('detail.header', function ($q) use ($idpesanan) {
-                $q->where(['pesanan_id' => $idpesanan]);
-            })->with(['NoseriBarangJadi'])->orderBy('id');
+        // if ($status == 'semua') {
+        //     $data = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
+        //         $q->where(['gdg_brg_jadi_id' => $id]);
+        //     })->whereHas('detail.header', function ($q) use ($idpesanan) {
+        //         $q->where(['pesanan_id' => $idpesanan]);
+        //     })->with(['NoseriBarangJadi'])->orderBy('id');
+        // } elseif ($status == 'belum') {
+        //     $data = NoseriTGbj::DoesntHave('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
+        //         $q->where(['gdg_brg_jadi_id' => $id]);
+        //     })->whereHas('detail.header', function ($q) use ($idpesanan) {
+        //         $q->where(['pesanan_id' => $idpesanan]);
+        //     })->with(['NoseriBarangJadi'])->orderBy('id');
+        // } elseif ($status == 'sudah') {
+        //     $data = NoseriTGbj::Has('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
+        //         $q->where(['gdg_brg_jadi_id' => $id]);
+        //     })->whereHas('detail.header', function ($q) use ($idpesanan) {
+        //         $q->where(['pesanan_id' => $idpesanan]);
+        //     })->with(['NoseriBarangJadi'])->orderBy('id');
+        // }
+
+          if ($status == 'semua') {
+            $data = NoseriBarangJadi::
+            select('noseri','noseri_detail_pesanan.tgl_uji','noseri_detail_pesanan.status','noseri_barang_jadi.gdg_barang_jadi_id','noseri_barang_jadi.id')
+            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+            ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+            ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+            ->addSelect([
+                'cek_rw' => function ($q) {
+                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                        ->from('seri_detail_rw')
+                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+                }
+            ])
+            ->where('t_gbj.pesanan_id',$idpesanan)
+            ->where('noseri_barang_jadi.gdg_barang_jadi_id',$id)
+            ->get();
+
         } elseif ($status == 'belum') {
-            $data = NoseriTGbj::DoesntHave('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
-                $q->where(['gdg_brg_jadi_id' => $id]);
-            })->whereHas('detail.header', function ($q) use ($idpesanan) {
-                $q->where(['pesanan_id' => $idpesanan]);
-            })->with(['NoseriBarangJadi'])->orderBy('id');
+            $data = NoseriBarangJadi::
+            select('noseri','noseri_detail_pesanan.tgl_uji','noseri_detail_pesanan.status','noseri_barang_jadi.gdg_barang_jadi_id','noseri_barang_jadi.id')
+            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+            ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+            ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+            ->addSelect([
+                'cek_rw' => function ($q) {
+                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                        ->from('seri_detail_rw')
+                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+                },
+                'sudah' => function ($q) {
+                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
+                        ->from('noseri_detail_pesanan')
+                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                        ->where('noseri_detail_pesanan.status', 'ok')
+                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                }
+            ])
+            ->havingRaw('sudah = 0')
+            ->where('t_gbj.pesanan_id',$idpesanan)
+            ->where('noseri_barang_jadi.gdg_barang_jadi_id',$id)
+            ->get();
+
+
         } elseif ($status == 'sudah') {
-            $data = NoseriTGbj::Has('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
-                $q->where(['gdg_brg_jadi_id' => $id]);
-            })->whereHas('detail.header', function ($q) use ($idpesanan) {
-                $q->where(['pesanan_id' => $idpesanan]);
-            })->with(['NoseriBarangJadi'])->orderBy('id');
+            $data = NoseriBarangJadi::
+            select('noseri','noseri_detail_pesanan.tgl_uji','noseri_detail_pesanan.status','noseri_barang_jadi.gdg_barang_jadi_id','noseri_barang_jadi.id')
+            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+            ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+            ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+            ->addSelect([
+                'cek_rw' => function ($q) {
+                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                        ->from('seri_detail_rw')
+                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+                },
+                'sudah' => function ($q) {
+                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
+                        ->from('noseri_detail_pesanan')
+                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                        ->where('noseri_detail_pesanan.status', 'ok')
+                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                }
+            ])
+            ->havingRaw('sudah > 0')
+            ->where('t_gbj.pesanan_id',$idpesanan)
+            ->where('noseri_barang_jadi.gdg_barang_jadi_id',$id)
+            ->get();
+
+
         }
+
+
+
+       // return response()->json($noseri);
 
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
-                $get = NoseriDetailPesanan::where('t_tfbj_noseri_id', $data->id)->first();
-                if (empty($get)) {
+                // $get = NoseriDetailPesanan::where('t_tfbj_noseri_id', $data->id)->first();
+                // if (empty($get)) {
+                //     return '  <div class="form-check">
+                //     <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->detail->gdg_brg_jadi_id . '" data-id="' . $data->noseri_id . '" />
+                //     </div>';
+                // } else {
+                //     if ($get->status == 'nok') {
+                //         return '<div class="form-check">
+                //         <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->detail->gdg_brg_jadi_id . '" data-id="' . $data->noseri_id . '" />
+                //         </div>';
+                //     } else {
+                //         return '';
+                //     }
+                // }
+                if ($data->tgl_uji == NULL) {
                     return '  <div class="form-check">
-                    <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->detail->gdg_brg_jadi_id . '" data-id="' . $data->noseri_id . '" />
+                    <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->gdg_barang_jadi_id . '" data-id="' . $data->id . '" />
                     </div>';
                 } else {
-                    if ($get->status == 'nok') {
+                    if ($data->status == 'nok') {
                         return '<div class="form-check">
-                        <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->detail->gdg_brg_jadi_id . '" data-id="' . $data->noseri_id . '" />
+                        <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->gdg_barang_jadi_id . '" data-id="' . $data->id . '" />
                         </div>';
                     } else {
                         return '';
                     }
                 }
+                return '-';
             })
             ->addColumn('seri', function ($data) {
-                return $data->NoseriBarangJadi->noseri;
+                return $data->noseri;
             })
             ->addColumn('tgl_uji', function ($data) {
-                $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', $data->id)->first();
-                if (isset($check)) {
-                    return Carbon::createFromFormat('Y-m-d', $check->tgl_uji)->format('d-m-Y');
+                // $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', $data->id)->first();
+                // if (isset($check)) {
+                //     return Carbon::createFromFormat('Y-m-d', $check->tgl_uji)->format('d-m-Y');
+                // } else {
+                //     return '-';
+                // }
+                 if ($data->tgl_uji != null) {
+                    return Carbon::createFromFormat('Y-m-d', $data->tgl_uji)->format('d-m-Y');
                 } else {
                     return '-';
                 }
+
             })
             ->addColumn('status', function ($data) {
-                $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', $data->id)->get();
-                if (count($check) > 0) {
-                    foreach ($check as $c) {
-                        if ($c->status == 'ok') {
+                // $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', $data->id)->get();
+                // if (count($check) > 0) {
+                //     foreach ($check as $c) {
+                //         if ($c->status == 'ok') {
+                //             return '<i class="fas fa-check-circle ok has-text-success"></i>';
+                //         } else {
+                //             return '<i class="fas fa-times-circle nok has-text-danger"></i>';
+                //         }
+                //     }
+                // } else {
+                //     return '<i class="fas fa-question-circle warning has-text-warning"></i>';
+                // }
+
+                if ($data->tgl_uji != NULL ) {
+
+                        if ($data->status == 'ok') {
                             return '<i class="fas fa-check-circle ok has-text-success"></i>';
                         } else {
                             return '<i class="fas fa-times-circle nok has-text-danger"></i>';
                         }
-                    }
+
                 } else {
                     return '<i class="fas fa-question-circle warning has-text-warning"></i>';
                 }
+
             })
             ->addColumn('button', function () {
                 return '';

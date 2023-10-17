@@ -22,10 +22,22 @@ export default {
             showModalDetail: false,
             dataModalDetail: null,
             layout: [
-                'Blok B',
-                'Blok D',
-                'E10',
-                'E7'
+                {
+                    id: 7,
+                    label: 'Blok B'
+                },
+                {
+                    id: 5,
+                    label: 'Blok D'
+                },
+                {
+                    id: 6,
+                    label: 'E10'
+                },
+                {
+                    id: 1,
+                    label: 'E7'
+                },
             ]
         }
     },
