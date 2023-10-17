@@ -10,7 +10,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth as JWTAuth;
 class ApiController extends Controller
 {
-    //
+
     public function register(Request $request)
     {
     	//Validate data
@@ -77,7 +77,7 @@ class ApiController extends Controller
  		//Token created, return with success response and jwt token
         return response()->json([
             'success' => true,
-           'nama' => 'a',
+            'nama' => auth()->user()->karyawan->nama,
             'token' => $token,
         ]);
     }
