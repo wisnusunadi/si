@@ -833,15 +833,26 @@ class GudangController extends Controller
     function getNoseri(Request $request, $id)
     {
         try {
-            $data = NoseriBarangJadi::whereHas('gudang', function ($d) use ($id) {
-                $d->where('id', $id);
-            })
-                ->where([
+            $data = NoseriBarangJadi::
+            select('noseri_barang_jadi.id','noseri_barang_jadi.noseri','seri_detail_rw.isi as isi')
+            ->addSelect([
+                'cek_rw' => function ($q) {
+                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                        ->from('seri_detail_rw')
+                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+                }
+            ])
+            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+            ->where([
                     'is_aktif' => 1,
                     'is_ready' => 0,
                     'is_change' => 1,
-                    'is_delete' => 0
+                    'is_delete' => 0,
+                    'gdg_barang_jadi_id' => $id
                 ])->get();
+
+
+            // return response()->json($data);
             $layout = Layout::where('jenis_id', 1)->get();
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -853,6 +864,13 @@ class GudangController extends Controller
                 })
                 ->addColumn('nomor', function ($d) {
                     return $d->noseri;
+                })
+                ->addColumn('item', function ($d) {
+                    if($d->isi == null){
+                        return  array();
+                    }else{
+                        return $d->isi;
+                    }
                 })
                 ->addColumn('Layout', function ($d) use ($layout) {
                     $opt = '';

@@ -106,11 +106,12 @@ class QcController extends Controller
 
           if ($status == 'semua') {
             $data = NoseriBarangJadi::
-            select('noseri','noseri_detail_pesanan.tgl_uji','noseri_detail_pesanan.status','noseri_barang_jadi.gdg_barang_jadi_id','noseri_barang_jadi.id')
+            select('seri_detail_rw.isi as isi','noseri','noseri_detail_pesanan.tgl_uji','noseri_detail_pesanan.status','noseri_barang_jadi.gdg_barang_jadi_id','noseri_barang_jadi.id')
             ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
             ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
             ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
             ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
             ->addSelect([
                 'cek_rw' => function ($q) {
                     $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
@@ -124,11 +125,12 @@ class QcController extends Controller
 
         } elseif ($status == 'belum') {
             $data = NoseriBarangJadi::
-            select('noseri','noseri_detail_pesanan.tgl_uji','noseri_detail_pesanan.status','noseri_barang_jadi.gdg_barang_jadi_id','noseri_barang_jadi.id')
+            select('seri_detail_rw.isi as isi','noseri','noseri_detail_pesanan.tgl_uji','noseri_detail_pesanan.status','noseri_barang_jadi.gdg_barang_jadi_id','noseri_barang_jadi.id')
             ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
             ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
             ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
             ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
             ->addSelect([
                 'cek_rw' => function ($q) {
                     $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
@@ -151,11 +153,12 @@ class QcController extends Controller
 
         } elseif ($status == 'sudah') {
             $data = NoseriBarangJadi::
-            select('noseri','noseri_detail_pesanan.tgl_uji','noseri_detail_pesanan.status','noseri_barang_jadi.gdg_barang_jadi_id','noseri_barang_jadi.id')
+            select('seri_detail_rw.isi as isi','noseri','noseri_detail_pesanan.tgl_uji','noseri_detail_pesanan.status','noseri_barang_jadi.gdg_barang_jadi_id','noseri_barang_jadi.id')
             ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
             ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
             ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
             ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
             ->addSelect([
                 'cek_rw' => function ($q) {
                     $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
@@ -230,6 +233,13 @@ class QcController extends Controller
                     return '-';
                 }
 
+            })
+            ->addColumn('item', function ($d) {
+                if($d->isi == null){
+                    return  array();
+                }else{
+                    return $d->isi;
+                }
             })
             ->addColumn('status', function ($data) {
                 // $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', $data->id)->get();
