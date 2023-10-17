@@ -177,6 +177,11 @@ class ProduksiController extends Controller
                         'status' => 11
                     ]);
 
+                    NoseriBarangJadi::whereIN('id', $data)
+                    ->update([
+                        'reworks_id' => NULL
+                    ]);
+
                 NoseriBarangJadi::find($id)->delete();
 
                 DB::commit();
@@ -287,10 +292,15 @@ class ProduksiController extends Controller
                             'varian' => $i->varian,
                             'produk' => $i->prd
                         );
+                        NoseriBarangJadi::where('id', $i->id)
+                        ->update([
+                            'reworks_id' =>  $produk_id->kode . $tahun . $bulan . $urutan
+                        ]);
+
                     }
                     SeriDetailRw::create([
                         'urutan' => $obj->urutan,
-                        // 'packer' => Auth::user()->nama,
+                        // 'packer' =>auth()->user()->nama,
                         'packer' => '-',
                         'noseri_id' => $nbj->id,
                         'noseri' =>  $produk_id->kode . $tahun . $bulan . $urutan,
@@ -407,14 +417,19 @@ class ProduksiController extends Controller
                             ->whereIN('noseri_barang_jadi.noseri', $newId)
                             ->pluck('noseri_barang_jadi.id')->toArray();
 
-                        JadwalRakitNoseriRw::where('noseri_id', $curValuesId)
+                        JadwalRakitNoseriRw::whereIN('noseri_id', $curValuesId)
                             ->update([
                                 'status' => 11
                             ]);
 
-                        JadwalRakitNoseriRw::where('noseri_id', $newValuesId)
+                        JadwalRakitNoseriRw::whereIN('noseri_id', $newValuesId)
                             ->update([
                                 'status' => 12
+                            ]);
+
+                            NoseriBarangJadi::whereIN('id', $curValuesId)
+                            ->update([
+                                'reworks_id' => NULL
                             ]);
 
                         $items = NoseriBarangJadi::select('produk.nama as prd', 'gdg_barang_jadi.nama as varian', 'noseri_barang_jadi.id', 'noseri_barang_jadi.noseri')
@@ -433,9 +448,15 @@ class ProduksiController extends Controller
 
                         $seriRw = SeriDetailRw::where('noseri_id', $id)->first();
                         SeriDetailRw::where('noseri_id', $id)
-                            ->update([
-                                'isi' => $item
-                            ]);
+                        ->update([
+                            'isi' => $item
+                        ]);
+
+                        NoseriBarangJadi::whereIN('id', $newValuesId)
+                        ->update([
+                            'reworks_id' => $seriRw->noseri
+                        ]);
+
 
                         DB::commit();
                         return response()->json([
@@ -2691,7 +2712,7 @@ class ProduksiController extends Controller
         left join jadwal_rakit_noseri jrn on jrn.jadwal_id = jp.id
         left join gdg_barang_jadi gbj on gbj.id = jp.produk_id
         left join produk p on p.id = gbj.produk_id
-        left join m_produk mp on mp.id = p.produk_id 
+        left join m_produk mp on mp.id = p.produk_id
         where jp.status not in (6) and jp.status_tf not in(14)
         group by jp.id
         having jp.jumlah != count(jrn.jadwal_id)");

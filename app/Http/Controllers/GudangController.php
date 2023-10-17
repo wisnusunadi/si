@@ -146,9 +146,10 @@ class GudangController extends Controller
     }
     function store_perakitan_rw(Request $request)
     {
+
         DB::beginTransaction();
         $obj =  json_decode(json_encode($request->all()), FALSE);
-       // dd($obj);
+      //dd($obj);
         try {
             //code...
 
@@ -159,10 +160,18 @@ class GudangController extends Controller
             $jadwal = JadwalPerakitanRw::where('urutan',$getUrut)->first();
 
             foreach($obj as $o){
+                if(isset($o->layout) && $o->layout != null){
+                    $l = $o->layout->id;
+                }else{
+                    $l = NULL;;
+                }
+
                 NoseriBarangJadi::where('id',$o->id)
                 ->update([
                     'is_prd' => 0,
-                    'is_aktif' => 1
+                    'is_aktif' => 1,
+                    'layout_id' => $l
+
                 ]);
              }
 
@@ -193,7 +202,7 @@ class GudangController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 200,
-                'message' =>  'Gagal Diterima',
+                'message' =>  'Gagal Diterima'.$th,
             ], 500);
         }
 
@@ -340,7 +349,7 @@ class GudangController extends Controller
     }
     function riwayat_rw_permintaan()
     {
-        $data = SystemLog::where(['tipe'=>'GBJ','subjek' => 'Kirim Permintaan Rework'])->orderBy('created_at','DESC')->get();
+        $data = SystemLog::where(['tipe'=>'GBJ','subjek' => 'Kirim Permintaan Rework'])->orderBy('created_at', 'ASC')->get();
 
         if($data->isEmpty()){
             $obj = array();
@@ -868,17 +877,14 @@ class GudangController extends Controller
     function getNoseriDone(Request $request, $id)
     {
         try {
-            $data = NoseriBarangJadi::whereHas('gudang', function ($d) use ($id) {
-                $d->where('id', $id);
-            })->where([
+
+            $data = NoseriBarangJadi::where([
                 'is_aktif' => 1,
                 'is_ready' => 1,
                 'is_change' => 1,
                 'is_delete' => 0
-            ])->get();
+            ])->with(['Pesanan'])->where('gdg_barang_jadi_id',$id)->get();
 
-
-            $layout = Layout::where('jenis_id', 1)->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('ids', function ($d) {
@@ -891,11 +897,17 @@ class GudangController extends Controller
                     return $d->noseri;
                 })
                 ->addColumn('used', function ($d) {
-                    if (isset($d->pesanan->so)) {
-                        return $d->pesanan->no_po;
-                    } else {
-                        return '-';
+                    if($d->reworks_id != NULL){
+                        return 'Perakitan Rework '.$d->reworks_id;
+                    }else{
+                        if (isset($d->Pesanan->so)) {
+                            return $d->Pesanan->no_po;
+                        } else {
+                           return '-';
+                        }
                     }
+
+
                 })
                 ->addColumn('aksi', function ($d) {
                     return '<a data-toggle="modal" data-target="#viewStock" class="viewStock" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
