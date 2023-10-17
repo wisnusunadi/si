@@ -329,7 +329,7 @@ class GudangController extends Controller
                     'nama' => $produk->nama,
                     'tgl_mulai' => $x->tanggal_mulai,
                     'tgl_selesai' => $x->tanggal_selesai,
-                    'tgl_tf' => $d->created_at->format('Y-m-d'),
+                    'tgl_tf' => $d->created_at,
                     'jumlah' => $x->jumlah,
                     'item' => $x->item
                 );
@@ -362,7 +362,7 @@ class GudangController extends Controller
                     'nama' => $x->nama,
                     'tgl_mulai' => $x->tgl_mulai,
                     'tgl_selesai' => $x->tgl_selesai,
-                    'tgl_tf' => $d->created_at->format('Y-m-d'),
+                    'tgl_tf' => $d->created_at,
                     'jumlah' => $noseriCount
                 );
 
@@ -5713,7 +5713,7 @@ class GudangController extends Controller
     function history_modal_data_seri_tf($id)
     {
         $data = NoseriBarangJadi::
-        select('noseri_barang_jadi.id','noseri_barang_jadi.noseri','seri_detail_rw.isi')
+        select('noseri_barang_jadi.id','noseri_barang_jadi.noseri','seri_detail_rw.isi', 'seri_detail_rw.created_at')
         ->leftjoin('t_gbj_noseri', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
         ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
         ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
@@ -5726,6 +5726,8 @@ class GudangController extends Controller
                 $obj[] = array(
                     'id' => $d->id,
                     'noseri' => $d->noseri,
+                    'tgl_dibuat' => $d->created_at ? $d->created_at->format('Y-m-d') : '-',
+                    'packer' => $d->packer ? $d->packer : '-',
                     'item' => $d->isi == null ? array(): json_decode($d->isi)
                 );
             }

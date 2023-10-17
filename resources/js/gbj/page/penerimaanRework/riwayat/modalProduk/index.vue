@@ -102,7 +102,7 @@ export default {
                                         <label for="">Tanggal Transfer</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                <span id="po">{{ dateFormat(dataSelected.tgl_tf) }}</span>
+                                                <span id="po">{{ dataSelected.tgl_tf }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -121,6 +121,7 @@ export default {
                                             <th>Nomor Seri</th>
                                             <th>Tanggal Dibuat</th>
                                             <th>Packer</th>
+                                            <th></th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -129,6 +130,7 @@ export default {
                                             <td>{{ index + 1 }}</td>
                                             <td>{{ data.noseri }}</td>
                                             <td>{{ dateFormat(data.tgl_buat) }}</td>
+                                            <td>{{ data.layout }}</td>
                                             <td>{{ data.packer ?? '-' }}</td>
                                             <td>
                                                 <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(data)">

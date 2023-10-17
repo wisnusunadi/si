@@ -2,6 +2,7 @@
 import Header from '../../components/header.vue'
 import Transfer from './transfer'
 import Riwayat from './riwayat'
+import axios from 'axios';
 export default {
     components: {
         Header,
@@ -31,8 +32,19 @@ export default {
                 this.$store.dispatch('setLoading', true);
                 const { data: penerimaan } = await axios.get(`/api/gbj/rw/dp/seri`);
                 const { data:riwayat } = await axios.get('/api/gbj/rw/riwayat_penerimaan')
-                this.penerimaan = penerimaan;
-                this.riwayat = riwayat;
+                this.penerimaan = penerimaan.map(item => {
+                    return {
+                        no_urut: `PRD-${item.id}`,
+                        ...item,
+                    }
+                });
+                this.riwayat = riwayat.map(item => {
+                    return {
+                        no_urut: `PRD-${item.urutan}`,
+                        ...item,
+                        tgl_tf: this.dateTimeFormat(item.tgl_tf),
+                    }
+                });
             } catch (error) {
                 console.log(error);
             } finally {

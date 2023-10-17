@@ -744,8 +744,8 @@
                     "language": {
                         // url: "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json",
                         processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                    </span>&emsp;Mohon Tunggu ...",
                     },
                     "columnDefs": [{
                             "targets": [5],
@@ -799,8 +799,8 @@
                     "language": {
                         // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                         processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                    </span>&emsp;Mohon Tunggu ...",
                     },
                     "columnDefs": [{
                             "targets": [5],
@@ -849,8 +849,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                </span>&emsp;Mohon Tunggu ...",
                 }
             });
 
@@ -1362,8 +1362,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                </span>&emsp;Mohon Tunggu ...",
                 },
                 "order": [
                     [5, 'asc']
@@ -1459,148 +1459,65 @@
         })
 
         $(document).on('click', '.buttonShowSeri', function(e) {
+            let json = [];
             let id = $(this).data('id');
             console.log(id);
-
-            let json = [
-                    {id: 1,
-                    noseri: '1234567890',
-                    tgl_dibuat: '2021-09-01',
-                    packer: 'Packer 1',
-                     item: [{
-                        id: 7079,
-                        noseri: "TD1621AA8268",
-                        varian: "",
-                        produk: "MTB-2MTR"
-                    }, {
-                        id: 26885,
-                        noseri: "TD09202B0484",
-                        varian: "COKLAT",
-                        produk: "DIGIT PRO IDA"
-                    }, {
-                        id: 81872,
-                        noseri: "TD17227A00077",
-                        varian: "",
-                        produk: "MTR-BABY 002"
-                    }, {
-                        id: 114347,
-                        noseri: "TD15229A0049",
-                        varian: "",
-                        produk: "PTB-2in1 "
-                    }, {
-                        id: 166263,
-                        noseri: "TD21237A00153",
-                        varian: "",
-                        produk: "DIGIT-PRO BABY"
-                    }]
+            $.ajax({
+                url: "/api/gbj/modal_data_seri_tf/" + id,
+                // before loaded
+                beforeSend: function () {
+                    // sweetalert loading
+                    swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
                 },
-                {
-                    id: 2,
-                    noseri: '1234567890',
-                    tgl_dibuat: '2021-09-01',
-                    packer: 'Packer 1',
-                    item: [{
-                        id: 7079,
-                        noseri: "TD1621AA8268",
-                        varian: "",
-                        produk: "MTB-2MTR"
-                    }, {
-                        id: 26885,
-                        noseri: "TD09202B0484",
-                        varian: "COKLAT",
-                        produk: "DIGIT PRO IDA"
-                    }, {
-                        id: 81872,
-                        noseri: "TD17227A00077",
-                        varian: "",
-                        produk: "MTR-BABY 002"
-                    }, {
-                        id: 114347,
-                        noseri: "TD15229A0049",
-                        varian: "",
-                        produk: "PTB-2in1 "
-                    }, {
-                        id: 166263,
-                        noseri: "TD21237A00153",
-                        varian: "",
-                        produk: "DIGIT-PRO BABY"
-                    }]
-                },
-                {
-                    id: 3,
-                    noseri: '1234567890',
-                    tgl_dibuat: '2021-09-01',
-                    packer: 'Packer 1',
-                    item: [{
-                        id: 7079,
-                        noseri: "TD1621AA8268",
-                        varian: "",
-                        produk: "MTB-2MTR"
-                    }, {
-                        id: 26885,
-                        noseri: "TD09202B0484",
-                        varian: "COKLAT",
-                        produk: "DIGIT PRO IDA"
-                    }, {
-                        id: 81872,
-                        noseri: "TD17227A00077",
-                        varian: "",
-                        produk: "MTR-BABY 002"
-                    }, {
-                        id: 114347,
-                        noseri: "TD15229A0049",
-                        varian: "",
-                        produk: "PTB-2in1 "
-                    }, {
-                        id: 166263,
-                        noseri: "TD21237A00153",
-                        varian: "",
-                        produk: "DIGIT-PRO BABY"
-                    }]
-                },
-                {
-                    id: 4,
-                    noseri: '1234567890',
-                    item: null,
-                },
-                {
-                    id: 5,
-                    noseri: '1234567890',
-                    
-                }
-                
-            ]
-
-            $('.tableDetailNoSeri').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: false,
-                ordering: false,
-                autoWidth: false,
-                data: json,
-                columns: [{
-                    data: 'noseri',
-                }, {
-                    data: null,
-                    render: function(data, type, row) {
-                        if (data?.item != undefined) {
-                            return `
+                success: function(res) {
+                    console.log(res);
+                    json = res;
+                    $('.tableDetailNoSeri').DataTable({
+                        destroy: true,
+                        processing: true,
+                        serverSide: false,
+                        ordering: false,
+                        autoWidth: false,
+                        data: json,
+                        columns: [{
+                            data: 'noseri',
+                        }, {
+                            data: null,
+                            render: function(data, type, row) {
+                                if (data.item.length > 0) {
+                                    return `
                             <button class="btn btn-sm btn-outline-info detailnoseriproduk"><i class="fa fa-info-circle"></i> Detail No. Seri Produk
                             </button>
                             <button class="btn btn-sm btn-outline-primary my-1 noseriprodukbarcode" data-noseri="${data.noseri}"><i class="fa fa-eye"></i> Lihat No. Seri</button>
                             <a href="/produksiReworks/viewpackinglist/${data.id}" target="_blank" class="btn btn-sm btn-outline-warning"><i class="fa fa-eye"></i> Lihat Packing List
                             </a>                            
                         `
-                        } else {
-                            return ''
+                                } else {
+                                    return ''
+                                }
+                            }
+                        }],
+                        "language": {
+                            // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                            processing: "<span class='fa-stack fa-md'>\n\
+                                                                                                                                                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
                         }
-                    }
-                }],
-                "language": {
-                    // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                    processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
+                    })
+                    $('#modalDetailNoSeri').modal('show');
                 },
+                error: function(xhr) {
+                    console.log(xhr);
+                    json = []
+                },
+                complete: function() {
+                    swal.close();
+                }
             })
 
             // show modal
