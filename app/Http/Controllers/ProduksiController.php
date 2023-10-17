@@ -3945,9 +3945,17 @@ class ProduksiController extends Controller
         return Excel::download(new NoseriRakitExport(), 'NoseriPerakitan.xlsx');
     }
 
-    function cetak_seri($seri)
+    function cetak_seri_rework($seri)
     {
         // buat 10cm x 2cm
+        $customPaper = array(0, 0, 143.46, 220.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper($customPaper, 'landscape');
+        return $pdf->stream();
+    }
+
+    function cetak_seri_finish_goods($seri)
+    {
+        // buat 5.5cm x 2.5cm
         $customPaper = array(0, 0, 143.46, 220.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper($customPaper, 'landscape');
         return $pdf->stream();

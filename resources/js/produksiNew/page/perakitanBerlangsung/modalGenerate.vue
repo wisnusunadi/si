@@ -34,7 +34,7 @@ export default {
                     no_urut_terakhir: this.form.no_urut_terakhir,
                 }
                 this.$emit('generate', data)
-                window.open(`/produksiReworks/cetakseri/12345678012`, '_blank');
+                window.open(`/produksiReworks/cetak_seri_finish_goods/12345678012`, '_blank');
             } else {
                 Swal.fire({
                     icon: 'error',
