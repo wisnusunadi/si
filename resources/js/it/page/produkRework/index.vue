@@ -1,12 +1,29 @@
 <script>
 import tableRework from './table.vue'
+import axios from 'axios'
 export default {
     components: { tableRework },
     data() {
         return {
-            product: null,
+            product: [],
         }
     },
+    methods: {
+        async getProductRework() {
+            try {
+                this.$store.dispatch('setLoading', true)
+                const { produk } = await axios.get('/api/produk').then(res => res.data);
+                this.product = produk;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.$store.dispatch('setLoading', false)
+            }
+        }
+    },
+    created() {
+        this.getProductRework()
+    }
 }
 </script>
 <template>
@@ -21,6 +38,7 @@ export default {
                 <div v-else>
                     <table-rework
                         :product="product"
+                        @refresh="getProductRework"
                     ></table-rework>
                 </div>
             </v-container>
