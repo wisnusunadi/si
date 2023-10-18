@@ -48,6 +48,7 @@ export default {
         <table class="table is-bordered has-text-centered" style="white-space: nowrap;">
             <thead>
                 <tr>
+                    <th rowspan="2">No Urut</th>
                     <th rowspan="2">Nama Produk</th>
                     <th rowspan="2">Jumlah</th>
                     <th rowspan="2">Aksi</th>
@@ -59,6 +60,7 @@ export default {
             </thead>
             <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, index) in dataTable" :key="index">
+                    <td>{{ data.no_urut }}</td>
                     <td>{{ data?.produk_id.label }}</td>
                     <td>{{ data.jumlah }}</td>
                     <td>

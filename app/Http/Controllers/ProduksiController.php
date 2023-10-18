@@ -2737,26 +2737,6 @@ class ProduksiController extends Controller
         $data = JadwalPerakitan::with('Produk.Produk')->whereNotIn('status', [6])->get();
         return response()->json($data);
     }
-    // function selisih($selisih, $tanggal_selesai)
-    // {
-    //     if (isset($tanggal_selesai)) {
-    //         if ($selisih >= -10 && $selisih < -5) {
-    //             return 'Kurang ' . abs($selisih) . ' Hari';
-    //         } elseif ($selisih >= -5 && $selisih <= -2) {
-    //             return 'Kurang ' . abs($selisih) . ' Hari';
-    //         } elseif ($selisih > -2 && $selisih <= 0) {
-    //             return 'Kurang ' . $selisih . ' Hari';
-    //         } elseif ($selisih > 0) {
-    //             return 'Lebih ' . $selisih . ' Hari';
-    //         } elseif ($selisih < -10) {
-    //             return 'Kurang ' . abs($selisih) . ' Hari';
-    //         } else {
-    //             return $selisih;
-    //         }
-    //     } else {
-    //         return '-';
-    //     }
-    // }
     function on_rakit()
     {
         try {
@@ -2776,6 +2756,7 @@ class ProduksiController extends Controller
             $data = collect($data)->map(function ($item) {
                 return [
                     'id' => $item->id,
+                    'produk_id' => $item->produk_id,
                     'no_bppb' => $item->no_bppb ? $item->no_bppb : '-',
                     'tanggal_mulai' => $item->tanggal_mulai ? $item->tanggal_mulai : '-',
                     'tanggal_selesai' => $item->tanggal_selesai ? $item->tanggal_selesai : '-',
@@ -4000,13 +3981,21 @@ class ProduksiController extends Controller
         return Excel::download(new NoseriRakitExport(), 'NoseriPerakitan.xlsx');
     }
 
-    function cetak_seri($seri)
+    function cetak_seri_rework($seri)
     {
         // buat 10cm x 2cm
         $customPaper = array(0, 0, 143.46, 220.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper($customPaper, 'landscape');
         return $pdf->stream();
 
+    }
+
+    function cetak_seri_finish_goods($seri)
+    {
+        // buat 5.5cm x 2.5cm
+        $customPaper = array(0, 0, 143.46, 220.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper($customPaper, 'landscape');
+        return $pdf->stream();
     }
 
     function view_packing_list($id)

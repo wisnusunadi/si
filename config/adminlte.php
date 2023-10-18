@@ -613,6 +613,10 @@ return [
             'url'  => '/administrator/user',
         ],
         [
+            'header' => 'Produk',
+            'auth'   => [14]
+        ],
+        [
             'text' => 'Kategori Produk',
             'url'  => '/administrator/kategori_produk',
             'icon' => 'fas fa-table',
@@ -621,6 +625,12 @@ return [
         [
             'text' => 'Produk',
             'url'  => '/administrator/produk',
+            'icon' => 'fas fa-table',
+            'auth' => [14]
+        ],
+        [
+            'text' => 'Produk Rework',
+            'url'  => '/administrator/produk_rework',
             'icon' => 'fas fa-table',
             'auth' => [14]
         ],
@@ -1756,7 +1766,7 @@ return [
         ],
         [
             'header' => 'Setting',
-            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2]
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 14]
         ],
         [
             'text' => 'Ubah Password',

@@ -5,7 +5,7 @@ export default {
         return {
             showModal: false,
             form: {
-                tgl_kedatangan: '',
+                kedatangan: 0,
                 jml_noseri: 0,
                 no_urut_terakhir: 0,
             },
@@ -34,7 +34,6 @@ export default {
                     no_urut_terakhir: this.form.no_urut_terakhir,
                 }
                 this.$emit('generate', data)
-                window.open(`/produksiReworks/cetakseri/12345678012`, '_blank');
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -47,6 +46,17 @@ export default {
     computed: {
         jumlahRakit() {
             return this.dataGenerate.jumlah > this.form.jml_noseri ? true : false
+        },
+    },
+    watch: {
+        'form.kedatangan': function (val) {
+            if (val > 26) {
+                this.form.kedatangan = 26
+            } else if (val < 0) {
+                this.form.kedatangan = 0
+            } else {
+                this.form.kedatangan = val
+            }
         },
     }
 }
@@ -123,19 +133,22 @@ export default {
                         <div class="card-body">
                             <form>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Tanggal Kedatangan</label>
-                                    <input type="date" class="form-control" v-model="form.tgl_kedatangan">
+                                    <label for="exampleInputEmail1">Kedatangan</label>
+                                    <input type="text" class="form-control" v-model.number="form.kedatangan"
+                                        @keypress="numberOnly($event)">
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Jumlah Noseri yang dibuat</label>
-                                    <input type="text" class="form-control" :class="jumlahRakit ? 'is-valid' : 'is-invalid'" @keypress="numberOnly($event)" v-model.number="form.jml_noseri">
+                                    <input type="text" class="form-control" :class="jumlahRakit ? 'is-valid' : 'is-invalid'"
+                                        @keypress="numberOnly($event)" v-model.number="form.jml_noseri">
                                     <div class="invalid-feedback" v-if="!jumlahRakit">
                                         Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">No Urut Terakhir</label>
-                                    <input type="text" class="form-control" @keypress="numberOnly($event)" v-model.number="form.no_urut_terakhir">
+                                    <input type="text" class="form-control" @keypress="numberOnly($event)"
+                                        v-model.number="form.no_urut_terakhir">
                                 </div>
                             </form>
                         </div>
@@ -143,9 +156,8 @@ export default {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                    <button type="button" class="btn btn-success" :disabled="loading" @click="simpan">Generate</button>
+                    <button type="button" class="btn btn-success" @click="simpan">Generate</button>
                 </div>
             </div>
         </div>
-    </div>
-</template>
+</div></template>

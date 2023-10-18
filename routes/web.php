@@ -132,7 +132,8 @@ Route::group(['prefix' => '/produksi', 'middleware' => ['auth', 'divisi:prd,diru
 });
 
 Route::group(['prefix' => '/produksiReworks'], function () {
-    Route::get('/cetakseri/{seri}', [ProduksiController::class, 'cetak_seri']);
+    Route::get('/cetak_seri_finish_goods/{seri}', [ProduksiController::class, 'cetak_seri_finish_goods']);
+    Route::get('/cetakseri/{seri}', [ProduksiController::class, 'cetak_seri_rework']);
     Route::get('/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);
     Route::get('/cetakpackinglist/{id}', [ProduksiController::class, 'cetak_packing_list']);
 });

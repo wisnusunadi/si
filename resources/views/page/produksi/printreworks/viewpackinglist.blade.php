@@ -22,8 +22,7 @@
         }
 
         header table tr td,
-        footer table tr td
-         {
+        footer table tr td {
             padding: 10px 0px;
         }
 
@@ -65,6 +64,10 @@
             /* set semi bold */
             font-weight: 500;
         }
+
+        .text-uppercase {
+            text-transform: uppercase;
+        }
     </style>
 </head>
 
@@ -75,13 +78,14 @@
 
         $dataNull = [
             [
-                'product_name' => '',
+                'produk' => '',
                 'quantity' => '',
-                'serial_number' => '',
+                'noseri' => '',
             ],
         ];
-
-        // jika dataItem kurang dari 16, maka tambahkan dataNull hingga 16
+        
+        // // // tambah data Array
+        // // jika dataItem kurang dari 16, maka tambahkan dataNull hingga 16
         if (count($dataItem) < 6) {
             $dataNullIsi = [];
             for ($i = 0; $i < 6 - count($dataItem); $i++) {
@@ -137,17 +141,17 @@
                     <td rowspan="{{ count($dataItem) + 1 }}" class="text-center">Standart Configuration</td>
                 </tr>
                 @foreach ($dataItem as $item)
-                    <tr>
+                    <tr class="text-uppercase">
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ isset($item->produk) ? $item->produk : '' }}
                             {{ isset($item->varian) ? $item->varian : '' }}</td>
-                        <td class="text-center">{{ isset($item->produk) ? '1' : '' }}</td>
+                        <td class="text-center">{{ isset($item->produk) && $item->produk != 'TAS' ? 1 : '' }}</td>
                         <td>{{ isset($item->noseri) ? $item->noseri : '' }}</td>
                     </tr>
                 @endforeach
                 <tr>
                     <td rowspan="{{ count($optionsConfiguration) + 1 }}" class="text-center">Options
-                            Configuration
+                        Configuration
                     </td>
                     @foreach ($optionsConfiguration as $options)
                 <tr>
