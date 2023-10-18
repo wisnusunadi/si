@@ -3708,11 +3708,11 @@ class PenjualanController extends Controller
                         'message' => 'Cek Form Kembali',
                     ], 500);
             }
-            if ($request->no_po_ekat != NULL && ( $request->perusahaan_pengiriman_ekat == NULL || $request->alamat_pengiriman_ekat == NULL ||  $request->kemasan == NULL) ) {
-                    return response()->json([
-                        'message' => 'Cek Form Kembali',
-                    ], 500);
-            }
+            // if ($request->no_po_ekat != NULL && ( $request->perusahaan_pengiriman_ekat == NULL || $request->alamat_pengiriman_ekat == NULL ||  $request->kemasan == NULL) ) {
+            //         return response()->json([
+            //             'message' => 'Cek Form Kembali',
+            //         ], 500);
+            // }
             //dd($request);
             // $this->validate(
             //     $request,
