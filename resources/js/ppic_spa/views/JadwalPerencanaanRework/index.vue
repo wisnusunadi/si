@@ -125,8 +125,12 @@ export default {
             try {
                 this.$store.commit('setIsLoading', true)
                 const { data } = await axios.get('/api/ppic/jadwal_rework/perencanaan')
-                this.dataTable = data
-                this.renderPaginate = data
+                this.dataTable = data.map((data) => {
+                    return {
+                        no_urut: `PRD-${data.urutan}`,
+                        ...data,
+                    }
+                })
             } catch (error) {
                 console.log(error)
             } finally {
