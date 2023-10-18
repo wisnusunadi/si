@@ -1,7 +1,11 @@
 <script>
 import axios from 'axios';
+import modalDetail from './modalDetail.vue';
 export default {
     props: ['selectProduct', 'dialogCreate', 'product'],
+    components: {
+        modalDetail
+    },
     data() {
         return {
             header: [
@@ -87,6 +91,11 @@ export default {
                 item.child = []
             }
             this.dataDetailSelected = JSON.parse(JSON.stringify(item))
+        },
+        simpanChild() {
+            this.showDialog = false
+            let index = this.selectProduct.findIndex(item => item.nama === this.dataDetailSelected.nama)
+            this.selectProduct[index].child = this.dataDetailSelected.child
         }
     },
     created() {
@@ -105,6 +114,8 @@ export default {
 </script>
 <template>
     <div>
+        <modalDetail v-if="showDialog" :show-dialog="showDialog" :data-detail-selected="dataDetailSelected"
+            @closeDialog="showDialog = false" @simpan="simpanChild"></modalDetail>
         <v-dialog v-model="dialogCreate" persistent max-width="70%">
             <v-card>
                 <v-toolbar dark color="primary">
