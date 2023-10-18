@@ -533,6 +533,7 @@
                 "autoWidth": false,
                 "pageLength": 10,
                 processing: true,
+                "scrollY": "300px",
                 ajax: {
                     url: "/api/prd/riwayat_seri_rakit/" + id + "/" + rakit,
                 },

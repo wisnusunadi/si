@@ -71,6 +71,7 @@ export default {
         <Modal
             @closeDialog="showDialog = false"
             @getProduct="getProduct"
+            v-if="showDialog"
             :selectProduct="selectProduct"
             :dialogCreate="showDialog"
             :product="product"
