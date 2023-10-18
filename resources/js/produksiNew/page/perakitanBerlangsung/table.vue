@@ -1,15 +1,18 @@
 <script>
 import moment from 'moment'
 import modalGenerate from './modalGenerate.vue';
+import modalPilihan from './modalPilihan.vue';
 export default {
     props: ['dataTable'],
     components: {
-        modalGenerate
+        modalGenerate,
+        modalPilihan
     },
     data() {
         return {
             showModal: false,
             detailData: {},
+            showModalCetak: false,
         }
     },
     methods: {
@@ -35,13 +38,28 @@ export default {
             this.$nextTick(() => {
                 $('.modalGenerate').modal('show')
             })
-        }
+        },
+        cetak(data) {
+            this.$emit('cetak', data)
+            $('.modalGenerate').modal('hide')
+            this.showModalCetak = true
+            this.$nextTick(() => {
+                $('.modalPilihan').modal('show')
+            })
+        },
+        closeModalCetak() {
+            this.showModalCetak = false
+            this.$nextTick(() => {
+                $('.modalGenerate').modal('show')
+            })
+        },
     },
 }
 </script>
 <template>
     <div>
-        <modalGenerate v-if="showModal" :dataGenerate="detailData" @closeModal="showModal = false"></modalGenerate>
+        <modalPilihan v-if="showModalCetak" @closeModal="closeModalCetak"></modalPilihan>
+        <modalGenerate v-if="showModal" :dataGenerate="detailData" @closeModal="showModal = false" @generate="cetak"></modalGenerate>
         <table class="table">
             <thead>
                 <tr>

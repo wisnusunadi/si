@@ -34,7 +34,6 @@ export default {
                     no_urut_terakhir: this.form.no_urut_terakhir,
                 }
                 this.$emit('generate', data)
-                window.open(`/produksiReworks/cetak_seri_finish_goods/12345678012`, '_blank');
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -143,7 +142,7 @@ export default {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                    <button type="button" class="btn btn-success" :disabled="loading" @click="simpan">Generate</button>
+                    <button type="button" class="btn btn-success"  @click="simpan">Generate</button>
                 </div>
             </div>
         </div>
