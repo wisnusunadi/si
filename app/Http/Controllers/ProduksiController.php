@@ -205,6 +205,59 @@ class ProduksiController extends Controller
             ], 500);
         }
     }
+
+    function generate_fg(Request $request)
+    {
+
+        try {
+            //code...
+            $prd = Produk::find($request->produk_id);
+            $getTgl= Carbon::createFromFormat('Y-m-d', $request->tgl_kedatangan);
+            $tahun = $getTgl->format('Y') % 100;
+            $bulan =  strtoupper(dechex($getTgl->format('m')));;
+            $kedatangan =  strtoupper(dechex(12));
+
+
+            $max_gbj = NoseriBarangJadi::Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+            ->where('gdg_barang_jadi.produk_id', $request->produk_id)
+            ->where('noseri_barang_jadi.unit', $prd->kode)
+            ->where('noseri_barang_jadi.th', $tahun)
+            ->latest('noseri_barang_jadi.id')->value('noseri_barang_jadi.urut');
+             $max_no_gbj = $max_gbj + 1;
+
+            $max_prd = JadwalRakitNoseri::
+            Join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+            ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+            ->where('gdg_barang_jadi.produk_id', $request->produk_id)
+            ->where('jadwal_rakit_noseri.unit', $prd->kode)
+            ->where('jadwal_rakit_noseri.th', $tahun)
+            ->latest('jadwal_rakit_noseri.id')->value('jadwal_rakit_noseri.urutan');
+             $max_no_prd = $max_prd + 1;
+
+             for ($i = 0; $i < $request->jml_noseri; $i++) {
+                JadwalRakitNoseri::create([
+                    'urutan' => $max_no_prd+$i,
+                    'no_bppb' => strtoupper($request->no_bppb),
+                    'jadwal_id' => $request->jadwal_id,
+                    'unit' => $prd->kode,
+                    'th' => $tahun,
+                    'bln' => $bulan,
+                    'kedatangan' => $kedatangan,
+                    'noseri' => $prd->kode.$tahun.$bulan.$kedatangan.str_pad($max_no_prd+$i, 5, '0', STR_PAD_LEFT),
+                ]);
+             }
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Error3',
+                'values' =>  $th,
+            ], 500);
+        }
+
+    }
+
+
     function generate_rw(Request $request)
     {
         DB::beginTransaction();
