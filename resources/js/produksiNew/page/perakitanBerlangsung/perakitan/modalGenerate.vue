@@ -1,7 +1,11 @@
 <script>
 import axios from 'axios';
+import DataTable from '../../../components/DataTable.vue';
 export default {
     props: ['dataGenerate'],
+    components: {
+        DataTable,
+    },
     data() {
         return {
             showModalCetak: false,
@@ -10,7 +14,20 @@ export default {
                 jml_noseri: 0,
                 no_urut_terakhir: 0,
             },
+            isError: false,
+            seri: [],
+            duplicate: [],
+            available: [],
+            searchPreview: '',
+            searchDuplikasi: '',
             loading: false,
+            headers: [
+                {
+                    text: 'No Seri',
+                    value: 'seri',
+                    align: 'text-left',
+                }
+            ]
         }
     },
     methods: {
@@ -36,13 +53,22 @@ export default {
 
                     const { data } = await axios.post('/api/prd/fg/gen', kirim)
                     this.$swal('Berhasil', 'Berhasil generate seri', 'success')
+                    this.$emit('refresh')
+                    this.closeModal()
                 } catch (error) {
                     const { message, seri, duplicate, available } = error.response.data
+                    this.isError = true
+                    this.seri = seri
+                    this.available = available
+                    this.duplicate = duplicate.map(item => {
+                        return {
+                            seri: item,
+                        }
+                    })
+                    this.available = available
                     this.$swal('Gagal', message, 'error')
-                } finally {
-                    this.loading = false
                 }
-                
+
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -50,6 +76,20 @@ export default {
                     text: 'Silahkan cek kembali form anda',
                 })
                 return
+            }
+        },
+        async simpanSeri() {
+            try {
+                const kirim = {
+                    seri: this.seri,
+                    available: this.available,
+                }
+                const { data } = await axios.post('/api/prd/fg/gen/confirm', kirim)
+                this.$swal('Berhasil', 'Berhasil menyimpan seri', 'success')
+                this.$emit('refresh')
+                this.closeModal()
+            } catch (error) {
+                console.log(error)
             }
         }
     },
@@ -100,7 +140,7 @@ export default {
                                         <div class="card">
                                             <div class="card-body">
                                                 <input type="text" name="no_bppb" id="no_bppb" class="form-control"
-                                                    v-model="dataGenerate.no_bppb" @keyup="keyUpperCase($event)">
+                                                    v-model="dataGenerate.no_bppb" :disabled="loading" @keyup="keyUpperCase($event)">
                                             </div>
                                         </div>
                                     </div>
@@ -148,7 +188,7 @@ export default {
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body" v-if="!isError">
                                 <form>
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Kedatangan</label>
@@ -171,11 +211,49 @@ export default {
                                     </div>
                                 </form>
                             </div>
+                            <div class="card-body" v-else>
+                                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link active" id="pills-preview-tab" data-toggle="pill"
+                                            data-target="#pills-preview" type="button" role="tab"
+                                            aria-controls="pills-preview" aria-selected="true">Preview Generate No Seri</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" id="pills-duplikasi-tab" data-toggle="pill"
+                                            data-target="#pills-duplikasi" type="button" role="tab"
+                                            aria-controls="pills-duplikasi" aria-selected="false">Duplikasi No Seri</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="pills-tabContent">
+                                    <div class="tab-pane fade show active" id="pills-preview" role="tabpanel"
+                                        aria-labelledby="pills-preview-tab">
+                                        <div class="d-flex flex-row-reverse bd-highlight">
+                                            <div class="p-2 bd-highlight">
+                                                <input type="text" v-model="searchPreview" class="form-control"
+                                                    placeholder="Cari...">
+                                            </div>
+                                        </div>
+                                        <DataTable :headers="headers" :items="seri" :search="searchPreview" />
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-duplikasi" role="tabpanel"
+                                        aria-labelledby="pills-duplikasi-tab">
+                                        <div class="d-flex flex-row-reverse bd-highlight">
+                                            <div class="p-2 bd-highlight">
+                                                <input type="text" v-model="searchDuplikasi" class="form-control"
+                                                    placeholder="Cari...">
+                                            </div>
+                                        </div>
+                                        <DataTable :headers="headers" :items="duplicate" :search="searchDuplikasi" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                        <button type="button" class="btn btn-success" :disabled="loading" @click="simpan">Generate</button>
+                        <button type="button" class="btn btn-success" v-if="!isError" :disabled="loading"
+                            @click="simpan">Generate</button>
+                        <button type="button" class="btn btn-success" v-if="seri.length > 0" @click="simpanSeri">Simpan</button>
                     </div>
                 </div>
             </div>

@@ -63,10 +63,10 @@ export default {
 </script>
 <template>
     <div>
-        <table class="table text-center">
+        <table class="table">
             <thead>
                 <tr>
-                    <th scope="col" class="text-center" v-for="header in headers" :key="header.text"
+                    <th scope="col" v-for="header in headers" :key="header.text" :class="header.align ? header.align : 'text-center'"
                         @click="sort(header)"
                         :sortable="header.sortable == false ? false : true"
                         >
@@ -83,7 +83,7 @@ export default {
             <tbody v-if="renderPaginate.length > 0">
                 <!-- sesuaikan dengan header -->
                 <tr v-for="(data, idx) in renderPaginate" :key="idx">
-                    <td v-for="header in headers" :key="header.value">
+                    <td v-for="header in headers" :key="header.value" :class="header.align ? header.align : 'text-center'">
                         <slot :name="`item.${header.value}`" :item="data" :index="idx">
                             {{ data[header.value] }}
                         </slot>

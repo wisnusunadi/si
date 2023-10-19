@@ -66,12 +66,15 @@ export default {
                 $('.modalGenerate').modal('show')
             })
         },
+        refresh() {
+            this.$emit('refresh')
+        }
     },
 }
 </script>
 <template>
-    <div>
-        <modalGenerate v-if="showModal" :dataGenerate="detailData" @closeModal="showModal = false"></modalGenerate>
+    <div v-if="!$store.state.loading">
+        <modalGenerate v-if="showModal" :dataGenerate="detailData" @closeModal="showModal = false" @refresh="refresh"></modalGenerate>
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
