@@ -26,6 +26,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use League\CommonMark\Extension\SmartPunct\EllipsesParser;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 use stdClass;
@@ -206,52 +207,201 @@ class ProduksiController extends Controller
         }
     }
 
+    function generate_fg_confirm(Request $request)
+    {
+      DB::beginTransaction();
+        try {
+            //code..
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+
+            $queryResultPrd = JadwalRakitNoseri::whereIN('noseri',$obj->available)->count();
+            $queryResultGbj = NoseriBarangJadi::whereIN('noseri',$obj->available)->count();
+            $jp = JadwalPerakitan::find($obj->seri[0]->jadwal_id);
+            $kurang = $jp->jumlah - $jp->noseri->count();
+
+            if( count($obj->available) <= $kurang ){
+                if($queryResultPrd > 0 || $queryResultGbj > 0 ){
+                    DB::rollBack();
+                    return response()->json([
+                        'status' => 200,
+                        'message' =>  'Gagal Ditambahkan',
+                        'seri' =>array(),
+                        'duplicate' =>  array(),
+                        'available' => array(),
+                    ], 500);
+                }else{
+                    foreach($obj->seri as $f){
+                        JadwalRakitNoseri::create([
+                            'jadwal_id' => $f->jadwal_id,
+                            'no_bppb' => $f->no_bppb,
+                            'urutan' => $f->no_urut,
+                            'unit' => $f->kode,
+                            'th' => $f->tahun,
+                            'bln' => $f->bulan,
+                            'kedatangan' => $f->kedatangan,
+                            'noseri' => $f->seri,
+                            'status' => 11,
+                            'date_in' => Carbon::now()
+                        ]);
+                    }
+
+
+                    $jp->status_tf = 12;
+                    $jp->save();
+
+                    DB::commit();
+                    return response()->json([
+                        'status' => 200,
+                        'message' =>  'No Seri Berhasil Ditambahkan',
+                        'seri' =>   array(),
+                        'duplicate' =>   array(),
+                        'available' =>   array(),
+                    ], 200);
+                }
+            }else{
+                DB::rollBack();
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  'Jumlah Melebihi',
+                    'seri' =>   array(),
+                    'duplicate' => array(),
+                    'available' =>  array(),
+                ], 500);
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Gagal Ditambhkan',
+                'seri' =>array(),
+                'duplicate' =>  array(),
+                'available' => array(),
+            ], 500);
+        }
+    }
+
     function generate_fg(Request $request)
     {
-
+      DB::beginTransaction();
         try {
             //code...
             $prd = Produk::find($request->produk_id);
-            $getTgl= Carbon::createFromFormat('Y-m-d', $request->tgl_kedatangan);
+            $jp = JadwalPerakitan::find($request->jadwal_id);
+            $kurang = $jp->jumlah - $jp->noseri->count();
+            $getTgl= Carbon::now();
             $tahun = $getTgl->format('Y') % 100;
             $bulan =  strtoupper(dechex($getTgl->format('m')));;
             $kedatangan =  strtoupper(dechex(12));
 
 
-            $max_gbj = NoseriBarangJadi::Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-            ->where('gdg_barang_jadi.produk_id', $request->produk_id)
-            ->where('noseri_barang_jadi.unit', $prd->kode)
-            ->where('noseri_barang_jadi.th', $tahun)
-            ->latest('noseri_barang_jadi.id')->value('noseri_barang_jadi.urut');
-             $max_no_gbj = $max_gbj + 1;
 
-            $max_prd = JadwalRakitNoseri::
-            Join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-            ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
-            ->where('gdg_barang_jadi.produk_id', $request->produk_id)
-            ->where('jadwal_rakit_noseri.unit', $prd->kode)
-            ->where('jadwal_rakit_noseri.th', $tahun)
-            ->latest('jadwal_rakit_noseri.id')->value('jadwal_rakit_noseri.urutan');
-             $max_no_prd = $max_prd + 1;
-
-             for ($i = 0; $i < $request->jml_noseri; $i++) {
-                JadwalRakitNoseri::create([
-                    'urutan' => $max_no_prd+$i,
-                    'no_bppb' => strtoupper($request->no_bppb),
-                    'jadwal_id' => $request->jadwal_id,
-                    'unit' => $prd->kode,
-                    'th' => $tahun,
-                    'bln' => $bulan,
-                    'kedatangan' => $kedatangan,
-                    'noseri' => $prd->kode.$tahun.$bulan.$kedatangan.str_pad($max_no_prd+$i, 5, '0', STR_PAD_LEFT),
-                ]);
+             for ($i = 1; $i <= $request->jml_noseri; $i++) {
+               $newSeri[] = $prd->kode.$tahun.$bulan.$kedatangan.str_pad($request->no_urut_terakhir+$i, 5, '0', STR_PAD_LEFT);
+               $newSeries[] = array(
+                'jadwal_id' => $request->jadwal_id,
+                'no_bppb' => $request->no_bppb,
+                'no_urut' => $request->no_urut_terakhir + $i,
+                'kode' =>  $prd->kode,
+                'tahun' => $tahun,
+                'bulan' => $bulan,
+                'kedatangan' => $kedatangan,
+                'seri' => $prd->kode.$tahun.$bulan.$kedatangan.str_pad($request->no_urut_terakhir+$i, 5, '0', STR_PAD_LEFT)
+               );
              }
+
+             if( $request->jml_noseri <= $kurang ){
+
+
+              $queryResultPrd = JadwalRakitNoseri::whereIN('noseri',$newSeri)->pluck('noseri')->toArray();
+              $queryResultGbj = NoseriBarangJadi::whereIN('noseri',$newSeri)->pluck('noseri')->toArray();
+              $combinedArray = array_merge($queryResultPrd, $queryResultGbj);
+
+             $cekSeri = array_intersect($newSeri, $combinedArray);
+             $available = array_values(array_diff($newSeri, $combinedArray));
+
+             if(!$cekSeri ){
+                $noseriCollection = collect($newSeries);
+                $filteredNoseri = $noseriCollection->whereIn('seri', $available);
+
+                foreach($filteredNoseri as $f){
+                    JadwalRakitNoseri::create([
+                        'jadwal_id' => $request->jadwal_id,
+                        'no_bppb' => $request->no_bppb,
+                        'urutan' => $f['no_urut'],
+                        'unit' => $f['kode'],
+                        'th' => $f['tahun'],
+                        'bln' => $f['bulan'],
+                        'kedatangan' => $f['kedatangan'],
+                        'noseri' => $f['seri'],
+                        'status' => 11,
+                        'date_in' => $getTgl
+                    ]);
+                }
+
+                $jp->status_tf = 12;
+                $jp->save();
+
+                DB::commit();
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  'No Seri Berhasil Ditambahkan',
+                    'seri' =>   array(),
+                    'duplicate' =>   array(),
+                    'available' =>   array(),
+                ], 200);
+             }else{
+
+                if($available){
+                        $noseriCollection = collect($newSeries);
+                        $filteredNoseri = $noseriCollection->whereIn('seri', $available);
+
+                    foreach($filteredNoseri as $f){
+                        $seri[] = array(
+                            'jadwal_id' => $f['jadwal_id'],
+                            'no_bppb' => $f['no_bppb'],
+                            'no_urut' => $f['no_urut'],
+                            'kode' => $f['kode'],
+                            'tahun' => $f['tahun'],
+                            'bulan' => $f['bulan'],
+                            'kedatangan' => $f['kedatangan'],
+                            'seri' => $f['seri']
+                        );
+                    }
+            }else{
+                $seri = [];
+                $available =[];
+            }
+            DB::rollBack();
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  'Dupikasi No Seri',
+                    'seri' =>   $seri,
+                    'duplicate' =>   array_values($cekSeri),
+                    'available' =>   $available,
+                ], 500);
+             }
+
+            }else{
+                DB::rollBack();
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  'Jumlah Melebihi',
+                    'seri' =>   array(),
+                    'duplicate' => array(),
+                    'available' =>  array(),
+                ], 500);
+            }
         } catch (\Throwable $th) {
             //throw $th;
+            DB::rollBack();
             return response()->json([
                 'status' => 200,
-                'message' =>  'Error3',
-                'values' =>  $th,
+                'message' =>  'Gagal Ditambhkan',
+                'seri' =>array(),
+                'duplicate' =>  array(),
+                'available' => array(),
             ], 500);
         }
 
