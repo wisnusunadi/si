@@ -1,20 +1,26 @@
 <script>
-import pagination from '../../../../components/pagination.vue';
 import modalDetail from '../../proses/modalDetail'
+import DataTable from '../../../../components/DataTable.vue';
 export default {
     props: ['dataSelected'],
     components: {
-        pagination,
         modalDetail,
+        DataTable,
     },
     data() {
         return {
             search: '',
-            renderPaginate: [],
             modalSeri: false,
             dataSeriSelected: null,
             dataModalDetail: null,
             showModalDetail: false,
+            headers: [
+                { text: 'No', value: 'no' },
+                { text: 'Nomor Seri', value: 'noseri' },
+                { text: 'Tanggal Dibuat', value: 'tgl_buat' },
+                { text: 'Packer', value: 'packer' },
+                { text: 'Aksi', value: 'aksi', sortable: false },
+            ]
         }
     },
     methods: {
@@ -36,9 +42,6 @@ export default {
                 $('.modalSeri').modal('show')
             })
         },
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
         detailProdukSeri(data) {
             this.dataModalDetail = JSON.parse(JSON.stringify(data))
             this.showModalDetail = true
@@ -53,15 +56,6 @@ export default {
             this.$nextTick(() => {
                 $('.modalProduk').modal('show')
             })
-        },
-    },
-    computed: {
-        filteredDalamProses() {
-            return this.dataSelected.item.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
-                });
-            });
         },
     },
 }
@@ -114,39 +108,19 @@ export default {
                                         <input type="text" v-model="search" class="form-control" placeholder="Cari...">
                                     </div>
                                 </div>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nomor Seri</th>
-                                            <th>Tanggal Dibuat</th>
-                                            <th>Packer</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody v-if="renderPaginate.length > 0">
-                                        <tr v-for="(data, index) in renderPaginate" :key="index">
-                                            <td>{{ index + 1 }}</td>
-                                            <td>{{ data.noseri }}</td>
-                                            <td>{{ dateFormat(data.tgl_buat) }}</td>
-                                            <td>{{ data.packer ?? '-' }}</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(data)">
-                                                    <i class="fa fa-info-circle"></i> Detail No. Seri Produk
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody v-else>
-                                        <tr>
-                                            <td colspan="4" class="text-center">
-                                                Tidak ada data
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <pagination :filteredDalamProses="filteredDalamProses"
-                                    @updateFilteredDalamProses="updateFilteredDalamProses" />
+                                <DataTable :items="dataSelected.item" :headers="headers" :search="search">
+                                    <template #item.no = "{ item, index }">
+                                        {{ index + 1 }}
+                                    </template>
+                                    <template #item.tgl_buat = "{ item }">
+                                        {{ dateFormat(item.tgl_buat) }}
+                                    </template>
+                                    <template #item.aksi="{ item }">
+                                        <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(item)">
+                                            <i class="fa fa-info-circle"></i> Detail No. Seri Produk
+                                        </button>
+                                    </template>
+                                </DataTable>
                             </div>
                         </div>
                     </div>

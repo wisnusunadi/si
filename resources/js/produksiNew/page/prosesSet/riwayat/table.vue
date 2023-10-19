@@ -1,20 +1,29 @@
 <script>
+import DataTable from '../../../components/DataTable.vue'
 import modalProduk from './modalProduk'
 export default {
     components: {
         modalProduk,
+        DataTable,
     },
     data() {
         return {
             dataSelected: {},
             showModal: false,
+            search: '',
+            headers: [
+                { text: 'No Urut', value: 'no_urut' },
+                { text: 'Nama Produk', value: 'nama' },
+                { text: 'Jumlah Transfer', value: 'jumlah' },
+                { text: 'Tanggal Transfer', value: 'tgl_tf' },
+                { text: 'Aksi', value: 'aksi', sortable: false },
+            ],
         }
     },
     props: ['dataTable'],
     methods: {
         detail(data) {
             this.dataSelected = JSON.parse(JSON.stringify(data))
-            
             this.showModal = true
             this.$nextTick(() => {
                 $('.modalProduk').modal('show')
@@ -26,35 +35,18 @@ export default {
 <template>
     <div>
         <modalProduk v-if="showModal" @closeModal="showModal = false" :dataSelected="dataSelected" />
-        <table class="table text-center">
-            <thead>
-                <tr>
-                    <th>No Urut</th>
-                    <th>Nama Produk</th>
-                    <th>Jumlah Transfer</th>
-                    <th>Tanggal Transfer</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody v-if="dataTable.length > 0">
-                <tr v-for="(data, idx) in dataTable" :key="idx">
-                    <td>PRD-{{ data.urutan }}</td>
-                    <td>{{ data.nama }}</td>
-                    <td>{{ data.item.length }}</td>
-                    <td>{{ data.tgl_tf }}</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-info" @click="detail(data)">
-                            <i class="fas fa-info-circle"></i>
-                            Detail
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-            <tbody v-else>
-                <tr>
-                    <td colspan="5" class="text-center">Tidak ada data</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="d-flex flex-row-reverse bd-highlight">
+            <div class="p-2 bd-highlight">
+                <input type="text" v-model="search" class="form-control" placeholder="Cari...">
+            </div>
+        </div>
+        <DataTable :headers="headers" :items="dataTable" :search="search">
+            <template #item.aksi="{ item }">
+                <button class="btn btn-sm btn-outline-info" @click="detail(item)">
+                    <i class="fas fa-info-circle"></i>
+                    Detail
+                </button>
+            </template>
+        </DataTable>
     </div>
 </template>

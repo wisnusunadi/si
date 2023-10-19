@@ -1,18 +1,35 @@
 <script>
-import pagination from '../../../../components/pagination.vue';
 import noseri from './noseri.vue';
+import DataTable from '../../../../components/DataTable.vue';
 export default {
     props: ['dataSelected'],
     components: {
-        pagination,
+        DataTable,
         noseri
     },
     data() {
         return {
             search: '',
-            renderPaginate: [],
             modalSeri: false,
             dataSeriSelected: null,
+            headers: [
+                {
+                    text: 'No.',
+                    value: 'no'
+                },
+                {
+                    text: 'No. Seri',
+                    value: 'noseri'
+                },
+                {
+                    text: 'Nama Produk',
+                    value: 'nama'
+                },
+                {
+                    text: 'Variasi',
+                    value: 'varian'
+                }
+            ]
         }
     },
     methods: {
@@ -33,18 +50,6 @@ export default {
             this.$nextTick(() => {
                 $('.modalSeri').modal('show')
             })
-        },
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
-    },
-    computed: {
-        filteredDalamProses() {
-            return this.dataSelected.data.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
-                });
-            });
         },
     },
 }
@@ -97,33 +102,11 @@ export default {
                                         <input type="text" v-model="search" class="form-control" placeholder="Cari...">
                                     </div>
                                 </div>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>No. Seri</th>
-                                            <th>Nama Produk</th>
-                                            <th>Variasi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody v-if="renderPaginate.length > 0">
-                                        <tr v-for="(data, index) in renderPaginate" :key="index">
-                                            <td>{{ index + 1 }}</td>
-                                            <td>{{ data.noseri }}</td>
-                                            <td>{{ data.nama }}</td>
-                                            <td>{{ data.varian }}</td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody v-else>
-                                        <tr>
-                                            <td colspan="4" class="text-center">
-                                                Tidak ada data
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <pagination :filteredDalamProses="filteredDalamProses"
-                                    @updateFilteredDalamProses="updateFilteredDalamProses" />
+                                <DataTable :items="dataSelected.data" :headers="headers">
+                                    <template #item.no = "{ item, index }">
+                                        {{ index + 1 }}
+                                    </template>
+                                </DataTable>
                             </div>
                         </div>
                     </div>

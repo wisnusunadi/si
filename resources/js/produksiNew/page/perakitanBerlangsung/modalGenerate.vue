@@ -25,7 +25,7 @@ export default {
         simpan() {
             const ceknotnull = Object.values(this.form).every(x => x !== null && x !== '' && x !== 0)
             const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-'
-            if (ceknotnull && cekbppb) {
+            if (ceknotnull && cekbppb && !this.jumlahRakit) {
                 this.loading = true
                 const data = {
                     no_bppb: this.dataGenerate.no_bppb,

@@ -47,13 +47,6 @@ export default {
                         tgl_tf: this.dateFormat(item.tgl_tf),
                     }
                 })
-
-                const { data: login } = await axios.get('/api/user', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
-                    }
-                })
-                console.log(login)
             } catch (error) {
                 console.log(error)
             } finally {

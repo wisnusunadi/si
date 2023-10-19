@@ -371,7 +371,7 @@ export default {
                     </div>
                     <div class="d-flex bd-highlight mb-3 mx-3">
                         <div class="mr-auto p-2 bd-highlight">
-                            <button class="btn btn-success" @click="selectSeri?.id ? updateSeri() : generateSeri()">
+                            <button class="btn btn-success" :disabled="isDisable" @click="selectSeri?.id ? updateSeri() : generateSeri()">
                                 {{ selectSeri?.id ? 'Simpan' : 'Generate' }}
                             </button>
                         </div>
