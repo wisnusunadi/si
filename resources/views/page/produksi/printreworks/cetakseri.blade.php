@@ -22,8 +22,8 @@
 
         /* small */
         @page {
-            margin-top: 0.055cm;
-            margin-left: 0.75cm;
+            margin-top: -0.01cm;
+            margin-left: 0.9cm;
             font-size: 5pt
         }
     </style>
