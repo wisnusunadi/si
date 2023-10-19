@@ -70,7 +70,9 @@ export default {
                         @click="sort(header)"
                         :sortable="header.sortable == false ? false : true"
                         >
-                        {{ header.text }}
+                        <slot :name="`header.${header.value}`">
+                            {{ header.text }}
+                        </slot>
                         <span v-if="sortColumn === header.value">
                             <i v-if="sortDirection === 'asc'" class="fas fa-arrow-up"></i>
                             <i v-else class="fas fa-arrow-down"></i>

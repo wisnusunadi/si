@@ -294,9 +294,6 @@ class ProduksiController extends Controller
             $tahun = $getTgl->format('Y') % 100;
             $bulan =  strtoupper(dechex($getTgl->format('m')));;
             $kedatangan =  strtoupper(dechex(12));
-
-
-
              for ($i = 1; $i <= $request->jml_noseri; $i++) {
                $newSeri[] = $prd->kode.$tahun.$bulan.$kedatangan.str_pad($request->no_urut_terakhir+$i, 5, '0', STR_PAD_LEFT);
                $newSeries[] = array(
@@ -398,7 +395,7 @@ class ProduksiController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 200,
-                'message' =>  'Gagal Ditambhkan',
+                'message' =>  'Gagal Ditambahkan',
                 'seri' =>array(),
                 'duplicate' =>  array(),
                 'available' => array(),
@@ -2905,7 +2902,7 @@ class ProduksiController extends Controller
 
             $data = collect($data)->map(function ($item) {
                 return [
-                    'id' => $item->id,
+                    'jadwal_id' => $item->id,
                     'produk_id' => $item->produk_id,
                     'no_bppb' => $item->no_bppb ? $item->no_bppb : '-',
                     'tanggal_mulai' => $item->tanggal_mulai ? $item->tanggal_mulai : '-',
