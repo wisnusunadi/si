@@ -331,6 +331,10 @@ Route::prefix('/tfp')->group(function () {
 });
 
 Route::prefix('/prd')->group(function () {
+    Route::prefix('/fg')->group(function () {
+        Route::post('/gen', [ProduksiController::class, 'generate_fg']);
+        Route::post('/gen/confirm', [ProduksiController::class, 'generate_fg_confirm']);
+    });
     Route::prefix('/rw')->group(function () {
         Route::get('/belum_kirim', [ProduksiController::class, 'belum_kirim_rw']);
         Route::get('/proses', [ProduksiController::class, 'proses_rw']);
