@@ -271,7 +271,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-body">
                             <input type="text" name="" class="seri_id" hidden>
                             <input type="text" class="created_by" name="" id=""
@@ -289,7 +289,7 @@
                             </div>
                             <button class=" btn btn-primary tambah_noseri mt-2">Tambah</button>
                         </div>
-                    </div>
+                    </div> --}}
                     <form action="" id="noseriForm" name="noseriForm">
 
                         <div class="card card-primary card-outline card-outline-tabs">
