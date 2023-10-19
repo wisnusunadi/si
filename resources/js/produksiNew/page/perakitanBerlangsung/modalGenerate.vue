@@ -25,20 +25,18 @@ export default {
         simpan() {
             const ceknotnull = Object.values(this.form).every(x => x !== null && x !== '' && x !== 0)
             const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-'
-            if (ceknotnull && cekbppb && !this.jumlahRakit) {
+            if (ceknotnull && cekbppb && this.jumlahRakit) {
                 this.loading = true
-                const data = {
-                    no_bppb: this.dataGenerate.no_bppb,
-                    tgl_kedatangan: this.form.tgl_kedatangan,
-                    jml_noseri: this.form.jml_noseri,
-                    no_urut_terakhir: this.form.no_urut_terakhir,
+                const kirim = {
+                    ...this.dataGenerate,
+                    ...this.form,
                 }
                 this.$emit('generate', data)
             } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Data tidak boleh kosong!',
+                    text: 'Silahkan cek kembali form anda',
                 })
             }
         }
