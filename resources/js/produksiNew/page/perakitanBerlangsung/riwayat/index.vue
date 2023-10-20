@@ -44,7 +44,7 @@ export default {
         checkAllSeri() {
             this.checkAll = !this.checkAll;
             if (this.checkAll) {
-                this.noSeriSelected = this.dataRiwayat.map((item) => item.id);
+                this.noSeriSelected = this.dataRiwayat.map((item) => item);
             } else {
                 this.noSeriSelected = [];
             }
