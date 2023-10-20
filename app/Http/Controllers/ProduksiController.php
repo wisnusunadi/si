@@ -293,10 +293,8 @@ class ProduksiController extends Controller
             $getTgl= Carbon::now();
             $tahun = $getTgl->format('Y') % 100;
             $bulan =  strtoupper(dechex($getTgl->format('m')));;
-            $kedatangan =  strtoupper(dechex(12));
-
-
-
+           //Default
+            $kedatangan =  strtoupper(dechex($request->kedatangan));
              for ($i = 1; $i <= $request->jml_noseri; $i++) {
                $newSeri[] = $prd->kode.$tahun.$bulan.$kedatangan.str_pad($request->no_urut_terakhir+$i, 5, '0', STR_PAD_LEFT);
                $newSeries[] = array(
@@ -312,8 +310,6 @@ class ProduksiController extends Controller
              }
 
              if( $request->jml_noseri <= $kurang ){
-
-
               $queryResultPrd = JadwalRakitNoseri::whereIN('noseri',$newSeri)->pluck('noseri')->toArray();
               $queryResultGbj = NoseriBarangJadi::whereIN('noseri',$newSeri)->pluck('noseri')->toArray();
               $combinedArray = array_merge($queryResultPrd, $queryResultGbj);
@@ -3364,6 +3360,25 @@ class ProduksiController extends Controller
         }
     }
 
+    function get_detail_noseri_rakit_cetak($id, $dd)
+    {
+
+        try {
+            $data = JadwalRakitNoseri::whereHas('header', function ($q) use ($id) {
+                $q->where('produk_id', $id);
+            })
+                ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$dd])
+                ->get();
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
     function detailSeri1($id, $jadwal)
     {
         try {
@@ -3548,6 +3563,59 @@ class ProduksiController extends Controller
     {
         $data = JadwalPerakitan::where('status_tf', 14)->get()->count('produk_id');
         return $data;
+    }
+    function surat_permintaan_rw($id)
+    {
+
+    $jadwal = JadwalPerakitanRw::addSelect([
+        'set' => function ($q) {
+            $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) ')
+                ->from('detail_produks_rw')
+                ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
+        },
+        'csiap' => function ($q) {
+            $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                ->from('seri_detail_rw')
+                ->whereColumn('seri_detail_rw.urutan', 'jadwal_perakitan_rw.urutan');
+        },
+    ])->where('urutan', $id)->get();
+    if ($jadwal->isEmpty()) {
+        $obj = array();
+    } else {
+        foreach ($jadwal as $d) {
+            $obj[] = array(
+                'id' => $d->id,
+                'nama' => $d->Produk->nama,
+                'jumlah' => $d->jumlah,
+            );
+        }
+    }
+     $object = new stdClass();
+     $object->no = str_pad($jadwal->first()->urutan, 5, '0', STR_PAD_LEFT).'/'.$this->toRomawi($jadwal->first()->created_at->format('m')).'/'.strtoupper($jadwal->first()->created_at->format('Y'));
+     $object->urutan = $jadwal->first()->urutan;
+     $object->nama = $jadwal->first()->ProdukRw->nama;
+     $object->bagian = 'Produksi';
+     $object->kegunaan = 'Reworks '.$jadwal->first()->ProdukRw->nama;
+     $object->tanggal_mulai = $jadwal->first()->tanggal_mulai;
+     $object->tanggal_selesai = $jadwal->first()->tanggal_selesai;
+     $object->item = $obj;
+
+     return response()->json($object);
+    }
+    public function toRomawi($number)
+    {
+        $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+        $returnValue = '';
+        while ($number > 0) {
+            foreach ($map as $roman => $int) {
+                if ($number >= $int) {
+                    $number -= $int;
+                    $returnValue .= $roman;
+                    break;
+                }
+            }
+        }
+        return $returnValue;
     }
 
     function h_unit()

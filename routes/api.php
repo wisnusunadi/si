@@ -334,6 +334,7 @@ Route::prefix('/prd')->group(function () {
     Route::prefix('/fg')->group(function () {
         Route::post('/gen', [ProduksiController::class, 'generate_fg']);
         Route::post('/gen/confirm', [ProduksiController::class, 'generate_fg_confirm']);
+        Route::get('/cetak/{id}/{tanggal}', [ProduksiController::class, 'get_detail_noseri_rakit_cetak']);
     });
     Route::prefix('/rw')->group(function () {
         Route::get('/belum_kirim', [ProduksiController::class, 'belum_kirim_rw']);
@@ -341,6 +342,7 @@ Route::prefix('/prd')->group(function () {
         Route::get('/proses/produk/{id}', [ProduksiController::class, 'proses_rw_produk']);
         Route::get('/siap/produk/{id}', [ProduksiController::class, 'siap_tf_rw_produk']);
         Route::post('/permintaan', [ProduksiController::class, 'permintaan_rw']);
+        Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'surat_permintaan_rw']);
         Route::post('/gen', [ProduksiController::class, 'generate_rw'])->middleware('jwt.verify');
         Route::put('/gen/{id}', [ProduksiController::class, 'update_rw'])->middleware('jwt.verify');
         Route::delete('/gen/{id}', [ProduksiController::class, 'hapus_rw']);
