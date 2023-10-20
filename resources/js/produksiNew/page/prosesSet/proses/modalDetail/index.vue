@@ -1,14 +1,18 @@
 <script>
-import pagination from '../../../../components/pagination.vue';
+import DataTable from '../../../../components/DataTable.vue';
 export default {
-    components: {
-        pagination
-    },
     props: ['dataModalDetailSeri'],
+    components: {
+        DataTable,
+    },
     data() {
         return {
             search: '',
-            renderPaginate: []
+            headers: [
+                { text: 'No', value: 'no' },
+                { text: 'Nama Produk', value: 'produk' },
+                { text: 'Nomor Seri', value: 'noseri' },
+            ],
         }
     },
     methods: {
@@ -16,18 +20,6 @@ export default {
             $('.modalDetailSeri').modal('hide');
             this.$nextTick(() => {
                 this.$emit('closeModal');
-            });
-        },
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
-    },
-    computed: {
-        filteredDalamProses() {
-            return this.dataModalDetailSeri.seri.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
-                });
             });
         },
     },
@@ -81,29 +73,14 @@ export default {
                             <input type="text" class="form-control" placeholder="Cari Produk" v-model="search">
                         </div>
                     </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Produk</th>
-                                <th>Nomor Seri</th>
-                            </tr>
-                        </thead>
-                        <tbody v-if="renderPaginate.length > 0">
-                            <tr v-for="(data, index) in renderPaginate" :key="index">
-                                <td>{{ index + 1 }}</td>
-                                <td>{{ data.produk }} {{ data.varian }}</td>
-                                <td>{{ data.noseri }}</td>
-                            </tr>
-                        </tbody>
-                        <tbody v-else>
-                            <tr>
-                                <td colspan="3" class="text-center">Tidak ada data</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <pagination :filteredDalamProses="filteredDalamProses"
-                        @updateFilteredDalamProses="updateFilteredDalamProses" />
+                    <DataTable :headers="headers" :items="dataModalDetailSeri.seri" :search="search">
+                        <template #item.no = "{ item, index}">
+                            {{ index + 1 }}
+                        </template>
+                        <template #item.produk = "{ item }">
+                            {{ item.produk }} {{ item.varian }}
+                        </template>
+                    </DataTable>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>

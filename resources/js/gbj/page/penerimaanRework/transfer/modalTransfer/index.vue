@@ -1,13 +1,13 @@
 <script>
 import axios from 'axios';
-import pagination from '../../../../components/pagination.vue';
 import Seriviatext from './seriviatext.vue';
 import modalDetail from '../../riwayat/modalProduk/noseri.vue'
+import pagination from '../../../../components/pagination.vue';
 export default {
     components: {
-        pagination,
         Seriviatext,
-        modalDetail
+        modalDetail,
+        pagination,
     },
     props: ['id'],
     data() {
@@ -206,7 +206,16 @@ export default {
             this.$nextTick(() => {
                 this.$refs.search.focus()
             })
-        }
+        },
+        changeLayout(event) {
+            console.log(event);
+            // change all layout noseriSelected
+            this.noSeriSelected.forEach((data) => {
+                data.layout = event
+            })
+            this.search = "t"
+            this.search = ""
+        },
     },
     computed: {
         filteredDalamProses() {
@@ -250,8 +259,9 @@ export default {
                                 </div>
                             </div>
                             <div class="p-2 bd-highlight">
-                                <input type="text" class="form-control" v-model="search" placeholder="Cari No Seri"
+                                <input type="text" class="form-control mb-1" v-model="search" placeholder="Cari No Seri"
                                     ref="search" @keyup.enter="autoSelect" />
+                                <v-select :options="layout" v-if="noSeriSelected.length > 0" @input="changeLayout($event)" placeholder="Ubah Layout Dipilih"></v-select>
                             </div>
                         </div>
                         <table class="table">
@@ -261,7 +271,7 @@ export default {
                                     <th>Nomor Seri</th>
                                     <th>Tanggal Dibuat</th>
                                     <th>Packer</th>
-                                    <th>Layout</th>
+                                    <th style="width: 20%;">Layout</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -274,7 +284,8 @@ export default {
                                     <td>{{ dateFormat(data.tgl_buat) }}</td>
                                     <td>{{ data.packer ?? '-' }}</td>
                                     <td>
-                                        <v-select :options="layout" v-model="data.layout" placeholder="Pilih Layout"></v-select>
+                                        <v-select :options="layout" v-model="data.layout"
+                                            placeholder="Pilih Layout"></v-select>
                                     </td>
                                     <td>
                                         <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(data)">
@@ -296,7 +307,6 @@ export default {
                                     <td colspan="5" class="text-center">Tidak ada data</td>
                                 </tr>
                             </tbody>
-
                         </table>
                         <pagination :filteredDalamProses="filteredDalamProses"
                             @updateFilteredDalamProses="updateFilteredDalamProses" />

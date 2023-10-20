@@ -394,7 +394,7 @@ class ProduksiController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 200,
-                'message' =>  'Gagal Ditambhkan',
+                'message' =>  'Gagal Ditambahkan',
                 'seri' =>array(),
                 'duplicate' =>  array(),
                 'available' => array(),
@@ -2901,7 +2901,7 @@ class ProduksiController extends Controller
 
             $data = collect($data)->map(function ($item) {
                 return [
-                    'id' => $item->id,
+                    'jadwal_id' => $item->id,
                     'produk_id' => $item->produk_id,
                     'no_bppb' => $item->no_bppb ? $item->no_bppb : '-',
                     'tanggal_mulai' => $item->tanggal_mulai ? $item->tanggal_mulai : '-',
@@ -4204,7 +4204,7 @@ class ProduksiController extends Controller
         // buat 10cm x 2cm
         // $customPaperLarge = array(0, 0, 90.46, 290.69);
         // $customPaperMedium = array(0, 0, 90.46, 170.69);
-        $customPaperSmall = array(0, 0, 80.46, 170.69);
+        $customPaperSmall = array(0, 0, 50.46, 150.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper($customPaperSmall, 'landscape');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakseri', compact('seri'));
@@ -4238,6 +4238,13 @@ class ProduksiController extends Controller
         $dataview = $data;
 
         return view('page.produksi.printreworks.cetakpackinglist', compact('dataview'));
+    }
+
+    function cetakTest()
+    {
+        // a4
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakbuktibarangjadi')->setPaper('a4', 'portrait');
+        return $pdf->stream();
     }
 }
 

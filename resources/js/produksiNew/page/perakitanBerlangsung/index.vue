@@ -1,13 +1,14 @@
 <script>
 import Header from '../../components/header.vue';
-import Table from './table.vue';
-import pagination from '../../components/pagination.vue';
+import perakitan from './perakitan';
+import riwayat from './riwayat';
 import axios from 'axios';
+import moment from 'moment'
 export default {
     components: {
         Header,
-        Table,
-        pagination,
+        perakitan,
+        riwayat,
     },
     data() {
         return {
@@ -22,10 +23,16 @@ export default {
                     link: '#'
                 },
             ],
-
-            dataTable: [],
-            search: '',
-            renderPaginate: [],
+            dataPerakitan: [],
+            dataRiwayat: [
+                {
+                    id: 1,
+                    noseri: '123456789',
+                    tanggal_dibuat: '12 Januari 2021',
+                    no_bppb: '123456789',
+                    nama_produk: 'Produk 1',
+                }
+            ],
         }
     },
     methods: {
@@ -33,12 +40,14 @@ export default {
             try {
                 this.$store.dispatch('setLoading', true)
                 const { data } = await axios.get('/api/prd/ongoing')
-                this.dataTable = data.map(item => {
+                this.dataPerakitan = data.map(item => {
                     return {
                         ...item,
+                        periode: this.periode(item.tanggal_mulai),
                         tgl_mulai: this.dateFormat(item.tanggal_mulai),
                         tgl_selesai: this.dateFormat(item.tanggal_selesai),
                         kurang_rakit: `Kurang ${item.jumlah - item.jumlah_rakit}`,
+                        kurang: item.jumlah - item.jumlah_rakit,
                         jumlah_unit: `${item.jumlah} Unit`
                     }
                 })
@@ -48,38 +57,40 @@ export default {
                 this.$store.dispatch('setLoading', false)
             }
         },
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
-    },
-    computed: {
-        filteredDalamProses() {
-            return this.dataTable.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
-                });
-            });
+        periode(date) {
+            // change to yyyy-mm-dd format
+            date = date.split(' ').reverse().join('-');
+            return moment(date).lang('id').format('MMMM');
         },
     },
     mounted() {
         this.getData()
-    },
+    }
 }
 </script>
 <template>
     <div>
-        <Header :title="title" :breadcumbs="breadcumbs" />
+        <Header :breadcumbs="breadcumbs" :title="title" />
         <div class="card">
-            <div class="card-body" v-if="!$store.state.loading">
-                <div class="d-flex flex-row-reverse bd-highlight">
-                    <div class="p-2 bd-highlight">
-                        <input type="text" v-model="search" class="form-control" placeholder="Cari...">
+            <div class="card-body">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
+                            type="button" role="tab" aria-controls="pills-home" aria-selected="true">Perakitan</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile"
+                            type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <perakitan :dataTable="dataPerakitan" @refresh="getData" />
+                    </div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        <riwayat :dataRiwayat="dataRiwayat" />
                     </div>
                 </div>
-                <Table :dataTable="renderPaginate" />
-                <pagination :filteredDalamProses="filteredDalamProses"
-                    @updateFilteredDalamProses="updateFilteredDalamProses" />
-
             </div>
         </div>
     </div>
