@@ -4172,8 +4172,9 @@ class ProduksiController extends Controller
     function cetakTest()
     {
         // a4
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakbuktibarangjadi')->setPaper('a4', 'portrait');
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakpermintaanbarangjadi')->setPaper('a4', 'portrait');
         return $pdf->stream();
+        // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');
     }
 }
 
