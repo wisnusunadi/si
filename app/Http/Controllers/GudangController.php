@@ -19,6 +19,7 @@ use App\Models\JadwalPerakitan;
 use App\Models\JadwalPerakitanRw;
 use App\Models\JadwalRakitNoseri;
 use App\Models\JadwalRakitNoseriRw;
+use App\Models\kesehatan\Karyawan;
 use App\Models\Layout;
 use App\Models\LogSurat;
 use App\Models\NoseriBarangJadi;
@@ -92,7 +93,8 @@ class GudangController extends Controller
             SystemLog::create([
                 'tipe' => 'GBJ',
                 'subjek' => 'Kirim Permintaan Rework',
-                'response' => json_encode($request->all())
+                'response' => json_encode($request->all()),
+                'user_id' => auth()->user()->id
             ]);
 
 
@@ -146,7 +148,6 @@ class GudangController extends Controller
     }
     function store_perakitan_rw(Request $request)
     {
-
         DB::beginTransaction();
         $obj =  json_decode(json_encode($request->all()), FALSE);
       //dd($obj);
@@ -163,7 +164,7 @@ class GudangController extends Controller
                 if(isset($o->layout) && $o->layout != null){
                     $l = $o->layout->id;
                 }else{
-                    $l = NULL;;
+                    $l = NULL;
                 }
 
                 NoseriBarangJadi::where('id',$o->id)
@@ -187,7 +188,8 @@ class GudangController extends Controller
          SystemLog::create([
             'tipe' => 'GBJ',
             'subjek' => 'Terima Reworks',
-            'response' => json_encode($riwayat)
+            'user_id' => auth()->user()->id,
+             'response' => json_encode($riwayat)
          ]);
 
 
@@ -322,14 +324,15 @@ class GudangController extends Controller
     function riwayat_rw_penerimaan()
     {
         $data = SystemLog::where(['tipe'=>'GBJ' , 'subjek' => 'Terima Reworks'])->get();
-        $res = $data->first()->response;
-        $getUrut = json_decode($res);
-        $jadwal = JadwalPerakitanRw::where('urutan',$getUrut->urutan)->first()->produk_reworks_id;
-        $produk = Produk::find($jadwal);
+
 
         if($data->isEmpty()){
             $obj = array();
         }else{
+            $res = $data->first()->response;
+            $getUrut = json_decode($res);
+            $jadwal = JadwalPerakitanRw::where('urutan',$getUrut->urutan)->first()->produk_reworks_id;
+            $produk = Produk::find($jadwal);
             foreach($data as $d){
                 $x = json_decode($d->response);
                 $obj[] = array(
@@ -347,6 +350,95 @@ class GudangController extends Controller
 
         return response()->json($obj);
     }
+
+    function surat_pengiriman($id)
+    {
+
+        $data = SystemLog::where(['tipe'=>'GBJ','subjek' => 'Kirim Permintaan Rework','id' => $id])->orderBy('created_at','DESC')->first();
+
+        if(!$data){
+            $datas = array();
+        }else{
+            $result = [];
+            $date = Carbon::now();
+            $x = json_decode($data->response);
+            foreach ($x->produk as $produk) {
+                            if (isset($produk->noseri) && is_array($produk->noseri)) {
+                                foreach ($produk->noseri as $noseri) {
+                                    if (isset($noseri->noseri)) {
+                                        $noseriArray[] = array(
+                                            'id' => $noseri->noseri,
+                                            'noseri' => $noseri->noseri,
+                                            'nama' => $produk->nama,
+                                            'varian' => $noseri->variasi
+                                        );
+                                    }
+                                }
+                            }
+                            }
+
+                            foreach ($noseriArray as $item) {
+                                $key = $item['nama'] . '_' . $item['varian'];
+
+                                if (!array_key_exists($key, $result)) {
+                                    $result[$key] = [
+                                        'nama' => $item['nama'],
+                                        'varian' => $item['varian'] ?? '',
+                                        'jumlah' => 0,
+                                        'noseri' => []
+                                    ];
+                                }
+
+                                $result[$key]['noseri'][] = $item['noseri'];
+                                $result[$key]['jumlah']++;
+                            }
+
+                            // Reindex the array to start index from 0
+                            $result = array_values($result);
+
+                            // Convert keys to numeric arrays
+                            foreach ($result as &$item) {
+                                $item['noseri'] = array_values($item['noseri']);
+                            }
+
+                            $max = SystemLog::
+                            where('tipe', 'GBJ')
+                            ->where('subjek', 'Kirim Permintaan Rework')
+                            ->where('tbl_log.id','<', $id)
+                            ->whereYear('created_at', $data->created_at->format('Y'))
+                            ->count();
+
+        $datas = new stdClass();
+        $thn_gbj = $date->format('Y')%100;
+        $urutans_gbj = str_pad($max+1, 6, '0', STR_PAD_LEFT);
+        $urutans_prd = str_pad($x->no, 6, '0', STR_PAD_LEFT);
+        $datas->tgl_dibuat = $data->created_at;
+        $datas->no_surat = 'FPBJ/'.$this->toRomawi($date->format('m')).'/'.$thn_gbj.'/'.$urutans_gbj;
+        $datas->no_referensi = $urutans_prd.'/'.$this->toRomawi( Carbon::createFromFormat('Y-m-d', $x->tgl_mulai)->month).'/'.Carbon::createFromFormat('Y-m-d', $x->tgl_mulai)->year;
+
+        $datas->diserahkan_oleh = $data->user_id != NULL ? User::find($data->user_id)->Karyawan->nama : '-';
+        $datas->items = $result;
+
+        }
+        return response()->json($datas);
+    }
+
+    public function toRomawi($number)
+    {
+        $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+        $returnValue = '';
+        while ($number > 0) {
+            foreach ($map as $roman => $int) {
+                if ($number >= $int) {
+                    $number -= $int;
+                    $returnValue .= $roman;
+                    break;
+                }
+            }
+        }
+        return $returnValue;
+    }
+
     function riwayat_rw_permintaan()
     {
         $data = SystemLog::where(['tipe'=>'GBJ','subjek' => 'Kirim Permintaan Rework'])->orderBy('created_at', 'ASC')->get();
@@ -430,6 +522,7 @@ class GudangController extends Controller
                 $obj[] = array(
                     'id' => $d->id,
                     'urutan' => $d->urutan,
+                    'no' => $d->no_permintaan,
                     'produk_reworks_id' => $d->produk_reworks_id,
                     'tgl_mulai' => $d->tanggal_mulai,
                     'tgl_selesai' => $d->tanggal_selesai,

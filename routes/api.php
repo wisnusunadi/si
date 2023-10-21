@@ -191,14 +191,15 @@ Route::prefix('/laporan')->group(function () {
 
 Route::prefix('/gbj')->group(function () {
     Route::prefix('/rw')->group(function () {
+        Route::get('/surat_pengiriman/{id}', [GudangController::class, 'surat_pengiriman']);
         Route::get('/riwayat_permintaan', [GudangController::class, 'riwayat_rw_permintaan']);
         Route::get('/riwayat_permintaan/{id}', [GudangController::class, 'riwayat_rw_permintaan_detail']);
         Route::get('/belum_kirim', [GudangController::class, 'belum_kirim_rw']);
-        Route::post('/belum_kirim', [GudangController::class, 'kirim_permintaan']);
+        Route::post('/belum_kirim', [GudangController::class, 'kirim_permintaan'])->middleware('jwt.verify');
         Route::post('/belum_kirim/produk/', [GudangController::class, 'belum_kirim_rw_produk']);
         Route::get('/belum_kirim/seri/{id}', [GudangController::class, 'belum_kirim_rw_seri']);
         Route::get('/dp/seri/', [GudangController::class, 'terima_perakitan_rw']);
-        Route::post('/terima', [GudangController::class, 'store_perakitan_rw']);
+        Route::post('/terima', [GudangController::class, 'store_perakitan_rw'])->middleware('jwt.verify');
         Route::get('/dp/seri/{id}', [GudangController::class, 'terima_perakitan_detail_rw']);
         Route::get('/riwayat_penerimaan', [GudangController::class, 'riwayat_rw_penerimaan']);
     });
@@ -333,20 +334,25 @@ Route::prefix('/tfp')->group(function () {
 Route::prefix('/prd')->group(function () {
     Route::prefix('/fg')->group(function () {
         Route::post('/gen', [ProduksiController::class, 'generate_fg']);
+        Route::get('/riwayat', [ProduksiController::class, 'riwayat_fg']);
         Route::post('/gen/confirm', [ProduksiController::class, 'generate_fg_confirm']);
+        Route::get('/cetak/', [ProduksiController::class, 'get_noseri_fg_cetak']);
     });
     Route::prefix('/rw')->group(function () {
         Route::get('/belum_kirim', [ProduksiController::class, 'belum_kirim_rw']);
+        Route::get('/riwayat_permintaan', [ProduksiController::class, 'riwayat_rw_permintaan']);
         Route::get('/proses', [ProduksiController::class, 'proses_rw']);
         Route::get('/proses/produk/{id}', [ProduksiController::class, 'proses_rw_produk']);
         Route::get('/siap/produk/{id}', [ProduksiController::class, 'siap_tf_rw_produk']);
-        Route::post('/permintaan', [ProduksiController::class, 'permintaan_rw']);
+        Route::post('/permintaan', [ProduksiController::class, 'permintaan_rw'])->middleware('jwt.verify');
+        Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'surat_permintaan_rw']);
+        Route::get('/surat_penyerahan/{id}', [ProduksiController::class, 'surat_penyerahan_rw']);
         Route::post('/gen', [ProduksiController::class, 'generate_rw'])->middleware('jwt.verify');
         Route::put('/gen/{id}', [ProduksiController::class, 'update_rw'])->middleware('jwt.verify');
         Route::delete('/gen/{id}', [ProduksiController::class, 'hapus_rw']);
         Route::get('/riwayat', [ProduksiController::class, 'riwayat_rw']);
         Route::get('/pack/{id}', [ProduksiController::class, 'packing_list_rw']);
-        Route::post('/tf', [ProduksiController::class, 'tf_rw']);
+        Route::post('/tf', [ProduksiController::class, 'tf_rw'])->middleware('jwt.verify');
         Route::get('/tf/riwayat', [ProduksiController::class, 'tf_riwayat_rw']);
     });
 
