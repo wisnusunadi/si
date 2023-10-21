@@ -26,7 +26,11 @@ export default {
                 cancelButtonColor: '#d33'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.post('/api/prd/rw/permintaan', data).then(() => {
+                    axios.post('/api/prd/rw/permintaan', data, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
+                        }
+                    }).then(() => {
                         success()
                     }).catch(() => {
                         error()

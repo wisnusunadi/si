@@ -162,7 +162,11 @@ export default {
         },
         async simpan() {
             try {
-                await axios.post('/api/prd/rw/tf', this.noSeriSelected).then(() => {
+                await axios.post('/api/prd/rw/tf', this.noSeriSelected, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
+                        }
+                    }).then(() => {
                     this.$swal({
                         title: 'Berhasil!',
                         text: 'Data berhasil disimpan',

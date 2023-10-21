@@ -706,28 +706,100 @@ class ProduksiController extends Controller
 
     function permintaan_rw(Request $request)
     {
-        $jumlah_tf = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
+        DB::beginTransaction();
+        try {
+            //code...
+              $jumlah_tf = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
         $data = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->get();
+        $max = JadwalPerakitanRw::whereYear('created_at',(Carbon::now()->format('Y')))->max('no_permintaan');
 
         if ($jumlah_tf > 0) {
+            DB::rollBack();
             return response()->json([
                 'status' => 200,
                 'message' => 'Gagal Di ubah',
             ], 500);
         } else {
             foreach ($data as $d) {
-                JadwalPerakitanRw::where('id', $d->id)
+                $item[] = array(
+                    'id' =>  $d->id,
+                    'produk_id' =>  $d->Produk->nama,
+                    'jumlah' =>  $d->jumlah,
+                );
+              $jadwal =  JadwalPerakitanRw::where('id', $d->id)
                     ->update([
-                        'status_tf' => 16
+                        'status_tf' => 16,
+                        'no_permintaan' => $max+1
                     ]);
             }
+            $object = new stdClass();
+            $object->no = str_pad($max+1, 5, '0', STR_PAD_LEFT).'/'.$this->toRomawi(Carbon::now()->format('m')).'/'.strtoupper(Carbon::now()->format('Y'));
+            $object->urutan =$data->first()->urutan;
+            $object->tanggal_mulai =$data->first()->tanggal_mulai;
+            $object->tanggal_selesai =$data->first()->tanggal_selesai;
+            $object->nama = auth()->user()->karyawan->nama;
+            $object->item =$item;
+
+            $data = SystemLog::create([
+                'tipe' => 'Produksi',
+                'subjek' => 'Permintaan Reworks',
+                'response' => json_encode($object)
+            ]);
+
         }
+
+        DB::commit();
         return response()->json([
             'status' => 200,
             'message' => 'Berhasil',
         ], 200);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Gagal'.$th,
+            ], 500);
+        }
+
     }
 
+    function riwayat_rw_permintaan()
+    {
+        $data = SystemLog::where(['tipe'=>'Produksi','subjek' => 'Permintaan Reworks'])->orderBy('created_at', 'ASC')->get();
+
+        if($data->isEmpty()){
+            $obj = array();
+        }else{
+            foreach($data as $d){
+
+                $x = json_decode($d->response);
+
+                $obj[] = array(
+                    'id' => $d->id,
+                    'no' => $x->no,
+                    'urutan' => $x->urutan,
+                    'nama' => $x->nama,
+                    'tgl_mulai' => $x->tanggal_mulai,
+                    'tgl_selesai' => $x->tanggal_selesai,
+                    'tgl_tf' => $d->created_at,
+                    'item' => $x->item
+                );
+
+
+            }
+        }
+
+
+
+        // $object = new stdClass();
+        // $object->produk_reworks_id = $jadwal->produk_reworks_id;
+        // $object->set = $jadwal->set;
+
+
+        return response()->json($obj);
+    }
     function belum_kirim_rw()
     {
         $data = JadwalPerakitanRw::addSelect([
@@ -3603,7 +3675,7 @@ class ProduksiController extends Controller
         $data = SystemLog::where(['tipe'=>'Produksi','subjek' => 'Kirim Reworks','id' => $id])->orderBy('created_at','DESC')->first();
 
         if(!$data){
-            $datas = array();
+            $object = array();
         }else{
             $x = json_decode($data->response);
 
@@ -3615,9 +3687,6 @@ class ProduksiController extends Controller
                     'jumlah' => $items->count()
                 ];
             })->values()->all();
-
-            // $items = ['item' => $groupedData];
-
             $max = SystemLog::
             where('tipe', 'Produksi')
             ->where('subjek', 'Kirim Reworks')
@@ -3637,38 +3706,15 @@ class ProduksiController extends Controller
     }
     function surat_permintaan_rw($id)
     {
-    $jadwal = JadwalPerakitanRw::addSelect([
-        'set' => function ($q) {
-            $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) ')
-                ->from('detail_produks_rw')
-                ->whereColumn('detail_produks_rw.produk_parent_id', 'jadwal_perakitan_rw.produk_reworks_id');
-        },
-        'csiap' => function ($q) {
-            $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
-                ->from('seri_detail_rw')
-                ->whereColumn('seri_detail_rw.urutan', 'jadwal_perakitan_rw.urutan');
-        },
-    ])->where('urutan', $id)->get();
-    if ($jadwal->isEmpty()) {
-        $obj = array();
-    } else {
-        foreach ($jadwal as $d) {
-            $obj[] = array(
-                'id' => $d->id,
-                'nama' => $d->Produk->nama,
-                'jumlah' => $d->jumlah,
-            );
+        $data = SystemLog::where(['tipe'=>'Produksi','subjek' => 'Permintaan Reworks','id' => $id])->orderBy('created_at','DESC')->first();
+
+        if(!$data){
+            $object = array();
+        }else{
+            $object = json_decode($data->response);
         }
-    }
-     $object = new stdClass();
-     $object->no = str_pad($jadwal->first()->urutan, 5, '0', STR_PAD_LEFT).'/'.$this->toRomawi($jadwal->first()->created_at->format('m')).'/'.strtoupper($jadwal->first()->created_at->format('Y'));
-     $object->ref = 'PRD-'.$jadwal->first()->urutan;
-     $object->nama = $jadwal->first()->ProdukRw->nama;
-     $object->bagian = 'Produksi';
-     $object->kegunaan = 'Reworks '.$jadwal->first()->ProdukRw->nama;
-     $object->tanggal_mulai = $jadwal->first()->tanggal_mulai;
-     $object->tanggal_selesai = $jadwal->first()->tanggal_selesai;
-     $object->item = $obj;
+
+        return response()->json($object);
 
      return response()->json($object);
     }
