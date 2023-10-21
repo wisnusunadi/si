@@ -102,6 +102,10 @@
         .utama-dokumen-td {
             padding: 10px 0px 10px 5px;
         }
+
+        .small-text {
+            font-size: 9pt;
+        }
     </style>
 </head>
 
@@ -117,19 +121,19 @@
             </td>
             <td colspan="3">
         <tr>
-            <td style="padding-bottom: 10px; padding-left: 5px;">No Dokumen</td>
-            <td style="padding-bottom: 10px; padding-left: 5px;">:</td>
-            <td style="padding-bottom: 10px; padding-left: 5px;"> SPA-FR/GUD-6</td>
+            <td class="small-text" style="padding-bottom: 10px; padding-left: 5px;">No Dokumen</td>
+            <td class="small-text" style="padding-bottom: 10px; padding-left: 5px;">:</td>
+            <td class="small-text" style="padding-bottom: 10px; padding-left: 5px;"> SPA-FR/GUD-6</td>
         </tr>
         <tr>
-            <td class="utama-dokumen utama-dokumen-td">Revisi</td>
-            <td class="utama-dokumen utama-dokumen-td">:</td>
-            <td class="utama-dokumen utama-dokumen-td"> 03</td>
+            <td class="small-text utama-dokumen utama-dokumen-td">Revisi</td>
+            <td class="small-text utama-dokumen utama-dokumen-td">:</td>
+            <td class="small-text utama-dokumen utama-dokumen-td"> 03</td>
         </tr>
         <tr>
-            <td class="utama-dokumen-td">Tgl. Terbit</td>
-            <td class="utama-dokumen-td">:</td>
-            <td class="utama-dokumen-td"> 14 September 2022</td>
+            <td class="small-text utama-dokumen-td">Tgl. Terbit</td>
+            <td class="small-text utama-dokumen-td">:</td>
+            <td class="small-text utama-dokumen-td"> 14 September 2022</td>
         </tr>
         </td>
         </tr>

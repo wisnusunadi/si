@@ -4133,7 +4133,7 @@ class ProduksiController extends Controller
         // buat 10cm x 2cm
         // $customPaperLarge = array(0, 0, 90.46, 290.69);
         // $customPaperMedium = array(0, 0, 90.46, 170.69);
-        $customPaperSmall = array(0, 0, 50.46, 150.69);
+        $customPaperSmall = array(0, 0, 35.46, 150.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper($customPaperSmall, 'landscape');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakseri', compact('seri'));
@@ -4143,7 +4143,7 @@ class ProduksiController extends Controller
     function cetak_seri_finish_goods($seri)
     {
         // buat 5.5cm x 2.5cm
-        $customPaper = array(0, 0, 143.46, 220.69);
+        $customPaper = array(0, 0, 130.46, 220.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper($customPaper, 'portrait');
         return $pdf->stream();
     }

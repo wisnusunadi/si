@@ -22,9 +22,10 @@
 
         /* small */
         @page {
-            margin-top: 0.08cm;
+            margin-top: 0.05cm;
             margin-left: 0.9cm;
-            font-size: 7.5pt
+            margin-bottom: 0cm;
+            font-size: 7.5pt;
         }
     </style>
 </head>
@@ -35,7 +36,7 @@
     @endphp
 
 {{-- ulangi 5 kali --}}
-     @for ($i = 0; $i < 5; $i++)
+     @for ($i = 0; $i < 2; $i++)
      {{-- large --}}
     {{-- <div class="image-container">
         <span>Elitech</span><br>
@@ -53,8 +54,9 @@
      {{-- small --}}
       <div class="image-container">
         <img
-            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($seri, $generator::TYPE_CODE_128_B, 0.8, 7)) }}" />
+            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($seri, $generator::TYPE_CODE_128_B, 0.75, 20)) }}" />
         <div class="text-center">{{ $seri }}</div>
+
     </div>
     @endfor
 </body>

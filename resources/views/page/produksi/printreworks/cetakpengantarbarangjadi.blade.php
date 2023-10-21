@@ -83,6 +83,10 @@
             padding: 10px 0px 10px 5px;
         }
 
+        .small-text {
+            font-size: 9pt;
+        }
+
         .table-dibuat {
             padding-left: 10%;
         }
@@ -97,23 +101,23 @@
                     width="85">
             </td>
             <td class="judul-utama" rowspan="4">
-                <h1 class="judul">Pengantar Barang Jadi</h1>
+                <h1 class="judul">PENGANTAR BARANG JADI</h1>
             </td>
             <td colspan="3">
         <tr>
-            <td style="padding-bottom: 10px; padding-left: 5px;">No Dokumen</td>
-            <td style="padding-bottom: 10px; padding-left: 5px;">:</td>
-            <td style="padding-bottom: 10px; padding-left: 5px;"> SPA-FR/GUD-7</td>
+            <td class="small-text" style="padding-bottom: 10px; padding-left: 5px;">No Dokumen</td>
+            <td class="small-text" style="padding-bottom: 10px; padding-left: 5px;">:</td>
+            <td class="small-text" style="padding-bottom: 10px; padding-left: 5px;"> SPA-FR/GUD-7</td>
         </tr>
         <tr>
-            <td class="utama-dokumen utama-dokumen-td">Revisi</td>
-            <td class="utama-dokumen utama-dokumen-td">:</td>
-            <td class="utama-dokumen utama-dokumen-td"> 00</td>
+            <td class="small-text utama-dokumen utama-dokumen-td">Revisi</td>
+            <td class="small-text utama-dokumen utama-dokumen-td">:</td>
+            <td class="small-text utama-dokumen utama-dokumen-td"> 00</td>
         </tr>
         <tr>
-            <td class="utama-dokumen-td">Tgl. Terbit</td>
-            <td class="utama-dokumen-td">:</td>
-            <td class="utama-dokumen-td"> 14 Maret 2020</td>
+            <td class="small-text utama-dokumen-td">Tgl. Terbit</td>
+            <td class="small-text utama-dokumen-td">:</td>
+            <td class="small-text utama-dokumen-td"> 14 Maret 2020</td>
         </tr>
         </td>
         </tr>
@@ -131,7 +135,7 @@
                 <td>Tanggal</td>
                 <td>: 18 Oktober 2023</td>
                 <td style="width: 15%"></td>
-                <td class="text-center td-urutan"><b>PRD-1</b></td>
+                <td class="text-center td-urutan"><b>00001/X/2023</b></td>
             </tr>
             <tr>
                 <td>Kepada</td>
