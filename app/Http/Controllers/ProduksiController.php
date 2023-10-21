@@ -3710,9 +3710,7 @@ class ProduksiController extends Controller
             $object = json_decode($data->response);
         }
 
-        return response()->json($object);
-
-     return response()->json($object);
+        return $object;
     }
     public function toRomawi($number)
     {
@@ -4351,6 +4349,24 @@ class ProduksiController extends Controller
         $dataview = $data;
 
         return view('page.produksi.printreworks.cetakpackinglist', compact('dataview'));
+    }
+
+    function cetakSuratPermintaan($id)
+    {
+        $data = $this->surat_permintaan_rw($id);
+        // a4
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakpermintaanbarangjadi', compact('data'))->setPaper('a4', 'portrait');
+        return $pdf->stream();
+        // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');
+    }
+
+    function cetakSuratPengantar($id)
+    {
+        $data = $this->surat_permintaan_rw($id);
+        // a4
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakpermintaanbarangjadi', compact('data'))->setPaper('a4', 'portrait');
+        return $pdf->stream();
+        // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');
     }
 
     function cetakTest()

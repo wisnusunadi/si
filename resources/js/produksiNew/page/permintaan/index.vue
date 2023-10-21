@@ -31,7 +31,7 @@ export default {
             try {
                 this.$store.dispatch('setLoading', true);
                 const { data:permintaan } = await axios.get('/api/prd/rw/belum_kirim');
-                const { data:riwayat } = await axios.get('/api/gbj/rw/riwayat_permintaan')
+                const { data:riwayat } = await axios.get('/api/prd/rw/riwayat_permintaan')
                 this.permintaan = permintaan.map(item => {
                     return {
                         no_urut: `PRD-${item.urutan}`,

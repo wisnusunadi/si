@@ -58,6 +58,10 @@ export default {
                 console.log(error)
             }
         },
+
+        async cetakPenerimaan(data) {
+            window.open(`/produksi/surat_permintaan/${data.id}`)
+        }
     },
 }
 </script>
@@ -74,6 +78,10 @@ export default {
                 <button class="btn btn-sm btn-outline-info" @click="detail(item)">
                     <i class="fas fa-info-circle"></i>
                     Detail
+                </button>
+                <button class="btn btn-sm btn-outline-info" @click="cetakPenerimaan(item)">
+                    <i class="fas fa-print"></i>
+                    Cetak
                 </button>
             </template>
         </data-table>
