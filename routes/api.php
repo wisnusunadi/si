@@ -195,11 +195,11 @@ Route::prefix('/gbj')->group(function () {
         Route::get('/riwayat_permintaan', [GudangController::class, 'riwayat_rw_permintaan']);
         Route::get('/riwayat_permintaan/{id}', [GudangController::class, 'riwayat_rw_permintaan_detail']);
         Route::get('/belum_kirim', [GudangController::class, 'belum_kirim_rw']);
-        Route::post('/belum_kirim', [GudangController::class, 'kirim_permintaan']);
+        Route::post('/belum_kirim', [GudangController::class, 'kirim_permintaan'])->middleware('jwt.verify');
         Route::post('/belum_kirim/produk/', [GudangController::class, 'belum_kirim_rw_produk']);
         Route::get('/belum_kirim/seri/{id}', [GudangController::class, 'belum_kirim_rw_seri']);
         Route::get('/dp/seri/', [GudangController::class, 'terima_perakitan_rw']);
-        Route::post('/terima', [GudangController::class, 'store_perakitan_rw']);
+        Route::post('/terima', [GudangController::class, 'store_perakitan_rw'])->middleware('jwt.verify');
         Route::get('/dp/seri/{id}', [GudangController::class, 'terima_perakitan_detail_rw']);
         Route::get('/riwayat_penerimaan', [GudangController::class, 'riwayat_rw_penerimaan']);
     });
@@ -352,7 +352,7 @@ Route::prefix('/prd')->group(function () {
         Route::delete('/gen/{id}', [ProduksiController::class, 'hapus_rw']);
         Route::get('/riwayat', [ProduksiController::class, 'riwayat_rw']);
         Route::get('/pack/{id}', [ProduksiController::class, 'packing_list_rw']);
-        Route::post('/tf', [ProduksiController::class, 'tf_rw']);
+        Route::post('/tf', [ProduksiController::class, 'tf_rw'])->middleware('jwt.verify');
         Route::get('/tf/riwayat', [ProduksiController::class, 'tf_riwayat_rw']);
     });
 

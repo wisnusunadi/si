@@ -45,13 +45,15 @@ class ProduksiController extends Controller
     function tf_riwayat_rw()
     {
         $data = SystemLog::where(['tipe' => 'Produksi', 'subjek' => 'Kirim Reworks'])->get();
-        $res = $data->first()->response;
-        $getUrut = json_decode($res);
-        $jadwal = JadwalPerakitanRw::where('urutan', $getUrut->urutan)->first()->produk_reworks_id;
-        $produk = Produk::find($jadwal);
+
         if ($data->isEmpty()) {
             $obj = array();
         } else {
+            $res = $data->first()->response;
+            $getUrut = json_decode($res);
+            $jadwal = JadwalPerakitanRw::where('urutan', $getUrut->urutan)->first()->produk_reworks_id;
+            $produk = Produk::find($jadwal);
+
             foreach ($data as $d) {
                 $x = json_decode($d->response);
                 $obj[] = array(
@@ -72,11 +74,10 @@ class ProduksiController extends Controller
 
     function tf_rw(Request $request)
     {
-        DB::beginTransaction();
+       DB::beginTransaction();
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
-
             $collection = collect($obj);
             $firstIdSeri = $collection->first()->id;
             $getUrut = SeriDetailRw::where('noseri_id', $firstIdSeri)->first()->urutan;
@@ -101,10 +102,10 @@ class ProduksiController extends Controller
             $riwayat->item = $obj;
 
 
-
             SystemLog::create([
                 'tipe' => 'Produksi',
                 'subjek' => 'Kirim Reworks',
+                'user_id' => auth()->user()->id,
                 'response' => json_encode($riwayat)
             ]);
             DB::commit();

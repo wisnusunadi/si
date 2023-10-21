@@ -93,7 +93,8 @@ class GudangController extends Controller
             SystemLog::create([
                 'tipe' => 'GBJ',
                 'subjek' => 'Kirim Permintaan Rework',
-                'response' => json_encode($request->all())
+                'response' => json_encode($request->all()),
+                'user_id' => auth()->user()->id
             ]);
 
 
@@ -147,7 +148,6 @@ class GudangController extends Controller
     }
     function store_perakitan_rw(Request $request)
     {
-
         DB::beginTransaction();
         $obj =  json_decode(json_encode($request->all()), FALSE);
       //dd($obj);
@@ -164,7 +164,7 @@ class GudangController extends Controller
                 if(isset($o->layout) && $o->layout != null){
                     $l = $o->layout->id;
                 }else{
-                    $l = NULL;;
+                    $l = NULL;
                 }
 
                 NoseriBarangJadi::where('id',$o->id)
@@ -188,7 +188,8 @@ class GudangController extends Controller
          SystemLog::create([
             'tipe' => 'GBJ',
             'subjek' => 'Terima Reworks',
-            'response' => json_encode($riwayat)
+            'user_id' => auth()->user()->id,
+             'response' => json_encode($riwayat)
          ]);
 
 
@@ -323,14 +324,15 @@ class GudangController extends Controller
     function riwayat_rw_penerimaan()
     {
         $data = SystemLog::where(['tipe'=>'GBJ' , 'subjek' => 'Terima Reworks'])->get();
-        $res = $data->first()->response;
-        $getUrut = json_decode($res);
-        $jadwal = JadwalPerakitanRw::where('urutan',$getUrut->urutan)->first()->produk_reworks_id;
-        $produk = Produk::find($jadwal);
+
 
         if($data->isEmpty()){
             $obj = array();
         }else{
+            $res = $data->first()->response;
+            $getUrut = json_decode($res);
+            $jadwal = JadwalPerakitanRw::where('urutan',$getUrut->urutan)->first()->produk_reworks_id;
+            $produk = Produk::find($jadwal);
             foreach($data as $d){
                 $x = json_decode($d->response);
                 $obj[] = array(
@@ -409,7 +411,7 @@ class GudangController extends Controller
         $datas = new stdClass();
         $thn_gbj = $date->format('Y')%100;
         $urutans_gbj = str_pad($max+1, 6, '0', STR_PAD_LEFT);
-        $urutans_prd = str_pad($x->urutan, 6, '0', STR_PAD_LEFT);
+        $urutans_prd = str_pad($x->no, 6, '0', STR_PAD_LEFT);
         $datas->tgl_dibuat = $data->created_at;
         $datas->no_surat = 'FPBJ/'.$this->toRomawi($date->format('m')).'/'.$thn_gbj.'/'.$urutans_gbj;
         $datas->no_referensi = $urutans_prd.'/'.$this->toRomawi( Carbon::createFromFormat('Y-m-d', $x->tgl_mulai)->month).'/'.Carbon::createFromFormat('Y-m-d', $x->tgl_mulai)->year;
@@ -520,6 +522,7 @@ class GudangController extends Controller
                 $obj[] = array(
                     'id' => $d->id,
                     'urutan' => $d->urutan,
+                    'no' => $d->no_permintaan,
                     'produk_reworks_id' => $d->produk_reworks_id,
                     'tgl_mulai' => $d->tanggal_mulai,
                     'tgl_selesai' => $d->tanggal_selesai,
