@@ -21,6 +21,7 @@ use App\Models\SeriDetailRw;
 use App\Models\SystemLog;
 use App\Models\TFProduksi;
 use App\Models\TFProduksiDetail;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -782,7 +783,12 @@ class ProduksiController extends Controller
 
     function siap_tf_rw_produk($id)
     {
-        $data = SeriDetailRw::Join('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
+        $data = SeriDetailRw::
+        select('produk.nama as nama_produk','noseri_barang_jadi.is_prd','noseri_barang_jadi.id as noseri_id','produk.id as produk_id','noseri_barang_jadi.noseri','seri_detail_rw.created_at',
+        'seri_detail_rw.packer','seri_detail_rw.isi')
+        ->Join('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
+        ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+        ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
             ->where('urutan', $id)
             ->where('noseri_barang_jadi.is_prd', 1)
             ->get();
@@ -799,6 +805,8 @@ class ProduksiController extends Controller
             foreach ($data as $d) {
                 $obj[] = array(
                     'id' => $d->noseri_id,
+                    'produk_id' => $d->produk_id,
+                    'nama_produk' => $d->nama_produk,
                     'noseri' => $d->noseri,
                     'tgl_buat' => $d->created_at->format('Y-m-d'),
                     'packer' => $d->packer,
@@ -3360,21 +3368,23 @@ class ProduksiController extends Controller
         }
     }
 
-    function get_detail_noseri_rakit_cetak($id, $dd)
+    function get_noseri_fg_cetak(Request $request)
     {
 
-        try {
-            $data = JadwalRakitNoseri::whereHas('header', function ($q) use ($id) {
-                $q->where('produk_id', $id);
-            })
-                ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$dd])
-                ->get();
 
-            return response()->json($data);
+        try {
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+            foreach($obj as $o){
+                $seri[] = array(
+                    'seri' => $o->noseri
+                );
+            }
+
+            return $seri;
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
-                'msg' => $e->getMessage(),
+                'msg' => 'Gagal Cetak',
             ]);
         }
     }
@@ -3564,9 +3574,69 @@ class ProduksiController extends Controller
         $data = JadwalPerakitan::where('status_tf', 14)->get()->count('produk_id');
         return $data;
     }
+    function riwayat_fg()
+    {
+       $data = JadwalRakitNoseri::
+       select('jadwal_rakit_noseri.id','jadwal_rakit_noseri.noseri','produk.nama as produk','jadwal_perakitan.no_bppb','jadwal_rakit_noseri.created_at')
+       ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+       ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+       ->join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+       ->whereYear('jadwal_rakit_noseri.created_at',  2023)->limit(2000)->orderBy('jadwal_rakit_noseri.created_at','DESC')->get();
+        if($data->isEmpty()){
+            $obj = array();
+        }else{
+            foreach($data as $d){
+            $obj[] = array(
+                'id' => $d->id,
+                'noseri' => $d->noseri,
+                'nama' => $d->produk,
+                'no_bppb' => $d->no_bppb,
+                'tgl_buat' => $d->created_at
+            );
+            }
+        }
+
+        return response()->json($obj);
+    }
+    function surat_penyerahan_rw($id)
+    {
+        $data = SystemLog::where(['tipe'=>'Produksi','subjek' => 'Kirim Reworks','id' => $id])->orderBy('created_at','DESC')->first();
+
+        if(!$data){
+            $datas = array();
+        }else{
+            $x = json_decode($data->response);
+
+            $groupedData = collect($x->item)->groupBy('produk_id')->map(function ($items, $key) {
+                return [
+                    'produk_id' => $key,
+                    'nama_produk' => $items[0]->nama_produk,
+                    'noseri' => $items->pluck('noseri')->toArray(),
+                    'jumlah' => $items->count()
+                ];
+            })->values()->all();
+
+            // $items = ['item' => $groupedData];
+
+            $max = SystemLog::
+            where('tipe', 'Produksi')
+            ->where('subjek', 'Kirim Reworks')
+            ->where('tbl_log.id','<', $id)
+            ->whereYear('created_at', $data->created_at->format('Y'))
+            ->count();
+
+            $object = new stdClass();
+            $object->ref = 'PRD-'.$x->urutan;
+            $object->no = 'BPBJ'.'/'.$this->toRomawi($data->created_at->format('m')).'/'.(strtoupper($data->created_at->format('Y'))%100).'/'. str_pad($max+1, 6, '0', STR_PAD_LEFT);
+            $object->item = $groupedData;
+            $object->diserahkan_oleh = $data->user_id != NULL ? User::find($data->user_id)->Karyawan->nama : '-';
+        }
+
+        return response()->json($object);
+
+    }
     function surat_permintaan_rw($id)
     {
-
     $jadwal = JadwalPerakitanRw::addSelect([
         'set' => function ($q) {
             $q->selectRaw('coalesce(count(detail_produks_rw.id), 0) ')
@@ -3592,7 +3662,7 @@ class ProduksiController extends Controller
     }
      $object = new stdClass();
      $object->no = str_pad($jadwal->first()->urutan, 5, '0', STR_PAD_LEFT).'/'.$this->toRomawi($jadwal->first()->created_at->format('m')).'/'.strtoupper($jadwal->first()->created_at->format('Y'));
-     $object->urutan = $jadwal->first()->urutan;
+     $object->ref = 'PRD-'.$jadwal->first()->urutan;
      $object->nama = $jadwal->first()->ProdukRw->nama;
      $object->bagian = 'Produksi';
      $object->kegunaan = 'Reworks '.$jadwal->first()->ProdukRw->nama;

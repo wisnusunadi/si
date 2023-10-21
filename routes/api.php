@@ -191,6 +191,7 @@ Route::prefix('/laporan')->group(function () {
 
 Route::prefix('/gbj')->group(function () {
     Route::prefix('/rw')->group(function () {
+        Route::get('/surat_pengiriman/{id}', [GudangController::class, 'surat_pengiriman']);
         Route::get('/riwayat_permintaan', [GudangController::class, 'riwayat_rw_permintaan']);
         Route::get('/riwayat_permintaan/{id}', [GudangController::class, 'riwayat_rw_permintaan_detail']);
         Route::get('/belum_kirim', [GudangController::class, 'belum_kirim_rw']);
@@ -333,8 +334,9 @@ Route::prefix('/tfp')->group(function () {
 Route::prefix('/prd')->group(function () {
     Route::prefix('/fg')->group(function () {
         Route::post('/gen', [ProduksiController::class, 'generate_fg']);
+        Route::get('/riwayat', [ProduksiController::class, 'riwayat_fg']);
         Route::post('/gen/confirm', [ProduksiController::class, 'generate_fg_confirm']);
-        Route::get('/cetak/{id}/{tanggal}', [ProduksiController::class, 'get_detail_noseri_rakit_cetak']);
+        Route::get('/cetak/', [ProduksiController::class, 'get_noseri_fg_cetak']);
     });
     Route::prefix('/rw')->group(function () {
         Route::get('/belum_kirim', [ProduksiController::class, 'belum_kirim_rw']);
@@ -343,6 +345,7 @@ Route::prefix('/prd')->group(function () {
         Route::get('/siap/produk/{id}', [ProduksiController::class, 'siap_tf_rw_produk']);
         Route::post('/permintaan', [ProduksiController::class, 'permintaan_rw']);
         Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'surat_permintaan_rw']);
+        Route::get('/surat_penyerahan/{id}', [ProduksiController::class, 'surat_penyerahan_rw']);
         Route::post('/gen', [ProduksiController::class, 'generate_rw'])->middleware('jwt.verify');
         Route::put('/gen/{id}', [ProduksiController::class, 'update_rw'])->middleware('jwt.verify');
         Route::delete('/gen/{id}', [ProduksiController::class, 'hapus_rw']);
