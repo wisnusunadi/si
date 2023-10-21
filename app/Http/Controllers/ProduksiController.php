@@ -311,7 +311,7 @@ class ProduksiController extends Controller
                );
              }
 
-             if( $request->jml_noseri <= $kurang ){
+             if( $request->jml_noseri <= $kurang && $prd->kode != NULL){
               $queryResultPrd = JadwalRakitNoseri::whereIN('noseri',$newSeri)->pluck('noseri')->toArray();
               $queryResultGbj = NoseriBarangJadi::whereIN('noseri',$newSeri)->pluck('noseri')->toArray();
               $combinedArray = array_merge($queryResultPrd, $queryResultGbj);
@@ -385,7 +385,7 @@ class ProduksiController extends Controller
                 DB::rollBack();
                 return response()->json([
                     'status' => 200,
-                    'message' =>  'Jumlah Melebihi',
+                    'message' =>  'Jumlah Melebihi atau Kode Barcode Kosong',
                     'seri' =>   array(),
                     'duplicate' => array(),
                     'available' =>  array(),
