@@ -13,7 +13,7 @@
                 }
 
                 @bottom-right {
-                    content: 'SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02';
+                    content: '';
                     /* style */
                     font-size: 10px;
                     font-style: italic;
