@@ -76,7 +76,8 @@ export default {
             window.open(`/produksiReworks/cetakpackinglist/${id}`, '_blank');
         },
         cetakNoseri(noseri) {
-            window.open(`/produksiReworks/cetakseri/${noseri}`, '_blank');
+            // window open with params
+            window.open(`/produksiReworks/cetakseriRework/${noseri}`, '_blank');
         }
     },
 }

@@ -254,7 +254,7 @@ export default {
         },
         cetakSeri() {
             // open new tab
-            window.open(`/produksiReworks/cetakseri/${this.hasilGenerate}`, '_blank');
+            window.open(`/produksiReworks/cetakseriRework/${this.hasilGenerate}`, '_blank');
         },
         viewPackingList() {
             let id = this.selectSeri?.id ? this.selectSeri.id : this.idGenerate;

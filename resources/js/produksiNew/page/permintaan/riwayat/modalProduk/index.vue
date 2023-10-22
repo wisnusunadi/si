@@ -15,19 +15,11 @@ export default {
             headers: [
                 {
                     text: 'No.',
-                    value: 'no'
-                },
-                {
-                    text: 'No. Seri',
-                    value: 'noseri'
+                    value: 'no',
                 },
                 {
                     text: 'Nama Produk',
-                    value: 'nama'
-                },
-                {
-                    text: 'Variasi',
-                    value: 'varian'
+                    value: 'produk'
                 }
             ]
         }
@@ -74,7 +66,7 @@ export default {
                                         <label for="">Nama Produk</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                <span id="so">{{ dataSelected.header.nama }}</span>
+                                                <span id="so">{{ dataSelected.nama }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -82,7 +74,7 @@ export default {
                                         <label for="">Jumlah Transfer</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                <span id="akn">{{ dataSelected.data.length }}</span>
+                                                <span id="akn">{{ dataSelected.item.length }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -90,7 +82,7 @@ export default {
                                         <label for="">Tanggal Transfer</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                <span id="po">{{ dataSelected.header.tgl_tf }}</span>
+                                                <span id="po">{{ dataSelected.tgl_tf }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -102,7 +94,7 @@ export default {
                                         <input type="text" v-model="search" class="form-control" placeholder="Cari...">
                                     </div>
                                 </div>
-                                <DataTable :items="dataSelected.data" :headers="headers">
+                                <DataTable :items="dataSelected.item" :headers="headers">
                                     <template #item.no = "{ item, index }">
                                         {{ index + 1 }}
                                     </template>

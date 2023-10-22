@@ -31,7 +31,7 @@ export default {
             try {
                 this.$store.dispatch('setLoading', true)
                 const { data: proses } = await axios.get('/api/prd/rw/proses')
-                const { data:riwayat } = await axios.get('/api/prd/rw/tf/riwayat')
+                const { data: riwayat } = await axios.get('/api/prd/rw/tf/riwayat')
                 this.proses = proses.map(item => {
                     return {
                         no_urut: `PRD-${item.urutan}`,
@@ -74,13 +74,16 @@ export default {
                             type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat</a>
                     </li>
                 </ul>
-                <div class="tab-content" id="pills-tabContent">
+                <div class="tab-content" id="pills-tabContent" v-if="!$store.state.loading">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                         <proses :dataTable="proses" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                         <riwayat :dataTable="riwayat" />
                     </div>
+                </div>
+                <div class="spinner-border" role="status" v-else>
+                    <span class="sr-only">Loading...</span>
                 </div>
             </div>
         </div>

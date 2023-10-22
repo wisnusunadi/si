@@ -266,49 +266,51 @@ export default {
                                         Text</button>
                                     <br>
                                     <div class="custom-control custom-switch my-3">
-                                        <input type="checkbox" class="custom-control-input" id="customSwitch1" :checked="isScan"
-                                            @click="scanSeri">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch1"
+                                            :checked="isScan" @click="scanSeri">
                                         <label class="custom-control-label" for="customSwitch1">Scan Nomor Seri
                                         </label>
                                     </div>
                                 </div>
                                 <div class="p-2 bd-highlight">
-                                    <input type="text" class="form-control" v-model="search" placeholder="Cari No Seri" ref="search"
-                                        @keyup.enter="autoSelect" />
+                                    <input type="text" class="form-control" v-model="search" placeholder="Cari No Seri"
+                                        ref="search" @keyup.enter="autoSelect" />
                                 </div>
                             </div>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <input type="checkbox" @click="checkAll" ref="checkAll" />
-                                        </th>
-                                        <th>No. Seri</th>
-                                        <th>Variasi</th>
-                                    </tr>
-                                </thead>
-                                <tbody v-if="renderPaginate.length > 0">
-                                    <tr v-for="(data, index) in renderPaginate" :key="index">
-                                        <td>
-                                            <input type="checkbox" ref="noseri" :checked="produk.noseri &&
-                                                produk.noseri.find(
-                                                    (item) =>
-                                                        item.noseri == data.noseri
-                                                )
-                                                " @click="selectNoSeri(data)" />
-                                        </td>
-                                        <td>{{ data.noseri }}</td>
-                                        <td>{{ data.variasi }}</td>
-                                    </tr>
-                                </tbody>
-                                <tbody v-else>
-                                    <tr>
-                                        <td colspan="5" class="text-center">
-                                            Data tidak ditemukan
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="scrollable">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <input type="checkbox" @click="checkAll" ref="checkAll" />
+                                            </th>
+                                            <th>No. Seri</th>
+                                            <th>Variasi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody v-if="renderPaginate.length > 0">
+                                        <tr v-for="(data, index) in renderPaginate" :key="index">
+                                            <td>
+                                                <input type="checkbox" ref="noseri" :checked="produk.noseri &&
+                                                    produk.noseri.find(
+                                                        (item) =>
+                                                            item.noseri == data.noseri
+                                                    )
+                                                    " @click="selectNoSeri(data)" />
+                                            </td>
+                                            <td>{{ data.noseri }}</td>
+                                            <td>{{ data.variasi }}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else>
+                                        <tr>
+                                            <td colspan="5" class="text-center">
+                                                Data tidak ditemukan
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses
                                 " />
                         </div>

@@ -1,9 +1,11 @@
 <script>
 import DataTable from '../../../components/DataTable.vue';
+import modalPilihan from './modalPilihan.vue';
 export default {
     props: ['dataRiwayat'],
     components: {
         DataTable,
+        modalPilihan
     },
     data() {
         return {
@@ -19,7 +21,7 @@ export default {
                 },
                 {
                     text: 'Tanggal Dibuat',
-                    value: 'tanggal_dibuat'
+                    value: 'tgl_buat'
                 },
                 {
                     text: 'No BPPB',
@@ -27,7 +29,7 @@ export default {
                 },
                 {
                     text: 'Nama Produk',
-                    value: 'nama_produk'
+                    value: 'nama'
                 },
                 {
                     text: 'Aksi',
@@ -38,6 +40,8 @@ export default {
             search: '',
             checkAll: false,
             noSeriSelected: [],
+            cetakSeriSingle: [],
+            cetakSeriType: 'all',
         }
     },
     methods: {
@@ -61,14 +65,28 @@ export default {
                 this.checkAll = true
             }
         },
+        cetakSeri(noseri) {
+            this.cetakSeriSingle.push(noseri)
+            this.cetakSeriType = 'single'
+            this.$nextTick(() => {
+                $('.modalPilihan').modal('show');
+            });
+        },
+        cetakBanyakSeri() {
+            this.cetakSeriType = 'all'
+            this.$nextTick(() => {
+                $('.modalPilihan').modal('show');
+            });
+        }
     },
 }
 </script>
 <template>
     <div>
+        <modalPilihan :data="cetakSeriType == 'single' ? cetakSeriSingle : noSeriSelected" v-if="cetakSeriSingle.length > 0 || noSeriSelected.length > 0" />
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
-                <button class="btn btn-outline-primary btn-sm" v-if="noSeriSelected.length > 0">
+                <button class="btn btn-outline-primary btn-sm" v-if="noSeriSelected.length > 0" @click="cetakBanyakSeri">
                     <i class="fa fa-print"></i>
                     Cetak Nomor Seri
                 </button>
@@ -87,7 +105,7 @@ export default {
                     @click="selectNoSeri(item)" />
             </template>
             <template #item.aksi="{ item }">
-                <button class="btn btn-outline-primary btn-sm">
+                <button class="btn btn-outline-primary btn-sm" @click="cetakSeri(item)">
                     <i class="fa fa-print"></i>
                     Cetak Nomor Seri
                 </button>

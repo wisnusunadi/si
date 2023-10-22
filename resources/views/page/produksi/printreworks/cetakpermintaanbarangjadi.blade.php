@@ -195,7 +195,7 @@
                 @foreach ($data->item as $item)
                 <tr>
                     <td>-</td>
-                    <td>{{ $item->produk_id }}</td>
+                    <td>{{ $item->produk }}</td>
                     <td>{{ $item->jumlah }} Unit</td>
                 </tr>    
                 @endforeach

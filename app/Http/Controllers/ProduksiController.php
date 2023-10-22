@@ -74,7 +74,7 @@ class ProduksiController extends Controller
 
     function tf_rw(Request $request)
     {
-       DB::beginTransaction();
+        DB::beginTransaction();
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
@@ -293,26 +293,26 @@ class ProduksiController extends Controller
             $getTgl = Carbon::now();
             $tahun = $getTgl->format('Y') % 100;
             $bulan =  strtoupper(dechex($getTgl->format('m')));;
-           //Default
+            //Default
             $kedatangan =  strtoupper(dechex($request->kedatangan));
-             for ($i = 1; $i <= $request->jml_noseri; $i++) {
-               $newSeri[] = $prd->kode.$tahun.$bulan.$kedatangan.str_pad($request->no_urut_terakhir+$i, 5, '0', STR_PAD_LEFT);
-               $newSeries[] = array(
-                'jadwal_id' => $request->jadwal_id,
-                'no_bppb' => $request->no_bppb,
-                'no_urut' => $request->no_urut_terakhir + $i,
-                'kode' =>  $prd->kode,
-                'tahun' => $tahun,
-                'bulan' => $bulan,
-                'kedatangan' => $kedatangan,
-                'seri' => $prd->kode.$tahun.$bulan.$kedatangan.str_pad($request->no_urut_terakhir+$i, 5, '0', STR_PAD_LEFT)
-               );
-             }
+            for ($i = 1; $i <= $request->jml_noseri; $i++) {
+                $newSeri[] = $prd->kode . $tahun . $bulan . $kedatangan . str_pad($request->no_urut_terakhir + $i, 5, '0', STR_PAD_LEFT);
+                $newSeries[] = array(
+                    'jadwal_id' => $request->jadwal_id,
+                    'no_bppb' => $request->no_bppb,
+                    'no_urut' => $request->no_urut_terakhir + $i,
+                    'kode' =>  $prd->kode,
+                    'tahun' => $tahun,
+                    'bulan' => $bulan,
+                    'kedatangan' => $kedatangan,
+                    'seri' => $prd->kode . $tahun . $bulan . $kedatangan . str_pad($request->no_urut_terakhir + $i, 5, '0', STR_PAD_LEFT)
+                );
+            }
 
-             if( $request->jml_noseri <= $kurang && $prd->kode != NULL){
-              $queryResultPrd = JadwalRakitNoseri::whereIN('noseri',$newSeri)->pluck('noseri')->toArray();
-              $queryResultGbj = NoseriBarangJadi::whereIN('noseri',$newSeri)->pluck('noseri')->toArray();
-              $combinedArray = array_merge($queryResultPrd, $queryResultGbj);
+            if ($request->jml_noseri <= $kurang && $prd->kode != NULL) {
+                $queryResultPrd = JadwalRakitNoseri::whereIN('noseri', $newSeri)->pluck('noseri')->toArray();
+                $queryResultGbj = NoseriBarangJadi::whereIN('noseri', $newSeri)->pluck('noseri')->toArray();
+                $combinedArray = array_merge($queryResultPrd, $queryResultGbj);
 
                 $cekSeri = array_intersect($newSeri, $combinedArray);
                 $available = array_values(array_diff($newSeri, $combinedArray));
@@ -705,70 +705,67 @@ class ProduksiController extends Controller
         DB::beginTransaction();
         try {
             //code...
-              $jumlah_tf = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
-        $data = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->get();
-        $max = JadwalPerakitanRw::whereYear('created_at',(Carbon::now()->format('Y')))->max('no_permintaan');
+            $jumlah_tf = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
+            $data = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->get();
+            $max = JadwalPerakitanRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_permintaan');
 
-        if ($jumlah_tf > 0) {
-            DB::rollBack();
+            if ($jumlah_tf > 0) {
+                DB::rollBack();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Gagal Di ubah',
+                ], 500);
+            } else {
+                foreach ($data as $d) {
+                    $item[] = array(
+                        'id' =>  $d->id,
+                        'produk' =>  $d->Produk->nama,
+                        'jumlah' =>  $d->jumlah,
+                    );
+                    $jadwal =  JadwalPerakitanRw::where('id', $d->id)
+                        ->update([
+                            'status_tf' => 16,
+                            'no_permintaan' => $max + 1
+                        ]);
+                }
+                $object = new stdClass();
+                $object->no = str_pad($max + 1, 5, '0', STR_PAD_LEFT) . '/' . $this->toRomawi(Carbon::now()->format('m')) . '/' . strtoupper(Carbon::now()->format('Y'));
+                $object->urutan = $data->first()->urutan;
+                $object->tanggal_mulai = $data->first()->tanggal_mulai;
+                $object->tanggal_selesai = $data->first()->tanggal_selesai;
+                $object->nama = auth()->user()->karyawan->nama;
+                $object->item = $item;
+
+                $data = SystemLog::create([
+                    'tipe' => 'Produksi',
+                    'subjek' => 'Permintaan Reworks',
+                    'response' => json_encode($object)
+                ]);
+            }
+
+            DB::commit();
             return response()->json([
                 'status' => 200,
-                'message' => 'Gagal Di ubah',
-            ], 500);
-        } else {
-            foreach ($data as $d) {
-                $item[] = array(
-                    'id' =>  $d->id,
-                    'produk_id' =>  $d->Produk->nama,
-                    'jumlah' =>  $d->jumlah,
-                );
-              $jadwal =  JadwalPerakitanRw::where('id', $d->id)
-                    ->update([
-                        'status_tf' => 16,
-                        'no_permintaan' => $max+1
-                    ]);
-            }
-            $object = new stdClass();
-            $object->no = str_pad($max+1, 5, '0', STR_PAD_LEFT).'/'.$this->toRomawi(Carbon::now()->format('m')).'/'.strtoupper(Carbon::now()->format('Y'));
-            $object->urutan =$data->first()->urutan;
-            $object->tanggal_mulai =$data->first()->tanggal_mulai;
-            $object->tanggal_selesai =$data->first()->tanggal_selesai;
-            $object->nama = auth()->user()->karyawan->nama;
-            $object->item =$item;
-
-            $data = SystemLog::create([
-                'tipe' => 'Produksi',
-                'subjek' => 'Permintaan Reworks',
-                'response' => json_encode($object)
-            ]);
-
-        }
-
-        DB::commit();
-        return response()->json([
-            'status' => 200,
-            'message' => 'Berhasil',
-        ], 200);
-
+                'message' => 'Berhasil',
+            ], 200);
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
             return response()->json([
                 'status' => 200,
-                'message' => 'Gagal'.$th,
+                'message' => 'Gagal' . $th,
             ], 500);
         }
-
     }
 
     function riwayat_rw_permintaan()
     {
-        $data = SystemLog::where(['tipe'=>'Produksi','subjek' => 'Permintaan Reworks'])->orderBy('created_at', 'ASC')->get();
+        $data = SystemLog::where(['tipe' => 'Produksi', 'subjek' => 'Permintaan Reworks'])->orderBy('created_at', 'ASC')->get();
 
-        if($data->isEmpty()){
+        if ($data->isEmpty()) {
             $obj = array();
-        }else{
-            foreach($data as $d){
+        } else {
+            foreach ($data as $d) {
 
                 $x = json_decode($d->response);
 
@@ -783,8 +780,6 @@ class ProduksiController extends Controller
                     'tgl_tf' => $d->created_at,
                     'item' => $x->item
                 );
-
-
             }
         }
 
@@ -852,12 +847,19 @@ class ProduksiController extends Controller
 
     function siap_tf_rw_produk($id)
     {
-        $data = SeriDetailRw::
-        select('produk.nama as nama_produk','noseri_barang_jadi.is_prd','noseri_barang_jadi.id as noseri_id','produk.id as produk_id','noseri_barang_jadi.noseri','seri_detail_rw.created_at',
-        'seri_detail_rw.packer','seri_detail_rw.isi')
-        ->Join('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
-        ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-        ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+        $data = SeriDetailRw::select(
+                'produk.nama as nama_produk',
+                'noseri_barang_jadi.is_prd',
+                'noseri_barang_jadi.id as noseri_id',
+                'produk.id as produk_id',
+                'noseri_barang_jadi.noseri',
+                'seri_detail_rw.created_at',
+                'seri_detail_rw.packer',
+                'seri_detail_rw.isi'
+            )
+            ->Join('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
+            ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+            ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
             ->where('urutan', $id)
             ->where('noseri_barang_jadi.is_prd', 1)
             ->get();
@@ -3439,11 +3441,9 @@ class ProduksiController extends Controller
 
     function get_noseri_fg_cetak(Request $request)
     {
-
-
         try {
             $obj =  json_decode(json_encode($request->all()), FALSE);
-            foreach($obj as $o){
+            foreach ($obj as $o) {
                 $seri[] = array(
                     'seri' => $o->noseri
                 );
@@ -3453,7 +3453,7 @@ class ProduksiController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
-                'msg' => 'Gagal Cetak',
+                'msg' => $e->getMessage()
             ]);
         }
     }
@@ -3645,23 +3645,22 @@ class ProduksiController extends Controller
     }
     function riwayat_fg()
     {
-       $data = JadwalRakitNoseri::
-       select('jadwal_rakit_noseri.id','jadwal_rakit_noseri.noseri','produk.nama as produk','jadwal_perakitan.no_bppb','jadwal_rakit_noseri.created_at')
-       ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-       ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
-       ->join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-       ->whereYear('jadwal_rakit_noseri.created_at',  2023)->limit(2000)->orderBy('jadwal_rakit_noseri.created_at','DESC')->get();
-        if($data->isEmpty()){
+        $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
+            ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+            ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+            ->join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+            ->whereYear('jadwal_rakit_noseri.created_at',  2023)->limit(2000)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
+        if ($data->isEmpty()) {
             $obj = array();
-        }else{
-            foreach($data as $d){
-            $obj[] = array(
-                'id' => $d->id,
-                'noseri' => $d->noseri,
-                'nama' => $d->produk,
-                'no_bppb' => $d->no_bppb,
-                'tgl_buat' => $d->created_at
-            );
+        } else {
+            foreach ($data as $d) {
+                $obj[] = array(
+                    'id' => $d->id,
+                    'noseri' => $d->noseri,
+                    'nama' => $d->produk,
+                    'no_bppb' => $d->no_bppb,
+                    'tgl_buat' => $d->created_at
+                );
             }
         }
 
@@ -3669,11 +3668,11 @@ class ProduksiController extends Controller
     }
     function surat_penyerahan_rw($id)
     {
-        $data = SystemLog::where(['tipe'=>'Produksi','subjek' => 'Kirim Reworks','id' => $id])->orderBy('created_at','DESC')->first();
+        $data = SystemLog::where(['tipe' => 'Produksi', 'subjek' => 'Kirim Reworks', 'id' => $id])->orderBy('created_at', 'DESC')->first();
 
-        if(!$data){
+        if (!$data) {
             $object = array();
-        }else{
+        } else {
             $x = json_decode($data->response);
 
             $groupedData = collect($x->item)->groupBy('produk_id')->map(function ($items, $key) {
@@ -3684,30 +3683,29 @@ class ProduksiController extends Controller
                     'jumlah' => $items->count()
                 ];
             })->values()->all();
-            $max = SystemLog::
-            where('tipe', 'Produksi')
-            ->where('subjek', 'Kirim Reworks')
-            ->where('tbl_log.id','<', $id)
-            ->whereYear('created_at', $data->created_at->format('Y'))
-            ->count();
+            $max = SystemLog::where('tipe', 'Produksi')
+                ->where('subjek', 'Kirim Reworks')
+                ->where('tbl_log.id', '<', $id)
+                ->whereYear('created_at', $data->created_at->format('Y'))
+                ->count();
 
             $object = new stdClass();
-            $object->ref = 'PRD-'.$x->urutan;
-            $object->no = 'BPBJ'.'/'.$this->toRomawi($data->created_at->format('m')).'/'.(strtoupper($data->created_at->format('Y'))%100).'/'. str_pad($max+1, 6, '0', STR_PAD_LEFT);
+            $object->ref = 'PRD-' . $x->urutan;
+            $object->no = 'BPBJ' . '/' . $this->toRomawi($data->created_at->format('m')) . '/' . (strtoupper($data->created_at->format('Y')) % 100) . '/' . str_pad($max + 1, 6, '0', STR_PAD_LEFT);
+            $object->tgl = $data->created_at->format('Y-m-d');
             $object->item = $groupedData;
             $object->diserahkan_oleh = $data->user_id != NULL ? User::find($data->user_id)->Karyawan->nama : '-';
         }
 
-        return response()->json($object);
-
+        return $object;
     }
     function surat_permintaan_rw($id)
     {
-        $data = SystemLog::where(['tipe'=>'Produksi','subjek' => 'Permintaan Reworks','id' => $id])->orderBy('created_at','DESC')->first();
+        $data = SystemLog::where(['tipe' => 'Produksi', 'subjek' => 'Permintaan Reworks', 'id' => $id])->orderBy('created_at', 'DESC')->first();
 
-        if(!$data){
+        if (!$data) {
             $object = array();
-        }else{
+        } else {
             $object = json_decode($data->response);
         }
 
@@ -4313,18 +4311,35 @@ class ProduksiController extends Controller
     function cetak_seri_rework($seri)
     {
         // buat 10cm x 2cm
-        // $customPaperLarge = array(0, 0, 90.46, 290.69);
-        $customPaperMedium = array(0, 0, 90.46, 170.69);
-        // $customPaperSmall = array(0, 0, 18.9, 151.2);
-        $customPaperSmall = array(0, 0, 90.46, 170.69);
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper($customPaperSmall, 'landscape');
+        $customPaperLarge = array(0, 0, 90.46, 290.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserilarge', compact('seri'))->setPaper($customPaperLarge, 'landscape');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakseri', compact('seri'));
 
     }
 
+    function cetak_seri_finish_goods_medium(Request $request)
+    {
+        $data =  json_decode($request->data, true);
+        $customPaperMedium = array(0, 0, 90.46, 170.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperMedium, 'landscape');
+        return $pdf->stream();
+    }
+
+    function cetak_seri_finish_goods_small(Request $request)
+    {
+        $data =  json_decode($request->data, true);
+        $customPaperSmall = array(0, 0, 130.46, 220.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperSmall, 'landscape');
+        return $pdf->stream();
+    }
+
     function cetak_seri_finish_goods($seri)
     {
+        // $customPaperLarge = array(0, 0, 90.46, 290.69);
+        $customPaperMedium = array(0, 0, 90.46, 170.69);
+        // $customPaperSmall = array(0, 0, 18.9, 151.2);
+        $customPaperSmall = array(0, 0, 90.46, 170.69);
         // buat 5.5cm x 2.5cm
         $customPaper = array(0, 0, 130.46, 220.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper($customPaper, 'portrait');
@@ -4361,19 +4376,10 @@ class ProduksiController extends Controller
         // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');
     }
 
-    function cetakSuratPengantar($id)
+    function cetakSuratPenyerahan($id)
     {
-        $data = $this->surat_permintaan_rw($id);
-        // a4
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakpermintaanbarangjadi', compact('data'))->setPaper('a4', 'portrait');
-        return $pdf->stream();
-        // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');
-    }
-
-    function cetakTest()
-    {
-        // a4
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakbuktibarangjadi')->setPaper('a4', 'portrait');
+        $data = $this->surat_penyerahan_rw($id);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakbuktibarangjadi', compact('data'))->setPaper('a4', 'portrait');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');
     }

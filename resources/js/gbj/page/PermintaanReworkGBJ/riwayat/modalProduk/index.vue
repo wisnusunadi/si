@@ -1,18 +1,34 @@
 <script>
-import pagination from '../../../../components/pagination.vue';
 import noseri from './noseri.vue';
+import DataTable from '../../../../components/DataTable.vue';
 export default {
     props: ['dataSelected'],
     components: {
-        pagination,
-        noseri
+        noseri,
+        DataTable
     },
     data() {
         return {
             search: '',
-            renderPaginate: [],
             modalSeri: false,
             dataSeriSelected: null,
+            headers: [{
+                text: 'No.',
+                value: 'no'
+            },
+            {
+                text: 'No. Seri',
+                value: 'noseri'
+            },
+            {
+                text: 'Nama Produk',
+                value: 'nama'
+            },
+            {
+                text: 'Variasi',
+                value: 'varian'
+            }
+            ]
         }
     },
     methods: {
@@ -97,33 +113,15 @@ export default {
                                         <input type="text" v-model="search" class="form-control" placeholder="Cari...">
                                     </div>
                                 </div>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>No. Seri</th>
-                                            <th>Nama Produk</th>
-                                            <th>Variasi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody v-if="renderPaginate.length > 0">
-                                        <tr v-for="(data, index) in renderPaginate" :key="index">
-                                            <td>{{ index + 1 }}</td>
-                                            <td>{{ data.noseri }}</td>
-                                            <td>{{ data.nama }}</td>
-                                            <td>{{ data.varian }}</td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody v-else>
-                                        <tr>
-                                            <td colspan="4" class="text-center">
-                                                Tidak ada data
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <pagination :filteredDalamProses="filteredDalamProses"
-                                    @updateFilteredDalamProses="updateFilteredDalamProses" />
+                                <div class="scrollable">
+                                    <DataTable :headers="headers" :items="dataSelected.data" :search="search">
+                                        <template #item.no="{ item, index }">
+                                            <div>
+                                                {{ index + 1 }}
+                                            </div>
+                                        </template>
+                                    </DataTable>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -155,5 +153,10 @@ export default {
     color: #fff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 18px
+}
+
+.scrollable {
+    height: 500px;
+    overflow-y: auto;
 }
 </style>

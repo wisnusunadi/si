@@ -421,7 +421,14 @@ class GudangController extends Controller
         $datas->items = $result;
 
         }
-        return response()->json($datas);
+        return $datas;
+    }
+
+    function cetakSuratPengantar($id) {
+        $data = $this->surat_pengiriman($id);
+
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakpengantarbarangjadi', compact('data'))->setPaper('a4', 'portrait');
+        return $pdf->stream();
     }
 
     public function toRomawi($number)

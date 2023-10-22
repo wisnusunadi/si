@@ -48,12 +48,11 @@
         /* full border table */
         main table {
             border-collapse: collapse;
-            border: 1px solid black;
         }
 
-        main table tr th,
-        main table tr td {
-            border: 1px solid black;
+        main table tr th {
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
             padding: 5px;
         }
 
@@ -103,6 +102,18 @@
 </head>
 
 <body>
+        @php
+        function dateformatIndo($date)
+        {
+            $BulanIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            $tahun = substr($date, 0, 4);
+            $bulan = substr($date, 5, 2);
+            $tgl = substr($date, 8, 2);
+            $result = $tgl . ' ' . $BulanIndo[(int) $bulan - 1] . ' ' . $tahun;
+            return $result;
+        }
+
+    @endphp
     <table class="utama">
         <tr>
             <td class="td-padding text-center" rowspan="4">
@@ -136,15 +147,15 @@
         <table>
             <tr>
                 <td style="width: 15%">No. Bukti</td>
-                <td style="width: 35%">: BPBJ/X/23/000001</td>
+                <td style="width: 35%">: {{ $data->no }}</td>
                 <td style="width: 30%"></td>
                 <td class="text-center td-full-border">No. Referensi</td>
             </tr>
             <tr>
                 <td>Tanggal</td>
-                <td>: 18 Oktober 2023</td>
+                <td>: {{ dateformatIndo($data->tgl) }}</td>
                 <td style="width: 15%"></td>
-                <td class="text-center td-urutan"><b>PRD-1</b></td>
+                <td class="text-center td-urutan"><b>{{ $data->ref }}</b></td>
             </tr>
             <tr>
                 <td>Bagian</td>
@@ -163,17 +174,18 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td style="width: 5%">1</td>
-                    <td style="width: 20%">5 Unit</td>
-                    <td>Antropometri Kit 10</td>
+                @foreach ($data->item as $item)
+                <tr style="border-top: 1px solid black">
+                    <td style="width: 5%">{{ $loop->iteration }}</td>
+                    <td style="width: 20%">{{ $item['jumlah'] }} Unit</td>
+                    <td>{{ $item['nama_produk'] }}</td>
                 </tr>
-                <tr>
-                    <td colspan="3" class="text-left"><b>No Seri</b> : Lorem ipsum dolor sit amet consectetur
-                        adipisicing
-                        elit. Impedit, earum magni consectetur cupiditate odit omnis quam, debitis nam officia doloribus
-                        doloremque aspernatur id provident, architecto dolores obcaecati minima animi quo?</td>
-                </tr>
+                <tr style="border-bottom: 1px solid black">
+                    <td></td>
+                    <td colspan="2" class="text-left"><b>No Seri</b> : {{ implode(', ', $item['noseri']) }}</td>
+                </tr>    
+                @endforeach
+                
             </tbody>
         </table>
     </main>
@@ -187,12 +199,12 @@
             </tr>
             <tr>
                 <td style="padding-top: 70px;">
-                    Ikut Login Produksi
+                    {{ $data->diserahkan_oleh }}
                     <hr>
                 </td>
                 <td style="width: 220px"></td>
                 <td style="padding-top: 70px; width: 200px">
-                    Ikut Login GBJ
+                    
                     <hr>
                 </td>
             </tr>

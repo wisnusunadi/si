@@ -29,6 +29,9 @@ export default {
                 $('.modalProduk').modal('show')
             })
         },
+        cetak(id) {
+            window.open('/produksi/surat_penyerahan/' + id, '_blank')
+        },
     },
 }
 </script>
@@ -45,6 +48,10 @@ export default {
                 <button class="btn btn-sm btn-outline-info" @click="detail(item)">
                     <i class="fas fa-info-circle"></i>
                     Detail
+                </button>
+                <button class="btn btn-sm btn-outline-primary" @click="cetak(item.id)">
+                    <i class="fas fa-print"></i>
+                    Cetak
                 </button>
             </template>
         </DataTable>

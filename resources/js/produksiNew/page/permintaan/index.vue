@@ -44,6 +44,7 @@ export default {
                     return {
                         no_urut: `PRD-${item.urutan}`,
                         ...item,
+                        jumlah: item.item.length,
                         tgl_tf: this.dateFormat(item.tgl_tf),
                     }
                 });

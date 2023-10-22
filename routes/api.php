@@ -336,7 +336,7 @@ Route::prefix('/prd')->group(function () {
         Route::post('/gen', [ProduksiController::class, 'generate_fg']);
         Route::get('/riwayat', [ProduksiController::class, 'riwayat_fg']);
         Route::post('/gen/confirm', [ProduksiController::class, 'generate_fg_confirm']);
-        Route::get('/cetak/', [ProduksiController::class, 'get_noseri_fg_cetak']);
+        Route::post('/cetak/', [ProduksiController::class, 'get_noseri_fg_cetak']);
     });
     Route::prefix('/rw')->group(function () {
         Route::get('/belum_kirim', [ProduksiController::class, 'belum_kirim_rw']);

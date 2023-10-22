@@ -1,26 +1,48 @@
 <script>
-import pagination from "../../../../components/pagination.vue";
 import axios from "axios";
 import noseri from "./noseri.vue";
+import DataTable from "../../../../components/DataTable.vue";
 export default {
   components: {
-    pagination,
+    DataTable,
     noseri,
   },
   props: ["headerData"],
   data() {
     return {
-      dataTable: [],
-      renderPaginate: [],
       search: "",
       produkSelected: {},
       showSeri: false,
+      dataTable: [],
+      headers: [
+        {
+          text: "No.",
+          value: "no",
+        },
+        {
+          text: "Nama Produk",
+          value: "nama",
+        },
+        {
+          text: "Jumlah",
+          value: "jumlah",
+        },
+        {
+          text: "Belum Transfer",
+          value: "belum",
+        },
+        {
+          text: "Jumlah No Seri Dipilih",
+          value: "noseri",
+        },
+        {
+          text: "Aksi",
+          value: "aksi",
+        }
+      ]
     };
   },
   methods: {
-    updateFilteredDalamProses(data) {
-      this.renderPaginate = data;
-    },
     closeModal() {
       $(".modalPermintaanRework").modal("hide");
       this.$nextTick(() => {
@@ -108,17 +130,6 @@ export default {
       }
     },
   },
-  computed: {
-    filteredDalamProses() {
-      return this.dataTable.filter((data) => {
-        return Object.keys(data).some((key) => {
-          return String(data[key])
-            .toLowerCase()
-            .includes(this.search.toLowerCase());
-        });
-      });
-    },
-  },
   created() {
     this.getData();
   },
@@ -141,7 +152,7 @@ export default {
       aria-labelledby="modelTitleId"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Form Permintaan Rework</h5>
@@ -205,44 +216,28 @@ export default {
                     />
                   </div>
                 </div>
-                <div class="scrollable">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th>No</th>
-                        <th>Nama Produk</th>
-                        <th>Jumlah</th>
-                        <th>Belum Transfer</th>
-                        <th>Jumlah No Seri Dipilih</th>
-                        <th>Aksi</th>
-                      </tr>
-                    </thead>
-                    <tbody v-if="renderPaginate.length > 0">
-                      <tr v-for="(data, idx) in renderPaginate" :key="idx">
-                        <td>{{ idx + 1 }}</td>
-                        <td>{{ data.nama }}</td>
-                        <td>{{ data.jumlah }}</td>
-                        <td>{{ data.belum }}</td>
-                        <td>{{ data?.noseri ? data.noseri.length : 0 }}</td>
-                        <td>
-                          <button
-                            type="button"
-                            class="btn btn-primary"
-                            @click="selectProduk(data)"
-                          >
-                            <i class="fa fa-qrcode"></i>
-                            Nomor Seri
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <pagination
-                  :filteredDalamProses="filteredDalamProses"
-                  @updateFilteredDalamProses="updateFilteredDalamProses"
-                />
+                  <DataTable :headers="headers" :items="dataTable" :search="search">
+                    <template #item.no = "{item, index}">
+                      <div>
+                        {{ index + 1 }}
+                      </div>
+                    </template>
+                    <template #item.noseri="{item}">
+                      <div>
+                        {{ item?.noseri ? item.noseri.length : 0 }}
+                      </div>
+                    </template>
+                    <template #item.aksi = "{item}">
+                         <button
+                              type="button"
+                              class="btn btn-primary"
+                              @click="selectProduk(item)"
+                            >
+                              <i class="fa fa-qrcode"></i>
+                              Nomor Seri
+                            </button>
+                    </template>
+                  </DataTable>
               </div>
             </div>
           </div>
@@ -286,10 +281,5 @@ export default {
   color: #fff;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 18px;
-}
-
-.scrollable {
-  height: 300px;
-  overflow-y: auto;
 }
 </style>

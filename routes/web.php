@@ -116,7 +116,7 @@ Route::group(['prefix' => '/gbj', 'middleware' => ['auth', 'divisi:gbj,mgrgdg,di
     Route::get('/export_nonso/{id}', [GudangController::class, 'exportNonso'])->name('gbj.nonso');
     Route::get('/export_spb/{id}', [GudangController::class, 'exportSpb'])->name('gbj.spb');
     Route::get('/export_noseri', [GudangController::class, 'export_noseri_gudang'])->name('gbj.noseri');
-
+    Route::get('/surat_pengiriman/{id}', [GudangController::class, 'cetakSuratPengantar']);
     // Route::view('/manager/produk', 'manager.gbj.produksi');
 });
 
@@ -129,13 +129,15 @@ Route::group(['prefix' => '/produksi', 'middleware' => ['auth', 'divisi:prd,diru
     Route::view('/pengiriman', 'page.produksi.pengiriman');
     Route::view('/riwayat_transfer', 'page.produksi.riwayat_transfer');
     Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'cetakSuratPermintaan']);
+    Route::get('/surat_penyerahan/{id}', [ProduksiController::class, 'cetakSuratPenyerahan']);
     Route::view('/{any?}', 'page.produksi.new_produksi')->where('any', '.*');
-
 });
 
 Route::group(['prefix' => '/produksiReworks'], function () {
     Route::get('/cetak_seri_finish_goods/{seri}', [ProduksiController::class, 'cetak_seri_finish_goods']);
-    Route::get('/cetakseri/{seri}', [ProduksiController::class, 'cetak_seri_rework']);
+    Route::get('/cetak_seri_fg_medium', [ProduksiController::class, 'cetak_seri_finish_goods_medium']);
+    Route::get('/cetak_seri_fg_small', [ProduksiController::class, 'cetak_seri_finish_goods_small']);
+    Route::get('/cetakseriRework/{seri}', [ProduksiController::class, 'cetak_seri_rework']);
     Route::get('/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);
     Route::get('/cetakpackinglist/{id}', [ProduksiController::class, 'cetak_packing_list']);
 });
@@ -223,27 +225,27 @@ Route::group(['prefix' => 'penjualan'], function () {
             Route::post('/spa/data/{value}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
             Route::post('/spb/data/{value}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
         });
-    Route::group(['middleware' => ['divisi:jual,ppic']], function () {
+        Route::group(['middleware' => ['divisi:jual,ppic']], function () {
             Route::get('/export/{jenis}/{customer_id}/{tgl_awal}/{tgl_akhir}/{seri}/{tampilan}', [App\Http\Controllers\PenjualanController::class, 'export_laporan'])->name('penjualan.penjualan.export');
         });
         // Route::group(['middleware' => ['divisi:jual']], function () {
-            Route::get('/cetak_surat_perintah/{id}',  [App\Http\Controllers\PenjualanController::class, 'cetak_surat_perintah'])->name('penjualan.penjualan.cetak_surat_perintah');
-            Route::view('/create', 'page.penjualan.penjualan.create')->name('penjualan.penjualan.create');
-            Route::view('/create_new', 'page.penjualan.penjualan.create_new')->name('penjualan.penjualan.create_new');
-            // Route::get('/penjualan/data/{jenis}/{status}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data'])->name('penjualan.penjualan.penjualan.data');
-            Route::post('/store', [App\Http\Controllers\PenjualanController::class, 'create_penjualan'])->name('penjualan.penjualan.store');
-            Route::post('/store_emindo', [App\Http\Controllers\PenjualanController::class, 'store_ekat_emindo'])->name('penjualan.penjualan.store_emindo');
-            Route::post('/store_emindo_po', [App\Http\Controllers\PenjualanController::class, 'store_ekat_emindo_po'])->name('penjualan.penjualan.store_emindo_po');
-            Route::post('/store_emindo_spa', [App\Http\Controllers\PenjualanController::class, 'store_spa_emindo'])->name('penjualan.penjualan.store_emindo_spa');
-            Route::post('/store_do', [App\Http\Controllers\PenjualanController::class, 'update_do'])->name('penjualan.penjualan.store_emindo_spa');
-            Route::get('/edit_ekatalog/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'update_penjualan'])->name('penjualan.penjualan.edit_ekatalog');
-            Route::put('/update/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'update_ekatalog'])->name('penjualan.penjualan.update_ekatalog');
-            Route::put('/update/spa/{id}', [App\Http\Controllers\PenjualanController::class, 'update_spa'])->name('penjualan.penjualan.update_spa');
-            Route::put('/update/spb/{id}', [App\Http\Controllers\PenjualanController::class, 'update_spb'])->name('penjualan.penjualan.update_spb');
-            Route::view('/edit_spa', 'page.penjualan.penjualan.edit_spa')->name('penjualan.penjualan.edit_spa');
-            Route::view('/edit_spa', 'page.penjualan.penjualan.edit_spa')->name('penjualan.penjualan.edit_spa');
-            //Export Laporan
-        });
+        Route::get('/cetak_surat_perintah/{id}',  [App\Http\Controllers\PenjualanController::class, 'cetak_surat_perintah'])->name('penjualan.penjualan.cetak_surat_perintah');
+        Route::view('/create', 'page.penjualan.penjualan.create')->name('penjualan.penjualan.create');
+        Route::view('/create_new', 'page.penjualan.penjualan.create_new')->name('penjualan.penjualan.create_new');
+        // Route::get('/penjualan/data/{jenis}/{status}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data'])->name('penjualan.penjualan.penjualan.data');
+        Route::post('/store', [App\Http\Controllers\PenjualanController::class, 'create_penjualan'])->name('penjualan.penjualan.store');
+        Route::post('/store_emindo', [App\Http\Controllers\PenjualanController::class, 'store_ekat_emindo'])->name('penjualan.penjualan.store_emindo');
+        Route::post('/store_emindo_po', [App\Http\Controllers\PenjualanController::class, 'store_ekat_emindo_po'])->name('penjualan.penjualan.store_emindo_po');
+        Route::post('/store_emindo_spa', [App\Http\Controllers\PenjualanController::class, 'store_spa_emindo'])->name('penjualan.penjualan.store_emindo_spa');
+        Route::post('/store_do', [App\Http\Controllers\PenjualanController::class, 'update_do'])->name('penjualan.penjualan.store_emindo_spa');
+        Route::get('/edit_ekatalog/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'update_penjualan'])->name('penjualan.penjualan.edit_ekatalog');
+        Route::put('/update/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'update_ekatalog'])->name('penjualan.penjualan.update_ekatalog');
+        Route::put('/update/spa/{id}', [App\Http\Controllers\PenjualanController::class, 'update_spa'])->name('penjualan.penjualan.update_spa');
+        Route::put('/update/spb/{id}', [App\Http\Controllers\PenjualanController::class, 'update_spb'])->name('penjualan.penjualan.update_spb');
+        Route::view('/edit_spa', 'page.penjualan.penjualan.edit_spa')->name('penjualan.penjualan.edit_spa');
+        Route::view('/edit_spa', 'page.penjualan.penjualan.edit_spa')->name('penjualan.penjualan.edit_spa');
+        //Export Laporan
+    });
     // });
 
     Route::group(['prefix' => '/so', 'middleware' => ['divisi:jual']], function () {
@@ -299,9 +301,9 @@ Route::group(['prefix' => 'logistik'], function () {
     });
     Route::group(['prefix' => '/so'], function () {
         // Route::group(['middleware' => ['divisi:log,dirut']], function () {
-            Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
-            Route::post('/data/{value}/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
-            Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
+        Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
+        Route::post('/data/{value}/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
+        Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
         // });
         Route::group(['middleware' => ['divisi:log']], function () {
             Route::get('/create/{jenis}', [App\Http\Controllers\logistikController::class, 'create_logistik_view'])->name('logistik.so.create');
@@ -335,19 +337,19 @@ Route::group(['prefix' => 'logistik'], function () {
 
     Route::group(['prefix' => '/pengiriman'], function () {
         // Route::group(['middleware' => ['divisi:jual,asp,dirut,log']], function () {
-            Route::view('/show', 'page.logistik.pengiriman.show')->name('logistik.pengiriman.show');
-            Route::post('/data/{pengiriman}/{provinsi}/{jenis_penjualan}', [App\Http\Controllers\LogistikController::class, 'get_data_pengiriman']);
-            Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_pengiriman_detail_data'])->name('logistik.pengiriman.detail');
-            Route::view('/noseri/{id}', 'page.logistik.pengiriman.noseri')->name('logistik.pengiriman.noseri');
-            Route::view('/create', 'page.logistik.pengiriman.create')->name('logistik.pengiriman.create');
-            // Route::view('/edit/{id}', 'page.logistik.pengiriman.edit')->name('logistik.pengiriman.edit');
-            Route::get('/edit/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'update_modal_surat_jalan'])->name('logistik.pengiriman.edit');
-            Route::get('/print/{id}', [App\Http\Controllers\LogistikController::class, 'pdf_surat_jalan'])->name('logistik.pengiriman.print');
-            Route::get('/prints/{id}', [App\Http\Controllers\LogistikController::class, 'cetak_surat_jalan']);
-            Route::get('/edit_sj_draft/{id}', [App\Http\Controllers\LogistikController::class, 'edit_sj']);
-            Route::group(['prefix' => '/riwayat'], function () {
-                Route::view('/show', 'page.logistik.pengiriman.riwayat.show')->name('logistik.riwayat.show');
-            });
+        Route::view('/show', 'page.logistik.pengiriman.show')->name('logistik.pengiriman.show');
+        Route::post('/data/{pengiriman}/{provinsi}/{jenis_penjualan}', [App\Http\Controllers\LogistikController::class, 'get_data_pengiriman']);
+        Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_pengiriman_detail_data'])->name('logistik.pengiriman.detail');
+        Route::view('/noseri/{id}', 'page.logistik.pengiriman.noseri')->name('logistik.pengiriman.noseri');
+        Route::view('/create', 'page.logistik.pengiriman.create')->name('logistik.pengiriman.create');
+        // Route::view('/edit/{id}', 'page.logistik.pengiriman.edit')->name('logistik.pengiriman.edit');
+        Route::get('/edit/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'update_modal_surat_jalan'])->name('logistik.pengiriman.edit');
+        Route::get('/print/{id}', [App\Http\Controllers\LogistikController::class, 'pdf_surat_jalan'])->name('logistik.pengiriman.print');
+        Route::get('/prints/{id}', [App\Http\Controllers\LogistikController::class, 'cetak_surat_jalan']);
+        Route::get('/edit_sj_draft/{id}', [App\Http\Controllers\LogistikController::class, 'edit_sj']);
+        Route::group(['prefix' => '/riwayat'], function () {
+            Route::view('/show', 'page.logistik.pengiriman.riwayat.show')->name('logistik.riwayat.show');
+        });
         // });
     });
 
@@ -509,7 +511,7 @@ Route::group(['prefix' => '/gk', 'middleware' => ['auth', 'divisi:gk,dirut']], f
     Route::get('/export-unit', [SparepartController::class, 'exportUnit'])->name('gk.export-unit');
 });
 
-Route::get('/testing/pbj',[ProduksiController::class, 'cetakTest']);
+Route::get('/testing/pbj', [ProduksiController::class, 'cetakTest']);
 
 Route::view('/uit', 'page.login_page.index');
 

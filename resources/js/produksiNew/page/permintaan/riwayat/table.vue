@@ -43,12 +43,7 @@ export default {
     methods: {
         async detail(data) {
             try {
-                const { data: mapArray } = await axios.get(`/api/gbj/rw/riwayat_permintaan/${data.id}`)
-
-                this.dataSelected = {
-                    header: data,
-                    data: mapArray
-                }
+                this.dataSelected = data
 
                 this.showModal = true
                 this.$nextTick(() => {
@@ -60,7 +55,7 @@ export default {
         },
 
         async cetakPenerimaan(data) {
-            window.open(`/produksi/surat_permintaan/${data.id}`)
+            window.open(`/produksi/surat_permintaan/${data.id}`, '_blank')
         }
     },
 }
@@ -79,7 +74,7 @@ export default {
                     <i class="fas fa-info-circle"></i>
                     Detail
                 </button>
-                <button class="btn btn-sm btn-outline-info" @click="cetakPenerimaan(item)">
+                <button class="btn btn-sm btn-outline-primary" @click="cetakPenerimaan(item)">
                     <i class="fas fa-print"></i>
                     Cetak
                 </button>

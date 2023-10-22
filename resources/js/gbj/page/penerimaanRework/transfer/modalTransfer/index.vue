@@ -54,7 +54,13 @@ export default {
         async getData() {
             try {
                 const { data } = await axios.get(`/api/gbj/rw/dp/seri/${this.id}`);
-                this.dataTable = data;
+                this.dataTable = data.map((data) => {
+                    data.layout = {
+                        id: 7,
+                        label: 'Blok B'
+                }
+                    return data
+                })
             } catch (error) {
                 console.log(error);
             }
@@ -183,7 +189,12 @@ export default {
         },
         async simpan() {
             try {
-                await axios.post('/api/gbj/rw/terima', this.noSeriSelected)
+                await axios.post('/api/gbj/rw/terima', this.noSeriSelected, {
+                    headers: {
+                        'Authorization': `Bearer` + localStorage.getItem('lokal_token'),
+
+                    }
+                })
                 this.$swal({
                     title: 'Berhasil!',
                     text: 'Data berhasil disimpan',

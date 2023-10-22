@@ -1,5 +1,6 @@
 <script>
 export default {
+    props: ['data'],
     methods: {
         closeModal() {
             $('.modalPilihan').modal('hide');
@@ -7,6 +8,14 @@ export default {
                 this.$emit('closeModal');
             });
         },
+        small() {
+            let cetak = JSON.stringify(this.data);
+            window.open(`/produksiReworks/cetak_seri_fg_small?data=${cetak}`, '_blank')
+        },
+        medium() {
+            let cetak = JSON.stringify(this.data);
+            window.open(`/produksiReworks/cetak_seri_fg_medium?data=${cetak}`, '_blank')
+        }
     },
 }
 </script>
@@ -22,8 +31,8 @@ export default {
                 </div>
                 <div class="modal-body text-center">
                     <h1>Silahkan Pilih Hasil Cetak</h1>
-                    <button type="button" class="btn btn-primary btn-lg">Kertas Kecil</button>
-                    <button type="button" class="btn btn-primary btn-lg">Kertas Medium</button>
+                    <button type="button" class="btn btn-primary btn-lg" @click="small">Kertas Kecil</button>
+                    <button type="button" class="btn btn-primary btn-lg" @click="medium">Kertas Medium</button>
                 </div>
             </div>
         </div>

@@ -24,23 +24,15 @@ export default {
                 },
             ],
             dataPerakitan: [],
-            dataRiwayat: [
-                {
-                    id: 1,
-                    noseri: '123456789',
-                    tanggal_dibuat: '12 Januari 2021',
-                    no_bppb: '123456789',
-                    nama_produk: 'Produk 1',
-                }
-            ],
+            dataRiwayat: [],
         }
     },
     methods: {
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true)
-                const { data } = await axios.get('/api/prd/ongoing')
-                this.dataPerakitan = data.map(item => {
+                const { data: perakitan } = await axios.get('/api/prd/ongoing')
+                this.dataPerakitan = perakitan.map(item => {
                     return {
                         ...item,
                         periode: this.periode(item.tanggal_mulai),
@@ -49,6 +41,14 @@ export default {
                         kurang_rakit: `Kurang ${item.jumlah - item.jumlah_rakit}`,
                         kurang: item.jumlah - item.jumlah_rakit,
                         jumlah_unit: `${item.jumlah} Unit`
+                    }
+                })
+
+                const { data: riwayat } = await axios.get('/api/prd/fg/riwayat')
+                this.dataRiwayat = riwayat.map(item => {
+                    return {
+                        ...item,
+                        tgl_buat: this.dateFormat(item.tgl_buat),
                     }
                 })
             } catch (error) {
@@ -83,13 +83,18 @@ export default {
                             type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat</a>
                     </li>
                 </ul>
-                <div class="tab-content" id="pills-tabContent">
+                <div class="tab-content" id="pills-tabContent" v-if="!$store.state.loading">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                         <perakitan :dataTable="dataPerakitan" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                         <riwayat :dataRiwayat="dataRiwayat" />
                     </div>
+                </div>
+                <div v-else>
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>              
                 </div>
             </div>
         </div>
