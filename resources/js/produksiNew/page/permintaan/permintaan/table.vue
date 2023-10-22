@@ -83,7 +83,7 @@ export default {
             </tbody>
             <tbody v-else>
                 <tr>
-                    <td colspan="4" class="text-center">Tidak ada data</td>
+                    <td colspan="100%" class="text-center">Tidak ada data</td>
                 </tr>
             </tbody>
         </table>
