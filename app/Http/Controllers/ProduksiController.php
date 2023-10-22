@@ -4330,19 +4330,7 @@ class ProduksiController extends Controller
     {
         $data =  json_decode($request->data, true);
         $customPaperSmall = array(0, 0, 130.46, 220.69);
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperSmall, 'landscape');
-        return $pdf->stream();
-    }
-
-    function cetak_seri_finish_goods($seri)
-    {
-        // $customPaperLarge = array(0, 0, 90.46, 290.69);
-        $customPaperMedium = array(0, 0, 90.46, 170.69);
-        // $customPaperSmall = array(0, 0, 18.9, 151.2);
-        $customPaperSmall = array(0, 0, 90.46, 170.69);
-        // buat 5.5cm x 2.5cm
-        $customPaper = array(0, 0, 130.46, 220.69);
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakseri', compact('seri'))->setPaper($customPaper, 'portrait');
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserismall', compact('data'))->setPaper($customPaperSmall, 'landscape');
         return $pdf->stream();
     }
 

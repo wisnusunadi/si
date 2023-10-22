@@ -51,7 +51,7 @@
     @endphp
 
     {{-- ulangi 5 kali --}}
-    @for ($i = 0; $i < 1; $i++)
+    @foreach ($data as $item)
         {{-- large --}}
         {{-- <div class="image-container">
         <span>Elitech</span><br>
@@ -69,8 +69,8 @@
         {{-- small --}}
         <div class="image-container">
         <img
-            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($seri, $generator::TYPE_CODE_128_B, 0.70, 13)) }}" />
-        <div class="small-text">{{ $seri }}</div>
+            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_128_B, 0.70, 13)) }}" />
+        <div class="small-text">{{ $item['noseri'] }}</div>
     </div>
 
         {{-- create square --}}
@@ -78,6 +78,6 @@
             <span>zxcvbnmasdfghjklqwertyuiopmnbvcxzlkjhgfdsapoiuytr</span>
         
         </div> --}}
-    @endfor
+    @endforeach
 </body>
 </html>
