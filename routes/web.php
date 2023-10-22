@@ -128,7 +128,9 @@ Route::group(['prefix' => '/produksi', 'middleware' => ['auth', 'divisi:prd,diru
     Route::get('/export_noseri', [ProduksiController::class, 'export_noseri_produksi'])->name('export.rakitseri');
     Route::view('/pengiriman', 'page.produksi.pengiriman');
     Route::view('/riwayat_transfer', 'page.produksi.riwayat_transfer');
+    Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'cetakSuratPermintaan']);
     Route::view('/{any?}', 'page.produksi.new_produksi')->where('any', '.*');
+
 });
 
 Route::group(['prefix' => '/produksiReworks'], function () {

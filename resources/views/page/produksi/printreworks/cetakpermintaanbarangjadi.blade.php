@@ -110,6 +110,20 @@
 </head>
 
 <body>
+    @php
+        function dateformatIndo($date) {
+        $BulanIndo = array(
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        );
+        $tahun = substr($date, 0, 4);
+        $bulan = substr($date, 5, 2);
+        $tgl = substr($date, 8, 2);
+        $result = $tgl . " " . $BulanIndo[(int) $bulan - 1] . " " . $tahun;
+        return ($result);
+        }
+    @endphp
+
     <table class="utama">
         <tr>
             <td class="td-padding text-center" rowspan="4">
@@ -143,19 +157,19 @@
         <table>
             <tr>
                 <td style="width: 22%">No. Permintaan</td>
-                <td style="width: 40%">: 0001/X/2003</td>
+                <td style="width: 40%">: {{ $data->no }}</td>
                 <td style="width: 15%"></td>
                 <td class="text-center td-full-border">No. Referensi</td>
             </tr>
             <tr>
                 <td>Tanggal Permintaan</td>
-                <td>: 18 Oktober 2023</td>
+                <td>: {{ dateFormatIndo($data->tanggal_mulai) }}</td>
                 <td style="width: 15%"></td>
-                <td class="text-center td-urutan"><b>PRD-1</b></td>
+                <td class="text-center td-urutan"><b>PRD-{{ $data->urutan }}</b></td>
             </tr>
             <tr>
                 <td>Tanggal Digunakan</td>
-                <td>: 18 Oktober 2023</td>
+                <td>: {{ dateFormatIndo($data->tanggal_selesai) }}</td>
             </tr>
             <tr>
                 <td>Bagian</td>
@@ -178,16 +192,13 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($data->item as $item)
                 <tr>
-                    <td>656356</td>
-                    <td>Antropometri Kit 10</td>
-                    <td>100 Unit</td>
-                </tr>
-                <tr>
-                    <td>656356</td>
-                    <td>Antropometri Kit 10</td>
-                    <td>100 Unit</td>
-                </tr>
+                    <td>-</td>
+                    <td>{{ $item->produk_id }}</td>
+                    <td>{{ $item->jumlah }} Unit</td>
+                </tr>    
+                @endforeach
             </tbody>
         </table>
     </main>
@@ -198,9 +209,7 @@
                 <td>Catatan :</td>
             </tr>
             <tr>
-                <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias nesciunt ex ratione hic iste
-                    adipisci minus. Eligendi, repudiandae, nemo suscipit consectetur deleniti nobis esse doloribus eos
-                    distinctio cupiditate at. Ab.</td>
+                <td style="color: white">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis sed quasi aperiam ipsam, nobis, sapiente sequi et doloremque modi id mollitia assumenda, rerum neque exercitationem est amet iste autem. Non!</td>
             </tr>
         </table>
 
@@ -210,6 +219,7 @@
             </tr>
             <tr>
                 <td style="padding-top: 70px;">
+                    {{ $data->nama }}
                     <hr>
                 </td>
             </tr>
