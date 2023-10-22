@@ -72,7 +72,7 @@ class GudangController extends Controller
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
-            // dd($obj);
+          //   dd($obj);
             foreach ($obj->produk as $p) {
                 for ($j = 0; $j < count($p->noseri); $j++) {
                     JadwalRakitNoseriRw::create([
@@ -86,6 +86,7 @@ class GudangController extends Controller
                         ->update([
                             'is_ready' => 1,
                             'used_by' => $p->id,
+                            'reworks_id' =>'Perakitan ' . $obj->no_urut,
                         ]);
                 }
             }
