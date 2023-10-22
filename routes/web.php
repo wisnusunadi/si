@@ -142,8 +142,6 @@ Route::group(['prefix' => '/produksiReworks'], function () {
     Route::get('/cetakpackinglist/{id}', [ProduksiController::class, 'cetak_packing_list']);
 });
 
-
-
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {
 //     Route::view('/produk/{any?}', 'page.penjualan.produk');
 //     Route::view('/customer/{any?}', 'page.penjualan.customer');
