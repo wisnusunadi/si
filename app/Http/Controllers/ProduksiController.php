@@ -4329,7 +4329,7 @@ class ProduksiController extends Controller
     function cetak_seri_finish_goods_small(Request $request)
     {
         $data =  json_decode($request->data, true);
-        $customPaperSmall = array(0, 0, 130.46, 220.69);
+        $customPaperSmall = array(0, 0, 35.46, 150.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserismall', compact('data'))->setPaper($customPaperSmall, 'landscape');
         return $pdf->stream();
     }

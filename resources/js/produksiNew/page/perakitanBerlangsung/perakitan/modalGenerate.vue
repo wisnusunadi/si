@@ -57,9 +57,11 @@ export default {
                     this.closeModal()
                 } catch (error) {
                     const { message, seri, duplicate, available } = error.response.data
-                    this.isError = true
                     this.seri = seri
                     this.available = available
+                    if (this.seri.length > 0 || this.available > 0) {
+                        this.isError = true
+                    }
                     this.duplicate = duplicate.map(item => {
                         return {
                             seri: item,

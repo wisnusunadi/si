@@ -8,40 +8,17 @@
             text-align: center;
         }
 
-        /* large */
-        /* @page {
-            margin-top: 0.08cm;
-            margin-left: 0.5cm;
-        } */
-
-        /* medium */
-        /* @page {
-            margin-top: 0.2cm;
-            margin-left: 0.2cm;
-        } */
-
-        /* small */
-        /* @page {
-            margin: 0.6cm 0cm -0.2cm 0.4cm;
-            font-size: 5pt;
-        } */
-
         /* small new */
         @page {
-            margin-top: 0.95cm;
+            margin-top: 0.55cm;
             margin-left: 0.5cm;
+            margin-bottom: 0cm;
             font-size: 8pt;
         }
 
         .small-text {
             margin-left: 0.6cm;
         }
-
-        /* .rectangle {
-            width: 100%;
-            height: 28%;
-            border: 1px solid black;
-        } */
     </style>
 </head>
 
@@ -52,32 +29,12 @@
 
     {{-- ulangi 5 kali --}}
     @foreach ($data as $item)
-        {{-- large --}}
-        {{-- <div class="image-container">
-        <span>Elitech</span><br>
-        <img
-            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($seri, $generator::TYPE_CODE_128_B, 2, 29)) }}" />
-        <div class="text-center">{{ $seri }}</div>
-    </div> --}}
-        {{-- medium --}}
-        {{-- <div class="image-container">
-        <span>Elitech</span><br>
-        <img
-            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($seri, $generator::TYPE_CODE_128_B, 0.95, 29)) }}" />
-        <div class="text-center">{{ $seri }}</div>
-    </div> --}}
-        {{-- small --}}
         <div class="image-container">
-        <img
-            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_128_B, 0.70, 13)) }}" />
-        <div class="small-text">{{ $item['noseri'] }}</div>
-    </div>
-
-        {{-- create square --}}
-        {{-- <div class="rectangle">
-            <span>zxcvbnmasdfghjklqwertyuiopmnbvcxzlkjhgfdsapoiuytr</span>
-        
-        </div> --}}
+            <img
+                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_128_B, 0.7, 13)) }}" />
+            <div class="small-text">{{ $item['noseri'] }}</div>
+        </div>
     @endforeach
 </body>
+
 </html>
