@@ -284,32 +284,34 @@ class ProduksiController extends Controller
 
     function generate_fg(Request $request)
     {
+
         DB::beginTransaction();
         try {
             //code...
-            $prd = Produk::find($request->produk_id);
-            $jp = JadwalPerakitan::find($request->jadwal_id);
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+            $prd = Produk::find($obj->produk_id);
+            $jp = JadwalPerakitan::find($obj->jadwal_id);
             $kurang = $jp->jumlah - $jp->noseri->count();
             $getTgl = Carbon::now();
             $tahun = $getTgl->format('Y') % 100;
             $bulan =  strtoupper(dechex($getTgl->format('m')));;
             //Default
-            $kedatangan =  strtoupper(dechex($request->kedatangan));
-            for ($i = 1; $i <= $request->jml_noseri; $i++) {
-                $newSeri[] = $prd->kode . $tahun . $bulan . $kedatangan . str_pad($request->no_urut_terakhir + $i, 5, '0', STR_PAD_LEFT);
+            $kedatangan =  strtoupper(dechex($obj->kedatangan));
+            for ($i = 1; $i <= $obj->jml_noseri; $i++) {
+                $newSeri[] = $prd->kode . $tahun . $bulan . $kedatangan . str_pad($obj->no_urut_terakhir + $i, 5, '0', STR_PAD_LEFT);
                 $newSeries[] = array(
-                    'jadwal_id' => $request->jadwal_id,
-                    'no_bppb' => $request->no_bppb,
-                    'no_urut' => $request->no_urut_terakhir + $i,
+                    'jadwal_id' => $obj->jadwal_id,
+                    'no_bppb' => $obj->no_bppb,
+                    'no_urut' => $obj->no_urut_terakhir + $i,
                     'kode' =>  $prd->kode,
                     'tahun' => $tahun,
                     'bulan' => $bulan,
                     'kedatangan' => $kedatangan,
-                    'seri' => $prd->kode . $tahun . $bulan . $kedatangan . str_pad($request->no_urut_terakhir + $i, 5, '0', STR_PAD_LEFT)
+                    'seri' => $prd->kode . $tahun . $bulan . $kedatangan . str_pad($obj->no_urut_terakhir + $i, 5, '0', STR_PAD_LEFT)
                 );
             }
 
-            if ($request->jml_noseri <= $kurang && $prd->kode != NULL) {
+            if ($obj->jml_noseri <= $kurang && $prd->kode != NULL) {
                 $queryResultPrd = JadwalRakitNoseri::whereIN('noseri', $newSeri)->pluck('noseri')->toArray();
                 $queryResultGbj = NoseriBarangJadi::whereIN('noseri', $newSeri)->pluck('noseri')->toArray();
                 $combinedArray = array_merge($queryResultPrd, $queryResultGbj);
@@ -323,8 +325,8 @@ class ProduksiController extends Controller
 
                     foreach ($filteredNoseri as $f) {
                         JadwalRakitNoseri::create([
-                            'jadwal_id' => $request->jadwal_id,
-                            'no_bppb' => $request->no_bppb,
+                            'jadwal_id' => $obj->jadwal_id,
+                            'no_bppb' => $obj->no_bppb,
                             'urutan' => $f['no_urut'],
                             'unit' => $f['kode'],
                             'th' => $f['tahun'],
@@ -348,7 +350,6 @@ class ProduksiController extends Controller
                         'available' =>   array(),
                     ], 200);
                 } else {
-
                     if ($available) {
                         $noseriCollection = collect($newSeries);
                         $filteredNoseri = $noseriCollection->whereIn('seri', $available);
@@ -2965,7 +2966,7 @@ class ProduksiController extends Controller
     function on_rakit()
     {
         try {
-            $data = DB::select("select mp.nama,jp.id, jp.produk_id, jp.created_at, jp.tanggal_mulai, jp.tanggal_selesai,
+            $data = DB::select("select mp.nama,jp.id, p.id as produk_id, jp.created_at, jp.tanggal_mulai, jp.tanggal_selesai,
         jp.no_bppb, jp.jumlah, jp.evaluasi, count(jrn.jadwal_id) as jml_rakit,
         concat(p.nama,' ',gbj.nama) as produkk,
         datediff(now(), jp.tanggal_selesai) as selisih
