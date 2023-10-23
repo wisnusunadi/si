@@ -32,7 +32,7 @@ export default {
     },
     methods: {
         keyUpperCase(e) {
-            e.target.value = e.target.value.toUpperCase();
+            this.dataGenerate.no_bppb = e.target.value.toUpperCase()
         },
         closeModal() {
             $('.modalGenerate').modal('hide')
@@ -61,6 +61,9 @@ export default {
                     this.available = available
                     if (this.seri.length > 0 || this.available > 0) {
                         this.isError = true
+                    } else {
+                        this.isError = false
+                        this.loading = false
                     }
                     this.duplicate = duplicate.map(item => {
                         return {
@@ -93,7 +96,13 @@ export default {
             } catch (error) {
                 console.log(error)
             }
-        }
+        },
+        closeModalCetak() {
+            this.showModalCetak = false
+            this.$nextTick(() => {
+                $('.modalGenerate').modal('show')
+            })
+        },
     },
     computed: {
         jumlahRakit() {
@@ -110,12 +119,6 @@ export default {
                 this.form.kedatangan = val
             }
         },
-    },
-    closeModalCetak() {
-        this.showModalCetak = false
-        this.$nextTick(() => {
-            $('.modalGenerate').modal('show')
-        })
     },
 }
 </script>
@@ -142,7 +145,8 @@ export default {
                                         <div class="card">
                                             <div class="card-body">
                                                 <input type="text" name="no_bppb" id="no_bppb" class="form-control"
-                                                    v-model="dataGenerate.no_bppb" :disabled="loading" @keyup="keyUpperCase($event)">
+                                                    v-model="dataGenerate.no_bppb" :disabled="loading"
+                                                    @keyup="keyUpperCase($event)">
                                             </div>
                                         </div>
                                     </div>
@@ -194,12 +198,12 @@ export default {
                                 <form>
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Kedatangan</label>
-                                        <input type="text" class="form-control" v-model.number="form.kedatangan"
+                                        <input type="number" class="form-control" v-model.number="form.kedatangan"
                                             @keypress="numberOnly($event)">
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">Jumlah Noseri yang dibuat</label>
-                                        <input type="text" class="form-control"
+                                        <input type="number" class="form-control"
                                             :class="jumlahRakit ? 'is-valid' : 'is-invalid'" @keypress="numberOnly($event)"
                                             v-model.number="form.jml_noseri">
                                         <div class="invalid-feedback" v-if="!jumlahRakit">
@@ -208,7 +212,7 @@ export default {
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">No Urut Terakhir</label>
-                                        <input type="text" class="form-control" @keypress="numberOnly($event)"
+                                        <input type="number" class="form-control" @keypress="numberOnly($event)"
                                             v-model.number="form.no_urut_terakhir">
                                     </div>
                                 </form>
@@ -255,7 +259,8 @@ export default {
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                         <button type="button" class="btn btn-success" v-if="!isError" :disabled="loading"
                             @click="simpan">Generate</button>
-                        <button type="button" class="btn btn-success" v-if="seri.length > 0" @click="simpanSeri">Simpan</button>
+                        <button type="button" class="btn btn-success" v-if="seri.length > 0"
+                            @click="simpanSeri">Simpan</button>
                     </div>
                 </div>
             </div>
