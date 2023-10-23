@@ -285,7 +285,7 @@ class ProduksiController extends Controller
     function generate_fg(Request $request)
     {
 
-       // DB::beginTransaction();
+        DB::beginTransaction();
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
