@@ -60,9 +60,14 @@ export default {
                     <i class="fas fa-info-circle"></i>
                     Detail
                 </button>
-                <button class="btn btn-sm btn-outline-primary" @click="cetak(item.id)">
+                <button class="btn btn-sm btn-outline-warning">
                     <i class="fas fa-print"></i>
-                    Cetak
+                    Cetak FPBJ
+                </button>
+                <!-- cetak sesuai urutannya -->
+                <button class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-print"></i>
+                    Cetak Permintaan
                 </button>
             </template>
         </DataTable>

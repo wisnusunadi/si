@@ -214,7 +214,7 @@
                                                 <tr>
                                                     <th><input type="checkbox" name="" id="head-cb"></th>
                                                     <th>Nomor Seri</th>
-                                                    <th>Aksi</th>
+                                                    {{-- <th>Aksi</th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody class="scan"></tbody>
@@ -584,16 +584,16 @@
                     {
                         data: "no_seri"
                     },
-                    {
-                        data: "id",
-                        render: function(data, type, row) {
-                            return '<button type="button" class="btn btn-outline-primary btn-sm detail" data-id="' +
-                                data + '" data-seri="' + row.no_seri +
-                                '"><i class="fas fa-edit"></i></button>&nbsp;<button type="button" class="btn btn-outline-danger btn-sm delete" data-id="' +
-                                data + '" data-seri="' + row.no_seri +
-                                '"><i class="fas fa-trash"></i></button>'
-                        }
-                    }
+                    // {
+                    //     data: "id",
+                    //     render: function(data, type, row) {
+                    //         return '<button type="button" class="btn btn-outline-primary btn-sm detail" data-id="' +
+                    //             data + '" data-seri="' + row.no_seri +
+                    //             '"><i class="fas fa-edit"></i></button>&nbsp;<button type="button" class="btn btn-outline-danger btn-sm delete" data-id="' +
+                    //             data + '" data-seri="' + row.no_seri +
+                    //             '"><i class="fas fa-trash"></i></button>'
+                    //     }
+                    // }
                 ],
                 columnDefs: [{
                     targets: [0],
@@ -888,7 +888,16 @@
 
         $('body').on('submit', '#formClose', function(e) {
             e.preventDefault();
-            $('#btnCloseSimpan').html('Sending..');
+
+            if($('#keterangan_transfer').val() == ''){
+                Swal.fire(
+                    'Error!',
+                    'Keterangan tidak boleh kosong',
+                    'error'
+                )
+                return false;
+            }
+
             var formData = new FormData(this);
 
             Swal.fire({
@@ -907,6 +916,7 @@
                         allowOutsideClick: false,
                         showConfirmButton: false
                     });
+                    $('#btnCloseSimpan').html('Sending..');
                     $(this).prop('disabled', true);
                     $.ajax({
                         url: "/api/tfp/closeTransfer",

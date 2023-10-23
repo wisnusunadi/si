@@ -106,7 +106,7 @@ export default {
     },
     computed: {
         jumlahRakit() {
-            return this.dataGenerate.kurang > this.form.jml_noseri ? true : false
+            return this.dataGenerate.kurang >= this.form.jml_noseri ? true : false
         },
     },
     watch: {

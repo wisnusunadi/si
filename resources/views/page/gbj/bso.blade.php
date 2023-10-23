@@ -838,10 +838,16 @@
                         data: null,
                         render: function(data, type, row) {
                             if(data.isaktif == 1){
-                                return `<a class="btn btn-sm btn-info" href="/produksiReworks/viewpackinglist/${data.id}" target="_blank">
+                                return `
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-info-circle"></i>
+                                    Detail Packing List
+                                    </button>
+                                 <a class="btn btn-sm btn-outline-info" href="/produksiReworks/viewpackinglist/${data.id}" target="_blank">
                                     <i class="fas fa-eye"></i>
                                     View Packing List
-                                    </a>`
+                                    </a>
+                                `
                             } else {
                                 return ''
                             }

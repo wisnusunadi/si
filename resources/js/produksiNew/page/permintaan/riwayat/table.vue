@@ -74,9 +74,9 @@ export default {
                     <i class="fas fa-info-circle"></i>
                     Detail
                 </button>
-                <button class="btn btn-sm btn-outline-primary" @click="cetakPenerimaan(item)">
+                <button class="btn btn-sm btn-outline-primary">
                     <i class="fas fa-print"></i>
-                    Cetak
+                    Cetak FPBJ
                 </button>
             </template>
         </data-table>

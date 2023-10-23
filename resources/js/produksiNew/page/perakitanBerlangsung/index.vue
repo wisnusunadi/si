@@ -73,7 +73,7 @@ export default {
         <Header :breadcumbs="breadcumbs" :title="title" />
         <div class="card">
             <div class="card-body">
-                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" v-if="!$store.state.loading">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
                             type="button" role="tab" aria-controls="pills-home" aria-selected="true">Perakitan</a>

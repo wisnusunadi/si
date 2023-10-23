@@ -66,7 +66,7 @@ export default {
             }
         },
         cetakSeri(noseri) {
-            this.cetakSeriSingle.push(noseri)
+            this.cetakSeriSingle = [noseri]
             this.cetakSeriType = 'single'
             this.$nextTick(() => {
                 $('.modalPilihan').modal('show');

@@ -104,10 +104,10 @@ export default {
                     Terima
                 </button>
 
-                <!-- <button class="btn btn-sm btn-outline-info" @click="cetak(item.id)">
+                <button class="btn btn-sm btn-outline-info" @click="cetak(item.id)">
                     <i class="fas fa-print"></i>
-                    Cetak
-                </button> -->
+                    Cetak BPBJ
+                </button>
             </template>
         </DataTable>
     </div>

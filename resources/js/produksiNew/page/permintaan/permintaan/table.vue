@@ -73,10 +73,13 @@ export default {
                         <status :status="data.status" />
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-outline-info" v-if="data.status != 'Proses'"
-                            @click="kirim(data)">
+                        <button class="btn btn-sm btn-outline-info" v-if="data.status != 'Proses'" @click="kirim(data)">
                             <i class="fas fa-paper-plane"></i>
                             Kirim
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-print"></i>
+                            Cetak Permintaan
                         </button>
                     </td>
                 </tr>

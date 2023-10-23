@@ -25,15 +25,15 @@ export default {
             this.$emit('refresh');
         },
         statusReworks(belum, selesai, jumlah) {
-            if(selesai == jumlah) {
+            if (selesai == jumlah) {
                 return 'selesai'
             }
 
-            if(selesai == 0){
+            if (selesai == 0) {
                 return 'belum_dikerjakan'
             }
 
-            if(selesai != jumlah && belum !=0) {
+            if (selesai != jumlah && belum != 0) {
                 return 'sedang_dikerjakan'
             }
         },
@@ -63,11 +63,17 @@ export default {
                     <td>{{ data.nama }}</td>
                     <td>{{ data.selesai }}</td>
                     <td>{{ data.belum }}</td>
-                    <td><status :status="statusReworks(data.belum, data.selesai, data.jumlah)" /></td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary" @click="detail(data)">
+                        <status :status="statusReworks(data.belum, data.selesai, data.jumlah)" />
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-info" @click="detail(data)">
                             <i class="fas fa-eye"></i>
                             Detail
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-print"></i>
+                            Cetak Permintaan
                         </button>
                     </td>
                 </tr>

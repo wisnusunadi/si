@@ -1458,7 +1458,7 @@ class GudangController extends Controller
                 })
                 ->addColumn('date_in', function ($d) {
                     if (isset($d->header->tgl_masuk)) {
-                        return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY');
+                        return Carbon::parse($d->header->tgl_masuk)->isoFormat('D-MM-YYYY');
                     } else {
                         return "-";
                     }
@@ -2117,11 +2117,6 @@ class GudangController extends Controller
                 })
                 ->addColumn('action', function ($d) {
                     return  '
-                            <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-produk="' . $d->product . '"data-attr=""  data-id="' . $d->id . '" data-tgl="' . $d->tgl_masuk . '" data-brgid="' . $d->gbj_id . '">
-                                <button class="btn btn-outline-info btn-sm" type="button" >
-                                <i class="far fa-eye"></i>&nbsp;Detail
-                                </button>
-                            </a>
                             <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-produk="' . $d->product . '" data-attr=""  data-id="' . $d->id . '" data-tgl="' . $d->tgl_masuk . '" data-brgid="' . $d->gbj_id . '">
                                 <button class="btn btn-outline-primary btn-sm" type="button" >
                                 <i class="far fa-edit"></i>&nbsp;Terima

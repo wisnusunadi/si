@@ -51,7 +51,7 @@ export default {
                 </button>
                 <button class="btn btn-sm btn-outline-primary" @click="cetak(item.id)">
                     <i class="fas fa-print"></i>
-                    Cetak
+                    Cetak BPBJ
                 </button>
             </template>
         </DataTable>

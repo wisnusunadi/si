@@ -47,6 +47,10 @@ export default {
                     <i class="fas fa-info-circle"></i>
                     Detail
                 </button>
+                <button class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-print"></i>
+                    Cetak BPBJ
+                </button>
             </template>
         </DataTable>
     </div>
