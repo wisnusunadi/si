@@ -289,9 +289,7 @@ class ProduksiController extends Controller
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
-
             $prd = Produk::find($obj->produk_id);
-            dd($prd);
             $jp = JadwalPerakitan::find($obj->jadwal_id);
             $kurang = $jp->jumlah - $jp->noseri->count();
             $getTgl = Carbon::now();
@@ -2969,7 +2967,7 @@ class ProduksiController extends Controller
     function on_rakit()
     {
         try {
-            $data = DB::select("select mp.nama,jp.id, jp.produk_id, jp.created_at, jp.tanggal_mulai, jp.tanggal_selesai,
+            $data = DB::select("select mp.nama,jp.id, p.id as produk_id, jp.created_at, jp.tanggal_mulai, jp.tanggal_selesai,
         jp.no_bppb, jp.jumlah, jp.evaluasi, count(jrn.jadwal_id) as jml_rakit,
         concat(p.nama,' ',gbj.nama) as produkk,
         datediff(now(), jp.tanggal_selesai) as selisih
