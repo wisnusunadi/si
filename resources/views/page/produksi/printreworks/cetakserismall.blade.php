@@ -10,14 +10,18 @@
 
         /* small new */
         @page {
-            margin-top: 0.55cm;
-            margin-left: 0.5cm;
+            margin-top: 0.05cm;
+            margin-left: 0.3cm;
             margin-bottom: 0cm;
             font-size: 8pt;
         }
 
         .small-text {
-            margin-left: 0.6cm;
+            margin-left: 0.8cm;
+        }
+
+        .page-break {
+            page-break-after: always;
         }
     </style>
 </head>
@@ -29,9 +33,10 @@
 
     {{-- ulangi 5 kali --}}
     @foreach ($data as $item)
-        <div class="image-container">
+    {{-- when last page not page break --}}
+        <div class="{{ $loop->last ? '' : 'page-break' }}">
             <img
-                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_128_B, 0.7, 13)) }}" />
+                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_39, 0.55, 20)) }}" />
             <div class="small-text">{{ $item['noseri'] }}</div>
         </div>
     @endforeach
