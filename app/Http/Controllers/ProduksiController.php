@@ -350,7 +350,6 @@ class ProduksiController extends Controller
                         'available' =>   array(),
                     ], 200);
                 } else {
-
                     if ($available) {
                         $noseriCollection = collect($newSeries);
                         $filteredNoseri = $noseriCollection->whereIn('seri', $available);
