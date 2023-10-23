@@ -841,11 +841,11 @@
                                 return `
                                 <button class="btn btn-sm btn-outline-primary">
                                     <i class="fas fa-info-circle"></i>
-                                    Detail Packing List
+                                    Detail No. Seri Produk
                                     </button>
-                                 <a class="btn btn-sm btn-outline-info" href="/produksiReworks/viewpackinglist/${data.id}" target="_blank">
+                                 <a class="btn btn-sm btn-outline-warning" href="/produksiReworks/viewpackinglist/${data.id}" target="_blank">
                                     <i class="fas fa-eye"></i>
-                                    View Packing List
+                                    Lihat Packing List
                                     </a>
                                 `
                             } else {
