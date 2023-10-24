@@ -703,7 +703,7 @@ class ProduksiController extends Controller
 
     function permintaan_rw(Request $request)
     {
-        DB::beginTransaction();
+     //   DB::beginTransaction();
         try {
             //code...
             $jumlah_tf = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
@@ -735,6 +735,7 @@ class ProduksiController extends Controller
                 $object->tanggal_mulai = $data->first()->tanggal_mulai;
                 $object->tanggal_selesai = $data->first()->tanggal_selesai;
                 $object->nama = auth()->user()->karyawan->nama;
+                $object->nama_produk = $data->first()->ProdukRw->nama;
                 $object->item = $item;
 
                 $data = SystemLog::create([
@@ -776,7 +777,7 @@ class ProduksiController extends Controller
                     'no' => $x->no,
                     'urutan' => $x->urutan,
                     'produk' => $x->nama,
-                    'nama' => 'ANTROPOMETRI KIT-10',
+                    'nama' => 'ANTROPOMETRI KIT-101',
                     'tgl_mulai' => $x->tanggal_mulai,
                     'tgl_selesai' => $x->tanggal_selesai,
                     'tgl_tf' => $d->created_at,
