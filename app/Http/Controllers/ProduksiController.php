@@ -3452,13 +3452,23 @@ class ProduksiController extends Controller
     {
         try {
             $obj =  json_decode(json_encode($request->all()), FALSE);
-            foreach ($obj as $o) {
-                $seri[] = array(
-                    'seri' => $o->noseri
-                );
+            foreach ($obj->item as $o) {
+                $data[] = $o->noseri;
             }
 
-            return $seri;
+
+            if($request->ukuran == 'medium'){
+                $customPaperMedium = array(0, 0, 90.46, 170.69);
+                $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperMedium, 'landscape');
+            }else{
+                $customPaperSmall = array(0, 0, 75.46, 150.69);
+                $pdf = PDF::loadview('page.produksi.printreworks.cetakserismall',compact('data'))->setPaper($customPaperSmall  , 'landscape');
+
+            }
+
+           return $pdf->stream();
+
+
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -4336,7 +4346,7 @@ class ProduksiController extends Controller
     }
 
     function cetak_seri_finish_goods_small(Request $request)
-    {
+{
         $data =  json_decode($request->data, true);
         $customPaperSmall = array(0, 0, 75.46, 150.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserismall', compact('data'))->setPaper($customPaperSmall, 'landscape');
