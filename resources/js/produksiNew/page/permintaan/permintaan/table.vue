@@ -37,7 +37,10 @@ export default {
                     })
                 }
             })
-        }
+        },
+        cetakPermintaan(id) {
+            window.open(`/produksiReworks/surat_permintaan/${id}`, '_blank')
+        },
     },
 }
 </script>
@@ -77,7 +80,7 @@ export default {
                             <i class="fas fa-paper-plane"></i>
                             Kirim
                         </button>
-                        <button class="btn btn-sm btn-outline-primary" v-else>
+                        <button class="btn btn-sm btn-outline-primary" v-else @click="cetakPermintaan(data.urutan)">
                             <i class="fas fa-print"></i>
                             Cetak Permintaan
                         </button>

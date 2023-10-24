@@ -213,6 +213,12 @@
                                                     <div><small class="text-muted">Status</small></div>
                                                     <div class="align-center">{!! $status !!}</div>
                                                 </div>
+                                                <div class="margin">
+                                                    <button class="btn btn-outline-success">
+                                                        <i class="far fa-file-excel"></i>
+                                                        Export
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -255,6 +261,12 @@
                                                     <div><b>{{ date('d-m-Y', strtotime($data->pesanan->tgl_po)) }}</b>
                                                     </div>
                                                 </div>
+                                                <div class="margin">
+                                                    <button class="btn btn-outline-success">
+                                                        <i class="far fa-file-excel"></i>
+                                                        Export
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -287,8 +299,9 @@
                                         @endif
                                         <li class="nav-item">
                                             <a class="nav-link @if ($proses == 'selesai') active @endif"
-                                                id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim"
-                                                role="tab" aria-controls="pills-selesai_kirim"
+                                                id="pills-selesai_kirim-tab" data-toggle="pill"
+                                                href="#pills-selesai_kirim" role="tab"
+                                                aria-controls="pills-selesai_kirim"
                                                 @if ($proses == 'selesai') aria-selected="true" @else aria-selected="false" @endif>Sudah
                                                 Kirim</a>
                                         </li>
@@ -1038,7 +1051,7 @@
                         {
                             data: null,
                             render: function(data, type, row) {
-                                if(data.cek_rw == 1){
+                                if (data.cek_rw == 1) {
                                     return `
                                     <button class="btn btn-sm btn-outline-info buttonNoSeriDetail">
                                         <i class="fa fa-info-circle"></i>
@@ -1049,7 +1062,7 @@
                                         Lihat Packing List
                                     </a>
                                 `
-                                }else {
+                                } else {
                                     return ''
                                 }
                             }
@@ -1654,7 +1667,7 @@
                 });
             }
 
-                        $(document).on('click', '.buttonNoSeriDetail', function() {
+            $(document).on('click', '.buttonNoSeriDetail', function() {
                 var table = $('#noseritable').DataTable();
                 var data = table.row($(this).closest('tr')).data();
                 var index = table.row($(this).closest('tr')).index();

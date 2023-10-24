@@ -63,9 +63,9 @@ export default {
             }
         },
 
-        async cetakPenerimaan(data) {
-            window.open(`/produksi/surat_permintaan/${data.id}`, '_blank')
-        }
+        cetakPengantar(id) {
+            window.open(`/produksiReworks/surat_pengiriman/${id}`, '_blank')
+        },
     },
 }
 </script>
@@ -83,7 +83,7 @@ export default {
                     <i class="fas fa-info-circle"></i>
                     Detail
                 </button>
-                <button class="btn btn-sm btn-outline-primary">
+                <button class="btn btn-sm btn-outline-primary" @click="cetakPengantar(item.id)">
                     <i class="fas fa-print"></i>
                     Cetak FPBJ
                 </button>
