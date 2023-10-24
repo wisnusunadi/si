@@ -62,6 +62,9 @@ export default {
             date = date.split(' ').reverse().join('-');
             return moment(date).lang('id').format('MMMM');
         },
+        findNoSeri(noseri) {
+            this.dataRiwayat = axios.get(`/api/prd/fg/riwayat?search=${noseri}`)
+        },
     },
     mounted() {
         this.getData()
@@ -88,7 +91,7 @@ export default {
                         <perakitan :dataTable="dataPerakitan" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <riwayat :dataRiwayat="dataRiwayat" />
+                        <riwayat :dataRiwayat="dataRiwayat" @findNoSeri="findNoSeri" />
                     </div>
                 </div>
                 <div v-else>

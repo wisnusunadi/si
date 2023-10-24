@@ -3651,13 +3651,19 @@ class ProduksiController extends Controller
         $data = JadwalPerakitan::where('status_tf', 14)->get()->count('produk_id');
         return $data;
     }
-    function riwayat_fg()
+    function riwayat_fg(Request $request)
     {
-        $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
+        $search = $request->search;
+        if ($search == '' || $search == null) {
+            $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
             ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
             ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
             ->join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
             ->whereYear('jadwal_rakit_noseri.created_at',  2023)->limit(2000)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
+        } else {
+            return 'ok';
+            // $data = JadwalPerakitan::where('status_tf', 14)->where('no_bppb', 'LIKE', '%' . $search . '%')->limit(2000)->orderBy('created_at', 'DESC')->get();
+        }
         if ($data->isEmpty()) {
             $obj = array();
         } else {

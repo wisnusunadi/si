@@ -77,6 +77,9 @@ export default {
             this.$nextTick(() => {
                 $('.modalPilihan').modal('show');
             });
+        },
+        findNoSeri(noseri) {
+            this.$emit('findNoSeri', noseri)
         }
     },
 }
@@ -92,7 +95,7 @@ export default {
                 </button>
             </div>
             <div class="p-2 bd-highlight">
-                <input type="text" v-model="search" class="form-control" placeholder="Cari...">
+                <input type="text" v-model="search" class="form-control" placeholder="Cari..." @keypress="findNoSeri(search)">
             </div>
         </div>
         <DataTable :headers="headers" :items="dataRiwayat" :search="search">
