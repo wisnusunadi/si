@@ -78,9 +78,6 @@ export default {
                 $('.modalPilihan').modal('show');
             });
         },
-        findNoSeri(noseri) {
-            this.$emit('findNoSeri', noseri)
-        }
     },
     computed: {
         filterData() {
@@ -93,7 +90,9 @@ export default {
     },
     watch: {
         search() {
-            if (this.filterData.length === this.dataRiwayat.length) {
+            if (this.noSeriSelected.length == this.dataRiwayat.length) {
+                this.checkAll = true
+            } else {
                 this.checkAll = false
             }
         }
@@ -111,7 +110,7 @@ export default {
                 </button>
             </div>
             <div class="p-2 bd-highlight">
-                <input type="text" v-model="search" class="form-control" placeholder="Cari..." @keypress="findNoSeri(search)">
+                <input type="text" v-model="search" class="form-control" placeholder="Cari...">
             </div>
         </div>
         <DataTable :headers="headers" :items="filterData">

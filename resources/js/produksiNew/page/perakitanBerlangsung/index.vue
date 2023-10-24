@@ -62,13 +62,10 @@ export default {
             date = date.split(' ').reverse().join('-');
             return moment(date).lang('id').format('MMMM');
         },
-        findNoSeri(noseri) {
-            this.dataRiwayat = axios.get(`/api/prd/fg/riwayat?search=${noseri}`)
-        },
     },
     mounted() {
         this.getData()
-    }
+    },
 }
 </script>
 <template>
