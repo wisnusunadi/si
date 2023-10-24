@@ -2302,7 +2302,7 @@ class ProduksiController extends Controller
     function getNoseriSO(Request $request)
     {
         try {
-            $data = NoseriBarangJadi::select('noseri_barang_jadi.is_change','noseri_barang_jadi.noseri','noseri_barang_jadi.id','seri_detail_rw.isi')->addSelect([
+            $data = NoseriBarangJadi::select('noseri_barang_jadi.is_change','noseri_barang_jadi.noseri','noseri_barang_jadi.id','seri_detail_rw.isi', 'seri_detail_rw.created_at', 'seri_detail_rw.packer')->addSelect([
                 'cek_rw' => function ($q) {
                     $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
                         ->from('seri_detail_rw')
