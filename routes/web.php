@@ -116,7 +116,6 @@ Route::group(['prefix' => '/gbj', 'middleware' => ['auth', 'divisi:gbj,mgrgdg,di
     Route::get('/export_nonso/{id}', [GudangController::class, 'exportNonso'])->name('gbj.nonso');
     Route::get('/export_spb/{id}', [GudangController::class, 'exportSpb'])->name('gbj.spb');
     Route::get('/export_noseri', [GudangController::class, 'export_noseri_gudang'])->name('gbj.noseri');
-    Route::get('/surat_pengiriman/{id}', [GudangController::class, 'cetakSuratPengantar']);
     // Route::view('/manager/produk', 'manager.gbj.produksi');
 });
 
@@ -128,8 +127,6 @@ Route::group(['prefix' => '/produksi', 'middleware' => ['auth', 'divisi:prd,diru
     Route::get('/export_noseri', [ProduksiController::class, 'export_noseri_produksi'])->name('export.rakitseri');
     Route::view('/pengiriman', 'page.produksi.pengiriman');
     Route::view('/riwayat_transfer', 'page.produksi.riwayat_transfer');
-    Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'cetakSuratPermintaan']);
-    Route::get('/surat_penyerahan/{id}', [ProduksiController::class, 'cetakSuratPenyerahan']);
     Route::view('/{any?}', 'page.produksi.new_produksi')->where('any', '.*');
 });
 
@@ -140,6 +137,9 @@ Route::group(['prefix' => '/produksiReworks'], function () {
     Route::get('/cetakseriRework/{seri}', [ProduksiController::class, 'cetak_seri_rework']);
     Route::get('/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);
     Route::get('/cetakpackinglist/{id}', [ProduksiController::class, 'cetak_packing_list']);
+    Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'cetakSuratPermintaan']);
+    Route::get('/surat_penyerahan/{id}', [ProduksiController::class, 'cetakSuratPenyerahan']);
+    Route::get('/surat_pengiriman/{id}', [GudangController::class, 'cetakSuratPengantar']);
 });
 
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {
