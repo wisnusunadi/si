@@ -2307,7 +2307,9 @@ class ProduksiController extends Controller
                         ->from('seri_detail_rw')
                         ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
                 }
-            ])->where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->where('is_aktif', 1)->get();
+            ])
+            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+            ->where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->where('is_aktif', 1)->get();
             $i = 0;
             return datatables()->of($data)
                 ->addColumn('ids', function ($d) {
@@ -2321,6 +2323,9 @@ class ProduksiController extends Controller
                 })
                 ->addColumn('seri', function ($d) {
                     return $d->noseri . '';
+                })
+                ->addColumn('item', function ($d) {
+                    return $d->isi == null ? array(): json_decode($d->isi);
                 })
                 ->addColumn('checkbox', function ($d) use ($i) {
                     $i++;
