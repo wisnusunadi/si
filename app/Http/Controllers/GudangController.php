@@ -211,6 +211,34 @@ class GudangController extends Controller
 
     }
 
+    function surat_penyerahan_belum_rw($id)
+    {
+
+        $seridetail = SeriDetailRw::
+        select('seri_detail_rw.urutan as id','produk.nama as nama')
+        ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
+        ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+        ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+        ->where('noseri_barang_jadi.is_prd',0)
+        ->where('noseri_barang_jadi.is_aktif',0)
+        ->where('noseri_barang_jadi.is_ready',0)
+        ->where('seri_detail_rw.urutan',$id)
+        ->get();
+
+        if ($seridetail->isEmpty()) {
+            $obj = array();
+        }else{
+            foreach($seridetail as $d){
+                $obj[] = array(
+                    'id' => $d->id,
+                    'produk_id' => $d->id,
+                    'noseri' => $d->id
+                );
+            }
+        }
+        return response()->json($obj);
+
+    }
     function terima_perakitan_rw()
     {
 
@@ -223,7 +251,7 @@ class GudangController extends Controller
         ->where('noseri_barang_jadi.is_prd',0)
         ->where('noseri_barang_jadi.is_aktif',0)
         ->where('noseri_barang_jadi.is_ready',0)
-       ->groupBy('seri_detail_rw.urutan')
+        ->groupBy('seri_detail_rw.urutan')
         ->get();
 
         if ($data->isEmpty()) {
@@ -796,6 +824,7 @@ class GudangController extends Controller
                     $query->selectRaw('count(noseri_barang_jadi.id)')
                         ->from('noseri_barang_jadi')
                         ->where('noseri_barang_jadi.is_ready', '0')
+                        ->where('noseri_barang_jadi.is_aktif', '1')
                         ->whereColumn('noseri_barang_jadi.gdg_barang_jadi_id', 'gdg_barang_jadi.id')
                         ->limit(1);
                 }, 'count_ekat_sepakat' => function ($query) {

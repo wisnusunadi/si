@@ -703,7 +703,7 @@ class ProduksiController extends Controller
 
     function permintaan_rw(Request $request)
     {
-        DB::beginTransaction();
+     //   DB::beginTransaction();
         try {
             //code...
             $jumlah_tf = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
@@ -735,6 +735,7 @@ class ProduksiController extends Controller
                 $object->tanggal_mulai = $data->first()->tanggal_mulai;
                 $object->tanggal_selesai = $data->first()->tanggal_selesai;
                 $object->nama = auth()->user()->karyawan->nama;
+                $object->nama_produk = $data->first()->ProdukRw->nama;
                 $object->item = $item;
 
                 $data = SystemLog::create([
@@ -776,7 +777,7 @@ class ProduksiController extends Controller
                     'no' => $x->no,
                     'urutan' => $x->urutan,
                     'produk' => $x->nama,
-                    'nama' => 'ANTROPOMETRI KIT-10',
+                    'nama' => 'ANTROPOMETRI KIT-101',
                     'tgl_mulai' => $x->tanggal_mulai,
                     'tgl_selesai' => $x->tanggal_selesai,
                     'tgl_tf' => $d->created_at,
@@ -3451,13 +3452,23 @@ class ProduksiController extends Controller
     {
         try {
             $obj =  json_decode(json_encode($request->all()), FALSE);
-            foreach ($obj as $o) {
-                $seri[] = array(
-                    'seri' => $o->noseri
-                );
+            foreach ($obj->item as $o) {
+                $data[] = $o->noseri;
             }
 
-            return $seri;
+
+            if($request->ukuran == 'medium'){
+                $customPaperMedium = array(0, 0, 90.46, 170.69);
+                $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperMedium, 'landscape');
+            }else{
+                $customPaperSmall = array(0, 0, 75.46, 150.69);
+                $pdf = PDF::loadview('page.produksi.printreworks.cetakserismall',compact('data'))->setPaper($customPaperSmall  , 'landscape');
+
+            }
+
+           return $pdf->stream();
+
+
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -4341,7 +4352,7 @@ class ProduksiController extends Controller
     }
 
     function cetak_seri_finish_goods_small(Request $request)
-    {
+{
         $data =  json_decode($request->data, true);
         $customPaperSmall = array(0, 0, 75.46, 150.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserismall', compact('data'))->setPaper($customPaperSmall, 'landscape');

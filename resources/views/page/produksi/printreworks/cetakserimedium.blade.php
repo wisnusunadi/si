@@ -26,8 +26,8 @@
         <div class="image-container">
             <span>Elitech</span><br>
             <img
-                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_128_B, 0.95, 29)) }}" />
-            <div class="text-center">{{ $item['noseri'] }}</div>
+                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_128_B, 0.95, 29)) }}" />
+            <div class="text-center">{{ $item }}</div>
         </div>
     @endforeach
 </body>
