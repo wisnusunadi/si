@@ -399,6 +399,7 @@
             </form>
         </div>
     </div>
+    @include('page.gbj.modalserireworks.index')
 
 @stop
 
@@ -839,7 +840,7 @@
                         render: function(data, type, row) {
                             if(data.isaktif == 1){
                                 return `
-                                <button class="btn btn-sm btn-outline-primary">
+                                <button class="btn btn-sm btn-outline-primary detailnoseriproduk">
                                     <i class="fas fa-info-circle"></i>
                                     Detail No. Seri Produk
                                     </button>
@@ -1495,6 +1496,57 @@
             $('#dpp').val(dpp);
             // change to first pagination
             $('.scan-produk').DataTable().page('first').draw('page');
+        });
+
+                $(document).on('click', '.detailnoseriproduk', function() {
+            var table = $('.scan-produk').DataTable();
+            var data = table.row($(this).closest('tr')).data();
+            var index = table.row($(this).closest('tr')).index();
+
+            const dateIndo = (date) => {
+                const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                ];
+                const d = new Date(date);
+                return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+            }
+
+            $('#nomor-seri-reworks').html(data.noseri);
+            $('#tgl-dibuat-reworks').html(dateIndo(data.created_at));
+            $('#packer-reworks').html(data.packer);
+            $('.tableprodukreworks').DataTable().clear().destroy();
+
+            let dataJson = data.item;
+            if (data.item) {
+                $('.tableprodukreworks').DataTable({
+                    data: dataJson,
+                    destroy: true,
+                    processing: true,
+                    serverSide: false,
+                    ordering: false,
+                    autoWidth: false,
+                    columns: [{
+                            data: null,
+                            // buat index
+                            render: function(data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, row) {
+                                return data.produk + ' ' + data.varian;
+                            }
+                        },
+                        {
+                            data: 'noseri',
+                        }
+                    ]
+                });
+            }
+
+            $('.modalDetailNoSeri').modal('show');
+            // Do something with the data
         });
     </script>
 @stop
