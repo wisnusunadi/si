@@ -3466,7 +3466,7 @@ class ProduksiController extends Controller
 
             }
 
-           return $pdf->stream();
+           return $pdf->download('noseri.pdf');
 
 
         } catch (\Exception $e) {
@@ -3670,7 +3670,7 @@ class ProduksiController extends Controller
             ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
             ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
             ->join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-            ->whereYear('jadwal_rakit_noseri.created_at',  2023)->limit(2000)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
+            ->whereYear('jadwal_rakit_noseri.created_at',  2023)->limit(100)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
         } else {
             return 'ok';
             // $data = JadwalPerakitan::where('status_tf', 14)->where('no_bppb', 'LIKE', '%' . $search . '%')->limit(2000)->orderBy('created_at', 'DESC')->get();
