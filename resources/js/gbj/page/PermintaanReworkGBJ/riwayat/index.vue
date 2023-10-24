@@ -29,7 +29,12 @@ export default {
 
                 this.dataSelected = {
                     header: data,
-                    data: mapArray
+                    data: mapArray.map(item => {
+                        return {
+                            ...item,
+                            varian: item.varian ? item.varian : '-'
+                        }
+                    })
                 }
 
                 this.showModal = true

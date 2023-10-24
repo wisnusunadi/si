@@ -359,7 +359,7 @@ export default {
                                                 <div class="p-2 bd-highlight">
                                                     <!-- bentuk pdf untuk view nya -->
                                                     <button class="btn btn-sm btn-outline-info" @click="viewPackingList">
-                                                        View Packing List <i class="fa fa-eye"></i>
+                                                        Lihat Packing List <i class="fa fa-eye"></i>
                                                     </button>
                                                 </div>
                                             </div>
