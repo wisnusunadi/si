@@ -738,6 +738,7 @@ class ProduksiController extends Controller
                 $object->item = $item;
 
                 $data = SystemLog::create([
+                    'header' => $data->first()->urutan,
                     'tipe' => 'Produksi',
                     'subjek' => 'Permintaan Reworks',
                     'response' => json_encode($object)
@@ -2301,7 +2302,7 @@ class ProduksiController extends Controller
     function getNoseriSO(Request $request)
     {
         try {
-            $data = NoseriBarangJadi::addSelect([
+            $data = NoseriBarangJadi::select('noseri_barang_jadi.is_change','noseri_barang_jadi.noseri','noseri_barang_jadi.id','seri_detail_rw.isi')->addSelect([
                 'cek_rw' => function ($q) {
                     $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
                         ->from('seri_detail_rw')
@@ -2310,6 +2311,7 @@ class ProduksiController extends Controller
             ])
             ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
             ->where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->where('is_aktif', 1)->get();
+
             $i = 0;
             return datatables()->of($data)
                 ->addColumn('ids', function ($d) {
@@ -3707,7 +3709,7 @@ class ProduksiController extends Controller
     }
     function surat_permintaan_rw($id)
     {
-        $data = SystemLog::where(['tipe' => 'Produksi', 'subjek' => 'Permintaan Reworks', 'id' => $id])->orderBy('created_at', 'DESC')->first();
+        $data = SystemLog::where(['tipe' => 'Produksi', 'subjek' => 'Permintaan Reworks', 'header' => $id])->orderBy('created_at', 'DESC')->first();
 
         if (!$data) {
             $object = array();
