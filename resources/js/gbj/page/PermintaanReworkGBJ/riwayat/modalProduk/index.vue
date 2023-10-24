@@ -50,18 +50,6 @@ export default {
                 $('.modalSeri').modal('show')
             })
         },
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
-    },
-    computed: {
-        filteredDalamProses() {
-            return this.dataSelected.data.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
-                });
-            });
-        },
     },
 }
 </script>

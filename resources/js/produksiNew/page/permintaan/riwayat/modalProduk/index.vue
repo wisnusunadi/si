@@ -82,7 +82,7 @@ export default {
                                         <label for="">Jumlah Transfer</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                <span id="akn">{{ dataSelected.data.length }}</span>
+                                                <span id="akn">{{ dataSelected.header.jumlah }}</span>
                                             </div>
                                         </div>
                                     </div>

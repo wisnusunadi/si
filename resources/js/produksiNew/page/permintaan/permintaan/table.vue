@@ -77,7 +77,7 @@ export default {
                             <i class="fas fa-paper-plane"></i>
                             Kirim
                         </button>
-                        <button class="btn btn-sm btn-outline-primary">
+                        <button class="btn btn-sm btn-outline-primary" v-else>
                             <i class="fas fa-print"></i>
                             Cetak Permintaan
                         </button>
