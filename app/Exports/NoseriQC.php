@@ -80,6 +80,7 @@ class NoseriQC implements FromView, WithTitle, ShouldAutoSize, WithStyles, WithE
         ];
     }
 
+
     public function view(): View
     {
         $id = $this->id;

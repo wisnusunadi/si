@@ -149,10 +149,11 @@ class GudangController extends Controller
     }
     function store_perakitan_rw(Request $request)
     {
+
         $auth = Auth::user();
-        dd($auth);
         DB::beginTransaction();
         $obj =  json_decode(json_encode($request->all()), FALSE);
+        dd($obj);
         try {
             //code...
             $collection = collect($obj);
