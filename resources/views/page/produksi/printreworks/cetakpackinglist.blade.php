@@ -1,5 +1,4 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <html>
 
 <head>
@@ -49,7 +48,12 @@
             text-align: right;
             font-family: 'Times New Roman';
             font-size: 10pt;
-            margin-top: 2px;
+        }
+
+        .dokumenfooter {
+            position: fixed;
+            bottom: 0;
+            width: 98%;
         }
 
         .width-table {
@@ -64,6 +68,8 @@
         .text-uppercase {
             text-transform: uppercase;
         }
+
+
     </style>
 </head>
 
@@ -79,7 +85,7 @@
                 'noseri' => '',
             ],
         ];
-        
+
         // // // tambah data Array
         // // jika dataItem kurang dari 16, maka tambahkan dataNull hingga 16
         if (count($dataItem) < 6) {
@@ -160,7 +166,6 @@
                 </tr>
             </tbody>
         </table>
-        <p class="dokumen">Nomor Dokumen: SPA-FR/QC-13, Tanggal Terbit : 04 Oktober 2018, Revisi : 00</p>
     </main>
 
     @php
@@ -197,6 +202,10 @@
                 </td>
             </tr>
         </table>
+    </footer>
+
+    <footer class="dokumenfooter">
+        <p class="dokumen">Nomor Dokumen: SPA-FR/QC-13, Tanggal Terbit : 04 Oktober 2018, Revisi : 00</p>
     </footer>
 </body>
 

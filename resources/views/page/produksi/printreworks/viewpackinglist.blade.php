@@ -53,7 +53,7 @@
             text-align: right;
             font-family: 'Times New Roman';
             font-size: 10pt;
-            margin-top: 2px;
+            margin-top: 200px;
         }
 
         .width-table {
@@ -164,7 +164,6 @@
                 </tr>
             </tbody>
         </table>
-        <p class="dokumen">Nomor Dokumen: SPA-FR/QC-13, Tanggal Terbit : 04 Oktober 2018, Revisi : 00</p>
     </main>
 
     @php
@@ -202,6 +201,7 @@
                 </td>
             </tr>
         </table>
+        <p class="dokumen">Nomor Dokumen: SPA-FR/QC-13, Tanggal Terbit : 04 Oktober 2018, Revisi : 00</p>
     </footer>
 </body>
 
