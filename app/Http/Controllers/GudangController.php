@@ -151,11 +151,8 @@ class GudangController extends Controller
     {
         DB::beginTransaction();
         $obj =  json_decode(json_encode($request->all()), FALSE);
-      //dd($obj);
         try {
             //code...
-
-
             $collection = collect($obj);
             $firstIdSeri = $collection->first()->id;
             $getUrut = SeriDetailRw::where('noseri_id',$firstIdSeri)->first()->urutan;
@@ -242,22 +239,35 @@ class GudangController extends Controller
     function terima_perakitan_rw()
     {
 
-        $data = SeriDetailRw::
-        select('seri_detail_rw.urutan as id','produk.nama as nama')
-        ->selectRaw('COUNT(*) as jumlah')
-        ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
-        ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-        ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-        ->where('noseri_barang_jadi.is_prd',0)
-        ->where('noseri_barang_jadi.is_aktif',0)
-        ->where('noseri_barang_jadi.is_ready',0)
-        ->groupBy('seri_detail_rw.urutan')
-        ->get();
+        $data = SystemLog::where(['tipe' => 'Produksi', 'subjek' => 'Kirim Reworks','status'=> 1])->get();
 
         if ($data->isEmpty()) {
-            $data = array();
+            $obj = array();
+        } else {
+            $res = $data->first()->response;
+            foreach ($data as $d) {
+
+                $max = SystemLog::where('tipe', 'Produksi')
+                ->where('subjek', 'Kirim Reworks')
+                ->where('tbl_log.id', '<', $d->id)
+                ->whereYear('created_at', $d->created_at->format('Y'))
+                ->count();
+
+                $x = json_decode($d->response);
+                $obj[] = array(
+                    'id' => $d->id,
+                    'no_surat' =>   'BPBJ' . '/' . $this->toRomawi($d->created_at->format('m')) . '/' . (strtoupper($d->created_at->format('Y')) % 100) . '/' . str_pad($max + 1, 6, '0', STR_PAD_LEFT),
+                    'diserahkan' =>  $d->user_id != NULL ? User::find($d->user_id)->nama : '-',
+                    'urutan' => 'PRD-'.$x->urutan,
+                    'tgl_mulai' => $x->tanggal_mulai,
+                    'tgl_selesai' => $x->tanggal_selesai,
+                    'tgl_tf' => $d->created_at->format('Y-m-d'),
+                    'jumlah' => $x->jumlah,
+                    'item' => $x->item,
+                );
+            }
         }
-        return response()->json($data);
+        return response()->json($obj);
 
     }
     function belum_kirim_rw_seri($id)

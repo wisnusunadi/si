@@ -103,6 +103,8 @@ class ProduksiController extends Controller
 
 
             SystemLog::create([
+                'status' => 1,
+                'header' => $getUrut,
                 'tipe' => 'Produksi',
                 'subjek' => 'Kirim Reworks',
                 'user_id' => auth()->user()->id,
