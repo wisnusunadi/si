@@ -13,6 +13,7 @@ export default {
         return {
             showModalTransfer: false,
             transferDetail: null,
+            headerTransfer: null,
             headers: [{
                 text: 'No Transfer',
                 value: 'no_surat',
@@ -77,7 +78,10 @@ export default {
             }
         },
         transferRework(data) {
-            this.transferDetail = data.map(item => {
+            this.headerTransfer = JSON.parse(JSON.stringify(data))
+            // delete item on headerTransfert
+            delete this.headerTransfer.item
+            this.transferDetail = data.item.map(item => {
                 return {
                     ...item,
                     layout: {
@@ -102,7 +106,7 @@ export default {
 </script>
 <template>
     <div>
-        <ModalTransfer v-if="showModalTransfer" :dataTable="transferDetail" @closeModal="showModalTransfer = false"
+        <ModalTransfer v-if="showModalTransfer" :headerTransfer="headerTransfer" :dataTable="transferDetail" @closeModal="showModalTransfer = false"
             @refresh="refresh" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
@@ -111,7 +115,7 @@ export default {
         </div>
         <DataTable :headers="headers" :items="dataTable" :search="search">
             <template #item.aksi="{ item }">
-                <button class="btn btn-sm btn-outline-primary" @click="transferRework(item.item)">
+                <button class="btn btn-sm btn-outline-primary" @click="transferRework(item)">
                     <i class="fas fa-check"></i>
                     Terima
                 </button>

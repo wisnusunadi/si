@@ -32,10 +32,10 @@ export default {
                 this.$store.dispatch('setLoading', true);
                 const { data: penerimaan } = await axios.get(`/api/gbj/rw/dp/seri`);
                 const { data:riwayat } = await axios.get('/api/gbj/rw/riwayat_penerimaan')
-                this.penerimaan = penerimaan.map(item => {
+                this.penerimaan = penerimaan.map(terima => {
                     return {
-                        nama: item.item[0].nama_produk,
-                        ...item,
+                        nama: terima.item[0].nama_produk,
+                        ...terima,
                     }
                 });
                 this.riwayat = riwayat.map(item => {

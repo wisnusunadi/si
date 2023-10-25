@@ -9,7 +9,7 @@ export default {
         modalDetail,
         pagination,
     },
-    props: ['dataTable'],
+    props: ['dataTable', 'headerTransfer'],
     data() {
         return {
             renderPaginate: [],
@@ -174,7 +174,12 @@ export default {
         },
         async simpan() {
             try {
-                await axios.post('/api/gbj/rw/terima', this.dataTable, {
+                const kirim = {
+                    ...this.headerTransfer,
+                    item: this.dataTable,
+                }
+
+                await axios.post('/api/gbj/rw/terima', kirim, {
                     headers: {
                         'Authorization': `Bearer` + localStorage.getItem('lokal_token'),
 
@@ -221,9 +226,6 @@ export default {
                 });
             });
         },
-    },
-    mounted() {
-        this.getData();
     },
 }
 </script>
