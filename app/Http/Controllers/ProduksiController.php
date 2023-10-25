@@ -3664,6 +3664,8 @@ class ProduksiController extends Controller
     function riwayat_fg(Request $request)
     {
         $search = $request->search;
+        $keywords   = explode(' ', $search);
+
         $date = Carbon::now()->format('Y');
 
         if ($search == '' || $search == null) {
@@ -3671,13 +3673,13 @@ class ProduksiController extends Controller
             ->leftjoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
             ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
             ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-            ->whereYear('jadwal_rakit_noseri.created_at',  $date)->limit(100)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
+            ->whereYear('jadwal_rakit_noseri.created_at',  $date)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
         } else {
             $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
             ->leftjoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
             ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
             ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-            ->Where('jadwal_rakit_noseri.noseri', 'like', '%' .$search  . '%')
+            ->Where('jadwal_rakit_noseri.noseri', 'like', '%'.$keywords[0].'%')
             ->whereYear('jadwal_rakit_noseri.created_at',  $date)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
         }
         if ($data->isEmpty()) {
