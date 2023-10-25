@@ -31,7 +31,7 @@ export default {
             })
         },
         cetak(id) {
-            window.open('/produksiReworks/surat_penyerahan/' + id, '_blank')
+            window.open(`/produksiReworks/surat_penyerahan/${id}/gbj`, '_blank')
         },
     },
 }

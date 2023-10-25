@@ -4423,9 +4423,9 @@ class ProduksiController extends Controller
         // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');
     }
 
-    function cetakSuratPenyerahan($id)
+    function cetakSuratPenyerahan($id, $divisi = 'produksi')
     {
-        $data = $this->surat_penyerahan_rw($id);
+        $data = $this->surat_penyerahan_rw($id, $divisi);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakbuktibarangjadi', compact('data'))->setPaper('a4', 'portrait');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');

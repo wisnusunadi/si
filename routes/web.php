@@ -95,7 +95,19 @@ Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
     Route::view('/{any?}', 'spa.manager_teknik.spa')->middleware('divisi:dirtek')->where('any', '.*');
 });
 
-Route::group(['prefix' => '/gbj', 'middleware' => ['auth', 'divisi:gbj,mgrgdg,dirut']], function () {
+Route::group(['prefix' => '/produksiReworks'], function () {
+    Route::get('/cetak_seri_finish_goods/{seri}', [ProduksiController::class, 'cetak_seri_finish_goods']);
+    Route::get('/cetak_seri_fg_medium', [ProduksiController::class, 'cetak_seri_finish_goods_medium']);
+    Route::get('/cetak_seri_fg_small', [ProduksiController::class, 'cetak_seri_finish_goods_small']);
+    Route::get('/cetakseriRework/{seri}', [ProduksiController::class, 'cetak_seri_rework']);
+    Route::get('/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);
+    Route::get('/cetakpackinglist/{id}', [ProduksiController::class, 'cetak_packing_list']);
+    Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'cetakSuratPermintaan']);
+    Route::get('/surat_penyerahan/{id}/{divisi}', [ProduksiController::class, 'cetakSuratPenyerahan']);
+    Route::get('/surat_pengiriman/{id}', [GudangController::class, 'cetakSuratPengantar']);
+});
+
+Route::group(['prefix' => '/gbj'], function () {
     Route::view('/rework/{any?}', 'page.gbj.gbj_rework')->where('any', '.*');
     Route::view('/stok/{any?}', 'page.gbj.stok')->where('any', '.*');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
@@ -119,7 +131,7 @@ Route::group(['prefix' => '/gbj', 'middleware' => ['auth', 'divisi:gbj,mgrgdg,di
     // Route::view('/manager/produk', 'manager.gbj.produksi');
 });
 
-Route::group(['prefix' => '/produksi', 'middleware' => ['auth', 'divisi:prd,dirut']], function () {
+Route::group(['prefix' => '/produksi'], function () {
     Route::view('/dashboard', 'page.produksi.dashboard');
     Route::view('/so', 'page.produksi.so');
     Route::view('/perencanaan_perakitan', 'page.produksi.perencanaan_perakitan');
@@ -129,19 +141,6 @@ Route::group(['prefix' => '/produksi', 'middleware' => ['auth', 'divisi:prd,diru
     Route::view('/riwayat_transfer', 'page.produksi.riwayat_transfer');
     Route::view('/{any?}', 'page.produksi.new_produksi')->where('any', '.*');
 });
-
-Route::group(['prefix' => '/produksiReworks'], function () {
-    Route::get('/cetak_seri_finish_goods/{seri}', [ProduksiController::class, 'cetak_seri_finish_goods']);
-    Route::get('/cetak_seri_fg_medium', [ProduksiController::class, 'cetak_seri_finish_goods_medium']);
-    Route::get('/cetak_seri_fg_small', [ProduksiController::class, 'cetak_seri_finish_goods_small']);
-    Route::get('/cetakseriRework/{seri}', [ProduksiController::class, 'cetak_seri_rework']);
-    Route::get('/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);
-    Route::get('/cetakpackinglist/{id}', [ProduksiController::class, 'cetak_packing_list']);
-    Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'cetakSuratPermintaan']);
-    Route::get('/surat_penyerahan/{id}', [ProduksiController::class, 'cetakSuratPenyerahan']);
-    Route::get('/surat_pengiriman/{id}', [GudangController::class, 'cetakSuratPengantar']);
-});
-
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {
 //     Route::view('/produk/{any?}', 'page.penjualan.produk');
 //     Route::view('/customer/{any?}', 'page.penjualan.customer');
