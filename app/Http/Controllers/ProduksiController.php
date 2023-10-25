@@ -703,7 +703,7 @@ class ProduksiController extends Controller
 
     function permintaan_rw(Request $request)
     {
-     //   DB::beginTransaction();
+        //   DB::beginTransaction();
         try {
             //code...
             $jumlah_tf = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
@@ -851,15 +851,15 @@ class ProduksiController extends Controller
     function siap_tf_rw_produk($id)
     {
         $data = SeriDetailRw::select(
-                'produk.nama as nama_produk',
-                'noseri_barang_jadi.is_prd',
-                'noseri_barang_jadi.id as noseri_id',
-                'produk.id as produk_id',
-                'noseri_barang_jadi.noseri',
-                'seri_detail_rw.created_at',
-                'seri_detail_rw.packer',
-                'seri_detail_rw.isi'
-            )
+            'produk.nama as nama_produk',
+            'noseri_barang_jadi.is_prd',
+            'noseri_barang_jadi.id as noseri_id',
+            'produk.id as produk_id',
+            'noseri_barang_jadi.noseri',
+            'seri_detail_rw.created_at',
+            'seri_detail_rw.packer',
+            'seri_detail_rw.isi'
+        )
             ->Join('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
             ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
             ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
@@ -2303,15 +2303,15 @@ class ProduksiController extends Controller
     function getNoseriSO(Request $request)
     {
         try {
-            $data = NoseriBarangJadi::select('noseri_barang_jadi.is_change','noseri_barang_jadi.noseri','noseri_barang_jadi.id','seri_detail_rw.isi', 'seri_detail_rw.created_at', 'seri_detail_rw.packer')->addSelect([
+            $data = NoseriBarangJadi::select('noseri_barang_jadi.is_change', 'noseri_barang_jadi.noseri', 'noseri_barang_jadi.id', 'seri_detail_rw.isi', 'seri_detail_rw.created_at', 'seri_detail_rw.packer')->addSelect([
                 'cek_rw' => function ($q) {
                     $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
                         ->from('seri_detail_rw')
                         ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
                 }
             ])
-            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->where('is_aktif', 1)->get();
+                ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->where('is_aktif', 1)->get();
 
             $i = 0;
             return datatables()->of($data)
@@ -2328,7 +2328,7 @@ class ProduksiController extends Controller
                     return $d->noseri . '';
                 })
                 ->addColumn('item', function ($d) {
-                    return $d->isi == null ? array(): json_decode($d->isi);
+                    return $d->isi == null ? array() : json_decode($d->isi);
                 })
                 ->addColumn('checkbox', function ($d) use ($i) {
                     $i++;
@@ -3456,18 +3456,15 @@ class ProduksiController extends Controller
                 $data[] = $o->noseri;
             }
 
-            if($request->ukuran == 'medium'){
+            if ($request->ukuran == 'medium') {
                 $customPaperMedium = array(0, 0, 90.46, 170.69);
                 $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperMedium, 'landscape');
-            }else{
+            } else {
                 $customPaperSmall = array(0, 0, 75.46, 150.69);
-                $pdf = PDF::loadview('page.produksi.printreworks.cetakserismall',compact('data'))->setPaper($customPaperSmall  , 'landscape');
-
+                $pdf = PDF::loadview('page.produksi.printreworks.cetakserismall', compact('data'))->setPaper($customPaperSmall, 'landscape');
             }
 
-           return $pdf->stream();
-
-
+            return $pdf->download('noseri.pdf');
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -3668,20 +3665,33 @@ class ProduksiController extends Controller
 
         $date = Carbon::now()->format('Y');
 
-        if ($search == '' || $search == null) {
-            $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
-            ->leftjoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-            ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
-            ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-            ->whereYear('jadwal_rakit_noseri.created_at',  $date)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
-        } else {
-            $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
-            ->leftjoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-            ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
-            ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-            ->Where('jadwal_rakit_noseri.noseri', 'like', '%'.$keywords[0].'%')
-            ->whereYear('jadwal_rakit_noseri.created_at',  $date)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
-        }
+        // if ($search == '' || $search == null) {
+        //     $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
+        //         ->leftjoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+        //         ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+        //         ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+        //         ->whereYear('jadwal_rakit_noseri.created_at',  $date)->limit(100)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
+        // } else {
+        //     $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
+        //         ->leftjoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+        //         ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+        //         ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+        //         ->Where('jadwal_rakit_noseri.noseri', 'like', '%' . $search  . '%')
+        //         ->OrWhere('produk.nama', 'like', '%' . $search  . '%')
+        //         ->OrWhere('jadwal_perakitan.no_bppb', 'like', '%' . $search  . '%')
+        //         ->whereYear('jadwal_rakit_noseri.created_at',  $date)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
+        // }
+
+        $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
+        ->leftjoin('jadwal_perakitan', 'jadwal_perakitan.id',
+            '=',
+            'jadwal_rakit_noseri.jadwal_id'
+        )
+        ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=',
+            'jadwal_perakitan.produk_id'
+        )
+        ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+        ->whereYear('jadwal_rakit_noseri.created_at',  $date)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
         if ($data->isEmpty()) {
             $obj = array();
         } else {
@@ -4352,15 +4362,24 @@ class ProduksiController extends Controller
 
     function cetak_seri_finish_goods_medium(Request $request)
     {
-        $data =  json_decode($request->data, true);
+        $getData =  json_decode($request->data, true);
+        $seri = JadwalRakitNoseri::select('noseri')->whereIn('id', $getData)->get();
+        foreach($seri as $s){
+            $data[] = $s->noseri;
+        }
         $customPaperMedium = array(0, 0, 90.46, 170.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperMedium, 'landscape');
         return $pdf->stream();
     }
 
     function cetak_seri_finish_goods_small(Request $request)
-{
-        $data =  json_decode($request->data, true);
+    {
+        $getData =  json_decode($request->data, true);
+        $seri = JadwalRakitNoseri::select('noseri')->whereIn('id', $getData)->get();
+        foreach($seri as $s){
+            $data[] = $s->noseri;
+        }
+
         $customPaperSmall = array(0, 0, 75.46, 150.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserismall', compact('data'))->setPaper($customPaperSmall, 'landscape');
         return $pdf->stream();

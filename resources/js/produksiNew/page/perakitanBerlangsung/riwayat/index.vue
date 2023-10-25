@@ -48,14 +48,14 @@ export default {
         checkAllSeri() {
             this.checkAll = !this.checkAll;
             if (this.checkAll) {
-                this.noSeriSelected = this.dataRiwayat.map((item) => item);
+                this.noSeriSelected = this.filterData.map((item) => item.id);
             } else {
                 this.noSeriSelected = [];
             }
         },
         selectNoSeri(noseri) {
             if (this.noSeriSelected.find((data) => data === noseri)) {
-                this.noSeriSelected = this.noSeriSelected.filter((data) => data !== noseri)
+                this.noSeriSelected = this.noSeriSelected.filter((data) => data.id !== noseri)
                 this.checkAll = false
             } else {
                 this.noSeriSelected.push(noseri)
@@ -78,10 +78,25 @@ export default {
                 $('.modalPilihan').modal('show');
             });
         },
-        findNoSeri(noseri) {
-            this.$emit('findNoSeri', noseri)
+    },
+    computed: {
+        filterData() {
+            return this.dataRiwayat.filter((data) => {
+                return Object.keys(data).some((key) => {
+                    return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
+                });
+            });
         }
     },
+    watch: {
+        search() {
+            if (this.noSeriSelected.length == this.dataRiwayat.length) {
+                this.checkAll = true
+            } else {
+                this.checkAll = false
+            }
+        }
+    }
 }
 </script>
 <template>
@@ -95,20 +110,20 @@ export default {
                 </button>
             </div>
             <div class="p-2 bd-highlight">
-                <input type="text" v-model="search" class="form-control" placeholder="Cari..." @keypress="findNoSeri(search)">
+                <input type="text" v-model="search" class="form-control" placeholder="Cari...">
             </div>
         </div>
-        <DataTable :headers="headers" :items="dataRiwayat" :search="search">
+        <DataTable :headers="headers" :items="filterData">
             <template #header.id>
                 <input type="checkbox" @click="checkAllSeri" :checked="checkAll">
             </template>
 
             <template #item.id="{ item }">
-                <input type="checkbox" :checked="noSeriSelected && noSeriSelected.find((noseri) => noseri === item)"
-                    @click="selectNoSeri(item)" />
+                <input type="checkbox" :checked="noSeriSelected && noSeriSelected.find((noseri) => noseri === item.id)"
+                    @click="selectNoSeri(item.id)" />
             </template>
             <template #item.aksi="{ item }">
-                <button class="btn btn-outline-primary btn-sm" @click="cetakSeri(item)">
+                <button class="btn btn-outline-primary btn-sm" @click="cetakSeri(item.id)">
                     <i class="fa fa-print"></i>
                     Cetak Nomor Seri
                 </button>
