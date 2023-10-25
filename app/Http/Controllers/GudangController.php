@@ -208,7 +208,7 @@ class GudangController extends Controller
 
     }
 
-    function surat_penyerahan_belum_rw($id)
+    function surat_penyerahan_rw($id)
     {
 
         $seridetail = SeriDetailRw::
