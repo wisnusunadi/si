@@ -3710,10 +3710,14 @@ class ProduksiController extends Controller
 
         return response()->json($obj);
     }
-    function surat_penyerahan_rw($id)
+    function surat_penyerahan_rw($status, $id)
     {
-        $data = SystemLog::where(['tipe' => 'Produksi', 'subjek' => 'Kirim Reworks', 'id' => $id])->orderBy('created_at', 'DESC')->first();
 
+        if($status == 'gbj'){
+        $data = SystemLog::where(['tipe' => 'GBJ', 'subjek' => 'Terima Reworks','id' => $id])->orderBy('created_at', 'DESC')->first();
+        }else{
+            $data = SystemLog::where(['tipe' => 'Produksi', 'subjek' => 'Kirim Reworks','id' => $id])->orderBy('created_at', 'DESC')->first();
+        }
         if (!$data) {
             $object = array();
         } else {
@@ -3734,11 +3738,12 @@ class ProduksiController extends Controller
                 ->count();
 
             $object = new stdClass();
-            $object->ref = 'PRD-' . $x->urutan;
+            $object->ref =  $status == 'gbj' ?  $x->urutan : 'PRD-' . $x->urutan;
             $object->no = 'BPBJ' . '/' . $this->toRomawi($data->created_at->format('m')) . '/' . (strtoupper($data->created_at->format('Y')) % 100) . '/' . str_pad($max + 1, 6, '0', STR_PAD_LEFT);
             $object->tgl = $data->created_at->format('Y-m-d');
             $object->item = $groupedData;
-            $object->diserahkan_oleh = $data->user_id != NULL ? User::find($data->user_id)->Karyawan->nama : '-';
+            $object->diserahkan_oleh = $status == 'gbj' ? $x->diserahkan : User::find($data->user_id)->Karyawan->nama;
+            $object->diterima_oleh = $status == 'gbj' ? User::find($data->user_id)->Karyawan->nama : '-';
         }
 
         return $object;

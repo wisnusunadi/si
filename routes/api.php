@@ -347,7 +347,7 @@ Route::prefix('/prd')->group(function () {
         Route::get('/siap/produk/{id}', [ProduksiController::class, 'siap_tf_rw_produk']);
         Route::post('/permintaan', [ProduksiController::class, 'permintaan_rw'])->middleware('jwt.verify');
         Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'surat_permintaan_rw']);
-        Route::get('/surat_penyerahan/{id}', [ProduksiController::class, 'surat_penyerahan_rw']);
+        Route::get('/surat_penyerahan/{divisi}/{id}', [ProduksiController::class, 'surat_penyerahan_rw']);
         Route::post('/gen', [ProduksiController::class, 'generate_rw'])->middleware('jwt.verify');
         Route::put('/gen/{id}', [ProduksiController::class, 'update_rw'])->middleware('jwt.verify');
         Route::delete('/gen/{id}', [ProduksiController::class, 'hapus_rw']);

@@ -149,19 +149,12 @@ class GudangController extends Controller
     }
     function store_perakitan_rw(Request $request)
     {
-
-        $auth = Auth::user();
         DB::beginTransaction();
         $obj =  json_decode(json_encode($request->all()), FALSE);
-        dd($obj);
-        try {
-            //code...
-            $collection = collect($obj);
-            $firstIdSeri = $collection->first()->id;
-            $getUrut = SeriDetailRw::where('noseri_id',$firstIdSeri)->first()->urutan;
-            $jadwal = JadwalPerakitanRw::where('urutan',$getUrut)->first();
 
-            foreach($obj as $o){
+        try {
+
+            foreach($obj->item as $o){
                 if(isset($o->layout) && $o->layout != null){
                     $l = $o->layout->id;
                 }else{
@@ -173,29 +166,21 @@ class GudangController extends Controller
                     'is_prd' => 0,
                     'is_aktif' => 1,
                     'layout_id' => $l
-
                 ]);
              }
 
-             $riwayat = new stdClass();
-             $riwayat->urutan = $jadwal->urutan;
-             $riwayat->tanggal_mulai = $jadwal->tanggal_mulai;
-             $riwayat->tanggal_selesai = $jadwal->tanggal_selesai;
-             $riwayat->tanggal_tf = Carbon::now()->format('Y-m-d');
-             $riwayat->jumlah = count($obj);
-             $riwayat->item = $obj;
 
+             SystemLog::where('id',$obj->id)->update([
+                'status' => 0,
+            ]);
 
          SystemLog::create([
             'tipe' => 'GBJ',
             'subjek' => 'Terima Reworks',
             'user_id' => auth()->user()->id,
-             'response' => json_encode($riwayat)
+             'response' => json_encode($obj)
          ]);
-
-
             DB::commit();
-
             return response()->json([
                'status' => 200,
                'message' =>  'Berhasil Diterima',
@@ -370,25 +355,16 @@ class GudangController extends Controller
 
         if($data->isEmpty()){
             $obj = array();
-        }else{
-            $res = $data->first()->response;
-            $getUrut = json_decode($res);
-            $jadwal = JadwalPerakitanRw::where('urutan',$getUrut->urutan)->first()->produk_reworks_id;
-            $produk = Produk::find($jadwal);
-            foreach($data as $d){
-                $x = json_decode($d->response);
-                $obj[] = array(
-                    'id' => $d->id,
-                    'urutan' => $x->urutan,
-                    'nama' => $produk->nama,
-                    'tgl_mulai' => $x->tanggal_mulai,
-                    'tgl_selesai' => $x->tanggal_selesai,
-                    'tgl_tf' => $d->created_at,
-                    'jumlah' => $x->jumlah,
-                    'item' => $x->item
-                );
-            }
         }
+            // }else{
+        //     $res = $data->first()->response;
+        //     $getUrut = json_decode($res);
+        //     $jadwal = JadwalPerakitanRw::where('urutan',$getUrut->urutan)->first()->produk_reworks_id;
+        //     $produk = Produk::find($jadwal);
+            foreach($data as $d){
+                $obj[] = json_decode($d->response);
+            }
+        // }
 
         return response()->json($obj);
     }
@@ -573,8 +549,8 @@ class GudangController extends Controller
                     'urutan' => $d->urutan,
                     'no' => $d->no_permintaan,
                     'produk_reworks_id' => $d->produk_reworks_id,
-                    'tgl_mulai' => $d->tanggal_mulai,
-                    'tgl_selesai' => $d->tanggal_selesai,
+                    'tgl_mulai' => $d->tgl_mulai,
+                    'tgl_selesai' => $d->tgl_selesai,
                     'nama' => $d->ProdukRw->nama,
                     'jumlah' => $d->jumlah,
                     'status' => $status,
