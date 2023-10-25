@@ -37,6 +37,9 @@ export default {
                 return 'sedang_dikerjakan'
             }
         },
+        cetakPermintaan(id) {
+            window.open(`/produksiReworks/surat_permintaan/${id}`, '_blank')
+        }
     },
 }
 </script>
@@ -71,7 +74,7 @@ export default {
                             <i class="fas fa-eye"></i>
                             Detail
                         </button>
-                        <button class="btn btn-sm btn-outline-primary">
+                        <button class="btn btn-sm btn-outline-primary" @click="cetakPermintaan(data.urutan)">
                             <i class="fas fa-print"></i>
                             Cetak Permintaan
                         </button>

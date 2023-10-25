@@ -9,10 +9,9 @@ export default {
         modalDetail,
         pagination,
     },
-    props: ['id'],
+    props: ['dataTable'],
     data() {
         return {
-            dataTable: [],
             renderPaginate: [],
             search: '',
             checkAll: false,
@@ -50,20 +49,6 @@ export default {
             this.$nextTick(() => {
                 this.$emit('closeModal');
             });
-        },
-        async getData() {
-            try {
-                const { data } = await axios.get(`/api/gbj/rw/dp/seri/${this.id}`);
-                this.dataTable = data.map((data) => {
-                    data.layout = {
-                        id: 7,
-                        label: 'Blok B'
-                }
-                    return data
-                })
-            } catch (error) {
-                console.log(error);
-            }
         },
         selectNoSeri(noseri) {
             if (this.noSeriSelected.find((data) => data === noseri)) {
@@ -189,7 +174,7 @@ export default {
         },
         async simpan() {
             try {
-                await axios.post('/api/gbj/rw/terima', this.noSeriSelected, {
+                await axios.post('/api/gbj/rw/terima', this.dataTable, {
                     headers: {
                         'Authorization': `Bearer` + localStorage.getItem('lokal_token'),
 

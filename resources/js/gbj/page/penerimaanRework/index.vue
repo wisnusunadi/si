@@ -34,14 +34,14 @@ export default {
                 const { data:riwayat } = await axios.get('/api/gbj/rw/riwayat_penerimaan')
                 this.penerimaan = penerimaan.map(item => {
                     return {
-                        no_urut: `PRD-${item.id}`,
+                        nama: item.item[0].nama_produk,
                         ...item,
                     }
                 });
                 this.riwayat = riwayat.map(item => {
                     return {
-                        no_urut: `PRD-${item.urutan}`,
                         ...item,
+                        nama: item.item[0].nama_produk,
                         tgl_tf: this.dateTimeFormat(item.tgl_tf),
                     }
                 });

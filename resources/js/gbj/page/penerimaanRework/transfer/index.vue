@@ -12,10 +12,14 @@ export default {
     data() {
         return {
             showModalTransfer: false,
-            idTransfer: null,
+            transferDetail: null,
             headers: [{
+                text: 'No Transfer',
+                value: 'no_surat',
+            },
+            {
                 text: 'No Urut',
-                value: 'no_urut',
+                value: 'urutan',
             },
             {
                 text: 'Nama Produk',
@@ -72,8 +76,16 @@ export default {
                 return 'sedang_dikerjakan'
             }
         },
-        transferRework(id) {
-            this.idTransfer = id
+        transferRework(data) {
+            this.transferDetail = data.map(item => {
+                return {
+                    ...item,
+                    layout: {
+                        id: 7,
+                        label: 'Blok B',
+                    }
+                }
+            })
             this.showModalTransfer = true
             this.$nextTick(() => {
                 $('.modalTransfer').modal('show')
@@ -90,7 +102,7 @@ export default {
 </script>
 <template>
     <div>
-        <ModalTransfer v-if="showModalTransfer" :id="idTransfer" @closeModal="showModalTransfer = false"
+        <ModalTransfer v-if="showModalTransfer" :dataTable="transferDetail" @closeModal="showModalTransfer = false"
             @refresh="refresh" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
@@ -99,7 +111,7 @@ export default {
         </div>
         <DataTable :headers="headers" :items="dataTable" :search="search">
             <template #item.aksi="{ item }">
-                <button class="btn btn-sm btn-outline-primary" @click="transferRework(item.id)">
+                <button class="btn btn-sm btn-outline-primary" @click="transferRework(item.item)">
                     <i class="fas fa-check"></i>
                     Terima
                 </button>

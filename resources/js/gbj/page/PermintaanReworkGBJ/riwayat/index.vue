@@ -48,6 +48,9 @@ export default {
         cetakPengantar(id) {
             window.open(`/produksiReworks/surat_pengiriman/${id}`, '_blank')
         },
+        cetakPermintaan(id) {
+            window.open(`/produksiReworks/surat_permintaan/${id}`, '_blank')
+        }
     },
 }
 </script>
@@ -70,7 +73,7 @@ export default {
                     Cetak FPBJ
                 </button>
                 <!-- cetak sesuai urutannya -->
-                <button class="btn btn-sm btn-outline-primary">
+                <button class="btn btn-sm btn-outline-primary" @click="cetakPermintaan(item.urutan)">
                     <i class="fas fa-print"></i>
                     Cetak Permintaan
                 </button>
