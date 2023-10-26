@@ -11,7 +11,7 @@ export default {
             dataSelected: {},
             showModal: false,
             headers: [
-                { text: 'No Urut', value: 'no_urut' },
+                { text: 'No Urut', value: 'urutan' },
                 { text: 'Nama Produk', value: 'nama' },
                 { text: 'Jumlah Transfer', value: 'jumlah' },
                 { text: 'Tanggal Penerimaan', value: 'tgl_tf' },

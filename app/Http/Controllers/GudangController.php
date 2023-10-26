@@ -374,6 +374,7 @@ class GudangController extends Controller
 
         $data = SystemLog::where(['tipe'=>'GBJ','subjek' => 'Kirim Permintaan Rework','id' => $id])->orderBy('created_at','DESC')->first();
 
+
         if(!$data){
             $datas = array();
         }else{
