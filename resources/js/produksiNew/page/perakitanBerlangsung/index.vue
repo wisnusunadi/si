@@ -88,7 +88,7 @@ export default {
                         <perakitan :dataTable="dataPerakitan" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <riwayat :dataRiwayat="dataRiwayat" @findNoSeri="findNoSeri" />
+                        <riwayat :dataRiwayat="dataRiwayat" />
                     </div>
                 </div>
                 <div v-else>
