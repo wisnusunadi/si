@@ -204,7 +204,7 @@
                 </td>
                 <td style="width: 220px"></td>
                 <td style="padding-top: 70px; width: 200px">
-                    
+                    {{ isset($data->diterima_oleh) ? $data->diterima_oleh : '' }}
                     <hr>
                 </td>
             </tr>

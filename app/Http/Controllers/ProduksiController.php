@@ -4409,6 +4409,9 @@ class ProduksiController extends Controller
         // $pdf = PDF::loadview('page.produksi.printreworks.cetakpackinglist', compact('id'))->setPaper('a5', 'portrait');
         // return $pdf->stream();
         $data = $this->packing_list_rw($id);
+        if ($data == null) {
+            return 'Data Kosong';
+        }
         // change array to object
         $dataview = $data;
 
@@ -4418,15 +4421,23 @@ class ProduksiController extends Controller
     function cetakSuratPermintaan($id)
     {
         $data = $this->surat_permintaan_rw($id);
+        if ($data == null) {
+            return 'Data Kosong';
+        }
         // a4
         $pdf = PDF::loadview('page.produksi.printreworks.cetakpermintaanbarangjadi', compact('data'))->setPaper('a4', 'portrait');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');
     }
 
-    function cetakSuratPenyerahan($id, $divisi = 'produksi')
+    function cetakSuratPenyerahan($id, $divisi = 'prd')
     {
-        $data = $this->surat_penyerahan_rw($id, $divisi);
+        $data = $this->surat_penyerahan_rw($divisi, $id);
+        // if null return data kosong
+        if ($data == null) {
+            return 'Data Kosong';
+        }
+        
         $pdf = PDF::loadview('page.produksi.printreworks.cetakbuktibarangjadi', compact('data'))->setPaper('a4', 'portrait');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');
