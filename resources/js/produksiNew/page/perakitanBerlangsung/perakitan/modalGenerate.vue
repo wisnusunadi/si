@@ -59,7 +59,7 @@ export default {
                     const { message, seri, duplicate, available } = error.response.data
                     this.seri = seri
                     this.available = available
-                    if (this.seri.length > 0 || this.available > 0) {
+                    if (this.seri.length > 0 || this.available > 0 || this.duplicate.length > 0) {
                         this.isError = true
                     } else {
                         this.isError = false
