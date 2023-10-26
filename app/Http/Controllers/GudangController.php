@@ -67,7 +67,6 @@ class GudangController extends Controller
 {
     function kirim_permintaan(Request $request)
     {
-
         DB::beginTransaction();
         try {
             //code...
@@ -378,7 +377,7 @@ class GudangController extends Controller
             $datas = array();
         }else{
             $result = [];
-            $date = Carbon::now();
+           $date = Carbon::now();
             $x = json_decode($data->response);
             foreach ($x->produk as $produk) {
                             if (isset($produk->noseri) && is_array($produk->noseri)) {
@@ -428,12 +427,11 @@ class GudangController extends Controller
 
         $datas = new stdClass();
         $thn_gbj = $date->format('Y')%100;
-        $urutans_gbj = str_pad($max+1, 6, '0', STR_PAD_LEFT);
-        $urutans_prd = str_pad($x->no, 6, '0', STR_PAD_LEFT);
-        $datas->tgl_dibuat = $data->created_at;
-        $datas->no_surat = 'FPBJ/'.$this->toRomawi($date->format('m')).'/'.$thn_gbj.'/'.$urutans_gbj;
-        $datas->no_referensi = $urutans_prd.'/'.$this->toRomawi( Carbon::createFromFormat('Y-m-d', $x->tgl_mulai)->month).'/'.Carbon::createFromFormat('Y-m-d', $x->tgl_mulai)->year;
-
+         $urutans_gbj = str_pad($max+1, 6, '0', STR_PAD_LEFT);
+         $urutans_prd = str_pad($x->no, 6, '0', STR_PAD_LEFT);
+         $datas->tgl_dibuat = $data->created_at;
+         $datas->no_surat = 'FPBJ/'.$this->toRomawi($date->format('m')).'/'.$thn_gbj.'/'.$urutans_gbj;
+         $datas->no_referensi = $urutans_prd.'/'.$this->toRomawi( Carbon::createFromFormat('Y-m-d', $x->tgl_mulai)->month).'/'.Carbon::createFromFormat('Y-m-d', $x->tgl_mulai)->year;
         $datas->diserahkan_oleh = $data->user_id != NULL ? User::find($data->user_id)->Karyawan->nama : '-';
         $datas->items = $result;
 
@@ -443,7 +441,6 @@ class GudangController extends Controller
 
     function cetakSuratPengantar($id) {
         $data = $this->surat_pengiriman($id);
-
         $pdf = PDF::loadview('page.produksi.printreworks.cetakpengantarbarangjadi', compact('data'))->setPaper('a4', 'portrait');
         return $pdf->stream();
     }
@@ -549,8 +546,8 @@ class GudangController extends Controller
                     'urutan' => $d->urutan,
                     'no' => $d->no_permintaan,
                     'produk_reworks_id' => $d->produk_reworks_id,
-                    'tgl_mulai' => $d->tgl_mulai,
-                    'tgl_selesai' => $d->tgl_selesai,
+                    'tgl_mulai' => $d->tanggal_mulai,
+                    'tgl_selesai' => $d->tanggal_selesai,
                     'nama' => $d->ProdukRw->nama,
                     'jumlah' => $d->jumlah,
                     'status' => $status,

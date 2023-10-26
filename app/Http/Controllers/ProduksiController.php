@@ -705,7 +705,8 @@ class ProduksiController extends Controller
 
     function permintaan_rw(Request $request)
     {
-        //   DB::beginTransaction();
+
+           DB::beginTransaction();
         try {
             //code...
             $jumlah_tf = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
