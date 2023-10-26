@@ -168,7 +168,6 @@ class GudangController extends Controller
                 ]);
              }
 
-
              SystemLog::where('id',$obj->id)->update([
                 'status' => 0,
             ]);
@@ -361,7 +360,20 @@ class GudangController extends Controller
         //     $jadwal = JadwalPerakitanRw::where('urutan',$getUrut->urutan)->first()->produk_reworks_id;
         //     $produk = Produk::find($jadwal);
             foreach($data as $d){
-                $obj[] = json_decode($d->response);
+                $x = json_decode($d->response);
+                $obj[] = array(
+                    'id' => $d->id,
+                    "nama"=>  $x->nama,
+                    "urutan"=>  $x->urutan,
+                    "no_surat"=> $x->no_surat,
+                    "diserahkan"=>  $x->diserahkan,
+                    "urutan"=>  $x->urutan,
+                    "tgl_mulai"=>  $x->tgl_mulai,
+                    "tgl_selesai"=>  $x->tgl_selesai,
+                    "tgl_tf"=> $d->created_at,
+                    "jumlah"=>  $x->jumlah,
+                    "item" => $x->item
+                );
             }
         // }
 
