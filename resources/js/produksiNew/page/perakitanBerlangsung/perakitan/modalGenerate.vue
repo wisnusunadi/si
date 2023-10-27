@@ -27,7 +27,9 @@ export default {
                     value: 'seri',
                     align: 'text-left',
                 }
-            ]
+            ],
+            showNoUrutTerakhir: false,
+            loadingNoUrut: false,
         }
     },
     methods: {
@@ -43,7 +45,7 @@ export default {
         async simpan() {
             const ceknotnull = Object.values(this.form).every(x => x !== null && x !== '' && x !== 0)
             const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-'
-            if (ceknotnull && cekbppb && this.jumlahRakit) {
+            if (ceknotnull && cekbppb && this.jumlahRakit && this.validasiNoUrutTerakhir) {
                 try {
                     this.loading = true
                     const kirim = {
@@ -70,6 +72,8 @@ export default {
                         this.isError = false
                     }
                     this.$swal('Gagal', message, 'error')
+                } finally {
+                    this.loading = false
                 }
 
             } else {
@@ -101,23 +105,46 @@ export default {
                 $('.modalGenerate').modal('show')
             })
         },
+        async checkNoUrut() {
+            try {
+                this.loadingNoUrut = true
+                const { data } = await axios.get(`/api/prd/ongoing/${this.dataGenerate.id}`)
+                if (data != 0) {
+                    this.showNoUrutTerakhir = true
+                    this.form.no_urut_terakhir = data
+                } else {
+                    this.showNoUrutTerakhir = false
+                }
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.form.kedatangan = 1
+                this.loadingNoUrut = false
+            }
+        }
     },
     computed: {
         jumlahRakit() {
             return this.dataGenerate.kurang >= this.form.jml_noseri ? true : false
         },
+        validasiNoUrutTerakhir() {
+            return this.form.no_urut_terakhir < 10000 ? true : false
+        }
     },
     watch: {
         'form.kedatangan': function (val) {
             if (val > 26) {
                 this.form.kedatangan = 26
-            } else if (val < 0) {
-                this.form.kedatangan = 0
+            } else if (val <= 1) {
+                this.form.kedatangan = 1
             } else {
                 this.form.kedatangan = val
             }
         },
     },
+    created() {
+        this.checkNoUrut()
+    }
 }
 </script>
 <template>
@@ -134,7 +161,7 @@ export default {
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="card">
+                        <div class="card" v-if="!loadingNoUrut">
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-sm">
@@ -208,10 +235,14 @@ export default {
                                             Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" v-if="!showNoUrutTerakhir">
                                         <label for="exampleInputPassword1">No Urut Terakhir</label>
-                                        <input type="number" class="form-control" @keypress="numberOnly($event)"
-                                            v-model.number="form.no_urut_terakhir">
+                                        <input type="number" class="form-control"
+                                            :class="validasiNoUrutTerakhir ? 'is-valid' : 'is-invalid'"
+                                            @keypress="numberOnly($event)" v-model.number="form.no_urut_terakhir">
+                                        <div class="invalid-feedback" v-if="!validasiNoUrutTerakhir">
+                                            Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -251,6 +282,9 @@ export default {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="spinner-border" role="status" v-else>
+                            <span class="sr-only">Loading...</span>
                         </div>
                     </div>
                     <div class="modal-footer">

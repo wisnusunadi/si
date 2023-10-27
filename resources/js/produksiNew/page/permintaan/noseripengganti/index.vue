@@ -2,11 +2,13 @@
 import DataTable from '../../../components/DataTable.vue'
 import Status from '../../../components/status.vue'
 import ModalTambah from './modalTambah.vue'
+import ModalDetail from './modalDetail.vue'
 export default {
     components: {
         DataTable,
         Status,
         ModalTambah,
+        ModalDetail,
     },
     props: ['dataTable'],
     data() {
@@ -32,6 +34,8 @@ export default {
                 },
             ],
             modalTambah: false,
+            modalDetail: false,
+            detailSelected: null,
         }
     },
     methods: {
@@ -40,13 +44,21 @@ export default {
             this.$nextTick(() => {
                 $('.modalTambah').modal('show')
             })
-        }
+        },
+        detail(item) {
+            this.detailSelected = item;
+            this.modalDetail = true;
+            this.$nextTick(() => {
+                $('.modalDetail').modal('show')
+            })
+        },
     },
 }
 </script>
 <template>
     <div>
         <ModalTambah v-if="modalTambah" @closeModal="modalTambah = false" />
+        <ModalDetail v-if="modalDetail" @closeModal="modalDetail = false" :headers="detailSelected" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex bd-highlight">
@@ -65,7 +77,7 @@ export default {
                         <Status :status="item.status" />
                     </template>
                     <template #item.aksi="{ item }">
-                        <button class="btn btn-sm btn-outline-info">
+                        <button class="btn btn-sm btn-outline-info" @click="detail(item)">
                             <i class="fas fa-info-circle"></i>
                             Detail
                         </button>

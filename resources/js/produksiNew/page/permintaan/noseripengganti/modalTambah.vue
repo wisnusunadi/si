@@ -41,6 +41,7 @@ export default {
             search: '',
             offset: 0,
             limit: 10,
+            keterangan: '',
         }
     },
     methods: {
@@ -70,6 +71,36 @@ export default {
             this.search = query;
             this.offset = 0;
         },
+        notifikasiSeri(noseri) {
+            const duplikasi = this.formNoseri.filter(item => item.noseri === noseri)
+            if (duplikasi.length > 1) {
+                return 'No seri sudah ada'
+            }
+            if (noseri == null) {
+                return 'No seri tidak boleh kosong'
+            }
+            return null
+        },
+        transfer() {
+            const uniqueNoseriItems = [...new Set(this.formNoseri.map(item => item.noseri))]
+            if (uniqueNoseriItems.length !== this.formNoseri.length) {
+                this.$swal('Peringatan', 'No seri tidak boleh sama', 'warning')
+                return
+            }
+
+            const cekkosong = this.formNoseri.filter(item => item.noseri == null)
+            if (cekkosong.length > 0) {
+                this.$swal('Peringatan', 'No seri tidak boleh kosong', 'warning')
+                return
+            }
+
+            if (this.keterangan == '') {
+                this.$swal('Peringatan', 'Keterangan tidak boleh kosong', 'warning')
+                return
+            }
+
+            this.loading = true
+        }
     },
     mounted() {
         this.getNoseri()
@@ -165,6 +196,7 @@ export default {
                                                 </button>
                                             </li>
                                         </v-select>
+                                        <small class="text-danger" v-if="notifikasiSeri(item.noseri)">{{ notifikasiSeri(item.noseri) }}</small>
                                     </td>
                                     <td>
                                         {{ item.noseri?.nama ?? '-' }}
@@ -184,10 +216,14 @@ export default {
                             </tbody>
                         </table>
                     </div>
+                    <div class="form-group">
+                      <label for="">Keterangan</label>
+                      <textarea cols="5" class="form-control" v-model="keterangan"></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                    <button type="button" class="btn btn-success" :disabled="loading">Transfer</button>
+                    <button type="button" class="btn btn-success" :disabled="loading" @click="transfer">Transfer</button>
                 </div>
             </div>
         </div>
@@ -208,7 +244,7 @@ export default {
 }
 
 .scrollable {
-    height: 500px;
+    height: 300px;
     overflow-y: auto;
 }
 </style>
