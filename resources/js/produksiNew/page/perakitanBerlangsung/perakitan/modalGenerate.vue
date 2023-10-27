@@ -71,6 +71,8 @@ export default {
                         this.isError = false
                     }
                     this.$swal('Gagal', message, 'error')
+                } finally {
+                    this.loading = false
                 }
 
             } else {
@@ -104,6 +106,7 @@ export default {
         },
         async checkNoUrut() {
             try {
+                this.loading = true
                 const { data } = await axios.get(`/api/prd/ongoing/${this.dataGenerate.id}`)
                 if (data != 0) {
                     this.showNoUrutTerakhir = true
@@ -115,6 +118,7 @@ export default {
                 console.log(error)
             } finally {
                 this.form.kedatangan = 1
+                this.loading = false
             }
         }
     },
@@ -137,7 +141,7 @@ export default {
             }
         },
     },
-    mounted() {
+    created() {
         this.checkNoUrut()
     }
 }
@@ -156,7 +160,7 @@ export default {
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="card">
+                        <div class="card" v-if="!loading">
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-sm">
@@ -277,6 +281,9 @@ export default {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="spinner-border" role="status" v-else>
+                            <span class="sr-only">Loading...</span>
                         </div>
                     </div>
                     <div class="modal-footer">
