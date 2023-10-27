@@ -479,8 +479,6 @@ class ProduksiController extends Controller
                     ]);
 
                     JadwalRakitNoseriRw::whereIn('noseri_id', $getIdSeri)->update(['status' => 12]);
-
-
                     $items = NoseriBarangJadi::select('produk.nama as prd', 'gdg_barang_jadi.nama as varian', 'noseri_barang_jadi.id', 'noseri_barang_jadi.noseri')
                         ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
                         ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
@@ -3064,9 +3062,7 @@ class ProduksiController extends Controller
         ->groupBy('jadwal_perakitan.id')
         ->havingRaw('jumlah != jml_rakit')
         ->get();
-
         // return ['jumlah'=>count($data),'data' => $data];
-
             $data = collect($data)->map(function ($item) {
                 return [
                     'jadwal_id' => $item->id,
@@ -3081,11 +3077,7 @@ class ProduksiController extends Controller
                     'jumlah_rakit' => $item->jml_rakit,
                 ];
             });
-
-
             return response()->json($data);
-
-
             // $res = datatables()->of($data)
             //     ->addColumn('start', function ($d) {
             //         if (isset($d->tanggal_mulai)) {
