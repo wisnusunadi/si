@@ -1,6 +1,7 @@
 import VueRouter from "vue-router";
 import PermintaanReworkGBJ from "./page/PermintaanReworkGBJ";
 import penerimaanRework from "./page/penerimaanRework";
+import penggantianRework from "./page/penggantianRework";
 
 const routes = [
     {
@@ -10,6 +11,10 @@ const routes = [
     {
         path: "/gbj/rework/penerimaan-rework",
         component: penerimaanRework
+    },
+    {
+        path: "/gbj/rework/penggantian-rework",
+        component: penggantianRework
     }
 ]
 

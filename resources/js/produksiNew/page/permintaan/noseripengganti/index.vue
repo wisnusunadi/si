@@ -20,6 +20,10 @@ export default {
                     value: 'no_urut',
                 },
                 {
+                    text: 'Nama Produk',
+                    value: 'nama',
+                },
+                {
                     text: 'Jumlah',
                     value: 'jumlah',
                 },
