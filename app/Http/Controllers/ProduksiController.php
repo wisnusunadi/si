@@ -341,6 +341,7 @@ class ProduksiController extends Controller
                     }
 
                     $jp->status_tf = 12;
+                    $jp->no_bppb = $request->no_bppb;
                     $jp->save();
 
                     DB::commit();
@@ -3740,7 +3741,7 @@ class ProduksiController extends Controller
 
             $object = new stdClass();
             $object->ref =  $status == 'gbj' ?  $x->urutan : 'PRD-' . $x->urutan;
-            $object->no = 'BPBJ' . '/' . $this->toRomawi($data->created_at->format('m')) . '/' . (strtoupper($data->created_at->format('Y')) % 100) . '/' . str_pad($max + 1, 6, '0', STR_PAD_LEFT);
+            $object->no =   $status == 'produksi' ? 'BPBJ' . '/' . $this->toRomawi($data->created_at->format('m')) . '/' . (strtoupper($data->created_at->format('Y')) % 100) . '/' . str_pad($max + 1, 6, '0', STR_PAD_LEFT) : $x->no_surat;
             $object->tgl = $data->created_at->format('Y-m-d');
             $object->item = $groupedData;
             $object->diserahkan_oleh = $status == 'gbj' ? $x->diserahkan : User::find($data->user_id)->Karyawan->nama;
@@ -4433,11 +4434,12 @@ class ProduksiController extends Controller
     function cetakSuratPenyerahan($id, $divisi = 'prd')
     {
         $data = $this->surat_penyerahan_rw($divisi, $id);
+
         // if null return data kosong
         if ($data == null) {
             return 'Data Kosong';
         }
-        
+
         $pdf = PDF::loadview('page.produksi.printreworks.cetakbuktibarangjadi', compact('data'))->setPaper('a4', 'portrait');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');
