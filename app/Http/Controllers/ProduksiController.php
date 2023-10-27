@@ -3017,7 +3017,7 @@ class ProduksiController extends Controller
         ->max('jadwal_rakit_noseri.urutan');
 
         if(!$data){
-            $data = NULL;
+            $data = 0;
         }
         return response()->json($data);
     }
@@ -3039,7 +3039,8 @@ class ProduksiController extends Controller
         // having jp.jumlah != count(jrn.jadwal_id)");
 
         $data = JadwalPerakitan::select('p.kode','mp.nama','jadwal_perakitan.id','p.id as produk_id','jadwal_perakitan.created_at','jadwal_perakitan.tanggal_mulai',
-        'jadwal_perakitan.tanggal_selesai','jadwal_perakitan.no_bppb','jadwal_perakitan.jumlah','jadwal_perakitan.evaluasi')
+        'jadwal_perakitan.tanggal_selesai','jadwal_perakitan.no_bppb','jadwal_perakitan.jumlah','jadwal_perakitan.evaluasi',
+                'gbj.id as gbj_id')
         ->selectRaw('count(jadwal_rakit_noseri.jadwal_id) as jml_rakit')
         ->selectRaw('concat(p.nama," ",gbj.nama) as produkk')
         ->selectRaw('datediff(now(), jadwal_perakitan.tanggal_selesai) as selisih')
@@ -3069,6 +3070,7 @@ class ProduksiController extends Controller
 
             $data = collect($data)->map(function ($item) {
                 return [
+                    'id' => $item->gbj_id,
                     'jadwal_id' => $item->id,
                     'produk_id' => $item->produk_id,
                     'no_bppb' => $item->no_bppb ? $item->no_bppb : '-',
