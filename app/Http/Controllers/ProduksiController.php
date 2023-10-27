@@ -341,6 +341,7 @@ class ProduksiController extends Controller
                     }
 
                     $jp->status_tf = 12;
+                    $jp->no_bppb = $request->no_bppb;
                     $jp->save();
 
                     DB::commit();
@@ -577,6 +578,31 @@ class ProduksiController extends Controller
             ], 500);
         }
     }
+    // function generate_seri_back(Request $request)
+    // {
+    //     DB::beginTransaction();
+    //     $obj =  json_decode(json_encode($request->all()), FALSE);
+    //     try {
+    //         //code...
+    //         foreach ($obj->seri as $f) {
+    //             JadwalRakitNoseri::create([
+    //                 'jadwal_id' => 999,
+    //                 'noseri' => $f,
+    //                 'status' => 11,
+    //                 'date_in' => Carbon::now()
+    //             ]);
+    //         }
+    //         DB::commit();
+    //     } catch (\Throwable $th) {
+    //         //throw $th;
+    //         DB::rollBack();
+    //         return response()->json([
+    //             'status' => 200,
+    //             'message' =>  'Gagal Ditambahkan',
+    //             'error' => $th->getMessage()
+    //         ], 500);
+    //     }
+    // }
 
     function update_rw(Request $request, $id)
     {
@@ -2974,21 +3000,72 @@ class ProduksiController extends Controller
         $data = JadwalPerakitan::with('Produk.Produk')->whereNotIn('status', [6])->get();
         return response()->json($data);
     }
+
+    function on_rakit_detail($id)
+    {
+        $date = Carbon::now();
+        $tahun = $date->format('Y') % 100;
+        $produk = GudangBarangJadi::
+        select('produk.kode')
+       ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+        ->where('gdg_barang_jadi.id',$id)
+        ->first();
+
+        $data = JadwalRakitNoseri::
+        where('jadwal_rakit_noseri.th',$tahun)
+        ->where('jadwal_rakit_noseri.unit', $produk->kode)
+        ->max('jadwal_rakit_noseri.urutan');
+
+        if(!$data){
+            $data = NULL;
+        }
+        return response()->json($data);
+    }
+
     function on_rakit()
     {
         try {
-            $data = DB::select("select mp.nama,jp.id, p.id as produk_id, jp.created_at, jp.tanggal_mulai, jp.tanggal_selesai,
-        jp.no_bppb, jp.jumlah, jp.evaluasi, count(jrn.jadwal_id) as jml_rakit,
-        concat(p.nama,' ',gbj.nama) as produkk,
-        datediff(now(), jp.tanggal_selesai) as selisih
-        from jadwal_perakitan jp
-        left join jadwal_rakit_noseri jrn on jrn.jadwal_id = jp.id
-        left join gdg_barang_jadi gbj on gbj.id = jp.produk_id
-        left join produk p on p.id = gbj.produk_id
-        left join m_produk mp on mp.id = p.produk_id
-        where jp.status not in (6) and jp.status_tf not in(14)
-        group by jp.id
-        having jp.jumlah != count(jrn.jadwal_id)");
+        //     $data = DB::select("select mp.nama,jp.id, p.id as produk_id, jp.created_at, jp.tanggal_mulai, jp.tanggal_selesai,
+        // jp.no_bppb, jp.jumlah, jp.evaluasi, count(jrn.jadwal_id) as jml_rakit,
+        // concat(p.nama,' ',gbj.nama) as produkk,
+        // datediff(now(), jp.tanggal_selesai) as selisih
+        // from jadwal_perakitan jp
+        // left join jadwal_rakit_noseri jrn on jrn.jadwal_id = jp.id
+        // left join gdg_barang_jadi gbj on gbj.id = jp.produk_id
+        // left join produk p on p.id = gbj.produk_id
+        // left join m_produk mp on mp.id = p.produk_id
+        // where jp.status not in (6) and jp.status_tf not in(14)
+        // group by jp.id
+        // having jp.jumlah != count(jrn.jadwal_id)");
+
+        $data = JadwalPerakitan::select('p.kode','mp.nama','jadwal_perakitan.id','p.id as produk_id','jadwal_perakitan.created_at','jadwal_perakitan.tanggal_mulai',
+        'jadwal_perakitan.tanggal_selesai','jadwal_perakitan.no_bppb','jadwal_perakitan.jumlah','jadwal_perakitan.evaluasi')
+        ->selectRaw('count(jadwal_rakit_noseri.jadwal_id) as jml_rakit')
+        ->selectRaw('concat(p.nama," ",gbj.nama) as produkk')
+        ->selectRaw('datediff(now(), jadwal_perakitan.tanggal_selesai) as selisih')
+        // ->addSelect([
+        //     'seri_terakhir' => function ($q) {
+        //         $q->select('jrs.urutan')
+        //             ->from('jadwal_rakit_noseri as jrs')
+        //             ->leftJoin('jadwal_perakitan as jp', 'jp.id', '=', 'jrs.jadwal_id')
+        //             ->leftJoin('gdg_barang_jadi as gb', 'gb.id', '=', 'jp.produk_id')
+        //             ->leftJoin('produk as prd', 'prd.id', '=', 'gb.produk_id')
+        //             ->whereColumn('jrs.unit','p.kode')
+        //             ->where('jrs.th','23')
+        //             ->limit(1);
+        //     }
+        // ])
+        ->leftJoin('jadwal_rakit_noseri', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+        ->leftJoin('gdg_barang_jadi as gbj', 'gbj.id', '=', 'jadwal_perakitan.produk_id')
+        ->leftJoin('produk as p', 'p.id', '=', 'gbj.produk_id')
+        ->leftJoin('m_produk as mp', 'mp.id', '=', 'p.produk_id')
+        ->whereNotIn('jadwal_perakitan.status',[6])
+        ->whereNotIn('jadwal_perakitan.status_tf',[14])
+        ->groupBy('jadwal_perakitan.id')
+        ->havingRaw('jumlah != jml_rakit')
+        ->get();
+
+        // return ['jumlah'=>count($data),'data' => $data];
 
             $data = collect($data)->map(function ($item) {
                 return [
@@ -3740,7 +3817,7 @@ class ProduksiController extends Controller
 
             $object = new stdClass();
             $object->ref =  $status == 'gbj' ?  $x->urutan : 'PRD-' . $x->urutan;
-            $object->no = 'BPBJ' . '/' . $this->toRomawi($data->created_at->format('m')) . '/' . (strtoupper($data->created_at->format('Y')) % 100) . '/' . str_pad($max + 1, 6, '0', STR_PAD_LEFT);
+            $object->no =   $status == 'produksi' ? 'BPBJ' . '/' . $this->toRomawi($data->created_at->format('m')) . '/' . (strtoupper($data->created_at->format('Y')) % 100) . '/' . str_pad($max + 1, 6, '0', STR_PAD_LEFT) : $x->no_surat;
             $object->tgl = $data->created_at->format('Y-m-d');
             $object->item = $groupedData;
             $object->diserahkan_oleh = $status == 'gbj' ? $x->diserahkan : User::find($data->user_id)->Karyawan->nama;
@@ -4433,11 +4510,12 @@ class ProduksiController extends Controller
     function cetakSuratPenyerahan($id, $divisi = 'prd')
     {
         $data = $this->surat_penyerahan_rw($divisi, $id);
+
         // if null return data kosong
         if ($data == null) {
             return 'Data Kosong';
         }
-        
+
         $pdf = PDF::loadview('page.produksi.printreworks.cetakbuktibarangjadi', compact('data'))->setPaper('a4', 'portrait');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');

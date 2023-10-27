@@ -243,7 +243,7 @@ class GudangController extends Controller
                 $obj[] = array(
                     'id' => $d->id,
                     'no_surat' =>   'BPBJ' . '/' . $this->toRomawi($d->created_at->format('m')) . '/' . (strtoupper($d->created_at->format('Y')) % 100) . '/' . str_pad($max + 1, 6, '0', STR_PAD_LEFT),
-                    'diserahkan' =>  $d->user_id != NULL ? User::find($d->user_id)->nama : '-',
+                    'diserahkan' =>  $d->user_id != NULL ? User::find($d->user_id)->Karyawan->nama : '-',
                     'urutan' => 'PRD-'.$x->urutan,
                     'tgl_mulai' => $x->tanggal_mulai,
                     'tgl_selesai' => $x->tanggal_selesai,
