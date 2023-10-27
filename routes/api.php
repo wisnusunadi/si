@@ -340,6 +340,7 @@ Route::prefix('/prd')->group(function () {
         Route::post('/cetak/', [ProduksiController::class, 'get_noseri_fg_cetak']);
     });
     Route::prefix('/rw')->group(function () {
+        // Route::post('/generate_seri_back', [ProduksiController::class, 'generate_seri_back'])->middleware('jwt.verify');
         Route::get('/belum_kirim', [ProduksiController::class, 'belum_kirim_rw']);
         Route::get('/riwayat_permintaan', [ProduksiController::class, 'riwayat_rw_permintaan']);
         Route::get('/proses', [ProduksiController::class, 'proses_rw']);
@@ -385,6 +386,7 @@ Route::prefix('/prd')->group(function () {
 
     // on
     Route::get('/ongoing', [ProduksiController::class, 'on_rakit']);
+    Route::get('/ongoing/{id}', [ProduksiController::class, 'on_rakit_detail']);
     Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current'])->middleware('jwt.verify');
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
     Route::get('/ajax_his_rakit', [ProduksiController::class, 'ajax_history_rakit']);
