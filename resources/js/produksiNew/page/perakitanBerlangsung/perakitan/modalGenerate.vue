@@ -29,6 +29,7 @@ export default {
                 }
             ],
             showNoUrutTerakhir: false,
+            loadingNoUrut: false,
         }
     },
     methods: {
@@ -106,7 +107,7 @@ export default {
         },
         async checkNoUrut() {
             try {
-                this.loading = true
+                this.loadingNoUrut = true
                 const { data } = await axios.get(`/api/prd/ongoing/${this.dataGenerate.id}`)
                 if (data != 0) {
                     this.showNoUrutTerakhir = true
@@ -118,7 +119,7 @@ export default {
                 console.log(error)
             } finally {
                 this.form.kedatangan = 1
-                this.loading = false
+                this.loadingNoUrut = false
             }
         }
     },
@@ -160,7 +161,7 @@ export default {
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="card" v-if="!loading">
+                        <div class="card" v-if="!loadingNoUrut">
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-sm">
