@@ -291,10 +291,10 @@ Route::group(['prefix' => 'logistik'], function () {
         // Route::group(['middleware' => ['divisi:log,dirut']], function () {
             Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
             Route::post('/data/{value}/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
-            Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
+            Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\LogistikController::class, 'update_so'])->name('logistik.so.detail');
         // });
         Route::group(['middleware' => ['divisi:log']], function () {
-            Route::get('/create/{jenis}', [App\Http\Controllers\logistikController::class, 'create_logistik_view'])->name('logistik.so.create');
+            Route::get('/create/{jenis}', [App\Http\Controllers\LogistikController::class, 'create_logistik_view'])->name('logistik.so.create');
             Route::view('/edit', 'page.logistik.so.edit')->name('logistik.so.edit');
             Route::group(['prefix' => '/riwayat'], function () {
                 Route::view('/show', 'page.logistik.so.riwayat.show')->name('logistik.so.riwayat.show');
@@ -302,7 +302,7 @@ Route::group(['prefix' => 'logistik'], function () {
             Route::group(['prefix' => '/laporan'], function () {
                 Route::view('/show', 'page.logistik.laporan.show')->name('logistik.so.laporan.show');
             });
-            Route::get('/cancel/{id}', [App\Http\Controllers\logistikController::class, 'cancel_so'])->name('logistik.so.cancel_po');
+            Route::get('/cancel/{id}', [App\Http\Controllers\LogistikController::class, 'cancel_so'])->name('logistik.so.cancel_po');
         });
     });
 
