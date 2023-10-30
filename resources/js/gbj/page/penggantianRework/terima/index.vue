@@ -1,9 +1,11 @@
 <script>
 import DataTable from '../../../components/DataTable.vue';
+import modaltransfer from './modalTransfer'
 export default {
     props: ['dataTable'],
     components: {
-        DataTable
+        DataTable,
+        modaltransfer
     },
     data() {
         return {
@@ -26,45 +28,47 @@ export default {
                 }
             ],
             search: '',
+            dataSelected: null,
+            showModalTransfer: false,
         }
     },
     methods: {
-        kirim(id) {
-            this.$swal({
-                title: 'Apakah anda yakin?',
-                text: "Data yang sudah dikirim tidak dapat dikembalikan!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.$swal({
-                        title: 'Berhasil!',
-                        text: 'Data berhasil dikirim.',
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    this.$emit('refresh')
+        kirim(data) {
+            this.dataSelected = JSON.parse(JSON.stringify(data));
+            this.dataSelected.item = this.dataSelected.item.map(item => {
+                return {
+                    ...item,
+                    layout: {
+                        id: 7,
+                        label: 'Blok B',
+                    }
                 }
             })
+            this.showModalTransfer = true;
+            this.$nextTick(() => {
+                $('.modalDetailTransfer').modal('show');
+            });
         }
     },
 }
 </script>
 <template>
     <div>
+        <modaltransfer :dataSelected="dataSelected" v-if="showModalTransfer" @closeModal="showModalTransfer = false" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
             </div>
         </div>
         <data-table :headers="headers" :items="dataTable" :search="search">
-            <template v-slot:item.aksi="{ item }">
+            <template #item.aksi="{ item }">
                 <button class="btn btn-sm btn-outline-primary" @click="kirim(item)">
                     <i class="fa fa-check"></i>
                     Terima</button>
+                <button class="btn btn-sm btn-outline-info">
+                    <i class="fa fa-print"></i>
+                    Cetak BPBJ
+                </button>
             </template>
         </data-table>
     </div>

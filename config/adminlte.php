@@ -1232,12 +1232,12 @@ return [
             'icon' => 'fas fa-truck-loading',
             'auth' => [13],
         ],
-        // [
-        //     'text' => 'Penerimaan Penggantian Rework',
-        //     'url' => '/gbj/rework/penggantian-rework',
-        //     'icon' => 'fas fa-exchange-alt',
-        //     'auth' => [13],
-        // ],
+        [
+            'text' => 'Penerimaan Penggantian Rework',
+            'url' => '/gbj/rework/penggantian-rework',
+            'icon' => 'fas fa-exchange-alt',
+            'auth' => [13],
+        ],
         [
             'text' => 'Penerimaan Rework',
             'url' => '/gbj/rework/penerimaan-rework',

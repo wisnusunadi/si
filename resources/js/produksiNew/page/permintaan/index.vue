@@ -86,11 +86,11 @@ export default {
                             data-target="#pills-permintaan" type="button" role="tab" aria-controls="pills-permintaan"
                             aria-selected="true">Permintaan</a>
                     </li>
-                    <!-- <li class="nav-item" role="presentation">
+                    <li class="nav-item" role="presentation">
                         <a class="nav-link" id="pills-noseripengganti-tab" data-toggle="pill"
                             data-target="#pills-noseripengganti" type="button" role="tab"
                             aria-controls="pills-noseripengganti" aria-selected="true">No Seri Pengganti</a>
-                    </li> -->
+                    </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="pills-riwayat-tab" data-toggle="pill" data-target="#pills-riwayat"
                             type="button" role="tab" aria-controls="pills-riwayat" aria-selected="false">Riwayat</a>
@@ -101,10 +101,10 @@ export default {
                         aria-labelledby="pills-permintaan-tab">
                         <Permintaan :dataTable="permintaan" @refresh="getData" />
                     </div>
-                    <!-- <div class="tab-pane fade" id="pills-noseripengganti" role="tabpanel"
+                    <div class="tab-pane fade" id="pills-noseripengganti" role="tabpanel"
                         aria-labelledby="pills-noseripengganti-tab">
                         <NoSeriPengganti :dataTable="noseripengganti" />
-                    </div> -->
+                    </div>
                     <div class="tab-pane fade" id="pills-riwayat" role="tabpanel" aria-labelledby="pills-riwayat-tab">
                         <Riwayat :dataTable="riwayat" />
                     </div>
