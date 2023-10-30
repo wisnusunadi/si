@@ -21,7 +21,7 @@ export default {
 </script>
 <template>
     <div class="modal fade modalPilihan" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-        <div class="modal-dialog modal-md" role="document">
+        <div class="modal-dialog modal-md modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Pilihan Cetak</h5>

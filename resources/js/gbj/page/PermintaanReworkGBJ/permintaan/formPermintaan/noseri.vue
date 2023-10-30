@@ -253,7 +253,7 @@ export default {
         <seriviatext v-if="showmodalviatext" @close="closeModalViaText" @submit="submit" />
         <div class="modal fade modalSeri" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Detail Produk</h5>
@@ -283,7 +283,6 @@ export default {
                                         ref="search" @keyup.enter="autoSelect" />
                                 </div>
                             </div>
-                            <div class="scrollable">
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -316,7 +315,6 @@ export default {
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
                             <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses
                                 " />
                         </div>

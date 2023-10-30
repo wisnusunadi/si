@@ -56,8 +56,9 @@ export default {
 <template>
     <div>
         <noseri v-if="modalSeri" :seriSelected="dataSeriSelected" @closeModal="closeModalSeri" />
-        <div class="modal fade modalProduk" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
+        <div class="modal fade modalProduk" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+            aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Detail Produk</h5>
@@ -101,15 +102,13 @@ export default {
                                         <input type="text" v-model="search" class="form-control" placeholder="Cari...">
                                     </div>
                                 </div>
-                                <div class="scrollable">
-                                    <DataTable :headers="headers" :items="dataSelected.data" :search="search">
-                                        <template #item.no="{ item, index }">
-                                            <div>
-                                                {{ index + 1 }}
-                                            </div>
-                                        </template>
-                                    </DataTable>
-                                </div>
+                                <DataTable :headers="headers" :items="dataSelected.data" :search="search">
+                                    <template #item.no="{ item, index }">
+                                        <div>
+                                            {{ index + 1 }}
+                                        </div>
+                                    </template>
+                                </DataTable>
                             </div>
                         </div>
                     </div>
@@ -141,10 +140,5 @@ export default {
     color: #fff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 18px
-}
-
-.scrollable {
-    height: 500px;
-    overflow-y: auto;
 }
 </style>
