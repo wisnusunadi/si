@@ -102,6 +102,13 @@ export default {
                 let noserinotfound = []
 
                 let noseriarray = this.search.split(/[\n, \t]/)
+
+                // remove empty string
+                noseriarray = noseriarray.filter((data) => data !== "")
+
+                // remove duplicate
+                noseriarray = [...new Set(noseriarray)]
+
                 for (let i = 0; i < noseriarray.length; i++) {
                     let found = false
                     for (let j = 0; j < this.dataTable.length; j++) {
