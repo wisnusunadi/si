@@ -103,6 +103,8 @@ export default {
             }
 
             this.loading = true
+            this.$swal('Berhasil', 'Berhasil transfer', 'success')
+            this.closeModal()
         },
         showSeriViaText() {
             this.showTextSeri = true
@@ -150,7 +152,7 @@ export default {
             }
             noserinotfound = [...new Set(noserinotfound)]
 
-            if(noserinotfound > 0 && noserinotfound != '') {
+            if(noserinotfound.length > 0 && noserinotfound != '') {
                 this.$swal('Peringatan', `No seri ${noserinotfound.join(', ')} tidak ditemukan`, 'warning')
             }
         }
@@ -244,17 +246,17 @@ export default {
                             <table class="table text-center">
                                 <thead>
                                     <tr>
-                                        <th>No Seri</th>
+                                        <th style="width: 300px;">No Seri</th>
                                         <th>Nama Produk</th>
                                         <th>Varian</th>
-                                        <th>No Produk</th>
+                                        <th>No Produksi</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(item, index) in formNoseri" :key="index">
                                         <td>
-                                            <v-select :options="paginated" v-model="item.noseri" @search="onSearch">
+                                            <v-select :options="paginated" v-model="item.noseri" @search="onSearch" style="width: 300px">
                                                 <li slot="list-footer" class="pagination">
                                                     <button type="button" class="btn btn-secondary" :disabled="!hasPrevPage"
                                                         @click="offset -= limit">
