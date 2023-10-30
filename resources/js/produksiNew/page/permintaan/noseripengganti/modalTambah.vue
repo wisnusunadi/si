@@ -85,8 +85,8 @@ export default {
             return null
         },
         transfer() {
-            const uniqueNoseriItems = [...new Set(this.formNoseri.map(item => item.noseri))]
-            if (uniqueNoseriItems.length !== this.formNoseri.length) {
+            const uniqueNoseriItems = [...new Set(this.formNoseri.map(item => item.noseri?.label))]
+            if (uniqueNoseriItems.length < this.formNoseri.length) {
                 this.$swal('Peringatan', 'No seri tidak boleh sama', 'warning')
                 return
             }
