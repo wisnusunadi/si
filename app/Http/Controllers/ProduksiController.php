@@ -287,7 +287,7 @@ class ProduksiController extends Controller
     function generate_fg(Request $request)
     {
 
-        DB::beginTransaction();
+    //    DB::beginTransaction();
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
@@ -298,7 +298,9 @@ class ProduksiController extends Controller
             $tahun = $getTgl->format('Y') % 100;
             $bulan =  strtoupper(dechex($getTgl->format('m')));;
             //Default
-            $kedatangan =  strtoupper(dechex($obj->kedatangan));
+            $abjad = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "Y", "V", "W", "X", "Y", "Z"];
+            $kedatangan =  $abjad[$obj->kedatangan - 1];
+
             for ($i = 1; $i <= $obj->jml_noseri; $i++) {
                 $newSeri[] = $prd->kode . $tahun . $bulan . $kedatangan . str_pad($obj->no_urut_terakhir + $i, 5, '0', STR_PAD_LEFT);
                 $newSeries[] = array(
