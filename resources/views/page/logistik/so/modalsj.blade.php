@@ -457,7 +457,7 @@
       if (this.checked) {
         $('.tablepart').DataTable().column(0).nodes().to$().find(':checkbox').prop('checked', true);
       } else {
-        $('.tablepart').DataTable().column(0).nodes().to$().find(':checkbox').prop('checked', true);
+        $('.tablepart').DataTable().column(0).nodes().to$().find(':checkbox').prop('checked', false);
       }
     });
 
@@ -555,15 +555,13 @@
 
         let table_part = $('.tablepart').DataTable();
         let check_part = table_part.column(0).nodes().to$().find(':checkbox:checked');
-
+        part = [];
         // push data to array
-        for (let i = 0; i < check_part.length; i++) {
-            if (check_part[i].checked) {
-                let row = table_part.row(i).node(); // Get the row node directly
-                let rowData = table_part.row(row).data();
-                part.push(rowData);
-            }
-        }
+        check_part.each(function () {
+          let row = table_part.row($(this).closest('tr'))
+          let rowData = row.data();
+          part.push(rowData);
+        });
 
         // remove duplicate part with Set
         part = [...new Set(part)];
@@ -595,7 +593,6 @@
           part: part,
           dataform: dataform
         }
-
 
         // post data
         $.ajax({
@@ -629,6 +626,16 @@
           }
         })
 
+    });
+
+    // close modal reset form
+    $('#cetaksjmodal').on('hidden.bs.modal', function () {
+      $('#formcetaksj').trigger('reset');
+      $('.tableproduk').DataTable().clear().draw();
+      $('.tablepart').DataTable().clear().draw();
+      $('#ekspedisi_id').empty().trigger('change');
+      produk = [];
+      part = [];
     });
 
     $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function () {

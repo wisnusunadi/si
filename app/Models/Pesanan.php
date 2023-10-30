@@ -555,16 +555,17 @@ class Pesanan extends Model
         return $data;
     }
 
-    public function GetProduk()
+    public function GetProduk($pj_id)
     {
         $id = $this->id;
-        $produk = DB::select('select group_concat(dpp.gudang_barang_jadi_id) as id  from detail_pesanan_produk dpp
+        $produk = DB::select('select group_concat(dpp.gudang_barang_jadi_id) as p_id, group_concat(penjualan_produk_id) as pp_id  from detail_pesanan_produk dpp
         left join detail_pesanan dp on dpp.detail_pesanan_id  = dp.id
         left join pesanan p on p.id = dp.pesanan_id
         where p.id = ?',[$id]);
-       $array = explode(",",$produk[0]->id);
+       $p_id = explode(",",$produk[0]->p_id);
+       $pp_id = explode(",",$produk[0]->pp_id);
 
-        if (in_array(380, $array))
+        if (in_array(380, $p_id) && $pj_id == 28 )
          {
             return 'BLUETOOTH';
          }
