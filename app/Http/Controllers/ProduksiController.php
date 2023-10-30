@@ -287,7 +287,7 @@ class ProduksiController extends Controller
     function generate_fg(Request $request)
     {
 
-        DB::beginTransaction();
+    //    DB::beginTransaction();
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
@@ -298,7 +298,9 @@ class ProduksiController extends Controller
             $tahun = $getTgl->format('Y') % 100;
             $bulan =  strtoupper(dechex($getTgl->format('m')));;
             //Default
-            $kedatangan =  strtoupper(dechex($obj->kedatangan));
+            $abjad = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "Y", "V", "W", "X", "Y", "Z"];
+            $kedatangan =  $abjad[$obj->kedatangan - 1];
+
             for ($i = 1; $i <= $obj->jml_noseri; $i++) {
                 $newSeri[] = $prd->kode . $tahun . $bulan . $kedatangan . str_pad($obj->no_urut_terakhir + $i, 5, '0', STR_PAD_LEFT);
                 $newSeries[] = array(
@@ -479,8 +481,6 @@ class ProduksiController extends Controller
                     ]);
 
                     JadwalRakitNoseriRw::whereIn('noseri_id', $getIdSeri)->update(['status' => 12]);
-
-
                     $items = NoseriBarangJadi::select('produk.nama as prd', 'gdg_barang_jadi.nama as varian', 'noseri_barang_jadi.id', 'noseri_barang_jadi.noseri')
                         ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
                         ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
@@ -3065,39 +3065,33 @@ class ProduksiController extends Controller
         ->groupBy('jadwal_perakitan.id')
         ->havingRaw('jumlah != jml_rakit')
         ->get();
-
         // return ['jumlah'=>count($data),'data' => $data];
-
-            // $data = collect($data)->map(function ($item) {
-            //     return [
-            //         'id' => $item->gbj_id,
-            //         'jadwal_id' => $item->id,
-            //         'produk_id' => $item->produk_id,
-            //         'no_bppb' => $item->no_bppb ? $item->no_bppb : '-',
-            //         'tanggal_mulai' => $item->tanggal_mulai ? $item->tanggal_mulai : '-',
-            //         'tanggal_selesai' => $item->tanggal_selesai ? $item->tanggal_selesai : '-',
-            //         'selisih' => $item->selisih,
-            //         'nama_produk' => $item->produkk,
-            //         'kategori' => $item->nama,
-            //         'jumlah' => $item->jumlah,
-            //         'jumlah_rakit' => $item->jml_rakit,
-            //     ];
-            // });
-
-
-            // return response()->json($data);
-
-
-            $res = datatables()->of($data)
-                ->addColumn('start', function ($d) {
-                    if (isset($d->tanggal_mulai)) {
-                        return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('end', function ($d) {
-                    $x = $d->selisih;
+            $data = collect($data)->map(function ($item) {
+                return [
+                    'id' => $item->gbj_id,
+                    'jadwal_id' => $item->id,
+                    'produk_id' => $item->produk_id,
+                    'no_bppb' => $item->no_bppb ? $item->no_bppb : '-',
+                    'tanggal_mulai' => $item->tanggal_mulai ? $item->tanggal_mulai : '-',
+                    'tanggal_selesai' => $item->tanggal_selesai ? $item->tanggal_selesai : '-',
+                    'selisih' => $item->selisih,
+                    'nama_produk' => $item->produkk,
+                    'kategori' => $item->nama,
+                    'jumlah' => $item->jumlah,
+                    'jumlah_rakit' => $item->jml_rakit,
+                ];
+            });
+            return response()->json($data);
+            // $res = datatables()->of($data)
+            //     ->addColumn('start', function ($d) {
+            //         if (isset($d->tanggal_mulai)) {
+            //             return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('end', function ($d) {
+            //         $x = $d->selisih;
 
                     if (isset($d->tanggal_selesai)) {
                         if ($x >= -10 && $x < -5) {
