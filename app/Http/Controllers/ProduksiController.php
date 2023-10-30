@@ -3068,93 +3068,93 @@ class ProduksiController extends Controller
 
         // return ['jumlah'=>count($data),'data' => $data];
 
-            $data = collect($data)->map(function ($item) {
-                return [
-                    'id' => $item->gbj_id,
-                    'jadwal_id' => $item->id,
-                    'produk_id' => $item->produk_id,
-                    'no_bppb' => $item->no_bppb ? $item->no_bppb : '-',
-                    'tanggal_mulai' => $item->tanggal_mulai ? $item->tanggal_mulai : '-',
-                    'tanggal_selesai' => $item->tanggal_selesai ? $item->tanggal_selesai : '-',
-                    'selisih' => $item->selisih,
-                    'nama_produk' => $item->produkk,
-                    'kategori' => $item->nama,
-                    'jumlah' => $item->jumlah,
-                    'jumlah_rakit' => $item->jml_rakit,
-                ];
-            });
+            // $data = collect($data)->map(function ($item) {
+            //     return [
+            //         'id' => $item->gbj_id,
+            //         'jadwal_id' => $item->id,
+            //         'produk_id' => $item->produk_id,
+            //         'no_bppb' => $item->no_bppb ? $item->no_bppb : '-',
+            //         'tanggal_mulai' => $item->tanggal_mulai ? $item->tanggal_mulai : '-',
+            //         'tanggal_selesai' => $item->tanggal_selesai ? $item->tanggal_selesai : '-',
+            //         'selisih' => $item->selisih,
+            //         'nama_produk' => $item->produkk,
+            //         'kategori' => $item->nama,
+            //         'jumlah' => $item->jumlah,
+            //         'jumlah_rakit' => $item->jml_rakit,
+            //     ];
+            // });
 
 
-            return response()->json($data);
+            // return response()->json($data);
 
 
-            // $res = datatables()->of($data)
-            //     ->addColumn('start', function ($d) {
-            //         if (isset($d->tanggal_mulai)) {
-            //             return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
-            //         } else {
-            //             return '-';
-            //         }
-            //     })
-            //     ->addColumn('end', function ($d) {
-            //         $x = $d->selisih;
+            $res = datatables()->of($data)
+                ->addColumn('start', function ($d) {
+                    if (isset($d->tanggal_mulai)) {
+                        return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('end', function ($d) {
+                    $x = $d->selisih;
 
-            //         if (isset($d->tanggal_selesai)) {
-            //             if ($x >= -10 && $x < -5) {
-            //                 return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
-            //             } elseif ($x >= -5 && $x <= -2) {
-            //                 return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
-            //             } elseif ($x > -2 && $x <= 0) {
-            //                 return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Kurang ' . $x . ' Hari</span>';
-            //             } elseif ($x > 0) {
-            //                 return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Lebih ' . $x . ' Hari</span>';
-            //             } elseif ($x < -10) {
-            //                 return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
-            //             } else {
-            //                 return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ' . $x;
-            //             }
-            //         } else {
-            //             return '-';
-            //         }
-            //     })
-            //     ->addColumn('produk', function ($d) {
-            //         return $d->produkk;
-            //     })
-            //     ->addColumn('jml', function ($d) {
-            //         return $d->jumlah . ' Unit' . '<br><span class="badge badge-dark">Kurang ' . intval($d->jumlah - $d->jml_rakit) . ' Unit</span>';
-            //     })
-            //     ->addColumn('action', function ($d) {
-            //         //     $a = '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-produk="'.$d->produk_id.'">
-            //         //                     <button class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i> Rakit Produk</button>
-            //         //             </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk.'" data-produk="'.$d->produk_id.'">
-            //         //                 <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
-            //         //             </a>';
-            //         $a = '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-produk="' . $d->produk_id . '">
-            //                         <button class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i> Rakit Produk</button>
-            //                 </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk . '" data-produk="' . $d->produk_id . '">
-            //                     <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
-            //                 </a>
-            //                 </a>&nbsp;<a data-toggle="modal" data-target="#evaluasirakit" class="evaluasirakit" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk . '" data-produk="' . $d->produk_id . '" data-eval="' . $d->evaluasi . '">
-            //                     <button class="btn btn-outline-secondary btn-sm"><i class="far fa-edit"></i> Evaluasi Perakitan</button>
-            //                 </a>';
-            //         return $a;
-            //     })
-            //     ->addColumn('created_at', function ($d) {
-            //         return $d->created_at;
-            //     })
-            //     ->addColumn('no_bppb', function ($d) {
-            //         return $d->no_bppb == null ? '-' : $d->no_bppb;
-            //     })
-            //     ->addColumn('periode', function ($d) {
-            //         if (isset($d->tanggal_mulai)) {
-            //             return Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM');
-            //         } else {
-            //             return '-';
-            //         }
-            //     })
-            //     ->rawColumns(['action', 'jml', 'end'])
-            //     ->make(true);
-            // return $res;
+                    if (isset($d->tanggal_selesai)) {
+                        if ($x >= -10 && $x < -5) {
+                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        } elseif ($x >= -5 && $x <= -2) {
+                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        } elseif ($x > -2 && $x <= 0) {
+                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Kurang ' . $x . ' Hari</span>';
+                        } elseif ($x > 0) {
+                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Lebih ' . $x . ' Hari</span>';
+                        } elseif ($x < -10) {
+                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        } else {
+                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ' . $x;
+                        }
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('produk', function ($d) {
+                    return $d->produkk;
+                })
+                ->addColumn('jml', function ($d) {
+                    return $d->jumlah . ' Unit' . '<br><span class="badge badge-dark">Kurang ' . intval($d->jumlah - $d->jml_rakit) . ' Unit</span>';
+                })
+                ->addColumn('action', function ($d) {
+                    //     $a = '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-produk="'.$d->produk_id.'">
+                    //                     <button class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i> Rakit Produk</button>
+                    //             </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk.'" data-produk="'.$d->produk_id.'">
+                    //                 <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
+                    //             </a>';
+                    $a = '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-produk="' . $d->produk_id . '">
+                                    <button class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i> Rakit Produk</button>
+                            </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk . '" data-produk="' . $d->produk_id . '">
+                                <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
+                            </a>
+                            </a>&nbsp;<a data-toggle="modal" data-target="#evaluasirakit" class="evaluasirakit" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk . '" data-produk="' . $d->produk_id . '" data-eval="' . $d->evaluasi . '">
+                                <button class="btn btn-outline-secondary btn-sm"><i class="far fa-edit"></i> Evaluasi Perakitan</button>
+                            </a>';
+                    return $a;
+                })
+                ->addColumn('created_at', function ($d) {
+                    return $d->created_at;
+                })
+                ->addColumn('no_bppb', function ($d) {
+                    return $d->no_bppb == null ? '-' : $d->no_bppb;
+                })
+                ->addColumn('periode', function ($d) {
+                    if (isset($d->tanggal_mulai)) {
+                        return Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM');
+                    } else {
+                        return '-';
+                    }
+                })
+                ->rawColumns(['action', 'jml', 'end'])
+                ->make(true);
+            return $res;
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
