@@ -1,12 +1,14 @@
 <script>
 import Header from '../../components/header.vue';
 import Permintaan from './permintaan';
+import penggantianseri from './penggantianseri';
 import Riwayat from './riwayat';
 import axios from 'axios';
 export default {
     components: {
         Header,
         Permintaan,
+        penggantianseri,
         Riwayat,
     },
     data() {
@@ -24,6 +26,7 @@ export default {
             ],
             permintaan: [],
             riwayat: [],
+            penggantian: [],
         }
     },
     methods: {
@@ -33,6 +36,13 @@ export default {
                 const { data: permintaan } = await axios.get('/api/gbj/rw/belum_kirim');
                 const { data: riwayat } = await axios.get('/api/gbj/rw/riwayat_permintaan')
                 this.permintaan = permintaan.map(item => {
+                    return {
+                        no_urut: `PRD-${item.urutan}`,
+                        ...item,
+                    }
+                });
+
+                this.penggantian = permintaan.map(item => {
                     return {
                         no_urut: `PRD-${item.urutan}`,
                         ...item,
@@ -69,6 +79,11 @@ export default {
                             type="button" role="tab" aria-controls="pills-home" aria-selected="true">Permintaan</a>
                     </li>
                     <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-penggantian-tab" data-toggle="pill" data-target="#pills-penggantian"
+                            type="button" role="tab" aria-controls="pills-penggantian" aria-selected="false">Penggantian No
+                            Seri</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
                         <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile"
                             type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat</a>
                     </li>
@@ -76,6 +91,9 @@ export default {
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                         <Permintaan :dataTable="permintaan" @refresh="getData" />
+                    </div>
+                    <div class="tab-pane fade" id="pills-penggantian" role="tabpanel" aria-labelledby="pills-penggantian-tab">
+                        <penggantianseri :dataTable="penggantian" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                         <Riwayat :dataTable="riwayat" />

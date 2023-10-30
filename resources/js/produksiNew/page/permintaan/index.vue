@@ -29,11 +29,13 @@ export default {
             noseripengganti: [
                 {
                     no_urut: 'PRD-1',
+                    nama: 'ANTROPOMETRI',
                     jumlah: 2,
                     status: 'Proses',
                 },
                 {
                     no_urut: 'PRD-2',
+                    nama: 'ANTROPOMETRI',
                     jumlah: 2,
                     status: 'selesai',
                 }

@@ -128,7 +128,7 @@ export default {
             return this.dataGenerate.kurang >= this.form.jml_noseri ? true : false
         },
         validasiNoUrutTerakhir() {
-            return this.form.no_urut_terakhir < 10000 ? true : false
+            return this.form.no_urut_terakhir < 100000 ? true : false
         }
     },
     watch: {

@@ -2,11 +2,11 @@
 import pagination from '../../../components/pagination.vue';
 import Table from './table.vue';
 export default {
+    props: ['dataTable'],
     components: {
         pagination,
         Table,
     },
-    props: ['dataTable'],
     data() {
         return {
             search: '',
