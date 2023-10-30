@@ -95,6 +95,32 @@ export default {
                 $('.modalSeri').modal('show');
             });
         },
+        transfer() {
+            const dataKirim = [];
+
+            this.dataTable.forEach((data) => {
+                if (data.noseri) {
+                    dataKirim.push(data);
+                }
+            });
+
+            if (dataKirim.length === 0) {
+                this.$swal('Peringatan', 'Tidak ada data yang dipilih', 'warning');
+                return;
+            }
+
+            const success = () => {
+                this.$swal("Berhasil", "Data berhasil ditransfer", "success");
+                this.closeModal();
+                this.$emit("refresh");
+            };
+
+            const error = () => {
+                this.$swal("Gagal", "Data gagal ditransfer", "error");
+            };
+
+            success();
+        }
     },
     created() {
         this.getData();
@@ -119,28 +145,6 @@ export default {
                         <div class="card">
                             <div class="card-header">
                                 <div class="row row-cols-2">
-                                    <div class="col">
-                                        <label for="">Tanggal Mulai</label>
-                                        <div class="card nomor-so">
-                                            <div class="card-body">
-                                                <span id="so">{{
-                                                    dateFormat(headerData.tgl_mulai)
-                                                }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col">
-                                        <label for="">Tanggal Selesai</label>
-                                        <div class="card nomor-akn">
-                                            <div class="card-body">
-                                                <span id="akn">{{
-                                                    dateFormat(headerData.tgl_selesai)
-                                                }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <div class="col">
                                         <label for="">Nama Produk</label>
                                         <div class="card nomor-po">
@@ -195,7 +199,7 @@ export default {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                        <button type="button" class="btn btn-success">Transfer</button>
+                        <button type="button" class="btn btn-success" @click="transfer">Transfer</button>
                     </div>
                 </div>
             </div>

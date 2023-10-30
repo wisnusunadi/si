@@ -75,7 +75,7 @@ export default {
             this.offset = 0;
         },
         notifikasiSeri(noseri) {
-            const duplikasi = this.formNoseri.filter(item => item.noseri === noseri)
+            const duplikasi = this.formNoseri.filter(item => item.noseri?.label === noseri?.label)
             if (duplikasi.length > 1) {
                 return 'No seri sudah ada'
             }
