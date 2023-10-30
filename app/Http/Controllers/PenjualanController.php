@@ -6402,7 +6402,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             $q->where('status','sepakat');
         })
             ->whereBetween('tgl_po', [$tgl_awal, $tgl_akhir])
-            ->select('Pesanan.tgl_po')
+            ->select('pesanan.tgl_po')
             ->get()
             ->groupBy(function ($date) {
                 return Carbon::parse($date->tgl_po)->format('m');
@@ -6428,7 +6428,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
         //SPA
         $spa = Pesanan::Has('Spa')
             ->whereBetween('tgl_po', [$tgl_awal, $tgl_akhir])
-            ->select('Pesanan.tgl_po')
+            ->select('pesanan.tgl_po')
             ->get()
             ->groupBy(function ($date) {
                 return Carbon::parse($date->tgl_po)->format('m');
@@ -6455,7 +6455,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
         //SPB
         $spb = Pesanan::Has('Spb')
             ->whereBetween('tgl_po', [$tgl_awal, $tgl_akhir])
-            ->select('Pesanan.tgl_po')
+            ->select('pesanan.tgl_po')
             ->get()
             ->groupBy(function ($date) {
                 return Carbon::parse($date->tgl_po)->format('m');
