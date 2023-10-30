@@ -122,19 +122,36 @@ export default {
 
             let noseriarray = noseri.split(/[\n, \t]/)
 
-            for (let i = 0; noseriarray.length; i++) {
+            // remove empty string
+            noseriarray = noseriarray.filter(item => item !== '')
+
+            // remove duplicate
+            noseriarray = [...new Set(noseriarray)]
+
+            // remove null in formNoseri
+            this.formNoseri = this.formNoseri.filter(item => item.noseri != null)
+
+            for (let i = 0; i < noseriarray.length; i++) {
                 let found = false
                 for (let j = 0; j < this.noseri.length; j++) {
-                    if (noseriarray[i] == this.noseri[j].noseri) {
-                        if (!this.formNoseri.some(item => item.noseri === this.noseri[j].noseri)) {
+                    if (noseriarray[i] === this.noseri[j].label) {
+                        if (!this.formNoseri.find(item => item.noseri?.label === this.noseri[j].label)) {
                             this.formNoseri.push({
-                                noseri: this.noseri[j].noseri,
+                                noseri: this.noseri[j],
                             })
                         }
                         found = true
                         break
                     }
                 }
+                if (!found) {
+                    noserinotfound.push(noseriarray[i])
+                }
+            }
+            noserinotfound = [...new Set(noserinotfound)]
+
+            if(noserinotfound > 0 && noserinotfound != '') {
+                this.$swal('Peringatan', `No seri ${noserinotfound.join(', ')} tidak ditemukan`, 'warning')
             }
         }
     },
@@ -209,7 +226,7 @@ export default {
                     <div class="modal-body">
                         <div class="d-flex bd-highlight">
                             <div class="p-2 flex-grow-1 bd-highlight">
-                                <button class="btn btn-primary" @click="showSeriViaText">
+                                <button class="btn btn-primary" @click="showSeriViaText" :disabled="loadingData">
                                     Pilih No Seri Via Text
                                 </button>
                             </div>
