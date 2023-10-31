@@ -38,11 +38,11 @@ export default {
             showTambah: false,
 
             headers: [
-                {
-                    text: 'id',
-                    value: 'id',
-                    sortable: false,
-                },
+                // {
+                //     text: 'id',
+                //     value: 'id',
+                //     sortable: false,
+                // },
                 {
                     text: 'No. Seri',
                     value: 'noseri',
@@ -250,7 +250,7 @@ export default {
                     </div>
                 </div>
                 <DataTable :headers="headers" :items="filterData">
-                    <template #header.id>
+                    <!-- <template #header.id>
                         <div>
                             <input type="checkbox" :checked="checkAll" @click="checkAllSeri">
                         </div>
@@ -261,7 +261,7 @@ export default {
                                 :checked="noSeriSelected && noSeriSelected.find((noseri) => noseri === item.id)"
                                 @click="selectNoSeri(item.id)">
                         </div>
-                    </template>
+                    </template> -->
                     <template #item.aksi="{ item }">
                         <div>
                             <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(item)">
