@@ -215,7 +215,10 @@ export default {
                 });
             });
         },
-        unique
+        uniquePacker() {
+            const packer = this.dataTable.map((data) => data.packer)
+            return [...new Set(packer)]
+        }
     },
     watch: {
         search() {
