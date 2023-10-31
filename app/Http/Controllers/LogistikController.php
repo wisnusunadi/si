@@ -814,6 +814,7 @@ class LogistikController extends Controller
     }
     public function get_noseri_so_belum_kirim($id, $array)
     {
+       // dd($id);
         $arr = explode(',', $array);
         // $data = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $id, 'status' => 'ok'])->doesntHave('NoseriDetailLogistik')->get();
         // $data = DB::table('noseri_barang_jadi')
@@ -844,7 +845,7 @@ class LogistikController extends Controller
         //     ->make(true);
 
         // $data = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $id, 'status' => 'ok'])->doesntHave('NoseriDetailLogistik')->get();
-        $data = NoseriBarangJadi::select('noseri_detail_pesanan.id as ndp_id', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id')
+        $data = NoseriBarangJadi::select('noseri_detail_pesanan.id as ndp_id', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as id')
             ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
             ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
             ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
@@ -856,12 +857,14 @@ class LogistikController extends Controller
                         ->from('seri_detail_rw')
                         ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
                 },
-                'cek_logistik' => function ($q) {
+                'cek_logistik' => function ($q) use ($id) {
                     $q->selectRaw('coalesce(count(noseri_logistik.id), 0)')
                         ->from('noseri_logistik')
                         ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
                         ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                        ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id')
+                        ->where('t_gbj_detail.detail_pesanan_produk_id', $id);
                 }
             ])
             ->havingRaw('cek_logistik = 0')
