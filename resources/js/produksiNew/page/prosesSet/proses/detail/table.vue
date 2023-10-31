@@ -2,10 +2,11 @@
 import modalDetail from '../modalDetail'
 import LihatSeri from '../modalCreate/modalSeri.vue'
 import axios from 'axios'
+import DataTable from '../../../../components/DataTable.vue'
 export default {
     components: {
         modalDetail,
-        LihatSeri
+        LihatSeri,
     },
     data() {
         return {
@@ -13,82 +14,62 @@ export default {
             dataModalDetail: null,
             showModalDetail: false,
             dataLihatNoSeri: null,
-            showModalNoSeri: false
+            showModalNoSeri: false,
         }
     },
-    props: ['dataTable'],
+    props: ['dataTable', 'search'],
     methods: {
-        detailNoseriProduk(id) {
-            this.detailSeri = true;
-            this.$nextTick(() => {
-                $('.modalDetailSeri').modal('show');
-            });
-        },
-        detailProdukSeri(data) {
-            this.dataModalDetail = JSON.parse(JSON.stringify(data))
-            this.showModalDetail = true
 
-            this.$nextTick(() => {
-                $('.modalDetailSeri').modal('show')
-            })
+        checkAllSeri() {
+            this.checkAll = !this.checkAll;
+            if (this.checkAll) {
+                this.noSeriSelected = this.filterData.map((item) => item.id);
+            } else {
+                this.noSeriSelected = [];
+            }
         },
-                lihatNoseri(noseri) {
-            this.dataLihatNoSeri = noseri
-            this.showModalNoSeri = true
-            this.$nextTick(() => {
-                $('.modalSeri').modal('show')
-            })
-        },
-        hapusNoseriProduk(id) {
-            this.$swal({
-                title: 'Apakah anda yakin?',
-                text: "Anda akan menghapus data no. seri produk ini",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    axios.delete(`/api/prd/rw/gen/${id}`).then(() => {
-                        this.$swal({
-                            title: 'Berhasil!',
-                            text: 'Data berhasil dihapus',
-                            icon: 'success',
-                        })
-                        this.$emit('refresh')
-                    }).catch((err) => {
-                        this.$swal({
-                            title: 'Gagal!',
-                            text: 'Data gagal dihapus',
-                            icon: 'error',
-                        })
-                    })
-                }
-            })
-        },
-        editNoseriProduk(data) {
-            this.$emit('editNoseriProduk', data)
-        },
-        lihatPackingList(id) {
-            window.open(`/produksiReworks/viewpackinglist/${id}`, '_blank');
-        },
-        cetakPackingList(id) {
-            window.open(`/produksiReworks/cetakpackinglist/${id}`, '_blank');
-        },
-        cetakNoseri(noseri) {
-            // window open with params
-            window.open(`/produksiReworks/cetakseriRework/${noseri}`, '_blank');
+        selectNoSeri(noseri) {
+            if(this.noSeriSelected.find((data) => data === noseri)) {
+                this.noSeriSelected = this.noSeriSelected.filter((data) => data !== noseri)
+                this.checkAll = false
+            } else {
+                this.noSeriSelected.push(noseri)
+            }
+
+            if(this.noSeriSelected.length === this.dataTable.length) {
+                this.checkAll = true
+            }
         }
     },
+    computed: {
+        filterData() {
+            return this.dataTable.filter((data) => {
+                return Object.keys(data).some((key) => {
+                    return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
+                });
+            });
+        }
+    },
+    watch: {
+        search() {
+            if (this.noSeriSelected.length == this.dataTable.length) {
+                this.checkAll = true
+            } else {
+                this.checkAll = false
+            }
+        }
+    }
 }
 </script>
 <template>
     <div>
-        <LihatSeri v-if="showModalNoSeri" :hasilGenerate="dataLihatNoSeri" @closeModal = "showModalNoSeri = false" />
+        <LihatSeri v-if="showModalNoSeri" :hasilGenerate="dataLihatNoSeri" @closeModal="showModalNoSeri = false" />
         <modalDetail v-if="showModalDetail" @closeModal="showModalDetail = false" :dataModalDetailSeri="dataModalDetail" />
-        <table class="table">
+
+        <!-- <table class="table">
             <thead>
                 <tr>
+                    <th><input type="checkbox"></th>
                     <th>No. Seri</th>
                     <th>Tanggal Dibuat</th>
                     <th>Packer</th>
@@ -97,6 +78,7 @@ export default {
             </thead>
             <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, idx) in dataTable" :key="idx">
+                    <td><input type="checkbox" name="" id=""></td>
                     <td>{{ data.noseri }}</td>
                     <td>{{ dateFormat(data.tgl_buat) }}</td>
                     <td>{{ data.packer }}</td>
@@ -131,6 +113,6 @@ export default {
                     <td colspan="4" class="text-center">Tidak ada data</td>
                 </tr>
             </tbody>
-        </table>
+        </table> -->
     </div>
 </template>
