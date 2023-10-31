@@ -1,7 +1,7 @@
 import VueRouter from "vue-router";
-import PermintaanReworks from "./Page/permintaan";
-import prosesSetReworks from './Page/prosesSet';
-import prosesSetReworksDetail from './Page/prosesSet/proses/detail';
+import PermintaanReworks from './page/permintaan'
+import prosesSetReworks from './page/prosesSet'
+import prosesSetReworksDetail from './page/prosesSet/proses/detail'
 // import perakitanBerlangsung from './Page/perakitanBerlangsung'
 
 const routes = [
