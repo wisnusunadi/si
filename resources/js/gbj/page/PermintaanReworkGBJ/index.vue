@@ -1,14 +1,14 @@
 <script>
 import Header from '../../components/header.vue';
 import Permintaan from './permintaan';
-import penggantianseri from './penggantianseri';
+// import penggantianseri from './penggantianseri';
 import Riwayat from './riwayat';
 import axios from 'axios';
 export default {
     components: {
         Header,
         Permintaan,
-        penggantianseri,
+        // penggantianseri,
         Riwayat,
     },
     data() {
