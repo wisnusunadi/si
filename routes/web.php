@@ -54,13 +54,13 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function () 
     Route::view('/dashboard', 'page.administrator.dashboard');
     Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
         Route::view('/', 'page.administrator.user.show');
-        Route::post('/data', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_data_user']);
-        Route::post('/ubah_status', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_change_status_user'])->name('user.status');
-        Route::get('/ubah_data/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_data_user_modal']);
-        Route::get('/tambah', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_create_user_modal']);
-        Route::post('/store', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_store_user']);
-        Route::post('/update/{jenis}/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_update_user']);
-        Route::post('/reset_pwd/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'reset_pwd_user'])->name('user.resetpwd');
+        Route::post('/data', [App\Http\Controllers\administrator\AdministratorController::class, 'get_data_user']);
+        Route::post('/ubah_status', [App\Http\Controllers\administrator\AdministratorController::class, 'get_change_status_user'])->name('user.status');
+        Route::get('/ubah_data/{id}', [App\Http\Controllers\administrator\AdministratorController::class, 'get_data_user_modal']);
+        Route::get('/tambah', [App\Http\Controllers\administrator\AdministratorController::class, 'get_create_user_modal']);
+        Route::post('/store', [App\Http\Controllers\administrator\AdministratorController::class, 'get_store_user']);
+        Route::post('/update/{jenis}/{id}', [App\Http\Controllers\administrator\AdministratorController::class, 'get_update_user']);
+        Route::post('/reset_pwd/{id}', [App\Http\Controllers\administrator\AdministratorController::class, 'reset_pwd_user'])->name('user.resetpwd');
     });
     Route::view('/{any?}', 'page.it.produk')->where('any', '.*');
     Route::group(['prefix' => 'part', 'middleware' => 'auth'], function () {
