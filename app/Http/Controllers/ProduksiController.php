@@ -3081,17 +3081,17 @@ class ProduksiController extends Controller
                     'jumlah_rakit' => $item->jml_rakit,
                 ];
             });
-            return response()->json($data);
-            // $res = datatables()->of($data)
-            //     ->addColumn('start', function ($d) {
-            //         if (isset($d->tanggal_mulai)) {
-            //             return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
-            //         } else {
-            //             return '-';
-            //         }
-            //     })
-            //     ->addColumn('end', function ($d) {
-            //         $x = $d->selisih;
+            // return response()->json($data);
+            $res = datatables()->of($data)
+                ->addColumn('start', function ($d) {
+                    if (isset($d->tanggal_mulai)) {
+                        return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('end', function ($d) {
+                    $x = $d->selisih;
 
                     if (isset($d->tanggal_selesai)) {
                         if ($x >= -10 && $x < -5) {

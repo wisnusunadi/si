@@ -32,10 +32,24 @@ export default {
                     data: mapArray.map(item => {
                         return {
                             ...item,
+                            kelompok: `${item.nama} - ${item.varian}`,
                             varian: item.varian ? item.varian : '-'
                         }
                     })
                 }
+
+                const unique = [...new Set(this.dataSelected.data.map(item => item.kelompok))]
+
+                const grouped = unique.map(item => {
+                    return {
+                        kelompok: item,
+                        nama: item.nama,
+                        varian: item.varian,
+                        item: this.dataSelected.data.filter(data => data.kelompok === item)
+                    }
+                })
+
+                this.dataSelected.data = grouped
 
                 this.showModal = true
                 this.$nextTick(() => {
