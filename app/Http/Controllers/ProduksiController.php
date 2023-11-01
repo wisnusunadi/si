@@ -4440,7 +4440,7 @@ class ProduksiController extends Controller
     function cetak_seri_rework($seri)
     {
         // buat 10cm x 2cm
-        $customPaperLarge = array(0, 0, 90.46, 290.69);
+        $customPaperLarge = array(0, 0, 86.46, 290.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserilarge', compact('seri'))->setPaper($customPaperLarge, 'landscape');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakseri', compact('seri'));
