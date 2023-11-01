@@ -279,7 +279,7 @@ export default {
                             <button class="btn btn-sm btn-outline-info my-1" @click="lihatNoseri(item.noseri)">
                                 <i class="fa fa-eye"></i> Lihat No. Seri
                             </button>
-                            <button class="btn btn-sm btn-outline-primary my-1" @click="cetakNoseri(item.id)">
+                            <button class="btn btn-sm btn-outline-primary my-1" @click="cetakNoseri(item.noseri)">
                                 <i class="fa fa-print"></i> Cetak No. Seri
                             </button> <br>
                             <button class="btn btn-sm btn-outline-info" @click="lihatPackingList(item.id)">
