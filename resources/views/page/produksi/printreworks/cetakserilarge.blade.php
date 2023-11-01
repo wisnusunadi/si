@@ -11,7 +11,7 @@
         /* large */
         @page {
             margin-top: 0cm;
-            margin-left: 0.1cm;
+            margin-left: 0.3cm;
         }
 
         /* medium */
