@@ -287,7 +287,7 @@ export default {
         <modalSeri v-if="detailSeri" @closeModal="closeModalSeri" :hasilGenerate="hasilGenerate" />
         <div class="modal fade modalSet" data-backdrop="static" id="modelId" role="dialog" aria-labelledby="modelTitleId"
             aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Form Scan Produk Rework</h5>
@@ -296,7 +296,7 @@ export default {
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="scrollable">
+                       
                             <div class="row">
                                 <div class="col">
                                     <form>
@@ -367,7 +367,6 @@ export default {
                                     </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
                     <div class="d-flex bd-highlight mb-3 mx-3">
                         <div class="mr-auto p-2 bd-highlight">
@@ -411,10 +410,5 @@ export default {
     color: #fff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 18px
-}
-
-.scrollable {
-    height: 500px;
-    overflow-y: scroll;
 }
 </style>
