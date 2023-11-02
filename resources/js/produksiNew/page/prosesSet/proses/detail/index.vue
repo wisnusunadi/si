@@ -268,12 +268,14 @@ export default {
                         <button class="btn btn-primary" @click="showModalCreate" v-if="!showTambah">
                             Tambah <i class="fa fa-plus"></i>
                         </button>
-                        <button class="btn btn-outline-primary ml-2" v-if="noSeriSelected.length > 0" @click="cetakAllNoseri">
-                                    <i class="fa fa-print"></i> Cetak No. Seri
-                                </button>
-                                <button class="btn btn-outline-secondary ml-2" v-if="noSeriSelected.length > 0" @click="cetakAllPackingList">
-                                        <i class="fa fa-print"></i> Cetak Packing List
-                                    </button>
+                        <button class="btn btn-outline-primary ml-2" v-if="noSeriSelected.length > 0"
+                            @click="cetakAllNoseri">
+                            <i class="fa fa-print"></i> Cetak No. Seri
+                        </button>
+                        <!-- <button class="btn btn-outline-secondary ml-2" v-if="noSeriSelected.length > 0"
+                            @click="cetakAllPackingList">
+                            <i class="fa fa-print"></i> Cetak Packing List
+                        </button> -->
                         <span class="filter ml-2">
                             <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
@@ -298,7 +300,7 @@ export default {
                                 </div>
                             </form>
                         </span>
-                        
+
                     </div>
                     <div class="p-2 bd-highlight"> <input type="text" v-model="search" class="form-control"
                             placeholder="Cari...">
