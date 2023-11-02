@@ -254,7 +254,7 @@ export default {
         },
         cetakSeri() {
             // open new tab
-            window.open(`/produksiReworks/cetakseriRework/${this.hasilGenerate}`, '_blank');
+            window.open(`/produksiReworks/cetakseriReworkAll?data=[${this.hasilGenerate}]`, '_blank');
         },
         viewPackingList() {
             let id = this.selectSeri?.id ? this.selectSeri.id : this.idGenerate;
@@ -262,7 +262,7 @@ export default {
         },
         cetakPackingList() {
             let id = this.selectSeri?.id ? this.selectSeri.id : this.idGenerate;
-            window.open(`/produksiReworks/cetakpackinglist/${id}`, '_blank');
+            window.open(`/produksiReworks/cetakpackinglist?data=[${id}]`, '_blank');
         },
         mappingEdit() {
             if (this.selectSeri?.id) {
