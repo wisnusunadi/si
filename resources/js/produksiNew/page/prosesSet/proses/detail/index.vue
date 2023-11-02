@@ -44,6 +44,11 @@ export default {
                     sortable: false,
                 },
                 {
+                    text: 'No.',
+                    value: 'no',
+                    sortable: false,
+                },
+                {
                     text: 'No. Seri',
                     value: 'noseri',
                     align: 'text-left'
@@ -317,6 +322,11 @@ export default {
                             <input type="checkbox"
                                 :checked="noSeriSelected && noSeriSelected.find((noseri) => noseri === item.id)"
                                 @click="selectNoSeri(item.id)">
+                        </div>
+                    </template>
+                    <template #item.no = "{item, index}">
+                        <div>
+                            {{ index + 1 }}
                         </div>
                     </template>
                     <template #item.aksi="{ item }">
