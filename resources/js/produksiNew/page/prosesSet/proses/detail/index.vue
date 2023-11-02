@@ -112,9 +112,10 @@ export default {
                 const id = this.$route.params.id;
                 const { data } = await axios.get(`/api/prd/rw/proses/produk/${id}`);
                 const { produk_reworks_id, set, urutan, item, belum } = data
-                this.dataTable = item.map((data) => {
+                this.dataTable = item.map((data, index) => {
                     return {
                         ...data,
+                        no: index + 1,
                         tgl_buat: this.dateFormat(data.tgl_buat),
                     }
                 })
@@ -322,11 +323,6 @@ export default {
                             <input type="checkbox"
                                 :checked="noSeriSelected && noSeriSelected.find((noseri) => noseri === item.id)"
                                 @click="selectNoSeri(item.id)">
-                        </div>
-                    </template>
-                    <template #item.no = "{item, index}">
-                        <div>
-                            {{ index + 1 }}
                         </div>
                     </template>
                     <template #item.aksi="{ item }">
