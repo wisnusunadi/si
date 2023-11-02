@@ -16,6 +16,7 @@ export default {
             loading: false,
             showmodalviatext: false,
             isScan: false,
+            noseritidakditemukan: [],
         }
     },
     methods: {
@@ -170,8 +171,13 @@ export default {
             noserinotfound = [...new Set(noserinotfound)]
 
             if (noserinotfound.length > 0 && noserinotfound != "") {
-                this.$swal('Peringatan', 'Nomor seri ' + noserinotfound.join(', ') + ' tidak ditemukan', 'warning')
-                
+                this.$swal('Peringatan', "Nomor seri " +
+                    (noserinotfound.length > 1
+                        ? noserinotfound.slice(0, 1).join(", ") + " ... dan " + (noserinotfound.length - 1) + " lainnya"
+                        : noserinotfound.join(", ")) +
+                    " tidak ditemukan", 'warning')
+                this.noseritidakditemukan = noserinotfound
+
                 // this.$swal({
                 //     title: "Peringatan",
                 //     // tampilkan jumlah dan nomor seri yang tidak ditemukan jika length > 5 maka tampilkan ... jika tidak tampilkan semua
@@ -347,6 +353,11 @@ export default {
                             </table>
                             <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses
                                 " />
+
+                            <div class="form-group" v-if="noseritidakditemukan.length > 0">
+                              <label for="">No Seri Tidak Ditemukan</label>
+                                <textarea class="form-control" rows="3" readonly>{{ noseritidakditemukan.join("\n") }}</textarea>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
