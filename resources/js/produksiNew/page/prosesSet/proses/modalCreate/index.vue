@@ -263,7 +263,7 @@ export default {
         },
         cetakPackingList() {
             let id = this.selectSeri?.id ? this.selectSeri.id : this.idGenerate;
-            window.open(`/produksiReworks/cetakpackinglist/${id}`, '_blank');
+            window.open(`/produksiReworks/cetakpackinglist?data=[${id}]`, '_blank');
         },
         mappingEdit() {
             if (this.selectSeri?.id) {
