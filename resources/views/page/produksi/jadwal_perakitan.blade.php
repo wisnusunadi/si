@@ -824,33 +824,33 @@
             })
             $(document).on('keydown', 'input.noseri', function(e) {
                 // jika tombol enter ditekan maka akan focus ke input berikutnya
-                // if (e.keyCode == 13) {
-                //     e.preventDefault();
-                //     $(this).parent().parent().next().find('input.noseri').focus();
-                // }
-
-                const a = $(this).val();
-                const b = a.charAt(0);
-                const regex = /^[a-zA-Z\s]*$/;
-                const length = $('#lengthNoSeri').val();
-                $(this).attr('maxlength', length);
-                if (e.keyCode == 8) {} else if (!regex.test(b)) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Nomor seri harus berupa huruf.',
-                    }).then((result) => {
-                        if (result.value) {
-                            $(this).val('');
-                            $(this).focus();
-                        }
-                    });
-                } else if (a.length == length) {
-                    $(this).parent().parent().next().find('input.noseri').focus();
-                } else if (a.length > length) {
-                    $(this).val(a.substring(0, length));
+                if (e.keyCode == 13) {
+                    e.preventDefault();
                     $(this).parent().parent().next().find('input.noseri').focus();
                 }
+
+                // const a = $(this).val();
+                // const b = a.charAt(0);
+                // const regex = /^[a-zA-Z\s]*$/;
+                // const length = $('#lengthNoSeri').val();
+                // $(this).attr('maxlength', length);
+                // if (e.keyCode == 8) {} else if (!regex.test(b)) {
+                //     Swal.fire({
+                //         icon: 'error',
+                //         title: 'Oops...',
+                //         text: 'Nomor seri harus berupa huruf.',
+                //     }).then((result) => {
+                //         if (result.value) {
+                //             $(this).val('');
+                //             $(this).focus();
+                //         }
+                //     });
+                // } else if (a.length == length) {
+                //     $(this).parent().parent().next().find('input.noseri').focus();
+                // } else if (a.length > length) {
+                //     $(this).val(a.substring(0, length));
+                //     $(this).parent().parent().next().find('input.noseri').focus();
+                // }
             });
 
             $("#lengthNoSeri").on("change paste keyup", function(e) {
