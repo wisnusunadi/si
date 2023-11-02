@@ -4489,16 +4489,53 @@ class ProduksiController extends Controller
         return view('page.produksi.printreworks.viewpackinglist', compact('dataview'));
     }
 
-    function cetak_packing_list($id)
+    function cetak_packing_list(Request $request)
     {
         // $pdf = PDF::loadview('page.produksi.printreworks.cetakpackinglist', compact('id'))->setPaper('a5', 'portrait');
         // return $pdf->stream();
-        $data = $this->packing_list_rw($id);
-        if ($data == null) {
+        $getData =  json_decode($request->data, true);
+
+        $seri = SeriDetailRw::select('seri_detail_rw.noseri', 'seri_detail_rw.created_at', 'packer', 'noseri_id', 'isi', 'produk.nama as model', 'm_produk.nama as produk')
+            ->leftjoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
+            ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+            ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+            ->leftjoin('m_produk', 'm_produk.id', '=', 'produk.produk_id')
+            ->whereIN('seri_detail_rw.noseri_id', $getData)->get();
+            //dd($data);
+
+        if ($seri->isEmpty()) {
+            $obj = array();
+        } else {
+
+            foreach($seri as $d){
+                $items = json_decode($d->isi);
+                $tas = new stdClass();
+                $tas->id = 666;
+                $tas->noseri = '';
+                $tas->varian = '';
+                $tas->produk = 'TAS';
+                $items[] = $tas;
+
+                $data[] = array(
+                    'id' => $d->noseri_id,
+                   'produk' =>  $d->produk,
+                    'model' =>  $d->model,
+                    'noseri' => $d->noseri,
+                    'tgl_buat' => $d->created_at->format('Y-m-d'),
+                    'packer'=> $d->packer,
+                    'items' => $items
+                );
+            }
+        }
+
+
+        if ($seri == null) {
             return 'Data Kosong';
         }
         // change array to object
         $dataview = $data;
+
+dd($dataview);
 
         return view('page.produksi.printreworks.cetakpackinglist', compact('dataview'));
     }

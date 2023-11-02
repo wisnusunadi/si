@@ -101,7 +101,7 @@ Route::group(['prefix' => '/produksiReworks' , 'middleware' => 'auth'], function
     Route::get('/cetak_seri_fg_small', [ProduksiController::class, 'cetak_seri_finish_goods_small']);;
     Route::get('/cetakseriReworkAll', [ProduksiController::class, 'cetak_seri_rework_all']);
     Route::get('/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);
-    Route::get('/cetakpackinglist/{id}', [ProduksiController::class, 'cetak_packing_list']);
+    Route::get('/cetakpackinglist', [ProduksiController::class, 'cetak_packing_list']);
     Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'cetakSuratPermintaan']);
     Route::get('/surat_penyerahan/{id}/{divisi}', [ProduksiController::class, 'cetakSuratPenyerahan']);
     Route::get('/surat_pengiriman/{id}', [GudangController::class, 'cetakSuratPengantar']);
