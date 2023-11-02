@@ -95,7 +95,7 @@ Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
     Route::view('/{any?}', 'spa.manager_teknik.spa')->middleware('divisi:dirtek')->where('any', '.*');
 });
 
-Route::group(['prefix' => '/produksiReworks'], function () {
+Route::group(['prefix' => '/produksiReworks' , 'middleware' => 'auth'], function () {
     Route::get('/cetak_seri_finish_goods/{seri}', [ProduksiController::class, 'cetak_seri_finish_goods']);
     Route::get('/cetak_seri_fg_medium', [ProduksiController::class, 'cetak_seri_finish_goods_medium']);
     Route::get('/cetak_seri_fg_small', [ProduksiController::class, 'cetak_seri_finish_goods_small']);;
@@ -107,7 +107,7 @@ Route::group(['prefix' => '/produksiReworks'], function () {
     Route::get('/surat_pengiriman/{id}', [GudangController::class, 'cetakSuratPengantar']);
 });
 
-Route::group(['prefix' => '/gbj'], function () {
+Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
     Route::view('/rework/{any?}', 'page.gbj.gbj_rework')->where('any', '.*');
     Route::view('/stok/{any?}', 'page.gbj.stok')->where('any', '.*');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
@@ -131,7 +131,7 @@ Route::group(['prefix' => '/gbj'], function () {
     // Route::view('/manager/produk', 'manager.gbj.produksi');
 });
 
-Route::group(['prefix' => '/produksi'], function () {
+Route::group(['prefix' => '/produksi', 'middleware' => 'auth'], function () {
     Route::view('/dashboard', 'page.produksi.dashboard');
     Route::view('/so', 'page.produksi.so');
     Route::view('/perencanaan_perakitan', 'page.produksi.perencanaan_perakitan');
@@ -159,7 +159,7 @@ Route::group(['prefix' => 'master', 'middleware' => 'auth'], function () {
     });
 });
 // 'middleware' => 'auth'
-Route::group(['prefix' => 'penjualan'], function () {
+Route::group(['prefix' => 'penjualan' , 'middleware' => 'auth'], function () {
     Route::group(['middleware' => ['divisi:jual,asp']], function () {
         Route::get('/dashboard', [App\Http\Controllers\PenjualanController::class, 'dashboard'])->name('penjualan.dashboard');
     });
@@ -266,7 +266,7 @@ Route::group(['prefix' => 'penjualan'], function () {
     // Route::get('/dep_doc/{id?}', 'digidocu\DocumentsController@dep_doc')->name('dc.dep_doc');
 });
 
-Route::group(['prefix' => 'qc'], function () {
+Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
     Route::group(['middleware' => ['divisi:qc']], function () {
         Route::get('/dashboard', [App\Http\Controllers\QcController::class, 'dashboard'])->name('qc.dashboard');
     });
@@ -295,7 +295,7 @@ Route::group(['prefix' => 'qc'], function () {
 });
 
 
-Route::group(['prefix' => 'logistik'], function () {
+Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     Route::group(['middleware' => ['divisi:log']], function () {
         Route::get('/dashboard', [App\Http\Controllers\LogistikController::class, 'dashboard'])->name('logistik.dashboard');
     });
@@ -395,6 +395,7 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
             });
         });
     });
+
     Route::group(['prefix' => '/coo'], function () {
         Route::group(['middleware' => ['divisi:dc,dirut']], function () {
             Route::view('/show', 'page.dc.coo.show')->name('dc.coo.show');
