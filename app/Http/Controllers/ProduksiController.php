@@ -4447,6 +4447,21 @@ class ProduksiController extends Controller
 
     }
 
+    function cetak_seri_rework_all(Request $request)
+    {
+        // buat 10cm x 2cm
+        $getData =  json_decode($request->data, true);
+        $nbj = NoseriBarangJadi::select('noseri')->whereIn('id', $getData)->get();
+        foreach($nbj as $s){
+            $seri[] = $s->noseri;
+        }
+        $customPaperLarge = array(0, 0, 88.46, 290.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserilarge', compact('seri'))->setPaper($customPaperLarge, 'landscape');
+        return $pdf->stream();
+        // return view('page.produksi.printreworks.cetakseri', compact('seri'));
+
+    }
+
     function cetak_seri_finish_goods_medium(Request $request)
     {
         $getData =  json_decode($request->data, true);
