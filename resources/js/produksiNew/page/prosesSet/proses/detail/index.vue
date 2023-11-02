@@ -197,8 +197,8 @@ export default {
         lihatPackingList(id) {
             window.open(`/produksiReworks/viewpackinglist/${id}`, '_blank');
         },
-        cetakAllPackingList(id) {
-            window.open(`/produksiReworks/cetakpackinglist?data=[${id}]`, '_blank');
+        cetakAllPackingList() {
+            window.open(`/produksiReworks/cetakpackinglist?data=[${this.noSeriSelected}]`, '_blank');
         },
         cetakPackingList(id) {
             window.open(`/produksiReworks/cetakpackinglist?data=[${id}]`, '_blank');
@@ -272,10 +272,10 @@ export default {
                             @click="cetakAllNoseri">
                             <i class="fa fa-print"></i> Cetak No. Seri
                         </button>
-                        <!-- <button class="btn btn-outline-secondary ml-2" v-if="noSeriSelected.length > 0"
+                        <button class="btn btn-outline-secondary ml-2" v-if="noSeriSelected.length > 0"
                             @click="cetakAllPackingList">
                             <i class="fa fa-print"></i> Cetak Packing List
-                        </button> -->
+                        </button>
                         <span class="filter ml-2">
                             <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">

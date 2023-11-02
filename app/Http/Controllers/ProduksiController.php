@@ -4535,8 +4535,6 @@ class ProduksiController extends Controller
         // change array to object
         $dataview = $data;
 
-dd($dataview);
-
         return view('page.produksi.printreworks.cetakpackinglist', compact('dataview'));
     }
 
