@@ -268,7 +268,7 @@ export default {
                         <button class="btn btn-outline-info" v-if="noSeriSelected.length > 0" @click="cetakAllNoseri">
                             <i class="fa fa-print"></i> Cetak No. Seri
                         </button>&nbsp;
-                        <span class="float-left filter">
+                        <span class="float-right filter">
                             <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
                                 <i class="fas fa-filter"></i> Filter
