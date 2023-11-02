@@ -1,35 +1,27 @@
 <script>
-import pagination from '../../../../components/pagination.vue';
+import DataTable from '../../../../components/DataTable.vue';
 export default {
     props: ['seriSelected'],
     components: {
-        pagination,
+        DataTable
     },
     data() {
         return {
+            headers: [
+                { text: 'No.', value: 'no' },
+                { text: 'No. Seri', value: 'noseri' },
+            ],
             search: '',
-            renderPaginate: [],
         }
     },
     methods: {
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
         closeModal() {
             $('.modalSeri').modal('hide')
             this.$nextTick(() => {
                 this.$emit('closeModal')
             })
         },
-    },
-    computed: {
-        filteredDalamProses() {
-            return this.seriSelected.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
-                });
-            });
-        },
+    
     },
 }
 </script>
@@ -39,43 +31,48 @@ export default {
         <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Detail Seri</h5>
+                    <h5 class="modal-title">Detail Nomor Seri</h5>
                     <button type="button" class="close" @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="d-flex flex-row-reverse bd-highlight">
-                        <div class="p-2 bd-highlight">
-                            <input type="text" v-model="search" class="form-control" placeholder="Cari...">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <label for="">Nama Produk</label>
+                                    <div class="card nomor-so">
+                                        <div class="card-body">
+                                            <span id="so">{{ seriSelected?.kelompok }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <label for="">Jumlah Transfer</label>
+                                    <div class="card nomor-akn">
+                                        <div class="card-body">
+                                            <span id="akn">{{ seriSelected?.jumlah }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-row-reverse bd-highlight">
+                                <div class="p-2 bd-highlight">
+                                    <input type="text" v-model="search" class="form-control" placeholder="Cari...">
+                                </div>
+                            </div>
+                            <DataTable :headers="headers" :items="seriSelected?.item" :search="search">
+                                <template #item.no="{ item, index }">
+                                    <div>
+                                        {{ index + 1 }}
+                                    </div>
+                                </template>
+                            </DataTable>
                         </div>
                     </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>No. Seri</th>
-                                <th>Variasi</th>
-                            </tr>
-                        </thead>
-                        <tbody v-if="renderPaginate.length > 0">
-                            <tr v-for="(data, index) in renderPaginate" :key="index">
-                                <td>{{ index + 1 }}</td>
-                                <td>{{ data.noseri }}</td>
-                                <td>{{ data.variasi }}</td>
-                            </tr>
-                        </tbody>
-                        <tbody v-else>
-                            <tr>
-                                <td colspan="3" class="text-center">Tidak ada data</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <pagination :filteredDalamProses="filteredDalamProses"
-                                        @updateFilteredDalamProses="updateFilteredDalamProses" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                 </div>
             </div>
         </div>
