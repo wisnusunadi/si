@@ -289,7 +289,8 @@ export default {
                                 </div>
                             </form>
                         </span>
-                        <button class="btn btn-outline-info ml-2" v-if="noSeriSelected.length > 0" @click="cetakAllNoseri">
+                        &nbsp;
+                        <button class="btn btn-outline-info" v-if="noSeriSelected.length > 0" @click="cetakAllNoseri">
                                 <i class="fa fa-print"></i> Cetak No. Seri
                             </button>
                     </div>
