@@ -200,11 +200,11 @@
                                 </div>
                                 <div class="col-sm-4"></div>
                                 <div class="col-sm-4">
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <label for="">Panjang Karakter No Seri</label>
                                         <input type="text" name="" id="lengthNoSeri"
                                             class="form-control number">
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <div class="row">
