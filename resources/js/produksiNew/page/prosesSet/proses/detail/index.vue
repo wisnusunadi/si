@@ -265,8 +265,7 @@ export default {
                         <button class="btn btn-primary" @click="showModalCreate" v-if="!showTambah">
                             Tambah <i class="fa fa-plus"></i>
                         </button>
-                        <div v-if="!showTambah">&nbsp;</div>
-                        <span class="filter">
+                        <span class="filter" :class="!showTambah ? 'ml-2' : ''">
                             <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
                                 <i class="fas fa-filter"></i> Filter
@@ -289,8 +288,8 @@ export default {
                                     </div>
                                 </div>
                             </form>
-                        </span>&nbsp;
-                        <button class="btn btn-outline-info" v-if="noSeriSelected.length > 0" @click="cetakAllNoseri">
+                        </span>
+                        <button class="btn btn-outline-info ml-2" v-if="noSeriSelected.length > 0" @click="cetakAllNoseri">
                                 <i class="fa fa-print"></i> Cetak No. Seri
                             </button>
                     </div>
