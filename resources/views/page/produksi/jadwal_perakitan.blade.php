@@ -823,6 +823,12 @@
                 $('.scan-produk').DataTable().columns.adjust().draw();
             })
             $(document).on('keydown', 'input.noseri', function(e) {
+                // jika tombol enter ditekan maka akan focus ke input berikutnya
+                // if (e.keyCode == 13) {
+                //     e.preventDefault();
+                //     $(this).parent().parent().next().find('input.noseri').focus();
+                // }
+
                 const a = $(this).val();
                 const b = a.charAt(0);
                 const regex = /^[a-zA-Z\s]*$/;
