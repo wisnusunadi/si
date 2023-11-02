@@ -213,12 +213,12 @@
                                                     <div><small class="text-muted">Status</small></div>
                                                     <div class="align-center">{!! $status !!}</div>
                                                 </div>
-                                                <div class="margin">
+                                                {{-- <div class="margin">
                                                     <button class="btn btn-outline-success">
                                                         <i class="far fa-file-excel"></i>
                                                         Export
                                                     </button>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -261,12 +261,12 @@
                                                     <div><b>{{ date('d-m-Y', strtotime($data->pesanan->tgl_po)) }}</b>
                                                     </div>
                                                 </div>
-                                                <div class="margin">
+                                                {{-- <div class="margin">
                                                     <button class="btn btn-outline-success">
                                                         <i class="far fa-file-excel"></i>
                                                         Export
                                                     </button>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>

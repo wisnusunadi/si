@@ -1899,10 +1899,6 @@ class LogistikController extends Controller
                             <i class="fas fa-print"></i>
                             Cetak Surat Jalan
                         </button>
-                        <button class="dropdown-item">
-                            <i class="far fa-file-excel"></i>
-                            Export
-                        </button>
                     </div>
                     ';
                 } else {
