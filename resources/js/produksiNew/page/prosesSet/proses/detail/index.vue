@@ -264,10 +264,8 @@ export default {
                     <div class="p-2 flex-grow-1 bd-highlight">
                         <button class="btn btn-primary" @click="showModalCreate" v-if="!showTambah">
                             Tambah <i class="fa fa-plus"></i>
-                        </button>&nbsp;
-                        <button class="btn btn-outline-info" v-if="noSeriSelected.length > 0" @click="cetakAllNoseri">
-                            <i class="fa fa-print"></i> Cetak No. Seri
-                        </button>&nbsp;
+                        </button>
+                        <div v-if="!showTambah">&nbsp;</div>
                         <span class="filter">
                             <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
@@ -291,7 +289,10 @@ export default {
                                     </div>
                                 </div>
                             </form>
-                        </span>
+                        </span>&nbsp;
+                        <button class="btn btn-outline-info" v-if="noSeriSelected.length > 0" @click="cetakAllNoseri">
+                                <i class="fa fa-print"></i> Cetak No. Seri
+                            </button>
                     </div>
                     <div class="p-2 bd-highlight"> <input type="text" v-model="search" class="form-control"
                             placeholder="Cari...">
