@@ -201,7 +201,7 @@ export default {
             window.open(`/produksiReworks/cetakpackinglist?data=[${id}]`, '_blank');
         },
         cetakPackingList(id) {
-            window.open(`/produksiReworks/cetakpackinglist?data=[${id}]`, '_blank');
+            window.open(`/produksiReworks/cetakpackinglist/${id}`, '_blank');
         },
         cetakAllNoseri() {
             window.open(`/produksiReworks/cetakseriReworkAll?data=[${this.noSeriSelected}]`, '_blank');
