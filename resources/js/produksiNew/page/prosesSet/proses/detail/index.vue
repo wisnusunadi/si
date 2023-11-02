@@ -38,11 +38,11 @@ export default {
             showTambah: false,
 
             headers: [
-                // {
-                //     text: 'id',
-                //     value: 'id',
-                //     sortable: false,
-                // },
+                {
+                    text: 'id',
+                    value: 'id',
+                    sortable: false,
+                },
                 {
                     text: 'No. Seri',
                     value: 'noseri',
@@ -244,13 +244,16 @@ export default {
                         <button class="btn btn-primary" @click="showModalCreate" v-if="!showTambah">
                             Tambah <i class="fa fa-plus"></i>
                         </button>
+                        <button class="btn btn-outline-info" v-if="noSeriSelected.length > 0">
+                            <i class="fa fa-print"></i> Cetak No. Seri
+                        </button>
                     </div>
                     <div class="p-2 bd-highlight"> <input type="text" v-model="search" class="form-control"
                             placeholder="Cari...">
                     </div>
                 </div>
                 <DataTable :headers="headers" :items="filterData">
-                    <!-- <template #header.id>
+                    <template #header.id>
                         <div>
                             <input type="checkbox" :checked="checkAll" @click="checkAllSeri">
                         </div>
@@ -261,7 +264,7 @@ export default {
                                 :checked="noSeriSelected && noSeriSelected.find((noseri) => noseri === item.id)"
                                 @click="selectNoSeri(item.id)">
                         </div>
-                    </template> -->
+                    </template>
                     <template #item.aksi="{ item }">
                         <div>
                             <button class="btn btn-sm btn-outline-info" @click="detailProdukSeri(item)">
