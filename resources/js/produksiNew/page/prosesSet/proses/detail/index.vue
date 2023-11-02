@@ -72,6 +72,7 @@ export default {
             showModalDetail: false,
             dataLihatNoSeri: null,
             showModalNoSeri: false,
+            filterProses: []
         }
     },
     methods: {
@@ -203,22 +204,39 @@ export default {
             // window open with params
             window.open(`/produksiReworks/cetakseriRework/${noseri}`, '_blank');
         },
+        clickFilterProses(filter) {
+            if (this.filterProses.includes(filter)) {
+                this.filterProses = this.filterProses.filter(item => item !== filter)
+            } else {
+                this.filterProses.push(filter)
+            }
+        },
     },
     mounted() {
         this.getData();
     },
     computed: {
         filterData() {
-            return this.dataTable.filter((data) => {
+            let filtered = []
+
+            if (this.filterProses.length > 0) {
+                this.filterProses.forEach((filter) => {
+                    filtered = filtered.concat(this.dataTable.filter((data) => data.packer == filter))
+                })
+            } else {
+                filtered = this.dataTable
+            }
+
+            return filtered.filter((data) => {
                 return Object.keys(data).some((key) => {
                     return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
                 });
             });
         },
-        uniquePacker() {
+        getAllStatusUnique() {
             const packer = this.dataTable.map((data) => data.packer)
             return [...new Set(packer)]
-        }
+        },
     },
     watch: {
         search() {
@@ -247,6 +265,30 @@ export default {
                         <button class="btn btn-outline-info" v-if="noSeriSelected.length > 0">
                             <i class="fa fa-print"></i> Cetak No. Seri
                         </button>
+                        <span class="float-left filter">
+                            <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                            <form id="filter_ekat">
+                                <div class="dropdown-menu">
+                                    <div class="px-3 py-3">
+                                        <div class="form-group">
+                                            <label for="jenis_penjualan">Keterangan</label>
+                                        </div>
+                                        <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" :ref="status"
+                                                    :value="status" id="status1" @click="clickFilterProses(status)" />
+                                                <label class="form-check-label text-uppercase" for="status1">
+                                                    {{ status }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </span>
                     </div>
                     <div class="p-2 bd-highlight"> <input type="text" v-model="search" class="form-control"
                             placeholder="Cari...">
