@@ -200,9 +200,12 @@ export default {
         cetakPackingList(id) {
             window.open(`/produksiReworks/cetakpackinglist/${id}`, '_blank');
         },
+        cetakAllNoseri() {
+            window.open(`/produksiReworks/cetakseriReworkAll/?data=[${this.noSeriSelected}]`, '_blank');
+        },
         cetakNoseri(noseri) {
             // window open with params
-            window.open(`/produksiReworks/cetakseriRework/${noseri}`, '_blank');
+            window.open(`/produksiReworks/cetakseriReworkAll/?data=[${noseri}]`, '_blank');
         },
         clickFilterProses(filter) {
             if (this.filterProses.includes(filter)) {
@@ -261,10 +264,10 @@ export default {
                     <div class="p-2 flex-grow-1 bd-highlight">
                         <button class="btn btn-primary" @click="showModalCreate" v-if="!showTambah">
                             Tambah <i class="fa fa-plus"></i>
-                        </button>
-                        <button class="btn btn-outline-info" v-if="noSeriSelected.length > 0">
+                        </button>&nbsp;
+                        <button class="btn btn-outline-info" v-if="noSeriSelected.length > 0" @click="cetakAllNoseri">
                             <i class="fa fa-print"></i> Cetak No. Seri
-                        </button>
+                        </button>&nbsp;
                         <span class="float-left filter">
                             <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
@@ -324,7 +327,7 @@ export default {
                             <button class="btn btn-sm btn-outline-info my-1" @click="lihatNoseri(item.noseri)">
                                 <i class="fa fa-eye"></i> Lihat No. Seri
                             </button>
-                            <button class="btn btn-sm btn-outline-primary my-1" @click="cetakNoseri(item.noseri)">
+                            <button class="btn btn-sm btn-outline-primary my-1" @click="cetakNoseri(item.id)">
                                 <i class="fa fa-print"></i> Cetak No. Seri
                             </button> <br>
                             <button class="btn btn-sm btn-outline-info" @click="lihatPackingList(item.id)">
