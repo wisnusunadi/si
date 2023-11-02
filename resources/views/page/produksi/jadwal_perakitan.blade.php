@@ -819,8 +819,11 @@
 
             // Produksi Tab
             $('.modalRakit').on('shown.bs.modal', function() {
-                $('.noseri:first').focus();
-                $('.scan-produk').DataTable().columns.adjust().draw();
+                const table = $('.scan-produk').DataTable()
+                // focus on the first input
+              setTimeout(() => {
+                $('input.noseri').eq(0).focus()
+              }, 100);
             })
             $(document).on('keydown', 'input.noseri', function(e) {
                 // jika tombol enter ditekan maka akan focus ke input berikutnya
