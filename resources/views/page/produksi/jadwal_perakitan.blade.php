@@ -676,6 +676,7 @@
                                             noseri: arr,
                                         },
                                         success: function(res) {
+                                            console.log(res);
                                             if (res.error == true) {
                                                 Swal.fire({
                                                     icon: 'error',
@@ -799,8 +800,6 @@
                                 }
                             }
                         }).addClass('is-invalid');
-
-                        console.log(duplicates(count(arr)));
 
                         Swal.fire({
                             icon: 'error',
