@@ -77,7 +77,9 @@ export default {
             showModalDetail: false,
             dataLihatNoSeri: null,
             showModalNoSeri: false,
-            filterProses: []
+            filterProses: [],
+            tanggalAwal: '',
+            tanggalAkhir: '',
         }
     },
     methods: {
@@ -112,11 +114,11 @@ export default {
                 const id = this.$route.params.id;
                 const { data } = await axios.get(`/api/prd/rw/proses/produk/${id}`);
                 const { produk_reworks_id, set, urutan, item, belum } = data
-                this.dataTable = item.map((data, index) => {
+                this.dataTable = item.map((data) => {
                     return {
                         ...data,
-                        no: index + 1,
                         tgl_buat: this.dateFormat(data.tgl_buat),
+                        tanggal: data.tgl_buat,
                     }
                 })
                 this.showTambah = belum == 0 ? true : false
@@ -223,20 +225,32 @@ export default {
                 this.filterProses.push(filter)
             }
         },
+        renderNo(data) {
+            return data.map((item, index) => {
+                return {
+                    ...item,
+                    no: index + 1
+                }
+            })
+        }
     },
     mounted() {
         this.getData();
     },
     computed: {
         filterData() {
-            let filtered = []
+            let filtered = this.renderNo(this.dataTable)
 
             if (this.filterProses.length > 0) {
-                this.filterProses.forEach((filter) => {
-                    filtered = filtered.concat(this.dataTable.filter((data) => data.packer == filter))
-                })
-            } else {
-                filtered = this.dataTable
+                filtered = this.renderNo(filtered.filter(data => this.filterProses.includes(data.packer)))
+            }
+
+            if (this.tanggalAwal && this.tanggalAkhir) {
+                filtered = this.renderNo(filtered.filter(data => new Date(data.tanggal) >= new Date(this.tanggalAwal) && new Date(data.tanggal) <= new Date(this.tanggalAkhir)))
+            } else if (this.tanggalAwal) {
+                filtered = this.renderNo(filtered.filter(data => new Date(data.tanggal) >= new Date(this.tanggalAwal)))
+            } else if (this.tanggalAkhir) {
+                filtered = this.renderNo(filtered.filter(data => new Date(data.tanggal) <= new Date(this.tanggalAkhir)))
             }
 
             return filtered.filter((data) => {
@@ -291,7 +305,7 @@ export default {
                                 <div class="dropdown-menu">
                                     <div class="px-3 py-3">
                                         <div class="form-group">
-                                            <label for="jenis_penjualan">Keterangan</label>
+                                            <label for="jenis_penjualan">Packer</label>
                                         </div>
                                         <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
                                             <div class="form-check">
@@ -302,6 +316,22 @@ export default {
                                                 </label>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Tanggal Awal</label>
+                                                    <input type="date" class="form-control" v-model="tanggalAwal">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Tanggal Akhir</label>
+                                                    <input type="date" class="form-control" v-model="tanggalAkhir">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                 </div>
                             </form>
