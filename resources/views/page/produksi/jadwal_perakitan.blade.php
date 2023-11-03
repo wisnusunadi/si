@@ -800,6 +800,8 @@
                             }
                         }).addClass('is-invalid');
 
+                        console.log(duplicates(count(arr)));
+
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
