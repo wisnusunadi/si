@@ -320,13 +320,13 @@ export default {
                                             <div class="col">
                                                 <div class="form-group">
                                                     <label for="jenis_penjualan">Tanggal Awal</label>
-                                                    <input type="date" class="form-control" v-model="tanggalAwal">
+                                                    <input type="date" class="form-control" v-model="tanggalAwal" :max="tanggalAkhir">
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="form-group">
                                                     <label for="jenis_penjualan">Tanggal Akhir</label>
-                                                    <input type="date" class="form-control" v-model="tanggalAkhir">
+                                                    <input type="date" class="form-control" v-model="tanggalAkhir" :min="tanggalAwal">
                                                 </div>
                                             </div>
                                         </div>
