@@ -16,6 +16,7 @@ export default {
             loading: false,
             showmodalviatext: false,
             isScan: false,
+            noseritidakditemukan: [],
         }
     },
     methods: {
@@ -170,11 +171,46 @@ export default {
             noserinotfound = [...new Set(noserinotfound)]
 
             if (noserinotfound.length > 0 && noserinotfound != "") {
-                this.$swal(
-                    "Peringatan",
-                    "Nomor seri " + noserinotfound.join(", ") + " tidak ditemukan",
-                    "warning"
-                );
+                this.$swal('Peringatan', "Nomor seri " +
+                    (noserinotfound.length > 1
+                        ? noserinotfound.slice(0, 1).join(", ") + " ... dan " + (noserinotfound.length - 1) + " lainnya"
+                        : noserinotfound.join(", ")) +
+                    " tidak ditemukan", 'warning')
+                this.noseritidakditemukan = noserinotfound
+
+                // this.$swal({
+                //     title: "Peringatan",
+                //     // tampilkan jumlah dan nomor seri yang tidak ditemukan jika length > 5 maka tampilkan ... jika tidak tampilkan semua
+                //     text:
+                //         "Nomor seri " +
+                //         (noserinotfound.length > 1
+                //             ? noserinotfound.slice(0, 1).join(", ") + " ... dan " + (noserinotfound.length - 1) + " lainnya"
+                //             : noserinotfound.join(", ")) +
+                //         " tidak ditemukan",
+                //     icon: "warning",
+                //     showCancelButton: true,
+                //     confirmButtonColor: "#3085d6",
+                //     cancelButtonColor: "#d33",
+                //     confirmButtonText: "Copy nomor seri yang tidak ditemukan",
+                //     cancelButtonText: "Tidak",
+                // }).then((result) => {
+                //     if (result.isConfirmed) {
+                //         try {
+                //             navigator.clipboard.writeText(noserinotfound.join("\n"))
+                //             this.$swal({
+                //                 title: "Berhasil!",
+                //                 text: "Nomor seri berhasil dicopy",
+                //                 icon: "success",
+                //             })
+                //         } catch (error) {
+                //             this.$swal({
+                //                 title: "Gagal!",
+                //                 text: "Nomor seri gagal dicopy",
+                //                 icon: "error",
+                //             })
+                //         }
+                //     }
+                // })
             }
         },
         autoSelect() {
@@ -283,40 +319,46 @@ export default {
                                         ref="search" @keyup.enter="autoSelect" />
                                 </div>
                             </div>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                <input type="checkbox" @click="checkAll" ref="checkAll" />
-                                            </th>
-                                            <th>No. Seri</th>
-                                            <th>Variasi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody v-if="renderPaginate.length > 0">
-                                        <tr v-for="(data, index) in renderPaginate" :key="index">
-                                            <td>
-                                                <input type="checkbox" ref="noseri" :checked="produk.noseri &&
-                                                    produk.noseri.find(
-                                                        (item) =>
-                                                            item.noseri == data.noseri
-                                                    )
-                                                    " @click="selectNoSeri(data)" />
-                                            </td>
-                                            <td>{{ data.noseri }}</td>
-                                            <td>{{ data.variasi }}</td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody v-else>
-                                        <tr>
-                                            <td colspan="5" class="text-center">
-                                                Data tidak ditemukan
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" @click="checkAll" ref="checkAll" />
+                                        </th>
+                                        <th>No. Seri</th>
+                                        <th>Variasi</th>
+                                    </tr>
+                                </thead>
+                                <tbody v-if="renderPaginate.length > 0">
+                                    <tr v-for="(data, index) in renderPaginate" :key="index">
+                                        <td>
+                                            <input type="checkbox" ref="noseri" :checked="produk.noseri &&
+                                                produk.noseri.find(
+                                                    (item) =>
+                                                        item.noseri == data.noseri
+                                                )
+                                                " @click="selectNoSeri(data)" />
+                                        </td>
+                                        <td>{{ data.noseri }}</td>
+                                        <td>{{ data.variasi }}</td>
+                                    </tr>
+                                </tbody>
+                                <tbody v-else>
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            Data tidak ditemukan
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                             <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses
                                 " />
+
+                            <div class="form-group" v-if="noseritidakditemukan.length > 0">
+                                <label for="">No Seri Tidak Ditemukan</label>
+                                <textarea class="form-control" rows="3"
+                                    readonly>{{ noseritidakditemukan.join("\n") }}</textarea>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
