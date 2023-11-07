@@ -481,16 +481,27 @@ class ProduksiController extends Controller
                     JadwalRakitNoseriRw::whereIn('noseri_id', $getIdSeri)->update(['status' => 12]);
 
 
-                    $items = NoseriBarangJadi::select('produk.nama as prd', 'gdg_barang_jadi.nama as varian', 'noseri_barang_jadi.id', 'noseri_barang_jadi.noseri')
+                    $items = NoseriBarangJadi::select('produk.nama as prd', 'gdg_barang_jadi.id as gbj_id','gdg_barang_jadi.nama as varian', 'noseri_barang_jadi.id', 'noseri_barang_jadi.noseri')
                         ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
                         ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
                         ->whereIN('noseri_barang_jadi.id', $getIdSeri)->get();
 
                     foreach ($items as $i) {
+                        if($i->gbj_id == 431){
+                            $varian = 'COKLAT';
+                        }elseif($i->gbj_id == 432){
+                            $varian = 'HIJAU';
+                        }elseif($i->gbj_id == 433){
+                            $varian = 'PUTIH';
+                        }elseif($i->gbj_id == 434){
+                            $varian = 'UNGU';
+                        }else{
+                            $varian = $i->varian;
+                        }
                         $item[] = array(
                             'id' => $i->id,
                             'noseri' => $i->noseri,
-                            'varian' => $i->varian,
+                            'varian' => $varian,
                             'produk' => $i->prd
                         );
                         NoseriBarangJadi::where('id', $i->id)
