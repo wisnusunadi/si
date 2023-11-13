@@ -351,7 +351,7 @@ Route::prefix('/prd')->group(function () {
         Route::get('/surat_penyerahan/{divisi}/{id}', [ProduksiController::class, 'surat_penyerahan_rw']);
         Route::post('/gen', [ProduksiController::class, 'generate_rw'])->middleware('jwt.verify');
         Route::put('/gen/{id}', [ProduksiController::class, 'update_rw'])->middleware('jwt.verify');
-        Route::delete('/gen/{id}', [ProduksiController::class, 'hapus_rw']);
+        Route::delete('/gen/{id}', [ProduksiController::class, 'hapus_rw'])->middleware('jwt.verify');
         Route::get('/riwayat', [ProduksiController::class, 'riwayat_rw']);
         Route::get('/pack/{id}', [ProduksiController::class, 'packing_list_rw']);
         Route::post('/tf', [ProduksiController::class, 'tf_rw'])->middleware('jwt.verify');

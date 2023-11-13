@@ -162,6 +162,10 @@ class ProduksiController extends Controller
     }
     function hapus_rw($id)
     {
+        return response()->json([
+            'status' => 200,
+            'message' =>  'Gagal Dihapus',
+        ], 500);
         DB::beginTransaction();
         try {
             //code...
@@ -206,6 +210,7 @@ class ProduksiController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' =>  'Gagal Dihapus',
+                'error' => $th->getMessage()
             ], 500);
         }
     }

@@ -185,7 +185,11 @@ export default {
                 cancelButtonColor: '#d33'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.delete(`/api/prd/rw/gen/${id}`).then(() => {
+                    axios.delete(`/api/prd/rw/gen/${id}`, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
+                        }
+                    }).then(() => {
                         this.$swal({
                             title: 'Berhasil!',
                             text: 'Data berhasil dihapus',
@@ -320,13 +324,15 @@ export default {
                                             <div class="col">
                                                 <div class="form-group">
                                                     <label for="jenis_penjualan">Tanggal Awal</label>
-                                                    <input type="date" class="form-control" v-model="tanggalAwal" :max="tanggalAkhir">
+                                                    <input type="date" class="form-control" v-model="tanggalAwal"
+                                                        :max="tanggalAkhir">
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="form-group">
                                                     <label for="jenis_penjualan">Tanggal Akhir</label>
-                                                    <input type="date" class="form-control" v-model="tanggalAkhir" :min="tanggalAwal">
+                                                    <input type="date" class="form-control" v-model="tanggalAkhir"
+                                                        :min="tanggalAwal">
                                                 </div>
                                             </div>
                                         </div>
