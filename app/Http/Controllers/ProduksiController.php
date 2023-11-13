@@ -563,7 +563,6 @@ class ProduksiController extends Controller
                     ->pluck('noseri_barang_jadi.noseri')->toArray();
 
                 $missingIds = array_values(array_diff($seriValues, $seriGagal));
-
                 if ($belum == 0) {
 
                     return response()->json([
@@ -572,6 +571,22 @@ class ProduksiController extends Controller
                         'values' =>   $seriValues,
                     ], 500);
                 }
+
+                $getTerpakai = NoseriBarangJadi::Join('jadwal_rakit_noseri_rw', 'jadwal_rakit_noseri_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->where('jadwal_rakit_noseri_rw.status', 12)
+                ->whereIN('noseri_barang_jadi.noseri', $seriValues)
+                ->pluck('noseri_barang_jadi.noseri')->toArray();
+
+
+                if(count($getTerpakai) > 0){
+                    return response()->json([
+                        'status' => 200,
+                        'message' =>  'Terpakai Perakitan',
+                        'values' =>  $getTerpakai,
+                    ], 500);
+
+                }
+
                 return response()->json([
                     'status' => 200,
                     'message' =>  'Tidak ditemukan',
