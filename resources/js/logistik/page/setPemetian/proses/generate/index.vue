@@ -1,11 +1,22 @@
 <script>
+import DataTable from '../../../../components/DataTable.vue';
 export default {
+    components: {
+        DataTable,
+    },
+    props: ['selectSeri'],
     data() {
         return {
             noseri: [],
             isDisable: false,
             errorValue: '',
             isError: false,
+            hasilGenerate: null,
+            noseriGeneratePackingList: [],
+            headersDokumen: [
+                {text: 'No.', value: 'no', align: 'text-left'},
+                {text: 'No. Seri', value: 'noseri', align: 'text-left'},
+            ]
         }
     },
     methods: {
@@ -17,10 +28,18 @@ export default {
             });
         },
         generateNoSeri() {
-            for (let i = 0; i < 3; i++) {
-                this.noseri.push({
-                    seri: '',
-                });
+            if (!this.selectSeri?.id) {
+                for (let i = 0; i < 3; i++) {
+                    this.noseri.push({
+                        seri: '',
+                    });
+                }
+            } else {
+                this.noseri = this.selectSeri.seri.map((data) => {
+                    return {
+                        seri: data.noseri,
+                    }
+                })
             }
         },
         autoTab(e, idx) {
@@ -37,7 +56,7 @@ export default {
                     return data.seri.trim() === '';
                 })
 
-                if (!this.isError && cek.length === 0) {
+                if (!this.isError && cek.length === 0 && !this.selectSeri?.id) {
                     this.simpanSeri();
                 }
 
@@ -81,14 +100,33 @@ export default {
 
             if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
                 this.isDisable = true
+
+
+                this.hasilGenerate = 'PETI-1'
+                this.noseriGeneratePackingList = this.noseri.map((data) => {
+                    return {
+                        noseri: data.seri,
+                    }
+                })
                 this.$swal('Berhasil', 'No. Seri berhasil disimpan', 'success')
             }
         },
+        updateSeri() {
+
+        },
+        mappingEdit() {
+            if (this.selectSeri?.id) {
+                this.hasilGenerate = this.selectSeri.no_peti
+                this.noseriGeneratePackingList = this.selectSeri.seri
+            }
+        },  
         resetModal() {
             this.noseri = []
             this.generateNoSeri()
             this.isDisable = false
             this.isError = false;
+            this.hasilGenerate = null;
+            this.noseriGeneratePackingList = [];
             this.$nextTick(() => {
                 setTimeout(() => {
                     this.$refs.noseri[0].focus();
@@ -98,6 +136,7 @@ export default {
     },
     mounted() {
         this.generateNoSeri();
+        this.mappingEdit();
         this.$nextTick(() => {
             setTimeout(() => {
                 this.$refs.noseri[0].focus();
@@ -139,6 +178,41 @@ export default {
                                 </tbody>
                             </table>
                         </div>
+                        <div class="col" v-if="hasilGenerate">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="">Nomor Peti</label>
+                                    <div class="card nomor-so">
+                                        <div class="card-body">
+                                            <span id="so">{{ hasilGenerate }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex bd-highlight">
+                                        <div class="p-2 flex-grow-1 bd-highlight">
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                Cetak No. Packing List <i class="fa fa-print"></i>
+                                            </button>
+                                        </div>
+                                        <div class="p-2 bd-highlight">
+                                            <!-- bentuk modal untuk view nya -->
+                                            <button class="btn btn-sm btn-outline-info">
+                                                View No. Packing List <i class="fa fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <label for="">Dokumen Packing List</label>
+                                    <DataTable :headers="headersDokumen" :items="noseriGeneratePackingList">
+                                        <template #item.no = "{item, index}">
+                                            <div>
+                                                {{ index + 1 }}
+                                            </div>
+                                        </template>
+                                    </DataTable>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex bd-highlight mb-3 mx-3">
@@ -146,10 +220,32 @@ export default {
                         <button type="button" class="btn btn-success">Simpan</button>
                     </div>
                     <div class="p-2 bd-highlight ml-auto">
-                        <button type="button" class="btn btn-primary" @click="resetModal">Reset</button>
+                        <button type="button" class="btn btn-primary" @click="resetModal" v-if="!this.selectSeri?.id">Reset</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+<style>
+.nomor-so {
+    background-color: #717FE1;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px
+}
+
+.nomor-akn {
+    background-color: #DF7458;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px
+}
+
+.nomor-po {
+    background-color: #85D296;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px
+}
+</style>

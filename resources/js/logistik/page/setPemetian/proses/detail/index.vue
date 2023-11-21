@@ -2,11 +2,13 @@
 import Header from '../../../../components/Header.vue';
 import DataTable from '../../../../components/DataTable.vue';
 import Generate from '../generate';
+import DetailSeri from '../modalDetail';
 export default {
     components: {
         Header,
         DataTable,
         Generate,
+        DetailSeri,
     },
     data() {
         return {
@@ -35,29 +37,62 @@ export default {
             ],
             items: [
                 {
+                    id: 1,
                     no_peti: 'PETI-1',
                     tanggal_dibuat: '31 Desember 2020',
                     packer: 'Packer 1',
+                    seri: [
+                        {
+                            produk: 'ANTROPOMETRI KIT 10',
+                            noseri: 'TD08217A4235'
+                        },
+                        {
+                            produk: 'ANTROPOMETRI KIT 10',
+                            noseri: 'TD08217A4235'
+                        },
+                        {
+                            produk: 'ANTROPOMETRI KIT 10',
+                            noseri: 'TD08217A4235'
+                        }
+                    ]
                 }
             ],
             showModalGenerate: false,
+            showModalDetail: false,
+            detailSeriSelected: {},
         }
     },
     methods: {
         openModalGenerate() {
+            this.detailSeriSelected = {};
             this.showModalGenerate = true;
             this.$nextTick(() => {
                 $('.modalGenerate').modal('show');
             });
         },
+        openModalDetail(item) {
+            this.detailSeriSelected = item;
+            this.showModalDetail = true;
+            this.$nextTick(() => {
+                $('.modalDetailSeri').modal('show');
+            });
+        },
+        openEditNomorSeri(item) {
+            this.detailSeriSelected = item;
+            this.showModalGenerate = true;
+            this.$nextTick(() => {
+                $('.modalGenerate').modal('show');
+            });
+        }
     },
-    
+
 }
 </script>
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
-        <Generate v-if="showModalGenerate" @closeModal="showModalGenerate = false" />
+        <Generate v-if="showModalGenerate" @closeModal="showModalGenerate = false" :selectSeri="detailSeriSelected" />
+        <DetailSeri v-if="showModalDetail" :dataModalDetailSeri="detailSeriSelected" @closeModal="showModalDetail = false" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex bd-highlight">
@@ -74,16 +109,16 @@ export default {
                 <DataTable :headers="headers" :items="items" :search="search">
                     <template #item.no="{ item, index }">
                         <div>
-                            {{ index + 1 }}    
+                            {{ index + 1 }}
                         </div>
                     </template>
-                    <template #item.action = "{item}">
+                    <template #item.action="{ item }">
                         <div>
-                            <button class="btn btn-sm btn-outline-info">
+                            <button class="btn btn-sm btn-outline-info" @click="openModalDetail(item)">
                                 <i class="fas fa-info-circle"></i>
                                 Detail No. Seri Peti
                             </button>
-                            <button class="btn btn-sm btn-outline-warning">
+                            <button class="btn btn-sm btn-outline-warning" @click="openEditNomorSeri(item)">
                                 <i class="fas fa-pencil"></i>
                                 Edit No. Seri Peti
                             </button>
