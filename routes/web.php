@@ -351,6 +351,8 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
             Route::view('/show', 'page.logistik.pengiriman.riwayat.show')->name('logistik.riwayat.show');
         });
         // });
+
+        Route::view('/{any?}', 'page.logistik.logistik')->where('any', '.*');
     });
 
     Route::group(['prefix' => '/pengiriman_retur'], function () {

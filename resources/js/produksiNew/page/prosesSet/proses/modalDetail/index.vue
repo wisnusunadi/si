@@ -52,7 +52,7 @@ export default {
                             <div class="card nomor-akn">
                                 <div class="card-body">
                                     <span id="akn">
-                                        {{ dateFormat(dataModalDetailSeri.tgl_buat) }}
+                                        {{ dataModalDetailSeri.tgl_buat }}
                                     </span>
                                 </div>
                             </div>
