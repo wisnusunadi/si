@@ -5529,13 +5529,35 @@ class LogistikController extends Controller
     public function peti_reworks_show()
     {
         $data = PetiRw::groupby('no_urut')->get();
-        foreach($data as $d){
-            $obj[] = array(
-                'id' => $d->id,
-                'no_urut' => $d->no_urut,
-                'tgl_buat' => $d->created_at,
-            );
+        if ($data->isempty()) {
+            $obj = array();
+        } else {
+            foreach($data as $d){
+                $obj[] = array(
+                    'id' => $d->no_urut,
+                    'no_urut' => $d->no_urut,
+                    'tgl_buat' => $d->created_at,
+                );
+            }
         }
+
+        return response()->json($obj);
+    }
+    public function peti_reworks_detail($urut)
+    {
+        $data = PetiRw::where('no_urut',$urut)->get();
+
+        if ($data->isempty()) {
+            $obj = array();
+        } else {
+            foreach($data as $d){
+                $obj[] = array(
+                    'id' => $d->no_urut,
+                    'noseri' => $d->noseri,
+                );
+            }
+        }
+
         return response()->json($obj);
     }
 

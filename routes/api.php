@@ -596,6 +596,7 @@ Route::prefix('/qc')->group(function () {
 Route::prefix('/logistik')->group(function () {
 
     Route::group(['prefix' => '/rw/peti'], function () {
+        Route::get('detail/{urut}', [App\Http\Controllers\LogistikController::class, 'peti_reworks_detail']);
         Route::post('store', [App\Http\Controllers\LogistikController::class, 'peti_reworks_store']);
         Route::get('show', [App\Http\Controllers\LogistikController::class, 'peti_reworks_show']);
     });
