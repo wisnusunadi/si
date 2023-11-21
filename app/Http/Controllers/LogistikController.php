@@ -5616,6 +5616,61 @@ class LogistikController extends Controller
             ], 500);
         }
     }
+    public function peti_reworks_update(Request $request,$id)
+    {
+        // DB::beginTransaction();
+        // try {
+            //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+        $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
+
+        $max = PetiRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_urut');
+        $cekSeri = NoseriBarangJadi::whereIn('noseri',$seriValues)->get();
+        $cekPeti = PetiRw::whereIn('noseri',$seriValues)->count();
+
+        if(count($seriValues) == count($cekSeri)){
+            if($cekPeti > 0){
+                $getUsed = PetiRw::whereIn('noseri',$seriValues)->pluck('noseri')->toArray();
+                // DB::rollBack();
+                return response()->json([
+                    'message' =>  'Noseri Pernah Dimasukkan',
+                    'values' => $getUsed,
+                ], 500);
+            }else{
+                // foreach($seriValues as $n){
+                //     $id = NoseriBarangJadi::where('noseri',$n)->first();
+
+                //     PetiRw::create([
+                //         'no_urut' => $max+1,
+                //         'noseri_id' => $id->id,
+                //         'noseri' => $n,
+                //         'packer' => 1,
+                //     ]);
+                // }
+                // DB::commit();
+                return response()->json([
+                    'message' =>  'Berhasil Di tambahkan',
+                    'values' => [],
+                ], 200);
+            }
+           }else{
+
+            $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+            // DB::rollBack();
+            return response()->json([
+                    'message' =>  'No Seri Tidak Terdaftar',
+                    'values' => array_values($getNotFound)
+                ], 500);
+        }
+        // } catch (\Throwable $th) {
+            $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+            // DB::rollBack();
+            return response()->json([
+                'message' =>  'Transaksi Gagal',
+                'values' => array_values($seriValues)
+            ], 500);
+        // }
+    }
 
     //MANAGER
     public function manager_logistik_show()
