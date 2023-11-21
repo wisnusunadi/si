@@ -30,6 +30,7 @@ use App\Models\NoseriTGbj;
 use App\Models\OutgoingPesananPart;
 use App\Models\Pengiriman;
 use App\Models\PetiRw;
+use App\Models\SeriDetailRw;
 use Carbon\Carbon as CarbonCarbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -5527,15 +5528,46 @@ class LogistikController extends Controller
     public function peti_reworks(Request $request)
     {
         $obj =  json_decode(json_encode($request->all()), FALSE);
-        return $obj;
-        foreach($obj->noseri as $n){
-            PetiRw::create([
-                'no_urut' => 1,
-                'noseri_id' => 2,
-                'noseri' => $n->noseri,
-            ]);
+        $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
+
+        $max = PetiRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_urut');
+        $cekSeri = NoseriBarangJadi::whereIn('noseri',$seriValues)->get();
+        $cekPeti = PetiRw::whereIn('noseri',$seriValues)->count();
+
+
+        if(count($seriValues) == count($cekSeri)){
+            if($cekPeti > 0){
+                $getUsed = PetiRw::whereIn('noseri',$seriValues)->pluck('noseri')->toArray();
+                return response()->json([
+                    'message' =>  'Noseri Pernah Dimasukkan',
+                    'values' => $getUsed,
+                ], 500);
+            }else{
+                foreach($seriValues as $n){
+                    $id = NoseriBarangJadi::where('noseri',$n)->first();
+
+                    PetiRw::create([
+                        'no_urut' => $max+1,
+                        'noseri_id' => $id->id,
+                        'noseri' => $n,
+                        'packer' => 1,
+                    ]);
+                }
+                return response()->json([
+                    'message' =>  'Berhasil Di tambahkan',
+                    'values' => [],
+                ], 200);
+            }
+           }else{
+
+            $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+                return response()->json([
+                    'message' =>  'No Seri Tidak Terdaftar',
+                    'values' => array_values($getNotFound)
+                ], 500);
         }
-        $date = Carbon::now();
+
+
     }
 
     //MANAGER

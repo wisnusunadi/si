@@ -71,8 +71,6 @@ class ExportRework implements  WithTitle, FromView, ShouldAutoSize, WithColumnFo
         $data_urut_produk = $collection->toArray();
         // return $data_urut_produk;
 
-
-
         return view('page.produksi.excel_reworks',['data'=> $data_urut_produk]);
     }
     public function title(): string
