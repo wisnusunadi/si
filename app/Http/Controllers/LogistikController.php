@@ -5526,7 +5526,20 @@ class LogistikController extends Controller
         return response()->json($data);
     }
 
-    public function peti_reworks(Request $request)
+    public function peti_reworks_show()
+    {
+        $data = PetiRw::groupby('no_urut')->get();
+        foreach($data as $d){
+            $obj[] = array(
+                'id' => $d->id,
+                'no_urut' => $d->no_urut,
+                'tgl_buat' => $d->created_at,
+            );
+        }
+        return response()->json($obj);
+    }
+
+    public function peti_reworks_store(Request $request)
     {
         DB::beginTransaction();
         try {
@@ -5580,9 +5593,6 @@ class LogistikController extends Controller
                 'values' => array_values($seriValues)
             ], 500);
         }
-
-
-
     }
 
     //MANAGER
