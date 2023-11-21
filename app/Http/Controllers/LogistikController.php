@@ -29,6 +29,7 @@ use App\Models\TFProduksiDetail;
 use App\Models\NoseriTGbj;
 use App\Models\OutgoingPesananPart;
 use App\Models\Pengiriman;
+use App\Models\PetiRw;
 use Carbon\Carbon as CarbonCarbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -5521,6 +5522,20 @@ class LogistikController extends Controller
 
 
         return response()->json($data);
+    }
+
+    public function peti_reworks(Request $request)
+    {
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+        return $obj;
+        foreach($obj->noseri as $n){
+            PetiRw::create([
+                'no_urut' => 1,
+                'noseri_id' => 2,
+                'noseri' => $n->noseri,
+            ]);
+        }
+        $date = Carbon::now();
     }
 
     //MANAGER

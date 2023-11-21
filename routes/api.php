@@ -594,6 +594,7 @@ Route::prefix('/qc')->group(function () {
 });
 
 Route::prefix('/logistik')->group(function () {
+    Route::post('rw/peti/', [App\Http\Controllers\LogistikController::class, 'peti_reworks']);
     Route::post('dashboard/data/{value}', [App\Http\Controllers\LogistikController::class, 'dashboard_data']);
     Route::post('dashboard/so', [App\Http\Controllers\LogistikController::class, 'dashboard_so']);
     Route::group(['prefix' => '/so'], function () {
