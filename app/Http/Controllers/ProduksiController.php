@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportRework;
 use App\Exports\NoseriRakitExport;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
@@ -4593,5 +4594,11 @@ class ProduksiController extends Controller
         $pdf = PDF::loadview('page.produksi.printreworks.cetakbuktibarangjadi', compact('data'))->setPaper('a4', 'portrait');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');
+    }
+
+    function export_rework_excel($urutan)
+    {
+        $waktu = Carbon::now();
+        return Excel::download(new ExportRework($urutan), 'PerakitanReworks  ' . $waktu->toDateTimeString() . '.xlsx');
     }
 }
