@@ -21,7 +21,7 @@ use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriDetailPesanan;
 use Illuminate\Http\Request;
 use PDF;
-use DB;
+
 use DomPDF\Options;
 use App\Models\Pesanan;
 use App\Models\TFProduksi;
@@ -30,9 +30,11 @@ use App\Models\NoseriTGbj;
 use App\Models\OutgoingPesananPart;
 use App\Models\Pengiriman;
 use App\Models\PetiRw;
+use App\Models\SeriDetailRw;
 use Carbon\Carbon as CarbonCarbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
@@ -5524,18 +5526,95 @@ class LogistikController extends Controller
         return response()->json($data);
     }
 
-    public function peti_reworks(Request $request)
+    public function peti_reworks_show()
     {
-        $obj =  json_decode(json_encode($request->all()), FALSE);
-        return $obj;
-        foreach($obj->noseri as $n){
-            PetiRw::create([
-                'no_urut' => 1,
-                'noseri_id' => 2,
-                'noseri' => $n->noseri,
-            ]);
+        $data = PetiRw::groupby('no_urut')->get();
+        if ($data->isempty()) {
+            $obj = array();
+        } else {
+            foreach($data as $d){
+                $obj[] = array(
+                    'id' => $d->no_urut,
+                    'no_urut' => $d->no_urut,
+                    'tgl_buat' => $d->created_at,
+                );
+            }
         }
-        $date = Carbon::now();
+
+        return response()->json($obj);
+    }
+    public function peti_reworks_detail($urut)
+    {
+        $data = PetiRw::where('no_urut',$urut)->get();
+
+        if ($data->isempty()) {
+            $obj = array();
+        } else {
+            foreach($data as $d){
+                $obj[] = array(
+                    'id' => $d->no_urut,
+                    'noseri' => $d->noseri,
+                );
+            }
+        }
+
+        return response()->json($obj);
+    }
+
+    public function peti_reworks_store(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+        $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
+
+        $max = PetiRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_urut');
+        $cekSeri = NoseriBarangJadi::whereIn('noseri',$seriValues)->get();
+        $cekPeti = PetiRw::whereIn('noseri',$seriValues)->count();
+
+        if(count($seriValues) == count($cekSeri)){
+            if($cekPeti > 0){
+                $getUsed = PetiRw::whereIn('noseri',$seriValues)->pluck('noseri')->toArray();
+                DB::rollBack();
+                return response()->json([
+                    'message' =>  'Noseri Pernah Dimasukkan',
+                    'values' => $getUsed,
+                ], 500);
+            }else{
+                foreach($seriValues as $n){
+                    $id = NoseriBarangJadi::where('noseri',$n)->first();
+
+                    PetiRw::create([
+                        'no_urut' => $max+1,
+                        'noseri_id' => $id->id,
+                        'noseri' => $n,
+                        'packer' => 1,
+                    ]);
+                }
+                DB::commit();
+                return response()->json([
+                    'message' =>  'Berhasil Di tambahkan',
+                    'values' => [],
+                ], 200);
+            }
+           }else{
+
+            $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+            DB::rollBack();
+            return response()->json([
+                    'message' =>  'No Seri Tidak Terdaftar',
+                    'values' => array_values($getNotFound)
+                ], 500);
+        }
+        } catch (\Throwable $th) {
+            $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+            DB::rollBack();
+            return response()->json([
+                'message' =>  'Transaksi Gagal',
+                'values' => array_values($seriValues)
+            ], 500);
+        }
     }
 
     //MANAGER
