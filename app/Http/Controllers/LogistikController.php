@@ -5635,6 +5635,7 @@ class LogistikController extends Controller
     }
 
     public function cetak_peti($id) {
-        return view('page.produksi.printreworks.cetakpeti');
+        $pdf = PDF::loadView('page.produksi.printreworks.viewpeti')->setPaper('a5', 'landscape');
+        return $pdf->stream('');
     }
 }
