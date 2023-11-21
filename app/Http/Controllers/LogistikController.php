@@ -5548,4 +5548,14 @@ class LogistikController extends Controller
     {
         return  Carbon::now()->format('Y');
     }
+
+    public function view_peti($id) {
+        // set paper A5 landscape
+        $pdf = PDF::loadView('page.produksi.printreworks.viewpeti')->setPaper('a5', 'landscape');
+        return $pdf->stream('');
+    }
+
+    public function cetak_peti($id) {
+        return view('page.produksi.printreworks.cetakpeti');
+    }
 }

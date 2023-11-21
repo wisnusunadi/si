@@ -4,6 +4,7 @@ export default {
     components: {
         DataTable,
     },
+    props: ['selectSeri'],
     data() {
         return {
             noseri: [],
@@ -14,7 +15,7 @@ export default {
             noseriGeneratePackingList: [],
             headersDokumen: [
                 {text: 'No.', value: 'no', align: 'text-left'},
-                {text: 'No. Seri', value: 'seri', align: 'text-left'},
+                {text: 'No. Seri', value: 'noseri', align: 'text-left'},
             ]
         }
     },
@@ -27,10 +28,18 @@ export default {
             });
         },
         generateNoSeri() {
-            for (let i = 0; i < 3; i++) {
-                this.noseri.push({
-                    seri: '',
-                });
+            if (!this.selectSeri?.id) {
+                for (let i = 0; i < 3; i++) {
+                    this.noseri.push({
+                        seri: '',
+                    });
+                }
+            } else {
+                this.noseri = this.selectSeri.seri.map((data) => {
+                    return {
+                        seri: data.noseri,
+                    }
+                })
             }
         },
         autoTab(e, idx) {
@@ -47,7 +56,7 @@ export default {
                     return data.seri.trim() === '';
                 })
 
-                if (!this.isError && cek.length === 0) {
+                if (!this.isError && cek.length === 0 && !this.selectSeri?.id) {
                     this.simpanSeri();
                 }
 
@@ -94,10 +103,23 @@ export default {
 
 
                 this.hasilGenerate = 'PETI-1'
-                this.noseriGeneratePackingList = this.noseri
+                this.noseriGeneratePackingList = this.noseri.map((data) => {
+                    return {
+                        noseri: data.seri,
+                    }
+                })
                 this.$swal('Berhasil', 'No. Seri berhasil disimpan', 'success')
             }
         },
+        updateSeri() {
+
+        },
+        mappingEdit() {
+            if (this.selectSeri?.id) {
+                this.hasilGenerate = this.selectSeri.no_peti
+                this.noseriGeneratePackingList = this.selectSeri.seri
+            }
+        },  
         resetModal() {
             this.noseri = []
             this.generateNoSeri()
@@ -114,6 +136,7 @@ export default {
     },
     mounted() {
         this.generateNoSeri();
+        this.mappingEdit();
         this.$nextTick(() => {
             setTimeout(() => {
                 this.$refs.noseri[0].focus();
@@ -197,7 +220,7 @@ export default {
                         <button type="button" class="btn btn-success">Simpan</button>
                     </div>
                     <div class="p-2 bd-highlight ml-auto">
-                        <button type="button" class="btn btn-primary" @click="resetModal">Reset</button>
+                        <button type="button" class="btn btn-primary" @click="resetModal" v-if="!this.selectSeri?.id">Reset</button>
                     </div>
                 </div>
             </div>
@@ -207,6 +230,20 @@ export default {
 <style>
 .nomor-so {
     background-color: #717FE1;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px
+}
+
+.nomor-akn {
+    background-color: #DF7458;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px
+}
+
+.nomor-po {
+    background-color: #85D296;
     color: #fff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 18px

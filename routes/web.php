@@ -12,6 +12,7 @@ use App\Http\Controllers\inventory\AlatujiController;
 use App\Http\Controllers\inventory\PerawatanController;
 use App\Http\Controllers\inventory\VerifikasiController;
 use App\Http\Controllers\inventory\KalibrasiPerbaikanController;
+use App\Http\Controllers\LogistikController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,6 +107,8 @@ Route::group(['prefix' => '/produksiReworks' , 'middleware' => 'auth'], function
     Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'cetakSuratPermintaan']);
     Route::get('/surat_penyerahan/{id}/{divisi}', [ProduksiController::class, 'cetakSuratPenyerahan']);
     Route::get('/surat_pengiriman/{id}', [GudangController::class, 'cetakSuratPengantar']);
+    Route::get('/cetakpeti/{id}', [LogistikController::class, 'cetak_peti']);
+    Route::get('/viewpeti/{id}', [LogistikController::class, 'view_peti']);
 });
 
 Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
