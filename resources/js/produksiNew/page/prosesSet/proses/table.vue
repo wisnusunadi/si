@@ -81,6 +81,9 @@ export default {
         refresh() {
             this.$emit('refresh')
         },
+        exportRework(urutan) {
+            console.log(urutan)
+        }
     },
 }
 </script>
@@ -123,6 +126,10 @@ export default {
                         <button class="btn btn-sm btn-outline-info" @click="detailRework(data.urutan, data.set)">
                             <i class="fas fa-eye"></i>
                             Detail
+                        </button>
+                        <button class="btn btn-sm btn-outline-success" @click="exportRework(data.urutan)">
+                            <i class="fas fa-file-excel"></i>
+                            Export
                         </button>
                     </td>
                 </tr>
