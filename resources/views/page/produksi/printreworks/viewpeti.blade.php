@@ -5,19 +5,19 @@
     <title>View Peti</title>
 
     <style>
-        .text-center {
-            text-align: center;
-        }
 
         /* position all to center */
         .image-container {
-            display: flex;
-            text-align: center;
+            margin-left: 23%
+        }
+
+        .image-container > .text-center {
+            margin-left: 22%
         }
 
         table {
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
         }
 
         .box {
@@ -28,11 +28,11 @@
 
         
     .first-item {
-        margin-bottom: 30px;
+        margin-bottom: 25px;
     }
 
     .last-item {
-        margin-top: 30px;
+        margin-top: 25px;
     }
     </style>
 </head>
@@ -45,7 +45,7 @@
             </td>
             <td style="width: 10%"></td>
             <td style="width: 15%">
-                <div class="box">PETI - 1000</div>
+                {{-- <div class="box">PETI - 1000</div> --}}
             </td>
         </tr>
     </table>
@@ -53,13 +53,13 @@
     @php
         $generator = new Picqer\Barcode\BarcodeGeneratorSVG();
 
-        $seri = ['TD08217A4235', 'TD08217A4258', 'TD08217A4207'];
+        $seri = ['AK1023A000003', 'AK1023B009994', 'AK1023B000005'];
     @endphp
 
         @foreach ($seri as $index => $s)
         <div class="image-container {{ $index === 0 ? 'first-item' : '' }} {{ $index === count($seri) - 1 ? 'last-item' : '' }}">
-            <img src="data:image/png;base64,{{ base64_encode($generator->getBarcode($s, $generator::TYPE_CODE_128_B, 2, 60)) }}"
-                class="text-center" />
+            <span>Elitech</span> <br>
+            <img src="data:image/png;base64,{{ base64_encode($generator->getBarcode($s, $generator::TYPE_CODE_128_B, 2, 60)) }}" />
             <div class="text-center">{{ $s }}</div>
         </div>
     @endforeach
