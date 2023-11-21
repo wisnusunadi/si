@@ -21,7 +21,7 @@ use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriDetailPesanan;
 use Illuminate\Http\Request;
 use PDF;
-use DB;
+
 use DomPDF\Options;
 use App\Models\Pesanan;
 use App\Models\TFProduksi;
@@ -34,6 +34,7 @@ use App\Models\SeriDetailRw;
 use Carbon\Carbon as CarbonCarbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
@@ -5527,17 +5528,20 @@ class LogistikController extends Controller
 
     public function peti_reworks(Request $request)
     {
-        $obj =  json_decode(json_encode($request->all()), FALSE);
+        DB::beginTransaction();
+        try {
+            //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
         $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
 
         $max = PetiRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_urut');
         $cekSeri = NoseriBarangJadi::whereIn('noseri',$seriValues)->get();
         $cekPeti = PetiRw::whereIn('noseri',$seriValues)->count();
 
-
         if(count($seriValues) == count($cekSeri)){
             if($cekPeti > 0){
                 $getUsed = PetiRw::whereIn('noseri',$seriValues)->pluck('noseri')->toArray();
+                DB::rollBack();
                 return response()->json([
                     'message' =>  'Noseri Pernah Dimasukkan',
                     'values' => $getUsed,
@@ -5553,6 +5557,7 @@ class LogistikController extends Controller
                         'packer' => 1,
                     ]);
                 }
+                DB::commit();
                 return response()->json([
                     'message' =>  'Berhasil Di tambahkan',
                     'values' => [],
@@ -5561,11 +5566,21 @@ class LogistikController extends Controller
            }else{
 
             $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
-                return response()->json([
+            DB::rollBack();
+            return response()->json([
                     'message' =>  'No Seri Tidak Terdaftar',
                     'values' => array_values($getNotFound)
                 ], 500);
         }
+        } catch (\Throwable $th) {
+            $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+            DB::rollBack();
+            return response()->json([
+                'message' =>  'Transaksi Gagal',
+                'values' => array_values($seriValues)
+            ], 500);
+        }
+
 
 
     }
