@@ -5668,7 +5668,7 @@ class LogistikController extends Controller
     }
     public function peti_reworks_update(Request $request,$urut)
     {
-        DB::beginTransaction();
+         DB::beginTransaction();
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
@@ -5677,7 +5677,9 @@ class LogistikController extends Controller
         $newId = array_values(array_diff($seriValues, $data));
 
         $currentId = array_values(array_diff($data, $seriValues));
-        $ids = NoseriBarangJadi::where('noseri',$currentId[0])->first();
+        if(count($currentId) > 0){
+            $ids = PetiRw::where('noseri',$currentId[0])->first();
+        }
 
 
         if($newId){
@@ -5726,10 +5728,10 @@ class LogistikController extends Controller
             ], 500);
         }
         } catch (\Throwable $th) {
-            //throw $th;
+           // throw $th;
                  DB::rollBack();
                 return response()->json([
-                    'message' =>  'Transaksi Gagal',
+                    'message' =>  $th->getMessage(),
                     'values' => []
                 ], 500);
         }
