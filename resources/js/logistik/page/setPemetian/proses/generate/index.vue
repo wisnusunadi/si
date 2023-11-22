@@ -77,6 +77,10 @@ export default {
                 return data.seri.trim() === '';
             });
 
+            if (cek.length > 0) {
+                this.$swal('Gagal', 'No. Seri tidak boleh kosong', 'error')
+                return
+            }
 
             const noSeriUnique = this.noseri.filter((data, index) => {
                 return this.noseri.findIndex((data2) => data2.seri === data.seri) === index;
@@ -92,11 +96,6 @@ export default {
                     return data
                 })
                 this.$swal('Gagal', 'No. Seri tidak boleh sama', 'error')
-                return
-            }
-
-            if (cek.length > 0) {
-                this.$swal('Gagal', 'No. Seri tidak boleh kosong', 'error')
                 return
             }
 
@@ -155,6 +154,11 @@ export default {
                 return data.seri.trim() === '';
             });
 
+            if (cek.length > 0) {
+                this.$swal('Gagal', 'No. Seri tidak boleh kosong', 'error')
+                return
+            }
+
             const noSeriUnique = this.noseri.filter((data, index) => {
                 return this.noseri.findIndex((data2) => data2.seri === data.seri) === index;
             })
@@ -169,11 +173,6 @@ export default {
                     return data
                 })
                 this.$swal('Gagal', 'No. Seri tidak boleh sama', 'error')
-                return
-            }
-
-            if (cek.length > 0) {
-                this.$swal('Gagal', 'No. Seri tidak boleh kosong', 'error')
                 return
             }
 
@@ -249,13 +248,15 @@ export default {
             window.open(`/produksiReworks/cetakpeti/${id}`, '_blank');
         },
     },
+    created() {
+        this.generateNoSeri()
+        this.mappingEdit()
+    },
     mounted() {
-        this.generateNoSeri();
-        this.mappingEdit();
         this.$nextTick(() => {
             setTimeout(() => {
                 this.$refs.noseri[0].focus();
-            }, 200);
+            }, 500);
         });
     },
 }
