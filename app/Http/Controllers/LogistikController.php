@@ -5620,10 +5620,10 @@ class LogistikController extends Controller
     }
     public function peti_reworks_update(Request $request,$urut)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             //code...
-        $obj =  json_decode(json_encode($request->all()), FALSE);
+            $obj =  json_decode(json_encode($request->all()), FALSE);
         $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
         $data = PetiRw::where('no_urut',$urut)->pluck('noseri')->toArray();
         $newId = array_values(array_diff($seriValues, $data));
@@ -5634,6 +5634,7 @@ class LogistikController extends Controller
             $cekPeti = PetiRw::whereIn('noseri',$newId)->get();
             if(count($cekSeri) == count($newId)){
             if(count($cekPeti) > 0){
+                DB::rollBack();
                 return response()->json([
                     'message' => 'No Seri Sudah Digunakan',
                     'values' => $cekPeti->pluck('noseri')->toArray()
@@ -5649,6 +5650,7 @@ class LogistikController extends Controller
                         'packer'=> 1,
                     ]);
                 }
+                DB::commit();
                 return response()->json([
                     'message' =>  'Berhasil Di Ubah',
                     'values' => [],
@@ -5657,18 +5659,29 @@ class LogistikController extends Controller
             }
             }else{
                 $getNotFound = array_diff($newId, $cekSeri->pluck('noseri')->toArray());
-                //     // DB::rollBack();
+               DB::rollBack();
                     return response()->json([
                             'message' => 'No Seri Tidak Terdaftar',
                             'values' => array_values($getNotFound)
                         ], 500);
             }
         }else{
+            DB::rollBack();
             return response()->json([
                 'message' =>  'No Seri Tidak Ada Perubahan',
                 'values' => []
             ], 500);
         }
+        } catch (\Throwable $th) {
+            //throw $th;
+                 DB::rollBack();
+                return response()->json([
+                    'message' =>  'Transaksi Gagal',
+                    'values' => []
+                ], 500);
+        }
+            //code...
+
 
         // $max = PetiRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_urut');
 
