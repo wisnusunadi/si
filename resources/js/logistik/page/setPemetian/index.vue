@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 import Header from '../../components/Header.vue'
 import proses from './proses'
 import riwayat from './riwayat'
@@ -21,16 +22,32 @@ export default {
                     link: '#'
                 }
             ],
-            proses: [{
-                id: 1,
-                no_urut: 'PRD-1',
-                nama_produk: 'Produk 1',
-                jumlah_selesai: 10,
-                jumlah_belum_selesai: 10,
-            }],
+            proses: [],
             riwayat: [],
         }
     },
+    methods: {
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true)
+                const { data } = await axios.get('/api/logistik/rw/')
+                this.proses = data.map(item => {
+                    return {
+                        ...item,
+                        sudah: parseInt(item.sudah) / 3,
+                        belum: parseInt(item.belum) / 3,
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.dispatch('setLoading', false)
+            }
+        }
+    },
+    created() {
+        this.getData()
+    }
 }
 </script>
 <template>
@@ -48,7 +65,7 @@ export default {
                             type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat</a>
                     </li> -->
                 </ul>
-                <div class="tab-content" id="pills-tabContent">
+                <div class="tab-content" id="pills-tabContent" v-if="!$store.state.loading">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                         <proses :dataTable="proses" />
                     </div>
@@ -56,6 +73,10 @@ export default {
                         <riwayat />
                     </div> -->
                 </div>
+                <div class="spinner-border" role="status" v-else>
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
+        </div>
     </div>
-</div></template>
+</template>

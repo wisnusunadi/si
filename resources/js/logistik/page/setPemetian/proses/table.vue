@@ -25,10 +25,10 @@ export default {
             </thead>
             <tbody v-if="dataTable.length > 0">
                 <tr v-for="(data, idx) in dataTable" :key="idx">
-                    <td>{{ data.no_urut }}</td>
-                    <td>{{ data.nama_produk }}</td>
-                    <td>{{ data.jumlah_selesai }}</td>
-                    <td>{{ data.jumlah_belum_selesai }}</td>
+                    <td>{{ data.urutan }}</td>
+                    <td>{{ data.nama }}</td>
+                    <td>{{ data.sudah }}</td>
+                    <td>{{ data.belum }}</td>
                     <td>
                         <button class="btn btn-outline-primary btn-sm" @click="setPemetian(data.id)">Set Pemetian</button>
                     </td>
