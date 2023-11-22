@@ -322,12 +322,12 @@ export default {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-check form-check-inline my-3">
+                                        <!-- <div class="form-check form-check-inline my-3">
                                             <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
                                                 value="option1">
                                             <label class="form-check-label" for="inlineCheckbox1">Mengalami
                                                 Perubahan</label>
-                                        </div>
+                                        </div> -->
                                         <div class="row">
                                             <div class="col">
                                                 <div class="form-group">
@@ -370,7 +370,7 @@ export default {
                     <template #item.noseri="{ item }">
                         <div>
                             <span>{{ item.noseri }}</span> <br>
-                            <span class="badge badge-info">Sudah diubah</span>
+                            <!-- <span class="badge badge-info">Sudah diubah</span> -->
                         </div>
                     </template>
                     <template #item.aksi="{ item }">
