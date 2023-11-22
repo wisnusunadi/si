@@ -88,7 +88,7 @@ export default {
 
             if (noSeriUnique.length !== this.noseri.length) {
                 this.isError = true
-                this.errorValue = 'tidak boleh sama'
+                this.errorValue = 'No. Seri tidak boleh sama'
                 this.noseri = this.noseri.map((data) => {
                     if (this.noseri.findIndex((data2) => data2.seri === data.seri) !== this.noseri.lastIndexOf(data)) {
                         data.error = true
