@@ -5614,6 +5614,7 @@ class LogistikController extends Controller
             DB::rollBack();
             return response()->json([
                 'message' =>  'Transaksi Gagal',
+                'error' => $th->getMessage(),
                 'values' => array_values($seriValues)
             ], 500);
         }
@@ -5647,14 +5648,14 @@ class LogistikController extends Controller
                         'no_urut'=> $urut,
                         'noseri_id'=> $id->id,
                         'noseri'=> $n,
-                        'packer'=> 1,
+                        'packer'=> auth()->user()->karyawan->id,
                     ]);
                 }
                 DB::commit();
                 return response()->json([
                     'message' =>  'Berhasil Di Ubah',
                     'values' => [],
-                    'id' => $urut
+                    'no_urut' => $urut
                 ], 200);
             }
             }else{

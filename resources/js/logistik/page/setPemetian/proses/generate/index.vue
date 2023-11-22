@@ -101,26 +101,124 @@ export default {
             }
 
             if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
-                this.isDisable = true
+                try {
+                    this.isDisable = true
 
-                const { data } = await axios.post('/api/logistik/rw/peti/store', {
-                    noseri: this.noseri
-                }, {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
-                    }
-                })
+                    const { data } = await axios.post('/api/logistik/rw/peti/store', {
+                        noseri: this.noseri
+                    }, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
+                        }
+                    })
 
-                this.hasilGenerate = 'PETI-1'
-                this.noseriGeneratePackingList = this.noseri.map((data) => {
-                    return {
-                        noseri: data.seri,
+                    const { no_urut } = data
+
+                    this.idGenerate = no_urut
+                    this.hasilGenerate = `PETI-${no_urut}`
+                    this.noseriGeneratePackingList = this.noseri.map((data) => {
+                        return {
+                            noseri: data.seri,
+                        }
+                    })
+                    this.$swal('Berhasil', 'No. Seri berhasil disimpan', 'success')
+                } catch (error) {
+                    const { message, values } = error.response.data
+                    this.$swal('Gagal', message, 'error')
+                    this.errorValue = message
+                    this.isError = true
+
+                    if (error.response.data?.values) {
+                        this.noseri = this.noseri.map((data) => {
+                            data.seri = data?.seri?.trim()
+                            const find = values.find((item) => item === data.seri)
+                            if (find) {
+                                return {
+                                    ...data,
+                                    error: true
+                                }
+                            }
+                            return data
+                        })
                     }
-                })
-                this.$swal('Berhasil', 'No. Seri berhasil disimpan', 'success')
+                    this.isDisable = false
+                }
             }
         },
-        updateSeri() {
+        async updateSeri() {
+            this.noseri = this.noseri.map((data) => {
+                delete data.error
+                return data
+            })
+
+            const cek = this.noseri.filter((data) => {
+                return data.seri.trim() === '';
+            });
+
+            const noSeriUnique = this.noseri.filter((data, index) => {
+                return this.noseri.findIndex((data2) => data2.seri === data.seri) === index;
+            })
+
+            if (noSeriUnique.length !== this.noseri.length) {
+                this.isError = true
+                this.errorValue = 'tidak boleh sama'
+                this.noseri = this.noseri.map((data) => {
+                    if (this.noseri.findIndex((data2) => data2.seri === data.seri) !== this.noseri.lastIndexOf(data)) {
+                        data.error = true
+                    }
+                    return data
+                })
+                this.$swal('Gagal', 'No. Seri tidak boleh sama', 'error')
+                return
+            }
+
+            if (cek.length > 0) {
+                this.$swal('Gagal', 'No. Seri tidak boleh kosong', 'error')
+                return
+            }
+
+            if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
+                try {
+                    this.isDisable = true
+                    const { data } = await axios.put(`/api/logistik/rw/peti/update/${this.selectSeri.id}`, {
+                        noseri: this.noseri
+                    }, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
+                        }
+                    })
+
+                    const { no_urut } = data
+                    this.hasilGenerate = `PETI-${no_urut}`
+                    this.noseriGeneratePackingList = this.noseri.map((data) => {
+                        return {
+                            noseri: data.seri,
+                        }
+                    })
+                    this.$swal('Berhasil', 'No. Seri berhasil diubah', 'success')
+                } catch (error) {
+                    const { message, values } = error.response.data
+                    this.$swal('Gagal', message, 'error')
+                    this.errorValue = message
+                    this.isError = true
+
+                    if (error.response.data?.values) {
+                        this.noseri = this.noseri.map((data) => {
+                            data.seri = data?.seri?.trim()
+                            const find = values.find((item) => item === data.seri)
+                            if (find) {
+                                return {
+                                    ...data,
+                                    error: true
+                                }
+                            }
+                            return data
+                        })
+                    }
+
+                    this.isDisable = false
+                }
+            }
 
         },
         mappingEdit() {
@@ -141,7 +239,15 @@ export default {
                     this.$refs.noseri[0].focus();
                 }, 200);
             });
-        }
+        },
+        viewPackingList() {
+            let id = this.selectSeri?.id ? this.selectSeri.id : this.idGenerate;
+            window.open(`/produksiReworks/viewpeti/${id}`, '_blank');
+        },
+        cetakPackingList() {
+            let id = this.selectSeri?.id ? this.selectSeri.id : this.idGenerate;
+            window.open(`/produksiReworks/cetakpeti/${id}`, '_blank');
+        },
     },
     mounted() {
         this.generateNoSeri();
@@ -180,7 +286,7 @@ export default {
                                                 @keyup.enter="autoTab($event, idx)" ref="noseri" :disabled="isDisable"
                                                 v-model="data.seri">
                                             <div class="invalid-feedback">
-                                                Nomor Seri {{ errorValue }}
+                                                {{ errorValue }}
                                             </div>
                                         </td>
                                     </tr>
@@ -199,13 +305,13 @@ export default {
 
                                     <div class="d-flex bd-highlight">
                                         <div class="p-2 flex-grow-1 bd-highlight">
-                                            <button class="btn btn-sm btn-outline-primary">
+                                            <button class="btn btn-sm btn-outline-primary" @click="cetakPackingList">
                                                 Cetak No. Packing List <i class="fa fa-print"></i>
                                             </button>
                                         </div>
                                         <div class="p-2 bd-highlight">
                                             <!-- bentuk modal untuk view nya -->
-                                            <button class="btn btn-sm btn-outline-info">
+                                            <button class="btn btn-sm btn-outline-info" @click="viewPackingList">
                                                 View No. Packing List <i class="fa fa-eye"></i>
                                             </button>
                                         </div>
@@ -226,7 +332,8 @@ export default {
                 </div>
                 <div class="d-flex bd-highlight mb-3 mx-3">
                     <div class="mr-auto p-2 bd-highlight">
-                        <button type="button" class="btn btn-success" :disabled="isDisable">Simpan</button>
+                        <button type="button" class="btn btn-success" @click="selectSeri?.id ? updateSeri() : simpanSeri()"
+                            :disabled="isDisable">Simpan</button>
                     </div>
                     <div class="p-2 bd-highlight ml-auto">
                         <button type="button" class="btn btn-primary" @click="resetModal"

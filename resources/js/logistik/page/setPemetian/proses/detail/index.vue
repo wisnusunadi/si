@@ -36,32 +36,13 @@ export default {
                 { text: 'Packer', value: 'packer' },
                 { text: 'Aksi', value: 'action', sortable: false },
             ],
-            // items: [
-            //     {
-            //         id: 1,
-            //         no_peti: 'PETI-1',
-            //         tanggal_dibuat: '31 Desember 2020',
-            //         packer: 'Packer 1',
-            //         seri: [
-            //             {
-            //                 produk: 'ANTROPOMETRI KIT 10',
-            //                 noseri: 'TD08217A4235'
-            //             },
-            //             {
-            //                 produk: 'ANTROPOMETRI KIT 10',
-            //                 noseri: 'TD08217A4235'
-            //             },
-            //             {
-            //                 produk: 'ANTROPOMETRI KIT 10',
-            //                 noseri: 'TD08217A4235'
-            //             }
-            //         ]
-            //     }
-            // ],
             items: [],
             showModalGenerate: false,
             showModalDetail: false,
             detailSeriSelected: {},
+            filterProses: [],
+            tanggalAwal: '',
+            tanggalAkhir: '',
         }
     },
     methods: {
@@ -119,13 +100,48 @@ export default {
         cetakPackingList(id) {
             window.open(`/produksiReworks/cetakpeti/${id}`, '_blank');
         },
-                viewPackingList(id) {
+        viewPackingList(id) {
             window.open(`/produksiReworks/viewpeti/${id}`, '_blank');
         },
+        renderNo(data) {
+            return data.map((item, index) => {
+                return {
+                    ...item,
+                    no: index + 1
+                }
+            })
+        }
     },
     mounted() {
         this.getPeti();
-    }
+    },
+    computed: {
+        filterData() {
+            let filtered = this.renderNo(this.items)
+
+            if (this.filterProses.length > 0) {
+                filtered = this.renderNo(filtered.filter(data => this.filterProses.includes(data.packer)))
+            }
+
+            if (this.tanggalAwal && this.tanggalAkhir) {
+                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_buat) >= new Date(this.tanggalAwal) && new Date(data.tgl_buat) <= new Date(this.tanggalAkhir)))
+            } else if (this.tanggalAwal) {
+                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_buat) >= new Date(this.tanggalAwal)))
+            } else if (this.tanggalAkhir) {
+                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_buat) <= new Date(this.tanggalAkhir)))
+            }
+
+            return filtered.filter((data) => {
+                return Object.keys(data).some((key) => {
+                    return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
+                });
+            });
+        },
+        getAllStatusUnique() {
+            const packer = this.items.map((data) => data.packer)
+            return [...new Set(packer)]
+        },
+    },
 
 }
 </script>
@@ -143,17 +159,52 @@ export default {
                             <i class="fas fa-plus"></i>
                             Tambah
                         </button>
+                        <span class="filter ml-2">
+                            <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                            <form id="filter_ekat">
+                                <div class="dropdown-menu">
+                                    <div class="px-3 py-3">
+                                        <div class="form-group">
+                                            <label for="jenis_penjualan">Packer</label>
+                                        </div>
+                                        <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" :ref="status"
+                                                    :value="status" id="status1" @click="clickFilterProses(status)" />
+                                                <label class="form-check-label text-uppercase" for="status1">
+                                                    {{ status }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Tanggal Awal</label>
+                                                    <input type="date" class="form-control" v-model="tanggalAwal"
+                                                        :max="tanggalAkhir">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Tanggal Akhir</label>
+                                                    <input type="date" class="form-control" v-model="tanggalAkhir"
+                                                        :min="tanggalAwal">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </span>
                     </div>
                     <div class="p-2 bd-highlight">
                         <input type="text" class="form-control" v-model="search" placeholder="Cari...">
                     </div>
                 </div>
-                <DataTable :headers="headers" :items="items" :search="search">
-                    <template #item.no="{ item, index }">
-                        <div>
-                            {{ index + 1 }}
-                        </div>
-                    </template>
+                <DataTable :headers="headers" :items="filterData">
                     <template #item.action="{ item }">
                         <div>
                             <button class="btn btn-sm btn-outline-info" @click="openModalDetail(item)">
