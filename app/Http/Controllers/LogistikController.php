@@ -5558,7 +5558,7 @@ class LogistikController extends Controller
             }
         }
 
-        return response()->json($obj);
+        return $obj;
     }
 
     public function peti_reworks_store(Request $request)
@@ -5589,7 +5589,7 @@ class LogistikController extends Controller
                         'no_urut' => $max+1,
                         'noseri_id' => $id->id,
                         'noseri' => $n,
-                        'packer' => 1,
+                        'packer' => auth()->user()->karyawan->id,
                     ]);
                 }
                 DB::commit();
@@ -5630,12 +5630,14 @@ class LogistikController extends Controller
 
     public function view_peti($id) {
         // set paper A5 landscape
-        $pdf = PDF::loadView('page.produksi.printreworks.viewpeti')->setPaper('a5', 'landscape');
+        $loadView = $this->peti_reworks_detail($id);
+        $pdf = PDF::loadView('page.produksi.printreworks.cetakpeti', compact('loadView'))->setPaper('a5', 'landscape');
         return $pdf->stream('');
     }
 
     public function cetak_peti($id) {
-        $pdf = PDF::loadView('page.produksi.printreworks.viewpeti')->setPaper('a5', 'landscape');
+        $loadView = $this->peti_reworks_detail($id);
+        $pdf = PDF::loadView('page.produksi.printreworks.cetakpeti', compact('loadView'))->setPaper('a5', 'landscape');
         return $pdf->stream('');
     }
 }

@@ -3,6 +3,7 @@ import Header from '../../../../components/Header.vue';
 import DataTable from '../../../../components/DataTable.vue';
 import Generate from '../generate';
 import DetailSeri from '../modalDetail';
+import axios from 'axios';
 export default {
     components: {
         Header,
@@ -35,28 +36,29 @@ export default {
                 { text: 'Packer', value: 'packer' },
                 { text: 'Aksi', value: 'action', sortable: false },
             ],
-            items: [
-                {
-                    id: 1,
-                    no_peti: 'PETI-1',
-                    tanggal_dibuat: '31 Desember 2020',
-                    packer: 'Packer 1',
-                    seri: [
-                        {
-                            produk: 'ANTROPOMETRI KIT 10',
-                            noseri: 'TD08217A4235'
-                        },
-                        {
-                            produk: 'ANTROPOMETRI KIT 10',
-                            noseri: 'TD08217A4235'
-                        },
-                        {
-                            produk: 'ANTROPOMETRI KIT 10',
-                            noseri: 'TD08217A4235'
-                        }
-                    ]
-                }
-            ],
+            // items: [
+            //     {
+            //         id: 1,
+            //         no_peti: 'PETI-1',
+            //         tanggal_dibuat: '31 Desember 2020',
+            //         packer: 'Packer 1',
+            //         seri: [
+            //             {
+            //                 produk: 'ANTROPOMETRI KIT 10',
+            //                 noseri: 'TD08217A4235'
+            //             },
+            //             {
+            //                 produk: 'ANTROPOMETRI KIT 10',
+            //                 noseri: 'TD08217A4235'
+            //             },
+            //             {
+            //                 produk: 'ANTROPOMETRI KIT 10',
+            //                 noseri: 'TD08217A4235'
+            //             }
+            //         ]
+            //     }
+            // ],
+            items: [],
             showModalGenerate: false,
             showModalDetail: false,
             detailSeriSelected: {},
@@ -70,21 +72,60 @@ export default {
                 $('.modalGenerate').modal('show');
             });
         },
-        openModalDetail(item) {
-            this.detailSeriSelected = item;
+        async openModalDetail(item) {
+            const { data } = await axios.get(`/api/logistik/rw/peti/detail/${item.id}`)
+            this.detailSeriSelected = {
+                ...item,
+                seri: data.map((item, index) => {
+                    return {
+                        ...item,
+                        produk: 'ANTROPOMETRI KIT 10',
+                        no: index + 1,
+                    }
+                })
+            }
             this.showModalDetail = true;
             this.$nextTick(() => {
                 $('.modalDetailSeri').modal('show');
             });
         },
-        openEditNomorSeri(item) {
-            this.detailSeriSelected = item;
+        async openEditNomorSeri(item) {
+            const { data } = await axios.get(`/api/logistik/rw/peti/detail/${item.id}`)
+            this.detailSeriSelected = {
+                ...item,
+                seri: data.map((item, index) => {
+                    return {
+                        ...item,
+                        produk: 'ANTROPOMETRI KIT 10',
+                        no: index + 1,
+                    }
+                })
+            }
             this.showModalGenerate = true;
             this.$nextTick(() => {
                 $('.modalGenerate').modal('show');
             });
-        }
+        },
+        async getPeti() {
+            const { data } = await axios.get('/api/logistik/rw/peti/show');
+            this.items = data.map((item, index) => {
+                return {
+                    ...item,
+                    no_peti: `PETI-${item.no_urut}`,
+                    tanggal_dibuat: this.dateFormat(item.tgl_buat),
+                }
+            });
+        },
+        cetakPackingList(id) {
+            window.open(`/produksiReworks/cetakpeti/${id}`, '_blank');
+        },
+                viewPackingList(id) {
+            window.open(`/produksiReworks/viewpeti/${id}`, '_blank');
+        },
     },
+    mounted() {
+        this.getPeti();
+    }
 
 }
 </script>
@@ -92,7 +133,8 @@ export default {
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
         <Generate v-if="showModalGenerate" @closeModal="showModalGenerate = false" :selectSeri="detailSeriSelected" />
-        <DetailSeri v-if="showModalDetail" :dataModalDetailSeri="detailSeriSelected" @closeModal="showModalDetail = false" />
+        <DetailSeri v-if="showModalDetail" :dataModalDetailSeri="detailSeriSelected"
+            @closeModal="showModalDetail = false" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex bd-highlight">
@@ -123,11 +165,11 @@ export default {
                                 Edit No. Seri Peti
                             </button>
                             <br>
-                            <button class="btn btn-sm btn-outline-info my-1">
+                            <button class="btn btn-sm btn-outline-info my-1" @click="viewPackingList(item.id)">
                                 <i class="fas fa-eye"></i>
                                 Lihat Packing List
                             </button>
-                            <button class="btn btn-sm btn btn-outline-primary my-1">
+                            <button class="btn btn-sm btn btn-outline-primary my-1" @click="cetakPackingList(item.id)">
                                 <i class="fas fa-print"></i>
                                 Cetak Packing List
                             </button>

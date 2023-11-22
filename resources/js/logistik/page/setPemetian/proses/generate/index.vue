@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import DataTable from '../../../../components/DataTable.vue';
 export default {
     components: {
@@ -12,10 +13,11 @@ export default {
             errorValue: '',
             isError: false,
             hasilGenerate: null,
+            idGenerate: null,
             noseriGeneratePackingList: [],
             headersDokumen: [
-                {text: 'No.', value: 'no', align: 'text-left'},
-                {text: 'No. Seri', value: 'noseri', align: 'text-left'},
+                { text: 'No.', value: 'no', align: 'text-left' },
+                { text: 'No. Seri', value: 'noseri', align: 'text-left' },
             ]
         }
     },
@@ -65,7 +67,7 @@ export default {
                 }
             }
         },
-        simpanSeri() {
+        async simpanSeri() {
             this.noseri = this.noseri.map((data) => {
                 delete data.error
                 return data
@@ -101,6 +103,13 @@ export default {
             if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
                 this.isDisable = true
 
+                const { data } = await axios.post('/api/logistik/rw/peti/store', {
+                    noseri: this.noseri
+                }, {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
+                    }
+                })
 
                 this.hasilGenerate = 'PETI-1'
                 this.noseriGeneratePackingList = this.noseri.map((data) => {
@@ -119,7 +128,7 @@ export default {
                 this.hasilGenerate = this.selectSeri.no_peti
                 this.noseriGeneratePackingList = this.selectSeri.seri
             }
-        },  
+        },
         resetModal() {
             this.noseri = []
             this.generateNoSeri()
@@ -204,7 +213,7 @@ export default {
 
                                     <label for="">Dokumen Packing List</label>
                                     <DataTable :headers="headersDokumen" :items="noseriGeneratePackingList">
-                                        <template #item.no = "{item, index}">
+                                        <template #item.no="{ item, index }">
                                             <div>
                                                 {{ index + 1 }}
                                             </div>
@@ -217,10 +226,11 @@ export default {
                 </div>
                 <div class="d-flex bd-highlight mb-3 mx-3">
                     <div class="mr-auto p-2 bd-highlight">
-                        <button type="button" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-success" :disabled="isDisable">Simpan</button>
                     </div>
                     <div class="p-2 bd-highlight ml-auto">
-                        <button type="button" class="btn btn-primary" @click="resetModal" v-if="!this.selectSeri?.id">Reset</button>
+                        <button type="button" class="btn btn-primary" @click="resetModal"
+                            v-if="!this.selectSeri?.id">Reset</button>
                     </div>
                 </div>
             </div>

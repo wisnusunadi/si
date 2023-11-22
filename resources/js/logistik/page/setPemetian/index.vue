@@ -43,18 +43,18 @@ export default {
                         <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
                             type="button" role="tab" aria-controls="pills-home" aria-selected="true">Produk Reworks</a>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <!-- <li class="nav-item" role="presentation">
                         <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile"
                             type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat</a>
-                    </li>
+                    </li> -->
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                         <proses :dataTable="proses" />
                     </div>
-                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                    <!-- <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                         <riwayat />
-                    </div>
+                    </div> -->
                 </div>
             </div>
     </div>
