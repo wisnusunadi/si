@@ -5570,6 +5570,7 @@ class LogistikController extends Controller
         $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
 
         $max = PetiRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_urut');
+        $urut = $max+1;
         $cekSeri = NoseriBarangJadi::whereIn('noseri',$seriValues)->get();
         $cekPeti = PetiRw::whereIn('noseri',$seriValues)->count();
 
@@ -5586,7 +5587,7 @@ class LogistikController extends Controller
                     $id = NoseriBarangJadi::where('noseri',$n)->first();
 
                     PetiRw::create([
-                        'no_urut' => $max+1,
+                        'no_urut' => $urut,
                         'noseri_id' => $id->id,
                         'noseri' => $n,
                         'packer' => auth()->user()->karyawan->id,
@@ -5595,6 +5596,7 @@ class LogistikController extends Controller
                 DB::commit();
                 return response()->json([
                     'message' =>  'Berhasil Di tambahkan',
+                    'no_urut' => $urut,
                     'values' => [],
                 ], 200);
             }
@@ -5615,6 +5617,118 @@ class LogistikController extends Controller
                 'values' => array_values($seriValues)
             ], 500);
         }
+    }
+    public function peti_reworks_update(Request $request,$urut)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+        $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
+        $data = PetiRw::where('no_urut',$urut)->pluck('noseri')->toArray();
+        $newId = array_values(array_diff($seriValues, $data));
+
+        $currentId = array_values(array_diff($data, $seriValues));
+        if($newId){
+            $cekSeri = NoseriBarangJadi::whereIn('noseri',$newId)->get();
+            $cekPeti = PetiRw::whereIn('noseri',$newId)->get();
+            if(count($cekSeri) == count($newId)){
+            if(count($cekPeti) > 0){
+                DB::rollBack();
+                return response()->json([
+                    'message' => 'No Seri Sudah Digunakan',
+                    'values' => $cekPeti->pluck('noseri')->toArray()
+                ], 500);
+            }else{
+                PetiRw::whereIn('noseri',$currentId)->delete();
+                foreach($newId as $n){
+                    $id = NoseriBarangJadi::where('noseri',$n)->first();
+                    PetiRw::create([
+                        'no_urut'=> $urut,
+                        'noseri_id'=> $id->id,
+                        'noseri'=> $n,
+                        'packer'=> 1,
+                    ]);
+                }
+                DB::commit();
+                return response()->json([
+                    'message' =>  'Berhasil Di Ubah',
+                    'values' => [],
+                    'id' => $urut
+                ], 200);
+            }
+            }else{
+                $getNotFound = array_diff($newId, $cekSeri->pluck('noseri')->toArray());
+               DB::rollBack();
+                    return response()->json([
+                            'message' => 'No Seri Tidak Terdaftar',
+                            'values' => array_values($getNotFound)
+                        ], 500);
+            }
+        }else{
+            DB::rollBack();
+            return response()->json([
+                'message' =>  'No Seri Tidak Ada Perubahan',
+                'values' => []
+            ], 500);
+        }
+        } catch (\Throwable $th) {
+            //throw $th;
+                 DB::rollBack();
+                return response()->json([
+                    'message' =>  'Transaksi Gagal',
+                    'values' => []
+                ], 500);
+        }
+            //code...
+
+
+        // $max = PetiRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_urut');
+
+        // $cekPeti = PetiRw::whereIn('noseri',$seriValues)->count();
+
+        // if(count($seriValues) == count($cekSeri)){
+        //     if($cekPeti > 0){
+        //         $getUsed = PetiRw::whereIn('noseri',$seriValues)->pluck('noseri')->toArray();
+        //         // DB::rollBack();
+        //         return response()->json([
+        //             'message' =>  'Noseri Pernah Dimasukkan',
+        //             'values' => $getUsed,
+        //         ], 500);
+        //     }else{
+        //         // foreach($seriValues as $n){
+        //         //     $id = NoseriBarangJadi::where('noseri',$n)->first();
+
+        //         //     PetiRw::create([
+        //         //         'no_urut' => $max+1,
+        //         //         'noseri_id' => $id->id,
+        //         //         'noseri' => $n,
+        //         //         'packer' => 1,
+        //         //     ]);
+        //         // }
+        //         // DB::commit();
+        //         return response()->json([
+        //             'message' =>  'Berhasil Di tambahkan',
+        //             'values' => [],
+        //         ], 200);
+        //     }
+        //    }else{
+
+        //     $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+        //     // DB::rollBack();
+        //     return response()->json([
+        //             'message' =>  'No Seri Tidak Terdaftar',
+        //             'values' => array_values($getNotFound)
+        //         ], 500);
+        // }
+        // // } catch (\Throwable $th) {
+        //     $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+        //     // DB::rollBack();
+        //     return response()->json([
+        //         'message' =>  'Transaksi Gagal',
+        //         'values' => array_values($seriValues)
+        //     ], 500);
+        // // }
     }
 
     //MANAGER
