@@ -311,14 +311,22 @@ export default {
                                         <div class="form-group">
                                             <label for="jenis_penjualan">Packer</label>
                                         </div>
-                                        <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" :ref="status"
-                                                    :value="status" id="status1" @click="clickFilterProses(status)" />
-                                                <label class="form-check-label text-uppercase" for="status1">
-                                                    {{ status }}
-                                                </label>
+                                        <div class="scrollable">
+                                            <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" :ref="status"
+                                                        :value="status" id="status1" @click="clickFilterProses(status)" />
+                                                    <label class="form-check-label text-uppercase" for="status1">
+                                                        {{ status }}
+                                                    </label>
+                                                </div>
                                             </div>
+                                        </div>
+                                        <div class="form-check form-check-inline my-3">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
+                                                value="option1">
+                                            <label class="form-check-label" for="inlineCheckbox1">Mengalami
+                                                Perubahan</label>
                                         </div>
                                         <div class="row">
                                             <div class="col">
@@ -336,8 +344,6 @@ export default {
                                                 </div>
                                             </div>
                                         </div>
-
-
                                     </div>
                                 </div>
                             </form>
@@ -359,6 +365,12 @@ export default {
                             <input type="checkbox"
                                 :checked="noSeriSelected && noSeriSelected.find((noseri) => noseri === item.id)"
                                 @click="selectNoSeri(item.id)">
+                        </div>
+                    </template>
+                    <template #item.noseri="{ item }">
+                        <div>
+                            <span>{{ item.noseri }}</span> <br>
+                            <span class="badge badge-info">Sudah diubah</span>
                         </div>
                     </template>
                     <template #item.aksi="{ item }">
@@ -394,3 +406,9 @@ export default {
         </div>
     </div>
 </template>
+<style>
+.scrollable {
+    overflow-x: scroll;
+    height: 400px;
+}
+</style>

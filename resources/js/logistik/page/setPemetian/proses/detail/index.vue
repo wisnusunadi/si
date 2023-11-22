@@ -246,3 +246,9 @@ export default {
         </div>
     </div>
 </template>
+<style>
+.scrollable {
+    overflow-x: scroll;
+    height: 400px;
+}
+</style>
