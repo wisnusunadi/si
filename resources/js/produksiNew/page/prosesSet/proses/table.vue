@@ -82,7 +82,7 @@ export default {
             this.$emit('refresh')
         },
         exportRework(urutan) {
-            console.log(urutan)
+            window.open('/produksiReworks/export_excel/' + urutan, '_blank')
         }
     },
 }

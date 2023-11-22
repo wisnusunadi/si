@@ -102,8 +102,9 @@ export default {
             if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
                 try {
                     this.isDisable = true
+                    const id = this.$route.params.id
 
-                    const { data } = await axios.post('/api/logistik/rw/peti/store', {
+                    const { data } = await axios.post(`/api/logistik/rw/peti/store/${id}`, {
                         noseri: this.noseri
                     }, {
                         headers: {
