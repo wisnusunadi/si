@@ -11,4 +11,9 @@ class PetiRw extends Model
     protected $table = 'peti_rw';
     protected $fillable = ['no_urut','noseri_id','noseri','packer'];
 
+    function User()
+    {
+        return $this->belongsTo(User::class, 'packer');
+    }
+
 }
