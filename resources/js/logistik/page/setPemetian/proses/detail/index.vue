@@ -103,6 +103,13 @@ export default {
         viewPackingList(id) {
             window.open(`/produksiReworks/viewpeti/${id}`, '_blank');
         },
+        clickFilterProses(filter) {
+            if (this.filterProses.includes(filter)) {
+                this.filterProses = this.filterProses.filter(item => item !== filter)
+            } else {
+                this.filterProses.push(filter)
+            }
+        },
         renderNo(data) {
             return data.map((item, index) => {
                 return {
@@ -110,6 +117,14 @@ export default {
                     no: index + 1
                 }
             })
+        },
+        refresh() {
+            this.filterProses = []
+            this.tanggalAwal = ''
+            this.tanggalAkhir = ''
+            this.search = ''
+            this.getPeti()
+            this.showModalGenerate = false
         }
     },
     mounted() {
@@ -148,7 +163,7 @@ export default {
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
-        <Generate v-if="showModalGenerate" @closeModal="showModalGenerate = false" :selectSeri="detailSeriSelected" />
+        <Generate v-if="showModalGenerate" @closeModal="refresh" :selectSeri="detailSeriSelected" />
         <DetailSeri v-if="showModalDetail" :dataModalDetailSeri="detailSeriSelected"
             @closeModal="showModalDetail = false" />
         <div class="card">

@@ -5,9 +5,14 @@
     <title>View Peti</title>
 
     <style>
+        body {
+            margin-left: 30%;
+            margin-right: 30%;
+        }
+
         /* position all to center */
         .image-container {
-            margin-left: 23%;
+            margin-left: 25%;
         }
 
         .text-center {
@@ -53,12 +58,6 @@
         </tr>
     </table>
 
-    @php
-        $generator = new Picqer\Barcode\BarcodeGeneratorSVG();
-
-        $seri = ['AK1023A000003', 'AK1023B009994', 'AK1023B000005'];
-    @endphp
-
     @foreach ($loadView as $index => $s)
         <table class="table {{ $index === 0 ? 'first-item' : '' }} {{ $index === count($loadView) - 1 ? 'last-item' : '' }}">
             <tr>
@@ -66,8 +65,7 @@
                     <div
                         class="image-container">
                         <span>Elitech</span> <br>
-                        <img
-                            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($s['noseri'], $generator::TYPE_CODE_128_B, 2, 60)) }}" />
+                        <svg id="barcode{{ $index }}"></svg>
                     </div>
                 </td>
             </tr>
@@ -78,6 +76,14 @@
             </tr>
         </table>
     @endforeach
+        <script>
+        // Generate a barcode for each item in the array
+        @foreach ($loadView as $index => $s)
+            JsBarcode("#barcode{{ $index }}", "{{ $s['noseri'] }}", {
+                displayValue: false // Don't display the text below the barcode
+            });
+        @endforeach
+    </script>
 </body>
 
 </html>

@@ -5747,8 +5747,7 @@ class LogistikController extends Controller
     public function view_peti($id) {
         // set paper A5 landscape
         $loadView = $this->peti_reworks_detail($id);
-        $pdf = PDF::loadView('page.produksi.printreworks.cetakpeti', compact('loadView'))->setPaper('a5', 'landscape');
-        return $pdf->stream('');
+        return view('page.produksi.printreworks.viewpeti', compact('loadView'));
     }
 
     public function cetak_peti($id) {
