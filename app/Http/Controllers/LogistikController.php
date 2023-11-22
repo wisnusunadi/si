@@ -5572,7 +5572,7 @@ class LogistikController extends Controller
 
         $max = PetiRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_urut');
         $urut = $max+1;
-        $cekSeri = NoseriBarangJadi::whereIn('noseri',$seriValues)->get();
+        $cekSeri = SeriDetailRw::whereIn('noseri',$seriValues)->get();
         $cekPeti = PetiRw::whereIn('noseri',$seriValues)->count();
 
         if(count($seriValues) == count($cekSeri)){
@@ -5580,18 +5580,17 @@ class LogistikController extends Controller
                 $getUsed = PetiRw::whereIn('noseri',$seriValues)->pluck('noseri')->toArray();
                 DB::rollBack();
                 return response()->json([
-                    'message' =>  'Noseri Pernah Dimasukkan',
+                    'message' =>  'Noseri Sudah Terdaftar',
                     'values' => $getUsed,
                 ], 500);
             }else{
                 foreach($seriValues as $n){
                     $id = NoseriBarangJadi::where('noseri',$n)->first();
-
                     PetiRw::create([
                         'no_urut' => $urut,
                         'noseri_id' => $id->id,
                         'noseri' => $n,
-                        'packer' => auth()->user()->karyawan->id,
+                        'packer' => auth()->user()->id,
                     ]);
                 }
                 DB::commit();
@@ -5632,7 +5631,7 @@ class LogistikController extends Controller
 
         $currentId = array_values(array_diff($data, $seriValues));
         if($newId){
-            $cekSeri = NoseriBarangJadi::whereIn('noseri',$newId)->get();
+            $cekSeri = SeriDetailRw::whereIn('noseri',$newId)->get();
             $cekPeti = PetiRw::whereIn('noseri',$newId)->get();
             if(count($cekSeri) == count($newId)){
             if(count($cekPeti) > 0){
@@ -5649,7 +5648,7 @@ class LogistikController extends Controller
                         'no_urut'=> $urut,
                         'noseri_id'=> $id->id,
                         'noseri'=> $n,
-                        'packer'=> auth()->user()->karyawan->id,
+                        'packer' => auth()->user()->id,
                     ]);
                 }
                 DB::commit();
