@@ -984,6 +984,7 @@ class ProduksiController extends Controller
                     'packer' => $d->packer,
                     'status' => $d->is_prd == 0 ? 'Transfer' : 'Belum',
                     'seri' => json_decode($d->isi)
+                    // 'ket' =>  $d->created_at != $d->updated_at ? 'Sudah' : 'Belum'
                 );
             }
         }
