@@ -18,7 +18,8 @@ export default {
             headersDokumen: [
                 { text: 'No.', value: 'no', align: 'text-left' },
                 { text: 'No. Seri', value: 'noseri', align: 'text-left' },
-            ]
+            ],
+            loading: false,
         }
     },
     methods: {
@@ -102,6 +103,7 @@ export default {
             if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
                 try {
                     this.isDisable = true
+                    this.loading = true
                     const id = this.$route.params.id
 
                     const { data } = await axios.post(`/api/logistik/rw/peti/store/${id}`, {
@@ -142,6 +144,8 @@ export default {
                         })
                     }
                     this.isDisable = false
+                } finally {
+                    this.loading = false
                 }
             }
         },
@@ -180,6 +184,7 @@ export default {
             if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
                 try {
                     this.isDisable = true
+                    this.loading = true
                     const { data } = await axios.put(`/api/logistik/rw/peti/update/${this.selectSeri.id}`, {
                         noseri: this.noseri
                     }, {
@@ -217,6 +222,8 @@ export default {
                     }
 
                     this.isDisable = false
+                } finally {
+                    this.loading = false
                 }
             }
 
@@ -263,7 +270,8 @@ export default {
 }
 </script>
 <template>
-    <div class="modal fade modalGenerate" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade modalGenerate" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl modal-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -335,7 +343,11 @@ export default {
                 <div class="d-flex bd-highlight mb-3 mx-3">
                     <div class="mr-auto p-2 bd-highlight">
                         <button type="button" class="btn btn-success" @click="selectSeri?.id ? updateSeri() : simpanSeri()"
-                            :disabled="isDisable">Simpan</button>
+                            :disabled="isDisable">Simpan
+                            <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </button>
                     </div>
                     <div class="p-2 bd-highlight ml-auto">
                         <button type="button" class="btn btn-primary" @click="resetModal"
