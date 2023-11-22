@@ -97,7 +97,7 @@ Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
 });
 
 Route::group(['prefix' => '/produksiReworks' , 'middleware' => 'auth'], function () {
-    Route::get('/export_excel', [ProduksiController::class, 'export_rework_excel']);
+    Route::get('/export_excel/{id}', [ProduksiController::class, 'export_rework_excel']);
     Route::get('/cetak_seri_finish_goods/{seri}', [ProduksiController::class, 'cetak_seri_finish_goods']);
     Route::get('/cetak_seri_fg_medium', [ProduksiController::class, 'cetak_seri_finish_goods_medium']);
     Route::get('/cetak_seri_fg_small', [ProduksiController::class, 'cetak_seri_finish_goods_small']);;

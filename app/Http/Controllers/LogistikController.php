@@ -14,6 +14,7 @@ use App\Models\Ekatalog;
 use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\Ekspedisi;
+use App\Models\JadwalPerakitanRw;
 use App\Models\Logistik;
 use App\Models\LogistikDraft;
 use App\Models\NoseriBarangJadi;
@@ -5561,8 +5562,53 @@ class LogistikController extends Controller
 
         return $obj;
     }
+    public function reworks_show()
+    {
+        $data = JadwalPerakitanRw::addSelect([
+            'cpeti' => function ($q) {
+                $q->selectRaw('coalesce(count(peti_rw.id), 0)')
+                    ->from('peti_rw')
+                    ->whereColumn('peti_rw.jadwal_perakitan_rw_id', 'jadwal_perakitan_rw.urutan');
+            },
+            'csiap' => function ($q) {
+                $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                    ->from('seri_detail_rw')
+                    ->whereColumn('seri_detail_rw.urutan', 'jadwal_perakitan_rw.urutan');
+            },
+        ])
+            ->where('state', 18)
+            ->where('status_tf', 16)
+            ->groupBy('urutan')->get();
+        if ($data->isempty()) {
+            $obj = array();
+        } else {
+            foreach ($data as $d) {
+                switch ($d->status_tf) {
+                    case "11":
+                        $status =  "Belum Dikirim";
+                        break;
+                    case "16":
+                        $status = "Proses";
+                        break;
+                    default:
+                        $status = "Error";
+                }
 
-    public function peti_reworks_store(Request $request)
+                $obj[] = array(
+                    'id' => $d->urutan,
+                    'urutan' => 'PRD-'.$d->urutan,
+                    'sudah' => $d->cpeti,
+                    'belum' => $d->csiap - $d->cpeti,
+                    'nama' => $d->ProdukRw->nama,
+
+                );
+            }
+        }
+
+        return response()->json($obj);
+    }
+
+    public function peti_reworks_store(Request $request,$urutan)
     {
         DB::beginTransaction();
         try {
@@ -5591,6 +5637,7 @@ class LogistikController extends Controller
                         'noseri_id' => $id->id,
                         'noseri' => $n,
                         'packer' => auth()->user()->id,
+                        'jadwal_perakitan_rw_id' => $urutan
                     ]);
                 }
                 DB::commit();
@@ -5630,6 +5677,9 @@ class LogistikController extends Controller
         $newId = array_values(array_diff($seriValues, $data));
 
         $currentId = array_values(array_diff($data, $seriValues));
+        $ids = NoseriBarangJadi::where('noseri',$currentId[0])->first();
+
+
         if($newId){
             $cekSeri = SeriDetailRw::whereIn('noseri',$newId)->get();
             $cekPeti = PetiRw::whereIn('noseri',$newId)->get();
@@ -5644,11 +5694,13 @@ class LogistikController extends Controller
                 PetiRw::whereIn('noseri',$currentId)->delete();
                 foreach($newId as $n){
                     $id = NoseriBarangJadi::where('noseri',$n)->first();
+
                     PetiRw::create([
                         'no_urut'=> $urut,
                         'noseri_id'=> $id->id,
                         'noseri'=> $n,
                         'packer' => auth()->user()->id,
+                        'jadwal_perakitan_rw_id' => $ids->jadwal_perakitan_rw_id
                     ]);
                 }
                 DB::commit();

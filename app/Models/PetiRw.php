@@ -9,7 +9,7 @@ class PetiRw extends Model
 {
     protected $connection = 'erp';
     protected $table = 'peti_rw';
-    protected $fillable = ['no_urut','noseri_id','noseri','packer'];
+    protected $fillable = ['no_urut','noseri_id','noseri','packer','jadwal_perakitan_rw_id'];
 
     function User()
     {

@@ -594,7 +594,7 @@ Route::prefix('/qc')->group(function () {
 });
 
 Route::prefix('/logistik')->group(function () {
-
+    Route::get('rw', [App\Http\Controllers\LogistikController::class, 'reworks_show']);
     Route::group(['prefix' => '/rw/peti'], function () {
         Route::get('detail/{urut}', [App\Http\Controllers\LogistikController::class, 'peti_reworks_detail']);
         Route::post('store', [App\Http\Controllers\LogistikController::class, 'peti_reworks_store'])->middleware('jwt.verify');
