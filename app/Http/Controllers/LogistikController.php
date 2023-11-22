@@ -5537,6 +5537,7 @@ class LogistikController extends Controller
                     'id' => $d->no_urut,
                     'no_urut' => $d->no_urut,
                     'tgl_buat' => $d->created_at,
+                    'packer' => $d->User->Karyawan->nama,
                 );
             }
         }
