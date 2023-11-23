@@ -23,7 +23,7 @@
                             <div class="row">
                                 <div class="col-8">
                                     <div class="row">
-                                        {{-- @if (Auth::user()->divisi_id != 2)
+                                        @if (Auth::user()->divisi_id != 2)
                                             <span class="float-left mr-1">
                                                 <button type="button" class="btn btn-success" id="downloadTemplate">
                                                     <i class="fas fa-download"></i>&nbsp;Template
@@ -42,7 +42,7 @@
                                                     <i class="fas fa-download"></i>&nbsp;Noseri
                                                 </a>
                                             </span>
-                                        @endif --}}
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -271,7 +271,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    {{-- <div class="card">
+                    <div class="card">
                         <div class="card-body">
                             <input type="text" name="" class="seri_id" hidden>
                             <input type="text" class="created_by" name="" id=""
@@ -289,7 +289,7 @@
                             </div>
                             <button class=" btn btn-primary tambah_noseri mt-2">Tambah</button>
                         </div>
-                    </div> --}}
+                    </div>
                     <form action="" id="noseriForm" name="noseriForm">
 
                         <div class="card card-primary card-outline card-outline-tabs">

@@ -32,8 +32,8 @@ export default {
             headers: [
                 { text: 'No.', value: 'no', sortable: false },
                 { text: 'No. Peti', value: 'no_peti' },
-                { text: 'Tanggal Dibuat', value: 'tanggal_dibuat' },
-                { text: 'Packer', value: 'packer' },
+                { text: 'Tanggal Dibuat', value: 'tanggal_dibuat', sortable: false },
+                { text: 'Packer', value: 'packer', sortable: false },
                 { text: 'Aksi', value: 'action', sortable: false },
             ],
             items: [],
@@ -174,26 +174,21 @@ export default {
                             <i class="fas fa-plus"></i>
                             Tambah
                         </button>
-                        <span class="filter ml-2">
-                            <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="fas fa-filter"></i> Filter
-                            </button>
+                    </div>
+                    <div class="p-2 bd-highlight">
+                        <input type="text" class="form-control" v-model="search" placeholder="Cari...">
+                    </div>
+                </div>
+                <DataTable :headers="headers" :items="filterData">
+                    <template #header.tanggal_dibuat>
+                        <span class="text-bold pr-2">Tanggal Dibuat</span>
+                        <span class="filter">
+                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-filter"></i>
+                            </a>
                             <form id="filter_ekat">
                                 <div class="dropdown-menu">
                                     <div class="px-3 py-3">
-                                        <div class="form-group">
-                                            <label for="jenis_penjualan">Packer</label>
-                                        </div>
-                                        <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" :ref="status"
-                                                    :value="status" id="status1" @click="clickFilterProses(status)" />
-                                                <label class="form-check-label text-uppercase" for="status1">
-                                                    {{ status }}
-                                                </label>
-                                            </div>
-                                        </div>
                                         <div class="row">
                                             <div class="col">
                                                 <div class="form-group">
@@ -214,12 +209,35 @@ export default {
                                 </div>
                             </form>
                         </span>
-                    </div>
-                    <div class="p-2 bd-highlight">
-                        <input type="text" class="form-control" v-model="search" placeholder="Cari...">
-                    </div>
-                </div>
-                <DataTable :headers="headers" :items="filterData">
+                    </template>
+
+                    <template #header.packer>
+                        <span class="text-bold pr-2">Packer</span>
+                        <span class="filter">
+                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-filter"></i>
+                            </a>
+                            <form id="filter_ekat">
+                                <div class="dropdown-menu">
+                                    <div class="px-3 py-3">
+                                        <div :class="getAllStatusUnique.length > 5 ? 'scrollable': ''">
+                                            <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" :ref="status"
+                                                        :value="status" id="status1" @click="clickFilterProses(status)" />
+                                                    <label class="form-check-label text-uppercase font-weight-normal"
+                                                        for="status1">
+                                                        {{ status }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </span>
+                    </template>
+
                     <template #item.action="{ item }">
                         <div>
                             <button class="btn btn-sm btn-outline-info" @click="openModalDetail(item)">
