@@ -959,7 +959,9 @@ class ProduksiController extends Controller
     }
     function proses_rw_produk($id)
     {
-        $data = SeriDetailRw::leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
+        $data = SeriDetailRw::
+         select('seri_detail_rw.isi','noseri_barang_jadi.noseri','seri_detail_rw.noseri_id','seri_detail_rw.packer','noseri_barang_jadi.is_prd','seri_detail_rw.created_at','seri_detail_rw.updated_at')
+       ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
             ->where('urutan', $id)->get();
         $jadwal = JadwalPerakitanRw::addSelect([
             'set' => function ($q) {
@@ -983,8 +985,10 @@ class ProduksiController extends Controller
                     'tgl_buat' => $d->created_at->format('Y-m-d'),
                     'packer' => $d->packer,
                     'status' => $d->is_prd == 0 ? 'Transfer' : 'Belum',
+                    'ket' =>  $d->updated_at <= $d->created_at ? false : true,
+                    'tgl_ubah' =>  $d->updated_at <= $d->created_at ? '-' : $d->updated_at->format('Y-m-d'),
                     'seri' => json_decode($d->isi)
-                    // 'ket' =>  $d->created_at != $d->updated_at ? 'Sudah' : 'Belum'
+
                 );
             }
         }
