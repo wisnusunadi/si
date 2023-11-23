@@ -579,7 +579,6 @@
             </div>
         </div>
     </div>
-
     {{-- Modal History Hapus NoSeri --}}
     <div class="modal fade history_seri" id="" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-labelledby="" aria-hidden="true">
@@ -595,10 +594,10 @@
                 <div class="modal-body">
                     <label for="">Alasan Dihapus Dari Staff</label>
                     <textarea name="" id="komentar_noseri_staff" cols="10" rows="10" disabled class="form-control">
-        </textarea>
+                    </textarea>
                     <label for="">Alasan Dihapus Dari Manager</label>
                     <textarea name="" id="komentar_noseri_mgr" cols="10" rows="10" disabled class="form-control">
-        </textarea>
+                </textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -606,7 +605,6 @@
             </div>
         </div>
     </div>
-
     <div class="modal fade modalComment" id="" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdrop" aria-hidden="true">
         <div class="modal-dialog">
@@ -629,8 +627,6 @@
             </div>
         </div>
     </div>
-
-
     <style>
         img {
             width: 100%;

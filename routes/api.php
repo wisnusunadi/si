@@ -341,7 +341,7 @@ Route::prefix('/prd')->group(function () {
     });
     Route::prefix('/rw')->group(function () {
         // Route::post('/generate_seri_back', [ProduksiController::class, 'generate_seri_back'])->middleware('jwt.verify');
-        //  Route::post('/generate_seri_peti', [ProduksiController::class, 'generate_seri_peti']);
+          Route::post('/generate_seri_peti', [ProduksiController::class, 'generate_seri_peti']);
         Route::get('/belum_kirim', [ProduksiController::class, 'belum_kirim_rw']);
         Route::get('/riwayat_permintaan', [ProduksiController::class, 'riwayat_rw_permintaan']);
         Route::get('/proses', [ProduksiController::class, 'proses_rw']);

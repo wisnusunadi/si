@@ -17,6 +17,7 @@ use App\Models\JadwalRakitNoseriRw;
 use App\Models\NoseriBarangJadi;
 use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
+use App\Models\PetiRw;
 use App\Models\Produk;
 use App\Models\SeriDetailRw;
 use App\Models\SystemLog;
@@ -639,7 +640,36 @@ class ProduksiController extends Controller
     {
         // DB::beginTransaction();
         $obj =  json_decode(json_encode($request->all()), FALSE);
-        dd($obj);
+
+        $iterationNumber =  PetiRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_urut') + 1;
+        foreach ($obj->seri as $index => $seri) {
+
+            $result[] =array(
+                'seri' => $seri,
+                'no_urut' => $iterationNumber
+            );
+
+            // Increment iteration number every 3rd item
+            if (($index + 1) % 3 === 0) {
+                $iterationNumber++;
+            }
+        }
+        //dd($result);
+
+
+        foreach($result as $n){
+        //    dd($n['seri']);
+            $id = NoseriBarangJadi::where('noseri',$n['seri'])->first();
+           // dd($id->id);
+            PetiRw::create([
+                'no_urut' => $n['no_urut'],
+                'noseri_id' => $id->id,
+                'noseri' => $n['seri'],
+                'packer' => 1,
+                'jadwal_perakitan_rw_id' => 2
+            ]);
+        }
+
         // try {
         //     //code...
         //     foreach ($obj->seri as $f) {
