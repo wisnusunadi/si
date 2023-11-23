@@ -431,7 +431,7 @@ export default {
                             <form id="filter_ekat">
                                 <div class="dropdown-menu">
                                     <div class="px-3 py-3">
-                                        <div class="scrollable">
+                                        <div :class="getAllStatusUnique.length > 5 ? 'scrollable' : ''">
                                             <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" :ref="status"
