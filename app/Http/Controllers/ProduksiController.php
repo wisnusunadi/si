@@ -1012,7 +1012,7 @@ class ProduksiController extends Controller
                     'packer' => $d->packer,
                     'status' => $d->is_prd == 0 ? 'Transfer' : 'Belum',
                     'ket' =>  $d->updated_at <= $d->created_at ? false : true,
-                    'tgl_ubah' =>  $d->updated_at <= $d->created_at ? '-' : $d->updated_at->format('Y-m-d'),
+                    'tgl_ubah' =>  $d->updated_at <= $d->created_at ? null : $d->updated_at->format('Y-m-d'),
                     'seri' => json_decode($d->isi)
                 );
             }

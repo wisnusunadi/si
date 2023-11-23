@@ -51,17 +51,26 @@ export default {
                 {
                     text: 'No. Seri',
                     value: 'noseri',
-                    align: 'text-left'
+                    align: 'text-left',
+                    sortable: false,
                 },
                 {
                     text: 'Tanggal Dibuat',
                     value: 'tgl_buat',
-                    align: 'text-left'
+                    align: 'text-left',
+                    sortable: false,
+                },
+                {
+                    text: 'Tanggal Update',
+                    value: 'tgl_update',
+                    align: 'text-left',
+                    sortable: false,
                 },
                 {
                     text: 'Packer',
                     value: 'packer',
-                    align: 'text-left'
+                    align: 'text-left',
+                    sortable: false,
                 },
                 {
                     text: 'Aksi',
@@ -80,6 +89,8 @@ export default {
             filterProses: [],
             tanggalAwal: '',
             tanggalAkhir: '',
+            tanggalAwalUpdate: '',
+            tanggalAkhirUpdate: '',
             filterPerubahan: false,
         }
     },
@@ -120,7 +131,7 @@ export default {
                         ...data,
                         tgl_buat: this.dateFormat(data.tgl_buat),
                         tanggal: data.tgl_buat,
-                        diubah: true,
+                        tgl_update: data.tgl_ubah ? this.dateFormat(data.tgl_ubah) : '-',
                     }
                 })
                 this.showTambah = belum == 0 ? true : false
@@ -252,7 +263,7 @@ export default {
             }
 
             if (this.filterPerubahan) {
-                filtered = this.renderNo(filtered.filter(data => data.diubah))
+                filtered = this.renderNo(filtered.filter(data => data.ket))
             }
 
             if (this.tanggalAwal && this.tanggalAkhir) {
@@ -261,6 +272,14 @@ export default {
                 filtered = this.renderNo(filtered.filter(data => new Date(data.tanggal) >= new Date(this.tanggalAwal)))
             } else if (this.tanggalAkhir) {
                 filtered = this.renderNo(filtered.filter(data => new Date(data.tanggal) <= new Date(this.tanggalAkhir)))
+            }
+
+            if (this.tanggalAwalUpdate && this.tanggalAkhirUpdate) {
+                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_ubah) >= new Date(this.tanggalAwalUpdate) && new Date(data.tgl_ubah) <= new Date(this.tanggalAkhirUpdate)))
+            } else if (this.tanggalAwalUpdate) {
+                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_ubah) >= new Date(this.tanggalAwalUpdate)))
+            } else if (this.tanggalAkhir) {
+                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_ubah) <= new Date(this.tanggalAkhirUpdate)))
             }
 
             return filtered.filter((data) => {
@@ -306,34 +325,49 @@ export default {
                             @click="cetakAllPackingList">
                             <i class="fa fa-print"></i> Cetak Packing List
                         </button>
-                        <span class="filter ml-2">
-                            <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="fas fa-filter"></i> Filter
-                            </button>
+
+                    </div>
+                    <div class="p-2 bd-highlight"> <input type="text" v-model="search" class="form-control"
+                            placeholder="Cari...">
+                    </div>
+                </div>
+                <DataTable :headers="headers" :items="filterData">
+                    <template #header.id>
+                        <div>
+                            <input type="checkbox" :checked="checkAll" @click="checkAllSeri">
+                        </div>
+                    </template>
+                    <template #header.noseri>
+                        <span class="text-bold pr-2">No. Seri</span>
+                        <span class="filter">
+                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-filter"></i>
+                            </a>
                             <form id="filter_ekat">
                                 <div class="dropdown-menu">
                                     <div class="px-3 py-3">
-                                        <div class="form-group">
-                                            <label for="jenis_penjualan">Packer</label>
-                                        </div>
-                                        <div class="scrollable">
-                                            <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" :ref="status"
-                                                        :value="status" id="status1" @click="clickFilterProses(status)" />
-                                                    <label class="form-check-label text-uppercase" for="status1">
-                                                        {{ status }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="form-check form-check-inline my-3">
                                             <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
                                                 :checked="filterPerubahan" @click="filterPerubahan = !filterPerubahan">
-                                            <label class="form-check-label" for="inlineCheckbox1">Mengalami
+                                            <label class="form-check-label font-weight-normal"
+                                                for="inlineCheckbox1">Mengalami
                                                 Perubahan</label>
                                         </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </span>
+                    </template>
+
+                    <template #header.tgl_buat>
+                        <span class="text-bold pr-2">Tanggal Dibuat</span>
+                        <span class="filter">
+                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-filter"></i>
+                            </a>
+                            <form id="filter_ekat">
+                                <div class="dropdown-menu">
+                                    <div class="px-3 py-3">
                                         <div class="row">
                                             <div class="col">
                                                 <div class="form-group">
@@ -354,18 +388,67 @@ export default {
                                 </div>
                             </form>
                         </span>
-
-                    </div>
-                    <div class="p-2 bd-highlight"> <input type="text" v-model="search" class="form-control"
-                            placeholder="Cari...">
-                    </div>
-                </div>
-                <DataTable :headers="headers" :items="filterData">
-                    <template #header.id>
-                        <div>
-                            <input type="checkbox" :checked="checkAll" @click="checkAllSeri">
-                        </div>
                     </template>
+
+                    <template #header.tgl_update>
+                        <span class="text-bold pr-2">Tanggal Update</span>
+                        <span class="filter">
+                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-filter"></i>
+                            </a>
+                            <form id="filter_ekat">
+                                <div class="dropdown-menu">
+                                    <div class="px-3 py-3">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Tanggal Awal</label>
+                                                    <input type="date" class="form-control" v-model="tanggalAwalUpdate"
+                                                        :max="tanggalAkhirUpdate">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Tanggal Akhir</label>
+                                                    <input type="date" class="form-control" v-model="tanggalAkhirUpdate"
+                                                        :min="tanggalAwalUpdate">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </span>
+                    </template>
+
+
+                    <template #header.packer>
+                        <span class="text-bold pr-2">Packer</span>
+                        <span class="filter">
+                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-filter"></i>
+                            </a>
+                            <form id="filter_ekat">
+                                <div class="dropdown-menu">
+                                    <div class="px-3 py-3">
+                                        <div class="scrollable">
+                                            <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" :ref="status"
+                                                        :value="status" id="status1" @click="clickFilterProses(status)" />
+                                                    <label class="form-check-label text-uppercase font-weight-normal"
+                                                        for="status1">
+                                                        {{ status }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </span>
+                    </template>
+
                     <template #item.id="{ item }">
                         <div>
                             <input type="checkbox"
@@ -376,7 +459,7 @@ export default {
                     <template #item.noseri="{ item }">
                         <div>
                             <span>{{ item.noseri }}</span> <br>
-                            <span class="badge badge-info" v-if="item.diubah">Sudah diubah</span>
+                            <span class="badge badge-info" v-if="item.ket">Sudah diubah</span>
                         </div>
                     </template>
                     <template #item.aksi="{ item }">
