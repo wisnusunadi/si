@@ -298,13 +298,19 @@ export default {
                         <div class="spinner-border" role="status" v-else>
                             <span class="sr-only">Loading...</span>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                        <button type="button" class="btn btn-success" v-if="!isError" :disabled="loading"
-                            @click="simpan">Generate</button>
-                        <button type="button" class="btn btn-success" v-if="seri.length > 0"
-                            @click="simpanSeri">Simpan</button>
+
+                        <div class="d-flex bd-highlight">
+                            <div class="p-2 flex-grow-1 bd-highlight">
+                                <!-- <button type="button" class="btn btn-success" v-if="!isError" :disabled="loading"
+                                    @click="simpan">Generate</button>
+                                <button type="button" class="btn btn-success" v-if="seri.length > 0"
+                                    @click="simpanSeri">Simpan</button> -->
+                                <button class="btn btn-success">Cetak Barcode</button>
+                            </div>
+                            <div class="p-2 bd-highlight">
+                                <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

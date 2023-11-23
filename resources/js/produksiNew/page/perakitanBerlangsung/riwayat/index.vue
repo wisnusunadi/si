@@ -1,11 +1,13 @@
 <script>
 import DataTable from '../../../components/DataTable.vue';
 import modalPilihan from './modalPilihan.vue';
+import riwayatCetak from './riwayatCetak.vue';
 export default {
     props: ['dataRiwayat'],
     components: {
         DataTable,
-        modalPilihan
+        modalPilihan,
+        riwayatCetak
     },
     data() {
         return {
@@ -42,6 +44,7 @@ export default {
             noSeriSelected: [],
             cetakSeriSingle: [],
             cetakSeriType: 'all',
+            riwayatSelected: null,
         }
     },
     methods: {
@@ -78,6 +81,12 @@ export default {
                 $('.modalPilihan').modal('show');
             });
         },
+        selectRiwayat(item) {
+            this.riwayatSelected = item
+            this.$nextTick(() => {
+                $('.modalRiwayat').modal('show');
+            });
+        }
     },
     computed: {
         filterData() {
@@ -102,6 +111,7 @@ export default {
 <template>
     <div>
         <modalPilihan :data="cetakSeriType == 'single' ? cetakSeriSingle : noSeriSelected" v-if="cetakSeriSingle.length > 0 || noSeriSelected.length > 0" />
+        <riwayatCetak :riwayat="riwayatSelected" v-if="riwayatSelected" @closeModal="riwayatCetak = null" />
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
                 <button class="btn btn-outline-primary btn-sm" v-if="noSeriSelected.length > 0" @click="cetakBanyakSeri">
@@ -125,7 +135,11 @@ export default {
             <template #item.aksi="{ item }">
                 <button class="btn btn-outline-primary btn-sm" @click="cetakSeri(item.id)">
                     <i class="fa fa-print"></i>
-                    Cetak Nomor Seri
+                    Cetak No. Seri
+                </button>
+                <button class="btn btn-outline-info btn-sm" @click="selectRiwayat(item)">
+                    <i class="fa fa-info-circle"></i>
+                    Riwayat Cetak No. Seri
                 </button>
             </template>
         </DataTable>
