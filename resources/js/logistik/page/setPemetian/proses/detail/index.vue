@@ -103,7 +103,7 @@ export default {
                     ...item,
                     no_peti: `PETI-${item.no_urut}`,
                     tanggal_dibuat: this.dateFormat(item.tgl_buat),
-                    tgl_update: data.tgl_ubah ? this.dateFormat(data.tgl_ubah) : '-',
+                    tgl_update: item.tgl_ubah ? this.dateFormat(item.tgl_ubah) : '-',
                 }
             });
         },
@@ -258,7 +258,7 @@ export default {
                         </span>
                     </template>
 
-                    
+
                             <template #header.tgl_update>
                                 <span class="text-bold pr-2">Tanggal Update</span>
                                 <span class="filter">

@@ -5577,11 +5577,11 @@ class LogistikController extends Controller
     public function reworks_show()
     {
         $data = JadwalPerakitanRw::addSelect([
-            'cupdate' => function ($q) {
+            'cpeti' => function ($q) {
                 $q->selectRaw('coalesce(count(peti_rw.id), 0)')
                     ->from('peti_rw')
-                    ->whereColumn('peti_rw.jadwal_perakitan_rw_id', 'jadwal_perakitan_rw.urutan')
-                    ->groupBy('updated_at');
+                    ->whereColumn('peti_rw.jadwal_perakitan_rw_id', 'jadwal_perakitan_rw.urutan');
+
             },
             'csiap' => function ($q) {
                 $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
