@@ -343,7 +343,7 @@ export default {
                 <div class="d-flex bd-highlight mb-3 mx-3">
                     <div class="mr-auto p-2 bd-highlight">
                         <button type="button" class="btn btn-success" @click="selectSeri?.id ? updateSeri() : simpanSeri()"
-                            :disabled="isDisable">Simpan
+                            :disabled="isDisable">{{ loading ? 'Loading...' : 'Simpan' }}
                             <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
                                 <span class="sr-only">Loading...</span>
                             </div>
