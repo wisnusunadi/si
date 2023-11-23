@@ -30,6 +30,10 @@ export default {
             ],
             showNoUrutTerakhir: false,
             loadingNoUrut: false,
+            hasilGenerate: [
+                { seri: '1234567890' },
+                { seri: '1234567890' },
+            ]
         }
     },
     methods: {
@@ -220,31 +224,39 @@ export default {
                                 </div>
                             </div>
                             <div class="card-body" v-if="!isError">
-                                <form>
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">Kedatangan</label>
-                                        <input type="number" class="form-control" v-model.number="form.kedatangan"
-                                            @keypress="numberOnly($event)">
+                                <div class="row">
+                                    <div class="col">
+                                        <form>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Kedatangan</label>
+                                                <input type="number" class="form-control" v-model.number="form.kedatangan"
+                                                    @keypress="numberOnly($event)">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword1">Jumlah Noseri yang dibuat</label>
+                                                <input type="number" class="form-control"
+                                                    :class="jumlahRakit ? 'is-valid' : 'is-invalid'"
+                                                    @keypress="numberOnly($event)" v-model.number="form.jml_noseri">
+                                                <div class="invalid-feedback" v-if="!jumlahRakit">
+                                                    Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
+                                                </div>
+                                            </div>
+                                            <div class="form-group" v-if="!showNoUrutTerakhir">
+                                                <label for="exampleInputPassword1">No Urut Terakhir</label>
+                                                <input type="number" class="form-control"
+                                                    :class="validasiNoUrutTerakhir ? 'is-valid' : 'is-invalid'"
+                                                    @keypress="numberOnly($event)" v-model.number="form.no_urut_terakhir">
+                                                <div class="invalid-feedback" v-if="!validasiNoUrutTerakhir">
+                                                    Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">Jumlah Noseri yang dibuat</label>
-                                        <input type="number" class="form-control"
-                                            :class="jumlahRakit ? 'is-valid' : 'is-invalid'" @keypress="numberOnly($event)"
-                                            v-model.number="form.jml_noseri">
-                                        <div class="invalid-feedback" v-if="!jumlahRakit">
-                                            Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
-                                        </div>
+                                    <div class="col">
+                                        <p class="text-bold">Hasil Generate No. Seri</p>
+                                        <DataTable :headers="headers" :items="hasilGenerate" />
                                     </div>
-                                    <div class="form-group" v-if="!showNoUrutTerakhir">
-                                        <label for="exampleInputPassword1">No Urut Terakhir</label>
-                                        <input type="number" class="form-control"
-                                            :class="validasiNoUrutTerakhir ? 'is-valid' : 'is-invalid'"
-                                            @keypress="numberOnly($event)" v-model.number="form.no_urut_terakhir">
-                                        <div class="invalid-feedback" v-if="!validasiNoUrutTerakhir">
-                                            Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
-                                        </div>
-                                    </div>
-                                </form>
+                                </div>
                             </div>
                             <div class="card-body" v-else>
                                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
