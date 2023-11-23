@@ -387,7 +387,7 @@ export default {
                         <div class="mr-auto p-2 bd-highlight">
                             <button class="btn btn-success" :disabled="isDisable"
                                 @click="selectSeri?.id ? updateSeri() : generateSeri()">
-                                {{ selectSeri?.id ? 'Simpan' : 'Generate' }}
+                                {{ loading ? 'Loading...' : (selectSeri?.id ? 'Simpan' : 'Generate') }}
                                 <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
                                     <span class="sr-only">Loading...</span>
                                 </div>
