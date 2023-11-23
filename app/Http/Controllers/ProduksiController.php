@@ -635,6 +635,32 @@ class ProduksiController extends Controller
     //         ], 500);
     //     }
     // }
+    function generate_seri_peti(Request $request)
+    {
+        // DB::beginTransaction();
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+        dd($obj);
+        // try {
+        //     //code...
+        //     foreach ($obj->seri as $f) {
+        //         JadwalRakitNoseri::create([
+        //             'jadwal_id' => 999,
+        //             'noseri' => $f,
+        //             'status' => 11,
+        //             'date_in' => Carbon::now()
+        //         ]);
+        //     }
+        //     DB::commit();
+        // } catch (\Throwable $th) {
+        //     //throw $th;
+        //     DB::rollBack();
+        //     return response()->json([
+        //         'status' => 200,
+        //         'message' =>  'Gagal Ditambahkan',
+        //         'error' => $th->getMessage()
+        //     ], 500);
+        // }
+    }
 
     function update_rw(Request $request, $id)
     {
@@ -988,7 +1014,6 @@ class ProduksiController extends Controller
                     'ket' =>  $d->updated_at <= $d->created_at ? false : true,
                     'tgl_ubah' =>  $d->updated_at <= $d->created_at ? '-' : $d->updated_at->format('Y-m-d'),
                     'seri' => json_decode($d->isi)
-
                 );
             }
         }
