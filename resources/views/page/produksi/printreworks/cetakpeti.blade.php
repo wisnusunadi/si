@@ -17,6 +17,7 @@
         table {
             width: 100%;
             margin-bottom: 5px;
+            margin-left: 2%;
         }
 
         .box {

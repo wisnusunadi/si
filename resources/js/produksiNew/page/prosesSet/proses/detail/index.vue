@@ -80,6 +80,7 @@ export default {
             filterProses: [],
             tanggalAwal: '',
             tanggalAkhir: '',
+            filterPerubahan: false,
         }
     },
     methods: {
@@ -119,6 +120,7 @@ export default {
                         ...data,
                         tgl_buat: this.dateFormat(data.tgl_buat),
                         tanggal: data.tgl_buat,
+                        diubah: true,
                     }
                 })
                 this.showTambah = belum == 0 ? true : false
@@ -233,7 +235,7 @@ export default {
             return data.map((item, index) => {
                 return {
                     ...item,
-                    no: index + 1
+                    no: index + 1,
                 }
             })
         }
@@ -247,6 +249,10 @@ export default {
 
             if (this.filterProses.length > 0) {
                 filtered = this.renderNo(filtered.filter(data => this.filterProses.includes(data.packer)))
+            }
+
+            if (this.filterPerubahan) {
+                filtered = this.renderNo(filtered.filter(data => data.diubah))
             }
 
             if (this.tanggalAwal && this.tanggalAkhir) {
@@ -322,12 +328,12 @@ export default {
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="form-check form-check-inline my-3">
+                                        <div class="form-check form-check-inline my-3">
                                             <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
-                                                value="option1">
+                                                :checked="filterPerubahan" @click="filterPerubahan = !filterPerubahan">
                                             <label class="form-check-label" for="inlineCheckbox1">Mengalami
                                                 Perubahan</label>
-                                        </div> -->
+                                        </div>
                                         <div class="row">
                                             <div class="col">
                                                 <div class="form-group">
@@ -370,7 +376,7 @@ export default {
                     <template #item.noseri="{ item }">
                         <div>
                             <span>{{ item.noseri }}</span> <br>
-                            <!-- <span class="badge badge-info">Sudah diubah</span> -->
+                            <span class="badge badge-info" v-if="item.diubah">Sudah diubah</span>
                         </div>
                     </template>
                     <template #item.aksi="{ item }">

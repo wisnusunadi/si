@@ -1,12 +1,12 @@
 <script>
-// import Header from '../../../../components/Header.vue';
+import Header from '../../../../components/header.vue';
 import DataTable from '../../../../components/DataTable.vue';
 import Generate from '../generate';
 import DetailSeri from '../modalDetail';
 import axios from 'axios';
 export default {
     components: {
-        // Header,
+        Header,
         DataTable,
         Generate,
         DetailSeri,
@@ -162,7 +162,7 @@ export default {
 </script>
 <template>
     <div>
-        <!-- <Header :title="title" :breadcumbs="breadcumbs" /> -->
+        <Header :title="title" :breadcumbs="breadcumbs" />
         <Generate v-if="showModalGenerate" @closeModal="refresh" :selectSeri="detailSeriSelected" />
         <DetailSeri v-if="showModalDetail" :dataModalDetailSeri="detailSeriSelected"
             @closeModal="showModalDetail = false" />

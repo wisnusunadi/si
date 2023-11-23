@@ -17,7 +17,8 @@ export default {
             noseriGeneratePackingList: [],
             isError: false,
             errorValue: '',
-            idGenerate: null
+            idGenerate: null,
+            loading: false,
         }
     },
     methods: {
@@ -115,6 +116,7 @@ export default {
             if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
                 try {
                     this.isDisable = true;
+                    this.loading = true;
                     const { data } = await axios.post('/api/prd/rw/gen', {
                         ...this.$store.state.setSeri,
                         noseri: this.noseri
@@ -154,6 +156,8 @@ export default {
                     }
 
                     this.isDisable = false
+                } finally {
+                    this.loading = false;
                 }
             }
 
@@ -195,6 +199,7 @@ export default {
             if (!this.isDisable && cek.length === 0 && noSeriUnique.length === this.noseri.length) {
                 try {
                     this.isDisable = true;
+                    this.loading = true;
                     const { data } = await axios.put(`/api/prd/rw/gen/${this.selectSeri.id}`, {
                         noseri: this.noseri
                     }, {
@@ -232,6 +237,8 @@ export default {
                     }
 
                     this.isDisable = false
+                } finally {
+                    this.loading = false;
                 }
             }
         },
@@ -380,7 +387,10 @@ export default {
                         <div class="mr-auto p-2 bd-highlight">
                             <button class="btn btn-success" :disabled="isDisable"
                                 @click="selectSeri?.id ? updateSeri() : generateSeri()">
-                                {{ selectSeri?.id ? 'Simpan' : 'Generate' }}
+                                {{ loading ? 'Loading...' : (selectSeri?.id ? 'Simpan' : 'Generate') }}
+                                <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
                             </button>
                         </div>
                         <div class="p-2 bd-highlight ml-auto">

@@ -1,11 +1,11 @@
 <script>
 import axios from 'axios';
-// import Header from '../../components/Header.vue';
+import Header from '../../components/header.vue';
 import proses from './proses'
 import riwayat from './riwayat'
 export default {
     components: {
-        // Header,
+        Header,
         proses,
         riwayat,
     },
@@ -52,7 +52,7 @@ export default {
 </script>
 <template>
     <div>
-        <!-- <Header :title="title" :breadcumbs="breadcumbs" /> -->
+        <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="card">
             <div class="card-body">
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
