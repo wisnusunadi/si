@@ -17,16 +17,16 @@ export default {
                 value: 'no'
             },
             {
-                text: 'No. Seri',
-                value: 'noseri'
-            },
-            {
                 text: 'Nama Produk',
-                value: 'nama'
+                value: 'kelompok'
             },
             {
-                text: 'Variasi',
-                value: 'varian'
+                text: 'Jumlah',
+                value: 'jumlah'
+            },
+            {
+                text: 'Aksi',
+                value: 'aksi'
             }
             ]
         }
@@ -45,8 +45,8 @@ export default {
         detailSeri(data) {
             this.dataSeriSelected = JSON.parse(JSON.stringify(data))
             this.modalSeri = true
-            $('.modalProduk').modal('hide')
             this.$nextTick(() => {
+                $('.modalProduk').modal('hide')
                 $('.modalSeri').modal('show')
             })
         },
@@ -106,6 +106,17 @@ export default {
                                     <template #item.no="{ item, index }">
                                         <div>
                                             {{ index + 1 }}
+                                        </div>
+                                    </template>
+                                    <template #item.namaproduk="{ item }">
+                                        <span>{{ showNamaProduk(item) }}</span>
+                                    </template>
+                                    <template #item.aksi="{ item }">
+                                        <div>
+                                            <button class="btn btn-outline-primary btn-sm" @click="detailSeri(item)">
+                                                <i class="fas fa-info-circle"></i>
+                                                Detail
+                                            </button>
                                         </div>
                                     </template>
                                 </DataTable>

@@ -32,7 +32,7 @@ export default {
                     data: mapArray.map(item => {
                         return {
                             ...item,
-                            kelompok: `${item.nama} - ${item.varian}`,
+                            kelompok: this.showNamaProduk(item),
                             varian: item.varian ? item.varian : '-'
                         }
                     })
@@ -43,9 +43,8 @@ export default {
                 const grouped = unique.map(item => {
                     return {
                         kelompok: item,
-                        nama: item.nama,
-                        varian: item.varian,
-                        item: this.dataSelected.data.filter(data => data.kelompok === item)
+                        item: this.dataSelected.data.filter(data => data.kelompok === item),
+                        jumlah: this.dataSelected.data.filter(data => data.kelompok === item).length
                     }
                 })
 
@@ -64,6 +63,13 @@ export default {
         },
         cetakPermintaan(id) {
             window.open(`/produksiReworks/surat_permintaan/${id}`, '_blank')
+        },
+                showNamaProduk(item) {
+            if (item.varian !== null && item.varian !== '' && item.varian !== '-') {
+                return `${item.nama} - ${item.varian}`
+            } else {
+                return item.nama
+            }
         }
     },
 }

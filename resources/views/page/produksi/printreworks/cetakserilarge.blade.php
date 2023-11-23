@@ -10,8 +10,8 @@
 
         /* large */
         @page {
-            margin-top: 0.08cm;
-            margin-left: 0.5cm;
+            margin-top: 0cm;
+            margin-left: 0.3cm;
         }
 
         /* medium */
@@ -38,15 +38,16 @@
     @php
         $generator = new Picqer\Barcode\BarcodeGeneratorSVG();
     @endphp
-
     {{-- ulangi 5 kali --}}
     {{-- large --}}
+    @foreach ($seri as $s)
     <div class="image-container">
         <span>Elitech</span><br>
         <img
-            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($seri, $generator::TYPE_CODE_128_B, 2, 29)) }}" />
-        <div class="text-center">{{ $seri }}</div>
+            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($s, $generator::TYPE_CODE_128_B, 2, 29)) }}" />
+        <div class="text-center">{{ $s }}</div>
     </div>
-</body>
+    @endforeach
 
+</body>
 </html>

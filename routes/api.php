@@ -351,7 +351,7 @@ Route::prefix('/prd')->group(function () {
         Route::get('/surat_penyerahan/{divisi}/{id}', [ProduksiController::class, 'surat_penyerahan_rw']);
         Route::post('/gen', [ProduksiController::class, 'generate_rw'])->middleware('jwt.verify');
         Route::put('/gen/{id}', [ProduksiController::class, 'update_rw'])->middleware('jwt.verify');
-        Route::delete('/gen/{id}', [ProduksiController::class, 'hapus_rw']);
+        Route::delete('/gen/{id}', [ProduksiController::class, 'hapus_rw'])->middleware('jwt.verify');
         Route::get('/riwayat', [ProduksiController::class, 'riwayat_rw']);
         Route::get('/pack/{id}', [ProduksiController::class, 'packing_list_rw']);
         Route::post('/tf', [ProduksiController::class, 'tf_rw'])->middleware('jwt.verify');
@@ -594,6 +594,13 @@ Route::prefix('/qc')->group(function () {
 });
 
 Route::prefix('/logistik')->group(function () {
+    Route::get('rw', [App\Http\Controllers\LogistikController::class, 'reworks_show']);
+    Route::group(['prefix' => '/rw/peti'], function () {
+        Route::get('detail/{urut}', [App\Http\Controllers\LogistikController::class, 'peti_reworks_detail']);
+        Route::post('store/{id}', [App\Http\Controllers\LogistikController::class, 'peti_reworks_store'])->middleware('jwt.verify');
+        Route::put('update/{id}', [App\Http\Controllers\LogistikController::class, 'peti_reworks_update'])->middleware('jwt.verify');
+        Route::get('show', [App\Http\Controllers\LogistikController::class, 'peti_reworks_show']);
+    });
     Route::post('dashboard/data/{value}', [App\Http\Controllers\LogistikController::class, 'dashboard_data']);
     Route::post('dashboard/so', [App\Http\Controllers\LogistikController::class, 'dashboard_so']);
     Route::group(['prefix' => '/so'], function () {

@@ -355,9 +355,8 @@ export default {
                                 " />
 
                             <div class="form-group" v-if="noseritidakditemukan.length > 0">
-                                <label for="">No Seri Tidak Ditemukan</label>
-                                <textarea class="form-control" rows="3"
-                                    readonly>{{ noseritidakditemukan.join("\n") }}</textarea>
+                              <label for="">No Seri Tidak Ditemukan</label>
+                                <textarea class="form-control" rows="3" readonly>{{ noseritidakditemukan.join("\n") }}</textarea>
                             </div>
                         </div>
                     </div>

@@ -12,6 +12,7 @@ use App\Http\Controllers\inventory\AlatujiController;
 use App\Http\Controllers\inventory\PerawatanController;
 use App\Http\Controllers\inventory\VerifikasiController;
 use App\Http\Controllers\inventory\KalibrasiPerbaikanController;
+use App\Http\Controllers\LogistikController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,13 +55,13 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function () 
     Route::view('/dashboard', 'page.administrator.dashboard');
     Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
         Route::view('/', 'page.administrator.user.show');
-        Route::post('/data', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_data_user']);
-        Route::post('/ubah_status', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_change_status_user'])->name('user.status');
-        Route::get('/ubah_data/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_data_user_modal']);
-        Route::get('/tambah', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_create_user_modal']);
-        Route::post('/store', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_store_user']);
-        Route::post('/update/{jenis}/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_update_user']);
-        Route::post('/reset_pwd/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'reset_pwd_user'])->name('user.resetpwd');
+        Route::post('/data', [App\Http\Controllers\administrator\AdministratorController::class, 'get_data_user']);
+        Route::post('/ubah_status', [App\Http\Controllers\administrator\AdministratorController::class, 'get_change_status_user'])->name('user.status');
+        Route::get('/ubah_data/{id}', [App\Http\Controllers\administrator\AdministratorController::class, 'get_data_user_modal']);
+        Route::get('/tambah', [App\Http\Controllers\administrator\AdministratorController::class, 'get_create_user_modal']);
+        Route::post('/store', [App\Http\Controllers\administrator\AdministratorController::class, 'get_store_user']);
+        Route::post('/update/{jenis}/{id}', [App\Http\Controllers\administrator\AdministratorController::class, 'get_update_user']);
+        Route::post('/reset_pwd/{id}', [App\Http\Controllers\administrator\AdministratorController::class, 'reset_pwd_user'])->name('user.resetpwd');
     });
     Route::view('/{any?}', 'page.it.produk')->where('any', '.*');
     Route::group(['prefix' => 'part', 'middleware' => 'auth'], function () {
@@ -95,19 +96,22 @@ Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
     Route::view('/{any?}', 'spa.manager_teknik.spa')->middleware('divisi:dirtek')->where('any', '.*');
 });
 
-Route::group(['prefix' => '/produksiReworks'], function () {
+Route::group(['prefix' => '/produksiReworks' , 'middleware' => 'auth'], function () {
+    Route::get('/export_excel/{id}', [ProduksiController::class, 'export_rework_excel']);
     Route::get('/cetak_seri_finish_goods/{seri}', [ProduksiController::class, 'cetak_seri_finish_goods']);
     Route::get('/cetak_seri_fg_medium', [ProduksiController::class, 'cetak_seri_finish_goods_medium']);
-    Route::get('/cetak_seri_fg_small', [ProduksiController::class, 'cetak_seri_finish_goods_small']);
-    Route::get('/cetakseriRework/{seri}', [ProduksiController::class, 'cetak_seri_rework']);
+    Route::get('/cetak_seri_fg_small', [ProduksiController::class, 'cetak_seri_finish_goods_small']);;
+    Route::get('/cetakseriReworkAll', [ProduksiController::class, 'cetak_seri_rework_all']);
     Route::get('/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);
-    Route::get('/cetakpackinglist/{id}', [ProduksiController::class, 'cetak_packing_list']);
+    Route::get('/cetakpackinglist', [ProduksiController::class, 'cetak_packing_list']);
     Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'cetakSuratPermintaan']);
     Route::get('/surat_penyerahan/{id}/{divisi}', [ProduksiController::class, 'cetakSuratPenyerahan']);
     Route::get('/surat_pengiriman/{id}', [GudangController::class, 'cetakSuratPengantar']);
+    Route::get('/cetakpeti/{id}', [LogistikController::class, 'cetak_peti']);
+    Route::get('/viewpeti/{id}', [LogistikController::class, 'view_peti']);
 });
 
-Route::group(['prefix' => '/gbj'], function () {
+Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
     Route::view('/rework/{any?}', 'page.gbj.gbj_rework')->where('any', '.*');
     Route::view('/stok/{any?}', 'page.gbj.stok')->where('any', '.*');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
@@ -131,7 +135,7 @@ Route::group(['prefix' => '/gbj'], function () {
     // Route::view('/manager/produk', 'manager.gbj.produksi');
 });
 
-Route::group(['prefix' => '/produksi'], function () {
+Route::group(['prefix' => '/produksi', 'middleware' => 'auth'], function () {
     Route::view('/dashboard', 'page.produksi.dashboard');
     Route::view('/so', 'page.produksi.so');
     Route::view('/perencanaan_perakitan', 'page.produksi.perencanaan_perakitan');
@@ -158,7 +162,7 @@ Route::group(['prefix' => 'master', 'middleware' => 'auth'], function () {
     });
 });
 // 'middleware' => 'auth'
-Route::group(['prefix' => 'penjualan'], function () {
+Route::group(['prefix' => 'penjualan' , 'middleware' => 'auth'], function () {
     Route::group(['middleware' => ['divisi:jual,asp']], function () {
         Route::get('/dashboard', [App\Http\Controllers\PenjualanController::class, 'dashboard'])->name('penjualan.dashboard');
     });
@@ -265,7 +269,7 @@ Route::group(['prefix' => 'penjualan'], function () {
     // Route::get('/dep_doc/{id?}', 'digidocu\DocumentsController@dep_doc')->name('dc.dep_doc');
 });
 
-Route::group(['prefix' => 'qc'], function () {
+Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
     Route::group(['middleware' => ['divisi:qc']], function () {
         Route::get('/dashboard', [App\Http\Controllers\QcController::class, 'dashboard'])->name('qc.dashboard');
     });
@@ -294,7 +298,7 @@ Route::group(['prefix' => 'qc'], function () {
 });
 
 
-Route::group(['prefix' => 'logistik'], function () {
+Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     Route::group(['middleware' => ['divisi:log']], function () {
         Route::get('/dashboard', [App\Http\Controllers\LogistikController::class, 'dashboard'])->name('logistik.dashboard');
     });
@@ -350,6 +354,8 @@ Route::group(['prefix' => 'logistik'], function () {
             Route::view('/show', 'page.logistik.pengiriman.riwayat.show')->name('logistik.riwayat.show');
         });
         // });
+
+        Route::view('/{any?}', 'page.logistik.logistik')->where('any', '.*');
     });
 
     Route::group(['prefix' => '/pengiriman_retur'], function () {
@@ -394,6 +400,7 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
             });
         });
     });
+
     Route::group(['prefix' => '/coo'], function () {
         Route::group(['middleware' => ['divisi:dc,dirut']], function () {
             Route::view('/show', 'page.dc.coo.show')->name('dc.coo.show');

@@ -14,6 +14,7 @@ use App\Models\Ekatalog;
 use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\Ekspedisi;
+use App\Models\JadwalPerakitanRw;
 use App\Models\Logistik;
 use App\Models\LogistikDraft;
 use App\Models\NoseriBarangJadi;
@@ -21,7 +22,7 @@ use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriDetailPesanan;
 use Illuminate\Http\Request;
 use PDF;
-use DB;
+
 use DomPDF\Options;
 use App\Models\Pesanan;
 use App\Models\TFProduksi;
@@ -29,9 +30,12 @@ use App\Models\TFProduksiDetail;
 use App\Models\NoseriTGbj;
 use App\Models\OutgoingPesananPart;
 use App\Models\Pengiriman;
+use App\Models\PetiRw;
+use App\Models\SeriDetailRw;
 use Carbon\Carbon as CarbonCarbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
@@ -814,6 +818,7 @@ class LogistikController extends Controller
     }
     public function get_noseri_so_belum_kirim($id, $array)
     {
+       // dd($id);
         $arr = explode(',', $array);
         // $data = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $id, 'status' => 'ok'])->doesntHave('NoseriDetailLogistik')->get();
         // $data = DB::table('noseri_barang_jadi')
@@ -844,7 +849,7 @@ class LogistikController extends Controller
         //     ->make(true);
 
         // $data = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $id, 'status' => 'ok'])->doesntHave('NoseriDetailLogistik')->get();
-        $data = NoseriBarangJadi::select('noseri_detail_pesanan.id as ndp_id', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id')
+        $data = NoseriBarangJadi::select('noseri_detail_pesanan.id as ndp_id', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as id')
             ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
             ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
             ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
@@ -856,12 +861,14 @@ class LogistikController extends Controller
                         ->from('seri_detail_rw')
                         ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
                 },
-                'cek_logistik' => function ($q) {
+                'cek_logistik' => function ($q) use ($id) {
                     $q->selectRaw('coalesce(count(noseri_logistik.id), 0)')
                         ->from('noseri_logistik')
                         ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
                         ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                        ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id')
+                        ->where('t_gbj_detail.detail_pesanan_produk_id', $id);
                 }
             ])
             ->havingRaw('cek_logistik = 0')
@@ -1895,10 +1902,6 @@ class LogistikController extends Controller
                         <button class="dropdown-item cetaksj" type="button" data-x="' . $x . '" data-y="' . $pesanan . '" data-z="' . $z . '">
                             <i class="fas fa-print"></i>
                             Cetak Surat Jalan
-                        </button>
-                        <button class="dropdown-item">
-                            <i class="far fa-file-excel"></i>
-                            Export
                         </button>
                     </div>
                     ';
@@ -5524,6 +5527,265 @@ class LogistikController extends Controller
         return response()->json($data);
     }
 
+    public function peti_reworks_show()
+    {
+        $data = PetiRw::groupby('no_urut')->get();
+        if ($data->isempty()) {
+            $obj = array();
+        } else {
+            foreach($data as $d){
+                $obj[] = array(
+                    'id' => $d->no_urut,
+                    'no_urut' => $d->no_urut,
+                    'tgl_buat' => $d->created_at,
+                    'packer' => $d->User->Karyawan->nama,
+                );
+            }
+        }
+
+        return response()->json($obj);
+    }
+    public function peti_reworks_detail($urut)
+    {
+        $data = PetiRw::where('no_urut',$urut)->get();
+
+        if ($data->isempty()) {
+            $obj = array();
+        } else {
+            foreach($data as $d){
+                $obj[] = array(
+                    'id' => $d->no_urut,
+                    'noseri' => $d->noseri,
+                );
+            }
+        }
+
+        return $obj;
+    }
+    public function reworks_show()
+    {
+        $data = JadwalPerakitanRw::addSelect([
+            'cpeti' => function ($q) {
+                $q->selectRaw('coalesce(count(peti_rw.id), 0)')
+                    ->from('peti_rw')
+                    ->whereColumn('peti_rw.jadwal_perakitan_rw_id', 'jadwal_perakitan_rw.urutan');
+            },
+            'csiap' => function ($q) {
+                $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                    ->from('seri_detail_rw')
+                    ->whereColumn('seri_detail_rw.urutan', 'jadwal_perakitan_rw.urutan');
+            },
+        ])
+            ->where('state', 18)
+            ->where('status_tf', 16)
+            ->groupBy('urutan')->get();
+        if ($data->isempty()) {
+            $obj = array();
+        } else {
+            foreach ($data as $d) {
+                switch ($d->status_tf) {
+                    case "11":
+                        $status =  "Belum Dikirim";
+                        break;
+                    case "16":
+                        $status = "Proses";
+                        break;
+                    default:
+                        $status = "Error";
+                }
+
+                $obj[] = array(
+                    'id' => $d->urutan,
+                    'urutan' => 'PRD-'.$d->urutan,
+                    'sudah' => $d->cpeti,
+                    'belum' => $d->csiap - $d->cpeti,
+                    'nama' => $d->ProdukRw->nama,
+
+                );
+            }
+        }
+
+        return response()->json($obj);
+    }
+
+    public function peti_reworks_store(Request $request,$urutan)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+        $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
+
+        $max = PetiRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_urut');
+        $urut = $max+1;
+        $cekSeri = SeriDetailRw::whereIn('noseri',$seriValues)->get();
+        $cekPeti = PetiRw::whereIn('noseri',$seriValues)->count();
+
+        if(count($seriValues) == count($cekSeri)){
+            if($cekPeti > 0){
+                $getUsed = PetiRw::whereIn('noseri',$seriValues)->pluck('noseri')->toArray();
+                DB::rollBack();
+                return response()->json([
+                    'message' =>  'Noseri Sudah Terdaftar',
+                    'values' => $getUsed,
+                ], 500);
+            }else{
+                foreach($seriValues as $n){
+                    $id = NoseriBarangJadi::where('noseri',$n)->first();
+                    PetiRw::create([
+                        'no_urut' => $urut,
+                        'noseri_id' => $id->id,
+                        'noseri' => $n,
+                        'packer' => auth()->user()->id,
+                        'jadwal_perakitan_rw_id' => $urutan
+                    ]);
+                }
+                DB::commit();
+                return response()->json([
+                    'message' =>  'Berhasil Di tambahkan',
+                    'no_urut' => $urut,
+                    'values' => [],
+                ], 200);
+            }
+           }else{
+
+            $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+            DB::rollBack();
+            return response()->json([
+                    'message' =>  'No Seri Tidak Terdaftar',
+                    'values' => array_values($getNotFound)
+                ], 500);
+        }
+        } catch (\Throwable $th) {
+            $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+            DB::rollBack();
+            return response()->json([
+                'message' =>  'Transaksi Gagal',
+                'error' => $th->getMessage(),
+                'values' => array_values($seriValues)
+            ], 500);
+        }
+    }
+    public function peti_reworks_update(Request $request,$urut)
+    {
+         DB::beginTransaction();
+        try {
+            //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+        $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
+        $data = PetiRw::where('no_urut',$urut)->pluck('noseri')->toArray();
+        $newId = array_values(array_diff($seriValues, $data));
+
+        $currentId = array_values(array_diff($data, $seriValues));
+        if(count($currentId) > 0){
+            $ids = PetiRw::where('noseri',$currentId[0])->first();
+        }
+
+
+        if($newId){
+            $cekSeri = SeriDetailRw::whereIn('noseri',$newId)->get();
+            $cekPeti = PetiRw::whereIn('noseri',$newId)->get();
+            if(count($cekSeri) == count($newId)){
+            if(count($cekPeti) > 0){
+                DB::rollBack();
+                return response()->json([
+                    'message' => 'No Seri Sudah Digunakan',
+                    'values' => $cekPeti->pluck('noseri')->toArray()
+                ], 500);
+            }else{
+                PetiRw::whereIn('noseri',$currentId)->delete();
+                foreach($newId as $n){
+                    $id = NoseriBarangJadi::where('noseri',$n)->first();
+
+                    PetiRw::create([
+                        'no_urut'=> $urut,
+                        'noseri_id'=> $id->id,
+                        'noseri'=> $n,
+                        'packer' => auth()->user()->id,
+                        'jadwal_perakitan_rw_id' => $ids->jadwal_perakitan_rw_id
+                    ]);
+                }
+                DB::commit();
+                return response()->json([
+                    'message' =>  'Berhasil Di Ubah',
+                    'values' => [],
+                    'no_urut' => $urut
+                ], 200);
+            }
+            }else{
+                $getNotFound = array_diff($newId, $cekSeri->pluck('noseri')->toArray());
+               DB::rollBack();
+                    return response()->json([
+                            'message' => 'No Seri Tidak Terdaftar',
+                            'values' => array_values($getNotFound)
+                        ], 500);
+            }
+        }else{
+            DB::rollBack();
+            return response()->json([
+                'message' =>  'No Seri Tidak Ada Perubahan',
+                'values' => []
+            ], 500);
+        }
+        } catch (\Throwable $th) {
+           // throw $th;
+                 DB::rollBack();
+                return response()->json([
+                    'message' =>  $th->getMessage(),
+                    'values' => []
+                ], 500);
+        }
+            //code...
+
+
+        // $max = PetiRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_urut');
+
+        // $cekPeti = PetiRw::whereIn('noseri',$seriValues)->count();
+
+        // if(count($seriValues) == count($cekSeri)){
+        //     if($cekPeti > 0){
+        //         $getUsed = PetiRw::whereIn('noseri',$seriValues)->pluck('noseri')->toArray();
+        //         // DB::rollBack();
+        //         return response()->json([
+        //             'message' =>  'Noseri Pernah Dimasukkan',
+        //             'values' => $getUsed,
+        //         ], 500);
+        //     }else{
+        //         // foreach($seriValues as $n){
+        //         //     $id = NoseriBarangJadi::where('noseri',$n)->first();
+
+        //         //     PetiRw::create([
+        //         //         'no_urut' => $max+1,
+        //         //         'noseri_id' => $id->id,
+        //         //         'noseri' => $n,
+        //         //         'packer' => 1,
+        //         //     ]);
+        //         // }
+        //         // DB::commit();
+        //         return response()->json([
+        //             'message' =>  'Berhasil Di tambahkan',
+        //             'values' => [],
+        //         ], 200);
+        //     }
+        //    }else{
+
+        //     $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+        //     // DB::rollBack();
+        //     return response()->json([
+        //             'message' =>  'No Seri Tidak Terdaftar',
+        //             'values' => array_values($getNotFound)
+        //         ], 500);
+        // }
+        // // } catch (\Throwable $th) {
+        //     $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+        //     // DB::rollBack();
+        //     return response()->json([
+        //         'message' =>  'Transaksi Gagal',
+        //         'values' => array_values($seriValues)
+        //     ], 500);
+        // // }
+    }
+
     //MANAGER
     public function manager_logistik_show()
     {
@@ -5533,5 +5795,17 @@ class LogistikController extends Controller
     function getYear()
     {
         return  Carbon::now()->format('Y');
+    }
+
+    public function view_peti($id) {
+        // set paper A5 landscape
+        $loadView = $this->peti_reworks_detail($id);
+        return view('page.produksi.printreworks.viewpeti', compact('loadView'));
+    }
+
+    public function cetak_peti($id) {
+        $loadView = $this->peti_reworks_detail($id);
+        $pdf = PDF::loadView('page.produksi.printreworks.cetakpeti', compact('loadView'))->setPaper('a5', 'landscape');
+        return $pdf->stream('');
     }
 }

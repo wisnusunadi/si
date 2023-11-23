@@ -176,7 +176,7 @@ export default {
             window.open(`/produksiReworks/viewpackinglist/${id}`, '_blank');
         },
         cetakPackingList(id) {
-            window.open(`/produksiReworks/cetakpackinglist/${id}`, '_blank');
+            window.open(`/produksiReworks/cetakpackinglist?data=[${id}]`, '_blank');
         },
         async simpan() {
             try {
