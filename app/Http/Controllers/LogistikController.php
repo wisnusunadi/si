@@ -5571,7 +5571,6 @@ class LogistikController extends Controller
                 );
             }
         }
-
         return $obj;
     }
     public function reworks_show()
@@ -5592,6 +5591,7 @@ class LogistikController extends Controller
             ->where('state', 18)
             ->where('status_tf', 16)
             ->groupBy('urutan')->get();
+
         if ($data->isempty()) {
             $obj = array();
         } else {
@@ -5606,14 +5606,18 @@ class LogistikController extends Controller
                     default:
                         $status = "Error";
                 }
+                $y =  $d->csiap - $d->cpeti ;
+                if ($y % 3 !== 0) {
+                    $remainder = $y % 3;
+                    $y += (3 - $remainder);
+                }
 
                 $obj[] = array(
                     'id' => $d->urutan,
                     'urutan' => 'PRD-'.$d->urutan,
-                    'sudah' => $d->cpeti,
-                    'belum' => $d->csiap - $d->cpeti,
+                     'sudah' => $d->cpeti,
+                    'belum' =>$y,
                     'nama' => $d->ProdukRw->nama,
-
                 );
             }
         }
