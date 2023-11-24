@@ -240,7 +240,7 @@ class ProduksiController extends Controller
                     ], 500);
                 } else {
                     foreach ($obj->seri as $f) {
-                        JadwalRakitNoseri::create([
+                       $jd = JadwalRakitNoseri::create([
                             'jadwal_id' => $f->jadwal_id,
                             'no_bppb' => $f->no_bppb,
                             'urutan' => $f->no_urut,
@@ -252,9 +252,9 @@ class ProduksiController extends Controller
                             'status' => 11,
                             'date_in' => Carbon::now()
                         ]);
+                        $jd_id[] = $jd->id;
+                        $jd_seri[] = (object)['seri' => $f->seri];
                     }
-
-
                     $jp->status_tf = 12;
                     $jp->save();
 
@@ -265,6 +265,8 @@ class ProduksiController extends Controller
                         'seri' =>   array(),
                         'duplicate' =>   array(),
                         'available' =>   array(),
+                        'id' =>   $jd_id,
+                        'noseri' =>  $jd_seri
                     ], 200);
                 }
             } else {
@@ -274,7 +276,7 @@ class ProduksiController extends Controller
                     'message' =>  'Jumlah Melebihi',
                     'seri' =>   array(),
                     'duplicate' => array(),
-                    'available' =>  array(),
+                    'available' =>  array()
                 ], 500);
             }
         } catch (\Throwable $th) {
@@ -293,7 +295,7 @@ class ProduksiController extends Controller
     function generate_fg(Request $request)
     {
 
-    //    DB::beginTransaction();
+       DB::beginTransaction();
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
@@ -334,7 +336,7 @@ class ProduksiController extends Controller
                     $filteredNoseri = $noseriCollection->whereIn('seri', $available);
 
                     foreach ($filteredNoseri as $f) {
-                        JadwalRakitNoseri::create([
+                     $jd=JadwalRakitNoseri::create([
                             'jadwal_id' => $obj->jadwal_id,
                             'no_bppb' => $obj->no_bppb,
                             'urutan' => $f['no_urut'],
@@ -346,6 +348,8 @@ class ProduksiController extends Controller
                             'status' => 11,
                             'date_in' => $getTgl
                         ]);
+                        $jd_id[] = $jd->id;
+                        $jd_seri[] = (object)['seri' => $f['seri']];
                     }
 
                     $jp->status_tf = 12;
@@ -359,6 +363,8 @@ class ProduksiController extends Controller
                         'seri' =>   array(),
                         'duplicate' =>   array(),
                         'available' =>   array(),
+                        'id' =>  $jd_id,
+                        'noseri' =>  $jd_seri,
                     ], 200);
                 } else {
                     if ($available) {
@@ -405,7 +411,7 @@ class ProduksiController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 200,
-                'message' =>  'Gagal Ditambahkan',
+                'message' =>  $th->getMessage().'Gagal Ditambahkan',
                 'seri' => array(),
                 'duplicate' =>  array(),
                 'available' => array(),
