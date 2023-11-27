@@ -1038,11 +1038,11 @@ class ProduksiController extends Controller
                 $obj[] = array(
                     'id' => $d->noseri_id,
                     'noseri' => $d->noseri,
-                    'tgl_buat' => $d->created_at->format('Y-m-d'),
+                    'tgl_buat' => $d->created_at,
                     'packer' => $d->packer,
                     'status' => $d->is_prd == 0 ? 'Transfer' : 'Belum',
                     'ket' =>  $d->updated_at <= $d->created_at ? false : true,
-                    'tgl_ubah' =>  $d->updated_at <= $d->created_at ? null : $d->updated_at->format('Y-m-d'),
+                    'tgl_ubah' =>  $d->updated_at <= $d->created_at ? null : $d->updated_at,
                     'seri' => json_decode($d->isi)
                 );
             }

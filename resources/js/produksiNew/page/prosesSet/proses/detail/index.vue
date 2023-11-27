@@ -56,7 +56,7 @@ export default {
                 },
                 {
                     text: 'Tanggal Dibuat',
-                    value: 'tgl_buat',
+                    value: 'tanggal_dibuat',
                     align: 'text-left',
                     sortable: false,
                 },
@@ -129,8 +129,7 @@ export default {
                 this.dataTable = item.map((data) => {
                     return {
                         ...data,
-                        tgl_buat: this.dateFormat(data.tgl_buat),
-                        tanggal: data.tgl_buat,
+                        tanggal_dibuat: this.dateFormat(data.tgl_buat),
                         tgl_update: data.tgl_ubah ? this.dateFormat(data.tgl_ubah) : '-',
                     }
                 })
@@ -267,19 +266,65 @@ export default {
             }
 
             if (this.tanggalAwal && this.tanggalAkhir) {
-                filtered = this.renderNo(filtered.filter(data => new Date(data.tanggal) >= new Date(this.tanggalAwal) && new Date(data.tanggal) <= new Date(this.tanggalAkhir)))
+                const startDate = new Date(this.tanggalAwal);
+                startDate.setHours(0, 0, 0, 0);
+
+                const endDate = new Date(this.tanggalAkhir);
+                endDate.setHours(23, 59, 59, 999);
+
+                filtered = this.renderNo(filtered.filter(data => {
+                    const date = new Date(data.tgl_buat);
+                    date.setHours(0, 0, 0, 0);
+                    return date >= startDate && date <= endDate;
+                }));
             } else if (this.tanggalAwal) {
-                filtered = this.renderNo(filtered.filter(data => new Date(data.tanggal) >= new Date(this.tanggalAwal)))
+                const startDate = new Date(this.tanggalAwal);
+                startDate.setHours(0, 0, 0, 0);
+
+                filtered = this.renderNo(filtered.filter(data => {
+                    const date = new Date(data.tgl_buat);
+                    date.setHours(0, 0, 0, 0);
+                    return date >= startDate;
+                }));
             } else if (this.tanggalAkhir) {
-                filtered = this.renderNo(filtered.filter(data => new Date(data.tanggal) <= new Date(this.tanggalAkhir)))
+                const endDate = new Date(this.tanggalAkhir);
+                endDate.setHours(23, 59, 59, 999);
+
+                filtered = this.renderNo(filtered.filter(data => {
+                    const date = new Date(data.tgl_buat);
+                    date.setHours(0, 0, 0, 0);
+                    return date <= endDate;
+                }));
             }
 
+
             if (this.tanggalAwalUpdate && this.tanggalAkhirUpdate) {
-                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_ubah) >= new Date(this.tanggalAwalUpdate) && new Date(data.tgl_ubah) <= new Date(this.tanggalAkhirUpdate)))
+                const startDate = new Date(this.tanggalAwalUpdate)
+                startDate.setHours(0, 0, 0, 0)
+
+                const endDate = new Date(this.tanggalAkhirUpdate)
+                endDate.setHours(23, 59, 59, 999)
+
+                filtered = this.renderNo(filtered.filter(data => {
+                    const date = new Date(data.tgl_ubah)
+                    return date >= startDate && date <= endDate
+                }))
             } else if (this.tanggalAwalUpdate) {
-                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_ubah) >= new Date(this.tanggalAwalUpdate)))
-            } else if (this.tanggalAkhir) {
-                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_ubah) <= new Date(this.tanggalAkhirUpdate)))
+                const startDate = new Date(this.tanggalAwalUpdate)
+                startDate.setHours(0, 0, 0, 0)
+
+                filtered = this.renderNo(filtered.filter(data => {
+                    const date = new Date(data.tgl_ubah)
+                    return date >= startDate
+                }))
+            } else if (this.tanggalAkhirUpdate) {
+                const endDate = new Date(this.tanggalAkhirUpdate)
+                endDate.setHours(23, 59, 59, 999)
+
+                filtered = this.renderNo(filtered.filter(data => {
+                    const date = new Date(data.tgl_ubah)
+                    return date <= endDate
+                }))
             }
 
             return filtered.filter((data) => {
@@ -361,7 +406,7 @@ export default {
                             </span>
                         </template>
 
-                        <template #header.tgl_buat>
+                        <template #header.tanggal_dibuat>
                             <span class="text-bold pr-2">Tanggal Dibuat</span>
                             <span class="filter">
                                 <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

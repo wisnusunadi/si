@@ -155,19 +155,62 @@ export default {
             }
 
             if (this.tanggalAwal && this.tanggalAkhir) {
-                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_buat) >= new Date(this.tanggalAwal) && new Date(data.tgl_buat) <= new Date(this.tanggalAkhir)))
+                const startDate = new Date(this.tanggalAwal);
+                startDate.setHours(0, 0, 0, 0);
+
+                const endDate = new Date(this.tanggalAkhir);
+                endDate.setHours(23, 59, 59, 999);
+
+                filtered = this.renderNo(filtered.filter(data => {
+                    const dataDate = new Date(data.tgl_buat);
+                    return dataDate >= startDate && dataDate <= endDate;
+                }));
             } else if (this.tanggalAwal) {
-                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_buat) >= new Date(this.tanggalAwal)))
+                const startDate = new Date(this.tanggalAwal);
+                startDate.setHours(0, 0, 0, 0);
+
+                filtered = this.renderNo(filtered.filter(data => {
+                    const dataDate = new Date(data.tgl_buat);
+                    return dataDate >= startDate;
+                }));
             } else if (this.tanggalAkhir) {
-                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_buat) <= new Date(this.tanggalAkhir)))
+                const endDate = new Date(this.tanggalAkhir);
+                endDate.setHours(23, 59, 59, 999);
+
+                filtered = this.renderNo(filtered.filter(data => {
+                    const dataDate = new Date(data.tgl_buat);
+                    return dataDate <= endDate;
+                }));
             }
 
+
             if (this.tanggalAwalUpdate && this.tanggalAkhirUpdate) {
-                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_ubah) >= new Date(this.tanggalAwalUpdate) && new Date(data.tgl_ubah) <= new Date(this.tanggalAkhirUpdate)))
+                const startDate = new Date(this.tanggalAwalUpdate);
+                startDate.setHours(0, 0, 0, 0);
+
+                const endDate = new Date(this.tanggalAkhirUpdate);
+                endDate.setHours(23, 59, 59, 999);
+
+                filtered = this.renderNo(filtered.filter(data => {
+                    const dataDate = new Date(data.tgl_ubah);
+                    return dataDate >= startDate && dataDate <= endDate;
+                }));
             } else if (this.tanggalAwalUpdate) {
-                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_ubah) >= new Date(this.tanggalAwalUpdate)))
+                const startDate = new Date(this.tanggalAwalUpdate);
+                startDate.setHours(0, 0, 0, 0);
+
+                filtered = this.renderNo(filtered.filter(data => {
+                    const dataDate = new Date(data.tgl_ubah);
+                    return dataDate >= startDate;
+                }));
             } else if (this.tanggalAkhirUpdate) {
-                filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_ubah) <= new Date(this.tanggalAkhirUpdate)))
+                const endDate = new Date(this.tanggalAkhirUpdate);
+                endDate.setHours(23, 59, 59, 999);
+
+                filtered = this.renderNo(filtered.filter(data => {
+                    const dataDate = new Date(data.tgl_ubah);
+                    return dataDate <= endDate;
+                }));
             }
 
 
