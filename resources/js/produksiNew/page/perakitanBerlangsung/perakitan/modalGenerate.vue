@@ -1,10 +1,12 @@
 <script>
 import axios from 'axios';
 import DataTable from '../../../components/DataTable.vue';
+import modalPilihan from '../riwayat/modalPilihan.vue';
 export default {
     props: ['dataGenerate'],
     components: {
         DataTable,
+        modalPilihan,
     },
     data() {
         return {
@@ -30,10 +32,9 @@ export default {
             ],
             showNoUrutTerakhir: false,
             loadingNoUrut: false,
-            hasilGenerate: [
-                { seri: '1234567890' },
-                { seri: '1234567890' },
-            ]
+            hasilGenerate: [],
+            idCetakHasilGenerate: [],
+            showModalPilihan: false,
         }
     },
     methods: {
@@ -43,6 +44,7 @@ export default {
         closeModal() {
             $('.modalGenerate').modal('hide')
             this.$nextTick(() => {
+                this.$emit('refresh')
                 this.$emit('closeModal')
             })
         },
@@ -59,8 +61,9 @@ export default {
 
                     const { data } = await axios.post('/api/prd/fg/gen', kirim)
                     this.$swal('Berhasil', 'Berhasil generate seri', 'success')
-                    this.$emit('refresh')
-                    this.closeModal()
+                    const { noseri, id } = data
+                    this.hasilGenerate = noseri
+                    this.idCetakHasilGenerate = id
                 } catch (error) {
                     const { message, seri, duplicate, available } = error.response.data
                     this.seri = seri
@@ -97,8 +100,9 @@ export default {
                 }
                 const { data } = await axios.post('/api/prd/fg/gen/confirm', kirim)
                 this.$swal('Berhasil', 'Berhasil menyimpan seri', 'success')
-                this.$emit('refresh')
-                this.closeModal()
+                const { noseri, id } = data
+                this.hasilGenerate = noseri
+                this.idCetakHasilGenerate = id
             } catch (error) {
                 console.log(error)
             }
@@ -125,6 +129,13 @@ export default {
                 this.form.kedatangan = 1
                 this.loadingNoUrut = false
             }
+        },
+        cetakSeri() {
+            this.showModalCetak = true
+            this.$nextTick(() => {
+                $('.modalGenerate').modal('hide')
+                $('.modalPilihan').modal('show')
+            })
         }
     },
     computed: {
@@ -153,7 +164,7 @@ export default {
 </script>
 <template>
     <div>
-        <modalPilihan v-if="showModalCetak" @closeModal="closeModalCetak"></modalPilihan>
+        <modalPilihan :data="idCetakHasilGenerate" v-if="showModalCetak" @closeModal="closeModalCetak"></modalPilihan>
         <div class="modal fade modalGenerate" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
             role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
@@ -252,10 +263,10 @@ export default {
                                             </div>
                                         </form>
                                     </div>
-                                    <!-- <div class="col">
+                                    <div class="col" v-if="hasilGenerate.length > 0">
                                         <p class="text-bold">Hasil Generate No. Seri</p>
                                         <DataTable :headers="headers" :items="hasilGenerate" />
-                                    </div> -->
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-body" v-else>
@@ -301,11 +312,14 @@ export default {
 
                         <div class="d-flex bd-highlight">
                             <div class="p-2 flex-grow-1 bd-highlight">
-                                <button type="button" class="btn btn-success" v-if="!isError" :disabled="loading"
-                                    @click="simpan">Generate</button>
-                                <button type="button" class="btn btn-success" v-if="seri.length > 0"
-                                    @click="simpanSeri">Simpan</button>
-                                <!-- <button class="btn btn-success">Cetak Barcode</button> -->
+                                <div v-if="hasilGenerate.length == 0">
+                                    <button type="button" class="btn btn-success" v-if="!isError" :disabled="loading"
+                                        @click="simpan">Generate</button>
+                                    <button type="button" class="btn btn-success" v-if="seri.length > 0"
+                                        @click="simpanSeri">Simpan</button>
+                                </div>
+
+                                <button class="btn btn-success" @click="cetakSeri" v-else>Cetak Barcode</button>
                             </div>
                             <div class="p-2 bd-highlight">
                                 <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
