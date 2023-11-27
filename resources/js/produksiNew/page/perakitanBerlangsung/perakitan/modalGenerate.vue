@@ -252,10 +252,10 @@ export default {
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="col">
+                                    <!-- <div class="col">
                                         <p class="text-bold">Hasil Generate No. Seri</p>
                                         <DataTable :headers="headers" :items="hasilGenerate" />
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="card-body" v-else>
@@ -301,11 +301,11 @@ export default {
 
                         <div class="d-flex bd-highlight">
                             <div class="p-2 flex-grow-1 bd-highlight">
-                                <!-- <button type="button" class="btn btn-success" v-if="!isError" :disabled="loading"
+                                <button type="button" class="btn btn-success" v-if="!isError" :disabled="loading"
                                     @click="simpan">Generate</button>
                                 <button type="button" class="btn btn-success" v-if="seri.length > 0"
-                                    @click="simpanSeri">Simpan</button> -->
-                                <button class="btn btn-success">Cetak Barcode</button>
+                                    @click="simpanSeri">Simpan</button>
+                                <!-- <button class="btn btn-success">Cetak Barcode</button> -->
                             </div>
                             <div class="p-2 bd-highlight">
                                 <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
