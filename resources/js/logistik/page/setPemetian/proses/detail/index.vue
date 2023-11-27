@@ -166,7 +166,7 @@ export default {
                 filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_ubah) >= new Date(this.tanggalAwalUpdate) && new Date(data.tgl_ubah) <= new Date(this.tanggalAkhirUpdate)))
             } else if (this.tanggalAwalUpdate) {
                 filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_ubah) >= new Date(this.tanggalAwalUpdate)))
-            } else if (this.tanggalAkhir) {
+            } else if (this.tanggalAkhirUpdate) {
                 filtered = this.renderNo(filtered.filter(data => new Date(data.tgl_ubah) <= new Date(this.tanggalAkhirUpdate)))
             }
 
