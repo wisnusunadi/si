@@ -5529,8 +5529,18 @@ class LogistikController extends Controller
 
     public function peti_reworks_show()
     {
-        $data = PetiRw::groupby('no_urut')->get();
-        if ($data->isempty()) {
+        $data = DB::select('SELECT k.nama, pr.no_urut, MAX(pr.updated_at) as updates, SUM(subquery.count_id) AS total_count, pr.created_at ,pr.packer,pr.updated_at
+        FROM peti_rw pr
+        JOIN (
+            SELECT no_urut, COUNT(DISTINCT updated_at) AS count_id
+            FROM peti_rw
+            GROUP BY no_urut, updated_at
+        ) AS subquery ON pr.no_urut = subquery.no_urut
+        left join users on users.id = pr.packer
+        left join erp_kesehatan.karyawans as k on users.karyawan_id = k.id
+        GROUP BY pr.no_urut');
+
+        if (count($data) <= 0) {
             $obj = array();
         } else {
             foreach($data as $d){
@@ -5538,7 +5548,9 @@ class LogistikController extends Controller
                     'id' => $d->no_urut,
                     'no_urut' => $d->no_urut,
                     'tgl_buat' => $d->created_at,
-                    'packer' => $d->User->Karyawan->nama,
+                    'tgl_ubah' => $d->total_count > 3 ? $d->updates : NULL ,
+                    'ket' => $d->total_count > 3 ? true : false,
+                    'packer' => $d->nama,
                 );
             }
         }
@@ -5559,7 +5571,6 @@ class LogistikController extends Controller
                 );
             }
         }
-
         return $obj;
     }
     public function reworks_show()
@@ -5569,6 +5580,7 @@ class LogistikController extends Controller
                 $q->selectRaw('coalesce(count(peti_rw.id), 0)')
                     ->from('peti_rw')
                     ->whereColumn('peti_rw.jadwal_perakitan_rw_id', 'jadwal_perakitan_rw.urutan');
+
             },
             'csiap' => function ($q) {
                 $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
@@ -5579,6 +5591,7 @@ class LogistikController extends Controller
             ->where('state', 18)
             ->where('status_tf', 16)
             ->groupBy('urutan')->get();
+
         if ($data->isempty()) {
             $obj = array();
         } else {
@@ -5593,14 +5606,18 @@ class LogistikController extends Controller
                     default:
                         $status = "Error";
                 }
+                $y =  $d->csiap - $d->cpeti ;
+                if ($y % 3 !== 0) {
+                    $remainder = $y % 3;
+                    $y += (3 - $remainder);
+                }
 
                 $obj[] = array(
                     'id' => $d->urutan,
                     'urutan' => 'PRD-'.$d->urutan,
-                    'sudah' => $d->cpeti,
-                    'belum' => $d->csiap - $d->cpeti,
+                     'sudah' => $d->cpeti,
+                    'belum' =>$y,
                     'nama' => $d->ProdukRw->nama,
-
                 );
             }
         }
@@ -5668,6 +5685,12 @@ class LogistikController extends Controller
     }
     public function peti_reworks_update(Request $request,$urut)
     {
+        // $obj =  json_decode(json_encode($request->all()), FALSE);
+        // $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
+        // $data = PetiRw::where('no_urut',$urut)->pluck('noseri')->toArray();
+        // $newId = array_values(array_diff($seriValues, $data));
+        // $currentId = array_values(array_diff($data, $seriValues));
+        // dd($currentId);
          DB::beginTransaction();
         try {
             //code...
@@ -5677,9 +5700,9 @@ class LogistikController extends Controller
         $newId = array_values(array_diff($seriValues, $data));
 
         $currentId = array_values(array_diff($data, $seriValues));
-        if(count($currentId) > 0){
-            $ids = PetiRw::where('noseri',$currentId[0])->first();
-        }
+        // if(count($currentId) > 0){
+        //     $ids = PetiRw::where('noseri',$currentId[0])->first();
+        // }
 
 
         if($newId){
@@ -5693,18 +5716,30 @@ class LogistikController extends Controller
                     'values' => $cekPeti->pluck('noseri')->toArray()
                 ], 500);
             }else{
-                PetiRw::whereIn('noseri',$currentId)->delete();
-                foreach($newId as $n){
-                    $id = NoseriBarangJadi::where('noseri',$n)->first();
+                // PetiRw::whereIn('noseri',$currentId)->delete();
+                for ($j = 0; $j < count($newId); $j++) {
 
-                    PetiRw::create([
-                        'no_urut'=> $urut,
-                        'noseri_id'=> $id->id,
-                        'noseri'=> $n,
-                        'packer' => auth()->user()->id,
-                        'jadwal_perakitan_rw_id' => $ids->jadwal_perakitan_rw_id
-                    ]);
-                }
+                    $nbj = NoseriBarangJadi::where('noseri',$currentId[$j])->first();
+                    $nbj_new = NoseriBarangJadi::where('noseri',$newId[$j])->first();
+
+                    $npeti = PetiRw::where('noseri_id',$nbj->id)->first();
+                    $npeti->noseri = $nbj_new->noseri;
+                    $npeti->noseri_id = $nbj_new->id;
+                    $npeti->save();
+
+                    }
+
+                // foreach($newId as $n){
+                //     $id = NoseriBarangJadi::where('noseri',$n)->first();
+
+                //     PetiRw::create([
+                //         'no_urut'=> $urut,
+                //         'noseri_id'=> $id->id,
+                //         'noseri'=> $n,
+                //         'packer' => auth()->user()->id,
+                //         'jadwal_perakitan_rw_id' => $ids->jadwal_perakitan_rw_id
+                //     ]);
+                // }
                 DB::commit();
                 return response()->json([
                     'message' =>  'Berhasil Di Ubah',
