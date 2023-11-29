@@ -33,6 +33,7 @@ export default {
             $('.modalGenerate').modal('hide')
             this.$nextTick(() => {
                 this.$emit('closeModal')
+                this.$emit('refresh')
             })
         },
         cetakSeri() {

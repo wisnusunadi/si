@@ -167,7 +167,7 @@ export default {
 </script>
 <template>
     <div>
-        <Tambah v-if="showModal" @closeModal="showModal = false" />
+        <Tambah v-if="showModal" @closeModal="showModal = false" @refresh="getKardus" />
         <modalDetail v-if="showModalDetail" @closeModal="showModalDetail = false" :dataModalDetailSeri="dataModalDetail" />
         <LihatSeri v-if="showModalNoSeri" :hasilGenerate="dataLihatNoSeri" @closeModal="showModalNoSeri = false" />
         <Header :breadcumbs="breadcumbs" :title="title" />
