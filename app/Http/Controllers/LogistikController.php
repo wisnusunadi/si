@@ -5560,7 +5560,7 @@ class LogistikController extends Controller
                 DB::commit();
                 return response()->json([
                     'message' =>  'Berhasil Di tambahkan',
-                    'no_urut' => $pr->id,
+                    'id' => $pr->noseri_id,
                     'values' => [],
                 ], 200);
             }
@@ -5676,7 +5676,7 @@ class LogistikController extends Controller
 
             foreach($data as $d){
                 $obj[] = array(
-                    'id' => $d->id,
+                    'id' => $d->noseri_id,
                     'noseri' => $d->noseri,
                 );
             }
