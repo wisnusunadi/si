@@ -5557,10 +5557,13 @@ class LogistikController extends Controller
                         'jadwal_perakitan_rw_id' => $urutan
                     ]);
                 }
+
+                $sr = SeriDetailRw::where('noseri_id',$pr->noseri_id)->first();
                 DB::commit();
                 return response()->json([
                     'message' =>  'Berhasil Di tambahkan',
                     'id' => $pr->noseri_id,
+                   'itemnoseri' =>  json_decode($sr->isi),
                     'values' => [],
                 ], 200);
             }
@@ -5652,8 +5655,8 @@ class LogistikController extends Controller
     }
     public function pack_reworks_detail($id)
     {
-        $data = PackRw::find($id);
-
+        $data = PackRw::where('noseri_id',$id)->first();
+        $sr = SeriDetailRw::where('noseri_id',$id)->first();
         if (!$data) {
             $obj = array();
         } else {
@@ -5661,6 +5664,7 @@ class LogistikController extends Controller
                 $obj = (object)[
                     'noseri_id' => $data->noseri_id,
                     'noseri' => $data->noseri,
+                    'itemnoseri' =>  json_decode($sr->isi),
                 ];
 
         }
