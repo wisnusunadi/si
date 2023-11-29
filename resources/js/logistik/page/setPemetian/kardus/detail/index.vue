@@ -34,8 +34,8 @@ export default {
             headers: [
                 { text: 'No.', value: 'no', sortable: false },
                 { text: 'No Seri', value: 'noseri', align: 'text-left' },
-                { text: 'Tanggal Dibuat', value: 'tanggal_dibuat', align: 'text-left' },
-                { text: 'Packer', value: 'packer', align: 'text-left' },
+                { text: 'Tanggal Dibuat', value: 'tanggal_dibuat', align: 'text-left', sortable: false },
+                { text: 'Packer', value: 'packer', align: 'text-left', sortable: false },
                 { text: 'Aksi', value: 'aksi', sortable: false, align: 'text-left' },
             ],
             items: [],
