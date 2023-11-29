@@ -5550,7 +5550,7 @@ class LogistikController extends Controller
             }else{
                 foreach($seriValues as $n){
                     $id = NoseriBarangJadi::where('noseri',$n)->first();
-                 $pr =  PackRw::create([
+                     $pr =  PackRw::create([
                         'noseri_id' => $id->id,
                         'noseri' => $n,
                         'user_id' => auth()->user()->karyawan->nama,
@@ -5683,9 +5683,9 @@ class LogistikController extends Controller
             foreach($data as $d){
                 $obj[] = array(
                     'id' => $d->noseri_id,
-                    'tgl_buat' => $data->created_at->format('Y-m-d'),
+                    'tgl_buat' => $d->created_at->format('Y-m-d'),
                     'noseri' => $d->noseri,
-                    'packer' =>  $data->user_id,
+                    'packer' =>  $d->user_id,
                 );
             }
 
