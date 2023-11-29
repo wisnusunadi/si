@@ -1,6 +1,7 @@
 import VueRouter from "vue-router";
 import setPemetian from './page/setPemetian'
 import detailPemetian from './page/setPemetian/proses/detail'
+import detailPengkardusan from './page/setPemetian/kardus/detail'
 
 const routes = [
     {
@@ -12,6 +13,11 @@ const routes = [
         path: "/logistik/pengiriman/pemetian/:id",
         component: detailPemetian,
         name: "detailPemetian"
+    },
+        {
+        path: "/logistik/pengiriman/pengkardusan/:id",
+        component: detailPengkardusan,
+        name: "detailPengkardusan"
     }
 ]
 
