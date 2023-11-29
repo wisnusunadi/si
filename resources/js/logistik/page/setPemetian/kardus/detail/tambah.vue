@@ -1,6 +1,7 @@
 <script>
 import modalSeri from '../../../../../produksiNew/page/prosesSet/proses/modalCreate/modalSeri.vue'
 import generatePackingList from '../../../../../produksiNew/page/prosesSet/proses/modalCreate/generatePackingList.vue'
+import axios from 'axios'
 export default {
     components: {
         modalSeri,
@@ -50,7 +51,7 @@ export default {
                 $('.modalGenerate').modal('show');
             });
         },
-        simpanSeri() {
+        async simpanSeri() {
             this.noseri = this.noseri.map((data) => {
                 delete data.error
                 return data
@@ -73,44 +74,15 @@ export default {
                 this.isDisable = true
                 this.loading = true
 
-                setTimeout(() => {
-                    this.hasilGenerate = 'AK1023A000001',
-                        this.idGenerate = 211596,
-                        this.noseriGeneratePackingList = [
-                            {
-                                "id": 205145,
-                                "noseri": "TD1523AB4205",
-                                "varian": "",
-                                "produk": "PTB-2IN1 "
-                            },
-                            {
-                                "id": 212298,
-                                "noseri": "TD16239A04196",
-                                "varian": "",
-                                "produk": "MTB-2MTR"
-                            },
-                            {
-                                "id": 209023,
-                                "noseri": "TD1723AB08181",
-                                "varian": "",
-                                "produk": "MTR-BABY002"
-                            },
-                            {
-                                "id": 203374,
-                                "noseri": "TD21237A02374",
-                                "varian": "",
-                                "produk": "DIGIT-PRO BABY"
-                            },
-                            {
-                                "id": 198447,
-                                "noseri": "TD22238A01060",
-                                "varian": "BLUETOOTH  PUTIH",
-                                "produk": "DIGIT PRO IDA NEW"
-                            }
-                        ]
-                    this.$swal('Berhasil', 'No. Seri berhasil di generate', 'success')
-                    this.loading = false
-                }, 1000);
+                const { data } = await axios.post(`/api/logistik/rw/pack/store/${this.$route.params.id}`, {
+                    noseri: this.noseri
+                }, {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
+                    }
+                })
+
+                console.log(data)
             }
         },
         reset() {

@@ -5670,7 +5670,7 @@ class LogistikController extends Controller
     {
         $data = PackRw::where('jadwal_perakitan_rw_id',$id)->get();
 
-        if (!$data) {
+        if ($data->isEmpty()) {
             $obj = array();
         } else {
 

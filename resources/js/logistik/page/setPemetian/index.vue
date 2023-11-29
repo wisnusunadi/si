@@ -34,6 +34,7 @@ export default {
             try {
                 this.$store.dispatch('setLoading', true)
                 const { data } = await axios.get('/api/logistik/rw/')
+                const { data:kardus } = await axios.get('/api/logistik/rw/pack/show')
                 this.proses = data.map(item => {
                     return {
                         ...item,
@@ -41,6 +42,7 @@ export default {
                         belum: parseInt(item.belum) / 3,
                     }
                 })
+                this.kardus = kardus
             } catch (error) {
                 console.log(error)
             } finally {
