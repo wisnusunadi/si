@@ -5553,7 +5553,7 @@ class LogistikController extends Controller
                  $pr =  PackRw::create([
                         'noseri_id' => $id->id,
                         'noseri' => $n,
-                        'user_id' =>1,
+                        'user_id' => auth()->user()->karyawan->nama,
                         'jadwal_perakitan_rw_id' => $urutan
                     ]);
                 }
@@ -5664,6 +5664,8 @@ class LogistikController extends Controller
                 $obj = (object)[
                     'noseri_id' => $data->noseri_id,
                     'noseri' => $data->noseri,
+                    'tgl_buat' => $data->created_at->format('Y-m-d'),
+                    'packer' =>  $data->user_id,
                     'itemnoseri' =>  json_decode($sr->isi),
                 ];
 
@@ -5681,7 +5683,9 @@ class LogistikController extends Controller
             foreach($data as $d){
                 $obj[] = array(
                     'id' => $d->noseri_id,
+                    'tgl_buat' => $data->created_at->format('Y-m-d'),
                     'noseri' => $d->noseri,
+                    'packer' =>  $data->user_id,
                 );
             }
 
