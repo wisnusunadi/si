@@ -71,18 +71,49 @@ export default {
             }
 
             if (!this.isDisable && cek, length === 0) {
-                this.isDisable = true
-                this.loading = true
+                try {
+                    this.isDisable = true
+                    this.loading = true
 
-                const { data } = await axios.post(`/api/logistik/rw/pack/store/${this.$route.params.id}`, {
-                    noseri: this.noseri
-                }, {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
+                    const { data } = await axios.post(`/api/logistik/rw/pack/store/${this.$route.params.id}`, {
+                        noseri: this.noseri
+                    }, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
+                        }
+                    })
+
+                    const { id, itemnoseri } = data
+                    this.idGenerate = id
+                    this.noseriGeneratePackingList = itemnoseri
+                    this.hasilGenerate = this.noseri[0].seri
+                    this.$swal('Berhasil', 'Data berhasil disimpan', 'success')
+                } catch (error) {
+                    const { message, values } = error.response.data
+                    this.$swal('Gagal', message, 'error')
+                    this.errorValue = message
+                    this.isError = true
+
+                    if (error.response.data?.values) {
+                        this.noseri = this.noseri.map((data) => {
+                            // trim no seri
+                            data.seri = data?.seri.trim();
+                            const find = values.find((data2) => data2 == data?.seri);
+                            if (find) {
+                                return {
+                                    ...data,
+                                    error: true
+                                };
+                            }
+                            return data;
+                        });
                     }
-                })
 
-                console.log(data)
+                    this.isDisable = false
+
+                } finally {
+                    this.loading = false;
+                }
             }
         },
         reset() {
