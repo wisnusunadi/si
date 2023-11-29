@@ -86,7 +86,7 @@ return [
         'si_21' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST_3', '192.168.13.2'),
+            'host' => env('DB_HOST_3', '127.0.0.1'),
             'port' => env('DB_PORT_3', '3306'),
             'database' => env('DB_DATABASE_3', 'forge'),
             'username' => env('DB_USERNAME_3', 'forge'),
@@ -106,7 +106,7 @@ return [
         'si_20' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST_4', '192.168.13.2'),
+            'host' => env('DB_HOST_4', '127.0.0.1'),
             'port' => env('DB_PORT_4', '3306'),
             'database' => env('DB_DATABASE_4', 'forge'),
             'username' => env('DB_USERNAME_4', 'forge'),
@@ -126,7 +126,7 @@ return [
         'erp_kalibrasi' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST_6', '192.168.13.2'),
+            'host' => env('DB_HOST_6', '127.0.0.1'),
             'port' => env('DB_PORT_6', '3306'),
             'database' => env('DB_DATABASE_6', 'forge'),
             'username' => env('DB_USERNAME_6', 'forge'),

@@ -1710,7 +1710,6 @@ class MasterController extends Controller
                     $q->selectRaw('count(noseri_logistik.id)')
                         ->from('noseri_logistik')
                         // ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-
                         ->leftjoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
                         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
                         ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
@@ -1722,7 +1721,6 @@ class MasterController extends Controller
                     $q->selectRaw('count(noseri_logistik.id)')
                         ->from('noseri_logistik')
                         // ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-
                         ->leftjoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
                         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
                         ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
@@ -1739,7 +1737,6 @@ class MasterController extends Controller
                         ->limit(1);
                 }
             ])->with('PenjualanProduk')->first();
-
 
             $data = array();
             $data['detail']['penjualan_produk']['nama'] = $detail_pesanan->PenjualanProduk->nama;
