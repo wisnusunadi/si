@@ -266,7 +266,7 @@ export default {
                             Cetak No. Seri
                         </button>
                         <br>
-                        <button class="btn btn-sm btn-outline-info my-1" @click="viewPackingList(item.id)">
+                        <button class="btn btn-sm btn-outline-info my-1" @click="lihatPackingList(item.id)">
                             <i class="fas fa-eye"></i>
                             Lihat Packing List
                         </button>
