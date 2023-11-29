@@ -1327,7 +1327,7 @@ return [
                     'url'   =>  '/logistik/pengiriman/show'
                 ],
                 [
-                    'text' => 'Pemetian',
+                    'text' => 'Reworks',
                     'icon' => 'far fa-circle',
                     'url' => '/logistik/pengiriman/pemetian',
                 ],

@@ -35,7 +35,7 @@ export default {
             })
         },
         cetakSeri() {
-            window.open(`/produksiReworks/cetakseriReworkAll?data=[${this.idGenerate}]`, '_blank')
+            window.open(`/produksiReworks/cetakseriReworkAllKardus?data=[${this.idGenerate}]`, '_blank')
         },
         lihatSeri() {
             this.detailSeri = true;
