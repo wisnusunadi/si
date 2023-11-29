@@ -2717,18 +2717,19 @@ class PenjualanController extends Controller
                         //     </button>
                         // </a>';
                     } else {
-                        $hitung = floor((($data->cseri / $data->cjumlah) * 100));
-                        if ($hitung > 0) {
-                            $datas = '<div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="' . $hitung . '"  style="width: ' . $hitung . '%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
-                            </div>
-                            <small class="text-muted">Selesai</small>';
-                        } else {
-                            $datas = '<div class="progress">
-                                <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
-                            </div>
-                            <small class="text-muted">Selesai</small>';
-                        }
+                        // $hitung = floor((($data->cseri / $data->cjumlah) * 100));
+                        // if ($hitung > 0) {
+                        //     $datas = '<div class="progress">
+                        //         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="' . $hitung . '"  style="width: ' . $hitung . '%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
+                        //     </div>
+                        //     <small class="text-muted">Selesai</small>';
+                        // } else {
+                        //     $datas = '<div class="progress">
+                        //         <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
+                        //     </div>
+                        //     <small class="text-muted">Selesai</small>';
+                        // }
+                        $datas='';
                     }
                 }
                 return $datas;
@@ -2741,12 +2742,15 @@ class PenjualanController extends Controller
                     if ($data->status == "batal") {
                         $datas .= 'batal';
                     } else {
-                        $hitung = floor((($data->cseri / $data->cjumlah) * 100));
-                        if ($hitung > 0) {
-                            $datas = $hitung;
-                        } else {
-                            $datas = $hitung;
-                        }
+                       // $hitung = floor((($data->cseri / $data->cjumlah) * 100));
+                        $datas = $data->cseri;
+                        // $hitung = floor((($data->cseri / $data->cjumlah) * 100));
+                        // if ($hitung > 0) {
+                        //     $datas = $hitung;
+                        // } else {
+                        //     $datas = $hitung;
+                        // }
+                        $datas .= '';
                     }
                 }
                 return $datas;
