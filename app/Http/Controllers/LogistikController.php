@@ -29,6 +29,7 @@ use App\Models\TFProduksi;
 use App\Models\TFProduksiDetail;
 use App\Models\NoseriTGbj;
 use App\Models\OutgoingPesananPart;
+use App\Models\PackRw;
 use App\Models\Pengiriman;
 use App\Models\PetiRw;
 use App\Models\SeriDetailRw;
@@ -5527,6 +5528,98 @@ class LogistikController extends Controller
         return response()->json($data);
     }
 
+    public function pack_reworks_store(Request $request,$urutan){
+
+        DB::beginTransaction();
+        try {
+            //code...
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+        $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
+
+        $cekSeri = SeriDetailRw::whereIn('noseri',$seriValues)->get();
+        $cekPeti = PackRw::whereIn('noseri',$seriValues)->count();
+
+        if(count($seriValues) == count($cekSeri)){
+            if($cekPeti > 0){
+                $getUsed = PackRw::whereIn('noseri',$seriValues)->pluck('noseri')->toArray();
+                DB::rollBack();
+                return response()->json([
+                    'message' =>  'Noseri Sudah Terdaftar',
+                    'values' => $getUsed,
+                ], 500);
+            }else{
+                foreach($seriValues as $n){
+                    $id = NoseriBarangJadi::where('noseri',$n)->first();
+                 $pr =  PackRw::create([
+                        'noseri_id' => $id->id,
+                        'noseri' => $n,
+                        'user_id' =>1,
+                        'jadwal_perakitan_rw_id' => $urutan
+                    ]);
+                }
+                DB::commit();
+                return response()->json([
+                    'message' =>  'Berhasil Di tambahkan',
+                    'no_urut' => $pr->id,
+                    'values' => [],
+                ], 200);
+            }
+           }else{
+
+            $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+            DB::rollBack();
+            return response()->json([
+                    'message' =>  'No Seri Tidak Terdaftar',
+                    'values' => array_values($getNotFound)
+                ], 500);
+        }
+        } catch (\Throwable $th) {
+            $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+            DB::rollBack();
+            return response()->json([
+                'message' =>  'Transaksi Gagal',
+                'error' => $th->getMessage(),
+                'values' => array_values($seriValues)
+            ], 500);
+        }
+    }
+    public function pack_reworks_show()
+    {
+        $data = JadwalPerakitanRw::addSelect([
+            'cpack' => function ($q) {
+                $q->selectRaw('coalesce(count(pack_rw.id), 0)')
+                    ->from('pack_rw')
+                    ->whereColumn('pack_rw.jadwal_perakitan_rw_id', 'jadwal_perakitan_rw.urutan');
+
+            },
+            'csiap' => function ($q) {
+                $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                    ->from('seri_detail_rw')
+                    ->whereColumn('seri_detail_rw.urutan', 'jadwal_perakitan_rw.urutan');
+            },
+        ])
+            ->where('state', 18)
+            ->where('status_tf', 16)
+            ->groupBy('urutan')->get();
+
+        if ($data->isempty()) {
+            $obj = array();
+        } else {
+            foreach ($data as $d) {
+
+
+                $obj[] = array(
+                    'id' => $d->urutan,
+                    'urutan' => 'PRD-'.$d->urutan,
+                     'sudah' => $d->cpack,
+                    'belum' =>$d->csiap - $d->cpack,
+                    'nama' => $d->ProdukRw->nama,
+                );
+            }
+        }
+
+        return response()->json($obj);
+    }
     public function peti_reworks_show()
     {
         $data = DB::select('SELECT k.nama, pr.no_urut, MAX(pr.updated_at) as updates, SUM(subquery.count_id) AS total_count, pr.created_at ,pr.packer,pr.updated_at
@@ -5556,6 +5649,40 @@ class LogistikController extends Controller
         }
 
         return response()->json($obj);
+    }
+    public function pack_reworks_detail($id)
+    {
+        $data = PackRw::find($id);
+
+        if (!$data) {
+            $obj = array();
+        } else {
+
+                $obj = (object)[
+                    'noseri_id' => $data->noseri_id,
+                    'noseri' => $data->noseri,
+                ];
+
+        }
+        return $obj;
+    }
+    public function pack_reworks_details($id)
+    {
+        $data = PackRw::where('jadwal_perakitan_rw_id',$id)->get();
+
+        if (!$data) {
+            $obj = array();
+        } else {
+
+            foreach($data as $d){
+                $obj[] = array(
+                    'id' => $d->id,
+                    'noseri' => $d->noseri,
+                );
+            }
+
+        }
+        return $obj;
     }
     public function peti_reworks_detail($urut)
     {
