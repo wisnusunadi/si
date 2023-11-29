@@ -73,13 +73,22 @@ export default {
                 $('.modalGenerate').modal('show')
             })
         },
-        detailProdukSeri(data) {
-            this.dataModalDetail = JSON.parse(JSON.stringify(data))
-            this.showModalDetail = true
+        async detailProdukSeri(data) {
+            try {
+                const { data: detail } = await axios.get(`/api/logistik/rw/pack/detail/${data.id}`)
+                const noseri = {
+                    ...data,
+                    seri: detail.itemnoseri
+                }
+                this.dataModalDetail = noseri
+                this.showModalDetail = true
 
-            this.$nextTick(() => {
-                $('.modalDetailSeri').modal('show')
-            })
+                this.$nextTick(() => {
+                    $('.modalDetailSeri').modal('show')
+                })
+            } catch (error) {
+                console.log(error)
+            }
         },
         lihatNoseri(noseri) {
             this.dataLihatNoSeri = noseri
@@ -167,7 +176,7 @@ export default {
 </script>
 <template>
     <div>
-        <Tambah v-if="showModal" @closeModal="showModal = false" />
+        <Tambah v-if="showModal" @closeModal="showModal = false" @refresh="getKardus" />
         <modalDetail v-if="showModalDetail" @closeModal="showModalDetail = false" :dataModalDetailSeri="dataModalDetail" />
         <LihatSeri v-if="showModalNoSeri" :hasilGenerate="dataLihatNoSeri" @closeModal="showModalNoSeri = false" />
         <Header :breadcumbs="breadcumbs" :title="title" />
