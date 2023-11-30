@@ -121,4 +121,5 @@ export default {
                     @updateFilteredDalamProses="updateFilteredDalamProses" />
             </div>
         </div>
-</div></template>
+</div>
+</template>
