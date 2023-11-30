@@ -6,9 +6,11 @@ export default {
             form: {
                 provinsi: '',
                 kota: '',
+                jumlah: '',
             },
             provinsi: [],
             kota: [],
+            jumlahMaksKirim: 8000,
         }
     },
     methods: {
@@ -48,6 +50,18 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+        kirim() {
+            const cekNull = Object.values(this.form).every((data) => data !== '' && data !== null);
+
+            if (cekNull) {
+                console.log(this.form);
+                // this.$emit('kirim', this.form);
+                this.closeModal();
+                this.$swal('Berhasil', 'Data berhasil ditambahkan', 'success');
+            } else {
+                this.$swal('Error', 'Data tidak boleh kosong', 'error')
+            }
         }
     },
     mounted() {
@@ -56,7 +70,7 @@ export default {
 }
 </script>
 <template>
-    <div class="modal fade modalPembagian" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade modalPembagian" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog modal-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -72,18 +86,24 @@ export default {
                     </div>
                     <div class="form-group">
                       <label for="">Kab. / Kota</label>
-                        <v-select :options="kota" />
+                        <v-select v-model="form.kota" :options="kota" />
                     </div>
                     <div class="form-group">
                       <label for="">Jumlah Pengiriman</label>
-                    <input type="text" class="form-control" placeholder="Jumlah Pengiriman" @keypress="numberOnly($event)">
+                        <input type="text" class="form-control"
+                        :class="{'is-invalid': form.jumlah > jumlahMaksKirim}"
+                        v-model="form.jumlah"
+                        placeholder="Jumlah Pengiriman" @keypress="numberOnly($event)">
+                              <div id="validationServer04Feedback" class="invalid-feedback">
+            Jumlah pengiriman tidak boleh lebih dari {{ jumlahMaksKirim  }}
+          </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-primary" @click="kirim">Simpan</button>
                 </div>
-                
+
             </div>
         </div>
     </div>
