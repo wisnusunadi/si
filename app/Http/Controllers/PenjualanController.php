@@ -2601,6 +2601,13 @@ class PenjualanController extends Controller
                         ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 },
+                'cjumlahdsb' => function ($q) {
+                    $q->selectRaw('sum(detail_pesanan_dsb.jumlah * detail_penjualan_produk.jumlah)')
+                        ->from('detail_pesanan_dsb')
+                        ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan_dsb.penjualan_produk_id')
+                        ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                        ->whereColumn('detail_pesanan_dsb.pesanan_id', 'ekatalog.pesanan_id');
+                },
                 'cgudang' => function ($q) {
                     $q->selectRaw('count(detail_pesanan_produk.id)')
                         ->from('detail_pesanan_produk')
@@ -2717,19 +2724,18 @@ class PenjualanController extends Controller
                         //     </button>
                         // </a>';
                     } else {
-                        // $hitung = floor((($data->cseri / $data->cjumlah) * 100));
-                        // if ($hitung > 0) {
-                        //     $datas = '<div class="progress">
-                        //         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="' . $hitung . '"  style="width: ' . $hitung . '%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
-                        //     </div>
-                        //     <small class="text-muted">Selesai</small>';
-                        // } else {
-                        //     $datas = '<div class="progress">
-                        //         <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
-                        //     </div>
-                        //     <small class="text-muted">Selesai</small>';
-                        // }
-                        $datas='';
+                        $hitung = floor((($data->cseri / ($data->cjumlah + $data->cjumlahdsb )) * 100));
+                        if ($hitung > 0) {
+                            $datas = '<div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="' . $hitung . '"  style="width: ' . $hitung . '%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
+                        } else {
+                            $datas = '<div class="progress">
+                                <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
+                        }
                     }
                 }
                 return $datas;
@@ -2742,15 +2748,12 @@ class PenjualanController extends Controller
                     if ($data->status == "batal") {
                         $datas .= 'batal';
                     } else {
-                       // $hitung = floor((($data->cseri / $data->cjumlah) * 100));
-                        $datas = $data->cseri;
-                        // $hitung = floor((($data->cseri / $data->cjumlah) * 100));
-                        // if ($hitung > 0) {
-                        //     $datas = $hitung;
-                        // } else {
-                        //     $datas = $hitung;
-                        // }
-                        $datas .= '';
+                        $hitung = floor((($data->cseri / ($data->cjumlah + $data->cjumlahdsb )) * 100));
+                        if ($hitung > 0) {
+                            $datas = $hitung;
+                        } else {
+                            $datas = $hitung;
+                        }
                     }
                 }
                 return $datas;
@@ -3793,7 +3796,6 @@ class PenjualanController extends Controller
             } else {
                 $nopaket = "";
             }
-
 
             $Ekatalog = Ekatalog::create([
                 'customer_id' => $c_id,
