@@ -20,7 +20,7 @@ export default {
                     link: '/logistik/dashboard'
                 },
                 {
-                    name: 'Set Reworks',
+                    name: 'Set Pemetian',
                     link: '/logistik/pengiriman/pemetian'
                 },
                 {

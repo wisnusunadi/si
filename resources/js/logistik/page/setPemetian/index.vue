@@ -13,14 +13,14 @@ export default {
     },
     data() {
         return {
-            title: 'Set Reworks',
+            title: 'Set Pemetian',
             breadcumbs: [
                 {
                     name: 'Beranda',
                     link: '/logistik/dashboard'
                 },
                 {
-                    name: 'Set Reworks',
+                    name: 'Set Pemetian',
                     link: '#'
                 }
             ],

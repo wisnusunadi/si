@@ -4,7 +4,7 @@ export default {
     methods: {
         setKardus(id) {
             this.$router.push({
-                name: 'detailPengkardusan',
+                name: 'detailPembagian',
                 params: {
                     id
                 }
