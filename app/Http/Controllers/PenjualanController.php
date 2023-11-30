@@ -4457,38 +4457,78 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             if($ekatalog->Pesanan->DetailPesananDsb->isEmpty()){
                 $data = $item;
             }else{
-                foreach($ekatalog->Pesanan->DetailPesananDsb as $key_paket => $d){
-                    if($d->NoseriDsb->isEmpty()){
-                        $seri =    "";
-                    }else{
-                        $seri =    implode(',', collect($d->NoseriDsb->pluck("noseri"))->toArray());
-                    }
+                if($ekatalog->Pesanan->DetailPesanan->isEmpty()){
+                    foreach($ekatalog->Pesanan->DetailPesananDsb as $key_paket => $d){
+                        if($d->NoseriDsb->isEmpty()){
+                            $seri =    "";
+                        }else{
+                            $seri =    implode(',', collect($d->NoseriDsb->pluck("noseri"))->toArray());
+                        }
 
-                    $item_dsb[$key_paket] = array(
-                        'jenis' => 'dsb',
-                        'id' => $d->id,
-                        'detail_rencana_penjualan_id' => 0,
-                        'penjualan_produk_id' => $d->penjualan_produk_id,
-                        'nama' => $d->PenjualanProduk->nama,
-                        'jumlah' => $d->jumlah,
-                        'harga' => $d->harga,
-                        'ongkir' => $d->ongkir,
-                        'ppn' => $d->ppn,
-                        'detail' => array(),
-                        'seri' => $seri
-                    );
-
-                    foreach ($d->DetailPesananProdukDsb as $key_prd => $e) {
-                        $item_dsb[$key_paket]['detail'][$key_prd] = array(
-                            'id' => $e->id,
-                            'gbj_id' => $e->GudangBarangJadi->id,
-                            'nama' => $e->GudangBarangJadi->Produk->nama,
-                            'variasi' => $e->GudangBarangJadi->nama,
+                        $item_dsb[$key_paket] = array(
+                            'jenis' => 'dsb',
+                            'id' => $d->id,
+                            'detail_rencana_penjualan_id' => 0,
+                            'penjualan_produk_id' => $d->penjualan_produk_id,
+                            'nama' => $d->PenjualanProduk->nama,
+                            'jumlah' => $d->jumlah,
+                            'harga' => $d->harga,
+                            'ongkir' => $d->ongkir,
+                            'ppn' => $d->ppn,
+                            'detail' => array(),
+                            'seri' => $seri
                         );
+
+                        foreach ($d->DetailPesananProdukDsb as $key_prd => $e) {
+                            $item_dsb[$key_paket]['detail'][$key_prd] = array(
+                                'id' => $e->id,
+                                'gbj_id' => $e->GudangBarangJadi->id,
+                                'nama' => $e->GudangBarangJadi->Produk->nama,
+                                'variasi' => $e->GudangBarangJadi->nama,
+                            );
+                        }
                     }
+                    $data = $item_dsb;
+                }else{
+                    foreach($ekatalog->Pesanan->DetailPesananDsb as $key_paket => $d){
+                        if($d->NoseriDsb->isEmpty()){
+                            $seri =    "";
+                        }else{
+                            $seri =    implode(',', collect($d->NoseriDsb->pluck("noseri"))->toArray());
+                        }
+
+                        $item_dsb[$key_paket] = array(
+                            'jenis' => 'dsb',
+                            'id' => $d->id,
+                            'detail_rencana_penjualan_id' => 0,
+                            'penjualan_produk_id' => $d->penjualan_produk_id,
+                            'nama' => $d->PenjualanProduk->nama,
+                            'jumlah' => $d->jumlah,
+                            'harga' => $d->harga,
+                            'ongkir' => $d->ongkir,
+                            'ppn' => $d->ppn,
+                            'detail' => array(),
+                            'seri' => $seri
+                        );
+
+                        foreach ($d->DetailPesananProdukDsb as $key_prd => $e) {
+                            $item_dsb[$key_paket]['detail'][$key_prd] = array(
+                                'id' => $e->id,
+                                'gbj_id' => $e->GudangBarangJadi->id,
+                                'nama' => $e->GudangBarangJadi->Produk->nama,
+                                'variasi' => $e->GudangBarangJadi->nama,
+                            );
+                        }
+                    }
+                    $data = array_merge($item, $item_dsb);
                 }
-                $data = array_merge($item, $item_dsb);
+
+
+
+
             }
+
+
            //return response()->json($data);
              return view('page.penjualan.penjualan.edit_ekatalog', ['e' => $ekatalog,'item' => $data]);
         } else if ($jenis == 'spa') {
