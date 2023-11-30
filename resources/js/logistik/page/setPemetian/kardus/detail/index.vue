@@ -26,6 +26,10 @@ export default {
                     link: '/logistik/pengiriman/pemetian'
                 },
                 {
+                    name: 'Set Pembagian Wilayah',
+                    link: this.$route.params.linkNow
+                },
+                {
                     name: 'Set Kardus',
                     link: '#'
                 }
