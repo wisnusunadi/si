@@ -170,6 +170,7 @@ export default {
                                             <td>
                                                 <input type="text" class="form-control"
                                                     :class="data.error ? 'is-invalid' : ''" ref="noseri"
+                                                    @keyup.enter="simpanSeri"
                                                     :disabled="isDisable" v-model="data.seri">
                                                 <div class="invalid-feedback">
                                                     {{ errorValue }}
