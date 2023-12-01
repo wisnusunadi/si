@@ -5543,23 +5543,29 @@ class LogistikController extends Controller
             ->count();
 
         if ($data->isempty()) {
-            $obj = array();
+            $obj = (object)[
+                'jumlah' => $sr ,
+                'data' => array()
+                    ];
         } else {
             $permintaan = 0;
-            foreach ($data as $d) {
-                $datas[] =  array(
-                    'id' => $d->id,
-                    'produk' => 'ANTROPOMETRI KIT 10',
-                    'wilayah' => $d->prov .' - '.$d->kota,
-                    'belum' => $d->jumlah - $d->cpack,
-                    'selesai' => $d->cpack,
-                );
-                $permintaan  += $d->jumlah;
-            }
-            $obj = (object)[
-                'jumlah' => $sr - $permintaan,
-                'data' => $datas
-            ];
+
+                foreach ($data as $d) {
+                    $datas[] =  array(
+                        'id' => $d->id,
+                        'produk' => 'ANTROPOMETRI KIT 10',
+                        'wilayah' => $d->prov .' - '.$d->kota,
+                        'belum' => $d->jumlah - $d->cpack,
+                        'selesai' => $d->cpack,
+                    );
+                    $permintaan  += $d->jumlah;
+                }
+                $obj = (object)[
+                    'jumlah' => $sr - $permintaan,
+                    'data' => $datas
+                ];
+
+
         }
 
         return response()->json($obj);
