@@ -5645,11 +5645,6 @@ class LogistikController extends Controller
                         'values' => [],
                     ], 200);
                 }
-
-
-
-
-
             }
            }else{
 
