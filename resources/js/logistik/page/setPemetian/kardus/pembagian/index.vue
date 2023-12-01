@@ -116,7 +116,7 @@ export default {
                             <td>{{ data.belum }}</td>
                             <td>
                                 <router-link
-                                    :to="{ name: 'detailPengkardusan', params: { id: data.id, linkNow: $route.fullPath } }"
+                                    :to="{ name: 'detailPengkardusan', params: { id: data.id, linkNow: $route.fullPath, belum: data.belum } }"
                                     class="btn btn-outline-primary btn-sm">Set Kardus</router-link>
                             </td>
                         </tr>
