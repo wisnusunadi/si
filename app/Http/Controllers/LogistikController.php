@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportPackWilayah;
 use App\Exports\LaporanLogistik;
 use App\Exports\LaporanPenjualanAll;
 use App\Models\DetailLogistik;
@@ -5648,11 +5649,6 @@ class LogistikController extends Controller
                         'values' => [],
                     ], 200);
                 }
-
-
-
-
-
             }
            }else{
 
@@ -6060,6 +6056,10 @@ class LogistikController extends Controller
         return view('page.produksi.printreworks.viewpeti', compact('loadView'));
     }
 
+    public function export_pack_wilayah_excel($id) {
+        $waktu = Carbon::now();
+        return Excel::download(new ExportPackWilayah($id), 'ExportPackWilayah  ' . $waktu->toDateTimeString() . '.xlsx');
+    }
     public function cetak_peti($id) {
         $loadView = $this->peti_reworks_detail($id);
         $pdf = PDF::loadView('page.produksi.printreworks.cetakpeti', compact('loadView'))->setPaper('a5', 'landscape');
