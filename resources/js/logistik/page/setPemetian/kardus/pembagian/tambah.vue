@@ -108,7 +108,6 @@ export default {
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                     <button type="button" class="btn btn-primary" @click="kirim">Simpan</button>
                 </div>
-
             </div>
         </div>
     </div>
