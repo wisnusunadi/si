@@ -116,8 +116,14 @@ export default {
                             <td>{{ data.belum }}</td>
                             <td>
                                 <router-link
-                                    :to="{ name: 'detailPengkardusan', params: { id: data.id, linkNow: $route.fullPath } }"
-                                    class="btn btn-outline-primary btn-sm">Set Kardus</router-link>
+                                    :to="{ name: 'detailPengkardusan', params: { id: data.id, linkNow: $route.fullPath, belum: data.belum } }"
+                                    class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    Set Kardus</router-link>
+                                <button class="btn btn-outline-success btn-sm">
+                                    <i class="fas fa-file-excel"></i>
+                                    Export
+                                </button>
                             </td>
                         </tr>
                     </tbody>
