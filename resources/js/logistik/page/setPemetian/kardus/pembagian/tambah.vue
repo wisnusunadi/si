@@ -69,7 +69,7 @@ export default {
                     this.$swal('Error', data.message, 'error');
                 }
             } else {
-                this.$swal('Error', 'Data tidak boleh kosong', 'error')
+                this.$swal('Error', 'Silahkan cek kembali data anda', 'error');
             }
         }
     },
