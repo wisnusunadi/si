@@ -5602,7 +5602,7 @@ class LogistikController extends Controller
 
     public function pack_reworks_store(Request $request,$urutan){
 
-        DB::beginTransaction();
+        // DB::beginTransaction();
         try {
             //code...
         $obj =  json_decode(json_encode($request->all()), FALSE);
@@ -5610,6 +5610,9 @@ class LogistikController extends Controller
 
         $cekSeri = SeriDetailRw::whereIn('noseri',$seriValues)->get();
         $cekPeti = PackRw::whereIn('noseri',$seriValues)->count();
+        $getPack = PackRwHead::find($urutan);
+        $cekJumlahAvailable = PackRw::where('pack_rw_head_id',$urutan)->count();
+        $tersedia = $getPack->jumlah - $cekJumlahAvailable;
 
         if(count($seriValues) == count($cekSeri)){
             if($cekPeti > 0){
@@ -5620,24 +5623,36 @@ class LogistikController extends Controller
                     'values' => $getUsed,
                 ], 500);
             }else{
-                foreach($seriValues as $n){
-                    $id = NoseriBarangJadi::where('noseri',$n)->first();
-                     $pr =  PackRw::create([
-                        'noseri_id' => $id->id,
-                        'noseri' => $n,
-                        'user_id' => auth()->user()->karyawan->nama,
-                        'pack_rw_head_id' => $urutan
-                    ]);
+                if(count($seriValues) > $tersedia){
+                    return response()->json([
+                        'message' =>  'Noseri Melebihi Batas',
+                        'values' =>[],
+                    ], 500);
+                }else{
+                    foreach($seriValues as $n){
+                        $id = NoseriBarangJadi::where('noseri',$n)->first();
+                         $pr =  PackRw::create([
+                            'noseri_id' => $id->id,
+                            'noseri' => $n,
+                            'user_id' => auth()->user()->karyawan->nama,
+                            'pack_rw_head_id' => $urutan
+                        ]);
+                    }
+
+                    $sr = SeriDetailRw::where('noseri_id',$pr->noseri_id)->first();
+                    DB::commit();
+                    return response()->json([
+                        'message' =>  'Berhasil Di tambahkan',
+                        'id' => $pr->noseri_id,
+                       'itemnoseri' =>  json_decode($sr->isi),
+                        'values' => [],
+                    ], 200);
                 }
 
-                $sr = SeriDetailRw::where('noseri_id',$pr->noseri_id)->first();
-                DB::commit();
-                return response()->json([
-                    'message' =>  'Berhasil Di tambahkan',
-                    'id' => $pr->noseri_id,
-                   'itemnoseri' =>  json_decode($sr->isi),
-                    'values' => [],
-                ], 200);
+
+
+
+
             }
            }else{
 
@@ -5687,8 +5702,8 @@ class LogistikController extends Controller
                 $obj[] = array(
                     'id' => $d->urutan,
                     'urutan' => 'PRD-'.$d->urutan,
-                    'sudah' => $d->cpack,
-                    'belum' =>$d->csiap - $d->cpack,
+                     'sudah' => $d->cpack,
+                     'belum' =>$d->csiap - $d->cpack,
                     'nama' => $d->ProdukRw->nama,
                 );
             }
