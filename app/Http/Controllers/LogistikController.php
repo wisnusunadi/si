@@ -5586,12 +5586,15 @@ class LogistikController extends Controller
             DB::commit();
             return response()->json([
                 'message' =>  'Berhasil ditambahkan',
+                'status' => true
             ], 200);
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
             return response()->json([
                 'message' =>  'Transaksi Gagal',
+                'error' => $th->getMessage(),
+                'status' => false
             ], 500);
         }
 
@@ -5684,8 +5687,8 @@ class LogistikController extends Controller
                 $obj[] = array(
                     'id' => $d->urutan,
                     'urutan' => 'PRD-'.$d->urutan,
-                     'sudah' => $d->cpack,
-                    // 'belum' =>$d->csiap - $d->cpack,
+                    'sudah' => $d->cpack,
+                    'belum' =>$d->csiap - $d->cpack,
                     'nama' => $d->ProdukRw->nama,
                 );
             }
