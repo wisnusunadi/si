@@ -300,10 +300,13 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
 });
 
 
-Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'logistik'], function () {
     Route::group(['middleware' => ['divisi:log']], function () {
         Route::get('/dashboard', [App\Http\Controllers\LogistikController::class, 'dashboard'])->name('logistik.dashboard');
     });
+
+    Route::get('/rw/pack_wilayah/export_excel/{id}', [LogistikController::class, 'export_pack_wilayah_excel']);
+
     Route::group(['prefix' => '/so'], function () {
         // Route::group(['middleware' => ['divisi:log,dirut']], function () {
             Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
@@ -322,7 +325,6 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
             Route::get('/cancel/{id}', [App\Http\Controllers\LogistikController::class, 'cancel_so'])->name('logistik.so.cancel_po');
         });
     });
-
     Route::group(['prefix' => '/ekspedisi'], function () {
         Route::group(['middleware' => ['divisi:log,dirut']], function () {
             Route::view('/show', 'page.logistik.ekspedisi.show')->name('logistik.ekspedisi.show');

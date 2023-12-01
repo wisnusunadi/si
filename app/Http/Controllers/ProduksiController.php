@@ -4673,9 +4673,9 @@ class ProduksiController extends Controller
         // return view('page.produksi.printreworks.cetakpermintaanbarangjadi');
     }
 
-    function export_rework_excel($urutan)
+    function export_pack_wilayah_excel($id)
     {
         $waktu = Carbon::now();
-        return Excel::download(new ExportRework($urutan), 'PerakitanReworks  ' . $waktu->toDateTimeString() . '.xlsx');
+        return Excel::download(new ExportRework($id), 'PerakitanReworks  ' . $waktu->toDateTimeString() . '.xlsx');
     }
 }
