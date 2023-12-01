@@ -2,6 +2,7 @@
 import pagination from '../../../../components/pagination.vue';
 import Header from '../../../../components/header.vue';
 import tambah from './tambah.vue';
+import axios from 'axios';
 export default {
     components: {
         pagination,
@@ -25,18 +26,11 @@ export default {
                     link: '#'
                 }
             ],
-            dataTable: [
-                {
-                    id: 1,
-                    nama: 'ANTROPOMETRI KIT-10',
-                    wilayah: 'Kab. Bantul - Daerah Istimewa Yogyakarta',
-                    selesai: 1,
-                    belum: 3349,
-                }
-            ],
+            dataTable: [],
             search: '',
             renderPaginate: [],
             showModal: false,
+            maksInput: 0,
         }
     },
     methods: {
@@ -51,6 +45,18 @@ export default {
             this.$nextTick(() => {
                 $('.modalPembagian').modal('show');
             });
+        },
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true);
+                const { data } = await axios.get(`/api/logistik/rw/pack_wilayah/show/${this.$route.params.id}`);
+                this.dataTable = data.data
+                this.maksInput = data.jumlah;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.$store.dispatch('setLoading', false);
+            }
         }
     },
     computed: {
@@ -62,13 +68,16 @@ export default {
             });
         }
     },
+    mounted() {
+        this.getData();
+    }
 }
 </script>
 <template>
     <div>
         <Header :breadcumbs="breadcumbs" :title="title" />
-        <tambah v-if="showModal" @closeModal="showModal = false" />
-        <div class="card">
+        <tambah v-if="showModal" @closeModal="showModal = false" :jumlahMaksKirim="maksInput" @refresh="getData" />
+        <div class="card" v-if="!$store.state.loading">
             <div class="card-body">
                 <div class="d-flex bd-highlight">
                     <div class="p-2 flex-grow-1 bd-highlight">
@@ -101,12 +110,13 @@ export default {
                     <tbody v-if="renderPaginate.length > 0">
                         <tr v-for="(data, idx) in renderPaginate" :key="idx">
                             <td>{{ idx + 1 }}</td>
-                            <td>{{ data.nama }}</td>
+                            <td>{{ data.produk }}</td>
                             <td>{{ data.wilayah }}</td>
                             <td>{{ data.selesai }}</td>
                             <td>{{ data.belum }}</td>
                             <td>
-                                <router-link :to="{ name: 'detailPengkardusan', params: { id: data.id, linkNow: $route.fullPath } }"
+                                <router-link
+                                    :to="{ name: 'detailPengkardusan', params: { id: data.id, linkNow: $route.fullPath } }"
                                     class="btn btn-outline-primary btn-sm">Set Kardus</router-link>
                             </td>
                         </tr>
@@ -121,5 +131,10 @@ export default {
                     @updateFilteredDalamProses="updateFilteredDalamProses" />
             </div>
         </div>
-</div>
+        <div v-else>
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
 </template>

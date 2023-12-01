@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios';
 export default {
+    props: ['jumlahMaksKirim'],
     data() {
         return {
             form: {
@@ -10,7 +11,6 @@ export default {
             },
             provinsi: [],
             kota: [],
-            jumlahMaksKirim: 8000,
         }
     },
     methods: {
@@ -18,6 +18,8 @@ export default {
             $('.modalPembagian').modal('hide');
             this.$nextTick(() => {
                 this.$emit('closeModal');
+                    this.$emit('refresh');
+
             });
         },
         getProvinsi() {
@@ -51,14 +53,17 @@ export default {
                 console.log(error);
             }
         },
-        kirim() {
+        async kirim() {
             const cekNull = Object.values(this.form).every((data) => data !== '' && data !== null);
 
-            if (cekNull) {
-                console.log(this.form);
-                // this.$emit('kirim', this.form);
-                this.closeModal();
-                this.$swal('Berhasil', 'Data berhasil ditambahkan', 'success');
+            if (cekNull && this.form.jumlah <= this.jumlahMaksKirim) {
+                const { data } = await axios.post(`/api/logistik/rw/pack_wilayah/store/${this.$route.params.id}`, this.form);
+                if (data.status) {
+                    this.$swal('Berhasil', data.message, 'success');
+                    this.closeModal();
+                } else {
+                    this.$swal('Error', data.message, 'error');
+                }
             } else {
                 this.$swal('Error', 'Data tidak boleh kosong', 'error')
             }
@@ -103,7 +108,6 @@ export default {
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                     <button type="button" class="btn btn-primary" @click="kirim">Simpan</button>
                 </div>
-
             </div>
         </div>
     </div>

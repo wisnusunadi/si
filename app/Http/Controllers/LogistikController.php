@@ -5586,12 +5586,15 @@ class LogistikController extends Controller
             DB::commit();
             return response()->json([
                 'message' =>  'Berhasil ditambahkan',
+                'status' => true
             ], 200);
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
             return response()->json([
                 'message' =>  'Transaksi Gagal',
+                'error' => $th->getMessage(),
+                'status' => false
             ], 500);
         }
 
