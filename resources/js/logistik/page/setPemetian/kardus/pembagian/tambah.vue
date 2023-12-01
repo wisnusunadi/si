@@ -85,7 +85,7 @@ export default {
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Form Pembagian Wilayah Produk</h5>
-                    <button type="button" class="close"  @click="closeModal">
+                    <button type="button" class="close" @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -101,15 +101,16 @@ export default {
                     <div class="form-group">
                         <label for="">Jumlah Pengiriman</label>
                         <input type="text" class="form-control" :class="{ 'is-invalid': form.jumlah > jumlahMaksKirim }"
-                            v-model="form.jumlah" placeholder="Jumlah Pengiriman" @keypress="numberOnly($event)" @keyup.enter="kirim">
+                            v-model="form.jumlah" placeholder="Jumlah Pengiriman" @keypress="numberOnly($event)"
+                            @keyup.enter="kirim">
                         <div id="validationServer04Feedback" class="invalid-feedback">
                             Jumlah pengiriman tidak boleh lebih dari {{ jumlahMaksKirim }}
                         </div>
                     </div>
                 </div>
                 <div class="spinner-border" role="status" v-else>
-      <span class="sr-only">Loading...</span>
-    </div>
+                    <span class="sr-only">Loading...</span>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                     <button type="button" class="btn btn-primary" @click="kirim">Simpan</button>
