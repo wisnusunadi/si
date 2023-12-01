@@ -18,7 +18,7 @@ export default {
             $('.modalPembagian').modal('hide');
             this.$nextTick(() => {
                 this.$emit('closeModal');
-                    this.$emit('refresh');
+                this.$emit('refresh');
 
             });
         },
@@ -32,7 +32,7 @@ export default {
                         }
                     });
                 });
-                
+
             } catch (error) {
                 console.log(error);
             }
@@ -48,7 +48,7 @@ export default {
                         }
                     });
                 });
-                
+
             } catch (error) {
                 console.log(error);
             }
@@ -75,33 +75,32 @@ export default {
 }
 </script>
 <template>
-    <div class="modal fade modalPembagian" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade modalPembagian" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
         <div class="modal-dialog modal-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Form Pembagian Wilayah Produk</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                      <label for="">Provinsi</label>
+                        <label for="">Provinsi</label>
                         <v-select :options="provinsi" v-model="form.provinsi" @input="getKota" />
                     </div>
                     <div class="form-group">
-                      <label for="">Kab. / Kota</label>
+                        <label for="">Kab. / Kota</label>
                         <v-select v-model="form.kota" :options="kota" />
                     </div>
                     <div class="form-group">
-                      <label for="">Jumlah Pengiriman</label>
-                        <input type="text" class="form-control"
-                        :class="{'is-invalid': form.jumlah > jumlahMaksKirim}"
-                        v-model="form.jumlah"
-                        placeholder="Jumlah Pengiriman" @keypress="numberOnly($event)">
-                              <div id="validationServer04Feedback" class="invalid-feedback">
-            Jumlah pengiriman tidak boleh lebih dari {{ jumlahMaksKirim  }}
-          </div>
+                        <label for="">Jumlah Pengiriman</label>
+                        <input type="text" class="form-control" :class="{ 'is-invalid': form.jumlah > jumlahMaksKirim }"
+                            v-model="form.jumlah" placeholder="Jumlah Pengiriman" @keypress="numberOnly($event)" @keyup.enter="kirim">
+                        <div id="validationServer04Feedback" class="invalid-feedback">
+                            Jumlah pengiriman tidak boleh lebih dari {{ jumlahMaksKirim }}
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
