@@ -6058,7 +6058,9 @@ class LogistikController extends Controller
 
     public function export_pack_wilayah_excel($id) {
         $waktu = Carbon::now();
-        return Excel::download(new ExportPackWilayah($id), 'ExportPackWilayah  ' . $waktu->toDateTimeString() . '.xlsx');
+
+        $wilayah = PackRwHead::find($id);
+        return Excel::download(new ExportPackWilayah($id), 'ExportPackWilayah  '.$wilayah->prov.'-'.$wilayah->kota.' ' . $waktu->toDateTimeString() . '.xlsx');
     }
     public function cetak_peti($id) {
         $loadView = $this->peti_reworks_detail($id);

@@ -1,6 +1,11 @@
 <table border="1">
     <thead>
         <tr>
+            <th colspan="9">
+                Wilayah : {{$wilayah->prov}} - {{ $wilayah->kota }}
+            </th>
+        </tr>
+        <tr>
             <th>No</th>
             <th>ANTROPOMETRI</th>
             <th>DIGIT PRO IDA NEW</th>
@@ -27,3 +32,4 @@
         </tr>
     </tbody>
     @endforeach
+</table>

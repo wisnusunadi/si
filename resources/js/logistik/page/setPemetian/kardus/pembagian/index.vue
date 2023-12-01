@@ -57,6 +57,13 @@ export default {
             } finally {
                 this.$store.dispatch('setLoading', false);
             }
+        },
+        exportExcel(id) {
+            try {
+                window.open(`/logistik/rw/pack_wilayah/export_excel/${id}`, '_blank');
+            } catch (error) {
+                console.log(error);
+            }
         }
     },
     computed: {
@@ -120,7 +127,7 @@ export default {
                                     class="btn btn-outline-primary btn-sm">
                                     <i class="fas fa-pencil-alt"></i>
                                     Set Kardus</router-link>
-                                <button class="btn btn-outline-success btn-sm" v-if="data.selesai !== 0">
+                                <button class="btn btn-outline-success btn-sm" v-if="data.selesai !== 0" @click="exportExcel(data.id)">
                                     <i class="fas fa-file-excel"></i>
                                     Export
                                 </button>
