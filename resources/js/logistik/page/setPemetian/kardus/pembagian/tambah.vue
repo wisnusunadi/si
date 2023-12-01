@@ -11,6 +11,7 @@ export default {
             },
             provinsi: [],
             kota: [],
+            loading: false,
         }
     },
     methods: {
@@ -24,6 +25,7 @@ export default {
         },
         getProvinsi() {
             try {
+                this.loading = true;
                 axios.get('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json').then((response) => {
                     this.provinsi = response.data.map((data) => {
                         return {
@@ -35,6 +37,8 @@ export default {
 
             } catch (error) {
                 console.log(error);
+            } finally {
+                this.loading = false;
             }
         },
         getKota() {
@@ -69,7 +73,7 @@ export default {
             }
         }
     },
-    mounted() {
+    created() {
         this.getProvinsi();
     }
 }
@@ -81,11 +85,11 @@ export default {
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Form Pembagian Wilayah Produk</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close"  @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" v-if="!loading">
                     <div class="form-group">
                         <label for="">Provinsi</label>
                         <v-select :options="provinsi" v-model="form.provinsi" @input="getKota" />
@@ -103,6 +107,9 @@ export default {
                         </div>
                     </div>
                 </div>
+                <div class="spinner-border" role="status" v-else>
+      <span class="sr-only">Loading...</span>
+    </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                     <button type="button" class="btn btn-primary" @click="kirim">Simpan</button>
