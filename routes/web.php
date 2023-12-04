@@ -102,6 +102,7 @@ Route::group(['prefix' => '/produksiReworks' , 'middleware' => 'auth'], function
     Route::get('/cetak_seri_fg_medium', [ProduksiController::class, 'cetak_seri_finish_goods_medium']);
     Route::get('/cetak_seri_fg_small', [ProduksiController::class, 'cetak_seri_finish_goods_small']);;
     Route::get('/cetakseriReworkAll', [ProduksiController::class, 'cetak_seri_rework_all']);
+    Route::get('/cetakseriReworkAllKardus', [ProduksiController::class, 'cetak_seri_rework_all_kardus']);
     Route::get('/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);
     Route::get('/cetakpackinglist', [ProduksiController::class, 'cetak_packing_list']);
     Route::get('/surat_permintaan/{id}', [ProduksiController::class, 'cetakSuratPermintaan']);
@@ -298,10 +299,13 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
 });
 
 
-Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'logistik'], function () {
     Route::group(['middleware' => ['divisi:log']], function () {
         Route::get('/dashboard', [App\Http\Controllers\LogistikController::class, 'dashboard'])->name('logistik.dashboard');
     });
+
+    Route::get('/rw/pack_wilayah/export_excel/{id}', [LogistikController::class, 'export_pack_wilayah_excel']);
+
     Route::group(['prefix' => '/so'], function () {
         // Route::group(['middleware' => ['divisi:log,dirut']], function () {
             Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
@@ -320,7 +324,6 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
             Route::get('/cancel/{id}', [App\Http\Controllers\LogistikController::class, 'cancel_so'])->name('logistik.so.cancel_po');
         });
     });
-
     Route::group(['prefix' => '/ekspedisi'], function () {
         Route::group(['middleware' => ['divisi:log,dirut']], function () {
             Route::view('/show', 'page.logistik.ekspedisi.show')->name('logistik.ekspedisi.show');

@@ -2,8 +2,13 @@
 export default {
     props: ['dataTable'],
     methods: {
-        setPemetian(id) {
-            this.$router.push(`/logistik/pengiriman/pemetian/${id}`)
+        setKardus(id) {
+            this.$router.push({
+                name: 'detailPembagian',
+                params: {
+                    id
+                }
+            });
         }
     },
 }
@@ -30,9 +35,9 @@ export default {
                     <td>{{ data.sudah }}</td>
                     <td>{{ data.belum }}</td>
                     <td>
-                        <button class="btn btn-outline-primary btn-sm" @click="setPemetian(data.id)">
+                        <button class="btn btn-outline-primary btn-sm" @click="setKardus(data.id)">
                             <i class="fas fa-pencil-alt"></i>
-                            Set Pemetian</button>
+                            Set Kardus</button>
                     </td>
                 </tr>
             </tbody>

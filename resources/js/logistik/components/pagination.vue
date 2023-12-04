@@ -77,7 +77,8 @@ export default {
         showPagesInformation() {
             if (this.filteredDalamProses.length > 0) {
                 let start = this.perPage * (this.currentPage - 1) + 1;
-                return `Showing ${start} to ${this.renderPaginate.length} of ${this.filteredDalamProses.length} entries`;
+                let end = this.renderPaginate.length
+                return `Showing ${start} to ${end} of ${this.filteredDalamProses.length} entries`;
             }
         },
     },
