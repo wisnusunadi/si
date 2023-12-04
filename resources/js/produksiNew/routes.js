@@ -3,6 +3,7 @@ import PermintaanReworks from './page/permintaan'
 import prosesSetReworks from './page/prosesSet'
 import prosesSetReworksDetail from './page/prosesSet/proses/detail'
 import perakitanBerlangsung from './Page/perakitanBerlangsung'
+import Transfer from './page/transfer'
 
 const routes = [
     {
@@ -24,6 +25,11 @@ const routes = [
         path: "/produksi/jadwal_perakitan",
         component: perakitanBerlangsung,
         name: "perakitanBerlangsung"
+    },
+    {
+        path: "/produksi/pengiriman",
+        component: Transfer,
+        name: "pengiriman"
     }
 ]
 
