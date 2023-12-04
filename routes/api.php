@@ -403,7 +403,7 @@ Route::prefix('/prd')->group(function () {
     Route::get('/testing', [ProduksiController::class, 'change_jadwal']);
 
     // kirim
-    Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit'])->middleware('jwt.verify');
+    Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit']);
     Route::get('/headerSeri/{id}', [ProduksiController::class, 'getHeaderSeri']);
     Route::get('/historySeri/{id}/{value}', [ProduksiController::class, 'historySeri']);
     Route::get('/riwayat_seri_rakit/{id}/{value}', [ProduksiController::class, 'get_detail_noseri_rakit']);
