@@ -3550,15 +3550,16 @@ class ProduksiController extends Controller
                 ->whereRaw("date_format(waktu_tf, '%Y-%m-%d %H:%i') = ?", [$dd])
                 // ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])
                 ->get();
-            return datatables()->of($data)
-                ->addColumn('checkbox', function ($d) {
-                    return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
-                })
-                ->addColumn('no_seri', function ($d) {
-                    return $d->noseri;
-                })
-                ->rawColumns(['checkbox'])
-                ->make(true);
+                return response()->json($data);
+            // return datatables()->of($data)
+            //     ->addColumn('checkbox', function ($d) {
+            //         return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
+            //     })
+            //     ->addColumn('no_seri', function ($d) {
+            //         return $d->noseri;
+            //     })
+            //     ->rawColumns(['checkbox'])
+            //     ->make(true);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,

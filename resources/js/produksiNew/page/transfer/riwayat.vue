@@ -21,24 +21,75 @@ export default {
             tanggalAwal: '',
             tanggalAkhir: '',
             filterProduk: '',
+            detailRiwayat: null,
+            showModalRiwayat: false,
         }
+    },
+    methods: {
+        openModalRiwayat(item) {
+            this.detailRiwayat = item
+            this.showModalRiwayat = true
+            this.$nextTick(() => {
+                $('.modalRiwayat').modal('show')
+            })
+        },
     },
     computed: {
         produkUnique() {
             const produk = this.dataTable.map(item => item.produk)
             return [...new Set(produk)]
         },
+        filterData() {
+            let filtered = this.dataTable
+            if (this.tanggalAwal && this.tanggalAkhir) {
+                const startDate = new Date(this.tanggalAwal)
+                startDate.setHours(0, 0, 0, 0)
+
+                const endDate = new Date(this.tanggalAkhir)
+                endDate.setHours(23, 59, 59, 999)
+
+                filtered = filtered.filter(item => {
+                    const date = new Date(item.waktu_tf)
+                    return date >= startDate && date <= endDate
+                })
+            }else if (this.tanggalAwal) {
+                const startDate = new Date(this.tanggalAwal)
+                startDate.setHours(0, 0, 0, 0)
+
+                filtered = filtered.filter(item => {
+                    const date = new Date(item.waktu_tf)
+                    return date >= startDate
+                })
+            } else if (this.tanggalAkhir) {
+                const endDate = new Date(this.tanggalAkhir)
+                endDate.setHours(23, 59, 59, 999)
+
+                filtered = filtered.filter(item => {
+                    const date = new Date(item.waktu_tf)
+                    return date <= endDate
+                })
+            }
+
+            if (this.filterProduk) {
+                filtered = filtered.filter(item => {
+                    return this.filterProduk.includes(item.produk)
+                })
+            }
+
+            return filtered
+        }
     }
 }
 </script>
 <template>
     <div>
+        <modalRiwayat :produk="detailRiwayat" v-if="showModalRiwayat" @close="showModalRiwayat = false"></modalRiwayat>
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" class="form-control" v-model="search" placeholder="Cari...">
             </div>
         </div>
-        <DataTable :headers="headers" :items="dataTable" :search="search">
+        <DataTable :headers="headers" :items="filterData" :search="search">
             <template #header.tanggal>
                 <span class="text-bold pr-2">Tanggal Pengiriman</span>
                 <span class="filter">
@@ -86,7 +137,7 @@ export default {
             </template>
             <template #item.aksi="{item}">
                 <div>   
-                    <button class="btn btn-outline-info btn-sm">
+                    <button class="btn btn-outline-info btn-sm" @click="openModalRiwayat(item)">
                         <i class="fas fa-info-circle"></i>
                         Detail
                     </button>

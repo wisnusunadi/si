@@ -884,12 +884,12 @@ return [
             'url'  => '/produksi/pengiriman',
             'auth' => [17],
         ],
-        [
-            'text'    => 'Riwayat Transfer',
-            'icon'    => 'fas fa-history',
-            'url'  => '/produksi/riwayat_transfer',
-            'auth' => [17],
-        ],
+        // [
+        //     'text'    => 'Riwayat Transfer',
+        //     'icon'    => 'fas fa-history',
+        //     'url'  => '/produksi/riwayat_transfer',
+        //     'auth' => [17],
+        // ],
         // [
         //     'text'    => 'Perakitan',
         //     'icon'    => 'fas fa-cogs',
