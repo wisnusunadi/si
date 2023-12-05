@@ -3530,6 +3530,78 @@ class ProduksiController extends Controller
         }
     }
 
+    function get_noseri_fg_riwayat_code($id)
+    {
+       $data = SystemLog::where([
+            'header'=>$id,
+            'tipe'=> 'Produksi',
+            'subjek'=> 'Cetak Seri Perakitan'
+            ]);
+
+        foreach($data->get() as $d){
+            $datas = json_decode($d->response);
+            $item[] = (object)[
+                'tgl' => $d->created_at,
+                'user' => $d->userid->Karyawan->nama,
+                'aktivitas' => $datas->ket
+            ];
+        }
+
+        $detail = json_decode($data->first()->response);
+        $obj = (object)[
+            'produk' => $detail->produk,
+            'noseri' => $detail->seri,
+            'no_bppb' => $detail->no_bppb,
+            'detail' => $item
+        ];
+
+        return response()->json($obj);
+    }
+
+    function store_noseri_fg_riwayat_code(Request $request)
+    {
+    DB::beginTransaction();
+       try {
+        //code...
+        $seri = JadwalRakitNoseri::select('jadwal_rakit_noseri.id','jadwal_rakit_noseri.noseri','jadwal_perakitan.id as jadwal_id','jadwal_perakitan.no_bppb','produk.nama')
+       ->leftJoin('jadwal_perakitan','jadwal_perakitan.id','=','jadwal_rakit_noseri.jadwal_id')
+       ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','jadwal_perakitan.produk_id')
+       ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
+       ->whereIN('jadwal_rakit_noseri.id',$request->data)->get();
+
+        foreach($seri as $s){
+            $data = (object)[
+                'seri' => $s->noseri,
+                'no_bppb' => $s->no_bppb,
+                'produk' => $s->nama,
+                'ket' => $request->alasan,
+               ];
+                SystemLog::create([
+                    'subjek' => 'Cetak Seri Perakitan',
+                    'header' => $s->id,
+                    'tipe' => 'Produksi',
+                    'response' => json_encode($data),
+                    'user_id' => auth()->user()->id,
+                ]);
+        }
+        DB::commit();
+        return response()->json([
+            'status' => 200,
+            'message' =>  'Berhasil Ditambahkan',
+
+        ], 200);
+       } catch (\Throwable $th) {
+        //throw $th;
+        DB::rollBack();
+        return response()->json([
+            'status' => 200,
+            'message' =>  'Gagal Ditambahkan',
+        ], 500);
+       }
+
+
+
+    }
     function get_noseri_fg_cetak(Request $request)
     {
         try {
