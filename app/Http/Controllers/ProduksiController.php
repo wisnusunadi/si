@@ -4450,35 +4450,37 @@ class ProduksiController extends Controller
                 ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
                 ->get()->sortByDesc('waktu_tf');
 
-            return datatables()->of($d)
-                ->addColumn('day_kirim', function ($d) {
-                    if (isset($d->waktu_tf)) {
-                        return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->isoFormat('dddd, D MMMM Y');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('day_kirim_filter', function ($d) {
-                    if (isset($d->waktu_tf)) {
-                        return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('Y-m-d');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('time_kirim', function ($d) {
-                    if (isset($d->waktu_tf)) {
-                        return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('H:i');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('bppb', function ($d) {
-                    return $d->no_bppb == null ? '-' : $d->no_bppb;
-                })
-                ->addColumn('jml', function ($d) {
-                    return $d->jml . ' Unit';
-                })
-                ->make(true);
+            return response()->json(array_values($d->toArray()));
+
+            // return datatables()->of($d)
+            //     ->addColumn('day_kirim', function ($d) {
+            //         if (isset($d->waktu_tf)) {
+            //             return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->isoFormat('dddd, D MMMM Y');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('day_kirim_filter', function ($d) {
+            //         if (isset($d->waktu_tf)) {
+            //             return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('Y-m-d');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('time_kirim', function ($d) {
+            //         if (isset($d->waktu_tf)) {
+            //             return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('H:i');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('bppb', function ($d) {
+            //         return $d->no_bppb == null ? '-' : $d->no_bppb;
+            //     })
+            //     ->addColumn('jml', function ($d) {
+            //         return $d->jml . ' Unit';
+            //     })
+            //     ->make(true);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
