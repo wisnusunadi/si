@@ -32,7 +32,6 @@ const routes = [
         name: "pengiriman"
     }
 ]
-
 const router = new VueRouter({
     mode: "history",
     routes

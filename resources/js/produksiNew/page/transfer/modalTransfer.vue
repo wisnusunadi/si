@@ -29,7 +29,6 @@ export default {
             $('.modalTransfer').modal('hide')
             this.$nextTick(() => {
                 this.$emit('closeModal')
-                this.$emit('refresh')
             })
         },
         async getDetailProduk() {
@@ -77,6 +76,8 @@ export default {
                 .then((response) => {
                     this.$swal('Berhasil', 'Berhasil Transfer', 'success')
                     this.closeModal()
+                    this.$emit('refresh')
+
                 })
                 .catch((error) => {
                     console.log(error)
