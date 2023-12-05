@@ -70,7 +70,7 @@ export default {
                 })
             }
 
-            if (this.filterProduk) {
+            if (this.filterProduk.length > 0) {
                 filtered = filtered.filter(item => {
                     return this.filterProduk.includes(item.produk)
                 })

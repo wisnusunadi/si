@@ -3596,6 +3596,7 @@ class ProduksiController extends Controller
         return response()->json([
             'status' => 200,
             'message' =>  'Gagal Ditambahkan',
+            'error' => $th->getMessage(),
         ], 500);
        }
 

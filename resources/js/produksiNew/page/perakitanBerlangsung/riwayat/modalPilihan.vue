@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 export default {
     props: ['data'],
     data() {
@@ -9,19 +10,38 @@ export default {
     methods: {
         closeModal() {
             $('.modalPilihan').modal('hide');
+            this.alasan = '';
             this.$nextTick(() => {
                 this.$emit('closeModal');
             });
-        },
+        }, 
         small() {
             let cetak = JSON.stringify(this.data);
             window.open(`/produksiReworks/cetak_seri_fg_small?data=${cetak}`, '_blank')
-            this.alasan = '';
+            this.postAlasan();
         },
         medium() {
             let cetak = JSON.stringify(this.data);
             window.open(`/produksiReworks/cetak_seri_fg_medium?data=${cetak}`, '_blank')
-            this.alasan = '';
+            this.postAlasan();
+        },
+        postAlasan() {
+            let form = {
+                alasan: this.alasan,
+                data: this.data
+            }
+
+            try {
+                axios.post('/api/prd/fg/riwayat_code', form, {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                    }
+                })
+            } catch (error) {
+                console.log(error);
+            } finally {
+                // this.closeModal();
+            }
         }
     },
 }

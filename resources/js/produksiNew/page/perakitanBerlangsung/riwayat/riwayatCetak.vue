@@ -1,5 +1,6 @@
 <script>
 import DataTable from '../../../components/DataTable.vue';
+import axios from 'axios';
 export default {
     props: ['riwayat'],
     components: {
@@ -11,7 +12,7 @@ export default {
             headers: [
                 { text: 'No.', value: 'no' },
                 { text: 'Tanggal Cetak', value: 'tgl_cetak' },
-                { text: 'Operator', value: 'operator' },
+                { text: 'Operator', value: 'user' },
                 { text: 'Aktivitas', value: 'aktivitas' },
             ],
             dataRiwayatCetak: [
@@ -30,7 +31,24 @@ export default {
                 this.$emit('closeModal');
             })
         },
-    }
+        async getRiwayatCetak() {
+            try {
+                const { data } = await axios.get(`/api/prd/fg/riwayat_code/${this.riwayat.id}`)
+                this.dataRiwayatCetak = data.detail.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        tgl_cetak: this.dateTimeFormat(item.tgl),
+                        ...item
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    },
+    created() {
+        this.getRiwayatCetak();
+    },
 }
 </script>
 <template>
@@ -71,19 +89,7 @@ export default {
                         </div>
                     </div>
 
-                    <DataTable :headers="headers" :items="dataRiwayatCetak" :search="search">
-                        <template #item.no = "{item, index}">
-                            <div>
-                                {{ index + 1 }}
-                            </div>
-                        </template>
-
-                        <template #item.tgl_cetak = "{item}">
-                            <div>
-                                {{ dateTimeFormat(item.tgl_cetak) }}
-                            </div>
-                        </template>
-                    </DataTable>
+                    <DataTable :headers="headers" :items="dataRiwayatCetak" :search="search" />
                 </div>
             </div>
         </div>
