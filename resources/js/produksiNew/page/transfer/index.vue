@@ -5,7 +5,6 @@ import moment from 'moment'
 import pagination from '../../components/pagination.vue'
 import transfer from './modalTransfer.vue'
 import sisaProduk from './sisaProduk.vue'
-import { nextTick } from 'vue'
 export default {
     components: {
         Header,
@@ -147,14 +146,10 @@ export default {
 </script>
 <template>
     <div>
-        <transfer v-if="showModalTransfer" :produk="produkSelected"
-        @closeModal="showModalTransfer = false"
-        @refresh="getData"
-        />
-        <sisa-produk v-if="showModalSisaProduk" :produk="produkSelected"
-        @closeModal="showModalSisaProduk = false"
-        @refresh="getData"
-        />
+        <transfer v-if="showModalTransfer" :produk="produkSelected" @closeModal="showModalTransfer = false"
+            @refresh="getData" />
+        <sisa-produk v-if="showModalSisaProduk" :produk="produkSelected" @closeModal="showModalSisaProduk = false"
+            @refresh="getData" />
         <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="card">
             <div class="card-body">
@@ -188,15 +183,15 @@ export default {
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <label for="jenis_penjualan">Tanggal Awal</label>
-                                                            <input type="date" class="form-control" v-model="tanggalMasukAwal"
-                                                                :max="tanggalMasukAkhir">
+                                                            <input type="date" class="form-control"
+                                                                v-model="tanggalMasukAwal" :max="tanggalMasukAkhir">
                                                         </div>
                                                     </div>
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <label for="jenis_penjualan">Tanggal Akhir</label>
-                                                            <input type="date" class="form-control" v-model="tanggalMasukAkhir"
-                                                                :min="tanggalMasukAwal">
+                                                            <input type="date" class="form-control"
+                                                                v-model="tanggalMasukAkhir" :min="tanggalMasukAwal">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -218,15 +213,15 @@ export default {
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <label for="jenis_penjualan">Tanggal Awal</label>
-                                                            <input type="date" class="form-control" v-model="tanggalKeluarAwal"
-                                                                :max="tanggalKeluarAkhir">
+                                                            <input type="date" class="form-control"
+                                                                v-model="tanggalKeluarAwal" :max="tanggalKeluarAkhir">
                                                         </div>
                                                     </div>
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <label for="jenis_penjualan">Tanggal Akhir</label>
-                                                            <input type="date" class="form-control" v-model="tanggalKeluarAkhir"
-                                                                :min="tanggalKeluarAwal">
+                                                            <input type="date" class="form-control"
+                                                                v-model="tanggalKeluarAkhir" :min="tanggalKeluarAwal">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -258,11 +253,11 @@ export default {
                             </td>
                             <td>
                                 <div v-if="data.jml_rakit != 0">
-                                    <button class="btn btn-outline-success btn-sm" @click="openModalTransfer(data)"><i class="far fa-edit"></i>
+                                    <button class="btn btn-outline-success btn-sm" @click="openModalTransfer(data)"><i
+                                            class="far fa-edit"></i>
                                         Transfer</button>
-                                    <button class="btn btn-outline-danger btn-sm"
-                                        @click="openModalSisaProduk(data)"
-                                    ><i class="far fa-edit"></i> Transfer
+                                    <button class="btn btn-outline-danger btn-sm" @click="openModalSisaProduk(data)"><i
+                                            class="far fa-edit"></i> Transfer
                                         Sisa Produk</button>
 
                                 </div>

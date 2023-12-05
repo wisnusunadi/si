@@ -39,7 +39,7 @@ export default {
 
                 const { data } = await axios.post('/api/tfp/closeTransfer', {
                     jadwal_id: this.produk.id,
-                    keterangan: this.keterangan,
+                    keterangan_transfer: this.keterangan,
                 })
             } catch (error) {
                 console.log(error)

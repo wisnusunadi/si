@@ -3258,7 +3258,6 @@ class ProduksiController extends Controller
             });
 
             return response()->json($data);
-
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
