@@ -16,17 +16,21 @@ export default {
                 align: 'text-left'
             }],
             search: '',
+            loading: false,
         }
     },
     methods: {
         async getRiwayat() {
             try {
+                this.loading = true
                 const date = moment(this.produk.waktu_tf).format('YYYY-MM-DD')
                 const dateTime = `${date} ${this.produk.waktu}`
                 const { data } = await axios.get(`/api/prd/historySeri/${this.produk.produk_id}/${dateTime}`)
                 this.dataRiwayat = data
             } catch (error) {
                 console.log(error)
+            } finally {
+                this.loading = false
             }
         },
         close() {
@@ -36,7 +40,7 @@ export default {
             })
         },
     },
-    mounted() {
+    created() {
         this.getRiwayat()
     },
 }
@@ -54,9 +58,15 @@ export default {
                 </div>
                 <div class="modal-body">
                     <div class="d-flex flex-row-reverse bd-highlight">
-      <div class="p-2 bd-highlight"><input type="text" v-model="search" class="form-control" placeholder="Cari..."></div>
-    </div>
-                    <DataTable :headers="headers" :items="dataRiwayat" :search="search" />
+                        <div class="p-2 bd-highlight"><input type="text" v-model="search" class="form-control"
+                                placeholder="Cari..."></div>
+                    </div>
+                    <DataTable :headers="headers" :items="dataRiwayat" :search="search" v-if="!loading" />
+                    <div class="d-flex justify-content-center" v-if="loading">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
