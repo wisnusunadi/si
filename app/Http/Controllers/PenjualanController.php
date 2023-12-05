@@ -8456,6 +8456,169 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
         ], 200);
     }
 
+    public function get_laporans()
+    {
+        $filter = 'spa';
+        $data = Pesanan::addSelect([
+            'spa' => function ($q) {
+                $q->selectRaw('coalesce(count(spa.id),0)')
+                    ->from('spa')
+                    ->whereColumn('spa.pesanan_id', 'pesanan.id');
+            },
+            'spb' => function ($q) {
+                $q->selectRaw('coalesce(count(spb.id),0)')
+                    ->from('spb')
+                    ->whereColumn('spb.pesanan_id', 'pesanan.id');
+            },
+            'ekat' => function ($q) {
+                $q->selectRaw('coalesce(count(ekatalog.id),0)')
+                    ->from('ekatalog')
+                    ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+            }
+        ])
+        ->havingRaw('ekat = 0 AND spb = 0')
+        ->wherenotnull('no_po');
+
+        $noseri = NoseriBarangJadi::
+        select('detail_pesanan.id as id','detail_pesanan.penjualan_produk_id','noseri')
+        ->leftJoin('t_gbj_noseri','t_gbj_noseri.noseri_id','=','noseri_barang_jadi.id')
+        ->leftJoin('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
+        ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','t_gbj_detail.detail_pesanan_produk_id')
+        ->leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
+        ->whereIN('detail_pesanan.pesanan_id',$data->pluck('id')->toArray())->get();
+
+
+
+
+       $detail_pesanan_part = DetailPesananPart::
+        select('detail_pesanan_part.id','detail_pesanan_part.pesanan_id','detail_pesanan_part.m_sparepart_id','m_sparepart.nama',
+        DB::raw('(SELECT COALESCE((SUM(dp.jumlah) * dp.harga) + dp.ongkir, 0)
+        FROM detail_pesanan_part AS dp
+        WHERE dp.pesanan_id = detail_pesanan_part.pesanan_id
+        AND dp.m_sparepart_id = detail_pesanan_part.m_sparepart_id) AS harga'),
+        DB::raw('(SELECT COALESCE(SUM(dp.jumlah), 0)
+        FROM detail_pesanan_part AS dp
+        WHERE dp.pesanan_id = detail_pesanan_part.pesanan_id
+        AND dp.m_sparepart_id = detail_pesanan_part.m_sparepart_id) AS jumlah'),
+        )
+        ->leftJoin('m_sparepart','m_sparepart.id','=','detail_pesanan_part.m_sparepart_id')
+        ->whereIN('detail_pesanan_part.pesanan_id',$data->pluck('id')->toArray())->get();
+
+
+
+       $detail_pesanan = DetailPesanan::
+        select('detail_pesanan.id','detail_pesanan.pesanan_id','detail_pesanan.penjualan_produk_id','penjualan_produk.nama as nama','penjualan_produk.nama_alias as nama_alias',
+        DB::raw('(SELECT COALESCE((SUM(dp.jumlah) * dp.harga) + dp.ongkir, 0)
+        FROM detail_pesanan AS dp
+        WHERE dp.pesanan_id = detail_pesanan.pesanan_id
+        AND dp.penjualan_produk_id = detail_pesanan.penjualan_produk_id) AS harga'),
+        DB::raw('(SELECT COALESCE(SUM(dp.jumlah), 0)
+        FROM detail_pesanan AS dp
+        WHERE dp.pesanan_id = detail_pesanan.pesanan_id
+        AND dp.penjualan_produk_id = detail_pesanan.penjualan_produk_id) AS jumlah')
+        )
+        ->leftJoin('penjualan_produk','penjualan_produk.id','=','detail_pesanan.penjualan_produk_id')
+        ->whereIN('detail_pesanan.pesanan_id',$data->pluck('id')->toArray())->get();
+
+
+        $groupedDataSeri = collect($noseri)->groupBy('id');
+        $groupedDataPrd = collect($detail_pesanan)->groupBy('pesanan_id');
+        $groupedDataPart = collect($detail_pesanan_part)->groupBy('pesanan_id');
+
+        // Restructure the data as desired
+        $noseri_group = $groupedDataSeri->map(function ($items, $key) {
+            $uniqueItems = $items->unique('noseri')->values()->all();
+            return [
+                'id' => $key,
+                'data' => $uniqueItems,
+            ];
+        })->values()->all();
+        return response()->json($noseri_group);
+
+
+        $detail_pesanan_part_group = $groupedDataPart->map(function ($items, $key) {
+            $uniqueItems = $items->unique('m_sparepart_id')->values()->all();
+            return [
+                'pesanan_id' => $key,
+                'data' => $uniqueItems,
+            ];
+        })->values()->all();
+
+        $detail_pesanan_group = $groupedDataPrd->map(function ($items, $key) {
+            $uniqueItems = $items->unique('penjualan_produk_id')->values()->all();
+            return [
+                'pesanan_id' => $key,
+                'data' => $uniqueItems,
+            ];
+        })->values()->all();
+
+
+
+
+
+        foreach($data->get() as $d){
+            $pesanan[] = array(
+                'id' => $d->id,
+
+            );
+        }
+
+        $produkByPesananId = [];
+        $partByPesananId = [];
+
+        // Group $produk array items by pesanan_id
+        foreach ($detail_pesanan_part_group as $item) {
+            $pesanansId = $item['pesanan_id'];
+
+            // Check if the pesanan_id exists in $produkByPesananId array
+            if (!array_key_exists($pesanansId, $partByPesananId)) {
+                $partByPesananId[$pesanansId] = [];
+            }
+
+            // Add the produk item to the corresponding pesanan_id
+            $partByPesananId[$pesanansId][] = $item;
+        }
+
+        foreach ($pesanan as &$pesananItem) {
+            $pesananId = $pesananItem['id'];
+
+            // Check if pesanan_id exists in $produkByPesananId array
+            if (array_key_exists($pesananId, $partByPesananId)) {
+                $pesananItem['part'] = $partByPesananId[$pesananId];
+            } else {
+                $pesananItem['part'] = [];
+            }
+        }
+
+//----------------------------------------
+
+        // Group $produk array items by pesanan_id
+        foreach ($detail_pesanan_group as $item) {
+            $pesananId = $item['pesanan_id'];
+
+            // Check if the pesanan_id exists in $produkByPesananId array
+            if (!array_key_exists($pesananId, $produkByPesananId)) {
+                $produkByPesananId[$pesananId] = [];
+            }
+
+            // Add the produk item to the corresponding pesanan_id
+            $produkByPesananId[$pesananId][] = $item;
+        }
+
+        // Update $pesanan array with produk items based on pesanan_id
+        foreach ($pesanan as &$pesananItem) {
+            $pesananId = $pesananItem['id'];
+
+            // Check if pesanan_id exists in $produkByPesananId array
+            if (array_key_exists($pesananId, $produkByPesananId)) {
+                $pesananItem['produk'] = $produkByPesananId[$pesananId];
+            } else {
+                $pesananItem['produk'] = [];
+            }
+        }
+
+        return response()->json($pesanan);
+    }
     public function cetak_surat_perintah($id)
     {
         $pesanan = Pesanan::find($id);
