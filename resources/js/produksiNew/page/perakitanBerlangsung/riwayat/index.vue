@@ -45,6 +45,7 @@ export default {
             cetakSeriSingle: [],
             cetakSeriType: 'all',
             riwayatSelected: null,
+            showModalRiwayat: false,
         }
     },
     methods: {
@@ -83,6 +84,7 @@ export default {
         },
         selectRiwayat(item) {
             this.riwayatSelected = item
+            this.showModalRiwayat = true
             this.$nextTick(() => {
                 $('.modalRiwayat').modal('show');
             });
@@ -111,7 +113,7 @@ export default {
 <template>
     <div>
         <modalPilihan :data="cetakSeriType == 'single' ? cetakSeriSingle : noSeriSelected" v-if="cetakSeriSingle.length > 0 || noSeriSelected.length > 0" />
-        <riwayatCetak :riwayat="riwayatSelected" v-if="riwayatSelected" @closeModal="riwayatCetak = null" />
+        <riwayatCetak :riwayat="riwayatSelected" v-if="showModalRiwayat" @closeModal="showModalRiwayat = false" />
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
                 <button class="btn btn-outline-primary btn-sm" v-if="noSeriSelected.length > 0" @click="cetakBanyakSeri">
