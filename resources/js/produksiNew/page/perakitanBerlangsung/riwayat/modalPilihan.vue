@@ -19,11 +19,13 @@ export default {
             let cetak = JSON.stringify(this.data);
             window.open(`/produksiReworks/cetak_seri_fg_small?data=${cetak}`, '_blank')
             this.postAlasan();
+            this.closeModal();
         },
         medium() {
             let cetak = JSON.stringify(this.data);
             window.open(`/produksiReworks/cetak_seri_fg_medium?data=${cetak}`, '_blank')
             this.postAlasan();
+            this.closeModal();
         },
         postAlasan() {
             let form = {
