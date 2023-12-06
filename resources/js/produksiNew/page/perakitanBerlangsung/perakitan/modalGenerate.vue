@@ -136,7 +136,15 @@ export default {
                 $('.modalGenerate').modal('hide')
                 $('.modalPilihan').modal('show')
             })
-        }
+        },
+        closeAllModal() {
+            $('.modalGenerate').modal('hide')
+            $('.modalPilihan').modal('hide')
+            this.$nextTick(() => {
+                this.$emit('refresh')
+                this.$emit('closeModal')
+            })
+        },
     },
     computed: {
         jumlahRakit() {
@@ -164,7 +172,7 @@ export default {
 </script>
 <template>
     <div>
-        <modalPilihan :data="idCetakHasilGenerate" v-if="showModalCetak" @closeModal="closeModalCetak"></modalPilihan>
+        <modalPilihan :data="idCetakHasilGenerate" v-if="showModalCetak" @closeModal="closeModalCetak" @closeAllModal="closeAllModal"></modalPilihan>
         <div class="modal fade modalGenerate" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
             role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
