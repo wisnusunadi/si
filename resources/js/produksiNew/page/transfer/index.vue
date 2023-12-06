@@ -1,16 +1,14 @@
 <script>
-import axios from 'axios'
-import Header from '../../components/header.vue'
+import axios from 'axios';
 import moment from 'moment'
-import pagination from '../../components/pagination.vue'
-import transfer from './modalTransfer.vue'
-import sisaProduk from './sisaProduk.vue'
+import Header from '../../components/header.vue'
+import transfer from './transfer.vue';
+import riwayatTransfer from './riwayat.vue';
 export default {
     components: {
         Header,
-        pagination,
         transfer,
-        sisaProduk,
+        riwayatTransfer
     },
     data() {
         return {
@@ -26,21 +24,14 @@ export default {
                 }
             ],
             pengiriman: [],
-            search: '',
-            renderPaginate: [],
-            tanggalMasukAwal: '',
-            tanggalMasukAkhir: '',
-            tanggalKeluarAwal: '',
-            tanggalKeluarAkhir: '',
-            produkSelected: null,
-            showModalTransfer: false,
-            showModalSisaProduk: false,
+            riwayat: [],
         }
     },
     methods: {
         async getData() {
-            const { data } = await axios.get('/api/prd/kirim')
-            this.pengiriman = data.map(item => {
+            const { data: pengiriman } = await axios.get('/api/prd/kirim')
+            const { data: riwayat } = await axios.get('/api/prd/history/pengiriman')
+            this.pengiriman = pengiriman.map(item => {
                 return {
                     ...item,
                     periode: this.monthFormat(item.tanggal_mulai),
@@ -48,230 +39,50 @@ export default {
                     tgl_selesai: this.dateFormat(item.tanggal_selesai),
                 }
             })
+            this.riwayat = riwayat.map(item => {
+                return {
+                    ...item,
+                    tanggal: this.dateFormat(item.waktu_tf),
+                    waktu: this.getTime(item.waktu_tf),
+                }
+            })
         },
         monthFormat(date) {
             return moment(date).lang('id').format('MMMM')
         },
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
+        getTime(date) {
+            return moment(date).format('HH:mm')
         },
-        openModalTransfer(item) {
-            this.produkSelected = JSON.parse(JSON.stringify(item))
-            this.showModalTransfer = true
-            this.$nextTick(() => {
-                $('.modalTransfer').modal('show')
-            })
-        },
-        openModalSisaProduk(item) {
-            this.produkSelected = JSON.parse(JSON.stringify(item))
-            this.showModalSisaProduk = true
-            this.$nextTick(() => {
-                $('.modalSisaProduk').modal('show')
-            })
-        },
-    },
-    computed: {
-        filterData() {
-            let filtered = this.pengiriman
-
-            if (this.tanggalMasukAwal && this.tanggalMasukAkhir) {
-                const startDate = new Date(this.tanggalMasukAwal)
-                startDate.setHours(0, 0, 0, 0)
-
-                const endDate = new Date(this.tanggalMasukAkhir)
-                endDate.setHours(23, 59, 59, 999)
-
-                filtered = filtered.filter(item => {
-                    const date = new Date(item.tanggal_mulai)
-                    return date >= startDate && date <= endDate
-                })
-            } else if (this.tanggalMasukAwal) {
-                const startDate = new Date(this.tanggalMasukAwal)
-                startDate.setHours(0, 0, 0, 0)
-
-                filtered = filtered.filter(item => {
-                    const date = new Date(item.tanggal_mulai)
-                    return date >= startDate
-                })
-            } else if (this.tanggalMasukAkhir) {
-                const endDate = new Date(this.tanggalMasukAkhir)
-                endDate.setHours(23, 59, 59, 999)
-
-                filtered = filtered.filter(item => {
-                    const date = new Date(item.tanggal_mulai)
-                    return date <= endDate
-                })
-            }
-
-            if (this.tanggalKeluarAwal && this.tanggalKeluarAkhir) {
-                const startDate = new Date(this.tanggalKeluarAwal)
-                startDate.setHours(0, 0, 0, 0)
-
-                const endDate = new Date(this.tanggalKeluarAkhir)
-                endDate.setHours(23, 59, 59, 999)
-
-                filtered = filtered.filter(item => {
-                    const date = new Date(item.tanggal_selesai)
-                    return date >= startDate && date <= endDate
-                })
-            } else if (this.tanggalKeluarAwal) {
-                const startDate = new Date(this.tanggalKeluarAwal)
-                startDate.setHours(0, 0, 0, 0)
-
-                filtered = filtered.filter(item => {
-                    const date = new Date(item.tanggal_selesai)
-                    return date >= startDate
-                })
-            } else if (this.tanggalKeluarAkhir) {
-                const endDate = new Date(this.tanggalKeluarAkhir)
-                endDate.setHours(23, 59, 59, 999)
-
-                filtered = filtered.filter(item => {
-                    const date = new Date(item.tanggal_selesai)
-                    return date <= endDate
-                })
-            }
-
-            return filtered.filter(item => {
-                return Object.keys(item).some(key => {
-                    return String(item[key]).toLowerCase().includes(this.search.toLowerCase())
-                })
-            })
-        }
     },
     mounted() {
         this.getData()
     }
+
 }
 </script>
 <template>
     <div>
-        <transfer v-if="showModalTransfer" :produk="produkSelected" @closeModal="showModalTransfer = false"
-            @refresh="getData" />
-        <sisa-produk v-if="showModalSisaProduk" :produk="produkSelected" @closeModal="showModalSisaProduk = false"
-            @refresh="getData" />
         <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="card">
             <div class="card-body">
-                <div class="d-flex flex-row-reverse bd-highlight">
-                    <div class="p-2 bd-highlight">
-                        <input type="text" class="form-control" v-model="search" placeholder="Cari...">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
+                            type="button" role="tab" aria-controls="pills-home" aria-selected="true">Transfer</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile"
+                            type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <transfer :dataTable="pengiriman" @refresh="getData" />
+                    </div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        <riwayatTransfer :dataTable="riwayat" />
                     </div>
                 </div>
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th rowspan="2">Periode</th>
-                            <th colspan="2" class="text-center">Tanggal</th>
-                            <th rowspan="2">Nomor BPPB</th>
-                            <th rowspan="2">Produk</th>
-                            <th rowspan="2">Jumlah</th>
-                            <th rowspan="2">Progress</th>
-                            <th rowspan="2">Aksi</th>
-                        </tr>
-                        <tr class="text-center">
-                            <th>
-                                <span class="text-bold pr-2">Tanggal Masuk</span>
-                                <span class="filter">
-                                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-filter"></i>
-                                    </a>
-                                    <form id="filter_ekat">
-                                        <div class="dropdown-menu">
-                                            <div class="px-3 py-3">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="form-group">
-                                                            <label for="jenis_penjualan">Tanggal Awal</label>
-                                                            <input type="date" class="form-control"
-                                                                v-model="tanggalMasukAwal" :max="tanggalMasukAkhir">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="form-group">
-                                                            <label for="jenis_penjualan">Tanggal Akhir</label>
-                                                            <input type="date" class="form-control"
-                                                                v-model="tanggalMasukAkhir" :min="tanggalMasukAwal">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </span>
-                            </th>
-                            <th>
-                                <span class="text-bold pr-2">Tanggal Keluar</span>
-                                <span class="filter">
-                                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-filter"></i>
-                                    </a>
-                                    <form id="filter_ekat">
-                                        <div class="dropdown-menu">
-                                            <div class="px-3 py-3">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="form-group">
-                                                            <label for="jenis_penjualan">Tanggal Awal</label>
-                                                            <input type="date" class="form-control"
-                                                                v-model="tanggalKeluarAwal" :max="tanggalKeluarAkhir">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="form-group">
-                                                            <label for="jenis_penjualan">Tanggal Akhir</label>
-                                                            <input type="date" class="form-control"
-                                                                v-model="tanggalKeluarAkhir" :min="tanggalKeluarAwal">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </span>
-
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody v-if="renderPaginate.length > 0">
-                        <tr v-for="(data, idx) in renderPaginate" :key="idx">
-                            <td>{{ data.periode }}</td>
-                            <td class="text-center">{{ data.tgl_mulai }}</td>
-                            <td class="text-center">{{ data.tgl_selesai }}</td>
-                            <td>{{ data.no_bppb }}</td>
-                            <td>{{ data.nama_produk }}</td>
-                            <td>{{ data.jumlah }} Unit
-                                <br><span class="badge badge-dark">
-                                    Terisi: {{ data.jml_all }} Unit
-                                </span>
-                            </td>
-                            <td>
-                                <span class="badge badge-success">Terkirim: {{ data.jml_kirim }} Unit {{ data.perc_kirim ??
-                                    0.00 }}%</span>
-                                <br><span class="badge badge-dark">Rakit: {{ data.jml_rakit }} Unit {{ data.perc_rakit ??
-                                    0.00 }}%</span>
-                            </td>
-                            <td>
-                                <div v-if="data.jml_rakit != 0">
-                                    <button class="btn btn-outline-success btn-sm" @click="openModalTransfer(data)"><i
-                                            class="far fa-edit"></i>
-                                        Transfer</button>
-                                    <button class="btn btn-outline-danger btn-sm" @click="openModalSisaProduk(data)"><i
-                                            class="far fa-edit"></i> Transfer
-                                        Sisa Produk</button>
-
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody v-else>
-                        <tr>
-                            <td colspan="100%" class="text-center">Tidak ada data</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <pagination :filteredDalamProses="filterData" @updateFilteredDalamProses="updateFilteredDalamProses" />
-
             </div>
         </div>
     </div>

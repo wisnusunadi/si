@@ -421,7 +421,7 @@ Route::prefix('/prd')->group(function () {
         Route::post('/rakit/h', [ProduksiController::class, 'h_rakit']);
         Route::post('/unit/h', [ProduksiController::class, 'h_unit']);
         Route::get('/header/{id}', [ProduksiController::class, 'header_his_rakit']);
-        Route::post('/pengiriman', [ProduksiController::class, 'h_pengiriman'])->middleware('jwt.verify');
+        Route::get('/pengiriman', [ProduksiController::class, 'h_pengiriman']);
     });
 });
 

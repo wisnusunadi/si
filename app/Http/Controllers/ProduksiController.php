@@ -3550,15 +3550,16 @@ class ProduksiController extends Controller
                 ->whereRaw("date_format(waktu_tf, '%Y-%m-%d %H:%i') = ?", [$dd])
                 // ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])
                 ->get();
-            return datatables()->of($data)
-                ->addColumn('checkbox', function ($d) {
-                    return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
-                })
-                ->addColumn('no_seri', function ($d) {
-                    return $d->noseri;
-                })
-                ->rawColumns(['checkbox'])
-                ->make(true);
+                return response()->json($data);
+            // return datatables()->of($data)
+            //     ->addColumn('checkbox', function ($d) {
+            //         return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
+            //     })
+            //     ->addColumn('no_seri', function ($d) {
+            //         return $d->noseri;
+            //     })
+            //     ->rawColumns(['checkbox'])
+            //     ->make(true);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -4450,35 +4451,37 @@ class ProduksiController extends Controller
                 ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
                 ->get()->sortByDesc('waktu_tf');
 
-            return datatables()->of($d)
-                ->addColumn('day_kirim', function ($d) {
-                    if (isset($d->waktu_tf)) {
-                        return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->isoFormat('dddd, D MMMM Y');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('day_kirim_filter', function ($d) {
-                    if (isset($d->waktu_tf)) {
-                        return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('Y-m-d');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('time_kirim', function ($d) {
-                    if (isset($d->waktu_tf)) {
-                        return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('H:i');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('bppb', function ($d) {
-                    return $d->no_bppb == null ? '-' : $d->no_bppb;
-                })
-                ->addColumn('jml', function ($d) {
-                    return $d->jml . ' Unit';
-                })
-                ->make(true);
+            return response()->json(array_values($d->toArray()));
+
+            // return datatables()->of($d)
+            //     ->addColumn('day_kirim', function ($d) {
+            //         if (isset($d->waktu_tf)) {
+            //             return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->isoFormat('dddd, D MMMM Y');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('day_kirim_filter', function ($d) {
+            //         if (isset($d->waktu_tf)) {
+            //             return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('Y-m-d');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('time_kirim', function ($d) {
+            //         if (isset($d->waktu_tf)) {
+            //             return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('H:i');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('bppb', function ($d) {
+            //         return $d->no_bppb == null ? '-' : $d->no_bppb;
+            //     })
+            //     ->addColumn('jml', function ($d) {
+            //         return $d->jml . ' Unit';
+            //     })
+            //     ->make(true);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
