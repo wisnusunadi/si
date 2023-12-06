@@ -1,7 +1,7 @@
 <script>
 import axios from 'axios';
 import DataTable from '../../../components/DataTable.vue';
-import modalPilihan from '../riwayat/modalPilihan.vue';
+import modalPilihan from './modalPilihan.vue';
 export default {
     props: ['dataGenerate'],
     components: {
