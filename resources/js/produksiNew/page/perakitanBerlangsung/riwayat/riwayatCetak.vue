@@ -15,13 +15,8 @@ export default {
                 { text: 'Operator', value: 'user' },
                 { text: 'Aktivitas', value: 'aktivitas' },
             ],
-            dataRiwayatCetak: [
-                {
-                    tgl_cetak: '2023-11-23 08:43:06',
-                    operator: 'Operator 1',
-                    aktivitas: 'Cetak Nomor Seri'
-                }
-            ]
+            dataRiwayatCetak: [],
+            loading: false,
         }
     },
     methods: {
@@ -33,6 +28,7 @@ export default {
         },
         async getRiwayatCetak() {
             try {
+                this.loading = true;
                 const { data } = await axios.get(`/api/prd/fg/riwayat_code/${this.riwayat.id}`)
                 this.dataRiwayatCetak = data.detail.map((item, index) => {
                     return {
@@ -43,6 +39,8 @@ export default {
                 })
             } catch (error) {
                 console.log(error)
+            } finally {
+                this.loading = false;
             }
         }
     },
@@ -89,7 +87,12 @@ export default {
                         </div>
                     </div>
 
-                    <DataTable :headers="headers" :items="dataRiwayatCetak" :search="search" />
+                    <DataTable :headers="headers" :items="dataRiwayatCetak" :search="search" v-if="!loading" />
+                    <div class="text-center" v-if="loading">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
