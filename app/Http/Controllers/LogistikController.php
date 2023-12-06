@@ -5603,7 +5603,7 @@ class LogistikController extends Controller
 
     public function pack_reworks_store(Request $request,$urutan){
 
-        // DB::beginTransaction();
+        DB::beginTransaction();
         try {
             //code...
         $obj =  json_decode(json_encode($request->all()), FALSE);
@@ -5615,6 +5615,7 @@ class LogistikController extends Controller
         $cekJumlahAvailable = PackRw::where('pack_rw_head_id',$urutan)->count();
         $tersedia = $getPack->jumlah - $cekJumlahAvailable;
 
+      //  dd($seriValues);
         if(count($seriValues) == count($cekSeri)){
             if($cekPeti > 0){
                 $getUsed = PackRw::whereIn('noseri',$seriValues)->pluck('noseri')->toArray();
