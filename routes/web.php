@@ -168,7 +168,6 @@ Route::group(['prefix' => 'penjualan' , 'middleware' => 'auth'], function () {
         Route::get('/dashboard', [App\Http\Controllers\PenjualanController::class, 'dashboard'])->name('penjualan.dashboard');
     });
 
-
     Route::group(['prefix' => '/produk'], function () {
         Route::group(['middleware' => ['divisi:jual']], function () {
             Route::view('/show', 'page.penjualan.produk.show')->name('penjualan.produk.show');
