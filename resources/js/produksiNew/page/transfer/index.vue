@@ -29,23 +29,30 @@ export default {
     },
     methods: {
         async getData() {
-            const { data: pengiriman } = await axios.get('/api/prd/kirim')
-            const { data: riwayat } = await axios.get('/api/prd/history/pengiriman')
-            this.pengiriman = pengiriman.map(item => {
-                return {
-                    ...item,
-                    periode: this.monthFormat(item.tanggal_mulai),
-                    tgl_mulai: this.dateFormat(item.tanggal_mulai),
-                    tgl_selesai: this.dateFormat(item.tanggal_selesai),
-                }
-            })
-            this.riwayat = riwayat.map(item => {
-                return {
-                    ...item,
-                    tanggal: this.dateFormat(item.waktu_tf),
-                    waktu: this.getTime(item.waktu_tf),
-                }
-            })
+            try {
+                this.$store.dispatch('setLoading', true)
+                const { data: pengiriman } = await axios.get('/api/prd/kirim')
+                const { data: riwayat } = await axios.get('/api/prd/history/pengiriman')
+                this.pengiriman = pengiriman.map(item => {
+                    return {
+                        ...item,
+                        periode: this.monthFormat(item.tanggal_mulai),
+                        tgl_mulai: this.dateFormat(item.tanggal_mulai),
+                        tgl_selesai: this.dateFormat(item.tanggal_selesai),
+                    }
+                })
+                this.riwayat = riwayat.map(item => {
+                    return {
+                        ...item,
+                        tanggal: this.dateFormat(item.waktu_tf),
+                        waktu: this.getTime(item.waktu_tf),
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.dispatch('setLoading', false)
+            }
         },
         monthFormat(date) {
             return moment(date).lang('id').format('MMMM')
@@ -64,7 +71,7 @@ export default {
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="card">
-            <div class="card-body">
+            <div class="card-body" v-if="!$store.state.loading">
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
@@ -81,6 +88,13 @@ export default {
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                         <riwayatTransfer :dataTable="riwayat" />
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" v-else>
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
                     </div>
                 </div>
             </div>
