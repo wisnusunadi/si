@@ -5767,7 +5767,7 @@ class LogistikController extends Controller
             foreach($data as $d){
                 $obj[] = array(
                     'id' => $d->noseri_id,
-                    'tgl_buat' => $d->created_at->format('Y-m-d'),
+                    'tgl_buat' => $d->created_at,
                     'noseri' => $d->noseri,
                     'packer' =>  $d->user_id,
                 );
