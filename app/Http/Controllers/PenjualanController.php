@@ -8458,9 +8458,8 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
 
     public function get_laporans()
     {
-        $filter = 'spa';
-        //GET PESANAN
-        $data = Pesanan::addSelect([
+          //GET PESANAN
+          $data = Pesanan::addSelect([
             'spa' => function ($q) {
                 $q->selectRaw('coalesce(count(spa.id),0)')
                     ->from('spa')
@@ -8479,7 +8478,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
         ])
         // ->havingRaw('ekat = 0 AND spb = 0')
         ->wherenotnull('no_po');
-        $pesananIds = $data->pluck('id')->toArray();
+        $pesananIds = $data->pluck('pesanan.id')->toArray();
 
 $data_dpp = DetailPesananProduk::leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
 ->whereIN('detail_pesanan.pesanan_id',$pesananIds);
@@ -8492,6 +8491,8 @@ $spb = Spb::select('spb.pesanan_id as id', 'customer.nama')
         ->selectRaw('"-" AS alamat_instansi')
         ->selectRaw('"-" AS satuan')
         ->selectRaw('"-" AS no_urut')
+        ->selectRaw('"-" AS tgl_buat')
+        ->selectRaw('"-" AS tgl_kontrak')
         ->leftJoin('customer', 'customer.id', '=', 'spb.customer_id')
         ->whereIn('spb.pesanan_id', $pesananIds)->get();
 
@@ -8502,10 +8503,12 @@ select('spa.pesanan_id as id', 'customer.nama')
 ->selectRaw('"-" AS alamat_instansi')
 ->selectRaw('"-" AS satuan')
 ->selectRaw('"-" AS no_urut')
+->selectRaw('"-" AS tgl_buat')
+->selectRaw('"-" AS tgl_kontrak')
 ->leftJoin('customer', 'customer.id', '=', 'spa.customer_id')
 ->whereIn('spa.pesanan_id', $pesananIds)->get();
 
-$ekatalog = Ekatalog::select('ekatalog.pesanan_id as id','ekatalog.no_urut as no_urut','customer.nama' ,'ekatalog.no_paket','ekatalog.instansi','ekatalog.alamat as alamat_instansi','ekatalog.satuan')
+$ekatalog = Ekatalog::select('ekatalog.pesanan_id as id','ekatalog.tgl_buat','ekatalog.tgl_kontrak','ekatalog.no_urut as no_urut','customer.nama' ,'ekatalog.no_paket','ekatalog.instansi','ekatalog.alamat as alamat_instansi','ekatalog.satuan')
         ->leftJoin('customer', 'customer.id', '=', 'ekatalog.customer_id')
         ->whereIn('ekatalog.pesanan_id', $pesananIds)->get();
 
@@ -8791,6 +8794,8 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
                 $pesanan[$key]['alamat_instansi'] = $infoByID[$pesananID]->alamat_instansi;
                 $pesanan[$key]['satuan'] =  $infoByID[$pesananID]->satuan;
                 $pesanan[$key]['no_urut'] =  $infoByID[$pesananID]->no_urut;
+                $pesanan[$key]['tgl_buat'] =  $infoByID[$pesananID]->tgl_buat;
+                $pesanan[$key]['tgl_kontrak'] =  $infoByID[$pesananID]->tgl_kontrak;
             } else {
                 // If no matching ID is found, set 'info' as an empty array or handle accordingly
                 $pesanan[$key]['nama'] = '-';
@@ -8799,14 +8804,11 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
                 $pesanan[$key]['alamat_instansi'] = '-';
                 $pesanan[$key]['satuan'] = '-';
                 $pesanan[$key]['no_urut'] = '-';
+                $pesanan[$key]['tgl_buat'] = '-';
+                $pesanan[$key]['tgl_kontrak'] = '-';
             }
         }
-
-
         return response()->json($pesanan);
-
-
-
     }
     public function cetak_surat_perintah($id)
     {
