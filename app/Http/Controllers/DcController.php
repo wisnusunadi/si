@@ -114,6 +114,7 @@ class DcController extends Controller
             ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
             ->orderBy('noseri_coo.id', 'DESC')
             ->where(['produk.coo' => 1, 'penjualan_produk.status' => 'ekat'])
+            ->whereYear('noseri_coo.created_at',2023)
             ->get();
 
         return datatables()->of($data)
