@@ -390,10 +390,11 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
         //GET SPAREPART
        $detail_pesanan_part = DetailPesananPart::
         select('detail_pesanan_part.id','detail_pesanan_part.pesanan_id','detail_pesanan_part.m_sparepart_id','m_sparepart.nama',
-        DB::raw('(SELECT COALESCE((SUM(dp.jumlah) * dp.harga) + dp.ongkir, 0)
-        FROM detail_pesanan_part AS dp
-        WHERE dp.pesanan_id = detail_pesanan_part.pesanan_id
-        AND dp.m_sparepart_id = detail_pesanan_part.m_sparepart_id) AS harga'),
+        'detail_pesanan_part.harga',
+        // DB::raw('(SELECT COALESCE((SUM(dp.jumlah) * dp.harga) + dp.ongkir, 0)
+        // FROM detail_pesanan_part AS dp
+        // WHERE dp.pesanan_id = detail_pesanan_part.pesanan_id
+        // AND dp.m_sparepart_id = detail_pesanan_part.m_sparepart_id) AS harga'),
         DB::raw('(SELECT COALESCE(SUM(dp.jumlah), 0)
         FROM detail_pesanan_part AS dp
         WHERE dp.pesanan_id = detail_pesanan_part.pesanan_id
@@ -410,10 +411,11 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
        //GET DETAIL PESANAN DSB
        $detail_pesanan_dsb = DetailPesananDsb::
         select('detail_pesanan_dsb.id','detail_pesanan_dsb.pesanan_id','detail_pesanan_dsb.penjualan_produk_id','penjualan_produk.nama as nama','penjualan_produk.nama_alias as nama_alias',
-        DB::raw('(SELECT COALESCE((SUM(dp.jumlah) * dp.harga) + dp.ongkir, 0)
-        FROM detail_pesanan_dsb AS dp
-        WHERE dp.pesanan_id = detail_pesanan_dsb.pesanan_id
-        AND dp.penjualan_produk_id = detail_pesanan_dsb.penjualan_produk_id) AS harga'),
+        'detail_pesanan_dsb.harga',
+        // DB::raw('(SELECT COALESCE((SUM(dp.jumlah) * dp.harga) + dp.ongkir, 0)
+        // FROM detail_pesanan_dsb AS dp
+        // WHERE dp.pesanan_id = detail_pesanan_dsb.pesanan_id
+        // AND dp.penjualan_produk_id = detail_pesanan_dsb.penjualan_produk_id) AS harga'),
         DB::raw('(SELECT COALESCE(SUM(dp.jumlah), 0)
         FROM detail_pesanan_dsb AS dp
         WHERE dp.pesanan_id = detail_pesanan_dsb.pesanan_id
@@ -430,10 +432,11 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
        //GET DETAIL PESANAN
        $detail_pesanan = DetailPesanan::
         select('detail_pesanan.id','detail_pesanan.pesanan_id','detail_pesanan.penjualan_produk_id','penjualan_produk.nama as nama','penjualan_produk.nama_alias as nama_alias',
-        DB::raw('(SELECT COALESCE((SUM(dp.jumlah) * dp.harga) + dp.ongkir, 0)
-        FROM detail_pesanan AS dp
-        WHERE dp.pesanan_id = detail_pesanan.pesanan_id
-        AND dp.penjualan_produk_id = detail_pesanan.penjualan_produk_id) AS harga'),
+        'detail_pesanan.harga',
+        // DB::raw('(SELECT COALESCE((SUM(dp.jumlah) * dp.harga) + dp.ongkir, 0)
+        // FROM detail_pesanan AS dp
+        // WHERE dp.pesanan_id = detail_pesanan.pesanan_id
+        // AND dp.penjualan_produk_id = detail_pesanan.penjualan_produk_id) AS harga'),
         DB::raw('(SELECT COALESCE(SUM(dp.jumlah), 0)
         FROM detail_pesanan AS dp
         WHERE dp.pesanan_id = detail_pesanan.pesanan_id
