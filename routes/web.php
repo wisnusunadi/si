@@ -384,7 +384,7 @@ Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [App\Http\Controllers\DireksiController::class, 'dashboard'])->name('direksi.dashboard');
 });
 
-Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'dc'], function () {
     Route::group(['middleware' => ['divisi:dc']], function () {
         Route::get('/dashboard',   [App\Http\Controllers\DcController::class, 'dashboard'])->name('dc.dashboard');
 
@@ -404,6 +404,7 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => '/coo'], function () {
+        Route::get('/rework/pdf', [App\Http\Controllers\DcController::class, 'pdf_coo_semua_rework']);
         Route::group(['middleware' => ['divisi:dc,dirut']], function () {
             Route::view('/show', 'page.dc.coo.show')->name('dc.coo.show');
             Route::get('/pdf/so/{id}/{value}/{jenis}/{stamp}', [App\Http\Controllers\DcController::class, 'pdf_semua_so_coo'])->name('dc.coo.semua.so.pdf');
