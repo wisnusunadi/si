@@ -12,10 +12,12 @@ use App\Models\NoseriCoo;
 use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriDetailPesanan;
 use App\Models\NoseriTGbj;
+use App\Models\PackRw;
 use Illuminate\Http\Request;
 use PDF;
 use App\Models\Pesanan;
 use App\Models\Produk;
+use App\Models\SeriDetailRw;
 use App\Models\SystemLog;
 use App\Models\User;
 use Illuminate\Support\Carbon;
@@ -30,6 +32,41 @@ class DcController extends Controller
         $pdf = PDF::loadView('page.dc.coo.pdf_semua', ['data' => $data])->setPaper('A4');
         return $pdf->stream('');
     }
+
+    public function pdf_coo_semua_rework()
+    {
+        $data = PackRw::select('pack_rw.noseri','seri_detail_rw.packer','seri_detail_rw.created_at','seri_detail_rw.isi')
+        ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'pack_rw.noseri_id')
+        ->where('pack_rw_head_id',9)->get();
+
+
+        foreach($data as $d)
+        {
+            $o = json_decode($d->isi);
+            $seri[] = array(
+                'seri' => $d->noseri,
+                'packer' => $d->packer,
+                'tgl' => Carbon::createFromFormat('Y-m-d H:i:s', $d->created_at)->format('d M Y'),
+                'item' => $o
+            );
+        }
+
+        $collection = collect($seri);
+
+        $collection = $collection->map(function ($item) {
+            $item['item'] = collect($item['item'])->sortBy('produk')->values()->all();
+            return $item;
+        });
+
+        $data_urut_produk = $collection->toArray();
+
+
+     return response()->json($data_urut_produk);
+
+     $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_rw')->setPaper('A4');
+        return $pdf->stream('');
+    }
+
     public function pdf_semua_coo($id, $value, $jenis, $stamp)
     {
         $data = NoseriCoo::whereHas('NoseriDetailLogistik', function ($q) use ($id) {
