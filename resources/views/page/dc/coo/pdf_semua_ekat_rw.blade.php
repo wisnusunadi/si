@@ -1,9 +1,8 @@
 <head>
     <style>
-        .page-break {
-            page-break-after: always;
-        }
-
+     .page-break {
+        page-break-after: always;
+    }
         /* body {
             margin-left: 90px;
             margin-right: 90px;
@@ -86,8 +85,9 @@
             height: 40px;
         }
 
-        .trheightitem {
-            height: 28px;
+        .back {
+            background-image: url("{{ public_path('assets/image/background_coo.jpg') }}");
+            background-size: 100%;
         }
 
         .back {
@@ -105,8 +105,21 @@
         }
     </style>
 </head>
-    <body class="back">
 
+
+    <body class="back">
+        <?php
+        $jumlah = 0;
+        $len = count($data);
+        ?>
+        @foreach ($data as $d)
+            <?php
+            if ($jumlah == $len - 1) {
+                echo '<div>';
+            } else {
+                echo ' <div class="page-break">';
+            }
+            ?>
 
     <div class="header">
         <table border="0" style="border-collapse: collapse; text-align:right;width:625px">
@@ -114,7 +127,7 @@
                 <tr>
                     <td style="width:52.3%;"></td>
                     <td class="veramd align-center" style="width:47.7%;">
-                        <h3>22185 / SKA / XII / SPA / 2023</h3>
+                        <h3>{{$d['no_coo']}} / SKA / XII / SPA / 2023</h3>
                     </td>
                 </tr>
             </tbody>
@@ -184,7 +197,7 @@
                             <td class="nospace trheightitem">Item Produk</td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                Digit-Pro Ida (TD22239A09554)
+                                Digit-Pro Ida ({{ $d['item'][0]->noseri}})
                             </td>
                         </tr>
                         <tr class="vera bold">
@@ -192,7 +205,7 @@
                             <td class="nospace trheightitem"></td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                Digit-Pro Baby (TD22239A09554)
+                                Digit-Pro Baby ({{ $d['item'][1]->noseri}})
                             </td>
                         </tr>
                         <tr class="vera bold">
@@ -200,7 +213,7 @@
                             <td class="nospace trheightitem"></td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                MTB-2MTR (TD22239A09554)
+                                MTB-2MTR ({{ $d['item'][2]->noseri}})
                             </td>
                         </tr>
                         <tr class="vera bold">
@@ -208,7 +221,7 @@
                             <td class="nospace trheightitem"></td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                MTR-Baby002 (TD22239A09554)
+                                MTR-Baby002 ({{ $d['item'][3]->noseri}})
                             </td>
                         </tr>
                         <tr class="vera bold">
@@ -216,7 +229,7 @@
                             <td class="nospace trheightitem"></td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                PTB-2in1 (TD22239A09554)
+                                PTB-2in1 ({{ $d['item'][4]->noseri}})
                             </td>
                         </tr>
                     </tbody>
@@ -239,7 +252,7 @@
                     <tr>
                         <td class="wb">
                             <b>
-                                Provinsi DI Yogyakarta <br> (Kab. Gunung Kidul)
+                                 {{ $d['kepada_prov']}} <br> ({{ $d['kepada_kab']}})
                             </b>
                         </td>
                     </tr>
@@ -355,4 +368,9 @@
         </div>
     </div>
     </div>
-</body>
+    </div>
+
+    <?php $jumlah++; ?>
+    @endforeach
+
+    </body>

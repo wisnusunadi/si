@@ -38,7 +38,7 @@ class DcController extends Controller
         $data = PackRw::select('pack_rw_head.prov','pack_rw_head.kota','pack_rw.noseri','seri_detail_rw.packer','seri_detail_rw.created_at','seri_detail_rw.isi')
         ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'pack_rw.noseri_id')
         ->leftjoin('pack_rw_head', 'pack_rw_head.id', '=', 'pack_rw.pack_rw_head_id')
-        ->where('pack_rw_head_id',9)->get();
+        ->where('pack_rw_head_id',13)->get();
 
         $no = 1;
         foreach($data as $d)
@@ -62,12 +62,13 @@ class DcController extends Controller
             return $item;
         });
 
-        $data_urut_produk = $collection->toArray();
+       $data_urut_produk = $collection->toArray();
 
 
     //  return response()->json($data_urut_produk);
 
-     $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data])->setPaper('A4');
+
+     $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk])->setPaper('A4');
         return $pdf->stream('');
     }
 
