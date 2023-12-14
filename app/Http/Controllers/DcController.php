@@ -35,15 +35,19 @@ class DcController extends Controller
 
     public function pdf_coo_semua_rework()
     {
-        $data = PackRw::select('pack_rw.noseri','seri_detail_rw.packer','seri_detail_rw.created_at','seri_detail_rw.isi')
+        $data = PackRw::select('pack_rw_head.prov','pack_rw_head.kota','pack_rw.noseri','seri_detail_rw.packer','seri_detail_rw.created_at','seri_detail_rw.isi')
         ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'pack_rw.noseri_id')
+        ->leftjoin('pack_rw_head', 'pack_rw_head.id', '=', 'pack_rw.pack_rw_head_id')
         ->where('pack_rw_head_id',9)->get();
 
-
+        $no = 1;
         foreach($data as $d)
         {
             $o = json_decode($d->isi);
             $seri[] = array(
+                'no_coo' => 'KIT10-'.str_pad($no++, 5, '0', STR_PAD_LEFT),
+                'kepada_prov' => 'Provinsi '.$d->prov,
+                'kepada_kab' => $d->kota,
                 'seri' => $d->noseri,
                 'packer' => $d->packer,
                 'tgl' => Carbon::createFromFormat('Y-m-d H:i:s', $d->created_at)->format('d M Y'),
