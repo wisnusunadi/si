@@ -114,6 +114,7 @@ class DcController extends Controller
             ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
             ->orderBy('noseri_coo.id', 'DESC')
             ->where(['produk.coo' => 1, 'penjualan_produk.status' => 'ekat'])
+            ->whereYear('noseri_coo.created_at',2023)
             ->get();
 
         return datatables()->of($data)
@@ -908,9 +909,23 @@ class DcController extends Controller
         // $data = Logistik::whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($id) {
         //     $q->where('Pesanan.id', $id);
         // })->get();
-        $data = DetailLogistik::whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($id) {
+        $data = DetailLogistik::
+       addSelect([
+            'cek_coo' => function ($q) {
+                $q->selectRaw('coalesce(count(noseri_coo.id),0)')
+                    ->from('noseri_coo')
+                    ->leftjoin('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
+                    ->whereColumn('noseri_logistik.detail_logistik_id', 'detail_logistik.id');
+            },
+            'cek_tf' => function ($q) {
+                $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->whereColumn('noseri_logistik.detail_logistik_id', 'detail_logistik.id');
+            },
+            ])
+        ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($id) {
             $q->where('pesanan.id', $id);
-        })->get();
+        })->with(['Logistik','DetailPesananProduk.GudangBarangJadi.Produk','DetailPesananProduk.DetailPesanan.Pesanan'])->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl_surat', function ($data) {
@@ -931,27 +946,27 @@ class DcController extends Controller
                 }
             })
             ->addColumn('bulan', function ($data) {
-                $bulan =  Carbon::createFromFormat('Y-m-d', $data->logistik->tgl_kirim)->format('m');
+                $bulan =  Carbon::createFromFormat('Y-m-d', $data->Logistik->tgl_kirim)->format('m');
                 $romawi = $this->toRomawi($bulan);
                 return $romawi;
             })
             ->addColumn('status', function ($data) {
-                $value = array();
-                $get = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->get();
-                foreach ($get as $d) {
-                    $value[] = $d->id;
-                }
-                $coo = NoseriCoo::whereIN('noseri_logistik_Id', $value)->get()->count();
+                // $value = array();
+                // $get = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->get();
+                // foreach ($get as $d) {
+                //     $value[] = $d->id;
+                // }
+                // $coo = NoseriCoo::whereIN('noseri_logistik_Id', $value)->get()->count();
 
-                if ($data->DetailPesananProduk->GudangBarangJadi->Produk->coo == '0') {
-                    return '<span class="badge red-text">Bukan Produk Utama</span>';
+                 if ($data->DetailPesananProduk->GudangBarangJadi->Produk->coo == '0') {
+                   return '<span class="badge red-text">Bukan Produk Utama</span>';
                 } else {
-                    if ($coo == 0) {
+                    if ($data->cek_coo == 0) {
                         return '<span class="badge red-text">Belum Tersedia</span>';
                     } else {
                         return ' <span class="badge green-text">Tersedia</span>';
                     }
-                }
+                 }
             })
             ->addColumn('button', function ($data) {
 
@@ -962,21 +977,21 @@ class DcController extends Controller
                     $x = 'spa';
                 }
 
-                $value = array();
-                $get = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->get();
-                foreach ($get as $d) {
-                    $value[] = $d->id;
-                }
-                $coo = NoseriCoo::whereIN('noseri_logistik_Id', $value)->get()->count();
-                $count_trf = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
+                // $value = array();
+                // $get = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->get();
+                // foreach ($get as $d) {
+                //     $value[] = $d->id;
+                // }
+                // $coo = NoseriCoo::whereIN('noseri_logistik_Id', $value)->get()->count();
+                // $count_trf = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
 
-                if ($count_trf == $coo) {
+                if ($data->cek_tf == $data->cek_coo) {
                     $c = 0;
                 } else {
                     $c = 1;
                 }
 
-                if ($coo == 0) {
+                if ($data->cek_coo == 0) {
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="noserishow dropdown-item" type="button" data-id="' . $data->id . '" data-count="' . $c . '">

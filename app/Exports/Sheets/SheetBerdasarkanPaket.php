@@ -4,9 +4,16 @@ namespace App\Exports\Sheets;
 
 use App\Models\Pesanan;
 use App\Models\DetailPesanan;
+use App\Models\DetailPesananDsb;
 use App\Models\DetailPesananPart;
+use App\Models\DetailPesananProduk;
 use App\Models\DetailRencanaPenjualan;
+use App\Models\Ekatalog;
+use App\Models\Logistik;
+use App\Models\NoseriBarangJadi;
 use App\Models\RencanaPenjualan;
+use App\Models\Spa;
+use App\Models\Spb;
 use App\Models\TblSiswa;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithTitle;
@@ -131,7 +138,7 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
 
         $sheet->getStyle('A:W')->getAlignment()
             ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
-        $sheet->getStyle('A:H')->getAlignment()
+        $sheet->getStyle('A:D')->getAlignment()
             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('L:M')->getAlignment()
             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -139,220 +146,795 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
 
     public function view(): View
     {
-        $distributor = $this->distributor;
-        $jenis_laporan = $this->jenis_laporan;
-        $seri = $this->seri;
-        $x = explode(',', $this->jenis_penjualan);
         $tanggal_awal = $this->tgl_awal;
         $tanggal_akhir = $this->tgl_akhir;
+        $jenis_laporan = $this->jenis_laporan;
+        $seri = $this->seri;
+        $distributor = $this->distributor;
+        $x = explode(',', $this->jenis_penjualan);
 
-        if ($distributor == 'semua') {
+         if ($distributor == 'semua') {
             if ($x == ['ekatalog', 'spa', 'spb']) {
-                $data = Pesanan::addSelect([
-                    'spa' => function ($q) {
-                        $q->selectRaw('coalesce(count(spa.id),0)')
-                            ->from('spa')
-                            ->whereColumn('spa.pesanan_id', 'pesanan.id');
-                    },
-                    'spb' => function ($q) {
-                        $q->selectRaw('coalesce(count(spb.id),0)')
-                            ->from('spb')
-                            ->whereColumn('spb.pesanan_id', 'pesanan.id');
-                    },
-                    'ekat' => function ($q) {
-                        $q->selectRaw('coalesce(count(ekatalog.id),0)')
-                            ->from('ekatalog')
-                            ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
-                    }
-                ])
-                ->wherenotnull('no_po')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->get();
+            //GET PESANAN
+            $data = Pesanan::addSelect([
+                'spa' => function ($q) {
+                    $q->selectRaw('coalesce(count(spa.id),0)')
+                        ->from('spa')
+                        ->whereColumn('spa.pesanan_id', 'pesanan.id');
+                },
+                'spb' => function ($q) {
+                    $q->selectRaw('coalesce(count(spb.id),0)')
+                        ->from('spb')
+                        ->whereColumn('spb.pesanan_id', 'pesanan.id');
+                },
+                'ekat' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id),0)')
+                        ->from('ekatalog')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                }
+            ])
+            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+            ->wherenotnull('no_po');
+
             } else if ($x == ['ekatalog', 'spa']) {
-                $data = Pesanan::addSelect([
-                    'spa' => function ($q) {
-                        $q->selectRaw('coalesce(count(spa.id),0)')
-                            ->from('spa')
-                            ->whereColumn('spa.pesanan_id', 'pesanan.id');
-                    },
-                    'spb' => function ($q) {
-                        $q->selectRaw('coalesce(count(spb.id),0)')
-                            ->from('spb')
-                            ->whereColumn('spb.pesanan_id', 'pesanan.id');
-                    },
-                    'ekat' => function ($q) {
-                        $q->selectRaw('coalesce(count(ekatalog.id),0)')
-                            ->from('ekatalog')
-                            ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
-                    }
-                ])
-                ->wherenotnull('no_po')
-                ->havingRaw('spb = 0 ')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->get();
+                 //GET PESANAN
+            $data = Pesanan::addSelect([
+                'spa' => function ($q) {
+                    $q->selectRaw('coalesce(count(spa.id),0)')
+                        ->from('spa')
+                        ->whereColumn('spa.pesanan_id', 'pesanan.id');
+                },
+                'spb' => function ($q) {
+                    $q->selectRaw('coalesce(count(spb.id),0)')
+                        ->from('spb')
+                        ->whereColumn('spb.pesanan_id', 'pesanan.id');
+                },
+                'ekat' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id),0)')
+                        ->from('ekatalog')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                }
+            ])
+            ->havingRaw('spb = 0')
+            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+            ->wherenotnull('no_po');
+
             } else if ($x == ['ekatalog', 'spb']) {
-                $data = Pesanan::addSelect([
-                    'spa' => function ($q) {
-                        $q->selectRaw('coalesce(count(spa.id),0)')
-                            ->from('spa')
-                            ->whereColumn('spa.pesanan_id', 'pesanan.id');
-                    },
-                    'spb' => function ($q) {
-                        $q->selectRaw('coalesce(count(spb.id),0)')
-                            ->from('spb')
-                            ->whereColumn('spb.pesanan_id', 'pesanan.id');
-                    },
-                    'ekat' => function ($q) {
-                        $q->selectRaw('coalesce(count(ekatalog.id),0)')
-                            ->from('ekatalog')
-                            ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
-                    }
-                ])
-                ->wherenotnull('no_po')
-                ->havingRaw('spa = 0 ')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->get();
+                 //GET PESANAN
+            $data = Pesanan::addSelect([
+                'spa' => function ($q) {
+                    $q->selectRaw('coalesce(count(spa.id),0)')
+                        ->from('spa')
+                        ->whereColumn('spa.pesanan_id', 'pesanan.id');
+                },
+                'spb' => function ($q) {
+                    $q->selectRaw('coalesce(count(spb.id),0)')
+                        ->from('spb')
+                        ->whereColumn('spb.pesanan_id', 'pesanan.id');
+                },
+                'ekat' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id),0)')
+                        ->from('ekatalog')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                }
+            ])
+            ->havingRaw('spa = 0')
+            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+            ->wherenotnull('no_po');
+
             } else if ($x == ['spa', 'spb']) {
-                $data = Pesanan::addSelect([
-                    'spa' => function ($q) {
-                        $q->selectRaw('coalesce(count(spa.id),0)')
-                            ->from('spa')
-                            ->whereColumn('spa.pesanan_id', 'pesanan.id');
-                    },
-                    'spb' => function ($q) {
-                        $q->selectRaw('coalesce(count(spb.id),0)')
-                            ->from('spb')
-                            ->whereColumn('spb.pesanan_id', 'pesanan.id');
-                    },
-                    'ekat' => function ($q) {
-                        $q->selectRaw('coalesce(count(ekatalog.id),0)')
-                            ->from('ekatalog')
-                            ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
-                    }
-                ])
-                ->wherenotnull('no_po')
-                ->havingRaw('ekat = 0')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->get();
+                 //GET PESANAN
+            $data = Pesanan::addSelect([
+                'spa' => function ($q) {
+                    $q->selectRaw('coalesce(count(spa.id),0)')
+                        ->from('spa')
+                        ->whereColumn('spa.pesanan_id', 'pesanan.id');
+                },
+                'spb' => function ($q) {
+                    $q->selectRaw('coalesce(count(spb.id),0)')
+                        ->from('spb')
+                        ->whereColumn('spb.pesanan_id', 'pesanan.id');
+                },
+                'ekat' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id),0)')
+                        ->from('ekatalog')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                }
+            ])
+            ->havingRaw('ekat = 0')
+            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+            ->wherenotnull('no_po');
+
             } else if ($this->jenis_penjualan == 'ekatalog') {
-                $data = Pesanan::addSelect([
-                    'spa' => function ($q) {
-                        $q->selectRaw('coalesce(count(spa.id),0)')
-                            ->from('spa')
-                            ->whereColumn('spa.pesanan_id', 'pesanan.id');
-                    },
-                    'spb' => function ($q) {
-                        $q->selectRaw('coalesce(count(spb.id),0)')
-                            ->from('spb')
-                            ->whereColumn('spb.pesanan_id', 'pesanan.id');
-                    },
-                    'ekat' => function ($q) {
-                        $q->selectRaw('coalesce(count(ekatalog.id),0)')
-                            ->from('ekatalog')
-                            ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
-                    }
-                ])
-                ->havingRaw('ekat > 0')
-                ->wherenotnull('no_po')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->get();
+                 //GET PESANAN
+            $data = Pesanan::addSelect([
+                'spa' => function ($q) {
+                    $q->selectRaw('coalesce(count(spa.id),0)')
+                        ->from('spa')
+                        ->whereColumn('spa.pesanan_id', 'pesanan.id');
+                },
+                'spb' => function ($q) {
+                    $q->selectRaw('coalesce(count(spb.id),0)')
+                        ->from('spb')
+                        ->whereColumn('spb.pesanan_id', 'pesanan.id');
+                },
+                'ekat' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id),0)')
+                        ->from('ekatalog')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                }
+            ])
+            ->havingRaw('ekat > 0')
+            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+            ->wherenotnull('no_po');
+
             } else if ($this->jenis_penjualan == 'spa') {
-                $data = Pesanan::addSelect([
-                    'spa' => function ($q) {
-                        $q->selectRaw('coalesce(count(spa.id),0)')
-                            ->from('spa')
-                            ->whereColumn('spa.pesanan_id', 'pesanan.id');
-                    },
-                    'spb' => function ($q) {
-                        $q->selectRaw('coalesce(count(spb.id),0)')
-                            ->from('spb')
-                            ->whereColumn('spb.pesanan_id', 'pesanan.id');
-                    },
-                    'ekat' => function ($q) {
-                        $q->selectRaw('coalesce(count(ekatalog.id),0)')
-                            ->from('ekatalog')
-                            ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
-                    }
-                ])
-                ->havingRaw('spa > 0')
-                ->wherenotnull('no_po')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->get();
+                 //GET PESANAN
+            $data = Pesanan::addSelect([
+                'spa' => function ($q) {
+                    $q->selectRaw('coalesce(count(spa.id),0)')
+                        ->from('spa')
+                        ->whereColumn('spa.pesanan_id', 'pesanan.id');
+                },
+                'spb' => function ($q) {
+                    $q->selectRaw('coalesce(count(spb.id),0)')
+                        ->from('spb')
+                        ->whereColumn('spb.pesanan_id', 'pesanan.id');
+                },
+                'ekat' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id),0)')
+                        ->from('ekatalog')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                }
+            ])
+             ->havingRaw('spa > 0')
+            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+            ->wherenotnull('no_po');
+
             } else if ($this->jenis_penjualan == 'spb') {
-                $data = Pesanan::addSelect([
-                    'spa' => function ($q) {
-                        $q->selectRaw('coalesce(count(spa.id),0)')
-                            ->from('spa')
-                            ->whereColumn('spa.pesanan_id', 'pesanan.id');
-                    },
-                    'spb' => function ($q) {
-                        $q->selectRaw('coalesce(count(spb.id),0)')
-                            ->from('spb')
-                            ->whereColumn('spb.pesanan_id', 'pesanan.id');
-                    },
-                    'ekat' => function ($q) {
-                        $q->selectRaw('coalesce(count(ekatalog.id),0)')
-                            ->from('ekatalog')
-                            ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
-                    }
-                ])
-                ->havingRaw('spb > 0')
-                ->wherenotnull('no_po')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->get();
+                 //GET PESANAN
+            $data = Pesanan::addSelect([
+                'spa' => function ($q) {
+                    $q->selectRaw('coalesce(count(spa.id),0)')
+                        ->from('spa')
+                        ->whereColumn('spa.pesanan_id', 'pesanan.id');
+                },
+                'spb' => function ($q) {
+                    $q->selectRaw('coalesce(count(spb.id),0)')
+                        ->from('spb')
+                        ->whereColumn('spb.pesanan_id', 'pesanan.id');
+                },
+                'ekat' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id),0)')
+                        ->from('ekatalog')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                }
+            ])
+             ->havingRaw('spb > 0')
+            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+            ->wherenotnull('no_po');
+
             }
-        } else {
-            $ekat  = Pesanan::wherenotnull('no_po')
-                ->whereHas('Ekatalog', function ($q) use ($distributor) {
-                    $q->where('customer_id', $distributor);
-                })
-                ->orderby('so', 'ASC')
-                ->where('so', 'LIKE', '%EKAT%')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->get();
-
-            $spa  = Pesanan::wherenotnull('no_po')
-                ->whereHas('Spa', function ($q) use ($distributor) {
-                    $q->where('customer_id', $distributor);
-                })
-                ->orderby('so', 'ASC')
-                ->where('so', 'LIKE', '%SPA%')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->get();
-
-            $spb  = Pesanan::wherenotnull('no_po')
-                ->whereHas('Spb', function ($q) use ($distributor) {
-                    $q->where('customer_id', $distributor);
-                })
-                ->orderby('so', 'ASC')
-                ->where('so', 'LIKE', '%SPB%')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->get();
 
 
-        if ($x == ['ekatalog', 'spa', 'spb']) {
-            $data = $ekat->merge($spa)->merge($spb);
-        } else if ($x == ['ekatalog', 'spa']) {
-            $data = $ekat->merge($spa);
-        } else if ($x == ['ekatalog', 'spb']) {
-            $data = $ekat->merge($spb);
-        } else if ($x == ['spa', 'spb']) {
-            $data = $spa->merge($spb);
-        } else if ($this->jenis_penjualan == 'ekatalog') {
-            $data = $ekat;
-        } else if ($this->jenis_penjualan == 'spa') {
-            $data = $spa;
-        } else if ($this->jenis_penjualan == 'spb') {
-            $data = $spb;
+
+        $pesananIds = $data->pluck('id')->toArray();
+
+$data_dpp = DetailPesananProduk::leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
+->whereIN('detail_pesanan.pesanan_id',$pesananIds);
+
+$dppIds = $data_dpp->pluck('detail_pesanan_produk.id')->toArray();
+
+$spb = Spb::select('spb.pesanan_id as id', 'customer.nama','spb.ket')
+        ->selectRaw('"-" AS no_paket')
+        ->selectRaw('"-" AS instansi')
+        ->selectRaw('"-" AS alamat_instansi')
+        ->selectRaw('"-" AS status')
+        ->selectRaw('"-" AS satuan')
+        ->selectRaw('"-" AS no_urut')
+        ->selectRaw('"-" AS tgl_buat')
+        ->selectRaw('"-" AS tgl_kontrak')
+        ->leftJoin('customer', 'customer.id', '=', 'spb.customer_id')
+        ->whereIn('spb.pesanan_id', $pesananIds)->get();
+
+$spa = Spa::
+select('spa.pesanan_id as id', 'customer.nama','spa.ket')
+->selectRaw('"-" AS no_paket')
+->selectRaw('"-" AS instansi')
+->selectRaw('"-" AS alamat_instansi')
+->selectRaw('"-" AS status')
+->selectRaw('"-" AS satuan')
+->selectRaw('"-" AS no_urut')
+->selectRaw('"-" AS tgl_buat')
+->selectRaw('"-" AS tgl_kontrak')
+->leftJoin('customer', 'customer.id', '=', 'spa.customer_id')
+->whereIn('spa.pesanan_id', $pesananIds)->get();
+
+$ekatalog = Ekatalog::select('ekatalog.pesanan_id as id','ekatalog.ket','ekatalog.tgl_buat','ekatalog.tgl_kontrak','ekatalog.no_urut as no_urut','customer.nama' ,'ekatalog.no_paket','ekatalog.instansi','ekatalog.alamat as alamat_instansi','ekatalog.satuan','ekatalog.status')
+        ->leftJoin('customer', 'customer.id', '=', 'ekatalog.customer_id')
+        ->whereIn('ekatalog.pesanan_id', $pesananIds)->get();
+
+$dataInfo =   $ekatalog->merge($spa)->merge($spb);
+
+//return response()->json($dataInfo);
+
+        //GET SURAT JALAN
+        $surat_jalan = Logistik::select('detail_pesanan.pesanan_id as id','nosurat','tgl_kirim')
+        ->leftJoin('detail_logistik','detail_logistik.logistik_id','=','logistik.id')
+        ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','detail_logistik.detail_pesanan_produk_id')
+        ->leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
+        ->whereIN('detail_logistik.detail_pesanan_produk_id',$dppIds)
+        ->groupBy('logistik.id')
+        ->get();
+
+        //GET SURAT JALAN PART
+        $surat_jalan_part = Logistik::select('detail_pesanan_part.pesanan_id as id','nosurat','tgl_kirim')
+        ->leftJoin('detail_logistik_part','detail_logistik_part.logistik_id','=','logistik.id')
+        ->leftJoin('detail_pesanan_part','detail_pesanan_part.id','=','detail_logistik_part.detail_pesanan_part_id')
+        ->whereIN('detail_logistik_part.detail_pesanan_part_id',$dppIds)
+        ->groupBy('logistik.id')
+        ->get();
+
+
+
+
+        //GET NOSERI
+        $noseri = NoseriBarangJadi::
+        select('detail_pesanan.id as id','detail_pesanan.penjualan_produk_id','noseri')
+        ->leftJoin('t_gbj_noseri','t_gbj_noseri.noseri_id','=','noseri_barang_jadi.id')
+        ->leftJoin('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
+        ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','t_gbj_detail.detail_pesanan_produk_id')
+        ->leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
+        ->whereIN('detail_pesanan.pesanan_id',$data->pluck('id')->toArray())->get();
+
+        //GET SPAREPART
+       $detail_pesanan_part = DetailPesananPart::
+        select('detail_pesanan_part.id','detail_pesanan_part.pesanan_id','detail_pesanan_part.m_sparepart_id','m_sparepart.nama',
+        'detail_pesanan_part.harga',
+        // DB::raw('(SELECT COALESCE((SUM(dp.jumlah) * dp.harga) + dp.ongkir, 0)
+        // FROM detail_pesanan_part AS dp
+        // WHERE dp.pesanan_id = detail_pesanan_part.pesanan_id
+        // AND dp.m_sparepart_id = detail_pesanan_part.m_sparepart_id) AS harga'),
+        DB::raw('(SELECT COALESCE(SUM(dp.jumlah), 0)
+        FROM detail_pesanan_part AS dp
+        WHERE dp.pesanan_id = detail_pesanan_part.pesanan_id
+        AND dp.m_sparepart_id = detail_pesanan_part.m_sparepart_id) AS jumlah'),
+        DB::raw('(SELECT COALESCE(SUM(dp.ongkir), 0)
+        FROM detail_pesanan_part AS dp
+        WHERE dp.pesanan_id = detail_pesanan_part.pesanan_id
+        AND dp.m_sparepart_id = detail_pesanan_part.m_sparepart_id) AS ongkir'),
+        )
+        ->leftJoin('m_sparepart','m_sparepart.id','=','detail_pesanan_part.m_sparepart_id')
+        ->whereIN('detail_pesanan_part.pesanan_id',$data->pluck('id')->toArray())->get();
+
+
+       //GET DETAIL PESANAN DSB
+       $detail_pesanan_dsb = DetailPesananDsb::
+        select('detail_pesanan_dsb.id','detail_pesanan_dsb.pesanan_id','detail_pesanan_dsb.penjualan_produk_id','penjualan_produk.nama as nama','penjualan_produk.nama_alias as nama_alias',
+        'detail_pesanan_dsb.harga',
+        // DB::raw('(SELECT COALESCE((SUM(dp.jumlah) * dp.harga) + dp.ongkir, 0)
+        // FROM detail_pesanan_dsb AS dp
+        // WHERE dp.pesanan_id = detail_pesanan_dsb.pesanan_id
+        // AND dp.penjualan_produk_id = detail_pesanan_dsb.penjualan_produk_id) AS harga'),
+        DB::raw('(SELECT COALESCE(SUM(dp.jumlah), 0)
+        FROM detail_pesanan_dsb AS dp
+        WHERE dp.pesanan_id = detail_pesanan_dsb.pesanan_id
+        AND dp.penjualan_produk_id = detail_pesanan_dsb.penjualan_produk_id) AS jumlah'),
+        DB::raw('(SELECT COALESCE(SUM(dp.ongkir), 0)
+        FROM detail_pesanan_dsb AS dp
+        WHERE dp.pesanan_id = detail_pesanan_dsb.pesanan_id
+        AND dp.penjualan_produk_id = detail_pesanan_dsb.penjualan_produk_id) AS ongkir')
+        )
+        ->leftJoin('penjualan_produk','penjualan_produk.id','=','detail_pesanan_dsb.penjualan_produk_id')
+        ->whereIN('detail_pesanan_dsb.pesanan_id',$data->pluck('id')->toArray())->get();
+
+
+       //GET DETAIL PESANAN
+       $detail_pesanan = DetailPesanan::
+        select('detail_pesanan.id','detail_pesanan.pesanan_id','detail_pesanan.penjualan_produk_id','penjualan_produk.nama as nama','penjualan_produk.nama_alias as nama_alias',
+        'detail_pesanan.harga',
+        // DB::raw('(SELECT COALESCE((SUM(dp.jumlah) * dp.harga) + dp.ongkir, 0)
+        // FROM detail_pesanan AS dp
+        // WHERE dp.pesanan_id = detail_pesanan.pesanan_id
+        // AND dp.penjualan_produk_id = detail_pesanan.penjualan_produk_id) AS harga'),
+        DB::raw('(SELECT COALESCE(SUM(dp.jumlah), 0)
+        FROM detail_pesanan AS dp
+        WHERE dp.pesanan_id = detail_pesanan.pesanan_id
+        AND dp.penjualan_produk_id = detail_pesanan.penjualan_produk_id) AS jumlah'),
+        DB::raw('(SELECT COALESCE(SUM(dp.ongkir), 0)
+        FROM detail_pesanan AS dp
+        WHERE dp.pesanan_id = detail_pesanan.pesanan_id
+        AND dp.penjualan_produk_id = detail_pesanan.penjualan_produk_id) AS ongkir')
+        )
+        ->leftJoin('penjualan_produk','penjualan_produk.id','=','detail_pesanan.penjualan_produk_id')
+        ->whereIN('detail_pesanan.pesanan_id',$data->pluck('id')->toArray())->get();
+
+        //GROUP DATA
+        $groupedDataSeri = collect($noseri)->groupBy('id');
+        $groupedDataPrd = collect($detail_pesanan)->groupBy('pesanan_id');
+        $groupedDataPrdDsb = collect($detail_pesanan_dsb)->groupBy('pesanan_id');
+        $groupedDataPart = collect($detail_pesanan_part)->groupBy('pesanan_id');
+        $groupedDataSj = collect($surat_jalan)->groupBy('id');
+        $groupedDataSjPart = collect($surat_jalan_part)->groupBy('id');
+
+        //GROUP BY REF ID
+        $noseri_group = $groupedDataSeri->map(function ($items, $key) {
+            $uniqueItems = $items->unique('noseri')->values()->all();
+            return [
+                'id' => $key,
+                'data' => $uniqueItems,
+            ];
+        })->values()->all();
+
+        //GROUP BY REF ID
+        $detail_pesanan_part_group = $groupedDataPart->map(function ($items, $key) {
+            $uniqueItems = $items->unique('m_sparepart_id')->values()->all();
+            return [
+                'pesanan_id' => $key,
+                'data' => $uniqueItems,
+            ];
+        })->values()->all();
+
+        //GROUP BY REF ID
+        $detail_pesanan_group = $groupedDataPrd->map(function ($items, $key) {
+            $uniqueItems = $items->unique('penjualan_produk_id')->values()->all();
+            return [
+                'pesanan_id' => $key,
+                'data' => $uniqueItems,
+            ];
+        })->values()->all();
+
+        //GROUP BY REF ID DSB
+        $detail_pesanan_dsb_group = $groupedDataPrdDsb->map(function ($items, $key) {
+            $uniqueItems = $items->unique('penjualan_produk_id')->values()->all();
+            return [
+                'pesanan_id' => $key,
+                'data' => $uniqueItems,
+            ];
+        })->values()->all();
+
+
+
+        //SET NOSERI TO INDEX
+        $seriByID = [];
+        foreach ($noseri_group as $seriItem) {
+            $seriByID[$seriItem['id']] = $seriItem['data'];
         }
+
+
+        //SET INDEX NOSERI TO DETAIL PESANAN
+        foreach ($detail_pesanan_group as $key => $pesananItem) {
+             foreach($pesananItem['data'] as $keys => $p){
+                 $pesananID = $p['id'];
+               if (isset($seriByID[$pesananID])) {
+                $detail_pesanan_group[$key]['data'][$keys]['seri'] = $seriByID[$pesananID];
+             } else {
+                $detail_pesanan_group[$key]['data'][$keys]['seri'] = [];
+             }
+            }
+
+        }
+
+        //SET PESANAN
+        foreach($data->get() as $d){
+            $pesanan[] = array(
+                'id' => $d->id,
+                'so' => $d->so,
+                'po' => $d->no_po,
+                'tgl_po' => $d->tgl_po,
+                'ket' => $d->ket,
+
+            );
+        }
+
+        $produkByPesananId = [];
+        $produkDsbByPesananId = [];
+        $partByPesananId = [];
+
+        // Group $produk array items by pesanan_id
+        foreach ($detail_pesanan_part_group as $item) {
+            $pesanansId = $item['pesanan_id'];
+
+            // Check if the pesanan_id exists in $produkByPesananId array
+            if (!array_key_exists($pesanansId, $partByPesananId)) {
+                $partByPesananId[$pesanansId] = [];
+            }
+
+            // Add the produk item to the corresponding pesanan_id
+            $partByPesananId[$pesanansId][] = $item;
         }
 
 
+        foreach ($pesanan as &$pesananItem) {
+            $pesananId = $pesananItem['id'];
+
+            // Check if pesanan_id exists in $produkByPesananId array
+            if (array_key_exists($pesananId, $partByPesananId)) {
+                $pesananItem['part'] = $partByPesananId[$pesananId][0]['data'];
+            } else {
+                $pesananItem['part'] = [];
+            }
+        }
+
+//----------------------------------------
+
+        // Group $produk array items by pesanan_id
+        foreach ($detail_pesanan_group as $item) {
+            $pesananId = $item['pesanan_id'];
+
+            // Check if the pesanan_id exists in $produkByPesananId array
+            if (!array_key_exists($pesananId, $produkByPesananId)) {
+                $produkByPesananId[$pesananId] = [];
+            }
+
+            // Add the produk item to the corresponding pesanan_id
+            $produkByPesananId[$pesananId][] = $item;
+        }
+
+        // Group $produk array items by pesanan_id
+        foreach ($detail_pesanan_dsb_group as $item) {
+            $pesananId = $item['pesanan_id'];
+
+            // Check if the pesanan_id exists in $produkByPesananId array
+            if (!array_key_exists($pesananId, $produkDsbByPesananId)) {
+                $produkDsbByPesananId[$pesananId] = [];
+            }
+
+            // Add the produk item to the corresponding pesanan_id
+            $produkDsbByPesananId[$pesananId][] = $item;
+        }
+
+        // Update $pesanan array with produk items based on pesanan_id
+        foreach ($pesanan as &$pesananItem) {
+            $pesananId = $pesananItem['id'];
+
+            // Check if pesanan_id exists in $produkByPesananId array
+            if (array_key_exists($pesananId, $produkDsbByPesananId)) {
+                $pesananItem['produk_dsb'] = $produkDsbByPesananId[$pesananId][0]['data'];
+            } else {
+                $pesananItem['produk_dsb'] = [];
+            }
+        }
+
+        foreach ($pesanan as &$pesananItem) {
+            $pesananId = $pesananItem['id'];
+
+            // Check if pesanan_id exists in $produkByPesananId array
+            if (array_key_exists($pesananId, $produkByPesananId)) {
+                $pesananItem['produk'] = $produkByPesananId[$pesananId][0]['data'];
+            } else {
+                $pesananItem['produk'] = [];
+            }
+        }
+
+        //SET SJ TO INDEX
+        // $SuratJalanByID = [];
+        // foreach ($surat_jalan as $suratjalan) {
+        //     $SuratJalanByID[$suratjalan->id] = $suratjalan;
+        // }
+
+        foreach ($pesanan as $key => $pesananItem) {
+            $pesananID = $pesananItem['id'];
+            if (isset($groupedDataSj[$pesananID])) {
+                $pesanan[$key]['nosurat'] = $groupedDataSj[$pesananID];
+            } else {
+                // If no matching ID is found, set 'info' as an empty array or handle accordingly
+                $pesanan[$key]['nosurat'] = [];
+
+            }
+        }
+
+        foreach ($pesanan as $key => $pesananItem) {
+            $pesananID = $pesananItem['id'];
+            if (isset($groupedDataSjPart[$pesananID])) {
+                $pesanan[$key]['nosurat_part'] = $groupedDataSjPart[$pesananID];
+            } else {
+                // If no matching ID is found, set 'info' as an empty array or handle accordingly
+                $pesanan[$key]['nosurat_part'] = [];
+
+            }
+        }
 
 
+        //SET INFO TO INDEX
+          $infoByID = [];
+          foreach ($dataInfo as $infoItem) {
+              $infoByID[$infoItem->id] = $infoItem;
+          }
 
-        return view('page.penjualan.penjualan.LaporanPenjualanPaketEx', ['data' => $data, 'jenis_laporan' => $jenis_laporan, 'seri' => $seri]);
+
+          foreach ($pesanan as $key => $pesananItem) {
+            $pesananID = $pesananItem['id'];
+            if (isset($infoByID[$pesananID])) {
+                $pesanan[$key]['nama'] = $infoByID[$pesananID]->nama;
+                $pesanan[$key]['no_paket'] = $infoByID[$pesananID]->no_paket;
+                $pesanan[$key]['instansi'] = $infoByID[$pesananID]->instansi;
+                $pesanan[$key]['alamat_instansi'] = $infoByID[$pesananID]->alamat_instansi;
+                $pesanan[$key]['satuan'] =  $infoByID[$pesananID]->satuan;
+                $pesanan[$key]['no_urut'] =  $infoByID[$pesananID]->no_urut;
+                $pesanan[$key]['tgl_buat'] =  $infoByID[$pesananID]->tgl_buat;
+                $pesanan[$key]['tgl_kontrak'] =  $infoByID[$pesananID]->tgl_kontrak;
+                $pesanan[$key]['status'] =  $infoByID[$pesananID]->status;
+            } else {
+                // If no matching ID is found, set 'info' as an empty array or handle accordingly
+                $pesanan[$key]['nama'] = '-';
+                $pesanan[$key]['no_paket'] = '-';
+                $pesanan[$key]['instansi'] = '-';
+                $pesanan[$key]['alamat_instansi'] = '-';
+                $pesanan[$key]['satuan'] = '-';
+                $pesanan[$key]['no_urut'] = '-';
+                $pesanan[$key]['tgl_buat'] = '-';
+                $pesanan[$key]['tgl_kontrak'] = '-';
+                $pesanan[$key]['status'] = '-';
+            }
+        }
+
+        return view('page.penjualan.penjualan.LaporanPenjualanPaketExNew',['data' => $pesanan,'seri' => $seri]);
+
+    }else{
+                $ekat  = Pesanan::wherenotnull('no_po')
+                    ->whereHas('Ekatalog', function ($q) use ($distributor) {
+                        $q->where('customer_id', $distributor);
+                    })
+                    ->orderby('so', 'ASC')
+                    ->where('so', 'LIKE', '%EKAT%')
+                    ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    ->get();
+
+                $spa  = Pesanan::wherenotnull('no_po')
+                    ->whereHas('Spa', function ($q) use ($distributor) {
+                        $q->where('customer_id', $distributor);
+                    })
+                    ->orderby('so', 'ASC')
+                    ->where('so', 'LIKE', '%SPA%')
+                    ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    ->get();
+
+                $spb  = Pesanan::wherenotnull('no_po')
+                    ->whereHas('Spb', function ($q) use ($distributor) {
+                        $q->where('customer_id', $distributor);
+                    })
+                    ->orderby('so', 'ASC')
+                    ->where('so', 'LIKE', '%SPB%')
+                    ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    ->get();
+
+
+            if ($x == ['ekatalog', 'spa', 'spb']) {
+                $data = $ekat->merge($spa)->merge($spb);
+            } else if ($x == ['ekatalog', 'spa']) {
+                $data = $ekat->merge($spa);
+            } else if ($x == ['ekatalog', 'spb']) {
+                $data = $ekat->merge($spb);
+            } else if ($x == ['spa', 'spb']) {
+                $data = $spa->merge($spb);
+            } else if ($this->jenis_penjualan == 'ekatalog') {
+                $data = $ekat;
+            } else if ($this->jenis_penjualan == 'spa') {
+                $data = $spa;
+            } else if ($this->jenis_penjualan == 'spb') {
+                $data = $spb;
+            }
+            return view('page.penjualan.penjualan.LaporanPenjualanPaketEx', ['data' => $data, 'jenis_laporan' => $jenis_laporan, 'seri' => $seri]);
+
     }
+    }
+    // public function view(): View
+    // {
+    //     $distributor = $this->distributor;
+    //     $jenis_laporan = $this->jenis_laporan;
+    //     $seri = $this->seri;
+    //     $x = explode(',', $this->jenis_penjualan);
+    //     $tanggal_awal = $this->tgl_awal;
+    //     $tanggal_akhir = $this->tgl_akhir;
+
+    //     if ($distributor == 'semua') {
+    //         if ($x == ['ekatalog', 'spa', 'spb']) {
+    //             $data = Pesanan::addSelect([
+    //                 'spa' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spa.id),0)')
+    //                         ->from('spa')
+    //                         ->whereColumn('spa.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'spb' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spb.id),0)')
+    //                         ->from('spb')
+    //                         ->whereColumn('spb.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'ekat' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(ekatalog.id),0)')
+    //                         ->from('ekatalog')
+    //                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+    //                 }
+    //             ])
+    //             ->wherenotnull('no_po')
+    //             ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+    //             ->get();
+    //         } else if ($x == ['ekatalog', 'spa']) {
+    //             $data = Pesanan::addSelect([
+    //                 'spa' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spa.id),0)')
+    //                         ->from('spa')
+    //                         ->whereColumn('spa.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'spb' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spb.id),0)')
+    //                         ->from('spb')
+    //                         ->whereColumn('spb.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'ekat' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(ekatalog.id),0)')
+    //                         ->from('ekatalog')
+    //                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+    //                 }
+    //             ])
+    //             ->wherenotnull('no_po')
+    //             ->havingRaw('spb = 0 ')
+    //             ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+    //             ->get();
+    //         } else if ($x == ['ekatalog', 'spb']) {
+    //             $data = Pesanan::addSelect([
+    //                 'spa' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spa.id),0)')
+    //                         ->from('spa')
+    //                         ->whereColumn('spa.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'spb' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spb.id),0)')
+    //                         ->from('spb')
+    //                         ->whereColumn('spb.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'ekat' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(ekatalog.id),0)')
+    //                         ->from('ekatalog')
+    //                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+    //                 }
+    //             ])
+    //             ->wherenotnull('no_po')
+    //             ->havingRaw('spa = 0 ')
+    //             ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+    //             ->get();
+    //         } else if ($x == ['spa', 'spb']) {
+    //             $data = Pesanan::addSelect([
+    //                 'spa' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spa.id),0)')
+    //                         ->from('spa')
+    //                         ->whereColumn('spa.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'spb' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spb.id),0)')
+    //                         ->from('spb')
+    //                         ->whereColumn('spb.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'ekat' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(ekatalog.id),0)')
+    //                         ->from('ekatalog')
+    //                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+    //                 }
+    //             ])
+    //             ->wherenotnull('no_po')
+    //             ->havingRaw('ekat = 0')
+    //             ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+    //             ->get();
+    //         } else if ($this->jenis_penjualan == 'ekatalog') {
+    //             $data = Pesanan::addSelect([
+    //                 'spa' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spa.id),0)')
+    //                         ->from('spa')
+    //                         ->whereColumn('spa.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'spb' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spb.id),0)')
+    //                         ->from('spb')
+    //                         ->whereColumn('spb.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'ekat' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(ekatalog.id),0)')
+    //                         ->from('ekatalog')
+    //                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+    //                 }
+    //             ])
+    //             ->havingRaw('ekat > 0')
+    //             ->wherenotnull('no_po')
+    //             ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+    //             ->get();
+    //         } else if ($this->jenis_penjualan == 'spa') {
+    //             $data = Pesanan::addSelect([
+    //                 'spa' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spa.id),0)')
+    //                         ->from('spa')
+    //                         ->whereColumn('spa.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'spb' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spb.id),0)')
+    //                         ->from('spb')
+    //                         ->whereColumn('spb.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'ekat' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(ekatalog.id),0)')
+    //                         ->from('ekatalog')
+    //                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+    //                 }
+    //             ])
+    //             ->havingRaw('spa > 0')
+    //             ->wherenotnull('no_po')
+    //             ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+    //             ->get();
+    //         } else if ($this->jenis_penjualan == 'spb') {
+    //             $data = Pesanan::addSelect([
+    //                 'spa' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spa.id),0)')
+    //                         ->from('spa')
+    //                         ->whereColumn('spa.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'spb' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(spb.id),0)')
+    //                         ->from('spb')
+    //                         ->whereColumn('spb.pesanan_id', 'pesanan.id');
+    //                 },
+    //                 'ekat' => function ($q) {
+    //                     $q->selectRaw('coalesce(count(ekatalog.id),0)')
+    //                         ->from('ekatalog')
+    //                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+    //                 }
+    //             ])
+    //             ->havingRaw('spb > 0')
+    //             ->wherenotnull('no_po')
+    //             ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+    //             ->get();
+    //         }
+    //     } else {
+    //         $ekat  = Pesanan::wherenotnull('no_po')
+    //             ->whereHas('Ekatalog', function ($q) use ($distributor) {
+    //                 $q->where('customer_id', $distributor);
+    //             })
+    //             ->orderby('so', 'ASC')
+    //             ->where('so', 'LIKE', '%EKAT%')
+    //             ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+    //             ->get();
+
+    //         $spa  = Pesanan::wherenotnull('no_po')
+    //             ->whereHas('Spa', function ($q) use ($distributor) {
+    //                 $q->where('customer_id', $distributor);
+    //             })
+    //             ->orderby('so', 'ASC')
+    //             ->where('so', 'LIKE', '%SPA%')
+    //             ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+    //             ->get();
+
+    //         $spb  = Pesanan::wherenotnull('no_po')
+    //             ->whereHas('Spb', function ($q) use ($distributor) {
+    //                 $q->where('customer_id', $distributor);
+    //             })
+    //             ->orderby('so', 'ASC')
+    //             ->where('so', 'LIKE', '%SPB%')
+    //             ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+    //             ->get();
+
+
+    //     if ($x == ['ekatalog', 'spa', 'spb']) {
+    //         $data = $ekat->merge($spa)->merge($spb);
+    //     } else if ($x == ['ekatalog', 'spa']) {
+    //         $data = $ekat->merge($spa);
+    //     } else if ($x == ['ekatalog', 'spb']) {
+    //         $data = $ekat->merge($spb);
+    //     } else if ($x == ['spa', 'spb']) {
+    //         $data = $spa->merge($spb);
+    //     } else if ($this->jenis_penjualan == 'ekatalog') {
+    //         $data = $ekat;
+    //     } else if ($this->jenis_penjualan == 'spa') {
+    //         $data = $spa;
+    //     } else if ($this->jenis_penjualan == 'spb') {
+    //         $data = $spb;
+    //     }
+    //     }
+
+
+
+
+
+    //     return view('page.penjualan.penjualan.LaporanPenjualanPaketEx', ['data' => $data, 'jenis_laporan' => $jenis_laporan, 'seri' => $seri]);
+    // }
     public function title(): string
     {
         return 'Sudah PO';
