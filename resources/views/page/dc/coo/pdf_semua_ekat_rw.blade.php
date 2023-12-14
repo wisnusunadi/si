@@ -126,7 +126,7 @@
             <tbody>
                 <tr>
                     <td style="width:52.3%;"></td>
-                    <td class="veramd align-center" style="width:47.7%;">
+                    <td class="veramd align-center" style="width:57.7%;">
                         <h3>{{$d['no_coo']}} / SKA / XII / SPA / 2023</h3>
                     </td>
                 </tr>
