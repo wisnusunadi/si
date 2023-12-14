@@ -61,9 +61,9 @@ class DcController extends Controller
         $data_urut_produk = $collection->toArray();
 
 
-     return response()->json($data_urut_produk);
+    //  return response()->json($data_urut_produk);
 
-     $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_rw')->setPaper('A4');
+     $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data])->setPaper('A4');
         return $pdf->stream('');
     }
 

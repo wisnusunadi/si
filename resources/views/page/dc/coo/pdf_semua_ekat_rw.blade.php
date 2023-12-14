@@ -86,6 +86,10 @@
             height: 40px;
         }
 
+        .trheightitem {
+            height: 28px;
+        }
+
         .back {
             background-image: url("{{ public_path('assets/image/background_coo.jpg') }}");
             background-size: 100%;
@@ -95,55 +99,32 @@
             background-image: url("{{ public_path('assets/image/no_background_coo.jpg') }}");
             background-size: 100%;
         }
+
+        .table {
+            width: 100%;
+        }
     </style>
 </head>
-
-
-
-@if ($jenis == 'back' || $jenis == 'ttd')
-
     <body class="back">
-    @else
-
-        <body class="noback">
-@endif
 
 
-
-<?php
-$jumlah = 0;
-$len = count($data);
-?>
-@foreach ($data as $d)
-    <?php
-    if ($jumlah == $len - 1) {
-        echo '<div>';
-    } else {
-        echo ' <div class="page-break">';
-    }
-
-    ?>
     <div class="header">
-        <table border="0" style="border-collapse: collapse; text-align:right;width:625px" class="table">
+        <table border="0" style="border-collapse: collapse; text-align:right;width:625px">
             <tbody>
                 <tr>
                     <td style="width:52.3%;"></td>
                     <td class="veramd align-center" style="width:47.7%;">
-                        <h3> {{ $d->no_coo }}/ SKA /
-                            {{ App\Http\Controllers\DcController::bulan_romawi($d->NoseriDetailLogistik->DetailLogistik->logistik->tgl_kirim) }}
-                            / SPA /
-                            {{ $d->tahun }}
-                        </h3>
+                        <h3>22185 / SKA / XII / SPA / 2023</h3>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
     <div class="body">
-        <table border="0" style="border-collapse: collapse; text-align:center;" class="table" width="100%">
+        <table style="text-align:center;" class="table">
             <tbody>
                 <tr>
-                    <td style="height: auto;">
+                    <td>
                         <h1><u>CERTIFICATE OF ORIGIN</u></h1>
                     </td>
                 </tr>
@@ -153,22 +134,16 @@ $len = count($data);
             </tbody>
         </table>
         <div class="row mdtxt">
-            <table border="0" class="table" style="border-collapse: collapse;" width="100%">
+            <table class="table" style="border-collapse: collapse; margin-left: 30px;">
                 <tbody>
                     <tr>
-                        <td colspan="3" class="align-center">Berdasarkan ijin edar/produksi dari</td>
+                        <td colspan="3">Berdasarkan ijin edar/produksi dari <b>Kementrian Kesehatan Nomor:</b></td>
                     </tr>
                     <tr>
                         <td colspan="3" style="height:5px"></td>
                     </tr>
                     <tr>
-                        <td class="nospace vera"><b>Kementrian Kesehatan Nomor</b></td>
-                        <td class="nospace vera"><b>:</b></td>
-                        <td class="wb vera"><b>KEMENKES RI AKD
-                                @if ($d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd != '')
-                                    {{ $d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd }}
-                                @endif
-                            </b></td>
+                        <td class="nospace vera"><b>KEMENKES RI ESUKA - FR.03.04/IVA/03435/2023</b></td>
                     </tr>
                     <tr>
                         <td colspan="3" style="height:20px"></td>
@@ -193,33 +168,55 @@ $len = count($data);
                             <td class="nospace trheight">Nama Produk</td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                {{-- @if ($d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo != '')
-                                    {{ $d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo }}
-                                @endif --}}
+                                ELITECH ANTROPOMETRI KIT Type KIT-10
                             </td>
                         </tr>
                         <tr class="vera bold">
                             <td style="width:2%"></td>
-                            <td class="nospace trheight">Tipe</td>
+                            <td class="nospace trheight">No Paket</td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                {{-- {{ $d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama }} --}}
+                                AK1023B000026
                             </td>
                         </tr>
                         <tr class="vera bold">
                             <td style="width:2%"></td>
-                            <td class="nospace trheight">Nomor Seri</td>
+                            <td class="nospace trheightitem">Item Produk</td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                {{-- {{ $d->NoseriDetailLogistik->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri }} --}}
+                                Digit-Pro Ida (TD22239A09554)
                             </td>
                         </tr>
                         <tr class="vera bold">
                             <td style="width:2%"></td>
-                            <td class="nospace trheight">Merk Produk</td>
+                            <td class="nospace trheightitem"></td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                {{-- {{ $d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->merk }} --}}
+                                Digit-Pro Baby (TD22239A09554)
+                            </td>
+                        </tr>
+                        <tr class="vera bold">
+                            <td style="width:2%"></td>
+                            <td class="nospace trheightitem"></td>
+                            <td class="nospace align-center"> : </td>
+                            <td class="wb">
+                                MTB-2MTR (TD22239A09554)
+                            </td>
+                        </tr>
+                        <tr class="vera bold">
+                            <td style="width:2%"></td>
+                            <td class="nospace trheightitem"></td>
+                            <td class="nospace align-center"> : </td>
+                            <td class="wb">
+                                MTR-Baby002 (TD22239A09554)
+                            </td>
+                        </tr>
+                        <tr class="vera bold">
+                            <td style="width:2%"></td>
+                            <td class="nospace trheightitem"></td>
+                            <td class="nospace align-center"> : </td>
+                            <td class="wb">
+                                PTB-2in1 (TD22239A09554)
                             </td>
                         </tr>
                     </tbody>
@@ -242,7 +239,7 @@ $len = count($data);
                     <tr>
                         <td class="wb">
                             <b>
-                                {{-- {{ $d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi }} --}}
+                                Provinsi DI Yogyakarta <br> (Kab. Gunung Kidul)
                             </b>
                         </td>
                     </tr>
@@ -264,13 +261,13 @@ $len = count($data);
                     </tr>
                     <tr>
                         <td class="wb"><b>
-                                {{-- {{ $d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->no_paket }} --}}
+                            KLK-P2311-8081143
                             </b></td>
                     </tr>
                     <tr style="min-height: 20px; max-height: 65px;">
                         <td class="wb">
                             <b class="font-size:auto;">
-                                {{-- {{ $d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->deskripsi }} --}}
+                                Penyediaan Antropometri Kit Tahap 2
                             </b>
                         </td>
                     </tr>
@@ -296,8 +293,7 @@ $len = count($data);
                 <tbody>
                     <tr>
                         <td width="50%"></td>
-                        <td class="align-center">Surabaya,
-                            {{-- {{ App\Http\Controllers\DcController::tgl_footer($d->NoseriDetailLogistik->DetailLogistik->logistik->tgl_kirim) }} --}}
+                        <td class="align-center">Surabaya, 16 Desember 2023
                         </td>
                     </tr>
                     <tr>
@@ -323,6 +319,8 @@ $len = count($data);
                                     <img src="" width="100" height="100">
                                 @endif
                             @endif --}}
+                            <img src="{{ public_path('assets/image/emiindo.png') }}" width="100"
+                                        height="100">
                         </td>
                     </tr>
                     <tr>
@@ -335,6 +333,7 @@ $len = count($data);
                                     @else
                                         {{ $d->nama }}
                                     @endif --}}
+                                        Bambang Hendro M BE
 
                                 </u></b></td>
                     </tr>
@@ -348,6 +347,7 @@ $len = count($data);
                             @else
                                 {{ $d->jabatan }}
                             @endif --}}
+                            Q.A Departement
                         </td>
                     </tr>
                 </tbody>
@@ -355,6 +355,4 @@ $len = count($data);
         </div>
     </div>
     </div>
-    {{-- <?php $jumlah++; ?>
-@endforeach --}}
 </body>
