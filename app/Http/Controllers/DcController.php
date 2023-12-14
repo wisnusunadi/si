@@ -38,7 +38,7 @@ class DcController extends Controller
         $data = PackRw::select('pack_rw_head.prov','pack_rw_head.kota','pack_rw.noseri','seri_detail_rw.packer','seri_detail_rw.created_at','seri_detail_rw.isi')
         ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'pack_rw.noseri_id')
         ->leftjoin('pack_rw_head', 'pack_rw_head.id', '=', 'pack_rw.pack_rw_head_id')
-        ->where('pack_rw_head_id',13)->get();
+        ->where('pack_rw_head_id',9)->get();
 
         $no = 1;
         foreach($data as $d)
