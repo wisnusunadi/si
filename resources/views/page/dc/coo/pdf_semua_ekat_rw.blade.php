@@ -189,7 +189,7 @@
                             <td class="nospace trheight">No Paket</td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                AK1023B000026
+                                {{ $d['seri']}}
                             </td>
                         </tr>
                         <tr class="vera bold">
