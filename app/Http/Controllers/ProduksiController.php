@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportPackWilayah;
 use App\Exports\ExportRework;
 use App\Exports\NoseriRakitExport;
 use App\Models\DetailPesanan;
@@ -4642,6 +4643,12 @@ class ProduksiController extends Controller
     function export_pack_wilayah_excel($id)
     {
         $waktu = Carbon::now();
-        return Excel::download(new ExportRework($id), 'PerakitanReworks  ' . $waktu->toDateTimeString() . '.xlsx');
+        return Excel::download(new ExportPackWilayah($id), 'PerakitanReworks  ' . $waktu->toDateTimeString() . '.xlsx');
+    }
+
+    function export_rework_excel($urutan)
+    {
+        $waktu = Carbon::now();
+        return Excel::download(new ExportRework($urutan), 'PerakitanReworks  ' . $waktu->toDateTimeString() . '.xlsx');
     }
 }
