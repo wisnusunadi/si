@@ -8458,13 +8458,23 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
 
     public function get_laporans()
     {
+        $ekt_id = Ekatalog::where('customer_id',213)->pluck('pesanan_id')->toArray();
+        $spa_id = Spa::where('customer_id',213)->pluck('pesanan_id')->toArray();
+        $spb_id = Spb::where('customer_id',213)->pluck('pesanan_id')->toArray();
+
+        $collection1 = collect($ekt_id);
+        $collection2 = collect($spa_id);
+        $collection3 = collect($spb_id);
+
+        $mergedCollection = $collection1->merge($collection2)->merge($collection3);
+
             $data = Pesanan::addSelect([
                 'spa' => function ($q) {
                     $q->selectRaw('coalesce(count(spa.id),0)')
                         ->from('spa')
                         ->whereColumn('spa.pesanan_id', 'pesanan.id');
                 },
-                'spb' => function ($q) {
+                'spb' => function ($q)  {
                     $q->selectRaw('coalesce(count(spb.id),0)')
                         ->from('spb')
                         ->whereColumn('spb.pesanan_id', 'pesanan.id');
@@ -8475,7 +8485,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
                 }
             ])
-            // ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+            ->whereIN('id', $mergedCollection)
             ->wherenotnull('no_po');
 
         $pesananIds = $data->pluck('id')->toArray();
@@ -8533,8 +8543,6 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
         ->whereIN('detail_logistik_part.detail_pesanan_part_id',$dppIds)
         ->groupBy('logistik.id')
         ->get();
-
-
 
 
         //GET NOSERI
