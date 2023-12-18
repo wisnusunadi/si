@@ -184,7 +184,7 @@
                 @endif
            </td>
             <td>{{$p['nama']}}</td>
-            <td>-</td>
+            <td>{{$p['nama']}}</td>
             <td>{{$p['item']}}</td>
             <td>{{$p['jumlah']}}</td>
             <td>{{$p['harga']}}</td>
