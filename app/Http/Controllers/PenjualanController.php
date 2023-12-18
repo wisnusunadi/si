@@ -8823,7 +8823,6 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
               $infoByID[$infoItem->id] = $infoItem;
           }
 
-
           foreach ($pesanan as $key => $pesananItem) {
             $pesananID = $pesananItem['id'];
             if (isset($infoByID[$pesananID])) {

@@ -550,14 +550,8 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                 ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                 ->whereIn('pesanan.id',$spb_id)
                 ->wherenotnull('no_po');
-
                 }
-
-
         }
-
-
-
         $pesananIds = $data->pluck('id')->toArray();
 
 $data_dpp = DetailPesananProduk::leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
