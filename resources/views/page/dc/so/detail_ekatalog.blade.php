@@ -826,21 +826,24 @@
                 event.preventDefault();
                 data = $('#noseri_selesai_proses_table').find(".nosericheck").data().value;
                 var id = $(this).data('id');
+               let jsonArray = JSON.stringify({ detail_logistik_id : data , id: checkedArySelesaiProses});
+               let url = "/dc/coo/edit?noseri="+ encodeURIComponent(jsonArray);
                 $.ajax({
-                    url: "/dc/coo/edit/" + checkedArySelesaiProses + "/" + data,
+                   url: url,
                     beforeSend: function() {
                         $('#loader').show();
                     },
                     // return the result
                     success: function(result) {
-                        console.log(checkedArySelesaiProses + "/" + data);
+                        // console.log(checkedArySelesaiProses + "/" + data);
                         $('#editmodal').modal("show");
                         $('#edit').html(result).show();
                         $('.bulan_edit').select2({
                             placeholder: 'Pilih Bulan',
                             allowClear: true
                         });
-                        listnoseri(checkedArySelesaiProses, data, 'listnoseriselesai');
+                        $('#listnoseriselesai').dataTable()
+                      //  listnoseri(checkedArySelesaiProses, data, 'listnoseriselesai');
                         // $("#editform").attr("action", href);
                     },
                     complete: function() {

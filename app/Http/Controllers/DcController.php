@@ -1409,31 +1409,57 @@ class DcController extends Controller
         return view('page.dc.coo.create', ['series'=> $series,'data' => $data, 'id' => $obj->id, 'jumlah' => $jumlah, 'noseri_id' => json_encode($obj->id)]);
     }
 
-    public function edit_coo($id, $value)
+    public function edit_coo(Request $request)
     {
-        $value2 = array();
-        $array_seri = explode(',', $id);
-        if ($id == 0) {
-            $data =  NoseriDetailLogistik::where('detail_logistik_id', $value)->first();
-            $jumlah = count($array_seri);
 
-            $seri_data = NoseriDetailLogistik::where('detail_logistik_id', $value)->get();
-            foreach ($seri_data as $d) {
-                $value2[] = $d->id;
-            }
-            $noseri_id =  json_encode($value2);
-        } else {
-            $data =  NoseriDetailLogistik::whereIN('id', $array_seri)->first();
-            $jumlah = count($array_seri);
+        $obj = json_decode($request->input('noseri'));
+        // $value2 = array();
+        // $array_seri = explode(',', $id);
+        // if ($id == 0) {
+        //     $data =  NoseriDetailLogistik::where('detail_logistik_id', $value)->first();
+        //     $jumlah = count($array_seri);
 
-            $seri_data = NoseriDetailLogistik::whereIN('id', $array_seri)->get();
-            foreach ($seri_data as $d) {
-                $value2[] = $d->id;
-            }
-            $noseri_id =  json_encode($value2);
-        }
+        //     $seri_data = NoseriDetailLogistik::where('detail_logistik_id', $value)->get();
+        //     foreach ($seri_data as $d) {
+        //         $value2[] = $d->id;
+        //     }
+        //     $noseri_id =  json_encode($value2);
+        // } else {
+        //     $data =  NoseriDetailLogistik::whereIN('id', $array_seri)->first();
+        //     $jumlah = count($array_seri);
 
-        return view('page.dc.coo.edit', ['data' => $data, 'id' => $id, 'jumlah' => $jumlah, 'noseri_id' => $noseri_id]);
+        //     $seri_data = NoseriDetailLogistik::whereIN('id', $array_seri)->get();
+        //     foreach ($seri_data as $d) {
+        //         $value2[] = $d->id;
+        //     }
+        //     $noseri_id =  json_encode($value2);
+        // }
+
+        $series = NoseriDetailLogistik::
+        select('noseri_barang_jadi.noseri')
+        ->leftJoin('noseri_coo','noseri_coo.noseri_logistik_id','=','noseri_logistik.id')
+        ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
+        ->leftJoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
+        ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
+        ->whereIN('noseri_logistik.id', $obj->id)
+        ->pluck('noseri')->toArray();
+
+        $data =  NoseriDetailLogistik::
+        select('produk.nama','produk.no_akd')
+        ->leftJoin('noseri_coo','noseri_coo.noseri_logistik_id','=','noseri_logistik.id')
+        ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
+        ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','noseri_detail_pesanan.detail_pesanan_produk_id')
+        ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','detail_pesanan_produk.gudang_barang_jadi_id')
+        ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
+        ->leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
+        ->leftJoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
+        ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
+        ->whereIN('noseri_logistik.id', $obj->id)
+        ->first();
+        $jumlah = count($obj->id);
+        return view('page.dc.coo.edit', ['series'=> $series,'data' => $data, 'id' => $obj->id, 'jumlah' => $jumlah, 'noseri_id' => json_encode($obj->id)]);
+
+
     }
 
     public function edit_tglkirim_coo($id)
@@ -1533,10 +1559,9 @@ class DcController extends Controller
         }
     }
 
-    public function update_coo(Request $request, $value)
+    public function update_coo(Request $request)
     {
-        $replace_array_seri = strtr($value, array('[' => '', ']' => ''));
-        $array_seri = explode(',', $replace_array_seri);
+        $array_seri = json_decode($request->id);
         $bool = true;
         for ($i = 0; $i < count($array_seri); $i++) {
             $noseri = NoseriCoo::where('noseri_logistik_id', $array_seri[$i])->first();
