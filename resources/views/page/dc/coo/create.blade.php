@@ -9,31 +9,30 @@
                     <div class="col-5">
                         <div><small class="text-muted">Nama Produk</small></div>
                         <div><b>
-                                @if($data->detaillogistik->DetailPesananProduk->GudangBarangJadi->nama == '')
-                                {{$data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->nama}}
-                                @else
-                                {{$data->detaillogistik->DetailPesananProduk->GudangBarangJadi->nama}}
-                                @endif</b></div>
+                            {{$data->nama}}
+                            </b></div>
                     </div>
                     <div class="col-4">
                         <div><small class="text-muted">No AKD</small></div>
                         <div><b>
-                                @if($data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->no_akd != '')
+                                {{-- @if($data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->no_akd != '' || $data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->no_akd != NULL)
                                 {{ $data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->no_akd}}
-                                @endif
+                                @endif --}}
+                                {{$data->no_akd != NULL ? $data->no_akd : '-' }}
                             </b></div>
                     </div>
                     <div class="col-3">
                         <div><small class="text-muted">Jumlah</small></div>
-                        <div><b>{{$data->detaillogistik->DetailPesananProduk->DetailPesanan->jumlah}}</b></div>
+                        <div><b>{{$jumlah}}</b></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-lg-7 col-md-6">
-        <form action="/api/dc/so/store/{{$noseri_id}}" id="form-create-coo" method="POST">
+        <form action="/api/dc/so/store" id="form-create-coo" method="POST">
             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+            <input type="hidden" name="id" value="{{$noseri_id}}">
             <div class="card">
                 <div class="card-header">
                     <h6 class="card-title">Tambah</h6>
@@ -133,6 +132,13 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($series as  $d)
+                                <tr>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$d}}</td>
+                                </tr>
+                                @endforeach
+
                             </tbody>
                         </table>
                     </div>

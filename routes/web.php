@@ -414,7 +414,7 @@ Route::group(['prefix' => 'dc'], function () {
         Route::group(['middleware' => ['divisi:dc']], function () {
             Route::view('/detail/{id}', 'page.dc.coo.detail')->name('dc.coo.detail');
             Route::view('/create/{id}', 'page.dc.coo.create')->name('dc.coo.create');
-            Route::get('/create/{id}/{Value}', [App\Http\Controllers\DcController::class, 'create_coo'])->name('dc.coo.create');
+            Route::get('/create', [App\Http\Controllers\DcController::class, 'create_coo'])->name('dc.coo.create');
             Route::get('/edit/{id}/{Value}', [App\Http\Controllers\DcController::class, 'edit_coo'])->name('dc.coo.edit');
             Route::get('/edit_tglkirim/{Value}', [App\Http\Controllers\DcController::class, 'edit_tglkirim_coo'])->name('dc.coo.tglkirim_edit');
             Route::group(['prefix' => '/laporan'], function () {

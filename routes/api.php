@@ -676,7 +676,7 @@ Route::prefix('/dc')->group(function () {
         Route::post('data', [App\Http\Controllers\DcController::class, 'get_data_so_in_process']);
     });
     Route::prefix('/so')->group(function () {
-        Route::post('store/{value}', [App\Http\Controllers\DcController::class, 'store_coo']);
+        Route::post('store', [App\Http\Controllers\DcController::class, 'store_coo']);
         Route::post('cancel', [App\Http\Controllers\DcController::class, 'cancel_so']);
         Route::post('update/{value}', [App\Http\Controllers\DcController::class, 'update_coo']);
         Route::put('update_tgl_kirim_coo/{value}', [App\Http\Controllers\DcController::class, 'update_tgl_kirim_coo']);

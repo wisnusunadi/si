@@ -791,9 +791,12 @@
             $(document).on('click', '.createmodal', function(event) {
                 event.preventDefault();
                 data = $(".nosericheck").data().value;
-                var id = $(this).data('id');
+                let id = $(this).data('id');
+                let jsonArray = JSON.stringify({ detail_logistik_id : data , id: checkedAryBelumProses});
+               let url = "/dc/coo/create?noseri="+ encodeURIComponent(jsonArray);
                 $.ajax({
-                    url: "/dc/coo/create/" + checkedAryBelumProses + "/" + data,
+                    url: url,
+                    // url: "/dc/coo/create/" + checkedAryBelumProses + "/" + data,
                     beforeSend: function() {
                         $('#loader').show();
                     },
@@ -804,14 +807,15 @@
                             placeholder: 'Pilih Bulan',
                             allowClear: true
                         });
-                        listnoseri(checkedAryBelumProses, data, 'listnoseribelum');
+                        $('#listnoseribelum').dataTable()
+                        // listnoseri(checkedAryBelumProses, data, 'listnoseribelum');
                     },
                     complete: function() {
                         $('#loader').hide();
                     },
                     error: function(jqXHR, testStatus, error) {
                         console.log(error);
-                        alert("Page " + href + " cannot open. Error:" + error);
+                        // alert("Page " + href + " cannot open. Error:" + error);
                         $('#loader').hide();
                     },
                     timeout: 8000
