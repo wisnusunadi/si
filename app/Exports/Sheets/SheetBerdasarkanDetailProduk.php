@@ -735,7 +735,7 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
             'po' => $d->no_po,
             'tgl_po' => $d->tgl_po,
             'ket' => $d->ket,
-
+            'log_id' => $d->log_id,
         );
     }
 

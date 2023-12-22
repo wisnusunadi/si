@@ -93,7 +93,7 @@
             <td>{{$p['harga']}}</td>
             <td>{{$p['ongkir']}}</td>
             <td>{{($p['jumlah'] * $p['harga']) + $p['ongkir']}}</td>
-            <td>{{$d['status']}}</td>
+            <td>{{ $d['log_id'] == 20 ? 'batal' :  $d['status']  }}</td>
             <td>{{$d['ket']}}</td>
             </tr>
             @endforeach
@@ -140,7 +140,7 @@
             <td>{{$p['harga']}}</td>
             <td>{{$p['ongkir']}}</td>
             <td>{{($p['jumlah'] * $p['harga']) + $p['ongkir']}}</td>
-            <td>{{$d['status']}}</td>
+            <td>{{ $d['log_id'] == 20 ? 'batal' :  $d['status']  }}</td>
             <td>{{$d['ket']}}</td>
             </tr>
             @endforeach
@@ -187,7 +187,7 @@
             <td>{{$p['harga']}}</td>
             <td>0</td>
             <td>{{$p['jumlah'] * $p['harga']}}</td>
-            <td>{{$d['status']}}</td>
+            <td>{{ $d['log_id'] == 20 ? 'batal' :  $d['status']  }}</td>
             <td>{{$d['ket']}}</td>
             </tr>
             @endforeach
