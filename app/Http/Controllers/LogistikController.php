@@ -852,7 +852,7 @@ class LogistikController extends Controller
         //     ->make(true);
 
         // $data = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $id, 'status' => 'ok'])->doesntHave('NoseriDetailLogistik')->get();
-        $data = NoseriBarangJadi::select('noseri_detail_pesanan.id as ndp_id', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as id')
+        $data = NoseriBarangJadi::select('noseri_detail_pesanan.id as ndp_id', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_detail_pesanan.id as id')
             ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
             ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
             ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
@@ -3766,7 +3766,7 @@ class LogistikController extends Controller
 
     public function create_logistik(Request $request, $jenis)
     {
-        // dd($request->all());
+         //dd(explode(',', $request->produk_no_seri[0]));
         $ids = "";
         $iddp = "";
         $poid = "";

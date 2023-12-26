@@ -2687,21 +2687,21 @@ class PenjualanController extends Controller
                 return $data->status;
             })
             ->addColumn('so', function ($data) {
-                if ($data->Pesanan) {
-                    if (!empty($data->Pesanan->so)) {
-                        return $data->Pesanan->so;
-                    } else {
-                        return '-';
-                    }
-                } else {
-                    return '-';
-                }
+                //
+                // if ($data->Pesanan) {
+                //     if (!empty($data->Pesanan->so)) {
+                //         return $data->Pesanan->so;
+                //     } else {
+                //         return '-';
+                //     }
+                // } else {
+                //     return '-';
+                // }
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
                 if ($data->Pesanan->log_id == '7') {
                     $datas .= '<span class="red-text badge">Penjualan</span>';
-
                     // if (!empty($data->status)) {
                     //     if ($data->status == "batal") {
                     //         $datas .= '<span class="red-text badge">';
