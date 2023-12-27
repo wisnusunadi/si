@@ -1476,7 +1476,7 @@ class DcController extends Controller
     // $check = Pesanan::whereYear('created_at', $this->getYear())->where('so', 'like', '%' . $this->getYear() . '%')->get('so');
     public function store_coo(Request $request)
     {
-
+        dd($request->all());
 
         if ($request->diketahui == 'spa') {
             $nama = NULL;
@@ -1553,9 +1553,9 @@ class DcController extends Controller
                 'response' => json_encode($obj),
                 'user_id' => $request->user_id,
             ]);
-            return response()->json(['data' =>  'success']);
+            return response()->json(['data' =>  'success'], 200);
         } else {
-            return response()->json(['data' =>  'error']);
+            return response()->json(['data' =>  'error'], 500);
         }
     }
 
