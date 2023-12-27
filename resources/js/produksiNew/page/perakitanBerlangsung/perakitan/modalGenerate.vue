@@ -12,9 +12,8 @@ export default {
         return {
             showModalCetak: false,
             form: {
-                kedatangan: 0,
+                kedatangan: 1,
                 jml_noseri: 0,
-                no_urut_terakhir: 0,
             },
             isError: false,
             seri: [],
@@ -30,8 +29,6 @@ export default {
                     align: 'text-left',
                 }
             ],
-            showNoUrutTerakhir: false,
-            loadingNoUrut: false,
             hasilGenerate: [],
             idCetakHasilGenerate: [],
             showModalPilihan: false,
@@ -115,19 +112,15 @@ export default {
         },
         async checkNoUrut() {
             try {
-                this.loadingNoUrut = true
                 const { data } = await axios.get(`/api/prd/ongoing/${this.dataGenerate.id}`)
                 if (data != 0) {
-                    this.showNoUrutTerakhir = true
                     this.form.no_urut_terakhir = data
                 } else {
-                    this.showNoUrutTerakhir = false
                 }
             } catch (error) {
                 console.log(error)
             } finally {
                 this.form.kedatangan = 1
-                this.loadingNoUrut = false
             }
         },
         cetakSeri() {
@@ -150,9 +143,6 @@ export default {
         jumlahRakit() {
             return this.dataGenerate.kurang >= this.form.jml_noseri ? true : false
         },
-        validasiNoUrutTerakhir() {
-            return this.form.no_urut_terakhir < 100000 ? true : false
-        }
     },
     watch: {
         'form.kedatangan': function (val) {
@@ -184,7 +174,7 @@ export default {
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="card" v-if="!loadingNoUrut">
+                        <div class="card">
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-sm">
@@ -260,15 +250,6 @@ export default {
                                                     Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
                                                 </div>
                                             </div>
-                                            <div class="form-group" v-if="!showNoUrutTerakhir">
-                                                <label for="exampleInputPassword1">No Urut Terakhir</label>
-                                                <input type="number" class="form-control"
-                                                    :class="validasiNoUrutTerakhir ? 'is-valid' : 'is-invalid'"
-                                                    @keypress="numberOnly($event)" v-model.number="form.no_urut_terakhir">
-                                                <div class="invalid-feedback" v-if="!validasiNoUrutTerakhir">
-                                                    Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
-                                                </div>
-                                            </div>
                                         </form>
                                     </div>
                                     <div class="col" v-if="hasilGenerate.length > 0">
@@ -313,9 +294,6 @@ export default {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="spinner-border" role="status" v-else>
-                            <span class="sr-only">Loading...</span>
                         </div>
 
                         <div class="d-flex bd-highlight">
