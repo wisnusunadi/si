@@ -212,47 +212,47 @@
                                 </thead>
                                 <tbody>
                                     <!-- <tr>
-                                                                        <td class="nowrap-text">1</td>
-                                                                        <td class="nowrap-text">19-10-2021</td>
-                                                                        <td class="nowrap-text minimizechar">B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
-                                                                        <td class="nowrap-text">21102900256</td>
-                                                                        <td class="nowrap-text">X</td>
-                                                                        <td class="nowrap-text">5</td>
-                                                                        <td class="nowrap-text"><span class="badge green-text">Tersedia</span></td>
-                                                                        <td class="nowrap-text"></a>
-                                                                            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                                <a class="noserishow dropdown-item" type="button">
-                                                                                    <i class="fas fa-eye"></i>
-                                                                                    Detail
-                                                                                </a>
+                                            <td class="nowrap-text">1</td>
+                                            <td class="nowrap-text">19-10-2021</td>
+                                            <td class="nowrap-text minimizechar">B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
+                                            <td class="nowrap-text">21102900256</td>
+                                            <td class="nowrap-text">X</td>
+                                            <td class="nowrap-text">5</td>
+                                            <td class="nowrap-text"><span class="badge green-text">Tersedia</span></td>
+                                            <td class="nowrap-text"></a>
+                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="noserishow dropdown-item" type="button">
+                                                        <i class="fas fa-eye"></i>
+                                                        Detail
+                                                    </a>
 
-                                                                                    <button class="dropdown-item" type="button">
-                                                                                        <i class="fas fa-file"></i>
-                                                                                        Laporan PDF
-                                                                                    </button>
+                                                        <button class="dropdown-item" type="button">
+                                                            <i class="fas fa-file"></i>
+                                                            Laporan PDF
+                                                        </button>
 
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>2</td>
-                                                                        <td>21-10-2021</td>
-                                                                        <td class="minimizechar">PULSE OXIMETER/OXYMETER FOX-2</td>
-                                                                        <td>20502210102</td>
-                                                                        <td></td>
-                                                                        <td>2</td>
-                                                                        <td><span class="badge red-text">Belum Tersedia</span></td>
-                                                                        <td class="nowrap-text"></a>
-                                                                            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                                <a class="noserishow dropdown-item" type="button">
-                                                                                    <i class="fas fa-eye"></i>
-                                                                                    Detail
-                                                                                </a>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr> -->
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>21-10-2021</td>
+                                            <td class="minimizechar">PULSE OXIMETER/OXYMETER FOX-2</td>
+                                            <td>20502210102</td>
+                                            <td></td>
+                                            <td>2</td>
+                                            <td><span class="badge red-text">Belum Tersedia</span></td>
+                                            <td class="nowrap-text"></a>
+                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="noserishow dropdown-item" type="button">
+                                                        <i class="fas fa-eye"></i>
+                                                        Detail
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -569,47 +569,39 @@
             }
 
             var checkedAryBelumProses = [];
-            $('#noseri_belum_proses_table').on('change', '#check_all', function() {
-                var table = $('#noseri_belum_proses_table').DataTable();
-                var rows = table.rows().nodes();
-                checkedAryBelumProses = [];
-
-                if ($(this).is(':checked')) {
-                    $('.nosericheck', rows).prop('checked', true);
+            $('#noseri_belum_proses_table').on('click', 'input[name="check_all"]', function() {
+                var rows = $('#noseri_belum_proses_table').DataTable().rows().nodes();
+                if ($('#noseri_belum_proses_table').find('input[name="check_all"]:checked').length > 0) {
                     $('#cekbrg').prop('disabled', false);
-                    $.each(rows, function() {
-                        var dataObject = table.row(this).data();
-                        checkedAryBelumProses.push(dataObject);
+                    // $('#cekbrgedit').prop('disabled', false);
+                    $('.nosericheck', rows).prop('checked', true);
+                    checkedAryBelumProses = [];
+                    $.each($(".nosericheck:checked", rows), function() {
+                        checkedAryBelumProses.push($(this).closest('tr').find('.nosericheck').attr(
+                            'data-id'));
                     });
-                } else {
+                } else if ($('#noseri_belum_proses_table').find('input[name="check_all"]:checked').length <=
+                    0) {
                     $('.nosericheck', rows).prop('checked', false);
                     $('#cekbrg').prop('disabled', true);
+                    // $('#cekbrgedit').prop('disabled', true);
                 }
             });
 
             $('#noseri_belum_proses_table').on('click', '.nosericheck', function() {
-                var table = $('#noseri_belum_proses_table').DataTable();
-                var rows = table.rows().nodes();
+                var rows = $('#noseri_belum_proses_table').DataTable().rows().nodes();
                 $('#noseri_belum_proses_table').find('#check_all').prop('checked', false);
-                checkedAryBelumProses = [];
-
                 if ($('.nosericheck:checked', rows).length > 0) {
                     $('#cekbrg').prop('disabled', false);
+                    // $('#cekbrgedit').prop('disabled', false);
+                    checkedAryBelumProses = [];
                     $.each($(".nosericheck:checked", rows), function() {
-                        // Get the row index
-                        var rowIndex = table.row($(this).closest('tr')).index();
-                        // Get the data object for the row
-                        var dataObject = table.row(rowIndex).data();
-                        if (checkedAryBelumProses.findIndex(x => x.id === dataObject.id) === -1) {
-                            checkedAryBelumProses.push(dataObject);
-                        } else {
-                            checkedAryBelumProses.splice(checkedAryBelumProses.findIndex(x => x
-                                .id ===
-                                dataObject.id), 1);
-                        }
+                        checkedAryBelumProses.push($(this).closest('tr').find('.nosericheck').attr(
+                            'data-id'));
                     });
                 } else if ($('.nosericheck:checked', rows).length <= 0) {
                     $('#cekbrg').prop('disabled', true);
+                    // $('#cekbrgedit').prop('disabled', true);
                 }
             });
 
@@ -798,277 +790,57 @@
 
             $(document).on('click', '.createmodal', function(event) {
                 event.preventDefault();
-                // select data datatable with class tr bgcolor
-                var dataTableOld = $('#showtable').dataTable();
-                var rows = dataTableOld.$('tr.bgcolor').closest('tr');
-                var data = dataTableOld.fnGetData(rows[0]);
-
-                let idSeri = []
-                $.each(checkedAryBelumProses, function(key, value) {
-                    idSeri.push(value.id);
-                });
-                $('#createmodal').modal("show");
-                $('#create').html(`
-                <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h6 class="card-title">Info</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="row d-flex justify-content-center">
-                                    <div class="col-5">
-                                        <div><small class="text-muted">Nama Produk</small></div>
-                                        <div><b>
-                                                ${data?.nama_paket}
-                                            </b></div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div><small class="text-muted">No AKD</small></div>
-                                        <div><b>
-                                                
-                                                ${data?.no_akd == null || data?.no_akd == '' ? '-' : data?.no_akd}
-                                            </b></div>
-                                    </div>
-                                    <div class="col-3">
-                                        <div><small class="text-muted">Jumlah</small></div>
-                                        <div><b>
-                                            ${checkedAryBelumProses.length}
-                                            </b></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-7 col-md-6">
-                        <form id="form-create-coo" method="POST">
-                            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                            <input type="hidden" name="id" value="${JSON.stringify(idSeri)}">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h6 class="card-title">Tambah</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-horizontal">
-                                        <div class="form-group">
-                                            <label for="" class="col-form-label">Diketahui Oleh</label>
-                                            <div class="col-form-label d-flex justify-content-between">
-                                                <div class="form-check form-check-inline ">
-                                                    <input class="form-check-input" type="radio" name="diketahui" id="diketahui1" value="spa" />
-                                                    <label class="form-check-label" for="diketahui1">PT Sinko Prima Alloy</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="diketahui" id="diketahui1" value="emiindo" />
-                                                    <label class="form-check-label" for="diketahui1">PT. EMIINDO Jaya Bersama</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="diketahui" id="diketahui2" value="custom" />
-                                                    <label class="form-check-label" for="diketahui2">Custom</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-row hide" id="nama_label">
-                                            {{-- <div class="card" style="box-shadow:none;">
-                                                <div class="card-body" style="background-color: #17a2b8">
-                                                    <div class="row"> --}}
-                                                        <div class="form-group col-6">
-                                                            <label for="" class="col-form-label" style="text-align:right;">Nama</label>
-                                                            <input type="text" class="form-control col-form-label" id="nama" name="nama">
-                                                        </div>
-                                                        <div class="form-group col-6">
-                                                            <label for="" class="col-form-label" style="text-align:right;">Jabatan</label>
-                                                            <input type="text" class="form-control col-form-label" id="jabatan" name="jabatan">
-                                                        </div>
-                                                    {{-- </div> --}}
-                                                {{-- </div>
-                                            </div> --}}
-                                            {{-- <label for="" class="col-5 col-form-label" style="text-align:right;">Nama</label>
-                                            <div class="col-5">
-                                                <input type="text" class="form-control col-form-label" id="nama" name="nama">
-                                            </div> --}}
-                                        </div>
-                                        {{-- <div class="form-group row hide" id="jabatan_label">
-                                            <label for="" class="col-5 col-form-label" style="text-align:right;">Jabatan</label>
-                                            <div class="col-5">
-                                                <input type="text" class="form-control col-form-label" id="jabatan" name="jabatan">
-                                            </div>
-                                        </div> --}}
-                                        <div class="form-group" for="tgl_kirim">
-                                            <label for="" class="col-form-label" style="text-align:right;">Tgl Kirim</label>
-                                            <input type="date" class="form-control col-form-label col-lg-4 col-md-6" name="tgl_kirim">
-                                            <div class="feedback" id="msgpart_id">
-                                                <small class="text-muted">*Boleh dikosongi jika tidak ada</small>
-                                            </div>
-                                        </div>
-                                        {{-- <div class="form-group row" id="tgl_kirim">
-                                            <label for="" class="col-5 col-form-label" style="text-align:right;">Tgl Kirim</label>
-                                            <div class="col-5">
-                                                <input type="date" class="form-control col-form-label" name="tgl_kirim">
-                                                <div class="feedback" id="msgpart_id">
-                                                    <small class="text-muted">*Boleh dikosongi jika tidak ada</small>
-                                                </div>
-                                            </div>
-                                        </div> --}}
-                                        <div class="form-group" for="keterangan">
-                                            <label for="" class="col-form-label">Tanda Terima</label>
-                                            <textarea class="form-control col-form-label" name="keterangan"></textarea>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <span>
-                                        <button class="btn btn-danger float-left" data-dismiss="modal">Batal</button>
-                                    </span>
-                                    <span>
-                                        <button type="submit" class="btn btn-info float-right disabled" id="btnsimpan">Simpan</button>
-                                    </span>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-lg-5 col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h6 class="card-title">List No Seri</h6>
-                            </div>
-                            <div class="card-body overflowy">
-                                <div class="form-group">
-                                    <div class="table-responsive">
-                                        <table class="table" style="width: 100%; text-align:center;" id="listnoseribelum">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>No Seri</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`).show();
-
-                $('#listnoseribelum').dataTable({
-                    data: checkedAryBelumProses,
-                    columns: [{
-                            data: 'no',
-                            className: 'nowrap-text align-center',
-                            orderable: false,
-                            searchable: false,
-                            render: function(data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            }
-                        },
-                        {
-                            data: 'noseri',
-                        }
-                    ]
+                data = $(".nosericheck").data().value;
+                let id = $(this).data('id');
+                let jsonArray = JSON.stringify({ detail_logistik_id : data , id: checkedAryBelumProses});
+               let url = "/dc/coo/create?noseri="+ encodeURIComponent(jsonArray);
+                $.ajax({
+                    url: url,
+                    // url: "/dc/coo/create/" + checkedAryBelumProses + "/" + data,
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    success: function(result) {
+                        $('#createmodal').modal("show");
+                        $('#create').html(result).show();
+                        $('.bulan_edit').select2({
+                            placeholder: 'Pilih Bulan',
+                            allowClear: true
+                        });
+                        $('#listnoseribelum').dataTable()
+                        // listnoseri(checkedAryBelumProses, data, 'listnoseribelum');
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        // alert("Page " + href + " cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
                 })
-
-                // send data /api/dc/so/store from form
-               $(document).on('click', '#btnsimpan', function(event) {
-                    event.preventDefault();
-                    $.ajax({
-                        url: "/api/dc/so/store",
-                        beforeSend: function() {
-                            $('#loader').show();
-                        },
-                        type: "POST",
-                        data: $('#form-create-coo').serialize(),
-                        success: function(result) {
-                            console.log(result);
-                            swal.fire(
-                                'Berhasil',
-                                'Berhasil melakukan Penambahan Data COO',
-                                'success'
-                            ).then(function() {
-                                location.reload();
-                            });
-                        },
-                        complete: function() {
-                            $('#loader').hide();
-                        },
-                        error: function(jqXHR, testStatus, error) {
-                            console.log(error);
-                            // alert("Page " + href + " cannot open. Error:" + error);
-                            $('#loader').hide();
-                            swal.fire(
-                                'Gagal',
-                                'Gagal melakukan Penambahan Data COO',
-                                'error'
-                            );
-                            
-                        },
-                        timeout: 8000
-                    })
-                });
-
-
-                // data = $(".nosericheck").data().value;
-                // let id = $(this).data('id');
-                // let jsonArray = JSON.stringify({
-                //     detail_logistik_id: data,
-                //     id: checkedAryBelumProses
-                // });
-                // let url = "/dc/coo/create?noseri=" + encodeURIComponent(jsonArray);
-                // $.ajax({
-                //     url: url,
-                //     // url: "/dc/coo/create/" + checkedAryBelumProses + "/" + data,
-                //     beforeSend: function() {
-                //         $('#loader').show();
-                //     },
-                //     success: function(result) {
-                //         $('#createmodal').modal("show");
-                //         $('#create').html(result).show();
-                //         $('.bulan_edit').select2({
-                //             placeholder: 'Pilih Bulan',
-                //             allowClear: true
-                //         });
-                //         $('#listnoseribelum').dataTable()
-                //         // listnoseri(checkedAryBelumProses, data, 'listnoseribelum');
-                //     },
-                //     complete: function() {
-                //         $('#loader').hide();
-                //     },
-                //     error: function(jqXHR, testStatus, error) {
-                //         console.log(error);
-                //         // alert("Page " + href + " cannot open. Error:" + error);
-                //         $('#loader').hide();
-                //     },
-                //     timeout: 8000
-                // })
-                // console.log("checkedAryBelumProses : " + checkedAryBelumProses);
             });
 
             $(document).on('click', '.editmodal', function(event) {
                 event.preventDefault();
                 data = $('#noseri_selesai_proses_table').find(".nosericheck").data().value;
                 var id = $(this).data('id');
-                let jsonArray = JSON.stringify({
-                    detail_logistik_id: data,
-                    id: checkedArySelesaiProses
-                });
-                let url = "/dc/coo/edit?noseri=" + encodeURIComponent(jsonArray);
                 $.ajax({
-                    url: url,
+                    url: "/dc/coo/edit/" + checkedArySelesaiProses + "/" + data,
                     beforeSend: function() {
                         $('#loader').show();
                     },
                     // return the result
                     success: function(result) {
-                        // console.log(checkedArySelesaiProses + "/" + data);
+                        console.log(checkedArySelesaiProses + "/" + data);
                         $('#editmodal').modal("show");
                         $('#edit').html(result).show();
                         $('.bulan_edit').select2({
                             placeholder: 'Pilih Bulan',
                             allowClear: true
                         });
-                        $('#listnoseriselesai').dataTable()
-                        //  listnoseri(checkedArySelesaiProses, data, 'listnoseriselesai');
+                        listnoseri(checkedArySelesaiProses, data, 'listnoseriselesai');
                         // $("#editform").attr("action", href);
                     },
                     complete: function() {
