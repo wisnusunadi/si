@@ -1476,7 +1476,6 @@ class DcController extends Controller
     // $check = Pesanan::whereYear('created_at', $this->getYear())->where('so', 'like', '%' . $this->getYear() . '%')->get('so');
     public function store_coo(Request $request)
     {
-        dd($request->all());
 
         if ($request->diketahui == 'spa') {
             $nama = NULL;
