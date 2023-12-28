@@ -104,8 +104,8 @@ export default {
                     <li class="page-item">
                         <a class="page-link" :disabled="currentPage == 1" @click="previousPage">Previous</a>
                     </li>
-                    <li class="page-item" :class="paginate == currentPage ? 'active' : ''" v-for="paginate in pages"
-                        :key="paginate">
+                    <li class="page-item" :class="paginate == currentPage ? 'active' : ''" v-for="(paginate, index) in pages"
+                        :key="index">
                         <a class="page-link" @click="nowPage(paginate)" :disabled="disableClickPageThreeDots(paginate)">{{
                             paginate }}</a>
                     </li>

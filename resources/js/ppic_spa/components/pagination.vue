@@ -93,7 +93,7 @@ export default {
         <a class="pagination-previous" :disabled="currentPage == 1" @click="previousPage">Sebelumnya</a>
         <a class="pagination-next" :disabled="currentPage == pages[pages.length - 1]" @click="nextPage">Selanjutnya</a>
         <ul class="pagination-list">
-            <li v-for="page in pages" :key="page">
+            <li v-for="(page, index) in pages" :key="index">
                 <a class="pagination-link" :class="{ 'is-current': page === currentPage }" @click="nowPage(page)"
                     :disabled="disableClickPageThreeDots(page)">
                     {{ page }}

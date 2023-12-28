@@ -157,7 +157,7 @@ export default {
                                         <div class="form-group">
                                             <label for="jenis_penjualan">Tanggal Awal</label>
                                             <input type="date" class="form-control" v-model="tanggal_awal"
-                                            @input="updateTanggal"
+                                            @change="updateTanggal"
                                                 :max="tanggal_akhir">
                                         </div>
                                     </div>
@@ -165,7 +165,7 @@ export default {
                                         <div class="form-group">
                                             <label for="jenis_penjualan">Tanggal Akhir</label>
                                             <input type="date" class="form-control" v-model="tanggal_akhir"
-                                            @input="updateTanggal"
+                                            @change="updateTanggal"
                                                 :min="tanggal_awal">
                                         </div>
                                     </div>
