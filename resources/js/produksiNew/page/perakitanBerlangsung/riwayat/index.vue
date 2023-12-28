@@ -47,6 +47,8 @@ export default {
             cetakSeriType: 'all',
             riwayatSelected: null,
             showModalRiwayat: false,
+            tanggal_awal: JSON.parse(JSON.stringify(this.tanggalAwal)),
+            tanggal_akhir: JSON.parse(JSON.stringify(this.tanggalAkhir)),
         }
     },
     methods: {
@@ -89,6 +91,12 @@ export default {
             this.$nextTick(() => {
                 $('.modalRiwayat').modal('show');
             });
+        },
+        updateTanggal() {
+            this.$emit('updateTanggal', {
+                tanggalAwal: this.tanggal_awal,
+                tanggalAkhir: this.tanggal_akhir
+            })
         }
     },
     computed: {
@@ -107,7 +115,10 @@ export default {
             } else {
                 this.checkAll = false
             }
-        }
+        },
+        tanggal_awal() {
+            this.$emit('updateTanggalAwal', this.tanggal_awal)
+        },
     }
 }
 </script>
@@ -145,15 +156,17 @@ export default {
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="jenis_penjualan">Tanggal Awal</label>
-                                            <input type="date" class="form-control" v-model="tanggalAwal"
-                                                :max="tanggalAkhir">
+                                            <input type="date" class="form-control" v-model="tanggal_awal"
+                                            @input="updateTanggal"
+                                                :max="tanggal_akhir">
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="jenis_penjualan">Tanggal Akhir</label>
-                                            <input type="date" class="form-control" v-model="tanggalAkhir"
-                                                :min="tanggalAwal">
+                                            <input type="date" class="form-control" v-model="tanggal_akhir"
+                                            @input="updateTanggal"
+                                                :min="tanggal_awal">
                                         </div>
                                     </div>
                                 </div>
