@@ -167,7 +167,6 @@ Route::group(['prefix' => 'penjualan' , 'middleware' => 'auth'], function () {
         Route::get('/dashboard', [App\Http\Controllers\PenjualanController::class, 'dashboard'])->name('penjualan.dashboard');
     });
 
-
     Route::group(['prefix' => '/produk'], function () {
         Route::group(['middleware' => ['divisi:jual']], function () {
             Route::view('/show', 'page.penjualan.produk.show')->name('penjualan.produk.show');
@@ -384,7 +383,7 @@ Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [App\Http\Controllers\DireksiController::class, 'dashboard'])->name('direksi.dashboard');
 });
 
-Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'dc'], function () {
     Route::group(['middleware' => ['divisi:dc']], function () {
         Route::get('/dashboard',   [App\Http\Controllers\DcController::class, 'dashboard'])->name('dc.dashboard');
 
@@ -404,6 +403,7 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => '/coo'], function () {
+        Route::get('/rework/pdf', [App\Http\Controllers\DcController::class, 'pdf_coo_semua_rework']);
         Route::group(['middleware' => ['divisi:dc,dirut']], function () {
             Route::view('/show', 'page.dc.coo.show')->name('dc.coo.show');
             Route::get('/pdf/so/{id}/{value}/{jenis}/{stamp}', [App\Http\Controllers\DcController::class, 'pdf_semua_so_coo'])->name('dc.coo.semua.so.pdf');
@@ -413,8 +413,8 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
         Route::group(['middleware' => ['divisi:dc']], function () {
             Route::view('/detail/{id}', 'page.dc.coo.detail')->name('dc.coo.detail');
             Route::view('/create/{id}', 'page.dc.coo.create')->name('dc.coo.create');
-            Route::get('/create/{id}/{Value}', [App\Http\Controllers\DcController::class, 'create_coo'])->name('dc.coo.create');
-            Route::get('/edit/{id}/{Value}', [App\Http\Controllers\DcController::class, 'edit_coo'])->name('dc.coo.edit');
+            Route::get('/create', [App\Http\Controllers\DcController::class, 'create_coo'])->name('dc.coo.create');
+            Route::get('/edit', [App\Http\Controllers\DcController::class, 'edit_coo'])->name('dc.coo.edit');
             Route::get('/edit_tglkirim/{Value}', [App\Http\Controllers\DcController::class, 'edit_tglkirim_coo'])->name('dc.coo.tglkirim_edit');
             Route::group(['prefix' => '/laporan'], function () {
                 Route::view('/show', 'page.dc.laporan.show')->name('dc.coo.laporan.show');

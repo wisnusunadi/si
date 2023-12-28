@@ -48,7 +48,7 @@ export default {
         async simpan() {
             const ceknotnull = Object.values(this.form).every(x => x !== null && x !== '' && x !== 0)
             const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-'
-            if (ceknotnull && cekbppb && this.jumlahRakit && this.validasiNoUrutTerakhir) {
+            if (ceknotnull && cekbppb && this.jumlahRakit) {
                 try {
                     this.loading = true
                     const kirim = {

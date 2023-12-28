@@ -62,7 +62,7 @@ export default {
                     return {
                         ...item,
                         no: index + 1,
-                        tanggal_dibuat: this.dateFormat(item.tgl_buat),
+                        tanggal_dibuat: this.dateTimeFormat(item.tgl_buat),
                     }
                 })
             } catch (error) {

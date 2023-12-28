@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportPackWilayah;
 use App\Exports\ExportRework;
 use App\Exports\NoseriRakitExport;
 use App\Models\DetailPesanan;
@@ -295,7 +296,7 @@ class ProduksiController extends Controller
 
     function generate_fg(Request $request)
     {
-dd($request->all());
+   // dd($request->all());
     DB::beginTransaction();
         try {
             //code...
@@ -304,6 +305,8 @@ dd($request->all());
             $prd = Produk::find($obj->produk_id);
             $jp = JadwalPerakitan::find($obj->jadwal_id);
             $kurang = $jp->jumlah - $jp->noseri->count();
+
+            if($prd->kode != NULL || $prd->kode != ''){
             $getTgl = Carbon::now();
             $tahun = 24;
            // $tahun = $getTgl->format('Y') % 100;
@@ -410,6 +413,16 @@ dd($request->all());
                     'available' =>  array(),
                 ], 500);
             }
+        }else{
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Kode Barang Belum di isi',
+                'seri' => array(),
+                'duplicate' =>  array(),
+                'available' => array(),
+            ], 500);
+        }
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
@@ -4777,6 +4790,12 @@ dd($request->all());
     function export_pack_wilayah_excel($id)
     {
         $waktu = Carbon::now();
-        return Excel::download(new ExportRework($id), 'PerakitanReworks  ' . $waktu->toDateTimeString() . '.xlsx');
+        return Excel::download(new ExportPackWilayah($id), 'PerakitanReworks  ' . $waktu->toDateTimeString() . '.xlsx');
+    }
+
+    function export_rework_excel($urutan)
+    {
+        $waktu = Carbon::now();
+        return Excel::download(new ExportRework($urutan), 'PerakitanReworks  ' . $waktu->toDateTimeString() . '.xlsx');
     }
 }
