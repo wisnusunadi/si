@@ -295,7 +295,7 @@ class ProduksiController extends Controller
 
     function generate_fg(Request $request)
     {
-
+dd($request->all());
     DB::beginTransaction();
         try {
             //code...
