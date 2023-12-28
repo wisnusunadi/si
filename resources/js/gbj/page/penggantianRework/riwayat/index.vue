@@ -58,13 +58,17 @@ export default {
                 {{ dateTimeFormat(item.tgl_tf) }}
             </template>
 
-            <template #item.aksi = "{item}">
+            <template #item.aksi="{ item }">
                 <button class="btn btn-outline-info btn-sm" @click="detail(item)">
                     <i class="fas fa-eye"></i>
                     Detail
                 </button>
+                <button class="btn btn-sm btn-outline-primary">
+                    <i class="fa fa-print"></i>
+                    Cetak BPBJ
+                </button>
             </template>
-            
+
         </DataTable>
     </div>
 </template>

@@ -1,11 +1,13 @@
 <script>
 import DataTable from '../../../components/DataTable.vue';
 import modalPilihan from './modalPilihan.vue';
+import riwayatCetak from './riwayatCetak.vue';
 export default {
-    props: ['dataRiwayat'],
+    props: ['dataRiwayat', 'tanggalAkhir', 'tanggalAwal'],
     components: {
         DataTable,
-        modalPilihan
+        modalPilihan,
+        riwayatCetak
     },
     data() {
         return {
@@ -21,7 +23,8 @@ export default {
                 },
                 {
                     text: 'Tanggal Dibuat',
-                    value: 'tgl_buat'
+                    value: 'tgl_buat',
+                    sortable: false,
                 },
                 {
                     text: 'No BPPB',
@@ -42,6 +45,10 @@ export default {
             noSeriSelected: [],
             cetakSeriSingle: [],
             cetakSeriType: 'all',
+            riwayatSelected: null,
+            showModalRiwayat: false,
+            tanggal_awal: JSON.parse(JSON.stringify(this.tanggalAwal)),
+            tanggal_akhir: JSON.parse(JSON.stringify(this.tanggalAkhir)),
         }
     },
     methods: {
@@ -78,6 +85,19 @@ export default {
                 $('.modalPilihan').modal('show');
             });
         },
+        selectRiwayat(item) {
+            this.riwayatSelected = item
+            this.showModalRiwayat = true
+            this.$nextTick(() => {
+                $('.modalRiwayat').modal('show');
+            });
+        },
+        updateTanggal() {
+            this.$emit('updateTanggal', {
+                tanggalAwal: this.tanggal_awal,
+                tanggalAkhir: this.tanggal_akhir
+            })
+        }
     },
     computed: {
         filterData() {
@@ -95,13 +115,18 @@ export default {
             } else {
                 this.checkAll = false
             }
-        }
+        },
+        tanggal_awal() {
+            this.$emit('updateTanggalAwal', this.tanggal_awal)
+        },
     }
 }
 </script>
 <template>
     <div>
-        <modalPilihan :data="cetakSeriType == 'single' ? cetakSeriSingle : noSeriSelected" v-if="cetakSeriSingle.length > 0 || noSeriSelected.length > 0" />
+        <modalPilihan :data="cetakSeriType == 'single' ? cetakSeriSingle : noSeriSelected"
+            v-if="cetakSeriSingle.length > 0 || noSeriSelected.length > 0" />
+        <riwayatCetak :riwayat="riwayatSelected" v-if="showModalRiwayat" @closeModal="showModalRiwayat = false" />
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
                 <button class="btn btn-outline-primary btn-sm" v-if="noSeriSelected.length > 0" @click="cetakBanyakSeri">
@@ -118,6 +143,39 @@ export default {
                 <input type="checkbox" @click="checkAllSeri" :checked="checkAll">
             </template>
 
+            <template #header.tgl_buat>
+                <span class="text-bold pr-2">Tanggal Dibuat</span>
+                <span class="filter">
+                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-filter"></i>
+                    </a>
+                    <form id="filter_ekat">
+                        <div class="dropdown-menu">
+                            <div class="px-3 py-3">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="jenis_penjualan">Tanggal Awal</label>
+                                            <input type="date" class="form-control" v-model="tanggal_awal"
+                                            @change="updateTanggal"
+                                                :max="tanggal_akhir">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="jenis_penjualan">Tanggal Akhir</label>
+                                            <input type="date" class="form-control" v-model="tanggal_akhir"
+                                            @change="updateTanggal"
+                                                :min="tanggal_awal">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </span>
+            </template>
+
             <template #item.id="{ item }">
                 <input type="checkbox" :checked="noSeriSelected && noSeriSelected.find((noseri) => noseri === item.id)"
                     @click="selectNoSeri(item.id)" />
@@ -125,7 +183,11 @@ export default {
             <template #item.aksi="{ item }">
                 <button class="btn btn-outline-primary btn-sm" @click="cetakSeri(item.id)">
                     <i class="fa fa-print"></i>
-                    Cetak Nomor Seri
+                    Cetak No. Seri
+                </button>
+                <button class="btn btn-outline-info btn-sm" @click="selectRiwayat(item)">
+                    <i class="fa fa-info-circle"></i>
+                    Riwayat Cetak No. Seri
                 </button>
             </template>
         </DataTable>

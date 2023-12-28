@@ -688,8 +688,12 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
         $groupedDataPrd = collect($detail_pesanan)->groupBy('pesanan_id');
         $groupedDataPrdDsb = collect($detail_pesanan_dsb)->groupBy('pesanan_id');
         $groupedDataPart = collect($detail_pesanan_part)->groupBy('pesanan_id');
-        $groupedDataSj = collect($surat_jalan)->groupBy('id');
-        $groupedDataSjPart = collect($surat_jalan_part)->groupBy('id');
+        $groupedDataSj = collect($surat_jalan)->groupBy('id')->toArray();
+        $groupedDataSjPart = collect($surat_jalan_part)->groupBy('id')->toArray();
+        $infoByID = [];
+        foreach ($dataInfo as $infoItem) {
+            $infoByID[$infoItem->id] = $infoItem;
+        }
 
         //GROUP BY REF ID
         $noseri_group = $groupedDataSeri->map(function ($items, $key) {
@@ -754,17 +758,57 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
             $pesanan[] = array(
                 'id' => $d->id,
                 'so' => $d->so,
+                'nama' => '-',
+                'no_paket' => '-',
+                'instansi' => '-',
+                'alamat_instansi' => '-',
+                'satuan' => '-',
+                'no_urut' => '-',
+                'tgl_buat' => '-',
+                'tgl_kontrak' => '-',
+                'status' => '-',
                 'po' => $d->no_po,
                 'tgl_po' => $d->tgl_po,
                 'ket' => $d->ket,
                 'log_id' => $d->log_id,
-
+                'nosurat' => [],
+                'nosurat_part' => []
             );
         }
 
         $produkByPesananId = [];
         $produkDsbByPesananId = [];
         $partByPesananId = [];
+
+        foreach ($pesanan as &$pesananItem) {
+            $pesananID = $pesananItem['id'];
+            if (array_key_exists($pesananID,$groupedDataSj)) {
+               // $pesanan[$key]['nosurat'] = $groupedDataSj[$pesananID];
+                $pesananItem['nosurat'] = $groupedDataSj[$pesananID];
+            }
+        }
+
+        foreach ($pesanan as  &$pesananItem) {
+            $pesananID = $pesananItem['id'];
+            if (array_key_exists($pesananID,$groupedDataSjPart)) {
+                $pesananItem['nosurat_part'] = $groupedDataSjPart[$pesananID];
+            }
+        }
+
+        foreach ($pesanan as  &$pesananItem) {
+            $pesananID = $pesananItem['id'];
+            if (array_key_exists($pesananID,$infoByID)) {
+                $pesananItem['nama'] = $infoByID[$pesananID]->nama;
+                $pesananItem['no_paket'] = $infoByID[$pesananID]->no_paket;
+                $pesananItem['instansi'] = $infoByID[$pesananID]->instansi;
+                $pesananItem['alamat_instansi'] = $infoByID[$pesananID]->alamat_instansi;
+                $pesananItem['satuan'] =  $infoByID[$pesananID]->satuan;
+                $pesananItem['no_urut'] =  $infoByID[$pesananID]->no_urut;
+                $pesananItem['tgl_buat'] =  $infoByID[$pesananID]->tgl_buat;
+                $pesananItem['tgl_kontrak'] =  $infoByID[$pesananID]->tgl_kontrak;
+                $pesananItem['status'] =  $infoByID[$pesananID]->status;
+            }
+        }
 
         // Group $produk array items by pesanan_id
         foreach ($detail_pesanan_part_group as $item) {
@@ -842,67 +886,8 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
             }
         }
 
-        //SET SJ TO INDEX
-        // $SuratJalanByID = [];
-        // foreach ($surat_jalan as $suratjalan) {
-        //     $SuratJalanByID[$suratjalan->id] = $suratjalan;
-        // }
-
-        foreach ($pesanan as $key => $pesananItem) {
-            $pesananID = $pesananItem['id'];
-            if (isset($groupedDataSj[$pesananID])) {
-                $pesanan[$key]['nosurat'] = $groupedDataSj[$pesananID];
-            } else {
-                // If no matching ID is found, set 'info' as an empty array or handle accordingly
-                $pesanan[$key]['nosurat'] = [];
-
-            }
-        }
-
-        foreach ($pesanan as $key => $pesananItem) {
-            $pesananID = $pesananItem['id'];
-            if (isset($groupedDataSjPart[$pesananID])) {
-                $pesanan[$key]['nosurat_part'] = $groupedDataSjPart[$pesananID];
-            } else {
-                // If no matching ID is found, set 'info' as an empty array or handle accordingly
-                $pesanan[$key]['nosurat_part'] = [];
-
-            }
-        }
 
 
-        //SET INFO TO INDEX
-          $infoByID = [];
-          foreach ($dataInfo as $infoItem) {
-              $infoByID[$infoItem->id] = $infoItem;
-          }
-
-
-          foreach ($pesanan as $key => $pesananItem) {
-            $pesananID = $pesananItem['id'];
-            if (isset($infoByID[$pesananID])) {
-                $pesanan[$key]['nama'] = $infoByID[$pesananID]->nama;
-                $pesanan[$key]['no_paket'] = $infoByID[$pesananID]->no_paket;
-                $pesanan[$key]['instansi'] = $infoByID[$pesananID]->instansi;
-                $pesanan[$key]['alamat_instansi'] = $infoByID[$pesananID]->alamat_instansi;
-                $pesanan[$key]['satuan'] =  $infoByID[$pesananID]->satuan;
-                $pesanan[$key]['no_urut'] =  $infoByID[$pesananID]->no_urut;
-                $pesanan[$key]['tgl_buat'] =  $infoByID[$pesananID]->tgl_buat;
-                $pesanan[$key]['tgl_kontrak'] =  $infoByID[$pesananID]->tgl_kontrak;
-                $pesanan[$key]['status'] =  $infoByID[$pesananID]->status;
-            } else {
-                // If no matching ID is found, set 'info' as an empty array or handle accordingly
-                $pesanan[$key]['nama'] = '-';
-                $pesanan[$key]['no_paket'] = '-';
-                $pesanan[$key]['instansi'] = '-';
-                $pesanan[$key]['alamat_instansi'] = '-';
-                $pesanan[$key]['satuan'] = '-';
-                $pesanan[$key]['no_urut'] = '-';
-                $pesanan[$key]['tgl_buat'] = '-';
-                $pesanan[$key]['tgl_kontrak'] = '-';
-                $pesanan[$key]['status'] = '-';
-            }
-        }
 
         return view('page.penjualan.penjualan.LaporanPenjualanPaketExNew',['data' => $pesanan,'seri' => $seri]);
 

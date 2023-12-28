@@ -339,6 +339,8 @@ Route::prefix('/prd')->group(function () {
         Route::get('/riwayat', [ProduksiController::class, 'riwayat_fg']);
         Route::post('/gen/confirm', [ProduksiController::class, 'generate_fg_confirm']);
         Route::post('/cetak/', [ProduksiController::class, 'get_noseri_fg_cetak']);
+        Route::post('/riwayat_code/', [ProduksiController::class, 'store_noseri_fg_riwayat_code'])->middleware('jwt.verify');
+        Route::get('/riwayat_code/{id}', [ProduksiController::class, 'get_noseri_fg_riwayat_code']);
     });
     Route::prefix('/rw')->group(function () {
         // Route::post('/generate_seri_back', [ProduksiController::class, 'generate_seri_back'])->middleware('jwt.verify');
@@ -387,7 +389,7 @@ Route::prefix('/prd')->group(function () {
     Route::post('/plan-cal', [ProduksiController::class, 'calender_plan']);
 
     // on
-    Route::post('/ongoing', [ProduksiController::class, 'on_rakit']);
+    Route::get('/ongoing', [ProduksiController::class, 'on_rakit']);
     Route::get('/ongoing/{id}', [ProduksiController::class, 'on_rakit_detail']);
     Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current'])->middleware('jwt.verify');
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
