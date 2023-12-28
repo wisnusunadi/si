@@ -309,7 +309,7 @@ class ProduksiController extends Controller
             if($prd->kode != NULL || $prd->kode != ''){
             $getTgl = Carbon::now();
            // $tahun = 24;
-             $tahun = $getTgl->format('Y') % 100;
+            $tahun = $getTgl->format('Y') % 100;
             $bulan =  strtoupper(dechex($getTgl->format('m')));;
             //Default
             $abjad = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T","U","V", "W", "X", "Y", "Z"];
@@ -3963,7 +3963,7 @@ class ProduksiController extends Controller
         //         ->whereYear('jadwal_rakit_noseri.created_at',  $date)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
         // }
 
-        $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
+        $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk','gdg_barang_jadi.nama as variasi', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
         ->leftjoin('jadwal_perakitan', 'jadwal_perakitan.id',
             '=',
             'jadwal_rakit_noseri.jadwal_id'
@@ -3982,7 +3982,7 @@ class ProduksiController extends Controller
                 $obj[] = array(
                     'id' => $d->id,
                     'noseri' => $d->noseri,
-                    'nama' => $d->produk,
+                    'nama' => $d->produk.' '.$d->variasi,
                     'no_bppb' => $d->no_bppb,
                     'tgl_buat' => $d->created_at
                 );
