@@ -312,7 +312,7 @@ class ProduksiController extends Controller
              $tahun = $getTgl->format('Y') % 100;
             $bulan =  strtoupper(dechex($getTgl->format('m')));;
             //Default
-            $abjad = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "Y", "V", "W", "X", "Y", "Z"];
+            $abjad = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T","U","V", "W", "X", "Y", "Z"];
             $kedatangan =  $abjad[$obj->kedatangan - 1];
             $max = JadwalRakitNoseri::where(['unit'=> $prd->kode.$gbj->kode,'th' => $tahun])->latest('id')->value('urutan')+0;
 
@@ -3277,8 +3277,8 @@ class ProduksiController extends Controller
         // group by jp.id
         // having jp.jumlah != count(jrn.jadwal_id)");
 
-        $data = JadwalPerakitan::select('p.kode','mp.nama','jadwal_perakitan.id','p.id as produk_id','jadwal_perakitan.created_at','jadwal_perakitan.tanggal_mulai',
-        'jadwal_perakitan.tanggal_selesai','jadwal_perakitan.no_bppb','jadwal_perakitan.jumlah','jadwal_perakitan.evaluasi',
+        $data = JadwalPerakitan::select('gbj.nama as varian','mp.nama','jadwal_perakitan.id','p.id as produk_id','jadwal_perakitan.created_at','jadwal_perakitan.tanggal_mulai',
+        'jadwal_perakitan.tanggal_selesai','jadwal_perakitan.no_bppb','jadwal_perakitan.jumlah','jadwal_perakitan.evaluasi','p.nama as produks',
                 'gbj.id as gbj_id')
         ->selectRaw('count(jadwal_rakit_noseri.jadwal_id) as jml_rakit')
         ->selectRaw('concat(p.nama," ",gbj.nama) as produkk')
@@ -3314,7 +3314,7 @@ class ProduksiController extends Controller
                     'tanggal_mulai' => $item->tanggal_mulai ? $item->tanggal_mulai : '-',
                     'tanggal_selesai' => $item->tanggal_selesai ? $item->tanggal_selesai : '-',
                     'selisih' => $item->selisih,
-                    'nama_produk' => $item->produkk,
+                    'nama_produk' => $item->produks.' '.$item->varian,
                     'kategori' => $item->nama,
                     'jumlah' => $item->jumlah,
                     'jumlah_rakit' => $item->jml_rakit,
