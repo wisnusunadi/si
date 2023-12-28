@@ -3946,11 +3946,6 @@ class ProduksiController extends Controller
     }
     function riwayat_fg(Request $request)
     {
-        $search = $request->search;
-        $keywords   = explode(' ', $search);
-
-        $date = Carbon::now()->format('Y');
-
         // if ($search == '' || $search == null) {
         //     $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
         //         ->leftjoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
@@ -3977,7 +3972,9 @@ class ProduksiController extends Controller
             'jadwal_perakitan.produk_id'
         )
         ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-        ->whereYear('jadwal_rakit_noseri.created_at',  $date)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
+        ->whereBetween('jadwal_rakit_noseri.created_at',[$request->tanggalAwal,$request->tanggalAkhir])
+        ->orderBy('jadwal_rakit_noseri.created_at', 'DESC')
+        ->get();
         if ($data->isEmpty()) {
             $obj = array();
         } else {
