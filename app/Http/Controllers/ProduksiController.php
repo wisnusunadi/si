@@ -309,10 +309,10 @@ class ProduksiController extends Controller
             if($prd->kode != NULL || $prd->kode != ''){
             $getTgl = Carbon::now();
            // $tahun = 24;
-             $tahun = $getTgl->format('Y') % 100;
+            $tahun = $getTgl->format('Y') % 100;
             $bulan =  strtoupper(dechex($getTgl->format('m')));;
             //Default
-            $abjad = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "Y", "V", "W", "X", "Y", "Z"];
+            $abjad = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T","U","V", "W", "X", "Y", "Z"];
             $kedatangan =  $abjad[$obj->kedatangan - 1];
             $max = JadwalRakitNoseri::where(['unit'=> $prd->kode.$gbj->kode,'th' => $tahun])->latest('id')->value('urutan')+0;
 
@@ -3277,8 +3277,8 @@ class ProduksiController extends Controller
         // group by jp.id
         // having jp.jumlah != count(jrn.jadwal_id)");
 
-        $data = JadwalPerakitan::select('p.kode','mp.nama','jadwal_perakitan.id','p.id as produk_id','jadwal_perakitan.created_at','jadwal_perakitan.tanggal_mulai',
-        'jadwal_perakitan.tanggal_selesai','jadwal_perakitan.no_bppb','jadwal_perakitan.jumlah','jadwal_perakitan.evaluasi',
+        $data = JadwalPerakitan::select('gbj.nama as varian','mp.nama','jadwal_perakitan.id','p.id as produk_id','jadwal_perakitan.created_at','jadwal_perakitan.tanggal_mulai',
+        'jadwal_perakitan.tanggal_selesai','jadwal_perakitan.no_bppb','jadwal_perakitan.jumlah','jadwal_perakitan.evaluasi','p.nama as produks',
                 'gbj.id as gbj_id')
         ->selectRaw('count(jadwal_rakit_noseri.jadwal_id) as jml_rakit')
         ->selectRaw('concat(p.nama," ",gbj.nama) as produkk')
@@ -3314,7 +3314,7 @@ class ProduksiController extends Controller
                     'tanggal_mulai' => $item->tanggal_mulai ? $item->tanggal_mulai : '-',
                     'tanggal_selesai' => $item->tanggal_selesai ? $item->tanggal_selesai : '-',
                     'selisih' => $item->selisih,
-                    'nama_produk' => $item->produkk,
+                    'nama_produk' => $item->produks.' '.$item->varian,
                     'kategori' => $item->nama,
                     'jumlah' => $item->jumlah,
                     'jumlah_rakit' => $item->jml_rakit,
@@ -3963,7 +3963,7 @@ class ProduksiController extends Controller
         //         ->whereYear('jadwal_rakit_noseri.created_at',  $date)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
         // }
 
-        $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
+        $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk','gdg_barang_jadi.nama as variasi', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
         ->leftjoin('jadwal_perakitan', 'jadwal_perakitan.id',
             '=',
             'jadwal_rakit_noseri.jadwal_id'
@@ -3982,7 +3982,7 @@ class ProduksiController extends Controller
                 $obj[] = array(
                     'id' => $d->id,
                     'noseri' => $d->noseri,
-                    'nama' => $d->produk,
+                    'nama' => $d->produk.' '.$d->variasi,
                     'no_bppb' => $d->no_bppb,
                     'tgl_buat' => $d->created_at
                 );
