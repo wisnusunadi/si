@@ -48,7 +48,7 @@ export default {
         async simpan() {
             const ceknotnull = Object.values(this.form).every(x => x !== null && x !== '' && x !== 0)
             const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-'
-            if (ceknotnull && cekbppb && this.jumlahRakit && this.validasiNoUrutTerakhir) {
+            if (ceknotnull && cekbppb && this.jumlahRakit) {
                 try {
                     this.loading = true
                     const kirim = {
@@ -183,7 +183,7 @@ export default {
                                         <div class="card">
                                             <div class="card-body">
                                                 <input type="text" name="no_bppb" id="no_bppb" class="form-control"
-                                                    v-model="dataGenerate.no_bppb" :disabled="loading"
+                                                    v-model="dataGenerate.no_bppb" :disabled="loading || hasilGenerate.length > 0"
                                                     @keyup="keyUpperCase($event)">
                                             </div>
                                         </div>
@@ -239,12 +239,14 @@ export default {
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Kedatangan</label>
                                                 <input type="number" class="form-control" v-model.number="form.kedatangan"
+                                                :disabled="hasilGenerate.length > 0"
                                                     @keypress="numberOnly($event)">
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputPassword1">Jumlah Noseri yang dibuat</label>
                                                 <input type="number" class="form-control"
                                                     :class="jumlahRakit ? 'is-valid' : 'is-invalid'"
+                                                    :disabled="hasilGenerate.length > 0"
                                                     @keypress="numberOnly($event)" v-model.number="form.jml_noseri">
                                                 <div class="invalid-feedback" v-if="!jumlahRakit">
                                                     Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
