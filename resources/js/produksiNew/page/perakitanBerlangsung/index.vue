@@ -25,6 +25,8 @@ export default {
             ],
             dataPerakitan: [],
             dataRiwayat: [],
+            tanggalAwal: moment().startOf('month').format('YYYY-MM-DD'),
+            tanggalAkhir: moment().endOf('month').format('YYYY-MM-DD'),
         }
     },
     methods: {
@@ -88,7 +90,7 @@ export default {
                         <perakitan :dataTable="dataPerakitan" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <riwayat :dataRiwayat="dataRiwayat" />
+                        <riwayat :dataRiwayat="dataRiwayat" :tanggalAwal="tanggalAwal" :tanggalAkhir="tanggalAkhir" />
                     </div>
                 </div>
                 <div v-else>

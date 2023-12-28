@@ -3,7 +3,7 @@ import DataTable from '../../../components/DataTable.vue';
 import modalPilihan from './modalPilihan.vue';
 import riwayatCetak from './riwayatCetak.vue';
 export default {
-    props: ['dataRiwayat'],
+    props: ['dataRiwayat', 'tanggalAkhir', 'tanggalAwal'],
     components: {
         DataTable,
         modalPilihan,
@@ -23,7 +23,8 @@ export default {
                 },
                 {
                     text: 'Tanggal Dibuat',
-                    value: 'tgl_buat'
+                    value: 'tgl_buat',
+                    sortable: false,
                 },
                 {
                     text: 'No BPPB',
@@ -112,7 +113,8 @@ export default {
 </script>
 <template>
     <div>
-        <modalPilihan :data="cetakSeriType == 'single' ? cetakSeriSingle : noSeriSelected" v-if="cetakSeriSingle.length > 0 || noSeriSelected.length > 0" />
+        <modalPilihan :data="cetakSeriType == 'single' ? cetakSeriSingle : noSeriSelected"
+            v-if="cetakSeriSingle.length > 0 || noSeriSelected.length > 0" />
         <riwayatCetak :riwayat="riwayatSelected" v-if="showModalRiwayat" @closeModal="showModalRiwayat = false" />
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
@@ -128,6 +130,37 @@ export default {
         <DataTable :headers="headers" :items="filterData">
             <template #header.id>
                 <input type="checkbox" @click="checkAllSeri" :checked="checkAll">
+            </template>
+
+            <template #header.tgl_buat>
+                <span class="text-bold pr-2">Tanggal Dibuat</span>
+                <span class="filter">
+                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-filter"></i>
+                    </a>
+                    <form id="filter_ekat">
+                        <div class="dropdown-menu">
+                            <div class="px-3 py-3">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="jenis_penjualan">Tanggal Awal</label>
+                                            <input type="date" class="form-control" v-model="tanggalAwal"
+                                                :max="tanggalAkhir">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="jenis_penjualan">Tanggal Akhir</label>
+                                            <input type="date" class="form-control" v-model="tanggalAkhir"
+                                                :min="tanggalAwal">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </span>
             </template>
 
             <template #item.id="{ item }">
