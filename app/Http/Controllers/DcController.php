@@ -1520,7 +1520,6 @@ class DcController extends Controller
                'tahun' => $thn,
             ]);
             }
-
             $series = NoseriBarangJadi::select('noseri_barang_jadi.noseri')
             ->leftJoin('t_gbj_noseri','t_gbj_noseri.noseri_id','=','noseri_barang_jadi.id')
             ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.t_tfbj_noseri_id','=','t_gbj_noseri.id')
@@ -1556,52 +1555,44 @@ class DcController extends Controller
 
     public function update_coo(Request $request)
     {
-        $array_seri = json_decode($request->id);
-        $bool = true;
-        for ($i = 0; $i < count($array_seri); $i++) {
-            $noseri = NoseriCoo::where('noseri_logistik_id', $array_seri[$i])->first();
-            if ($noseri) {
-                $l = NoseriCoo::find($noseri->id);
-                $l->tgl_kirim = $request->edit_tgl_kirim;
-                $l->catatan = $request->edit_keterangan;
-                $l->save();
-                if (!$l) {
-                    $bool = false;
-                }
+        DB::beginTransaction();
+        try {
+              $array_seri = explode(',',$request->id);
+            //code...
+            for ($i = 0; $i < count($array_seri); $i++) {
+                NoseriCoo::where('noseri_logistik_id', $array_seri[$i])
+                ->update([
+                    'tgl_kirim' => $request->edit_tgl_kirim,
+                    'catatan' => $request->edit_keterangan
+             ]);
             }
-        }
-        if ($bool == true) {
-            $obj = [
-                'noseri' => NoseriBarangJadi::whereIn(
-                    'id',
-                    NoseriTGbj::whereIn(
-                        'id',
-                        NoseriDetailPesanan::whereIn(
-                            'id',
-                            NoseriDetailLogistik::whereIn('id', $array_seri)
-                                ->get()->pluck('noseri_detail_pesanan_id')
-                        )
-                            ->get()->pluck('t_tfbj_noseri_id')
-                    )
-                        ->get()->pluck('noseri_id')
-                )
-                    ->get()->pluck('noseri'),
+            $series = NoseriBarangJadi::select('noseri_barang_jadi.noseri')
+            ->leftJoin('t_gbj_noseri','t_gbj_noseri.noseri_id','=','noseri_barang_jadi.id')
+            ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.t_tfbj_noseri_id','=','t_gbj_noseri.id')
+            ->leftJoin('noseri_logistik','noseri_logistik.noseri_detail_pesanan_id','=','noseri_detail_pesanan.id')
+            ->whereIN('noseri_logistik.id',$array_seri)
+            ->pluck('noseri_barang_jadi.noseri')
+            ->toArray();
+            $item = [
+                'noseri' => $series,
                 'diketahui' => $request->diketahui,
                 'nama' => $request->nama,
                 'jabatan' => $request->jabatan,
                 'tgl_kirim' => $request->edit_tgl_kirim,
                 'keterangan' => $request->edit_keterangan,
             ];
-
             SystemLog::create([
                 'tipe' => 'DC',
-                'subjek' => 'Perubahan Beberapa COO',
-                'response' => json_encode($obj),
+                'subjek' => 'Ubah COO',
+                'response' => json_encode($item),
                 'user_id' => $request->user_id,
             ]);
-            return response()->json(['data' =>  'success']);
-        } else {
-            return response()->json(['data' =>  'error']);
+            DB::commit();
+        return response()->json(['data' =>  'success'], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+           //dd($th->getMessage());
+            return response()->json(['data' =>  'error'], 500);
         }
     }
 
