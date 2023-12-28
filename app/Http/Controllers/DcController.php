@@ -988,7 +988,7 @@ class DcController extends Controller
                 return $data->Logistik->tgl_kirim;
             })
             ->addColumn('nama_paket', function ($data) {
-                if ($data->DetailPesananProduk->GudangBarangJadi->nama == '') {
+                if ($data->DetailPesananProduk->GudangBarangJadi->nama == ' ') {
                     return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
                 } else {
                     return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - ' . $data->DetailPesananProduk->GudangBarangJadi->nama;
