@@ -301,6 +301,8 @@ export default {
                         <div class="d-flex bd-highlight">
                             <div class="p-2 flex-grow-1 bd-highlight">
                                 <div v-if="hasilGenerate.length == 0">
+                                    <!-- <button type="button" class="btn btn-success"
+                                        @click="simpan">Generate</button> -->
                                     <button type="button" class="btn btn-success" v-if="!isError" :disabled="loading"
                                         @click="simpan">Generate</button>
                                     <button type="button" class="btn btn-success" v-if="seri.length > 0"
