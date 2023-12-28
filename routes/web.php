@@ -143,7 +143,6 @@ Route::group(['prefix' => '/produksi', 'middleware' => 'auth'], function () {
     Route::get('/riwayat_perakitan', [ProduksiController::class, 'his_rakit']);
     Route::get('/export_noseri', [ProduksiController::class, 'export_noseri_produksi'])->name('export.rakitseri');
     Route::view('/riwayat_transfer', 'page.produksi.riwayat_transfer');
-    Route::view('/jadwal_perakitan', 'page.produksi.jadwal_perakitan');
     Route::view('/{any?}', 'page.produksi.new_produksi')->where('any', '.*');
 });
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {

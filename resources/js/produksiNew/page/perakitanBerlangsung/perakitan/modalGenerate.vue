@@ -1,18 +1,19 @@
 <script>
 import axios from 'axios';
 import DataTable from '../../../components/DataTable.vue';
+import modalPilihan from './modalPilihan.vue';
 export default {
     props: ['dataGenerate'],
     components: {
         DataTable,
+        modalPilihan,
     },
     data() {
         return {
             showModalCetak: false,
             form: {
-                kedatangan: 0,
+                kedatangan: 1,
                 jml_noseri: 0,
-                no_urut_terakhir: 0,
             },
             isError: false,
             seri: [],
@@ -28,8 +29,9 @@ export default {
                     align: 'text-left',
                 }
             ],
-            showNoUrutTerakhir: false,
-            loadingNoUrut: false,
+            hasilGenerate: [],
+            idCetakHasilGenerate: [],
+            showModalPilihan: false,
         }
     },
     methods: {
@@ -39,6 +41,7 @@ export default {
         closeModal() {
             $('.modalGenerate').modal('hide')
             this.$nextTick(() => {
+                this.$emit('refresh')
                 this.$emit('closeModal')
             })
         },
@@ -55,8 +58,9 @@ export default {
 
                     const { data } = await axios.post('/api/prd/fg/gen', kirim)
                     this.$swal('Berhasil', 'Berhasil generate seri', 'success')
-                    this.$emit('refresh')
-                    this.closeModal()
+                    const { noseri, id } = data
+                    this.hasilGenerate = noseri
+                    this.idCetakHasilGenerate = id
                 } catch (error) {
                     const { message, seri, duplicate, available } = error.response.data
                     this.seri = seri
@@ -93,8 +97,9 @@ export default {
                 }
                 const { data } = await axios.post('/api/prd/fg/gen/confirm', kirim)
                 this.$swal('Berhasil', 'Berhasil menyimpan seri', 'success')
-                this.$emit('refresh')
-                this.closeModal()
+                const { noseri, id } = data
+                this.hasilGenerate = noseri
+                this.idCetakHasilGenerate = id
             } catch (error) {
                 console.log(error)
             }
@@ -107,29 +112,37 @@ export default {
         },
         async checkNoUrut() {
             try {
-                this.loadingNoUrut = true
                 const { data } = await axios.get(`/api/prd/ongoing/${this.dataGenerate.id}`)
                 if (data != 0) {
-                    this.showNoUrutTerakhir = true
                     this.form.no_urut_terakhir = data
                 } else {
-                    this.showNoUrutTerakhir = false
                 }
             } catch (error) {
                 console.log(error)
             } finally {
                 this.form.kedatangan = 1
-                this.loadingNoUrut = false
             }
-        }
+        },
+        cetakSeri() {
+            this.showModalCetak = true
+            this.$nextTick(() => {
+                $('.modalGenerate').modal('hide')
+                $('.modalPilihan').modal('show')
+            })
+        },
+        closeAllModal() {
+            $('.modalGenerate').modal('hide')
+            $('.modalPilihan').modal('hide')
+            this.$nextTick(() => {
+                this.$emit('refresh')
+                this.$emit('closeModal')
+            })
+        },
     },
     computed: {
         jumlahRakit() {
             return this.dataGenerate.kurang >= this.form.jml_noseri ? true : false
         },
-        validasiNoUrutTerakhir() {
-            return this.form.no_urut_terakhir < 100000 ? true : false
-        }
     },
     watch: {
         'form.kedatangan': function (val) {
@@ -149,7 +162,7 @@ export default {
 </script>
 <template>
     <div>
-        <modalPilihan v-if="showModalCetak" @closeModal="closeModalCetak"></modalPilihan>
+        <modalPilihan :data="idCetakHasilGenerate" v-if="showModalCetak" @closeModal="closeModalCetak" @closeAllModal="closeAllModal"></modalPilihan>
         <div class="modal fade modalGenerate" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
             role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
@@ -161,7 +174,7 @@ export default {
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="card" v-if="!loadingNoUrut">
+                        <div class="card">
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-sm">
@@ -220,31 +233,30 @@ export default {
                                 </div>
                             </div>
                             <div class="card-body" v-if="!isError">
-                                <form>
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">Kedatangan</label>
-                                        <input type="number" class="form-control" v-model.number="form.kedatangan"
-                                            @keypress="numberOnly($event)">
+                                <div class="row">
+                                    <div class="col">
+                                        <form>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Kedatangan</label>
+                                                <input type="number" class="form-control" v-model.number="form.kedatangan"
+                                                    @keypress="numberOnly($event)">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword1">Jumlah Noseri yang dibuat</label>
+                                                <input type="number" class="form-control"
+                                                    :class="jumlahRakit ? 'is-valid' : 'is-invalid'"
+                                                    @keypress="numberOnly($event)" v-model.number="form.jml_noseri">
+                                                <div class="invalid-feedback" v-if="!jumlahRakit">
+                                                    Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">Jumlah Noseri yang dibuat</label>
-                                        <input type="number" class="form-control"
-                                            :class="jumlahRakit ? 'is-valid' : 'is-invalid'" @keypress="numberOnly($event)"
-                                            v-model.number="form.jml_noseri">
-                                        <div class="invalid-feedback" v-if="!jumlahRakit">
-                                            Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
-                                        </div>
+                                    <div class="col" v-if="hasilGenerate.length > 0">
+                                        <p class="text-bold">Hasil Generate No. Seri</p>
+                                        <DataTable :headers="headers" :items="hasilGenerate" />
                                     </div>
-                                    <div class="form-group" v-if="!showNoUrutTerakhir">
-                                        <label for="exampleInputPassword1">No Urut Terakhir</label>
-                                        <input type="number" class="form-control"
-                                            :class="validasiNoUrutTerakhir ? 'is-valid' : 'is-invalid'"
-                                            @keypress="numberOnly($event)" v-model.number="form.no_urut_terakhir">
-                                        <div class="invalid-feedback" v-if="!validasiNoUrutTerakhir">
-                                            Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
-                                        </div>
-                                    </div>
-                                </form>
+                                </div>
                             </div>
                             <div class="card-body" v-else>
                                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -283,16 +295,22 @@ export default {
                                 </div>
                             </div>
                         </div>
-                        <div class="spinner-border" role="status" v-else>
-                            <span class="sr-only">Loading...</span>
+
+                        <div class="d-flex bd-highlight">
+                            <div class="p-2 flex-grow-1 bd-highlight">
+                                <div v-if="hasilGenerate.length == 0">
+                                    <button type="button" class="btn btn-success" v-if="!isError" :disabled="loading"
+                                        @click="simpan">Generate</button>
+                                    <button type="button" class="btn btn-success" v-if="seri.length > 0"
+                                        @click="simpanSeri">Simpan</button>
+                                </div>
+
+                                <button class="btn btn-success" @click="cetakSeri" v-else>Cetak Barcode</button>
+                            </div>
+                            <div class="p-2 bd-highlight">
+                                <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                        <button type="button" class="btn btn-success" v-if="!isError" :disabled="loading"
-                            @click="simpan">Generate</button>
-                        <button type="button" class="btn btn-success" v-if="seri.length > 0"
-                            @click="simpanSeri">Simpan</button>
                     </div>
                 </div>
             </div>

@@ -242,7 +242,7 @@ class ProduksiController extends Controller
                     ], 500);
                 } else {
                     foreach ($obj->seri as $f) {
-                        JadwalRakitNoseri::create([
+                       $jd = JadwalRakitNoseri::create([
                             'jadwal_id' => $f->jadwal_id,
                             'no_bppb' => $f->no_bppb,
                             'urutan' => $f->no_urut,
@@ -254,9 +254,9 @@ class ProduksiController extends Controller
                             'status' => 11,
                             'date_in' => Carbon::now()
                         ]);
+                        $jd_id[] = $jd->id;
+                        $jd_seri[] = (object)['seri' => $f->seri];
                     }
-
-
                     $jp->status_tf = 12;
                     $jp->save();
 
@@ -267,6 +267,8 @@ class ProduksiController extends Controller
                         'seri' =>   array(),
                         'duplicate' =>   array(),
                         'available' =>   array(),
+                        'id' =>   $jd_id,
+                        'noseri' =>  $jd_seri
                     ], 200);
                 }
             } else {
@@ -276,7 +278,7 @@ class ProduksiController extends Controller
                     'message' =>  'Jumlah Melebihi',
                     'seri' =>   array(),
                     'duplicate' => array(),
-                    'available' =>  array(),
+                    'available' =>  array()
                 ], 500);
             }
         } catch (\Throwable $th) {
@@ -295,7 +297,7 @@ class ProduksiController extends Controller
     function generate_fg(Request $request)
     {
 
-        DB::beginTransaction();
+       DB::beginTransaction();
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
@@ -306,7 +308,9 @@ class ProduksiController extends Controller
             $tahun = $getTgl->format('Y') % 100;
             $bulan =  strtoupper(dechex($getTgl->format('m')));;
             //Default
-            $kedatangan =  strtoupper(dechex($obj->kedatangan));
+            $abjad = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "Y", "V", "W", "X", "Y", "Z"];
+            $kedatangan =  $abjad[$obj->kedatangan - 1];
+
             for ($i = 1; $i <= $obj->jml_noseri; $i++) {
                 $newSeri[] = $prd->kode . $tahun . $bulan . $kedatangan . str_pad($obj->no_urut_terakhir + $i, 5, '0', STR_PAD_LEFT);
                 $newSeries[] = array(
@@ -334,7 +338,7 @@ class ProduksiController extends Controller
                     $filteredNoseri = $noseriCollection->whereIn('seri', $available);
 
                     foreach ($filteredNoseri as $f) {
-                        JadwalRakitNoseri::create([
+                     $jd=JadwalRakitNoseri::create([
                             'jadwal_id' => $obj->jadwal_id,
                             'no_bppb' => $obj->no_bppb,
                             'urutan' => $f['no_urut'],
@@ -346,6 +350,8 @@ class ProduksiController extends Controller
                             'status' => 11,
                             'date_in' => $getTgl
                         ]);
+                        $jd_id[] = $jd->id;
+                        $jd_seri[] = (object)['seri' => $f['seri']];
                     }
 
                     $jp->status_tf = 12;
@@ -359,6 +365,8 @@ class ProduksiController extends Controller
                         'seri' =>   array(),
                         'duplicate' =>   array(),
                         'available' =>   array(),
+                        'id' =>  $jd_id,
+                        'noseri' =>  $jd_seri,
                     ], 200);
                 } else {
                     if ($available) {
@@ -405,7 +413,7 @@ class ProduksiController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 200,
-                'message' =>  'Gagal Ditambahkan',
+                'message' =>  $th->getMessage().'Gagal Ditambahkan',
                 'seri' => array(),
                 'duplicate' =>  array(),
                 'available' => array(),
@@ -3158,96 +3166,24 @@ class ProduksiController extends Controller
         ->groupBy('jadwal_perakitan.id')
         ->havingRaw('jumlah != jml_rakit')
         ->get();
-
         // return ['jumlah'=>count($data),'data' => $data];
+            $data = collect($data)->map(function ($item) {
+                return [
+                    'id' => $item->gbj_id,
+                    'jadwal_id' => $item->id,
+                    'produk_id' => $item->produk_id,
+                    'no_bppb' => $item->no_bppb ? $item->no_bppb : '-',
+                    'tanggal_mulai' => $item->tanggal_mulai ? $item->tanggal_mulai : '-',
+                    'tanggal_selesai' => $item->tanggal_selesai ? $item->tanggal_selesai : '-',
+                    'selisih' => $item->selisih,
+                    'nama_produk' => $item->produkk,
+                    'kategori' => $item->nama,
+                    'jumlah' => $item->jumlah,
+                    'jumlah_rakit' => $item->jml_rakit,
+                ];
+            });
+            return response()->json($data);
 
-            // $data = collect($data)->map(function ($item) {
-            //     return [
-            //         'id' => $item->gbj_id,
-            //         'jadwal_id' => $item->id,
-            //         'produk_id' => $item->produk_id,
-            //         'no_bppb' => $item->no_bppb ? $item->no_bppb : '-',
-            //         'tanggal_mulai' => $item->tanggal_mulai ? $item->tanggal_mulai : '-',
-            //         'tanggal_selesai' => $item->tanggal_selesai ? $item->tanggal_selesai : '-',
-            //         'selisih' => $item->selisih,
-            //         'nama_produk' => $item->produkk,
-            //         'kategori' => $item->nama,
-            //         'jumlah' => $item->jumlah,
-            //         'jumlah_rakit' => $item->jml_rakit,
-            //     ];
-            // });
-
-
-            // return response()->json($data);
-
-
-            $res = datatables()->of($data)
-                ->addColumn('start', function ($d) {
-                    if (isset($d->tanggal_mulai)) {
-                        return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('end', function ($d) {
-                    $x = $d->selisih;
-
-                    if (isset($d->tanggal_selesai)) {
-                        if ($x >= -10 && $x < -5) {
-                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
-                        } elseif ($x >= -5 && $x <= -2) {
-                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
-                        } elseif ($x > -2 && $x <= 0) {
-                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Kurang ' . $x . ' Hari</span>';
-                        } elseif ($x > 0) {
-                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Lebih ' . $x . ' Hari</span>';
-                        } elseif ($x < -10) {
-                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
-                        } else {
-                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ' . $x;
-                        }
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('produk', function ($d) {
-                    return $d->produkk;
-                })
-                ->addColumn('jml', function ($d) {
-                    return $d->jumlah . ' Unit' . '<br><span class="badge badge-dark">Kurang ' . intval($d->jumlah - $d->jml_rakit) . ' Unit</span>';
-                })
-                ->addColumn('action', function ($d) {
-                    //     $a = '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-produk="'.$d->produk_id.'">
-                    //                     <button class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i> Rakit Produk</button>
-                    //             </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk.'" data-produk="'.$d->produk_id.'">
-                    //                 <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
-                    //             </a>';
-                    $a = '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-produk="' . $d->produk_id . '">
-                                    <button class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i> Rakit Produk</button>
-                            </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk . '" data-produk="' . $d->produk_id . '">
-                                <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
-                            </a>
-                            </a>&nbsp;<a data-toggle="modal" data-target="#evaluasirakit" class="evaluasirakit" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk . '" data-produk="' . $d->produk_id . '" data-eval="' . $d->evaluasi . '">
-                                <button class="btn btn-outline-secondary btn-sm"><i class="far fa-edit"></i> Evaluasi Perakitan</button>
-                            </a>';
-                    return $a;
-                })
-                ->addColumn('created_at', function ($d) {
-                    return $d->created_at;
-                })
-                ->addColumn('no_bppb', function ($d) {
-                    return $d->no_bppb == null ? '-' : $d->no_bppb;
-                })
-                ->addColumn('periode', function ($d) {
-                    if (isset($d->tanggal_mulai)) {
-                        return Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->rawColumns(['action', 'jml', 'end'])
-                ->make(true);
-            return $res;
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -3595,6 +3531,79 @@ class ProduksiController extends Controller
         }
     }
 
+    function get_noseri_fg_riwayat_code($id)
+    {
+       $data = SystemLog::where([
+            'header'=>$id,
+            'tipe'=> 'Produksi',
+            'subjek'=> 'Cetak Seri Perakitan'
+            ]);
+
+        foreach($data->get() as $d){
+            $datas = json_decode($d->response);
+            $item[] = (object)[
+                'tgl' => $d->created_at,
+                'user' => $d->userid->Karyawan->nama,
+                'aktivitas' => $datas->ket
+            ];
+        }
+
+        $detail = json_decode($data->first()->response);
+        $obj = (object)[
+            'produk' => $detail->produk,
+            'noseri' => $detail->seri,
+            'no_bppb' => $detail->no_bppb,
+            'detail' => $item
+        ];
+
+        return response()->json($obj);
+    }
+
+    function store_noseri_fg_riwayat_code(Request $request)
+    {
+    DB::beginTransaction();
+       try {
+        //code...
+        $seri = JadwalRakitNoseri::select('jadwal_rakit_noseri.id','jadwal_rakit_noseri.noseri','jadwal_perakitan.id as jadwal_id','jadwal_perakitan.no_bppb','produk.nama')
+       ->leftJoin('jadwal_perakitan','jadwal_perakitan.id','=','jadwal_rakit_noseri.jadwal_id')
+       ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','jadwal_perakitan.produk_id')
+       ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
+       ->whereIN('jadwal_rakit_noseri.id',$request->data)->get();
+
+        foreach($seri as $s){
+            $data = (object)[
+                'seri' => $s->noseri,
+                'no_bppb' => $s->no_bppb,
+                'produk' => $s->nama,
+                'ket' => $request->alasan,
+               ];
+                SystemLog::create([
+                    'subjek' => 'Cetak Seri Perakitan',
+                    'header' => $s->id,
+                    'tipe' => 'Produksi',
+                    'response' => json_encode($data),
+                    'user_id' => auth()->user()->id,
+                ]);
+        }
+        DB::commit();
+        return response()->json([
+            'status' => 200,
+            'message' =>  'Berhasil Ditambahkan',
+
+        ], 200);
+       } catch (\Throwable $th) {
+        //throw $th;
+        DB::rollBack();
+        return response()->json([
+            'status' => 200,
+            'message' =>  'Gagal Ditambahkan',
+            'error' => $th->getMessage(),
+        ], 500);
+       }
+
+
+
+    }
     function get_noseri_fg_cetak(Request $request)
     {
         try {

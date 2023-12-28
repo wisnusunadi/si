@@ -64,19 +64,6 @@ export default {
 
             });
         },
-        statusReworks(belum, selesai, jumlah) {
-            if (selesai == jumlah) {
-                return 'selesai'
-            }
-
-            if (selesai == 0) {
-                return 'belum_dikerjakan'
-            }
-
-            if (selesai != jumlah && belum != 0) {
-                return 'sedang_dikerjakan'
-            }
-        },
         transferRework(data) {
             this.headerTransfer = JSON.parse(JSON.stringify(data))
             // delete item on headerTransfert

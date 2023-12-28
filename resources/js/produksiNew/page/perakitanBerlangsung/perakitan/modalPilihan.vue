@@ -1,12 +1,6 @@
 <script>
-import axios from 'axios';
 export default {
     props: ['data'],
-    data() {
-        return {
-            alasan: '',
-        }
-    },
     methods: {
         closeModal() {
             $('.modalPilihan').modal('hide');
@@ -14,37 +8,19 @@ export default {
             this.$nextTick(() => {
                 this.$emit('closeModal');
             });
-        }, 
+        },
         small() {
             let cetak = JSON.stringify(this.data);
             window.open(`/produksiReworks/cetak_seri_fg_small?data=${cetak}`, '_blank')
-            this.postAlasan();
             this.closeModal();
+            this.$emit('closeAllModal')
         },
         medium() {
             let cetak = JSON.stringify(this.data);
             window.open(`/produksiReworks/cetak_seri_fg_medium?data=${cetak}`, '_blank')
-            this.postAlasan();
             this.closeModal();
+            this.$emit('closeAllModal')
         },
-        postAlasan() {
-            let form = {
-                alasan: this.alasan,
-                data: this.data
-            }
-
-            try {
-                axios.post('/api/prd/fg/riwayat_code', form, {
-                    headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
-                    }
-                })
-            } catch (error) {
-                console.log(error);
-            } finally {
-                // this.closeModal();
-            }
-        }
     },
 }
 </script>
@@ -60,10 +36,6 @@ export default {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="">Alasan Cetak</label>
-                        <textarea class="form-control" name="" id="" rows="3" v-model="alasan"></textarea>
-                    </div>
                     <div class="text-center">
                         <h1>Silahkan Pilih Hasil Cetak</h1>
                         <button type="button" class="btn btn-primary btn-lg" @click="small">Kertas Kecil</button>

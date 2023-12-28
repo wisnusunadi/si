@@ -26,11 +26,45 @@ export default {
                     no_urut: 'PRD-1',
                     nama: 'ANTROPOMETRI KIT-10',
                     jumlah: 2,
+                    keterangan: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+                    item: [{
+                        noseri: 'TD156789',
+                        nama: 'DIGIT PRO IDA',
+                        varian: 'HIJAU',
+                    },
+                    {
+                        noseri: 'TD256789',
+                        nama: 'DIGIT PRO IDA',
+                        varian: 'UNGU',
+                    },
+                    {
+                        noseri: 'TD356789',
+                        nama: 'DIGIT PRO IDA',
+                        varian: 'BIRU',
+                    }
+                    ]
                 },
                 {
                     no_urut: 'PRD-2',
                     nama: 'ANTROPOMETRI KIT-10',
                     jumlah: 2,
+                    keterangan: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+                    item: [{
+                        noseri: 'TD456789',
+                        nama: 'DIGIT PRO IDA',
+                        varian: 'UNGU',
+                    },
+                    {
+                        noseri: 'TD456789',
+                        nama: 'DIGIT PRO IDA',
+                        varian: 'UNGU',
+                    },
+                    {
+                        noseri: 'TD456789',
+                        nama: 'DIGIT PRO IDA',
+                        varian: 'UNGU',
+                    }
+                    ]
                 }
             ],
             riwayatData: [

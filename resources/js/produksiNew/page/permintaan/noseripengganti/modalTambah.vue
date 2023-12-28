@@ -152,7 +152,7 @@ export default {
             }
             noserinotfound = [...new Set(noserinotfound)]
 
-            if(noserinotfound.length > 0 && noserinotfound != '') {
+            if (noserinotfound.length > 0 && noserinotfound != '') {
                 this.$swal('Peringatan', `No seri ${noserinotfound.join(', ')} tidak ditemukan`, 'warning')
             }
         }
@@ -217,7 +217,7 @@ export default {
         <seriviatext v-if="showTextSeri" @close="closeTextSeri" @submit="submit" />
         <div class="modal fade modalTambah" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
             aria-labelledby="modelTitleId" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-scrollable" role="document">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Form Penggantian Nomor Seri</h5>
@@ -256,7 +256,8 @@ export default {
                                 <tbody>
                                     <tr v-for="(item, index) in formNoseri" :key="index">
                                         <td>
-                                            <v-select :options="paginated" v-model="item.noseri" @search="onSearch" style="width: 300px">
+                                            <v-select :options="paginated" v-model="item.noseri" @search="onSearch"
+                                                style="width: 300px">
                                                 <li slot="list-footer" class="pagination">
                                                     <button type="button" class="btn btn-secondary" :disabled="!hasPrevPage"
                                                         @click="offset -= limit">
