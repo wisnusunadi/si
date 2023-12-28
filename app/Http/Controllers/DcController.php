@@ -969,6 +969,15 @@ class DcController extends Controller
                     ->from('noseri_logistik')
                     ->whereColumn('noseri_logistik.detail_logistik_id', 'detail_logistik.id');
             },
+            'cek_rw' => function ($q) {
+                $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                    ->from('seri_detail_rw')
+                    ->leftjoin('noseri_barang_jadi', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                    ->leftJoin('t_gbj_noseri','t_gbj_noseri.noseri_id','=','noseri_barang_jadi.id')
+                    ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.t_tfbj_noseri_id','=','t_gbj_noseri.id')
+                    ->leftJoin('noseri_logistik','noseri_logistik.noseri_detail_pesanan_id','=','noseri_detail_pesanan.id')
+                    ->whereColumn('noseri_logistik.detail_logistik_id', 'detail_logistik.id');
+            }
             ])
         ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($id) {
             $q->where('pesanan.id', $id);
@@ -996,6 +1005,7 @@ class DcController extends Controller
                 $bulan =  Carbon::createFromFormat('Y-m-d', $data->Logistik->tgl_kirim)->format('m');
                 $romawi = $this->toRomawi($bulan);
                 return $romawi;
+
             })
             ->addColumn('status', function ($data) {
                 // $value = array();
@@ -1357,6 +1367,7 @@ class DcController extends Controller
     }
     public function create_coo(Request $request)
     {
+
         $obj = json_decode($request->input('noseri'));
         // if ($id == 0) {
         //     $data =  NoseriDetailLogistik::where('detail_logistik_id', $obj->detail_logistik_id)->first();
@@ -1476,86 +1487,71 @@ class DcController extends Controller
     // $check = Pesanan::whereYear('created_at', $this->getYear())->where('so', 'like', '%' . $this->getYear() . '%')->get('so');
     public function store_coo(Request $request)
     {
-
-        if ($request->diketahui == 'spa') {
-            $nama = NULL;
-            $jabatan = NULL;
-            $ket = 'spa';
-        } elseif ($request->diketahui == 'emiindo') {
-            $nama = NULL;
-            $jabatan = NULL;
-            $ket = 'emiindo';
-        } else {
-            $nama = $request->nama;
-            $jabatan = $request->jabatan;
-            $ket = NULL;
-        }
-        $array_seri = json_decode($request->id);
-        $bool = true;
-        for ($i = 0; $i < count($array_seri); $i++) {
-            $noseri = NoseriCoo::where('noseri_logistik_id', $array_seri[$i])->first();
-            if ($noseri) {
-                $l = NoseriCoo::find($noseri->id);
-                $l->nama = $nama;
-                $l->jabatan = $jabatan;
-                $l->ket = $ket;
-                $l->tgl_kirim = $request->tgl_kirim;
-                $l->catatan = $request->keterangan;
-                $l->save();
-                if (!$l) {
-                    $bool = false;
-                }
+        DB::beginTransaction();
+        try {
+            $array_seri = explode(',',$request->id);
+            if ($request->diketahui == 'spa') {
+                $nama = NULL;
+                $jabatan = NULL;
+                $ket = 'spa';
+            } elseif ($request->diketahui == 'emiindo') {
+                $nama = NULL;
+                $jabatan = NULL;
+                $ket = 'emiindo';
             } else {
-                $l = NoseriDetailLogistik::find($array_seri[$i]);
-                $max = NoseriCoo::where('tahun', $this->getYear($l->DetailLogistik->Logistik->tgl_kirim))->latest('id')->value('no_coo');
-                $c = NoseriCoo::create([
-                    'no_coo' => $max + 1,
-                    'tahun' => $this->getYear($l->DetailLogistik->Logistik->tgl_kirim),
-                    'nama' => $nama,
-                    'jabatan' => $jabatan,
-                    'ket' => $ket,
-                    'noseri_logistik_id' => $array_seri[$i],
-                    'tgl_kirim' => $request->tgl_kirim,
-                    'catatan' => $request->keterangan,
-                ]);
-                if (!$c) {
-                    $bool = false;
-                }
+                $nama = $request->nama;
+                $jabatan = $request->jabatan;
+                $ket = NULL;
             }
-        }
-        if ($bool == true) {
-            $obj = [
-                'noseri' => NoseriBarangJadi::whereIn(
-                    'id',
-                    NoseriTGbj::whereIn(
-                        'id',
-                        NoseriDetailPesanan::whereIn(
-                            'id',
-                            NoseriDetailLogistik::whereIn('id', $array_seri)
-                                ->get()->pluck('noseri_detail_pesanan_id')
-                        )
-                            ->get()->pluck('t_tfbj_noseri_id')
-                    )
-                        ->get()->pluck('noseri_id')
-                )
-                    ->get()->pluck('noseri'),
+
+              $l = NoseriDetailLogistik::find($array_seri[0]);
+              $max = NoseriCoo::where('tahun', $this->getYear($l->DetailLogistik->Logistik->tgl_kirim))->latest('id')->value('no_coo') + 1;
+              $thn =  $this->getYear($l->DetailLogistik->Logistik->tgl_kirim);
+            //code...
+            for ($i = 0; $i < count($array_seri); $i++) {
+            NoseriCoo::create([
+              'no_coo'=> $max+$i,
+              'nama'=> $nama,
+              'jabatan'=> $jabatan,
+               'noseri_logistik_id'=> $array_seri[$i],
+               'ket'=> $ket,
+               'tgl_kirim'=> $request->tgl_kirim,
+               'catatan'=>  $request->keterangan,
+               'tahun' => $thn,
+            ]);
+            }
+
+            $series = NoseriBarangJadi::select('noseri_barang_jadi.noseri')
+            ->leftJoin('t_gbj_noseri','t_gbj_noseri.noseri_id','=','noseri_barang_jadi.id')
+            ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.t_tfbj_noseri_id','=','t_gbj_noseri.id')
+            ->leftJoin('noseri_logistik','noseri_logistik.noseri_detail_pesanan_id','=','noseri_detail_pesanan.id')
+            ->whereIN('noseri_logistik.id',$array_seri)
+            ->pluck('noseri_barang_jadi.noseri')
+            ->toArray();
+
+            $item = [
+                'noseri' => $series,
                 'diketahui' => $request->diketahui,
                 'nama' => $request->nama,
                 'jabatan' => $request->jabatan,
                 'tgl_kirim' => $request->tgl_kirim,
-                'keterangan' => $request->keterangan,
+                'keterangan' => $request->keterangan
             ];
 
             SystemLog::create([
                 'tipe' => 'DC',
-                'subjek' => 'Pembuatan COO',
-                'response' => json_encode($obj),
+                'subjek' => 'Penambahan COO',
+                'response' => json_encode($item),
                 'user_id' => $request->user_id,
             ]);
-            return response()->json(['data' =>  'success'], 200);
-        } else {
+
+            DB::commit();
+        return response()->json(['data' =>  'success'], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
             return response()->json(['data' =>  'error'], 500);
         }
+
     }
 
     public function update_coo(Request $request)

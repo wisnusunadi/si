@@ -826,7 +826,7 @@
                                     <div class="col-4">
                                         <div><small class="text-muted">No AKD</small></div>
                                         <div><b>
-                                                
+
                                                 ${data?.no_akd == null || data?.no_akd == '' ? '-' : data?.no_akd}
                                             </b></div>
                                     </div>
@@ -843,7 +843,7 @@
                     <div class="col-lg-7 col-md-6">
                         <form id="form-create-coo" method="POST">
                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                            <input type="hidden" name="id" value="${JSON.stringify(idSeri)}">
+                            <input type="hidden" name="id" value="${idSeri}">
                             <div class="card">
                                 <div class="card-header">
                                     <h6 class="card-title">Tambah</h6>
@@ -971,6 +971,13 @@
 
                 // send data /api/dc/so/store from form
                $(document).on('click', '#btnsimpan', function(event) {
+                data = $(".nosericheck").data().value;
+                // let id = $(this).data('id');
+                // let jsonArray = JSON.stringify({
+                //     detail_logistik_id: data,
+                //     id: checkedAryBelumProses
+                // });
+                console.log($('#form-create-coo').serialize());
                     event.preventDefault();
                     $.ajax({
                         url: "/api/dc/so/store",
@@ -1001,7 +1008,7 @@
                                 'Gagal melakukan Penambahan Data COO',
                                 'error'
                             );
-                            
+
                         },
                         timeout: 8000
                     })
