@@ -23,7 +23,7 @@
                             <div class="row">
                                 <div class="col-8">
                                     <div class="row">
-                                        @if (Auth::user()->divisi_id != 2)
+                                        {{-- @if (Auth::user()->divisi_id != 2)
                                             <span class="float-left mr-1">
                                                 <button type="button" class="btn btn-success" id="downloadTemplate">
                                                     <i class="fas fa-download"></i>&nbsp;Template
@@ -42,7 +42,7 @@
                                                     <i class="fas fa-download"></i>&nbsp;Noseri
                                                 </a>
                                             </span>
-                                        @endif
+                                        @endif --}}
                                     </div>
                                 </div>
                                 <div class="col-4">

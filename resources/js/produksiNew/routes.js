@@ -2,7 +2,7 @@ import VueRouter from "vue-router";
 import PermintaanReworks from './page/permintaan'
 import prosesSetReworks from './page/prosesSet'
 import prosesSetReworksDetail from './page/prosesSet/proses/detail'
-// import perakitanBerlangsung from './Page/perakitanBerlangsung'
+import perakitanBerlangsung from './Page/perakitanBerlangsung'
 import Transfer from './page/transfer'
 
 const routes = [
@@ -21,11 +21,11 @@ const routes = [
         component: prosesSetReworksDetail,
         name: "prosesSetReworksDetail"
     },
-    // {
-    //     path: "/produksi/jadwal_perakitan",
-    //     component: perakitanBerlangsung,
-    //     name: "perakitanBerlangsung"
-    // },
+    {
+        path: "/produksi/jadwal_perakitan",
+        component: perakitanBerlangsung,
+        name: "perakitanBerlangsung"
+    },
         {
         path: "/produksi/pengiriman",
         component: Transfer,

@@ -25,6 +25,9 @@ export default {
             ],
             dataPerakitan: [],
             dataRiwayat: [],
+            tanggalAwal: moment().startOf('month').format('YYYY-MM-DD'),
+            tanggalAkhir: moment().endOf('month').format('YYYY-MM-DD'),
+            loadingRiwayat: false,
         }
     },
     methods: {
@@ -44,7 +47,7 @@ export default {
                     }
                 })
 
-                const { data: riwayat } = await axios.get('/api/prd/fg/riwayat')
+                const { data: riwayat } = await axios.get('/api/prd/fg/riwayat?tanggalAwal=' + this.tanggalAwal + '&tanggalAkhir=' + this.tanggalAkhir)
                 this.dataRiwayat = riwayat.map(item => {
                     return {
                         ...item,
@@ -61,6 +64,28 @@ export default {
             // change to yyyy-mm-dd format
             date = date.split(' ').reverse().join('-');
             return moment(date).lang('id').format('MMMM');
+        },
+        async updateRiwayat() {
+            try {
+                this.loadingRiwayat = true
+                const { data } = await axios.get('/api/prd/fg/riwayat?tanggalAwal=' + this.tanggalAwal + '&tanggalAkhir=' + this.tanggalAkhir)
+                this.dataRiwayat = data.map(item => {
+                    return {
+                        ...item,
+                        tgl_buat: this.dateFormat(item.tgl_buat),
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.loadingRiwayat = false
+            }
+        },
+        updateTanggal(tanggal) {
+            const { tanggalAwal, tanggalAkhir } = tanggal
+            this.tanggalAwal = tanggalAwal
+            this.tanggalAkhir = tanggalAkhir
+            this.updateRiwayat()
         },
     },
     mounted() {
@@ -88,13 +113,17 @@ export default {
                         <perakitan :dataTable="dataPerakitan" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <riwayat :dataRiwayat="dataRiwayat" />
+                        <riwayat :dataRiwayat="dataRiwayat" :tanggalAwal="tanggalAwal" :tanggalAkhir="tanggalAkhir"
+                            @updateTanggal="updateTanggal" v-if="!loadingRiwayat" />
+                        <div class="spinner-border" role="status" v-else>
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
                 </div>
                 <div v-else>
                     <div class="spinner-border" role="status">
                         <span class="sr-only">Loading...</span>
-                    </div>              
+                    </div>
                 </div>
             </div>
         </div>
