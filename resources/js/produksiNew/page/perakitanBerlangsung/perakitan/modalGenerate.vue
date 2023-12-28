@@ -81,12 +81,14 @@ export default {
                 }
 
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Silahkan cek kembali form anda',
-                })
-                return
+                // tampilkan error sesuai kondisinya
+                if (!cekbppb) {
+                    this.$swal('Gagal', 'Nomor BPPB tidak boleh kosong', 'error')
+                } else if (!ceknotnull) {
+                    this.$swal('Gagal', 'Kedatangan dan Jumlah Noseri tidak boleh kosong', 'error')
+                } else if (!this.jumlahRakit) {
+                    this.$swal('Gagal', 'Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit', 'error')
+                }
             }
         },
         async simpanSeri() {
