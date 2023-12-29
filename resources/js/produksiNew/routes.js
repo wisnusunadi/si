@@ -4,6 +4,7 @@ import prosesSetReworks from './page/prosesSet'
 import prosesSetReworksDetail from './page/prosesSet/proses/detail'
 import perakitanBerlangsung from './Page/perakitanBerlangsung'
 import Transfer from './page/transfer'
+import RiwayatPerakitan from './page/riwayatPerakitan'
 
 const routes = [
     {
@@ -30,7 +31,12 @@ const routes = [
         path: "/produksi/pengiriman",
         component: Transfer,
         name: "pengiriman"
-    }
+    },
+    {
+        path: "/produksi/riwayat_perakitan",
+        component: RiwayatPerakitan,
+        name: "riwayatPerakitan"
+        }
 ]
 const router = new VueRouter({
     mode: "history",
