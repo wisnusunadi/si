@@ -128,7 +128,7 @@
                     <tr>
                         <td style="width:52.3%;"></td>
                         <td class="veramd align-center" style="width:57.7%;">
-                            <h3>{{ $d['no_coo'] }} / SKA / XII / SPA / 2023</h3>
+                            <h3>{{ $d['no_coo'] }} / SKA / {{ $d['romawi'] }} / SPA / {{ $d['tahun'] }}</h3>
                         </td>
                     </tr>
                 </tbody>
@@ -276,13 +276,13 @@
                         </tr>
                         <tr>
                             <td class="wb"><b>
-                                    KLK-P2311-8081143
+                                    {{$d['no_paket']}}
                                 </b></td>
                         </tr>
                         <tr style="min-height: 20px; max-height: 65px;">
                             <td class="wb">
                                 <b class="font-size:auto;">
-                                    Penyediaan Antropometri Kit Tahap 2
+                                    {{$d['deskripsi']}}
                                 </b>
                             </td>
                         </tr>
@@ -308,7 +308,7 @@
                     <tbody>
                         <tr>
                             <td width="50%"></td>
-                            <td class="align-center">Surabaya, 16 Desember 2023
+                            <td class="align-center">Surabaya, {{$d['tgl']}}
                             </td>
                         </tr>
                         <tr>

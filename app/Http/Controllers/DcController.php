@@ -18,11 +18,13 @@ use PDF;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\SeriDetailRw;
+use App\Models\Spa;
 use App\Models\SystemLog;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 
 class DcController extends Controller
 {
@@ -33,30 +35,61 @@ class DcController extends Controller
         return $pdf->stream('');
     }
 
-    public function pdf_coo_semua_rework()
+    public function pdf_coo_semua_rework(Request $request)
     {
-        $series = [
-            "AK1023B009711",
-            "AK1023B000180",
-            "AK1023B008837"
-        ];
-        $data = PackRw::select('pack_rw_head.prov','pack_rw_head.kota','pack_rw.noseri','seri_detail_rw.packer','seri_detail_rw.created_at','seri_detail_rw.isi')
-        ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'pack_rw.noseri_id')
-        ->leftjoin('pack_rw_head', 'pack_rw_head.id', '=', 'pack_rw.pack_rw_head_id')
-        ->whereIN('pack_rw.noseri',$series)->get();
 
-        $no = 2600;
+        $series = [
+            112612,
+            116111,
+            116110,
+            116109
+        ];
+
+        $pesanan = Pesanan::select('pesanan.id')
+        ->leftJoin('detail_pesanan','pesanan.id','=','detail_pesanan.pesanan_id')
+        ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.detail_pesanan_id','=','detail_pesanan.id')
+        ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.detail_pesanan_produk_id','=','detail_pesanan_produk.id')
+        ->leftJoin('noseri_logistik','noseri_logistik.noseri_detail_pesanan_id','=','noseri_detail_pesanan.id')
+        ->where('noseri_logistik.id',$series[0])
+        ->pluck('id')->toArray();
+
+
+        $ekat = Ekatalog::where('pesanan_id',$pesanan[0]);
+        $spa = Spa::where('pesanan_id',$pesanan[0]);
+
+        if($ekat->count() > 0){
+            $no_paket = $ekat->first()->no_paket;
+            $deskripsi = $ekat->first()->deskripsi;
+        }else{
+            $no_paket = '';
+            $deskripsi = '';
+        }
+
+        $data = PackRw::select('noseri_coo.tgl_kirim as tgls','noseri_coo.tahun','noseri_coo.no_coo','pack_rw_head.prov','pack_rw_head.kota','pack_rw.noseri','seri_detail_rw.packer','seri_detail_rw.created_at','seri_detail_rw.isi')
+        ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'pack_rw.noseri_id')
+         ->leftjoin('noseri_barang_jadi', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+         ->leftJoin('t_gbj_noseri','t_gbj_noseri.noseri_id','=','noseri_barang_jadi.id')
+        ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.t_tfbj_noseri_id','=','t_gbj_noseri.id')
+        ->leftJoin('noseri_logistik','noseri_logistik.noseri_detail_pesanan_id','=','noseri_detail_pesanan.id')
+        ->leftJoin('noseri_coo','noseri_coo.noseri_logistik_id','=','noseri_logistik.id')
+        ->leftjoin('pack_rw_head', 'pack_rw_head.id', '=', 'pack_rw.pack_rw_head_id')
+        ->whereIN('noseri_logistik.id',$series)->get();
+
         foreach($data as $d)
         {
             $o = json_decode($d->isi);
             $seri[] = array(
-                'no_coo' => 'KIT10-'.str_pad($no++, 5, '0', STR_PAD_LEFT),
+                'no_coo' => 'KIT10-'.str_pad($d->no_coo, 5, '0', STR_PAD_LEFT),
                 'kepada_prov' => 'Provinsi '.$d->prov,
                 'kepada_kab' => $d->kota,
                 'seri' => $d->noseri,
                 'packer' => $d->packer,
-                'tgl' => Carbon::createFromFormat('Y-m-d H:i:s', $d->created_at)->format('d M Y'),
-                'item' => $o
+                'tahun' => $d->tahun,
+                'tgl' => $d->tgls != NULL ? $this->tgl_footer($d->tgls) : '-',
+                'item' => $o,
+                'no_paket' => $no_paket,
+                'deskripsi' => $deskripsi,
+                'romawi' => $d->tgls != NULL ? $this->bulan_romawi($d->tgls) : '-'
             );
         }
 
@@ -73,8 +106,10 @@ class DcController extends Controller
     //  return response()->json($data_urut_produk);
 
 
-     $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk])->setPaper('A4');
-        return $pdf->stream('');
+      $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk])->setPaper('A4');
+         return $pdf->stream('');
+   //return view('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk]);
+
     }
 
     public function pdf_semua_coo($id, $value, $jenis, $stamp)
