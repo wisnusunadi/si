@@ -9,7 +9,7 @@ class NoseriCoo extends Model
 {
     protected $connection = 'erp';
     protected $table = 'noseri_coo';
-    protected $fillable = ['no_coo', 'nama', 'jabatan', 'noseri_logistik_id', 'ket', 'tgl_kirim', 'catatan', 'tahun'];
+    protected $fillable = ['no_coo', 'jenis','nama', 'jabatan', 'noseri_logistik_id', 'ket', 'tgl_kirim', 'catatan', 'tahun'];
 
     public function NoseriDetailLogistik()
     {

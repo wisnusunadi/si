@@ -1134,6 +1134,7 @@ class DcController extends Controller
             ->leftJoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
             ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
             ->where('detail_logistik_id', $id)
+            ->orderBy('noseri_coo.no_coo')
             ->has('NoseriCoo')
             ->get();
         }
@@ -1487,6 +1488,7 @@ class DcController extends Controller
     // $check = Pesanan::whereYear('created_at', $this->getYear())->where('so', 'like', '%' . $this->getYear() . '%')->get('so');
     public function store_coo(Request $request)
     {
+        $array_seri = explode(',',$request->id);
         DB::beginTransaction();
         try {
             $array_seri = explode(',',$request->id);
@@ -1505,7 +1507,19 @@ class DcController extends Controller
             }
 
               $l = NoseriDetailLogistik::find($array_seri[0]);
-              $max = NoseriCoo::where('tahun', $this->getYear($l->DetailLogistik->Logistik->tgl_kirim))->latest('id')->value('no_coo') + 1;
+              $cek_rw = SeriDetailRw::selectRaw('coalesce(count(seri_detail_rw.id), 0) as cek')
+                        ->leftjoin('noseri_barang_jadi', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                        ->leftJoin('t_gbj_noseri','t_gbj_noseri.noseri_id','=','noseri_barang_jadi.id')
+                        ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.t_tfbj_noseri_id','=','t_gbj_noseri.id')
+                        ->leftJoin('noseri_logistik','noseri_logistik.noseri_detail_pesanan_id','=','noseri_detail_pesanan.id')
+                        ->where('noseri_logistik.id',$array_seri[0])->get();
+
+                if($cek_rw[0]->cek > 0 ){
+                    $max = NoseriCoo::where(['tahun'=> $this->getYear($l->DetailLogistik->Logistik->tgl_kirim),'jenis' => 'antro'])->latest('id')->value('no_coo') + 1;
+                }else{
+                    $max = NoseriCoo::where(['tahun'=> $this->getYear($l->DetailLogistik->Logistik->tgl_kirim),'jenis' => 'default'])->latest('id')->value('no_coo') + 1;
+                }
+
               $thn =  $this->getYear($l->DetailLogistik->Logistik->tgl_kirim);
             //code...
             for ($i = 0; $i < count($array_seri); $i++) {
@@ -1518,6 +1532,7 @@ class DcController extends Controller
                'tgl_kirim'=> $request->tgl_kirim,
                'catatan'=>  $request->keterangan,
                'tahun' => $thn,
+               'jenis' => $cek_rw[0]->cek > 0 ? 'antro' : 'default'
             ]);
             }
             $series = NoseriBarangJadi::select('noseri_barang_jadi.noseri')
