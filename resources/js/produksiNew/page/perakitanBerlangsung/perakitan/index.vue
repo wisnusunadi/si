@@ -85,7 +85,7 @@ export default {
                 startDate.setHours(0, 0, 0, 0)
 
                 const endDate = new Date(this.tanggalAkhirMulai)
-                endDate.setHours(0, 0, 0, 0)
+                endDate.setHours(23, 59, 59, 999)
 
                 return this.dataTable.filter((data) => {
                     const date = new Date(data.tgl_mulai)
@@ -101,7 +101,7 @@ export default {
                 })
             } else if (this.tanggalAwalSelesai) {
                 const endDate = new Date(this.tanggalAwalSelesai)
-                endDate.setHours(0, 0, 0, 0)
+                endDate.setHours(23, 59, 59, 999)
 
                 return this.dataTable.filter((data) => {
                     const date = new Date(data.tgl_mulai)
@@ -114,7 +114,7 @@ export default {
                 startDate.setHours(0, 0, 0, 0)
 
                 const endDate = new Date(this.tanggalAkhirSelesai)
-                endDate.setHours(0, 0, 0, 0)
+                endDate.setHours(23, 59, 59, 999)
 
                 return this.dataTable.filter((data) => {
                     const date = new Date(data.tgl_selesai)
@@ -130,7 +130,7 @@ export default {
                 })
             } else if (this.tanggalAkhirSelesai) {
                 const endDate = new Date(this.tanggalAkhirSelesai)
-                endDate.setHours(0, 0, 0, 0)
+                endDate.setHours(23, 59, 59, 999)
 
                 return this.dataTable.filter((data) => {
                     const date = new Date(data.tgl_selesai)

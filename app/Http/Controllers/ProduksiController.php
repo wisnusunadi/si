@@ -3652,15 +3652,16 @@ class ProduksiController extends Controller
                 ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$dd])
                 // ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])
                 ->get();
-            return datatables()->of($data)
-                ->addColumn('checkbox', function ($d) {
-                    return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
-                })
-                ->addColumn('no_seri', function ($d) {
-                    return $d->noseri;
-                })
-                ->rawColumns(['checkbox'])
-                ->make(true);
+                return response()->json($data);
+            // return datatables()->of($data)
+            //     ->addColumn('checkbox', function ($d) {
+            //         return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
+            //     })
+            //     ->addColumn('no_seri', function ($d) {
+            //         return $d->noseri;
+            //     })
+            //     ->rawColumns(['checkbox'])
+            //     ->make(true);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -4335,98 +4336,121 @@ class ProduksiController extends Controller
         }
     }
 
+    function jml_sisa_transfer($d){
+        $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 14)->get();
+        $c = count($seri);
+        $seri_all = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
+        $c_all = count($seri_all);
+        $seri_belum = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 11)->get()->count();
+
+        return [
+            'sisa_kirim' => intval($seri_belum),
+            'sisa_rakit' => intval($d->jumlah - $c_all)
+        ];
+    }
+
     function ajax_sisa_transfer()
     {
         try {
-            $data = JadwalPerakitan::whereNotNull('keterangan_transfer')->orWhereNotNull('keterangan')->get();
+            $data = JadwalPerakitan::whereNotNull('keterangan_transfer')->orWhereNotNull('keterangan')->get()->map(function ($item) {
+                return [
+                    ...$item->toArray(),
+                    'produk' => $item->produk->nama ? $item->produk->produk->nama . ' ' . $item->produk->nama : $item->produk->produk->nama,
+                    'jml_rakit' => $item->jumlah . ' ' . $item->produk->satuan->nama,
+                    'jml_sisa' => $this->jml_sisa_transfer($item),
+                    'remark' => $item->keterangan ? $item->keterangan : $item->keterangan_transfer,
+                ];
+            });
 
-            return datatables()->of($data)
-                ->addIndexColumn()
-                ->addColumn('periode', function ($d) {
-                    if (isset($d->tanggal_mulai)) {
-                        return Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('no_bppb', function ($d) {
-                    return $d->no_bppb == null ? '-' : $d->no_bppb;
-                })
-                ->addColumn('start', function ($d) {
-                    if (isset($d->tanggal_mulai)) {
-                        return Carbon::parse($d->tanggal_mulai)->isoFormat('dddd, D MMM YYYY');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('end', function ($d) {
-                    if (isset($d->tanggal_selesai)) {
-                        return Carbon::parse($d->tanggal_selesai)->isoFormat('dddd, D MMM YYYY');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('produk', function ($d) {
-                    if (isset($d->produk->nama)) {
-                        return $d->produk->produk->nama . ' ' . $d->produk->nama;
-                    } else {
-                        return $d->produk->produk->nama;
-                    }
-                })
-                ->addColumn('jml_rakit', function ($d) {
-                    return  $d->jumlah . ' ' . $d->produk->satuan->nama;
-                })
-                ->addColumn('jml_sisa', function ($d) {
-                    $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 14)->get();
-                    $c = count($seri);
-                    $seri_all = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
-                    $c_all = count($seri_all);
-                    $seri_belum = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 11)->get()->count();
+            return response()->json($data);
 
-                    return '
-                    <span class="badge badge-success">Sisa Kirim : ' . intval($seri_belum) . ' Unit</span>
-                    <br><span class="badge badge-warning">Sisa Rakit : ' . intval($d->jumlah - $c_all) . ' Unit</span>
-                    ';
-                })
-                ->addColumn('remark', function ($d) {
-                    if (isset($d->keterangan)) {
-                        return $d->keterangan;
-                    } else {
-                        return $d->keterangan_transfer;
-                    }
-                })
-                ->addColumn('aksi', function ($d) {
-                    $seri_belum = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 11)->get()->count();
-                    if (isset($d->keterangan)) {
-                        return '
-                        <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="' . $d->keterangan . '">
-                            <button class="btn btn-outline-secondary"><i class="far fa-eye"></i> Detail</button>
-                        </a>
-                        ';
-                    } else {
-                        return '
-                        <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="' . $d->keterangan_transfer . '">
-                            <button class="btn btn-outline-secondary"><i class="far fa-eye"></i> Detail</button>
-                        </a>
-                        ';
-                    }
-                })
-                ->addColumn('start_filter', function ($d) {
-                    if (isset($d->tanggal_mulai)) {
-                        return Carbon::createFromFormat('Y-m-d', $d->tanggal_mulai)->isoFormat('D-MM-Y');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('end_filter', function ($d) {
-                    if (isset($d->tanggal_selesai)) {
-                        return Carbon::createFromFormat('Y-m-d', $d->tanggal_selesai)->isoFormat('D-MM-Y');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->rawColumns(['aksi', 'jml_rakit', 'jml_sisa'])
-                ->make(true);
+            // return datatables()->of($data)
+            //     ->addIndexColumn()
+            //     ->addColumn('periode', function ($d) {
+            //         if (isset($d->tanggal_mulai)) {
+            //             return Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('no_bppb', function ($d) {
+            //         return $d->no_bppb == null ? '-' : $d->no_bppb;
+            //     })
+            //     ->addColumn('start', function ($d) {
+            //         if (isset($d->tanggal_mulai)) {
+            //             return Carbon::parse($d->tanggal_mulai)->isoFormat('dddd, D MMM YYYY');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('end', function ($d) {
+            //         if (isset($d->tanggal_selesai)) {
+            //             return Carbon::parse($d->tanggal_selesai)->isoFormat('dddd, D MMM YYYY');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('produk', function ($d) {
+            //         if (isset($d->produk->nama)) {
+            //             return $d->produk->produk->nama . ' ' . $d->produk->nama;
+            //         } else {
+            //             return $d->produk->produk->nama;
+            //         }
+            //     })
+            //     ->addColumn('jml_rakit', function ($d) {
+            //         return  $d->jumlah . ' ' . $d->produk->satuan->nama;
+            //     })
+            //     ->addColumn('jml_sisa', function ($d) {
+            //         $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 14)->get();
+            //         $c = count($seri);
+            //         $seri_all = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
+            //         $c_all = count($seri_all);
+            //         $seri_belum = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 11)->get()->count();
+
+            //         return '
+            //         <span class="badge badge-success">Sisa Kirim : ' . intval($seri_belum) . ' Unit</span>
+            //         <br><span class="badge badge-warning">Sisa Rakit : ' . intval($d->jumlah - $c_all) . ' Unit</span>
+            //         ';
+            //     })
+            //     ->addColumn('remark', function ($d) {
+            //         if (isset($d->keterangan)) {
+            //             return $d->keterangan;
+            //         } else {
+            //             return $d->keterangan_transfer;
+            //         }
+            //     })
+            //     ->addColumn('aksi', function ($d) {
+            //         $seri_belum = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 11)->get()->count();
+            //         if (isset($d->keterangan)) {
+            //             return '
+            //             <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="' . $d->keterangan . '">
+            //                 <button class="btn btn-outline-secondary"><i class="far fa-eye"></i> Detail</button>
+            //             </a>
+            //             ';
+            //         } else {
+            //             return '
+            //             <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="' . $d->keterangan_transfer . '">
+            //                 <button class="btn btn-outline-secondary"><i class="far fa-eye"></i> Detail</button>
+            //             </a>
+            //             ';
+            //         }
+            //     })
+            //     ->addColumn('start_filter', function ($d) {
+            //         if (isset($d->tanggal_mulai)) {
+            //             return Carbon::createFromFormat('Y-m-d', $d->tanggal_mulai)->isoFormat('D-MM-Y');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('end_filter', function ($d) {
+            //         if (isset($d->tanggal_selesai)) {
+            //             return Carbon::createFromFormat('Y-m-d', $d->tanggal_selesai)->isoFormat('D-MM-Y');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->rawColumns(['aksi', 'jml_rakit', 'jml_sisa'])
+            //     ->make(true);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -4440,25 +4464,27 @@ class ProduksiController extends Controller
         try {
             $data = JadwalRakitNoseri::with('header')->where('jadwal_id', $request->id)->where('status', 11)->get();
 
-            return datatables()->of($data)
-                ->addIndexColumn()
-                ->addColumn('noseri', function ($d) {
-                    return $d->noseri;
-                })
-                ->addColumn('tgl_masuk', function ($d) {
-                    return Carbon::parse($d->date_in)->isoFormat('dddd, D MMM YYYY hh:ii:ss');
-                })
-                ->addColumn('waktu_masuk', function ($d) {
-                    return Carbon::parse($d->date_in)->isoFormat('hh:ii:ss');
-                })
-                ->addColumn('remark', function ($d) {
-                    if (isset($d->header->keterangan)) {
-                        return $d->header->keterangan;
-                    } else {
-                        return $d->header->keterangan_transfer;
-                    }
-                })
-                ->make(true);
+            return response()->json($data);
+
+            // return datatables()->of($data)
+            //     ->addIndexColumn()
+            //     ->addColumn('noseri', function ($d) {
+            //         return $d->noseri;
+            //     })
+            //     ->addColumn('tgl_masuk', function ($d) {
+            //         return Carbon::parse($d->date_in)->isoFormat('dddd, D MMM YYYY hh:ii:ss');
+            //     })
+            //     ->addColumn('waktu_masuk', function ($d) {
+            //         return Carbon::parse($d->date_in)->isoFormat('hh:ii:ss');
+            //     })
+            //     ->addColumn('remark', function ($d) {
+            //         if (isset($d->header->keterangan)) {
+            //             return $d->header->keterangan;
+            //         } else {
+            //             return $d->header->keterangan_transfer;
+            //         }
+            //     })
+            //     ->make(true);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -4481,30 +4507,32 @@ class ProduksiController extends Controller
                 ->orderByDesc('date_in')
                 ->get();
 
-            return datatables()->of($data)
-                ->addColumn('day_rakit', function ($d) {
-                    return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('dddd, D MMMM Y');
-                })
-                ->addColumn('time_rakit', function ($d) {
-                    return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('H:i');
-                })
-                ->addColumn('bppb', function ($d) {
-                    return $d->no_bppb == null ? '-' : $d->no_bppb;
-                })
-                ->addColumn('produk', function ($d) {
-                    return $d->produkk;
-                })
-                ->addColumn('jml', function ($d) {
-                    return $d->jml . ' Unit';
-                })
-                ->addColumn('action', function ($d) {
-                    return '<button class="btn btn-outline-secondary detail" data-rakit="' . Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('Y-m-d H:i') . '" data-jml="' . $d->jml . '" data-id="' . $d->produk_id . '"><i class="far fa-eye"></i> Detail</button>';
-                })
-                ->addColumn('day_rakit_filter', function ($d) {
-                    return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('D-MM-Y');
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+            return response()->json($data);
+
+            // return datatables()->of($data)
+            //     ->addColumn('day_rakit', function ($d) {
+            //         return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('dddd, D MMMM Y');
+            //     })
+            //     ->addColumn('time_rakit', function ($d) {
+            //         return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('H:i');
+            //     })
+            //     ->addColumn('bppb', function ($d) {
+            //         return $d->no_bppb == null ? '-' : $d->no_bppb;
+            //     })
+            //     ->addColumn('produk', function ($d) {
+            //         return $d->produkk;
+            //     })
+            //     ->addColumn('jml', function ($d) {
+            //         return $d->jml . ' Unit';
+            //     })
+            //     ->addColumn('action', function ($d) {
+            //         return '<button class="btn btn-outline-secondary detail" data-rakit="' . Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('Y-m-d H:i') . '" data-jml="' . $d->jml . '" data-id="' . $d->produk_id . '"><i class="far fa-eye"></i> Detail</button>';
+            //     })
+            //     ->addColumn('day_rakit_filter', function ($d) {
+            //         return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('D-MM-Y');
+            //     })
+            //     ->rawColumns(['action'])
+            //     ->make(true);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,

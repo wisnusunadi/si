@@ -394,13 +394,13 @@ Route::prefix('/prd')->group(function () {
     Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current'])->middleware('jwt.verify');
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
     Route::get('/ajax_his_rakit', [ProduksiController::class, 'ajax_history_rakit']);
-    Route::post('/riwayat_rakit', [ProduksiController::class, 'get_his_rakit'])->middleware('jwt.verify');
+    Route::get('/riwayat_rakit', [ProduksiController::class, 'get_his_rakit']);
     Route::get('/ajax_perproduk', [ProduksiController::class, 'ajax_perproduk']);
     Route::get('/detail_perproduk/{id}', [ProduksiController::class, 'detail_perproduk']);
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
     Route::post('cek-noseri', [ProduksiController::class, 'cekDuplicateNoseri']);
-    Route::post('/ajax_sisa', [ProduksiController::class, 'ajax_sisa_transfer']);
+    Route::get('/ajax_sisa', [ProduksiController::class, 'ajax_sisa_transfer']);
     Route::post('/detail_sisa_kirim', [ProduksiController::class, 'detail_sisa_kirim']);
 
     Route::get('/testing', [ProduksiController::class, 'change_jadwal']);
