@@ -8642,6 +8642,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                     return [
                         'pesanan_id' => $key,
                         'data' => $uniqueItems,
+                        'data' => $uniqueItems,
                     ];
                 })->values()->all();
 
