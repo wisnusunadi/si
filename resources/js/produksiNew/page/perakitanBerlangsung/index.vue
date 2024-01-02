@@ -26,7 +26,35 @@ export default {
                 },
             ],
             dataPerakitan: [],
-            dataRiwayat: [],
+            dataRiwayat: [
+                { "id": 218733, jenis_perakitan: 'terjadwal', "noseri": "FX01241A00001", "nama": "FOX-1 PINK", "no_bppb": "01FOX/04/22", "tgl_buat": "02 Januari 2024" },
+                {
+                    id: 218734, jenis_perakitan: 'tidak_terjadwal', "noseri": "FX01241A00002", "nama": "FOX-1 PINK", "no_bppb": "01FOX/04/22", "tgl_buat": "02 Januari 2024"
+                }
+            ],
+            dataFleksibel: [
+                {
+                    no_bppb: 'BPPB/2020/01/001',
+                    tgl_rakit: '2023-09-23',
+                    produk: 'Produk 1',
+                    bagian: 'Sarkes',
+                    jml: '10',
+                },
+                {
+                    no_bppb: 'BPPB/2020/01/002',
+                    tgl_rakit: '2023-09-23',
+                    produk: 'Produk 2',
+                    bagian: 'Produksi',
+                    jml: '10',
+                },
+                {
+                    no_bppb: 'BPPB/2020/01/003',
+                    tgl_rakit: '2023-09-23',
+                    produk: 'Produk 3',
+                    bagian: 'Produksi',
+                    jml: '10',
+                }
+            ],
             tanggalAwal: moment().startOf('month').format('YYYY-MM-DD'),
             tanggalAkhir: moment().endOf('month').format('YYYY-MM-DD'),
             loadingRiwayat: false,
@@ -49,13 +77,13 @@ export default {
                     }
                 })
 
-                const { data: riwayat } = await axios.get('/api/prd/fg/riwayat?tanggalAwal=' + this.tanggalAwal + '&tanggalAkhir=' + this.tanggalAkhir)
-                this.dataRiwayat = riwayat.map(item => {
-                    return {
-                        ...item,
-                        tgl_buat: this.dateFormat(item.tgl_buat),
-                    }
-                })
+                // const { data: riwayat } = await axios.get('/api/prd/fg/riwayat?tanggalAwal=' + this.tanggalAwal + '&tanggalAkhir=' + this.tanggalAkhir)
+                // this.dataRiwayat = riwayat.map(item => {
+                //     return {
+                //         ...item,
+                //         tgl_buat: this.dateFormat(item.tgl_buat),
+                //     }
+                // })
             } catch (error) {
                 console.log(error)
             } finally {
@@ -98,92 +126,50 @@ export default {
 <template>
     <div>
         <Header :breadcumbs="breadcumbs" :title="title" />
-        <!-- <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="pills-terjadwal-tab" data-toggle="pill" data-target="#pills-terjadwal" type="button"
-                    role="tab" aria-controls="pills-terjadwal" aria-selected="true">Perakitan Terjadwal</a>
+                <a class="nav-link active" id="pills-terjadwal-tab" data-toggle="pill" data-target="#pills-terjadwal"
+                    type="button" role="tab" aria-controls="pills-terjadwal" aria-selected="true">Perakitan Terjadwal</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-fleksibel-tab" data-toggle="pill" data-target="#pills-fleksibel" type="button"
-                    role="tab" aria-controls="pills-fleksibel" aria-selected="false">Perakitan Fleksibel</a>
+                    role="tab" aria-controls="pills-fleksibel" aria-selected="false">Perakitan Tanpa Jadwal</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pills-riwayat-tab" data-toggle="pill" data-target="#pills-riwayat" type="button"
+                    role="tab" aria-controls="pills-riwayat" aria-selected="false">Riwayat</a>
             </li>
         </ul>
-        <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-terjadwal" role="tabpanel" aria-labelledby="pills-terjadwal-tab">
+        <div class="tab-content" id="pills-tabContent" v-if="!$store.state.loading">
+            <div class="tab-pane fade show active" id="pills-terjadwal" role="tabpanel"
+                aria-labelledby="pills-terjadwal-tab">
                 <div class="card">
                     <div class="card-body">
-                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" v-if="!$store.state.loading">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
-                                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">Perakitan</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile"
-                                    type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="pills-tabContent" v-if="!$store.state.loading">
-                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-                                aria-labelledby="pills-home-tab">
-                                <perakitan :dataTable="dataPerakitan" @refresh="getData" />
-                            </div>
-                            <div class="tab-pane fade" id="pills-profile" role="tabpanel"
-                                aria-labelledby="pills-profile-tab">
-                                <riwayat :dataRiwayat="dataRiwayat" :tanggalAwal="tanggalAwal" :tanggalAkhir="tanggalAkhir"
-                                    @updateTanggal="updateTanggal" v-if="!loadingRiwayat" />
-                                <div class="spinner-border" role="status" v-else>
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else>
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
+                        <perakitan :dataTable="dataPerakitan" @refresh="getData" />
                     </div>
                 </div>
             </div>
             <div class="tab-pane fade" id="pills-fleksibel" role="tabpanel" aria-labelledby="pills-fleksibel-tab">
                 <div class="card">
                     <div class="card-body">
-                        <fleksibel />
+                        <fleksibel :perakitan="dataFleksibel" />
                     </div>
                 </div>
             </div>
-        </div> -->
-                        <div class="card">
-                        <div class="card-body">
-                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" v-if="!$store.state.loading">
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
-                                        type="button" role="tab" aria-controls="pills-home" aria-selected="true">Perakitan</a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile"
-                                        type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content" id="pills-tabContent" v-if="!$store.state.loading">
-                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-                                    aria-labelledby="pills-home-tab">
-                                    <perakitan :dataTable="dataPerakitan" @refresh="getData" />
-                                </div>
-                                <div class="tab-pane fade" id="pills-profile" role="tabpanel"
-                                    aria-labelledby="pills-profile-tab">
-                                    <riwayat :dataRiwayat="dataRiwayat" :tanggalAwal="tanggalAwal" :tanggalAkhir="tanggalAkhir"
-                                        @updateTanggal="updateTanggal" v-if="!loadingRiwayat" />
-                                    <div class="spinner-border" role="status" v-else>
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-else>
-                                <div class="spinner-border" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </div>
+            <div class="tab-pane fade" id="pills-riwayat" role="tabpanel" aria-labelledby="pills-riwayat-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <riwayat :dataRiwayat="dataRiwayat" :tanggalAwal="tanggalAwal" :tanggalAkhir="tanggalAkhir"
+                            @updateTanggal="updateTanggal" v-if="!loadingRiwayat" />
+                        <div class="spinner-border" role="status" v-else>
+                            <span class="sr-only">Loading...</span>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div v-else class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     </div>
 </template>
