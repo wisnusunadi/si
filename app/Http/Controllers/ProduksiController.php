@@ -296,7 +296,7 @@ class ProduksiController extends Controller
 
     function generate_fg_non_jadwal(Request $request)
     {
-        $obj =  json_decode(json_encode($request->all()), FALSE);
+       // $obj =  json_decode(json_encode($request->all()), FALSE);
         //DB::beginTransaction();
         try {
             //code...
