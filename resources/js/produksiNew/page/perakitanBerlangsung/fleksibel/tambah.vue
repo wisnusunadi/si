@@ -53,8 +53,9 @@ export default {
                 this.produk = produk.reduce((acc, item) => {
                     if(item.gudang_barang_jadi.length > 0) {
                         item.gudang_barang_jadi.forEach(variasi => {
+                            const nama = variasi.nama == null || variasi.nama == '' ? '' : `${variasi.nama}`
                             acc.push({
-                                label: `${item.nama} ${variasi.nama}`,
+                                label: `${item.nama} ${nama}`,
                                 value: variasi.id
                             })
                         })
