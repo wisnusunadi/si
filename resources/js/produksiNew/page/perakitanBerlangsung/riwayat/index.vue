@@ -64,7 +64,7 @@ export default {
                     value: 'tidak_terjadwal'
                 }
             ],
-            jenisPerakitanSelected: null,
+            jenisPerakitanSelected: [],
         }
     },
     methods: {
@@ -113,16 +113,24 @@ export default {
                 tanggalAwal: this.tanggal_awal,
                 tanggalAkhir: this.tanggal_akhir
             })
+        },
+        jenisPerakitanClicked(jenis) {
+            if (this.jenisPerakitanSelected.find((data) => data === jenis.value)) {
+                this.jenisPerakitanSelected = this.jenisPerakitanSelected.filter((data) => data !== jenis.value)
+            } else {
+                this.jenisPerakitanSelected.push(jenis.value)
+            }
         }
     },
     computed: {
         filterData() {
-            let data = this.dataRiwayat
-            let jenis = this.jenisPerakitanSelected?.value
-            if (this.jenisPerakitanSelected) {
-                data = data.filter(item => item.jenis_perakitan == jenis)
+            if(this.jenisPerakitanSelected.length > 0) {
+                return this.dataRiwayat.filter(item => {
+                    return this.jenisPerakitanSelected.includes(item.jenis_perakitan)
+                })
+            } else {
+                return this.dataRiwayat
             }
-            return data
         }
     },
     watch: {
@@ -169,7 +177,13 @@ export default {
                     <form id="filter_ekat">
                         <div class="dropdown-menu">
                             <div class="px-3 py-3 font-weight-normal">
-                                <v-select :options="jenisPerakitanOptions" v-model="jenisPerakitanSelected"></v-select>
+                                <div class="form-check" v-for="jenis in jenisPerakitanOptions" :key="jenis.value">
+                                    <input class="form-check-input" type="checkbox" @click="jenisPerakitanClicked(jenis)"
+                                        :id="jenis.value">
+                                    <label class="form-check-label" :for="jenis.value">
+                                        {{ jenis.label }}
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -207,7 +221,7 @@ export default {
                 </span>
             </template>
 
-            <template #item.jenis_perakitan="{item}">
+            <template #item.jenis_perakitan="{ item }">
                 <div>
                     <span>{{ item.jenis_perakitan == 'terjadwal' ? 'Terjadwal' : 'Tidak Terjadwal' }}</span>
                 </div>
