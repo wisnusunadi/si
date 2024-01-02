@@ -8,7 +8,7 @@ class JadwalPerakitan extends Model
 {
     protected $connection = 'erp';
     protected $table = 'jadwal_perakitan';
-    protected $fillable = ['jenis','produk_id','no_bppb', 'jumlah', 'tanggal_mulai', 'tanggal_selesai', 'status', 'state', 'konfirmasi', 'warna', 'status_tf', 'created_at', 'keterangan', 'keterangan_transfer', 'evaluasi'];
+    protected $fillable = ['divisi_id','jenis','produk_id','no_bppb', 'jumlah', 'tanggal_mulai', 'tanggal_selesai', 'status', 'state', 'konfirmasi', 'warna', 'status_tf', 'created_at', 'keterangan', 'keterangan_transfer', 'evaluasi'];
 
     public function Produk()
     {

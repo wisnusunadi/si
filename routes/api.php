@@ -337,6 +337,8 @@ Route::prefix('/prd')->group(function () {
     Route::prefix('/fg')->group(function () {
         Route::prefix('/non_jadwal')->group(function () {
             Route::post('/gen', [ProduksiController::class, 'generate_fg_non_jadwal']);
+            Route::get('/show', [ProduksiController::class, 'show_non_jadwal']);
+            Route::get('/detail/{id}', [ProduksiController::class, 'detail_non_jadwal']);
         });
         Route::post('/gen', [ProduksiController::class, 'generate_fg']);
         Route::get('/riwayat', [ProduksiController::class, 'riwayat_fg']);

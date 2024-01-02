@@ -294,26 +294,103 @@ class ProduksiController extends Controller
         }
     }
 
+    function detail_non_jadwal($id)
+    {
+        $head = JadwalPerakitan::
+        select('divisi.nama as divisi','jadwal_perakitan.no_bppb','jadwal_perakitan.id','produk.nama','gdg_barang_jadi.nama as variasi',
+        'jadwal_perakitan.created_at',
+        DB::raw('(SELECT COALESCE(COUNT(jadwal_rakit_noseri.id), 0) FROM jadwal_rakit_noseri WHERE jadwal_rakit_noseri.jadwal_id = jadwal_perakitan.id) as jumlah')
+        )
+        ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','jadwal_perakitan.produk_id')
+        ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
+        ->leftJoin('divisi','divisi.id','=','jadwal_perakitan.divisi_id')
+        ->where('jadwal_perakitan.id',$id)
+        ->first();
+
+
+
+        $data = JadwalRakitNoseri::
+        select('jadwal_rakit_noseri.noseri','jadwal_rakit_noseri.id')
+        ->where('jadwal_rakit_noseri.jadwal_id',$id)
+        ->get();
+
+        if ($data->isEmpty()) {
+            $seri = array();
+        } else {
+        foreach($data as $d){
+            $seri[] = array(
+                'id' => $d->id,
+                'noseri' => $d->noseri,
+            );
+        }
+        }
+
+        if (!$head) {
+            $obj = array();
+        } else {
+
+        $obj = (object)[
+            'id' => $head->id,
+            'no_bppb' => $head->no_bppb,
+            'nama' => $head->nama .' '. $head->variasi,
+            'jumlah' => $head->jumlah,
+            'tgl_buat' => $head->created_at,
+            'divisi' => $head->divisi,
+            'seri '=> $seri
+        ];
+    }
+        return response()->json($obj);
+    }
+
+    function show_non_jadwal()
+    {
+        $data = JadwalPerakitan::
+        select('divisi.nama as divisi','jadwal_perakitan.no_bppb','jadwal_perakitan.id','produk.nama','gdg_barang_jadi.nama as variasi',
+        'jadwal_perakitan.created_at',
+        DB::raw('(SELECT COALESCE(COUNT(jadwal_rakit_noseri.id), 0) FROM jadwal_rakit_noseri WHERE jadwal_rakit_noseri.jadwal_id = jadwal_perakitan.id) as jumlah')
+        )
+        ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','jadwal_perakitan.produk_id')
+        ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
+        ->leftJoin('divisi','divisi.id','=','jadwal_perakitan.divisi_id')
+        ->where('jenis','tidak_terjadwal')
+        ->get();
+
+        if ($data->isEmpty()) {
+            $obj = array();
+        } else {
+        foreach($data as $d){
+            $obj[] = array(
+                'id' => $d->id,
+                'no_bppb' => $d->no_bppb,
+                'nama' => $d->nama .' '. $d->variasi,
+                'jumlah' => $d->jumlah,
+                'tgl_buat' => $d->created_at,
+                'divisi' => $d->divisi,
+            );
+        }
+        }
+
+        return response()->json($obj);
+    }
+
     function generate_fg_non_jadwal(Request $request)
     {
        // $obj =  json_decode(json_encode($request->all()), FALSE);
-        //DB::beginTransaction();
+        DB::beginTransaction();
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
             $gbj = GudangBarangJadi::find($obj->produk->value);
             $prd = Produk::find($gbj->produk_id);
 
-
-
             if($prd->kode != NULL || $prd->kode != ''){
             $jadwal = JadwalPerakitan::create([
                 'jenis' => 'tidak_terjadwal',
                 'no_bppb' => $obj->no_bppb,
-                'produk_id' => $obj->no_bppb,
+                'produk_id' => $gbj->id,
                 'jumlah' => $obj->jml,
-                'tgl_mulai' => '2022-01-03',
-                'tgl_selesai' => '2022-01-03',
+                'tanggal_mulai' => Carbon::now()->format('Y-m-d'),
+                'tanggal_selesai' => Carbon::now()->format('Y-m-d'),
                 'status' => 8,
                 'state' => 17,
                 'konfirmasi' => 0,
@@ -322,7 +399,7 @@ class ProduksiController extends Controller
                 'keterangan' => $obj->tujuan,
                 'divisi_id' => $obj->bagian->value,
             ]);
-            dd('tes');
+
             $getTgl = Carbon::now();
            // $tahun = 24;
             $tahun = $getTgl->format('Y') % 100;
@@ -332,10 +409,10 @@ class ProduksiController extends Controller
             $kedatangan =  $abjad[$obj->kedatangan - 1];
             $max = JadwalRakitNoseri::where(['unit'=> $prd->kode.$gbj->kode,'th' => $tahun])->latest('id')->value('urutan')+0;
 
-            for ($i = 1; $i <= $obj->jml_noseri; $i++) {
+            for ($i = 1; $i <= $obj->jml; $i++) {
                 $newSeri[] = $prd->kode . $gbj->kode. $tahun . $bulan . $kedatangan . str_pad($max + $i, 5, '0', STR_PAD_LEFT);
                 $newSeries[] = array(
-                    'jadwal_id' => $obj->jadwal_id,
+                    'jadwal_id' => $jadwal->id,
                     'no_bppb' => $obj->no_bppb,
                     'no_urut' => $max + $i,
                     'kode' =>  $prd->kode .$gbj->kode,
@@ -359,7 +436,7 @@ class ProduksiController extends Controller
 
                     foreach ($filteredNoseri as $f) {
                      $jd=JadwalRakitNoseri::create([
-                            'jadwal_id' => $obj->jadwal_id,
+                            'jadwal_id' => $jadwal->id,
                             'no_bppb' => $obj->no_bppb,
                             'urutan' => $f['no_urut'],
                             'unit' => $f['kode'],
@@ -374,9 +451,9 @@ class ProduksiController extends Controller
                         $jd_seri[] = (object)['seri' => $f['seri']];
                     }
 
-                    $jp->status_tf = 12;
-                    $jp->no_bppb = $request->no_bppb;
-                    $jp->save();
+                    // $jp->status_tf = 12;
+                    // $jp->no_bppb = $request->no_bppb;
+                    // $jp->save();
 
                     DB::commit();
                     return response()->json([
@@ -3447,6 +3524,7 @@ class ProduksiController extends Controller
         ->leftJoin('gdg_barang_jadi as gbj', 'gbj.id', '=', 'jadwal_perakitan.produk_id')
         ->leftJoin('produk as p', 'p.id', '=', 'gbj.produk_id')
         ->leftJoin('m_produk as mp', 'mp.id', '=', 'p.produk_id')
+        ->where('jadwal_perakitan.jenis','terjadwal')
         ->whereNotIn('jadwal_perakitan.status',[6])
         ->whereNotIn('jadwal_perakitan.status_tf',[14])
         ->groupBy('jadwal_perakitan.id')
@@ -4112,7 +4190,7 @@ class ProduksiController extends Controller
         //         ->whereYear('jadwal_rakit_noseri.created_at',  $date)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
         // }
 
-        $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk','gdg_barang_jadi.nama as variasi', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
+        $data = JadwalRakitNoseri::select('jadwal_perakitan.jenis','jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk','gdg_barang_jadi.nama as variasi', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
         ->leftjoin('jadwal_perakitan', 'jadwal_perakitan.id',
             '=',
             'jadwal_rakit_noseri.jadwal_id'
@@ -4130,6 +4208,7 @@ class ProduksiController extends Controller
             foreach ($data as $d) {
                 $obj[] = array(
                     'id' => $d->id,
+                    'jenis' => $d->jenis,
                     'noseri' => $d->noseri,
                     'nama' => $d->produk.' '.$d->variasi,
                     'no_bppb' => $d->no_bppb,
