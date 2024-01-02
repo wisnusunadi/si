@@ -18,7 +18,7 @@ export default {
                 },
                 {
                     text: 'Tanggal Rakit',
-                    value: 'tgl_rakit',
+                    value: 'tgl',
                     sortable: false
                 },
                 {
@@ -174,11 +174,6 @@ export default {
                 </span>
             </template>
 
-            <template #item.tgl_rakit="{item}">
-                <div>
-                    <p>{{ dateFormat(item.tgl_rakit) }}</p>
-                </div>
-            </template>
             <template #item.aksi="{ item }">
                 <div>
                     <button class="btn btn-outline-secondary btn-sm" @click="openDetailRakit(item)">

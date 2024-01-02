@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 import DataTable from '../../../components/DataTable.vue'
 import modalPilihan from '../riwayat/modalPilihan.vue'
 export default {
@@ -18,15 +19,9 @@ export default {
                     align: 'text-left'
                 }
             ],
-            riwayatRakit: [
-                {
-                    noseri: '1234567890'
-                },
-                {
-                    noseri: '1234567890'
-                }
-            ],
+            riwayatRakit: {},
             showModalPilihan: false,
+            seri: []
         }
     },
     methods: {
@@ -50,7 +45,22 @@ export default {
                 $('.modalDetail').modal('show')
             })
         },
+        async getData() {
+            try {
+                this.loading = true
+                const { data } = await axios.get(`/api/prd/fg/non_jadwal/detail/${this.produk.id}`)
+                this.riwayatRakit = data
+                this.seri = data?.seri
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.loading = false
+            }
+        }
     },
+    created() {
+        this.getData()
+    }
 }
 </script>
 <template>
@@ -127,7 +137,7 @@ export default {
                                 <div class="card-group">
                                     <div class="card">
                                         <div class="card-body">
-                                            <p class="card-text" id="t_rakit">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut eligendi fuga aliquam enim tempora accusantium, eos nemo voluptate eveniet architecto iusto voluptatem reprehenderit corporis dolore quam. Eius illo ipsa dolor.</p>
+                                            <p class="card-text" id="t_rakit">{{ riwayatRakit?.tujuan }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -138,22 +148,22 @@ export default {
                                         <input type="text" v-model="search" class="form-control" placeholder="Cari...">
                                     </div>
                                 </div>
-                                <DataTable :headers="headers" :items="riwayatRakit" :search="search" v-if="!loading" />
+                                <DataTable :headers="headers" :items="seri" :search="search" v-if="!loading" />
                                 <div class="text-center" v-else>
                                     <div class="spinner-border text-primary" role="status">
                                         <span class="sr-only">Loading...</span>
                                     </div>
                                 </div>
 
-                                <div class="d-flex bd-highlight">
+                                <!-- <div class="d-flex bd-highlight">
                                     <div class="p-2 flex-grow-1 bd-highlight">
-                                        <button class="btn btn-success" v-if="riwayatRakit.length > 0"
+                                        <button class="btn btn-success" v-if=seri.length > 0"
                                             @click="cetakBarcode">Cetak Barcode</button>
                                     </div>
                                     <div class="p-2 bd-highlight">
                                         <button class="btn btn-secondary" @click="closeModal">Keluar</button>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

@@ -23,7 +23,7 @@ export default {
                 },
                 {
                     text: 'Jenis Perakitan',
-                    value: 'jenis_perakitan',
+                    value: 'jenis',
                     sortable: false,
                 },
                 {
@@ -126,7 +126,7 @@ export default {
         filterData() {
             if(this.jenisPerakitanSelected.length > 0) {
                 return this.dataRiwayat.filter(item => {
-                    return this.jenisPerakitanSelected.includes(item.jenis_perakitan)
+                    return this.jenisPerakitanSelected.includes(item.jenis)
                 })
             } else {
                 return this.dataRiwayat
@@ -168,7 +168,7 @@ export default {
                 <input type="checkbox" @click="checkAllSeri" :checked="checkAll">
             </template>
 
-            <template #header.jenis_perakitan>
+            <template #header.jenis>
                 <span class="text-bold pr-2">Jenis Perakitan</span>
                 <span class="filter">
                     <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -221,9 +221,9 @@ export default {
                 </span>
             </template>
 
-            <template #item.jenis_perakitan="{ item }">
+            <template #item.jenis="{ item }">
                 <div>
-                    <span>{{ item.jenis_perakitan == 'terjadwal' ? 'Terjadwal' : 'Tidak Terjadwal' }}</span>
+                    <span>{{ item.jenis == 'terjadwal' ? 'Terjadwal' : 'Tidak Terjadwal' }}</span>
                 </div>
             </template>
 

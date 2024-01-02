@@ -26,35 +26,8 @@ export default {
                 },
             ],
             dataPerakitan: [],
-            dataRiwayat: [
-                { "id": 218733, jenis_perakitan: 'terjadwal', "noseri": "FX01241A00001", "nama": "FOX-1 PINK", "no_bppb": "01FOX/04/22", "tgl_buat": "02 Januari 2024" },
-                {
-                    id: 218734, jenis_perakitan: 'tidak_terjadwal', "noseri": "FX01241A00002", "nama": "FOX-1 PINK", "no_bppb": "01FOX/04/22", "tgl_buat": "02 Januari 2024"
-                }
-            ],
-            dataFleksibel: [
-                {
-                    no_bppb: 'BPPB/2020/01/001',
-                    tgl_rakit: '2023-09-23',
-                    produk: 'Produk 1',
-                    bagian: 'Sarkes',
-                    jml: '10',
-                },
-                {
-                    no_bppb: 'BPPB/2020/01/002',
-                    tgl_rakit: '2023-09-23',
-                    produk: 'Produk 2',
-                    bagian: 'Produksi',
-                    jml: '10',
-                },
-                {
-                    no_bppb: 'BPPB/2020/01/003',
-                    tgl_rakit: '2023-09-23',
-                    produk: 'Produk 3',
-                    bagian: 'Produksi',
-                    jml: '10',
-                }
-            ],
+            dataRiwayat: [],
+            dataFleksibel: [],
             tanggalAwal: moment().startOf('month').format('YYYY-MM-DD'),
             tanggalAkhir: moment().endOf('month').format('YYYY-MM-DD'),
             loadingRiwayat: false,
@@ -77,13 +50,21 @@ export default {
                     }
                 })
 
-                // const { data: riwayat } = await axios.get('/api/prd/fg/riwayat?tanggalAwal=' + this.tanggalAwal + '&tanggalAkhir=' + this.tanggalAkhir)
-                // this.dataRiwayat = riwayat.map(item => {
-                //     return {
-                //         ...item,
-                //         tgl_buat: this.dateFormat(item.tgl_buat),
-                //     }
-                // })
+                const { data: riwayat } = await axios.get('/api/prd/fg/riwayat?tanggalAwal=' + this.tanggalAwal + '&tanggalAkhir=' + this.tanggalAkhir)
+                this.dataRiwayat = riwayat.map(item => {
+                    return {
+                        ...item,
+                        tgl_buat: this.dateFormat(item.tgl_buat),
+                    }
+                })
+
+                const { data: fleksibel } = await axios.get('/api/prd/fg/non_jadwal/show')
+                this.dataFleksibel = fleksibel.map(item => {
+                    return {
+                        ...item,
+                        tgl: this.dateFormat(item.tgl_rakit),
+                    }
+                })
             } catch (error) {
                 console.log(error)
             } finally {
