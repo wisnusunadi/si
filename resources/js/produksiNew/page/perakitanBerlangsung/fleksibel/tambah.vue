@@ -51,8 +51,9 @@ export default {
                     }
                 })
                 this.produk = produk.map(item => {
+                    let variasi = item?.gudang_barang_jadi[0]?.nama == null || item?.gudang_barang_jadi[0]?.nama == '' ? null : item?.gudang_barang_jadi[0]?.nama
                     return {
-                        label: item.nama,
+                        label: `${item.nama} ${variasi}`,
                         value: item.id
                     }
                 });
