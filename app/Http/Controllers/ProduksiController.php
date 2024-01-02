@@ -297,7 +297,7 @@ class ProduksiController extends Controller
     function generate_fg_non_jadwal(Request $request)
     {
         $obj =  json_decode(json_encode($request->all()), FALSE);
-  DB::beginTransaction();
+        //DB::beginTransaction();
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
@@ -305,11 +305,28 @@ class ProduksiController extends Controller
             $prd = Produk::find($gbj->produk_id);
 
 
+
             if($prd->kode != NULL || $prd->kode != ''){
+            $jadwal = JadwalPerakitan::create([
+                'jenis' => 'tidak_terjadwal',
+                'no_bppb' => $obj->no_bppb,
+                'produk_id' => $obj->no_bppb,
+                'jumlah' => $obj->jml,
+                'tgl_mulai' => '2022-01-03',
+                'tgl_selesai' => '2022-01-03',
+                'status' => 8,
+                'state' => 17,
+                'konfirmasi' => 0,
+                'warna' => '#6c757d',
+                'status_tf' => 15,
+                'keterangan' => $obj->tujuan,
+                'divisi_id' => $obj->bagian->value,
+            ]);
+            dd('tes');
             $getTgl = Carbon::now();
            // $tahun = 24;
             $tahun = $getTgl->format('Y') % 100;
-            $bulan =  strtoupper(dechex($getTgl->format('m')));;
+            $bulan =  strtoupper(dechex($getTgl->format('m')));
             //Default
             $abjad = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T","U","V", "W", "X", "Y", "Z"];
             $kedatangan =  $abjad[$obj->kedatangan - 1];
@@ -401,8 +418,8 @@ class ProduksiController extends Controller
                         'available' =>   $available,
                     ], 500);
                 }
-            }\
-        }else{
+            }
+        else{
             DB::rollBack();
             return response()->json([
                 'status' => 200,
