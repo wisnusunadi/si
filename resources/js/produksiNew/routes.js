@@ -36,7 +36,12 @@ const routes = [
         path: "/produksi/riwayat_perakitan",
         component: RiwayatPerakitan,
         name: "riwayatPerakitan"
-        }
+    },
+    {
+        path: '/produksi/kamus_produk',
+        name: 'kamusProduk',
+        component: () => import('./page/kamusProduk')
+    }
 ]
 const router = new VueRouter({
     mode: "history",
