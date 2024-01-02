@@ -12,7 +12,8 @@ export default {
             headers: [
                 { text: 'No Seri', value: 'noseri', align: 'text-left' },
             ],
-            loading: false
+            loading: false,
+            search: ''
         }
     },
     methods: {
