@@ -50,13 +50,18 @@ export default {
                         'Authorization': 'Bearer ' + localStorage.getItem('lokal_token')
                     }
                 })
-                this.produk = produk.map(item => {
-                    let variasi = item?.gudang_barang_jadi[0]?.nama == null || item?.gudang_barang_jadi[0]?.nama == '' ? '' : item?.gudang_barang_jadi[0]?.nama
-                    return {
-                        label: `${item.nama} ${variasi}`,
-                        value: item.id
+                this.produk = produk.reduce((acc, item) => {
+                    if(item.gudang_barang_jadi.length > 0) {
+                        item.gudang_barang_jadi.forEach(variasi => {
+                            acc.push({
+                                label: `${item.nama} ${variasi.nama}`,
+                                value: variasi.id
+                            })
+                        })
                     }
-                });
+                    return acc
+                }, [])
+
                 this.bagian = bagian.map(item => {
                     return {
                         label: item.nama,
