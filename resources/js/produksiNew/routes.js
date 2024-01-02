@@ -2,7 +2,7 @@ import VueRouter from "vue-router";
 import PermintaanReworks from './page/permintaan'
 import prosesSetReworks from './page/prosesSet'
 import prosesSetReworksDetail from './page/prosesSet/proses/detail'
-import perakitanBerlangsung from './Page/perakitanBerlangsung'
+import perakitanBerlangsung from './page/perakitanBerlangsung'
 import Transfer from './page/transfer'
 import RiwayatPerakitan from './page/riwayatPerakitan'
 
