@@ -14,6 +14,7 @@ export default {
                 no_bppb: '',
                 produk: '',
                 jml: '',
+                kedatangan: 1,
                 bagian: '',
                 tujuan: '',
             },
@@ -51,7 +52,7 @@ export default {
                     }
                 })
                 this.produk = produk.reduce((acc, item) => {
-                    if(item.gudang_barang_jadi.length > 0) {
+                    if (item.gudang_barang_jadi.length > 0) {
                         item.gudang_barang_jadi.forEach(variasi => {
                             const nama = variasi.nama == null || variasi.nama == '' ? '' : `${variasi.nama}`
                             acc.push({
@@ -119,6 +120,17 @@ export default {
     created() {
         this.getData()
     },
+    watch: {
+        'form.kedatangan': function (val) {
+            if (val > 26) {
+                this.form.kedatangan = 26
+            } else if (val <= 1) {
+                this.form.kedatangan = 1
+            } else {
+                this.form.kedatangan = val
+            }
+        },
+    },
 }
 </script>
 <template>
@@ -150,19 +162,27 @@ export default {
                                 </div>
 
                                 <div class="form-group">
+                                    <label for="exampleInputEmail1">Kedatangan</label>
+                                    <input type="number" class="form-control" v-model.number="form.kedatangan"
+                                        :disabled="hasilGenerate.length > 0" @keypress="numberOnly($event)">
+                                </div>
+
+                                <div class="form-group">
                                     <label for="">Jumlah Rakit</label>
-                                    <input type="text" class="form-control" v-model="form.jml"
+                                    <input type="number" class="form-control" v-model="form.jml"
                                         @keypress="numberOnly($event)" :disabled="hasilGenerate.length > 0">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="">Bagian (Peminta No Seri)</label>
-                                    <v-select :options="bagian" v-model="form.bagian" placeholder="Bagian" :disabled="hasilGenerate.length > 0"></v-select>
+                                    <v-select :options="bagian" v-model="form.bagian" placeholder="Bagian"
+                                        :disabled="hasilGenerate.length > 0"></v-select>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="">Tujuan (Minta No Seri)</label>
-                                    <textarea class="form-control" v-model="form.tujuan" rows="3" :disabled="hasilGenerate.length > 0"></textarea>
+                                    <textarea class="form-control" v-model="form.tujuan" rows="3"
+                                        :disabled="hasilGenerate.length > 0"></textarea>
 
                                 </div>
                             </div>
