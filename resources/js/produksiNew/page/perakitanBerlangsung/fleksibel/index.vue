@@ -69,7 +69,7 @@ export default {
                 startDate.setHours(0, 0, 0, 0)
 
                 const endDate = new Date(this.tanggalAkhir)
-                endDate.setHours(0, 0, 0, 0)
+                endDate.setHours(23, 59, 59, 999)
 
                 return this.perakitan.filter(item => {
                     const date = new Date(item.tgl_rakit)
@@ -85,7 +85,7 @@ export default {
                 })
             } else if (this.tanggalAkhir) {
                 const endDate = new Date(this.tanggalAkhir)
-                endDate.setHours(0, 0, 0, 0)
+                endDate.setHours(23, 59, 59, 999)
 
                 return this.perakitan.filter(item => {
                     const date = new Date(item.tgl_rakit)
@@ -126,7 +126,7 @@ export default {
             </div>
         </div>
         <DataTable :headers="headers" :items="filterData" :search="search">
-            <template #header.tgl_rakit>
+            <template #header.tgl>
                 <span class="text-bold pr-2">Tanggal Rakit</span>
                 <span class="filter">
                     <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
