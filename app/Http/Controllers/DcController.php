@@ -107,7 +107,9 @@ class DcController extends Controller
 
 
       $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk])->setPaper('A4');
-         return $pdf->stream('');
+         return $pdf->download('tes.pdf');
+
+         //return $pdf->stream('');
    //return view('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk]);
 
     }
