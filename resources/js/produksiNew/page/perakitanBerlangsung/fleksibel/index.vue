@@ -61,6 +61,9 @@ export default {
                 $('.modalDetail').modal('show')
             })
         },
+        refresh() {
+            this.$emit('refresh')
+        }
     },
     computed: {
         filterData() {
@@ -113,7 +116,7 @@ export default {
 </script>
 <template>
     <div>
-        <tambah v-if="modalTambah" @closeModal="modalTambah = false" />
+        <tambah v-if="modalTambah" @closeModal="modalTambah = false" @refresh="refresh" />
         <detail v-if="detailSelected" :produk="detailSelected" @closeModal="detailSelected = null" />
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
