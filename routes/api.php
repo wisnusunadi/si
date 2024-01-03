@@ -676,7 +676,7 @@ Route::prefix('/logistik')->group(function () {
 });
 
 Route::prefix('/dc')->group(function () {
-    Route::post('data', [App\Http\Controllers\DcController::class, 'get_data_coo']);
+    Route::post('data/{tahun}', [App\Http\Controllers\DcController::class, 'get_data_coo']);
     Route::post('dashboard/data/{value}', [App\Http\Controllers\DcController::class, 'dashboard_data']);
     Route::post('dashboard/so', [App\Http\Controllers\DcController::class, 'dashboard_so']);
     Route::prefix('/so_in_process')->group(function () {

@@ -361,17 +361,24 @@
                                                         <div class="form-group">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio"
-                                                                    value="2023" id="status2" name="data_tahun"
+                                                                    value="{!! \Carbon\Carbon::now()->year !!}" id="status2" name="data_tahun"
                                                                     checked />
                                                                 <label class="form-check-label" for="status2">
-                                                                    2023
+                                                                    {!! \Carbon\Carbon::now()->year !!}
                                                                 </label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio"
-                                                                    value="2022" id="status2" name="data_tahun" />
+                                                                    value="{!! \Carbon\Carbon::now()->subYear()->year !!}" id="status2" name="data_tahun" />
                                                                 <label class="form-check-label" for="status2">
-                                                                    2022
+                                                                    {!! \Carbon\Carbon::now()->subYear()->year !!}
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"
+                                                                    value="{!! \Carbon\Carbon::now()->subYear(2)->year !!}" id="status2" name="data_tahun" />
+                                                                <label class="form-check-label" for="status2">
+                                                                    {!! \Carbon\Carbon::now()->subYear(2)->year !!}
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -485,18 +492,24 @@
                                                         <div class="form-group">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio"
-                                                                    value="2023" id="status2" name="data_tahun_spa"
+                                                                    value="{!! \Carbon\Carbon::now()->year !!}" id="status2" name="data_tahun_spa"
                                                                     checked />
                                                                 <label class="form-check-label" for="status2">
-                                                                    2023
+                                                                    {!! \Carbon\Carbon::now()->year !!}
                                                                 </label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio"
-                                                                    value="2022" id="status2"
-                                                                    name="data_tahun_spa" />
+                                                                    value="{!! \Carbon\Carbon::now()->subYear()->year !!}" id="status2" name="data_tahun_spa" />
                                                                 <label class="form-check-label" for="status2">
-                                                                    2022
+                                                                    {!! \Carbon\Carbon::now()->subYear()->year !!}
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"
+                                                                    value="{!! \Carbon\Carbon::now()->subYear(2)->year !!}" id="status2" name="data_tahun_spa" />
+                                                                <label class="form-check-label" for="status2">
+                                                                    {!! \Carbon\Carbon::now()->subYear(2)->year !!}
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -611,18 +624,24 @@
                                                         <div class="form-group">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio"
-                                                                    value="2023" id="status2" name="data_tahun_spb"
+                                                                    value="{!! \Carbon\Carbon::now()->year !!}" id="status2" name="data_tahun_spb"
                                                                     checked />
                                                                 <label class="form-check-label" for="status2">
-                                                                    2023
+                                                                    {!! \Carbon\Carbon::now()->year !!}
                                                                 </label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio"
-                                                                    value="2022" id="status2"
-                                                                    name="data_tahun_spb" />
+                                                                    value="{!! \Carbon\Carbon::now()->subYear()->year !!}" id="status2" name="data_tahun_spb" />
                                                                 <label class="form-check-label" for="status2">
-                                                                    2022
+                                                                    {!! \Carbon\Carbon::now()->subYear()->year !!}
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"
+                                                                    value="{!! \Carbon\Carbon::now()->subYear(2)->year !!}" id="status2" name="data_tahun_spb" />
+                                                                <label class="form-check-label" for="status2">
+                                                                    {!! \Carbon\Carbon::now()->subYear(2)->year !!}
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -745,18 +764,24 @@
                                                         <div class="form-group">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio"
-                                                                    value="2023" id="status2" name="data_tahun_pen"
+                                                                    value="{!! \Carbon\Carbon::now()->year !!}" id="status2" name="data_tahun_pen"
                                                                     checked />
                                                                 <label class="form-check-label" for="status2">
-                                                                    2023
+                                                                    {!! \Carbon\Carbon::now()->year !!}
                                                                 </label>
                                                             </div>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio"
-                                                                    value="2022" id="status2"
-                                                                    name="data_tahun_pen" />
+                                                                    value="{!! \Carbon\Carbon::now()->subYear()->year !!}" id="status2" name="data_tahun_pen" />
                                                                 <label class="form-check-label" for="status2">
-                                                                    2022
+                                                                    {!! \Carbon\Carbon::now()->subYear()->year !!}
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"
+                                                                    value="{!! \Carbon\Carbon::now()->subYear(2)->year !!}" id="status2" name="data_tahun_pen" />
+                                                                <label class="form-check-label" for="status2">
+                                                                    {!! \Carbon\Carbon::now()->subYear(2)->year !!}
                                                                 </label>
                                                             </div>
                                                         </div>

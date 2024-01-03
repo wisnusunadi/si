@@ -80,6 +80,51 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
+                                    <button class="btn btn-outline-secondary" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-filter"></i> Filter
+                                            </button>
+                                    <form id="filter_coo">
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Database</label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            value="{!! \Carbon\Carbon::now()->year !!}" id="status2" name="tahun"
+                                                            checked />
+                                                        <label class="form-check-label" for="status2">
+                                                            {!! \Carbon\Carbon::now()->year !!}
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            value="{!! \Carbon\Carbon::now()->subYear()->year !!}" id="status2" name="tahun" />
+                                                        <label class="form-check-label" for="status2">
+                                                            {!! \Carbon\Carbon::now()->subYear()->year !!}
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            value="{!! \Carbon\Carbon::now()->subYear(2)->year !!}" id="status2" name="tahun" />
+                                                        <label class="form-check-label" for="status2">
+                                                            {!! \Carbon\Carbon::now()->subYear(2)->year !!}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span class="float-right">
+                                                        <button class="btn btn-primary" id="filter_coo"
+                                                            type="submit">
+                                                            Cari
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                     <div class="table-responsive">
                                         <table class="table table-striped nowraptext" style="text-align:center;"
                                             id="showtable">
@@ -187,11 +232,21 @@
 @section('adminlte_js')
     <script>
         $(function() {
+            $('#filter_coo').submit(function() {
+                //alert('ok');
+                var data_tahun = $('input[name="tahun"]:checked').val();
+
+                $('#showtable').DataTable().ajax.url('/api/dc/data/' + data_tahun).load();
+                return false;
+            });
+
+
             $('#showtable').DataTable({
                 processing: true,
                 serverSide: true,
+                bLengthChange: false,
                 ajax: {
-                    'url': '/api/dc/data',
+                    'url': '/api/dc/data/'+   {{ \Carbon\Carbon::now()->year }},
                     'type': 'POST',
                     'datatype': 'JSON',
                     'headers': {
