@@ -107,43 +107,47 @@ export default {
 <template>
     <div>
         <Header :breadcumbs="breadcumbs" :title="title" />
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="pills-terjadwal-tab" data-toggle="pill" data-target="#pills-terjadwal"
-                    type="button" role="tab" aria-controls="pills-terjadwal" aria-selected="true">Perakitan Terjadwal</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="pills-fleksibel-tab" data-toggle="pill" data-target="#pills-fleksibel" type="button"
-                    role="tab" aria-controls="pills-fleksibel" aria-selected="false">Perakitan Tanpa Jadwal</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="pills-riwayat-tab" data-toggle="pill" data-target="#pills-riwayat" type="button"
-                    role="tab" aria-controls="pills-riwayat" aria-selected="false">Riwayat</a>
-            </li>
-        </ul>
-        <div class="tab-content" id="pills-tabContent" v-if="!$store.state.loading">
-            <div class="tab-pane fade show active" id="pills-terjadwal" role="tabpanel"
-                aria-labelledby="pills-terjadwal-tab">
-                <div class="card">
-                    <div class="card-body">
-                        <perakitan :dataTable="dataPerakitan" @refresh="getData" />
+        <div v-if="!$store.state.loading">
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="pills-terjadwal-tab" data-toggle="pill" data-target="#pills-terjadwal"
+                        type="button" role="tab" aria-controls="pills-terjadwal" aria-selected="true">Perakitan
+                        Terjadwal</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="pills-fleksibel-tab" data-toggle="pill" data-target="#pills-fleksibel"
+                        type="button" role="tab" aria-controls="pills-fleksibel" aria-selected="false">Perakitan Tanpa
+                        Jadwal</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="pills-riwayat-tab" data-toggle="pill" data-target="#pills-riwayat" type="button"
+                        role="tab" aria-controls="pills-riwayat" aria-selected="false">Riwayat</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-terjadwal" role="tabpanel"
+                    aria-labelledby="pills-terjadwal-tab">
+                    <div class="card">
+                        <div class="card-body">
+                            <perakitan :dataTable="dataPerakitan" @refresh="getData" />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="pills-fleksibel" role="tabpanel" aria-labelledby="pills-fleksibel-tab">
-                <div class="card">
-                    <div class="card-body">
-                        <fleksibel :perakitan="dataFleksibel" />
+                <div class="tab-pane fade" id="pills-fleksibel" role="tabpanel" aria-labelledby="pills-fleksibel-tab">
+                    <div class="card">
+                        <div class="card-body">
+                            <fleksibel :perakitan="dataFleksibel" @refresh="getData" />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="pills-riwayat" role="tabpanel" aria-labelledby="pills-riwayat-tab">
-                <div class="card">
-                    <div class="card-body">
-                        <riwayat :dataRiwayat="dataRiwayat" :tanggalAwal="tanggalAwal" :tanggalAkhir="tanggalAkhir"
-                            @updateTanggal="updateTanggal" v-if="!loadingRiwayat" />
-                        <div class="spinner-border" role="status" v-else>
-                            <span class="sr-only">Loading...</span>
+                <div class="tab-pane fade" id="pills-riwayat" role="tabpanel" aria-labelledby="pills-riwayat-tab">
+                    <div class="card">
+                        <div class="card-body">
+                            <riwayat :dataRiwayat="dataRiwayat" :tanggalAwal="tanggalAwal" :tanggalAkhir="tanggalAkhir"
+                                @updateTanggal="updateTanggal" v-if="!loadingRiwayat" />
+                            <div class="spinner-border" role="status" v-else>
+                                <span class="sr-only">Loading...</span>
+                            </div>
                         </div>
                     </div>
                 </div>

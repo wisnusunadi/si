@@ -45,6 +45,7 @@ export default {
             $('.modalFleksibel').modal('hide')
             this.$nextTick(() => {
                 this.$emit('closeModal')
+                this.$emit('refresh')
             })
         },
         keyUpperCase(e) {
@@ -175,7 +176,7 @@ export default {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Form Perakitan Tanpa Jadwal</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" @click="closeModal">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
