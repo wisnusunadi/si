@@ -5,13 +5,22 @@
     <title>Cetak Seri</title>
     <style>
         .text-center {
-            text-align: center;
+            margin-left: 0.8cm;
+        }
+        .font-size-elitech {
+            font-size: 13pt;
         }
 
-        /* medium */
+        /* medium */ 
+        /* ukuran 100 x 50 */
         @page {
-            margin-top: 0.2cm;
+            margin-top: 0.0001cm;
             margin-left: 0.2cm;
+            font-size: 12pt;
+        }
+
+        .page-break {
+            page-break-after: always;
         }
     </style>
 </head>
@@ -23,11 +32,13 @@
 
     {{-- ulangi 5 kali --}}
     @foreach ($data as $item)
-        <div class="image-container">
-            <span>Elitech</span><br>
-            <img
-                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_128_B, 0.95, 29)) }}" />
-            <div class="text-center">{{ $item }}</div>
+        <div class="{{ $loop->last ? '' : 'page-break' }}">
+            <div class="image-container">
+                <span class="font-size-elitech">Elitech</span><br>
+                <img
+                    src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_128_B, 0.97, 29)) }}" />
+                <div class="text-center">{{ $item }}</div>
+            </div>
         </div>
     @endforeach
 </body>
