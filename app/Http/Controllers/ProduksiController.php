@@ -4980,7 +4980,7 @@ class ProduksiController extends Controller
             $data[] = $s->noseri;
         }
 
-        $customPaperSmall = array(0, 0, 75.46, 150.69);
+        $customPaperSmall = array(0, 0, 30.46, 150.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserismall', compact('data'))->setPaper($customPaperSmall, 'landscape');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakserismall', compact('data'));

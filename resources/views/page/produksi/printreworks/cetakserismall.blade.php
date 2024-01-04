@@ -8,10 +8,11 @@
             text-align: center;
         }
 
-        /* small new */
+        /* small new */ 
+        /* 45 x 36 : kertas kecil */
         @page {
-            margin-top: 0.05cm;
-            margin-left: 0.3cm;
+            margin-top: 0.1cm;
+            margin-left: 0.4cm;
             margin-bottom: 0cm;
             font-size: 8pt;
         }
@@ -36,7 +37,7 @@
     {{-- when last page not page break --}}
         <div class="{{ $loop->last ? '' : 'page-break' }}">
             <img
-                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_39, 0.55, 20)) }}" />
+                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_39, 0.58, 18)) }}" />
             <div class="small-text">{{ $item }}</div>
         </div>
     @endforeach
