@@ -103,9 +103,12 @@ export default {
                 }
                 const { data } = await axios.post('/api/prd/fg/gen/confirm', kirim)
                 this.$swal('Berhasil', 'Berhasil menyimpan seri', 'success')
-                const { noseri, id } = data
+                const { noseri, id, produk_id, date_in  } = data
                 this.hasilGenerate = noseri
                 this.idCetakHasilGenerate = id
+                const tgl = moment(date_in).format('YYYY-MM-DD')
+                const wkt_rakit = this.timeFormat(date_in)
+                this.linkExport = `/produksi/export_noseri_gen/${produk_id}/${tgl} ${wkt_rakit}`
             } catch (error) {
                 console.log(error)
             }
