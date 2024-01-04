@@ -12,6 +12,7 @@ use App\Models\DetailProdukRw;
 use App\Models\Divisi;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
+use App\Models\GudangKarantina;
 use App\Models\JadwalPerakitan;
 use App\Models\JadwalPerakitanRw;
 use App\Models\JadwalRakitNoseri;
@@ -993,31 +994,36 @@ class ProduksiController extends Controller
             ], 500);
         }
     }
-    // function generate_seri_back(Request $request)
-    // {
-    //     DB::beginTransaction();
-    //     $obj =  json_decode(json_encode($request->all()), FALSE);
-    //     try {
-    //         //code...
-    //         foreach ($obj->seri as $f) {
-    //             JadwalRakitNoseri::create([
-    //                 'jadwal_id' => 999,
-    //                 'noseri' => $f,
-    //                 'status' => 11,
-    //                 'date_in' => Carbon::now()
-    //             ]);
-    //         }
-    //         DB::commit();
-    //     } catch (\Throwable $th) {
-    //         //throw $th;
-    //         DB::rollBack();
-    //         return response()->json([
-    //             'status' => 200,
-    //             'message' =>  'Gagal Ditambahkan',
-    //             'error' => $th->getMessage()
-    //         ], 500);
-    //     }
-    // }
+    function generate_seri_back(Request $request)
+    {
+        DB::beginTransaction();
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+        try {
+            //code...
+            foreach ($obj->seri as $f) {
+                JadwalRakitNoseri::create([
+                    'jadwal_id' => 813,
+                    'noseri' => 'ST0123CA'.$f,
+                    'unit' => 'ST01',
+                    'bln' => 'C',
+                    'kedatangan' => 'A',
+                    'urutan' => $f,
+                    'th' => 23,
+                    'status' => 11,
+                    'date_in' => Carbon::now()
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Gagal Ditambahkan',
+                'error' => $th->getMessage()
+            ], 500);
+        }
+    }
     function generate_seri_peti(Request $request)
     {
         // DB::beginTransaction();
@@ -3916,13 +3922,17 @@ class ProduksiController extends Controller
     function export_noseri_gen($id, $dd)
     {
         $data = $this->get_detail_noseri_rakit($id, $dd);
+        $produk = GudangBarangJadi::select('produk.nama','gdg_barang_jadi.nama as variasi')
+        ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
+        ->where('gdg_barang_jadi.id', $id)
+        ->first();
         $noseri =  $data->map(function ($item) {
             return [
                 'noseri' => $item->noseri,
             ];
         });
 
-        return Excel::download(new NoSeriGenerate($noseri), 'Generate No Seri.xlsx');
+        return Excel::download(new NoSeriGenerate($noseri), $produk->nama.' '.$produk->variasi.' '.Carbon::now().' Generate No Seri.xlsx');
     }
 
     function get_noseri_fg_riwayat_code($id)
