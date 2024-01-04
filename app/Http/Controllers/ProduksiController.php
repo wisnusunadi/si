@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\ExportPackWilayah;
 use App\Exports\ExportRework;
+use App\Exports\NoSeriGenerate;
 use App\Exports\NoseriRakitExport;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
@@ -605,6 +606,8 @@ class ProduksiController extends Controller
                             'available' =>   array(),
                             'id' =>  $jd_id,
                             'noseri' =>  $jd_seri,
+                            'produk_id' => $obj->id,
+                            'date_in' => $jd->created_at
                         ], 200);
                     } else {
                         if ($available) {
@@ -3892,7 +3895,7 @@ class ProduksiController extends Controller
                 ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$dd])
                 // ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])
                 ->get();
-            return response()->json($data);
+            return $data;
             // return datatables()->of($data)
             //     ->addColumn('checkbox', function ($d) {
             //         return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
@@ -3908,6 +3911,18 @@ class ProduksiController extends Controller
                 'msg' => $e->getMessage(),
             ]);
         }
+    }
+
+    function export_noseri_gen($id, $dd)
+    {
+        $data = $this->get_detail_noseri_rakit($id, $dd);
+        $noseri =  $data->map(function ($item) {
+            return [
+                'noseri' => $item->noseri,
+            ];
+        });
+
+        return Excel::download(new NoSeriGenerate($noseri), 'Generate No Seri.xlsx');
     }
 
     function get_noseri_fg_riwayat_code($id)

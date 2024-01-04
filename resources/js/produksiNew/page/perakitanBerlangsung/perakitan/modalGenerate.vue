@@ -32,6 +32,7 @@ export default {
             hasilGenerate: [],
             idCetakHasilGenerate: [],
             showModalPilihan: false,
+            linkExport: '',
         }
     },
     methods: {
@@ -58,9 +59,12 @@ export default {
 
                     const { data } = await axios.post('/api/prd/fg/gen', kirim)
                     this.$swal('Berhasil', 'Berhasil generate seri', 'success')
-                    const { noseri, id } = data
+                    const { noseri, id, produk_id, date_in } = data
                     this.hasilGenerate = noseri
                     this.idCetakHasilGenerate = id
+                    const tgl = moment(date_in).format('YYYY-MM-DD')
+                    const wkt_rakit = this.timeFormat(date_in)
+                    this.linkExport = `/produksi/export_noseri_gen/${produk_id}/${tgl} ${wkt_rakit}`
                 } catch (error) {
                     const { message, seri, duplicate, available } = error.response.data
                     this.seri = seri
@@ -140,6 +144,9 @@ export default {
                 this.$emit('closeModal')
             })
         },
+        exportBarcode() {
+            window.open(this.linkExport, '_blank')
+        }
     },
     computed: {
         jumlahRakit() {
@@ -311,7 +318,10 @@ export default {
                                         @click="simpanSeri">Simpan</button>
                                 </div>
 
-                                <button class="btn btn-success" @click="cetakSeri" v-else>Cetak Barcode</button>
+                                <div v-else>
+                                    <button class="btn btn-primary" @click="cetakSeri">Cetak Barcode</button>
+                                    <button class="btn btn-success" @click="exportBarcode">Export Barcode</button>
+                                </div>
                             </div>
                             <div class="p-2 bd-highlight">
                                 <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
