@@ -38,7 +38,7 @@
     {{-- when last page not page break --}}
         <div class="{{ $loop->last ? '' : 'page-break' }}">
             <img
-                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_93, 0.9, 18)) }}" />
+                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_93, 0.9, 16)) }}" />
             <div class="small-text">{{ $item }}</div>
         </div>
     @endforeach
