@@ -14,12 +14,12 @@
             margin-top: 0.1cm;
             margin-left: 0.4cm;
             margin-bottom: 0cm;
-            font-size: 8pt;
+            font-size: 6pt;
             font-family: Arial, Helvetica, sans-serif;
         }
 
         .small-text {
-            margin-left: 0.8cm;
+            margin-left: 1cm;
         }
 
         .page-break {
