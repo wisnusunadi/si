@@ -4970,7 +4970,7 @@ class ProduksiController extends Controller
 
     }
 
-    function cetak_seri_finish_goods_medium(Request $request)
+    function cetak_seri_finish_goods_medium_repeated(Request $request)
     {
         $getData =  json_decode($request->data, true);
         $seri = JadwalRakitNoseri::select('noseri')->whereIn('id', $getData)->get();
@@ -4982,7 +4982,31 @@ class ProduksiController extends Controller
         return $pdf->stream();
     }
 
+    function cetak_seri_finish_goods_medium(Request $request)
+    {
+        $seri = $this->get_detail_noseri_rakit($request->id, $request->dd);
+        foreach ($seri as $s) {
+            $data[] = $s->noseri;
+        }
+        $customPaperMedium = array(0, 0, 160.46, 170.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperMedium, 'landscape');
+        return $pdf->stream();
+    }
+
     function cetak_seri_finish_goods_small(Request $request)
+    {
+        $seri = $this->get_detail_noseri_rakit($request->id, $request->dd);
+        foreach ($seri as $s) {
+            $data[] = $s->noseri;
+        }
+
+        $customPaperSmall = array(0, 0, 60.46, 150.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserismall', compact('data'))->setPaper($customPaperSmall, 'landscape');
+        return $pdf->stream();
+        // return view('page.produksi.printreworks.cetakserismall', compact('data'));
+    }
+
+    function cetak_seri_finish_goods_small_repeated(Request $request)
     {
         $getData =  json_decode($request->data, true);
         $seri = JadwalRakitNoseri::select('noseri')->whereIn('id', $getData)->get();

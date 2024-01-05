@@ -17,13 +17,13 @@ export default {
         }, 
         small() {
             let cetak = JSON.stringify(this.data);
-            window.open(`/produksiReworks/cetak_seri_fg_small?data=${cetak}`, '_blank')
+            window.open(`/produksiReworks/cetak_seri_fg_small_repeated?data=${cetak}`, '_blank')
             this.postAlasan();
             this.closeModal();
         },
         medium() {
             let cetak = JSON.stringify(this.data);
-            window.open(`/produksiReworks/cetak_seri_fg_medium?data=${cetak}`, '_blank')
+            window.open(`/produksiReworks/cetak_seri_fg_medium_repeated?data=${cetak}`, '_blank')
             this.postAlasan();
             this.closeModal();
         },
