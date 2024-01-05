@@ -15,6 +15,7 @@
             margin-left: 0.4cm;
             margin-bottom: 0cm;
             font-size: 8pt;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         .small-text {
@@ -37,7 +38,7 @@
     {{-- when last page not page break --}}
         <div class="{{ $loop->last ? '' : 'page-break' }}">
             <img
-                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_39, 0.58, 18)) }}" />
+                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_93, 0.9, 18)) }}" />
             <div class="small-text">{{ $item }}</div>
         </div>
     @endforeach
