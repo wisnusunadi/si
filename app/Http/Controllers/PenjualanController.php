@@ -2616,7 +2616,7 @@ class PenjualanController extends Controller
                         ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 }
 
-            ])->whereYear('created_at',  $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
+            ])->whereYear('tgl_buat',  $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
         } else {
             $data  = Ekatalog::with(['Pesanan.State',  'Customer'])->addSelect([
 
@@ -2653,7 +2653,7 @@ class PenjualanController extends Controller
                 }
 
 
-            ])->whereYear('created_at', $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
+            ])->whereYear('tgl_buat', $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
             // ])->orderBy('created_at', 'DESC')->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
         }
 
