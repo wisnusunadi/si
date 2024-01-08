@@ -66,14 +66,10 @@
             <td>{{$d['alamat_instansi']}}</td>
             <td>{{$d['satuan']}}</td>
             <td>
-                @if ($d['tgl_buat'] != '-')
-                {{ date('d-m-Y', strtotime($d['tgl_buat'])) }}
-                @endif
+                {{$d['tgl_buat']}}
             </td>
             <td>
-                @if ($d['tgl_kontrak'] != '-')
-                {{ date('d-m-Y', strtotime($d['tgl_kontrak'])) }}
-                @endif
+                {{$d['tgl_kontrak']}}
            </td>
             <td>{{$p['nama']}}</td>
             <td>{{$p['nama_alias']}}</td>
@@ -124,14 +120,10 @@
             <td>{{$d['alamat_instansi']}}</td>
             <td>{{$d['satuan']}}</td>
             <td>
-                @if ($d['tgl_buat'] != '-')
-                {{ date('d-m-Y', strtotime($d['tgl_buat'])) }}
-                @endif
+                {{$d['tgl_buat']}}
             </td>
             <td>
-                @if ($d['tgl_kontrak'] != '-')
-                {{ date('d-m-Y', strtotime($d['tgl_kontrak'])) }}
-                @endif
+                {{$d['tgl_kontrak']}}
            </td>
             <td>{{$p['nama']}}</td>
             <td>{{$p['nama_alias']}}</td>
@@ -171,14 +163,10 @@
             <td>{{$d['alamat_instansi']}}</td>
             <td>{{$d['satuan']}}</td>
             <td>
-                @if ($d['tgl_buat'] != '-')
-                {{ date('d-m-Y', strtotime($d['tgl_buat'])) }}
-                @endif
+                {{$d['tgl_buat']}}
             </td>
             <td>
-                @if ($d['tgl_kontrak'] != '-')
-                {{ date('d-m-Y', strtotime($d['tgl_kontrak'])) }}
-                @endif
+                {{$d['tgl_kontrak']}}
            </td>
             <td>{{$p['nama']}}</td>
             <td>{{$p['nama']}}</td>
@@ -191,43 +179,36 @@
             <td>{{$d['ket']}}</td>
             </tr>
             @endforeach
-            {{-- <tr>
-            <td >{{$loop->iteration}}</td>
-            <td>{{$d['so']}}</td>
-            <td>{{$d['po']}}</td>
-            <td>{{$d['tgl_po']}}</td>
-            <td>
-                @if (count($d['nosurat']) > 0)
-                @foreach ($d['nosurat'] as $f)
-                {{ $f['nosurat']}}({{ date('d-m-Y', strtotime($f['tgl_kirim'])) }})
-                @if (!$loop->last),@endif
-                @endforeach
-                @endif
-                @if (count($d['nosurat_part']) > 0)
-                @foreach ($d['nosurat_part'] as $f)
-                {{ $f['nosurat']}}({{ date('d-m-Y', strtotime($f['tgl_kirim'])) }})
-                @if (!$loop->last),@endif
-                @endforeach
-                @endif
-            </td>
-            <td>{{$d['no_urut']}}</td>
-            <td>{{$d['no_paket']}}</td>
-            <td>{{$d['nama']}}</td>
-            <td>{{$d['instansi']}}</td>
-            <td>{{$d['alamat_instansi']}}</td>
-            <td>{{$d['satuan']}}</td>
-            <td>
-                @if ($d['tgl_buat'] != '-')
-                {{ date('d-m-Y', strtotime($d['tgl_buat'])) }}
-                @endif
-            </td>
-            <td>
-                @if ($d['tgl_kontrak'] != '-')
-                {{ date('d-m-Y', strtotime($d['tgl_kontrak'])) }}
-                @endif
-           </td>
-            </tr> --}}
+            @if (count($d['produk']) == 0 && count($d['part']) == 0 && count($d['produk_dsb']) == 0)
+            <tr>
+                <td >{{ $no++}}</td>
+                <td>{{$d['so']}}</td>
+                <td>{{$d['po']}}</td>
+                <td>{{$d['tgl_po']}}</td>
+                <td></td>
+                <td>{{$d['no_urut']}}</td>
+                <td>{{$d['no_paket']}}</td>
+                <td>{{$d['nama']}}</td>
+                <td>{{$d['instansi']}}</td>
+                <td>{{$d['alamat_instansi']}}</td>
+                <td>{{$d['satuan']}}</td>
+                <td>
+                    {{$d['tgl_buat']}}
+                </td>
+                <td>
+                    {{$d['tgl_kontrak']}}
+               </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ $d['log_id'] == 20 ? 'batal' :  $d['status']  }}</td>
+                <td></td>
+                </tr>
+            @endif
         @endforeach
-
     </tbody>
 </table>

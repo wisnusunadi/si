@@ -194,6 +194,40 @@
             <td>{{$d['ket']}}</td>
             </tr>
             @endforeach
+            @if (count($d['produk']) == 0 && count($d['part']) == 0 && count($d['produk_dsb']) == 0)
+            <tr>
+                <td >{{ $no++}}</td>
+                <td>{{$d['so']}}</td>
+                <td>{{$d['po']}}</td>
+                <td>{{$d['tgl_po']}}</td>
+                <td></td>
+                <td>{{$d['no_urut']}}</td>
+                <td>{{$d['no_paket']}}</td>
+                <td>{{$d['nama']}}</td>
+                <td>{{$d['instansi']}}</td>
+                <td>{{$d['alamat_instansi']}}</td>
+                <td>{{$d['satuan']}}</td>
+                <td>
+                    @if ($d['tgl_buat'] != '-' || $d['tgl_buat'] != null || $d['tgl_buat'] != '')
+                    {{ date('d-m-Y', strtotime($d['tgl_buat'])) }}
+                    @endif
+                </td>
+                <td>
+                    @if ($d['tgl_kontrak'] != '' || $d['tgl_kontrak'] != null || $d['tgl_kontrak'] != '-')
+                    {{ date('d-m-Y', strtotime($d['tgl_kontrak'])) }}
+                    @endif
+               </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ $d['log_id'] == 20 ? 'batal' :  $d['status']  }}</td>
+                <td></td>
+                </tr>
+            @endif
             @endforeach
         </tbody>
 </table>

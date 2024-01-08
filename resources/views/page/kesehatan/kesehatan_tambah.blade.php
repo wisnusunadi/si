@@ -1,4 +1,5 @@
 @extends('adminlte.page')
+@section('title', 'ERP')
 @section('content_header')
 <div class="container-fluid">
     <div class="row mb-2">
@@ -521,6 +522,7 @@
                                                                             <option value="1">1</option>
                                                                             <option value="2">2</option>
                                                                             <option value="3">3</option>
+                                                                            <option value="4">4</option>
                                                                         </select>
                                                                     </td>
                                                                     <td>
@@ -739,6 +741,7 @@
                                                                         <option value="1">1</option>
                                                                         <option value="2">2</option>
                                                                         <option value="3">3</option>
+                                                                        <option value="4">4</option>
                                                                     </select>
                                                                 </td>
                                                                 <td>

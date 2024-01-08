@@ -1002,12 +1002,13 @@ class ProduksiController extends Controller
             //code...
             foreach ($obj->seri as $f) {
                 JadwalRakitNoseri::create([
-                    'jadwal_id' => 813,
-                    'noseri' => 'ST0123CA'.$f,
-                    'unit' => 'ST01',
-                    'bln' => 'C',
-                    'kedatangan' => 'A',
-                    'urutan' => $f,
+                    'jadwal_id' => 770,
+                    'noseri' => $f,
+                    //'no_bppb' => 'PRD/07-BPM002/X/23',
+                    // 'unit' => 'ST01',
+                    // 'bln' => 'C',
+                    // 'kedatangan' => 'A',
+                    // 'urutan' => $f,
                     'th' => 23,
                     'status' => 11,
                     'date_in' => Carbon::now()

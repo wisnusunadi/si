@@ -173,10 +173,9 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
                 }
             ])
-            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-            ->whereRaw('TRIM(no_po) <> ""')
-            ->wherenotnull('no_po');
-
+            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
+            // ->whereRaw('TRIM(no_po) <> ""')
+            // ->wherenotnull('no_po');
             } else if ($x == ['ekatalog', 'spa']) {
                  //GET PESANAN
             $data = Pesanan::addSelect([
@@ -197,9 +196,9 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                 }
             ])
             ->havingRaw('spb = 0')
-            ->whereRaw('TRIM(no_po) <> ""')
-            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-            ->wherenotnull('no_po');
+            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
+            // ->whereRaw('TRIM(no_po) <> ""')
+            // ->wherenotnull('no_po')
 
             } else if ($x == ['ekatalog', 'spb']) {
                  //GET PESANAN
@@ -221,9 +220,9 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                 }
             ])
             ->havingRaw('spa = 0')
-            ->whereRaw('TRIM(no_po) <> ""')
-            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-            ->wherenotnull('no_po');
+            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
+            // ->whereRaw('TRIM(no_po) <> ""')
+            // ->wherenotnull('no_po');
 
             } else if ($x == ['spa', 'spb']) {
                  //GET PESANAN
@@ -245,9 +244,9 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                 }
             ])
             ->havingRaw('ekat = 0')
-            ->whereRaw('TRIM(no_po) <> ""')
-            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-            ->wherenotnull('no_po');
+            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
+            // ->whereRaw('TRIM(no_po) <> ""')
+            // ->wherenotnull('no_po');
 
             } else if ($this->jenis_penjualan == 'ekatalog') {
                  //GET PESANAN
@@ -269,9 +268,9 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                 }
             ])
             ->havingRaw('ekat > 0')
-            ->whereRaw('TRIM(no_po) <> ""')
-            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-            ->wherenotnull('no_po');
+            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
+            // ->whereRaw('TRIM(no_po) <> ""')
+            // ->wherenotnull('no_po');
 
             } else if ($this->jenis_penjualan == 'spa') {
                  //GET PESANAN
@@ -293,9 +292,9 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                 }
             ])
              ->havingRaw('spa > 0')
-             ->whereRaw('TRIM(no_po) <> ""')
-            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-            ->wherenotnull('no_po');
+             ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
+            //  ->whereRaw('TRIM(no_po) <> ""')
+            // ->wherenotnull('no_po');
 
             } else if ($this->jenis_penjualan == 'spb') {
                  //GET PESANAN
@@ -317,9 +316,9 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                 }
             ])
              ->havingRaw('spb > 0')
-             ->whereRaw('TRIM(no_po) <> ""')
-            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-            ->wherenotnull('no_po');
+            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
+            // ->whereRaw('TRIM(no_po) <> ""')
+            // ->wherenotnull('no_po');
 
             }
 
@@ -356,10 +355,10 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                             ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
                     }
                 ])
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->whereRaw('TRIM(no_po) <> ""')
-                ->whereIN('id', $mergedCollection)
-                ->wherenotnull('no_po');
+                ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
+                // ->whereRaw('TRIM(no_po) <> ""')
+                ->whereIN('id', $mergedCollection);
+                // ->wherenotnull('no_po');
 
                 } else if ($x == ['ekatalog', 'spa']) {
                     $ekt_id = Ekatalog::where('customer_id',$distributor)->pluck('pesanan_id')->toArray();
@@ -390,10 +389,10 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                     }
                 ])
                 ->havingRaw('spb = 0')
-                ->whereRaw('TRIM(no_po) <> ""')
+                // ->whereRaw('TRIM(no_po) <> ""')
                 ->whereIN('id', $mergedCollection)
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->wherenotnull('no_po');
+                ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
+                // ->wherenotnull('no_po');
 
                 } else if ($x == ['ekatalog', 'spb']) {
                     $ekt_id = Ekatalog::where('customer_id',$distributor)->pluck('pesanan_id')->toArray();
@@ -424,10 +423,10 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                     }
                 ])
                 ->havingRaw('spa = 0')
-                ->whereRaw('TRIM(no_po) <> ""')
+                // ->whereRaw('TRIM(no_po) <> ""')
                 ->whereIN('id', $mergedCollection)
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->wherenotnull('no_po');
+                ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
+                // ->wherenotnull('no_po');
 
                 } else if ($x == ['spa', 'spb']) {
 
@@ -459,11 +458,10 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                     }
                 ])
                 ->havingRaw('ekat = 0')
-                ->whereRaw('TRIM(no_po) <> ""')
+                // ->whereRaw('TRIM(no_po) <> ""')
                 ->whereIn('pesanan.id',$mergedCollection)
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->wherenotnull('no_po');
-
+                ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
+                // ->wherenotnull('no_po');
                 } else if ($this->jenis_penjualan == 'ekatalog') {
 
                 $ekt_id = Ekatalog::where('customer_id',$distributor)->pluck('pesanan_id')->toArray();
@@ -487,14 +485,11 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                     }
                 ])
                 ->havingRaw('ekat > 0')
-                ->whereRaw('TRIM(no_po) <> ""')
+                // ->whereRaw('TRIM(no_po) <> ""')
                 ->whereIn('pesanan.id',$ekt_id)
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->wherenotnull('no_po');
-
+                ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
+                // ->wherenotnull('no_po');
                 } else if ($this->jenis_penjualan == 'spa') {
-
-
                 $spa_id = Spa::where('customer_id',$distributor)->pluck('pesanan_id')->toArray();
 
                      //GET PESANAN
@@ -516,17 +511,13 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                     }
                 ])
                  ->havingRaw('spa > 0')
-                 ->whereRaw('TRIM(no_po) <> ""')
+                //  ->whereRaw('TRIM(no_po) <> ""')
                  ->whereIn('pesanan.id',$spa_id)
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->wherenotnull('no_po');
+                ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
+                // ->wherenotnull('no_po');
 
                 } else if ($this->jenis_penjualan == 'spb') {
-
-
                 $spb_id = Spb::where('customer_id',$distributor)->pluck('pesanan_id')->toArray();
-
-
                      //GET PESANAN
                 $data = Pesanan::addSelect([
                     'spa' => function ($q) {
@@ -546,10 +537,10 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                     }
                 ])
                  ->havingRaw('spb > 0')
-                 ->whereRaw('TRIM(no_po) <> ""')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->whereIn('pesanan.id',$spb_id)
-                ->wherenotnull('no_po');
+                //  ->whereRaw('TRIM(no_po) <> ""')
+                ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
+                ->whereIn('pesanan.id',$spb_id);
+                // ->wherenotnull('no_po');
                 }
         }
         $pesananIds = $data->pluck('id')->toArray();
@@ -584,7 +575,8 @@ select('spa.pesanan_id as id', 'customer.nama','spa.ket')
 ->leftJoin('customer', 'customer.id', '=', 'spa.customer_id')
 ->whereIn('spa.pesanan_id', $pesananIds)->get();
 
-$ekatalog = Ekatalog::select('ekatalog.pesanan_id as id','ekatalog.ket','ekatalog.tgl_buat','ekatalog.tgl_kontrak','ekatalog.no_urut as no_urut','customer.nama' ,'ekatalog.no_paket','ekatalog.instansi','ekatalog.alamat as alamat_instansi','ekatalog.satuan','ekatalog.status')
+$ekatalog = Ekatalog::select(DB::raw("DATE_FORMAT(ekatalog.tgl_buat, '%d-%m-%Y') as tgl_buat"),DB::raw("DATE_FORMAT(ekatalog.tgl_kontrak, '%d-%m-%Y') as tgl_kontrak"),
+    'ekatalog.pesanan_id as id','ekatalog.ket','ekatalog.no_urut as no_urut','customer.nama' ,'ekatalog.no_paket','ekatalog.instansi','ekatalog.alamat as alamat_instansi','ekatalog.satuan','ekatalog.status')
         ->leftJoin('customer', 'customer.id', '=', 'ekatalog.customer_id')
         ->whereIn('ekatalog.pesanan_id', $pesananIds)->get();
 
@@ -593,7 +585,7 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
 //return response()->json($dataInfo);
 
         //GET SURAT JALAN
-        $surat_jalan = Logistik::select('detail_pesanan.pesanan_id as id','nosurat','tgl_kirim')
+        $surat_jalan = Logistik::select('detail_pesanan.pesanan_id as id','nosurat',DB::raw("DATE_FORMAT(tgl_kirim, '%d-%m-%Y') as tgl_kirim"))
         ->leftJoin('detail_logistik','detail_logistik.logistik_id','=','logistik.id')
         ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','detail_logistik.detail_pesanan_produk_id')
         ->leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
@@ -602,15 +594,12 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
         ->get();
 
         //GET SURAT JALAN PART
-        $surat_jalan_part = Logistik::select('detail_pesanan_part.pesanan_id as id','nosurat','tgl_kirim')
+        $surat_jalan_part = Logistik::select('detail_pesanan_part.pesanan_id as id','nosurat',DB::raw("DATE_FORMAT(tgl_kirim, '%d-%m-%Y') as tgl_kirim"))
         ->leftJoin('detail_logistik_part','detail_logistik_part.logistik_id','=','logistik.id')
         ->leftJoin('detail_pesanan_part','detail_pesanan_part.id','=','detail_logistik_part.detail_pesanan_part_id')
         ->whereIN('detail_logistik_part.detail_pesanan_part_id',$dppIds)
         ->groupBy('logistik.id')
         ->get();
-
-
-
 
         //GET NOSERI
         $noseri = NoseriBarangJadi::
@@ -768,7 +757,7 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
                 'tgl_kontrak' => '-',
                 'status' => '-',
                 'po' => $d->no_po,
-                'tgl_po' => $d->tgl_po,
+                'tgl_po' => $d->tgl_po != null ? date('d-m-Y', strtotime($d->tgl_po)) : '-' ,
                 'ket' => $d->ket,
                 'log_id' => $d->log_id,
                 'nosurat' => [],
@@ -1113,6 +1102,6 @@ $dataInfo =   $ekatalog->merge($spa)->merge($spb);
     // }
     public function title(): string
     {
-        return 'Sudah PO';
+        return 'Paket Produk';
     }
 }
