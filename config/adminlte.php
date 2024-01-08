@@ -439,12 +439,12 @@ return [
             'icon' => 'fas fa-users',
             'auth' => [26]
         ],
-        [
-            'text' => 'Rencana Order',
-            'url'  => '/penjualan/rencana/show',
-            'icon' => 'fas fa-archive',
-            'auth' => [26]
-        ],
+        // [
+        //     'text' => 'Rencana Order',
+        //     'url'  => '/penjualan/rencana/show',
+        //     'icon' => 'fas fa-archive',
+        //     'auth' => [26]
+        // ],
         [
             'text' => 'Laporan',
             'url'  => '/penjualan/laporan/show',
@@ -1586,7 +1586,7 @@ return [
         [
             'text'    => 'PPIC',
             'icon'    => 'fas fa-database',
-            'auth' => [2, 26],
+            'auth' => [2],
             'submenu' => [
                 [
                     'text' => 'Permintaan Barang',
