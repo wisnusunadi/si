@@ -61,9 +61,9 @@ export default {
                     this.$swal('Berhasil', 'Berhasil generate seri', 'success')
                     const { noseri, id, produk_id, date_in } = data
                     this.hasilGenerate = noseri
-                    this.idCetakHasilGenerate = id
                     const tgl = moment(date_in).format('YYYY-MM-DD')
                     const wkt_rakit = this.timeFormat(date_in)
+                    this.idCetakHasilGenerate = `${produk_id}&dd=${tgl} ${wkt_rakit}`
                     this.linkExport = `/produksi/export_noseri_gen/${produk_id}/${tgl} ${wkt_rakit}`
                 } catch (error) {
                     const { message, seri, duplicate, available } = error.response.data
@@ -105,9 +105,9 @@ export default {
                 this.$swal('Berhasil', 'Berhasil menyimpan seri', 'success')
                 const { noseri, id, produk_id, date_in  } = data
                 this.hasilGenerate = noseri
-                this.idCetakHasilGenerate = id
                 const tgl = moment(date_in).format('YYYY-MM-DD')
                 const wkt_rakit = this.timeFormat(date_in)
+                this.idCetakHasilGenerate = `${produk_id}&dd=${tgl} ${wkt_rakit}`
                 this.linkExport = `/produksi/export_noseri_gen/${produk_id}/${tgl} ${wkt_rakit}`
             } catch (error) {
                 console.log(error)
@@ -174,7 +174,7 @@ export default {
 </script>
 <template>
     <div>
-        <modalPilihan :data="idCetakHasilGenerate" v-if="showModalCetak" @closeModal="closeModalCetak" @closeAllModal="closeAllModal"></modalPilihan>
+        <modalPilihan :data="idCetakHasilGenerate"  v-if="showModalCetak" @closeModal="closeModalCetak" @closeAllModal="closeAllModal"></modalPilihan>
         <div class="modal fade modalGenerate" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
             role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">

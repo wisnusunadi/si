@@ -14,9 +14,20 @@
         /* medium */ 
         /* ukuran 100 x 50 */
         @page {
-            margin-top: 0.0001cm;
-            margin-left: 0.2cm;
+            margin-top: 0.001cm;
             font-size: 12pt;
+        }
+
+        .image-container-logo {
+            margin-left: -0.85cm;
+        }
+
+        .image-container {
+            margin-left: -0.89cm;
+        }
+
+        .logo {
+            margin-top: 0.2cm;
         }
 
         .page-break {
@@ -28,15 +39,22 @@
 <body>
     @php
         $generator = new Picqer\Barcode\BarcodeGeneratorSVG();
+        $isLogo = true;
+        $sizeHeight = $isLogo ? 29 : 33;
+        $sizeWidth = $isLogo ? 0.97 : 0.91;
     @endphp
 
     {{-- ulangi 5 kali --}}
     @foreach ($data as $item)
         <div class="{{ $loop->last ? '' : 'page-break' }}">
-            <div class="image-container">
-                <span class="font-size-elitech">Elitech</span><br>
+            <div class="{{ $isLogo ? 'image-container-logo' : 'image-container' }}">
+                @if($isLogo)
+                <span class="font-size-elitech">Elitech</span>
+                @else
+                <div class="logo"></div>
+                @endif
                 <img
-                    src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_128_B, 0.97, 29)) }}" />
+                    src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_128_B, $sizeWidth, $sizeHeight)) }}" />
                 <div class="text-center">{{ $item }}</div>
             </div>
         </div>
