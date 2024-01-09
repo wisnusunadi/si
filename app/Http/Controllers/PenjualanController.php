@@ -93,11 +93,9 @@ class PenjualanController extends Controller
                         ->from('detail_pesanan_part')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
                 }
-
             ])->whereYear('tgl_buat',  $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get());
 
             $Spa = collect(Spa::addSelect([
-
                 'ckirimprd' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
                         ->from('noseri_logistik')
@@ -780,13 +778,14 @@ class PenjualanController extends Controller
             })
             ->rawColumns(['button', 'status', 'tgl_order', 'tgl_kontrak', 'no_paket'])
             ->setRowClass(function ($data) {
+                // return 'text-danger font-weight-bold line-through';
                 $name =  $data->getTable();
                 if ($name == 'ekatalog') {
-                    if ($data->status == 'batal') {
+                    if ($data->status == 'batal' || $data->Pesanan->State->nama == 'Batal' ) {
                         return 'text-danger font-weight-bold line-through';
                     }
                 } else {
-                    if ($data->log == 'batal') {
+                    if ($data->Pesanan->State->nama == 'Batal') {
                         return 'text-danger font-weight-bold line-through';
                     }
                 }
