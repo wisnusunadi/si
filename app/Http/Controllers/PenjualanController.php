@@ -2469,6 +2469,7 @@ class PenjualanController extends Controller
     }
     public function get_data_ekatalog_pengiriman()
     {
+        $tahun = Carbon::now()->format('Y');
         $data  = Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po')->whereNotIn('log_id', ['7', '10', '20']);
         })->addSelect(['tgl_kontrak_custom' => function ($q) {
@@ -2491,7 +2492,13 @@ class PenjualanController extends Controller
                 ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                 ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id')
                 ->limit(1);
-        }])->with(['Pesanan','Customer'])->orderBy('tgl_kontrak_custom', 'ASC')->limit(20)->get();
+        }])
+        ->havingRaw('clogprd > 0')
+        ->with(['Pesanan','Customer'])
+        ->orderBy('tgl_buat', 'DESC')
+        ->whereYear('ekatalog.tgl_buat',  $tahun)
+        ->limit(20)
+        ->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -2515,6 +2522,9 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('status', function ($data) {
+                // return $data->clogprd + $data->clogpart . '&&' . $data->cjumlahprd + $data->cjumlahpart;
+                $hitung = floor(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+
                 $datas = "";
                 if (!empty($data->Pesanan->log_id)) {
                     $hitung = floor(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
@@ -6578,6 +6588,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
 
     public function dashboard()
     {
+        $tahun = Carbon::now()->format('Y');
         $penj = Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNull('so')->where('log_id', '7')->whereNotIn('log_id', ['20', '10']);
         })->where('status', 'sepakat')->count();
@@ -6593,7 +6604,10 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                     left join t_gbj_detail on t_gbj_detail.id = t_gbj_noseri.t_gbj_detail_id
                     left join t_gbj on t_gbj.id = t_gbj_detail.t_gbj_id
                     where t_gbj.pesanan_id = pesanan.id)');
-        })->whereNotIn('log_id', ['7', '20', '10'])->count();
+        })
+        ->whereNotIn('log_id', ['7', '20', '10'])
+        ->whereYear('created_at', $tahun)
+        ->count();
         //QC
 
 
@@ -6656,6 +6670,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
 
         ])
             ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
+            ->whereYear('created_at', $tahun)
             ->havingRaw('(cqcprd < ctfprd AND ctfprd > 0) OR (cqcpart < ctfpart AND ctfpart > 0)')
             ->orderBy('tgl_kontrak', 'asc')
             ->count();
@@ -6674,7 +6689,9 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
             left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
             where detail_pesanan.pesanan_id = pesanan.id)');
-        })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7', '9', '20', '10']);
+        })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
+        ->whereYear('created_at', $tahun)
+        ->whereNotIn('log_id', ['7', '9', '20', '10']);
 
         $logpart = Pesanan::whereIn('id', function ($q) {
             $q->select('pesanan.id')
@@ -6694,7 +6711,9 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                         left join detail_pesanan_part on detail_pesanan_part.id = detail_logistik_part.detail_pesanan_part_id
                         left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode NOT LIKE '%JASA%'
                         where detail_pesanan_part.pesanan_id = pesanan.id)) AND SUM(outgoing_pesanan_part.jumlah_ok) > 0");
-        })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7', '20', '10']);
+        })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
+        ->whereYear('created_at', $tahun)
+        ->whereNotIn('log_id', ['7', '20', '10']);
 
         $logjasa = Pesanan::whereIn('id', function ($q) {
             $q->select('pesanan.id')
@@ -6713,7 +6732,9 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                             left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode LIKE '%JASA%'
                             where detail_pesanan_part.pesanan_id = pesanan.id)")
                 ->groupBy('pesanan.id');
-        })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7', '20', '10'])->union($logprd)->union($logpart)->orderBy('id', 'desc')->count();
+        })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
+        ->whereYear('created_at', $tahun)
+        ->whereNotIn('log_id', ['7', '20', '10'])->union($logprd)->union($logpart)->orderBy('id', 'desc')->count();
 
         $log = $logjasa;
         return view('page.penjualan.dashboard', ['belum_so' => $penj, 'so_belum_gudang' => $gudang, 'so_belum_qc' => $qc, 'so_belum_logistik' => $log]);
