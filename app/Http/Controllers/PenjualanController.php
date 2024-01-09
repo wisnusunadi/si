@@ -94,7 +94,7 @@ class PenjualanController extends Controller
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
                 }
 
-            ])->whereYear('created_at',  $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get());
+            ])->whereYear('tgl_buat',  $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get());
 
             $Spa = collect(Spa::addSelect([
 
