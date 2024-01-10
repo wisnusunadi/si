@@ -1,4 +1,4 @@
-<script>
+    <script>
 import axios from 'axios';
 import DataTable from '../../../components/DataTable.vue';
 import modalPilihan from './modalPilihan.vue';
@@ -32,6 +32,7 @@ export default {
             hasilGenerate: [],
             idCetakHasilGenerate: [],
             showModalPilihan: false,
+            linkExport: '',
         }
     },
     methods: {
@@ -58,9 +59,12 @@ export default {
 
                     const { data } = await axios.post('/api/prd/fg/gen', kirim)
                     this.$swal('Berhasil', 'Berhasil generate seri', 'success')
-                    const { noseri, id } = data
+                    const { noseri, id, produk_id, date_in } = data
                     this.hasilGenerate = noseri
-                    this.idCetakHasilGenerate = id
+                    const tgl = moment(date_in).format('YYYY-MM-DD')
+                    const wkt_rakit = this.timeFormat(date_in)
+                    this.idCetakHasilGenerate = `${produk_id}&dd=${tgl} ${wkt_rakit}`
+                    this.linkExport = `/produksi/export_noseri_gen/${produk_id}/${tgl} ${wkt_rakit}`
                 } catch (error) {
                     const { message, seri, duplicate, available } = error.response.data
                     this.seri = seri
@@ -99,9 +103,12 @@ export default {
                 }
                 const { data } = await axios.post('/api/prd/fg/gen/confirm', kirim)
                 this.$swal('Berhasil', 'Berhasil menyimpan seri', 'success')
-                const { noseri, id } = data
+                const { noseri, id, produk_id, date_in  } = data
                 this.hasilGenerate = noseri
-                this.idCetakHasilGenerate = id
+                const tgl = moment(date_in).format('YYYY-MM-DD')
+                const wkt_rakit = this.timeFormat(date_in)
+                this.idCetakHasilGenerate = `${produk_id}&dd=${tgl} ${wkt_rakit}`
+                this.linkExport = `/produksi/export_noseri_gen/${produk_id}/${tgl} ${wkt_rakit}`
             } catch (error) {
                 console.log(error)
             }
@@ -140,6 +147,9 @@ export default {
                 this.$emit('closeModal')
             })
         },
+        exportBarcode() {
+            window.open(this.linkExport, '_blank')
+        }
     },
     computed: {
         jumlahRakit() {
@@ -164,7 +174,7 @@ export default {
 </script>
 <template>
     <div>
-        <modalPilihan :data="idCetakHasilGenerate" v-if="showModalCetak" @closeModal="closeModalCetak" @closeAllModal="closeAllModal"></modalPilihan>
+        <modalPilihan :data="idCetakHasilGenerate"  v-if="showModalCetak" @closeModal="closeModalCetak" @closeAllModal="closeAllModal"></modalPilihan>
         <div class="modal fade modalGenerate" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
             role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
@@ -311,7 +321,10 @@ export default {
                                         @click="simpanSeri">Simpan</button>
                                 </div>
 
-                                <button class="btn btn-success" @click="cetakSeri" v-else>Cetak Barcode</button>
+                                <div v-else>
+                                    <button class="btn btn-primary" @click="cetakSeri">Cetak Barcode</button>
+                                    <button class="btn btn-success" @click="exportBarcode">Export Barcode</button>
+                                </div>
                             </div>
                             <div class="p-2 bd-highlight">
                                 <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>

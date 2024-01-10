@@ -2,8 +2,9 @@ import VueRouter from "vue-router";
 import PermintaanReworks from './page/permintaan'
 import prosesSetReworks from './page/prosesSet'
 import prosesSetReworksDetail from './page/prosesSet/proses/detail'
-import perakitanBerlangsung from './Page/perakitanBerlangsung'
+import perakitanBerlangsung from './page/perakitanBerlangsung'
 import Transfer from './page/transfer'
+import RiwayatPerakitan from './page/riwayatPerakitan'
 
 const routes = [
     {
@@ -30,6 +31,16 @@ const routes = [
         path: "/produksi/pengiriman",
         component: Transfer,
         name: "pengiriman"
+    },
+    {
+        path: "/produksi/riwayat_perakitan",
+        component: RiwayatPerakitan,
+        name: "riwayatPerakitan"
+    },
+    {
+        path: '/produksi/kamus_produk',
+        name: 'kamusProduk',
+        component: () => import('./page/kamusProduk')
     }
 ]
 const router = new VueRouter({

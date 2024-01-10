@@ -21,11 +21,13 @@ export default {
                 },
                 {
                     text: 'Tanggal Mulai',
-                    value: 'tgl_mulai'
+                    value: 'tgl_mulai',
+                    sortable: false,
                 },
                 {
                     text: 'Tanggal Selesai',
-                    value: 'tgl_selesai'
+                    value: 'tgl_selesai',
+                    sortable: false,
                 },
                 {
                     text: 'No BPPB',
@@ -33,7 +35,8 @@ export default {
                 },
                 {
                     text: 'Nama Produk',
-                    value: 'nama_produk'
+                    value: 'nama_produk',
+                    sortable: false,
                 },
                 {
                     text: 'Jumlah Rakit',
@@ -44,7 +47,12 @@ export default {
                     sortable: false,
                     value: 'aksi'
                 },
-            ]
+            ],
+            tanggalAwalMulai: '',
+            tanggalAkhirMulai: '',
+            tanggalAwalSelesai: '',
+            tanggalAkhirSelesai: '',
+            filterProduk: [],
         }
     },
     methods: {
@@ -70,17 +78,169 @@ export default {
             this.$emit('refresh')
         }
     },
+    computed: {
+        filterData() {
+            if (this.tanggalAwalMulai && this.tanggalAkhirMulai) {
+                const startDate = new Date(this.tanggalAwalMulai)
+                startDate.setHours(0, 0, 0, 0)
+
+                const endDate = new Date(this.tanggalAkhirMulai)
+                endDate.setHours(23, 59, 59, 999)
+
+                return this.dataTable.filter((data) => {
+                    const date = new Date(data.tgl_mulai)
+                    return date >= startDate && date <= endDate
+                })
+            } else if (this.tanggalAwalMulai) {
+                const startDate = new Date(this.tanggalAwalMulai)
+                startDate.setHours(0, 0, 0, 0)
+
+                return this.dataTable.filter((data) => {
+                    const date = new Date(data.tgl_mulai)
+                    return date >= startDate
+                })
+            } else if (this.tanggalAwalSelesai) {
+                const endDate = new Date(this.tanggalAwalSelesai)
+                endDate.setHours(23, 59, 59, 999)
+
+                return this.dataTable.filter((data) => {
+                    const date = new Date(data.tgl_mulai)
+                    return date <= endDate
+                })
+            }
+
+            if (this.tanggalAwalSelesai && this.tanggalAkhirSelesai) {
+                const startDate = new Date(this.tanggalAwalSelesai)
+                startDate.setHours(0, 0, 0, 0)
+
+                const endDate = new Date(this.tanggalAkhirSelesai)
+                endDate.setHours(23, 59, 59, 999)
+
+                return this.dataTable.filter((data) => {
+                    const date = new Date(data.tgl_selesai)
+                    return date >= startDate && date <= endDate
+                })
+            } else if (this.tanggalAwalSelesai) {
+                const startDate = new Date(this.tanggalAwalSelesai)
+                startDate.setHours(0, 0, 0, 0)
+
+                return this.dataTable.filter((data) => {
+                    const date = new Date(data.tgl_selesai)
+                    return date >= startDate
+                })
+            } else if (this.tanggalAkhirSelesai) {
+                const endDate = new Date(this.tanggalAkhirSelesai)
+                endDate.setHours(23, 59, 59, 999)
+
+                return this.dataTable.filter((data) => {
+                    const date = new Date(data.tgl_selesai)
+                    return date <= endDate
+                })
+            }
+
+            if (this.filterProduk.length > 0) {
+                return this.dataTable.filter((data) => {
+                    return this.filterProduk.includes(data.nama_produk)
+                })
+            }
+
+            return this.dataTable
+        },
+        produkUnique() {
+            return [...new Set(this.dataTable.map(item => item.nama_produk))]
+        }
+    }
 }
 </script>
 <template>
     <div v-if="!$store.state.loading">
-        <modalGenerate v-if="showModal" :dataGenerate="detailData" @closeModal="showModal = false" @refresh="refresh"></modalGenerate>
+        <modalGenerate v-if="showModal" :dataGenerate="detailData" @closeModal="showModal = false" @refresh="refresh">
+        </modalGenerate>
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
             </div>
         </div>
-        <DataTable :headers="headers" :items="dataTable" :search="search">
+        <DataTable :headers="headers" :items="filterData" :search="search">
+            <template #header.tgl_mulai>
+                <span class="text-bold pr-2">Tanggal Mulai</span>
+                <span class="filter">
+                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-filter"></i>
+                    </a>
+                    <form id="filter_ekat">
+                        <div class="dropdown-menu">
+                            <div class="px-3 py-3">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="jenis_penjualan">Tanggal Awal</label>
+                                            <input type="date" class="form-control" v-model="tanggalAwalMulai"
+                                                :max="tanggalAkhirMulai">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="jenis_penjualan">Tanggal Akhir</label>
+                                            <input type="date" class="form-control" v-model="tanggalAkhirMulai"
+                                                :min="tanggalAwalMulai">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </span>
+            </template>
+
+            <template #header.tgl_selesai>
+                <span class="text-bold pr-2">Tanggal Selesai</span>
+                <span class="filter">
+                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-filter"></i>
+                    </a>
+                    <form id="filter_ekat">
+                        <div class="dropdown-menu">
+                            <div class="px-3 py-3">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="jenis_penjualan">Tanggal Awal</label>
+                                            <input type="date" class="form-control" v-model="tanggalAwalSelesai"
+                                                :max="tanggalAkhirSelesai">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="jenis_penjualan">Tanggal Akhir</label>
+                                            <input type="date" class="form-control" v-model="tanggalAkhirSelesai"
+                                                :min="tanggalAwalSelesai">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </span>
+            </template>
+
+            <template #header.nama_produk>
+                <span class="text-bold pr-2">Nama Produk</span>
+                <span class="filter">
+                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-filter"></i>
+                    </a>
+                    <form id="filter_ekat">
+                        <div class="dropdown-menu">
+                            <div class="px-3 py-3 font-weight-normal">
+                                <v-select multiple :options="produkUnique" v-model="filterProduk" placeholder="Pilih Produk" />
+                            </div>
+                        </div>
+                    </form>
+                </span>
+            </template>
+
+
             <template #item.tgl_selesai="{ item }">
                 <span>{{ item.tgl_selesai }}</span> <br>
                 <span v-html="selisih(item.selisih, item.tanggal_selesai)"></span>

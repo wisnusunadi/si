@@ -80,6 +80,39 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
+                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        <i class="fas fa-filter"></i> Filter
+                                    </button>
+                                    <form id="filter_coo">
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Database</label>
+                                                </div>
+                                                <div class="form-group">
+                                                    @for ($i = 0; $i < 5; $i++)
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio"
+                                                                value="{!! \Carbon\Carbon::now()->year - $i !!}"
+                                                                id="status{{ $i }}" name="tahun"
+                                                                @if ($i === 0) checked @endif />
+                                                            <label class="form-check-label" for="status{{ $i }}">
+                                                                {!! \Carbon\Carbon::now()->year - $i !!}
+                                                            </label>
+                                                        </div>
+                                                    @endfor
+                                                </div>
+                                                <div class="form-group">
+                                                    <span class="float-right">
+                                                        <button class="btn btn-primary" id="filter_coo" type="submit">
+                                                            Cari
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                     <div class="table-responsive">
                                         <table class="table table-striped nowraptext" style="text-align:center;"
                                             id="showtable">
@@ -98,80 +131,80 @@
                                             </thead>
                                             <tbody>
                                                 <!-- <tr>
-                                                        <td>1</td>
-                                                        <td>30031</td>
-                                                        <td>MTB2390193</td>
-                                                        <td>SO/EKAT/X/02/98</td>
-                                                        <td>AK1-909090-1892180</td>
-                                                        <td>Elitech MTB 2 MTR</td>
-                                                        <td>AKD4284020</td>
-                                                        <td>IX</td>
-                                                        <td>30-09-2021</td>
-                                                        <td><a href="/dc/coo/pdf">
-                                                                <i class="fas fa-file"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>30031</td>
-                                                        <td>MTB2390193</td>
-                                                        <td>SO/EKAT/X/02/98</td>
-                                                        <td>AK1-909090-1892180</td>
-                                                        <td>Elitech MTB 2 MTR</td>
-                                                        <td>AKD4284020</td>
-                                                        <td>IX</td>
-                                                        <td>30-09-2021</td>
-                                                        <td><a href="/dc/coo/pdf">
-                                                                <i class="fas fa-file"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>30031</td>
-                                                        <td>MTB2390193</td>
-                                                        <td>SO/EKAT/X/02/98</td>
-                                                        <td>AK1-909090-1892180</td>
-                                                        <td>Elitech MTB 2 MTR</td>
-                                                        <td>AKD4284020</td>
-                                                        <td>IX</td>
-                                                        <td>30-09-2021</td>
-                                                        <td><a href="/dc/coo/pdf">
-                                                                <i class="fas fa-file"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>4</td>
-                                                        <td>30031</td>
-                                                        <td>MTB2390193</td>
-                                                        <td>SO/EKAT/X/02/98</td>
-                                                        <td>AK1-909090-1892180</td>
-                                                        <td>Elitech MTB 2 MTR</td>
-                                                        <td>AKD4284020</td>
-                                                        <td>IX</td>
-                                                        <td>30-09-2021</td>
-                                                        <td><a href="/dc/coo/pdf">
-                                                                <i class="fas fa-file"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>5</td>
-                                                        <td>30031</td>
-                                                        <td>MTB2390193</td>
-                                                        <td>SO/EKAT/X/02/98</td>
-                                                        <td>AK1-909090-1892180</td>
-                                                        <td>Elitech MTB 2 MTR</td>
-                                                        <td>AKD4284020</td>
-                                                        <td>IX</td>
-                                                        <td>30-09-2021</td>
-                                                        <td><a href="/dc/coo/pdf">
-                                                                <i class="fas fa-file"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr> -->
+                                                            <td>1</td>
+                                                            <td>30031</td>
+                                                            <td>MTB2390193</td>
+                                                            <td>SO/EKAT/X/02/98</td>
+                                                            <td>AK1-909090-1892180</td>
+                                                            <td>Elitech MTB 2 MTR</td>
+                                                            <td>AKD4284020</td>
+                                                            <td>IX</td>
+                                                            <td>30-09-2021</td>
+                                                            <td><a href="/dc/coo/pdf">
+                                                                    <i class="fas fa-file"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>2</td>
+                                                            <td>30031</td>
+                                                            <td>MTB2390193</td>
+                                                            <td>SO/EKAT/X/02/98</td>
+                                                            <td>AK1-909090-1892180</td>
+                                                            <td>Elitech MTB 2 MTR</td>
+                                                            <td>AKD4284020</td>
+                                                            <td>IX</td>
+                                                            <td>30-09-2021</td>
+                                                            <td><a href="/dc/coo/pdf">
+                                                                    <i class="fas fa-file"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>3</td>
+                                                            <td>30031</td>
+                                                            <td>MTB2390193</td>
+                                                            <td>SO/EKAT/X/02/98</td>
+                                                            <td>AK1-909090-1892180</td>
+                                                            <td>Elitech MTB 2 MTR</td>
+                                                            <td>AKD4284020</td>
+                                                            <td>IX</td>
+                                                            <td>30-09-2021</td>
+                                                            <td><a href="/dc/coo/pdf">
+                                                                    <i class="fas fa-file"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>4</td>
+                                                            <td>30031</td>
+                                                            <td>MTB2390193</td>
+                                                            <td>SO/EKAT/X/02/98</td>
+                                                            <td>AK1-909090-1892180</td>
+                                                            <td>Elitech MTB 2 MTR</td>
+                                                            <td>AKD4284020</td>
+                                                            <td>IX</td>
+                                                            <td>30-09-2021</td>
+                                                            <td><a href="/dc/coo/pdf">
+                                                                    <i class="fas fa-file"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>5</td>
+                                                            <td>30031</td>
+                                                            <td>MTB2390193</td>
+                                                            <td>SO/EKAT/X/02/98</td>
+                                                            <td>AK1-909090-1892180</td>
+                                                            <td>Elitech MTB 2 MTR</td>
+                                                            <td>AKD4284020</td>
+                                                            <td>IX</td>
+                                                            <td>30-09-2021</td>
+                                                            <td><a href="/dc/coo/pdf">
+                                                                    <i class="fas fa-file"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -187,11 +220,21 @@
 @section('adminlte_js')
     <script>
         $(function() {
+            $('#filter_coo').submit(function() {
+                //alert('ok');
+                var data_tahun = $('input[name="tahun"]:checked').val();
+
+                $('#showtable').DataTable().ajax.url('/api/dc/data/' + data_tahun).load();
+                return false;
+            });
+
+
             $('#showtable').DataTable({
                 processing: true,
                 serverSide: true,
+                bLengthChange: false,
                 ajax: {
-                    'url': '/api/dc/data',
+                    'url': '/api/dc/data/' + {{ \Carbon\Carbon::now()->year }},
                     'type': 'POST',
                     'datatype': 'JSON',
                     'headers': {

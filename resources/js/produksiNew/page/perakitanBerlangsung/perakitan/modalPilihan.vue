@@ -10,14 +10,12 @@ export default {
             });
         },
         small() {
-            let cetak = JSON.stringify(this.data);
-            window.open(`/produksiReworks/cetak_seri_fg_small?data=${cetak}`, '_blank')
+            window.open(`/produksiReworks/cetak_seri_fg_small?id=${this.data}`, '_blank')
             this.closeModal();
             this.$emit('closeAllModal')
         },
         medium() {
-            let cetak = JSON.stringify(this.data);
-            window.open(`/produksiReworks/cetak_seri_fg_medium?data=${cetak}`, '_blank')
+            window.open(`/produksiReworks/cetak_seri_fg_medium?id=${this.data}`, '_blank')
             this.closeModal();
             this.$emit('closeAllModal')
         },

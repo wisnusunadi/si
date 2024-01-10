@@ -100,7 +100,9 @@ Route::group(['prefix' => '/produksiReworks' , 'middleware' => 'auth'], function
     Route::get('/export_excel/{id}', [ProduksiController::class, 'export_rework_excel']);
     Route::get('/cetak_seri_finish_goods/{seri}', [ProduksiController::class, 'cetak_seri_finish_goods']);
     Route::get('/cetak_seri_fg_medium', [ProduksiController::class, 'cetak_seri_finish_goods_medium']);
+    Route::get('/cetak_seri_fg_medium_repeated', [ProduksiController::class, 'cetak_seri_finish_goods_medium_repeated']);
     Route::get('/cetak_seri_fg_small', [ProduksiController::class, 'cetak_seri_finish_goods_small']);;
+    Route::get('/cetak_seri_fg_small_repeated', [ProduksiController::class, 'cetak_seri_finish_goods_small_repeated']);;
     Route::get('/cetakseriReworkAll', [ProduksiController::class, 'cetak_seri_rework_all']);
     Route::get('/cetakseriReworkAllKardus', [ProduksiController::class, 'cetak_seri_rework_all_kardus']);
     Route::get('/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);
@@ -140,8 +142,9 @@ Route::group(['prefix' => '/produksi', 'middleware' => 'auth'], function () {
     Route::view('/dashboard', 'page.produksi.dashboard');
     Route::view('/so', 'page.produksi.so');
     Route::view('/perencanaan_perakitan', 'page.produksi.perencanaan_perakitan');
-    Route::get('/riwayat_perakitan', [ProduksiController::class, 'his_rakit']);
+    // Route::get('/riwayat_perakitan', [ProduksiController::class, 'his_rakit']);
     Route::get('/export_noseri', [ProduksiController::class, 'export_noseri_produksi'])->name('export.rakitseri');
+    Route::get('/export_noseri_gen/{id}/{value}', [ProduksiController::class, 'export_noseri_gen']);
     Route::view('/riwayat_transfer', 'page.produksi.riwayat_transfer');
     Route::view('/{any?}', 'page.produksi.new_produksi')->where('any', '.*');
 });

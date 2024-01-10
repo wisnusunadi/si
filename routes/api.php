@@ -335,6 +335,11 @@ Route::prefix('/tfp')->group(function () {
 
 Route::prefix('/prd')->group(function () {
     Route::prefix('/fg')->group(function () {
+        Route::prefix('/non_jadwal')->group(function () {
+            Route::post('/gen', [ProduksiController::class, 'generate_fg_non_jadwal']);
+            Route::get('/show', [ProduksiController::class, 'show_non_jadwal']);
+            Route::get('/detail/{id}', [ProduksiController::class, 'detail_non_jadwal']);
+        });
         Route::post('/gen', [ProduksiController::class, 'generate_fg']);
         Route::get('/riwayat', [ProduksiController::class, 'riwayat_fg']);
         Route::post('/gen/confirm', [ProduksiController::class, 'generate_fg_confirm']);
@@ -343,7 +348,7 @@ Route::prefix('/prd')->group(function () {
         Route::get('/riwayat_code/{id}', [ProduksiController::class, 'get_noseri_fg_riwayat_code']);
     });
     Route::prefix('/rw')->group(function () {
-        // Route::post('/generate_seri_back', [ProduksiController::class, 'generate_seri_back'])->middleware('jwt.verify');
+        Route::post('/generate_seri_back', [ProduksiController::class, 'generate_seri_back']);
         //   Route::post('/generate_seri_peti', [ProduksiController::class, 'generate_seri_peti']);
         Route::get('/belum_kirim', [ProduksiController::class, 'belum_kirim_rw']);
         Route::get('/riwayat_permintaan', [ProduksiController::class, 'riwayat_rw_permintaan']);
@@ -394,13 +399,13 @@ Route::prefix('/prd')->group(function () {
     Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current'])->middleware('jwt.verify');
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
     Route::get('/ajax_his_rakit', [ProduksiController::class, 'ajax_history_rakit']);
-    Route::post('/riwayat_rakit', [ProduksiController::class, 'get_his_rakit'])->middleware('jwt.verify');
+    Route::get('/riwayat_rakit', [ProduksiController::class, 'get_his_rakit']);
     Route::get('/ajax_perproduk', [ProduksiController::class, 'ajax_perproduk']);
     Route::get('/detail_perproduk/{id}', [ProduksiController::class, 'detail_perproduk']);
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
     Route::post('cek-noseri', [ProduksiController::class, 'cekDuplicateNoseri']);
-    Route::post('/ajax_sisa', [ProduksiController::class, 'ajax_sisa_transfer']);
+    Route::get('/ajax_sisa', [ProduksiController::class, 'ajax_sisa_transfer']);
     Route::post('/detail_sisa_kirim', [ProduksiController::class, 'detail_sisa_kirim']);
 
     Route::get('/testing', [ProduksiController::class, 'change_jadwal']);
@@ -671,7 +676,7 @@ Route::prefix('/logistik')->group(function () {
 });
 
 Route::prefix('/dc')->group(function () {
-    Route::post('data', [App\Http\Controllers\DcController::class, 'get_data_coo']);
+    Route::post('data/{tahun}', [App\Http\Controllers\DcController::class, 'get_data_coo']);
     Route::post('dashboard/data/{value}', [App\Http\Controllers\DcController::class, 'dashboard_data']);
     Route::post('dashboard/so', [App\Http\Controllers\DcController::class, 'dashboard_so']);
     Route::prefix('/so_in_process')->group(function () {

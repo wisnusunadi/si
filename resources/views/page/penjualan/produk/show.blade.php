@@ -217,14 +217,14 @@
                                                             Harga Minimum
                                                         </div>
                                                         <div class="form-group">
-                                                            <input type="text" style="width:200px;" class="form-control"
+                                                            <input type="text" class="form-control"
                                                                 id="harga_min" name="stok" value="0" />
                                                         </div>
                                                         <div class="dropdown-header">
                                                             Harga Maksimum
                                                         </div>
                                                         <div class="form-group">
-                                                            <input type="text" style="width:200px;"
+                                                            <input type="text"
                                                                 class="form-control" id="harga_maks" name="stok"
                                                                 value="0" disabled />
                                                         </div>

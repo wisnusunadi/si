@@ -157,7 +157,7 @@ class DcController extends Controller
 
         return $pdf->stream('');
     }
-    public function get_data_coo()
+    public function get_data_coo($tahun)
     {
         // $data = NoseriCoo::with(['NoseriDetailLogistik.NoseriDetailPesanan.NoseriTGbj.NoseriBarangJadi','NoseriDetailLogistik.DetailLogistik.DetailPesananProduk.']);
 
@@ -196,7 +196,7 @@ class DcController extends Controller
             ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
             ->orderBy('noseri_coo.id', 'DESC')
             ->where(['produk.coo' => 1, 'penjualan_produk.status' => 'ekat'])
-            ->whereYear('noseri_coo.created_at',2023)
+            ->whereYear('noseri_coo.created_at',$tahun)
             ->get();
 
         return datatables()->of($data)
