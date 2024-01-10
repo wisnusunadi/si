@@ -212,47 +212,47 @@
                                 </thead>
                                 <tbody>
                                     <!-- <tr>
-                                                                                            <td class="nowrap-text">1</td>
-                                                                                            <td class="nowrap-text">19-10-2021</td>
-                                                                                            <td class="nowrap-text minimizechar">B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
-                                                                                            <td class="nowrap-text">21102900256</td>
-                                                                                            <td class="nowrap-text">X</td>
-                                                                                            <td class="nowrap-text">5</td>
-                                                                                            <td class="nowrap-text"><span class="badge green-text">Tersedia</span></td>
-                                                                                            <td class="nowrap-text"></a>
-                                                                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                                                    <a class="noserishow dropdown-item" type="button">
-                                                                                                        <i class="fas fa-eye"></i>
-                                                                                                        Detail
-                                                                                                    </a>
+                                                                                                    <td class="nowrap-text">1</td>
+                                                                                                    <td class="nowrap-text">19-10-2021</td>
+                                                                                                    <td class="nowrap-text minimizechar">B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
+                                                                                                    <td class="nowrap-text">21102900256</td>
+                                                                                                    <td class="nowrap-text">X</td>
+                                                                                                    <td class="nowrap-text">5</td>
+                                                                                                    <td class="nowrap-text"><span class="badge green-text">Tersedia</span></td>
+                                                                                                    <td class="nowrap-text"></a>
+                                                                                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                                                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                                                            <a class="noserishow dropdown-item" type="button">
+                                                                                                                <i class="fas fa-eye"></i>
+                                                                                                                Detail
+                                                                                                            </a>
 
-                                                                                                        <button class="dropdown-item" type="button">
-                                                                                                            <i class="fas fa-file"></i>
-                                                                                                            Laporan PDF
-                                                                                                        </button>
+                                                                                                                <button class="dropdown-item" type="button">
+                                                                                                                    <i class="fas fa-file"></i>
+                                                                                                                    Laporan PDF
+                                                                                                                </button>
 
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td>2</td>
-                                                                                            <td>21-10-2021</td>
-                                                                                            <td class="minimizechar">PULSE OXIMETER/OXYMETER FOX-2</td>
-                                                                                            <td>20502210102</td>
-                                                                                            <td></td>
-                                                                                            <td>2</td>
-                                                                                            <td><span class="badge red-text">Belum Tersedia</span></td>
-                                                                                            <td class="nowrap-text"></a>
-                                                                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                                                    <a class="noserishow dropdown-item" type="button">
-                                                                                                        <i class="fas fa-eye"></i>
-                                                                                                        Detail
-                                                                                                    </a>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr> -->
+                                                                                                        </div>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td>2</td>
+                                                                                                    <td>21-10-2021</td>
+                                                                                                    <td class="minimizechar">PULSE OXIMETER/OXYMETER FOX-2</td>
+                                                                                                    <td>20502210102</td>
+                                                                                                    <td></td>
+                                                                                                    <td>2</td>
+                                                                                                    <td><span class="badge red-text">Belum Tersedia</span></td>
+                                                                                                    <td class="nowrap-text"></a>
+                                                                                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                                                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                                                            <a class="noserishow dropdown-item" type="button">
+                                                                                                                <i class="fas fa-eye"></i>
+                                                                                                                Detail
+                                                                                                            </a>
+                                                                                                        </div>
+                                                                                                    </td>
+                                                                                                </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -400,6 +400,37 @@
                         </div>
                         <div class="modal-body" id="tglkirim_edit">
 
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modalCetakCOO" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Cetak COO</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <small class="text-muted"><span class="text-danger">*</span>Silahkan cetak tiap 100 Nomor
+                                Seri</small>
+                            <table class="table tableNoSeriCetakCOO">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="checkall"></th>
+                                        <th>Nomor Seri</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                            <button type="button" class="btn btn-primary cetakNoSeriCOO">Cetak</button>
                         </div>
                     </div>
                 </div>
@@ -1265,6 +1296,84 @@
                     $('#btnsimpan').addClass('disabled');
                 }
             });
+
+            $(document).on('click', '.buttonShowModalCOO', function(e) {
+                e.preventDefault();
+
+                var id = $(this).data('id');
+                var value = $(this).data('value');
+                var jenis = $(this).data('jenis');
+                var stamp = $(this).data('stamp');
+
+                // implement to button cetak
+                $('.cetakNoSeriCOO').data('id', id)
+                $('.cetakNoSeriCOO').data('value', value)
+                $('.cetakNoSeriCOO').data('jenis', jenis)
+                $('.cetakNoSeriCOO').data('stamp', stamp)
+
+                $('.tableNoSeriCetakCOO').DataTable()
+
+                // create datatable with data
+                $('.tableNoSeriCetakCOO').DataTable({
+                    destroy: true,
+                    ajax: {
+                    'type': 'POST',
+                    'datatype': 'JSON',
+                    'url': '/api/dc/so/detail/seri/' + id + '/selesai',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                },
+                    autoWidth: false,
+                    columns: [{
+                            data: 'id',
+                            render: function(data, type, row) {
+                                return `<input type="checkbox" name="" id="">`
+                            }
+                        },
+                        {
+                            data: 'noseri'
+                        }
+                    ]
+                })
+                $('#modalCetakCOO').modal('show');
+            })
+
+            $('#checkall').click(function() {
+                if ($(this).is(':checked')) {
+                    $('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]').prop('checked', true)
+                } else {
+                    $('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]').prop('checked', false)
+                }
+            })
+
+            $(document).on('click', '.cetakNoSeriCOO', function(e) {
+                e.preventDefault()
+
+                var data = []
+
+                var table = $('.tableNoSeriCetakCOO').DataTable()
+
+                // get all checked checkbox id and push to array
+                $('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]:checked').each(function() {
+                    var row = table.row($(this).parents('tr'));
+                    var rowData = row.data();
+                    data.push(rowData.id);
+                });
+
+                console.log(data)
+
+                var id = $(this).data('id');
+                var value = $(this).data('value');
+                var jenis = $(this).data('jenis');
+                var stamp = $(this).data('stamp');
+
+                console.log(id, value, jenis, stamp)
+
+                // open link in new tab
+                window.open(`/dc/coo/rework/pdf?id=${data}`)
+
+            })
 
         })
     </script>
