@@ -97,7 +97,6 @@ class DcController extends Controller
 
         //  return response()->json($data_urut_produk);
 
-
         $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk])->setPaper('A4');
         return $pdf->stream('');
         //return view('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk]);
@@ -160,6 +159,7 @@ class DcController extends Controller
                 DB::raw("DATE_FORMAT(logistik.tgl_kirim, '%d-%m-%Y') as tglsjcoo"),
                 DB::raw("DATE_FORMAT(noseri_coo.tgl_kirim, '%d-%m-%Y') as tglkirim_coo"),
                 'noseri_coo.catatan as coo_catatan',
+                'noseri_coo.jenis as coo_jenis',
                 'noseri',
                 'noseri_logistik.id as noserilogistik_id',
                 'produk.no_akd',
@@ -248,7 +248,37 @@ class DcController extends Controller
                 } else {
                     $x = 'spa';
                 }
+
+                if ($data->coo_jenis == 'antro') {
                 return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id. '" target="_blank">
+                      <button class="dropdown-item" type="button">
+                          <i class="fas fa-file"></i>
+                          Coo
+                      </button>
+                  </a>
+                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '" target="_blank">
+                          <button class="dropdown-item" type="button">
+                              <i class="fas fa-file"></i>
+                              Coo + Background
+                          </button>
+                      </a>
+                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '" target="_blank">
+                      <button class="dropdown-item" type="button">
+                          <i class="fas fa-file"></i>
+                          Coo + Background + Ttd
+                      </button>
+                  </a>
+                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '" target="_blank">
+                      <button class="dropdown-item" type="button">
+                          <i class="fas fa-file"></i>
+                          Coo + Background + Ttd + Stamp
+                      </button>
+                  </a>
+                  </div>';
+                } else {
+                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       <a href="' . route('dc.seri.coo.pdf', [$data->noserilogistik_id, $x, "kosong", 0]) . '" target="_blank">
                       <button class="dropdown-item" type="button">
@@ -275,6 +305,7 @@ class DcController extends Controller
                       </button>
                   </a>
                   </div>';
+                }
             })
             ->rawColumns(['laporan'])
             ->make(true);
@@ -959,8 +990,67 @@ class DcController extends Controller
                     }
                 }
 
-                if ($name[1] == 'EKAT') {
-                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                if ($data->ccoo > 100) {
+                    if ($name[1] == 'EKAT') {
+
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
+                        <i class="fas fa-eye"></i>
+                            Detail
+                        </a>
+                     <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="ekatalog" data-jenis="kosong" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="ekatalog" data-jenis="back" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="ekatalog" data-jenis="ttd" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="ekatalog" data-jenis="ttd" data-stamp="1" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd + Stamp
+                    </button>
+                        <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="' . $data->id . '"><i class="fas fa-times text-danger"></i>
+                       <b class="text-danger">Batal</b>
+                    </button>
+
+                    </div>';
+                    } else {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a  class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'spa']) . '">
+                        <i class="fas fa-eye"></i>
+                            Detail
+                        </a>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="spa" data-jenis="kosong" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="spa" data-jenis="back" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="spa" data-jenis="ttd" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="spa" data-jenis="ttd" data-stamp="1" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd + Stamp
+                    </button>
+                    <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="' . $data->id . '"><i class="fas fa-times "></i>
+                        <b class="text-danger">Batal</b>
+                    </button>
+                    </div>';
+                    }
+                } else {
+                    if ($name[1] == 'EKAT') {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
                         <i class="fas fa-eye"></i>
@@ -995,8 +1085,8 @@ class DcController extends Controller
                             <b class="text-danger">Batal</b>
                             </button>
                     </div>';
-                } else {
-                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    } else {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a  class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'spa']) . '">
                         <i class="fas fa-eye"></i>
@@ -1031,6 +1121,7 @@ class DcController extends Controller
                             </button>
 
                     </div>';
+                    }
                 }
             })
             ->rawColumns(['button', 'status', 'batas_paket'])
