@@ -14,14 +14,24 @@ export default {
             this.$nextTick(() => {
                 this.$emit('closeModal');
             });
-        }, 
+        },
         small() {
+            if (this.alasan == '') {
+                this.$swal.fire('Perhatian', 'Alasan Cetak Harus Diisi', 'warning');
+                return;
+            }
+
             let cetak = JSON.stringify(this.data);
             window.open(`/produksiReworks/cetak_seri_fg_small_repeated?data=${cetak}`, '_blank')
             this.postAlasan();
             this.closeModal();
         },
         medium() {
+            if (this.alasan == '') {
+                this.$swal.fire('Perhatian', 'Alasan Cetak Harus Diisi', 'warning');
+                return;
+            }
+
             let cetak = JSON.stringify(this.data);
             window.open(`/produksiReworks/cetak_seri_fg_medium_repeated?data=${cetak}`, '_blank')
             this.postAlasan();

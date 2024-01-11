@@ -262,12 +262,12 @@ export default {
             </template>
 
             <template #item.aksi="{ item }">
-                <!-- <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
+                <button class="btn btn-sm btn-outline-primary" @click="detail(item)" v-if="item.generate_seri == 1">
                     <i class="fa fa-barcode"></i>
                     Generate Nomor Seri
-                </button> -->
+                </button>
 
-                <button class="btn btn-sm btn-outline-primary" @click="detailInputNoSeri(item)">
+                <button class="btn btn-sm btn-outline-primary" @click="detailInputNoSeri(item)" v-else>
                     <!-- icon tambah nomor seri -->
                     <i class="fa fa-barcode"></i>
                     Tambah Nomor Seri
