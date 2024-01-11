@@ -107,8 +107,16 @@
     </style>
 </head>
 
+@if ($jenis == 'back' || $jenis == 'ttd')
 
-<body class="back">
+    <body class="back">
+    @else
+
+        <body class="noback">
+@endif
+
+
+
     <?php
     $jumlah = 0;
     $len = count($data);
@@ -318,8 +326,8 @@
                         <tr>
                             <td width="50%"></td>
                             <td class="align-center" style="height:75px;">
-                                {{-- @if ($jenis == 'ttd')
-                                @if (empty($d->nama) && $d->ket == 'spa')
+                                @if ($jenis == 'ttd')
+                                @if (empty($d['nama']) && $d['ket'] == 'spa')
                                     @if ($stamp == 1)
                                         <img src="{{ public_path('assets/image/spa_stamp.png') }}" width="200"
                                             height="100">
@@ -327,42 +335,44 @@
                                         <img src="{{ public_path('assets/image/spa.png') }}" width="200"
                                             height="100">
                                     @endif
-                                @elseif(empty($d->nama) && $d->ket == 'emiindo')
+                                @elseif(empty($d['nama']) && $d['ket'] == 'emiindo')
                                     <img src="{{ public_path('assets/image/emiindo.png') }}" width="100"
                                         height="100">
                                 @else
                                     <img src="" width="100" height="100">
                                 @endif
-                            @endif --}}
-                                <img src="{{ public_path('assets/image/emiindo.png') }}" width="100"
-                                    height="100">
+                            @endif
+                                {{-- <img src="{{ public_path('assets/image/emiindo.png') }}" width="100"
+                                    height="100"> --}}
+
+
                             </td>
                         </tr>
                         <tr>
                             <td width="50%"></td>
                             <td class="align-center"><b><u>
-                                        {{-- @if (empty($d->nama) && $d->ket == 'spa')
+                                        @if (empty($d['nama']) && $d['ket'] == 'spa')
                                         Kusmardiana Rahayu
-                                    @elseif(empty($d->nama) && $d->ket == 'emiindo')
+                                    @elseif(empty($d['nama']) && $d['ket'] == 'emiindo')
                                         Bambang Hendro M BE
                                     @else
-                                        {{ $d->nama }}
-                                    @endif --}}
-                                        Bambang Hendro M BE
+                                        {{ $d['nama'] }}
+                                    @endif
+                                        {{-- Bambang Hendro M BE --}}
 
                                     </u></b></td>
                         </tr>
                         <tr>
                             <td width="50%"></td>
                             <td class="align-center">
-                                {{-- @if (empty($d->nama) && $d->ket == 'spa')
+                                @if (empty($d['nama']) && $d['ket'] == 'spa')
                                 Q.A Manager
-                            @elseif(empty($d->nama) && $d->ket == 'emiindo')
+                            @elseif(empty($d['nama']) && $d['ket'] == 'emiindo')
                                 Q.A Departement
                             @else
                                 {{ $d->jabatan }}
-                            @endif --}}
-                                Q.A Departement
+                            @endif
+                                {{-- Q.A Departement --}}
                             </td>
                         </tr>
                     </tbody>

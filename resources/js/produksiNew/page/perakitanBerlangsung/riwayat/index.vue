@@ -22,6 +22,11 @@ export default {
                     value: 'noseri'
                 },
                 {
+                    text: 'Jenis Perakitan',
+                    value: 'jenis',
+                    sortable: false,
+                },
+                {
                     text: 'Tanggal Dibuat',
                     value: 'tgl_buat',
                     sortable: false,
@@ -49,6 +54,17 @@ export default {
             showModalRiwayat: false,
             tanggal_awal: JSON.parse(JSON.stringify(this.tanggalAwal)),
             tanggal_akhir: JSON.parse(JSON.stringify(this.tanggalAkhir)),
+            jenisPerakitanOptions: [
+                {
+                    label: 'Terjadwal',
+                    value: 'terjadwal'
+                },
+                {
+                    label: 'Tidak Terjadwal',
+                    value: 'tidak_terjadwal'
+                }
+            ],
+            jenisPerakitanSelected: [],
         }
     },
     methods: {
@@ -97,15 +113,24 @@ export default {
                 tanggalAwal: this.tanggal_awal,
                 tanggalAkhir: this.tanggal_akhir
             })
+        },
+        jenisPerakitanClicked(jenis) {
+            if (this.jenisPerakitanSelected.find((data) => data === jenis.value)) {
+                this.jenisPerakitanSelected = this.jenisPerakitanSelected.filter((data) => data !== jenis.value)
+            } else {
+                this.jenisPerakitanSelected.push(jenis.value)
+            }
         }
     },
     computed: {
         filterData() {
-            return this.dataRiwayat.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
-                });
-            });
+            if(this.jenisPerakitanSelected.length > 0) {
+                return this.dataRiwayat.filter(item => {
+                    return this.jenisPerakitanSelected.includes(item.jenis)
+                })
+            } else {
+                return this.dataRiwayat
+            }
         }
     },
     watch: {
@@ -138,9 +163,31 @@ export default {
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
             </div>
         </div>
-        <DataTable :headers="headers" :items="filterData">
+        <DataTable :headers="headers" :items="filterData" :search="search">
             <template #header.id>
                 <input type="checkbox" @click="checkAllSeri" :checked="checkAll">
+            </template>
+
+            <template #header.jenis>
+                <span class="text-bold pr-2">Jenis Perakitan</span>
+                <span class="filter">
+                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-filter"></i>
+                    </a>
+                    <form id="filter_ekat">
+                        <div class="dropdown-menu">
+                            <div class="px-3 py-3 font-weight-normal">
+                                <div class="form-check" v-for="jenis in jenisPerakitanOptions" :key="jenis.value">
+                                    <input class="form-check-input" type="checkbox" @click="jenisPerakitanClicked(jenis)"
+                                        :id="jenis.value">
+                                    <label class="form-check-label" :for="jenis.value">
+                                        {{ jenis.label }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </span>
             </template>
 
             <template #header.tgl_buat>
@@ -157,16 +204,14 @@ export default {
                                         <div class="form-group">
                                             <label for="jenis_penjualan">Tanggal Awal</label>
                                             <input type="date" class="form-control" v-model="tanggal_awal"
-                                            @change="updateTanggal"
-                                                :max="tanggal_akhir">
+                                                @change="updateTanggal" :max="tanggal_akhir">
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="jenis_penjualan">Tanggal Akhir</label>
                                             <input type="date" class="form-control" v-model="tanggal_akhir"
-                                            @change="updateTanggal"
-                                                :min="tanggal_awal">
+                                                @change="updateTanggal" :min="tanggal_awal">
                                         </div>
                                     </div>
                                 </div>
@@ -174,6 +219,12 @@ export default {
                         </div>
                     </form>
                 </span>
+            </template>
+
+            <template #item.jenis="{ item }">
+                <div>
+                    <span>{{ item.jenis == 'terjadwal' ? 'Terjadwal' : 'Tidak Terjadwal' }}</span>
+                </div>
             </template>
 
             <template #item.id="{ item }">

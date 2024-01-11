@@ -201,12 +201,7 @@
             width: 25%;
             border-top-right-radius: 0;
             border-bottom-left-radius: calc(0.25rem - 1px);
-        }
-
-        /* .overflowcard {
-                                                                                                                                                                                                                                                                                                                                                                                                                        max-height:
-                                                                                                                                                                                                                                                                                                                                                                                                                        700px;
-                                                                                                                                                                                                                                                                                                                                                                                                                    } */
+        }                                                                                                                                                                                                                                                                                                                                                                                                                } */
 
         .bg-chart-light {
             background: rgba(192, 192, 192, 0.2);
@@ -359,21 +354,19 @@
                                                             <label for="jenis_penjualan">Database</label>
                                                         </div>
                                                         <div class="form-group">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    value="2023" id="status2" name="data_tahun"
-                                                                    checked />
-                                                                <label class="form-check-label" for="status2">
-                                                                    2023
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    value="2022" id="status2" name="data_tahun" />
-                                                                <label class="form-check-label" for="status2">
-                                                                    2022
-                                                                </label>
-                                                            </div>
+                                                            {{-- perulangan selama 5 tahun --}}
+                                                            @for ($i = 0; $i < 5; $i++)
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input form-years-select" type="radio"
+                                                                        value="{!! \Carbon\Carbon::now()->year - $i !!}"
+                                                                        id="status{{ $i }}" name="data_tahun"
+                                                                        @if ($i === 0) checked @endif />
+                                                                    <label class="form-check-label"
+                                                                        for="status{{ $i }}">
+                                                                        {!! \Carbon\Carbon::now()->year - $i !!}
+                                                                    </label>
+                                                                </div>
+                                                            @endfor
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="jenis_penjualan">Status</label>
@@ -483,22 +476,19 @@
                                                             <label for="jenis_penjualan">Database</label>
                                                         </div>
                                                         <div class="form-group">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    value="2023" id="status2" name="data_tahun_spa"
-                                                                    checked />
-                                                                <label class="form-check-label" for="status2">
-                                                                    2023
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    value="2022" id="status2"
-                                                                    name="data_tahun_spa" />
-                                                                <label class="form-check-label" for="status2">
-                                                                    2022
-                                                                </label>
-                                                            </div>
+                                                            @for ($i = 0; $i < 5; $i++)
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input form-years-select" type="radio"
+                                                                        value="{!! \Carbon\Carbon::now()->year - $i !!}"
+                                                                        id="status{{ $i }}"
+                                                                        name="data_tahun_spa"
+                                                                        @if ($i === 0) checked @endif />
+                                                                    <label class="form-check-label"
+                                                                        for="status{{ $i }}">
+                                                                        {!! \Carbon\Carbon::now()->year - $i !!}
+                                                                    </label>
+                                                                </div>
+                                                            @endfor
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="jenis_penjualan">Status</label>
@@ -609,22 +599,19 @@
                                                             <label for="jenis_penjualan">Database</label>
                                                         </div>
                                                         <div class="form-group">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    value="2023" id="status2" name="data_tahun_spb"
-                                                                    checked />
-                                                                <label class="form-check-label" for="status2">
-                                                                    2023
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    value="2022" id="status2"
-                                                                    name="data_tahun_spb" />
-                                                                <label class="form-check-label" for="status2">
-                                                                    2022
-                                                                </label>
-                                                            </div>
+                                                            @for ($i = 0; $i < 5; $i++)
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input form-years-select" type="radio"
+                                                                        value="{!! \Carbon\Carbon::now()->year - $i !!}"
+                                                                        id="status{{ $i }}"
+                                                                        name="data_tahun_spb"
+                                                                        @if ($i === 0) checked @endif />
+                                                                    <label class="form-check-label"
+                                                                        for="status{{ $i }}">
+                                                                        {!! \Carbon\Carbon::now()->year - $i !!}
+                                                                    </label>
+                                                                </div>
+                                                            @endfor
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="jenis_penjualan">Status</label>
@@ -743,22 +730,19 @@
                                                             <label for="jenis_penjualan">Database</label>
                                                         </div>
                                                         <div class="form-group">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    value="2023" id="status2" name="data_tahun_pen"
-                                                                    checked />
-                                                                <label class="form-check-label" for="status2">
-                                                                    2023
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    value="2022" id="status2"
-                                                                    name="data_tahun_pen" />
-                                                                <label class="form-check-label" for="status2">
-                                                                    2022
-                                                                </label>
-                                                            </div>
+                                                            @for ($i = 0; $i < 5; $i++)
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input form-years-select" type="radio"
+                                                                        value="{!! \Carbon\Carbon::now()->year - $i !!}"
+                                                                        id="status{{ $i }}"
+                                                                        name="data_tahun_pen"
+                                                                        @if ($i === 0) checked @endif />
+                                                                    <label class="form-check-label"
+                                                                        for="status{{ $i }}">
+                                                                        {!! \Carbon\Carbon::now()->year - $i !!}
+                                                                    </label>
+                                                                </div>
+                                                            @endfor
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="jenis_penjualan">Jenis Penjualan</label>
@@ -955,6 +939,7 @@
 @section('adminlte_js')
     <script>
         $(function() {
+            var years = {{ \Carbon\Carbon::now()->year }};
             document.querySelector('#spa-tab').addEventListener('click', spa_show);
             document.querySelector('#spb-tab').addEventListener('click', spb_show);
             document.querySelector('#semua-penjualan-tab').addEventListener('click', p_show);
@@ -975,7 +960,7 @@
                     serverSide: true,
                     ajax: {
                         'url': "/api/penjualan/penjualan/data/semua/semua/" +
-                            {{ \Carbon\Carbon::now()->year }},
+                            years,
                         "dataType": "json",
                         'type': 'POST',
                         "headers": {
@@ -1019,7 +1004,7 @@
                     serverSide: true,
                     ajax: {
                         'url': '/penjualan/penjualan/ekatalog/data/semua/' +
-                            {{ \Carbon\Carbon::now()->year }},
+                            years,
                         "dataType": "json",
                         'type': 'POST',
                         'headers': {
@@ -1087,7 +1072,7 @@
                     serverSide: true,
                     ajax: {
                         'url': '/penjualan/penjualan/spa/data/semua/' +
-                            {{ \Carbon\Carbon::now()->year }},
+                            years,
                         "dataType": "json",
                         'type': 'POST',
                         'headers': {
@@ -1136,7 +1121,7 @@
                     serverSide: true,
                     ajax: {
                         'url': '/penjualan/penjualan/spb/data/semua/' +
-                            {{ \Carbon\Carbon::now()->year }},
+                            years,
                         "dataType": "json",
                         'type': 'POST',
                         'headers': {
@@ -1177,10 +1162,6 @@
                     ],
                 });
             }
-        })
-    </script>
-    <script>
-        $(function() {
             function validasi_batal() {
                 if ($('#tanggal').val() != "" && $('#alasan').val() != "") {
                     $('#btnkirimbatal').attr('disabled', false);
@@ -1308,12 +1289,6 @@
                 }
 
             }
-
-
-
-
-
-
 
             $(document).on('click', '.detailmodal', function(event) {
                 event.preventDefault();
@@ -2096,6 +2071,26 @@
                 })
 
             });
+
+            
+            // make global variable
+            $(document).on('click', '.form-years-select', function () {
+                years = $(this).val();
+                console.log('years', years);
+
+                // remove all checked on class form-years-select
+                $('.form-years-select').each(function () {
+                    $(this).prop('checked', false);
+                });
+
+                // implement checked on class form-years-select when value == years
+                $('.form-years-select').each(function () {
+                    if ($(this).val() == years) {
+                        $(this).prop('checked', true);
+                    }
+                });
+                
+            })
         })
     </script>
 @stop
