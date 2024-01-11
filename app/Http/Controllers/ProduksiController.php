@@ -4989,8 +4989,22 @@ class ProduksiController extends Controller
         foreach ($seri as $s) {
             $data[] = $s->noseri;
         }
+        $isLogo = true;
         $customPaperMedium = array(0, 0, 160.46, 170.69);
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperMedium, 'landscape');
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
+        return $pdf->stream();
+    }
+
+    function cetak_seri_finish_goods_medium_sementara(Request $request)
+    {
+        // $seri = $this->get_detail_noseri_rakit($request->id, $request->dd);
+        // foreach ($seri as $s) {
+        //     $data[] = $s->noseri;
+        // }
+        $data = explode(',', $request->data);
+        $isLogo = false;
+        $customPaperMedium = array(0, 0, 160.46, 170.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
         return $pdf->stream();
     }
 

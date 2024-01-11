@@ -15,12 +15,15 @@ export default {
                 }
             ],
             noseri: [],
+            isDisabled: false,
+            noseridiisi: 0
         }
     },
     methods: {
         closeModal() {
             $('.inputNoSeri').modal('hide');
             this.$nextTick(() => {
+                this.$emit('refresh');
                 this.$emit('closeModal');
             })
         },
@@ -31,19 +34,71 @@ export default {
                 })
             }
         },
-        focusFirstInput() {
-            setTimeout(() => {
-                this.$refs.noseri[0].focus();
-            }, 500);
-        },
         keyUpperCase(e) {
             this.dataGenerate.no_bppb = e.target.value.toUpperCase()
         },
+        autoTab(event, idx) {
+            // key upppercase
+            event.target.value = event.target.value.toUpperCase();
+            if (idx < this.noseri.length - 1) {
+                this.$refs.noseri[idx + 1].focus();
+            } else {
+                this.$refs.noseri[idx].blur();
+                this.simpan();
+            }
+        },
+        simpan() {
+            const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-' && this.dataGenerate.no_bppb !== '/'
+            if (!cekbppb) {
+                this.$swal('Peringatan!', 'Nomor BPPB tidak boleh kosong', 'warning');
+                return false;
+            }
+
+            let data = {
+                no_bppb: this.dataGenerate.no_bppb,
+                noseri: this.noseri
+            }
+
+            this.isDisabled = true;
+
+            this.$swal('Berhasil!', 'Data berhasil disimpan', 'success');
+        },
+        cetak() {
+            // remove noseri null
+            const noseri = this.noseri.filter((item) => {
+                return item.noseri !== null && item.noseri !== ''
+            })
+
+            // change to array like this ['1', '2', '3']
+
+            noseri.forEach((item, index) => {
+                noseri[index] = item.noseri
+            })
+
+            window.open(`/produksiReworks/cetak_seri_fg_medium_sementara?data=${noseri}`, '_blank');
+        }
     },
     mounted() {
         this.addNoSeri();
-        this.focusFirstInput();
+        this.$nextTick(() => {
+            setTimeout(() => {
+                this.$refs.noseri[0].focus();
+            }, 200);
+        })
     },
+    watch: {
+        noseri: {
+            handler() {
+                this.noseridiisi = 0;
+                this.noseri.forEach((item) => {
+                    if (item.noseri !== '') {
+                        this.noseridiisi += 1;
+                    }
+                })
+            },
+            deep: true
+        }
+    }
 }
 </script>
 <template>
@@ -67,7 +122,8 @@ export default {
                                     <div class="card">
                                         <div class="card-body">
                                             <input type="text" name="no_bppb" id="no_bppb" class="form-control"
-                                                v-model="dataGenerate.no_bppb" @keyup="keyUpperCase($event)">
+                                                :disabled="isDisabled" v-model="dataGenerate.no_bppb"
+                                                @keyup="keyUpperCase($event)">
                                         </div>
                                     </div>
                                 </div>
@@ -116,16 +172,38 @@ export default {
                             </div>
                         </div>
                         <div class="card-body">
-                            <DataTable :headers="headers" :items="noseri">
+                            <!-- <DataTable :headers="headers" :items="noseri">
                                 <template #item.noseri="{ item }">
                                     <input type="text" ref="noseri" class="form-control" v-model="item.noseri">
                                 </template>
-                            </DataTable>
+                            </DataTable> -->
+                            <div class="scrollable">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>No. Seri</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody v-for="(item, index) in noseri" :key="index">
+                                        <tr>
+                                            <td>
+                                                <input type="text" ref="noseri" class="form-control" v-model="item.noseri"
+                                                    :disabled="isDisabled"
+                                                    @keyup="$event.target.value = $event.target.value.toUpperCase()"
+                                                    @keyup.enter="autoTab($event, index)">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="card-footer">
+                            <p>No Seri Yang Diisi : {{ noseridiisi }} Unit</p>
+
                             <div class="d-flex bd-highlight">
                                 <div class="p-2 flex-grow-1 bd-highlight">
-                                    <button class="btn btn-primary">Simpan</button>
+                                    <button class="btn btn-primary" @click="simpan" v-if="!isDisabled">Simpan</button>
+                                    <button class="btn btn-success" @click="cetak" v-else>Cetak</button>
                                 </div>
                                 <div class="p-2 bd-highlight">
                                     <button class="btn btn-secondary" @click="closeModal">Keluar</button>
@@ -138,3 +216,9 @@ export default {
         </div>
     </div>
 </template>
+<style>
+.scrollable {
+    height: 300px;
+    overflow-y: auto;
+}
+</style>

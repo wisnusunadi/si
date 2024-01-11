@@ -39,7 +39,6 @@
 <body>
     @php
         $generator = new Picqer\Barcode\BarcodeGeneratorSVG();
-        $isLogo = true;
         $sizeHeight = $isLogo ? 29 : 33;
         $sizeWidth = $isLogo ? 0.97 : 0.91;
     @endphp

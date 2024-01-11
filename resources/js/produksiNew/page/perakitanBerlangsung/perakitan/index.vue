@@ -165,7 +165,7 @@ export default {
 <template>
     <div v-if="!$store.state.loading">
         <modalGenerate v-if="showModal" :dataGenerate="detailData" @closeModal="showModal = false" @refresh="refresh" />
-        <inputNoSeri v-if="showModalNoSeri" :dataGenerate="detailData" @closeModal="showModalNoSeri = false" />
+        <inputNoSeri v-if="showModalNoSeri" :dataGenerate="detailData" @closeModal="showModalNoSeri = false" @refresh="refresh" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
