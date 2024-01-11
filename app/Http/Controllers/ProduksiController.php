@@ -529,6 +529,84 @@ class ProduksiController extends Controller
         }
     }
 
+    function non_generate_fg(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+            if(count($obj->noseri) > 0){
+
+                $seriValues = array_map(function ($item) {
+                    return $item->noseri;
+                }, $obj->noseri);
+
+                $jadwalseri = JadwalRakitNoseri::whereIN('noseri', $seriValues);
+
+                if($jadwalseri->count() > 0 ){
+
+                    $available = array_values(array_diff($seriValues, $jadwalseri->pluck('noseri')->toArray()));
+                    $duplicates = array_values(array_diff($seriValues, $available));
+                    DB::rollBack();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Duplikasi No Seri',
+                        'duplicate' =>  $duplicates,
+                        'available' => $available,
+                    ],500);
+
+                }else{
+
+                    $jp = JadwalPerakitan::find($obj->jadwal_id);
+                    $jp->state = 12;
+                    $jp->save();
+
+
+                    foreach($seriValues as $s){
+                        JadwalRakitNoseri::create([
+                            'jadwal_id' => $obj->jadwal_id,
+                            'no_bppb' => $obj->no_bppb,
+                            'noseri' => $s,
+                            'status' => 11,
+                            'date_in' => Carbon::now()
+                        ]);
+                    }
+
+                    DB::commit();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Berhasil Ditambahkan',
+                        'duplicate' =>  array(),
+                        'available' => array(),
+                    ],200);
+                }
+
+            }else{
+                DB::rollBack();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Noseri Belum di isi',
+                    'seri' => array(),
+                    'duplicate' =>  array(),
+                    'available' => array(),
+                ],500);
+
+
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal Ditambahkan',
+                'seri' => array(),
+                'duplicate' =>  array(),
+                'available' => array(),
+            ],500);
+        }
+    }
+
+
     function generate_fg(Request $request)
     {
         // dd($request->all());
@@ -3528,6 +3606,7 @@ class ProduksiController extends Controller
                 'jadwal_perakitan.jumlah',
                 'jadwal_perakitan.evaluasi',
                 'p.nama as produks',
+                'p.generate_seri',
                 'gbj.id as gbj_id'
             )
                 ->selectRaw('count(jadwal_rakit_noseri.jadwal_id) as jml_rakit')
@@ -3561,6 +3640,7 @@ class ProduksiController extends Controller
                     'id' => $item->gbj_id,
                     'jadwal_id' => $item->id,
                     'produk_id' => $item->produk_id,
+                    'generate_seri' => $item->generate_seri,
                     'no_bppb' => $item->no_bppb ? $item->no_bppb : '-',
                     'tanggal_mulai' => $item->tanggal_mulai ? $item->tanggal_mulai : '-',
                     'tanggal_selesai' => $item->tanggal_selesai ? $item->tanggal_selesai : '-',
@@ -4978,8 +5058,9 @@ class ProduksiController extends Controller
         foreach ($seri as $s) {
             $data[] = $s->noseri;
         }
+        $isLogo = true;
         $customPaperMedium = array(0, 0, 160.46, 170.69);
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperMedium, 'landscape');
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
         return $pdf->stream();
     }
 
