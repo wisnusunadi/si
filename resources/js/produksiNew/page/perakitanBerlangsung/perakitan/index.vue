@@ -171,6 +171,7 @@ export default {
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
             </div>
         </div>
+        
         <DataTable :headers="headers" :items="filterData" :search="search">
             <template #header.tgl_mulai>
                 <span class="text-bold pr-2">Tanggal Mulai</span>
