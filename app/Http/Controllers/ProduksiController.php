@@ -5054,13 +5054,28 @@ class ProduksiController extends Controller
     function cetak_seri_finish_goods_medium_repeated(Request $request)
     {
         $getData =  json_decode($request->data, true);
-        $seri = JadwalRakitNoseri::select('noseri')->whereIn('id', $getData)->get();
+        // $seri = JadwalRakitNoseri::select('noseri')->whereIn('id', $getData)->get();
+        // foreach ($seri as $s) {
+        //     $data[] = $s->noseri;
+        // }
+
+        //SetLogo
+        $seri = JadwalRakitNoseri::select('noseri','produk.merk as merk')
+        ->leftJoin('jadwal_perakitan','jadwal_perakitan.id','=','jadwal_rakit_noseri.jadwal_id')
+        ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','jadwal_perakitan.produk_id')
+        ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
+        ->whereIn('jadwal_rakit_noseri.id', $getData)->get();
+
         foreach ($seri as $s) {
-            $data[] = $s->noseri;
+            $data[] = (object)[
+                'noseri' => $s->noseri,
+                'logo' => $s->merk == 'ELITECH' ? true : false
+            ];
         }
-        $isLogo = true;
+
+
         $customPaperMedium = array(0, 0, 160.46, 170.69);
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperMedium, 'landscape');
         return $pdf->stream();
     }
 

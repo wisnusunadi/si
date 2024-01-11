@@ -11,7 +11,7 @@
             font-size: 13pt;
         }
 
-        /* medium */ 
+        /* medium */
         /* ukuran 100 x 50 */
         @page {
             margin-top: 0.001cm;
@@ -37,14 +37,36 @@
 </head>
 
 <body>
-    @php
+@foreach ($data as $item)
+@php
+$generator = new Picqer\Barcode\BarcodeGeneratorSVG();
+$sizeHeight =$item->logo ? 29 : 33;
+$sizeWidth = $item->logo ? 0.97 : 0.91;
+@endphp
+
+<div class="{{ $loop->last ? '' : 'page-break' }}">
+    <div class="{{  $item->logo ? 'image-container-logo' : 'image-container' }}">
+        @if($item->logo)
+        <span class="font-size-elitech">Elitech</span>
+        @else
+        <div class="logo"></div>
+        @endif
+        <img
+            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item->noseri, $generator::TYPE_CODE_128_B, $sizeWidth, $sizeHeight)) }}" />
+        <div class="text-center">{{ $item->noseri }}</div>
+    </div>
+</div>
+@endforeach
+
+
+{{-- LAMA --}}
+{{-- @php
         $generator = new Picqer\Barcode\BarcodeGeneratorSVG();
         $sizeHeight = $isLogo ? 29 : 33;
         $sizeWidth = $isLogo ? 0.97 : 0.91;
-    @endphp
-
+    @endphp --}}
     {{-- ulangi 5 kali --}}
-    @foreach ($data as $item)
+    {{-- @foreach ($data as $item)
         <div class="{{ $loop->last ? '' : 'page-break' }}">
             <div class="{{ $isLogo ? 'image-container-logo' : 'image-container' }}">
                 @if($isLogo)
@@ -57,7 +79,7 @@
                 <div class="text-center">{{ $item }}</div>
             </div>
         </div>
-    @endforeach
+    @endforeach --}}
 </body>
 
 </html>
