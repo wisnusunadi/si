@@ -1448,25 +1448,25 @@ class DcController extends Controller
                                 Edit
                             </button>
                         </a>
-                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '" target="_blank">
+                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '&produk=1&penjualan=ekatalog&jenis=kosong&stamp=0" target="_blank">
                             <button class="dropdown-item" type="button">
                                 <i class="fas fa-file"></i>
                                 Coo
                             </button>
                         </a>
-                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '" target="_blank">
+                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '&produk=1&penjualan=ekatalog&jenis=back&stamp=0" target="_blank">
                                 <button class="dropdown-item" type="button">
                                     <i class="fas fa-file"></i>
                                     Coo + Background
                                 </button>
                             </a>
-                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '" target="_blank">
+                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '&produk=1&penjualan=ekatalog&jenis=ttd&stamp=0" target="_blank">
                             <button class="dropdown-item" type="button">
                                 <i class="fas fa-file"></i>
                                 Coo + Background + Ttd
                             </button>
                         </a>
-                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '" target="_blank">
+                            <a href="/dc/coo/rework/pdf?id=' . $data->id . 'produk=1&penjualan=ekatalog&jenis=ttd&stamp=0" target="_blank">
                             <button class="dropdown-item" type="button">
                                 <i class="fas fa-file"></i>
                                 Coo + Background + Ttd + Stamp
