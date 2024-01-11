@@ -16,7 +16,9 @@ export default {
             ],
             noseri: [],
             isDisabled: false,
-            noseridiisi: 0
+            noseridiisi: 0,
+            isError: false,
+            errorValue: ''
         }
     },
     methods: {
@@ -40,6 +42,37 @@ export default {
         autoTab(event, idx) {
             // key upppercase
             event.target.value = event.target.value.toUpperCase();
+            if (this.noseri[idx].error) {
+                delete this.noseri[idx].error;
+            }
+
+            if (!this.noseri.find((data) => data?.error)) {
+                this.isError = false;
+            }
+
+            // cek noseri duplikasi
+            const noseri = this.noseri.filter((item) => {
+                return item.noseri !== null && item.noseri !== ''
+            })
+
+            const noseriUnique = noseri.filter((data, index) => {
+                return noseri.findIndex((item) => {
+                    return item.noseri === data.noseri
+                }) === index
+            })
+
+            if (noseriUnique.length !== noseri.length) {
+                this.isError = true;
+                this.errorValue = 'Nomor seri tidak boleh sama';
+                this.noseri[idx].error = true;
+                this.$swal('Peringatan!', 'Nomor seri tidak boleh sama', 'warning');
+                return
+            } else {
+                this.isError = false;
+                this.errorValue = '';
+                delete this.noseri[idx].error;
+            }
+
             if (idx < this.noseri.length - 1) {
                 this.$refs.noseri[idx + 1].focus();
             } else {
@@ -52,6 +85,29 @@ export default {
             if (!cekbppb) {
                 this.$swal('Peringatan!', 'Nomor BPPB tidak boleh kosong', 'warning');
                 return false;
+            }
+
+            const noseri = this.noseri.filter((item) => {
+                return item.noseri !== null && item.noseri !== ''
+            })
+
+            const noseriUnique = noseri.filter((data, index) => {
+                return noseri.findIndex((item) => {
+                    return item.noseri === data.noseri
+                }) === index
+            })
+
+            if (noseriUnique.length !== noseri.length) {
+                this.isError = true;
+                this.errorValue = 'Nomor seri tidak boleh sama';
+                this.noseri = this.noseri.map((item) => {
+                    if (this.noseri.findIndex((data) => data.noseri === item.noseri) !== this.noseri.lastIndexOf(item)) {
+                        item.error = true;
+                    }
+                    return item;
+                })
+                this.$swal('Peringatan!', 'Nomor seri tidak boleh sama', 'warning');
+                return
             }
 
             let data = {
@@ -102,8 +158,8 @@ export default {
 }
 </script>
 <template>
-    <div class="modal fade inputNoSeri" data-backdrop="static" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-        aria-hidden="true">
+    <div class="modal fade inputNoSeri" data-backdrop="static" id="modelId" tabindex="-1" role="dialog"
+        aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -188,9 +244,12 @@ export default {
                                         <tr>
                                             <td>
                                                 <input type="text" ref="noseri" class="form-control" v-model="item.noseri"
-                                                    :disabled="isDisabled"
+                                                    :disabled="isDisabled" :class="item.error ? 'is-invalid' : ''"
                                                     @keyup="$event.target.value = $event.target.value.toUpperCase()"
                                                     @keyup.enter="autoTab($event, index)">
+                                                <div class="invalid-feedback">
+                                                    Nomor Seri {{ errorValue }}
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>
