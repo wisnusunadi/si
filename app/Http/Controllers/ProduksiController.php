@@ -5002,7 +5002,7 @@ class ProduksiController extends Controller
         //     $data[] = $s->noseri;
         // }
         $data = explode(',', $request->data);
-        $isLogo = false;
+        $isLogo = true;
         $customPaperMedium = array(0, 0, 160.46, 170.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
         return $pdf->stream();

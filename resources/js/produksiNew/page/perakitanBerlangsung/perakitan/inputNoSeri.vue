@@ -102,7 +102,7 @@ export default {
 }
 </script>
 <template>
-    <div class="modal fade inputNoSeri" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+    <div class="modal fade inputNoSeri" data-backdrop="static" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
         aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
             <div class="modal-content">
