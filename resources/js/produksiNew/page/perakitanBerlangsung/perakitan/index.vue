@@ -1,12 +1,14 @@
 <script>
 import modalGenerate from './modalGenerate.vue';
 import modalPilihan from '../riwayat/modalPilihan.vue';
+import inputNoSeri from './inputNoSeri.vue';
 import DataTable from '../../../components/DataTable.vue';
 export default {
     props: ['dataTable'],
     components: {
         modalGenerate,
         modalPilihan,
+        inputNoSeri,
         DataTable,
     },
     data() {
@@ -53,6 +55,7 @@ export default {
             tanggalAwalSelesai: '',
             tanggalAkhirSelesai: '',
             filterProduk: [],
+            showModalNoSeri: false,
         }
     },
     methods: {
@@ -72,6 +75,13 @@ export default {
             this.showModal = true
             this.$nextTick(() => {
                 $('.modalGenerate').modal('show')
+            })
+        },
+        detailInputNoSeri(data) {
+            this.detailData = JSON.parse(JSON.stringify(data))
+            this.showModalNoSeri = true
+            this.$nextTick(() => {
+                $('.inputNoSeri').modal('show')
             })
         },
         refresh() {
@@ -154,8 +164,8 @@ export default {
 </script>
 <template>
     <div v-if="!$store.state.loading">
-        <modalGenerate v-if="showModal" :dataGenerate="detailData" @closeModal="showModal = false" @refresh="refresh">
-        </modalGenerate>
+        <modalGenerate v-if="showModal" :dataGenerate="detailData" @closeModal="showModal = false" @refresh="refresh" />
+        <inputNoSeri v-if="showModalNoSeri" :dataGenerate="detailData" @closeModal="showModalNoSeri = false" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
@@ -252,9 +262,15 @@ export default {
             </template>
 
             <template #item.aksi="{ item }">
-                <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
+                <!-- <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
                     <i class="fa fa-barcode"></i>
                     Generate Nomor Seri
+                </button> -->
+
+                <button class="btn btn-sm btn-outline-primary" @click="detailInputNoSeri(item)">
+                    <!-- icon tambah nomor seri -->
+                    <i class="fa fa-barcode"></i>
+                    Tambah Nomor Seri
                 </button>
             </template>
         </DataTable>
