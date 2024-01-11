@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import DataTable from '../../../components/DataTable.vue';
 export default {
     components: {
@@ -18,7 +19,9 @@ export default {
             isDisabled: false,
             noseridiisi: 0,
             isError: false,
-            errorValue: ''
+            errorValue: '',
+            loading: false,
+            hasilGenerate: []
         }
     },
     methods: {
@@ -80,11 +83,19 @@ export default {
                 this.simpan();
             }
         },
-        simpan() {
+        async simpan() {
             const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-' && this.dataGenerate.no_bppb !== '/'
+            const ceknoserinull = this.noseri.filter((item) => {
+                return item.noseri === null || item.noseri === ''
+            })
             if (!cekbppb) {
                 this.$swal('Peringatan!', 'Nomor BPPB tidak boleh kosong', 'warning');
-                return false;
+                return;
+            }
+
+            if (ceknoserinull.length === this.noseri.length) {
+                this.$swal('Peringatan!', 'Nomor seri tidak boleh kosong', 'warning');
+                return;
             }
 
             const noseri = this.noseri.filter((item) => {
@@ -113,6 +124,17 @@ export default {
             let data = {
                 no_bppb: this.dataGenerate.no_bppb,
                 noseri: this.noseri
+            }
+
+            try {
+                this.isDisabled = true;
+                this.loading = true;
+                const { data } = await axios.post('/api/prd/fg/non_gen', {
+                    noseri: this.noseri,
+                })
+                console.log(data);
+            } catch (error) {
+                const { message, duplicate, available } = error.response.data
             }
 
             this.isDisabled = true;
