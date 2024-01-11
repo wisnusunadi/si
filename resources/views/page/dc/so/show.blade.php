@@ -383,29 +383,28 @@
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
             columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'no_po',
-                }, {
-                    data: 'no_paket',
-                }, {
-                    data: 'batas_paket',
-                }, {
-                    data: 'nama_customer',
-                }, {
-                    data: 'instansi',
-                }, {
-                    data: 'status',
-                }, {
-                    data: 'ket',
-                    class: 'minimizechar'
-                }, {
-                    data: 'button',
-                },
-            ]
+                data: 'DT_RowIndex',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'no_po',
+            }, {
+                data: 'no_paket',
+            }, {
+                data: 'batas_paket',
+            }, {
+                data: 'nama_customer',
+            }, {
+                data: 'instansi',
+            }, {
+                data: 'status',
+            }, {
+                data: 'ket',
+                class: 'minimizechar'
+            }, {
+                data: 'button',
+            }, ]
         })
 
         function selesaitables() {
@@ -476,6 +475,7 @@
             var value = $(this).data('value');
             var jenis = $(this).data('jenis');
             var stamp = $(this).data('stamp');
+            console.log(id, value, jenis, stamp)
 
             // implement to button cetak
             $('.cetakNoSeriCOO').data('id', id)
@@ -485,33 +485,32 @@
 
             $('.tableNoSeriCetakCOO').DataTable()
 
-            var data = []
-
             // create foreach for data 1000
-            for (let i = 0; i < 1000; i++) {
-                data.push({
-                    id: i,
-                    noseri: `${value}${stamp}${i}`
-                })
-            }
+            $.ajax({
+                type: "post",
+                url: `/api/dc/so/detail/seri_po/${id}`,
+                success: function(data) {
+                    $('.tableNoSeriCetakCOO').DataTable({
+                        destroy: true,
+                        data: data,
+                        autoWidth: false,
+                        columns: [{
+                                data: 'id',
+                                render: function(data, type, row) {
+                                    return `<input type="checkbox" name="" id="">`
+                                }
+                            },
+                            {
+                                data: 'noseri'
+                            }
+                        ]
+                    })
+                    $('#modalCetakCOO').modal('show');
+                }
+            });
 
             // create datatable with data
-            $('.tableNoSeriCetakCOO').DataTable({
-                destroy: true,
-                data: data,
-                autoWidth: false,
-                columns: [{
-                        data: 'id',
-                        render: function(data, type, row) {
-                            return `<input type="checkbox" name="" id="">`
-                        }
-                    },
-                    {
-                        data: 'noseri'
-                    }
-                ]
-            })
-            $('#modalCetakCOO').modal('show');
+
         })
 
         $('#checkall').click(function() {
@@ -544,7 +543,7 @@
             var stamp = $(this).data('stamp');
 
             console.log(id, value, jenis, stamp)
-
+            window.open(`/dc/coo/rework/pdf?id=${data}&produk=${id}&penjualan=${value}&jenis=${jenis}&stamp=${stamp}`)
         })
     </script>
 @stop

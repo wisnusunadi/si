@@ -37,96 +37,94 @@ class DcController extends Controller
 
     public function pdf_coo_semua_rework(Request $request)
     {
-        // $rw_produk = $request->produk;
-        // $jenis = $request->jenis;
-        // $stamp = $request->stamp;
-        // $penjualan = $request->penjualan;
+        $rw_produk = $request->produk;
+        $jenis = $request->jenis;
+        $stamp = $request->stamp;
+        $penjualan = $request->penjualan;
 
-        $rw_produk = 1;
-        $penjualan = 'ekatalog';
-        $jenis = 'kosong';
-        $stamp = 1;
+        // $rw_produk = 1;
+        // $penjualan = 'ekatalog';
+        // $jenis = 'kosong';
+        // $stamp = 1;
 
 
         $series = explode(',', $request->id);
-        if($rw_produk > 0){
-        $pesanan = Pesanan::select('pesanan.id')
-            ->leftJoin('detail_pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
-            ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-            ->leftJoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
-            ->whereIN('noseri_logistik.id', $series)
-            ->pluck('id')->toArray();
+        if ($rw_produk > 0) {
+            $pesanan = Pesanan::select('pesanan.id')
+                ->leftJoin('detail_pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                ->leftJoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
+                ->whereIN('noseri_logistik.id', $series)
+                ->pluck('id')->toArray();
 
 
-        $ekat = Ekatalog::where('pesanan_id', $pesanan[0]);
-        $spa = Spa::where('pesanan_id', $pesanan[0]);
+            $ekat = Ekatalog::where('pesanan_id', $pesanan[0]);
+            $spa = Spa::where('pesanan_id', $pesanan[0]);
 
-        if ($ekat->count() > 0) {
-            $no_paket = $ekat->first()->no_paket;
-            $deskripsi = $ekat->first()->deskripsi;
+            if ($ekat->count() > 0) {
+                $no_paket = $ekat->first()->no_paket;
+                $deskripsi = $ekat->first()->deskripsi;
+            } else {
+                $no_paket = '';
+                $deskripsi = '';
+            }
+
+            $data = PackRw::select('noseri_coo.nama', 'noseri_coo.ket', 'noseri_coo.tgl_kirim as tgls', 'noseri_coo.tahun', 'noseri_coo.no_coo', 'pack_rw_head.prov', 'pack_rw_head.kota', 'pack_rw.noseri', 'seri_detail_rw.packer', 'seri_detail_rw.created_at', 'seri_detail_rw.isi')
+                ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'pack_rw.noseri_id')
+                ->leftjoin('noseri_barang_jadi', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                ->leftJoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
+                ->leftJoin('noseri_coo', 'noseri_coo.noseri_logistik_id', '=', 'noseri_logistik.id')
+                ->leftjoin('pack_rw_head', 'pack_rw_head.id', '=', 'pack_rw.pack_rw_head_id')
+                ->whereIN('noseri_logistik.id', $series)->get();
+
+            foreach ($data as $d) {
+                $o = json_decode($d->isi);
+                $seri[] = array(
+                    'no_coo' => 'KIT10-' . str_pad($d->no_coo, 5, '0', STR_PAD_LEFT),
+                    'kepada_prov' => 'Provinsi ' . $d->prov,
+                    'kepada_kab' => $d->kota,
+                    'seri' => $d->noseri,
+                    'packer' => $d->packer,
+                    'tahun' => $d->tahun,
+                    'tgl' => $d->tgls != NULL ? $this->tgl_footer($d->tgls) : '-',
+                    'item' => $o,
+                    'no_paket' => $no_paket,
+                    'deskripsi' => $deskripsi,
+                    'nama' => $d->nama,
+                    'ket' => $d->ket,
+                    'romawi' => $d->tgls != NULL ? $this->bulan_romawi($d->tgls) : '-'
+                );
+            }
+
+            $collection = collect($seri);
+
+            $collection = $collection->map(function ($item) {
+                $item['item'] = collect($item['item'])->sortBy('produk')->values()->all();
+                return $item;
+            });
+
+            $data_urut_produk = $collection->toArray();
+
+            //  return response()->json($data_urut_produk);
+
+            $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk, 'jenis' => $jenis, 'stamp' => $stamp])->setPaper('A4');
+            //return view('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk]);
+
         } else {
-            $no_paket = '';
-            $deskripsi = '';
+            $data = NoseriCoo::leftJoin('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
+                ->whereIN('noseri_logistik.id', $series)
+                ->get();
+
+            if ($penjualan == 'ekatalog') {
+                $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat', ['data' => $data, 'count' => count($series), 'jenis' => $jenis, 'stamp' => $stamp])->setPaper('A4');
+            } else {
+                $pdf = PDF::loadView('page.dc.coo.pdf_semua_spa', ['data' => $data, 'count' => count($series), 'jenis' => $jenis, 'stamp' => $stamp])->setPaper('A4');
+            }
         }
-
-        $data = PackRw::select('noseri_coo.nama','noseri_coo.ket','noseri_coo.tgl_kirim as tgls', 'noseri_coo.tahun', 'noseri_coo.no_coo', 'pack_rw_head.prov', 'pack_rw_head.kota', 'pack_rw.noseri', 'seri_detail_rw.packer', 'seri_detail_rw.created_at', 'seri_detail_rw.isi')
-            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'pack_rw.noseri_id')
-            ->leftjoin('noseri_barang_jadi', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
-            ->leftJoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
-            ->leftJoin('noseri_coo', 'noseri_coo.noseri_logistik_id', '=', 'noseri_logistik.id')
-            ->leftjoin('pack_rw_head', 'pack_rw_head.id', '=', 'pack_rw.pack_rw_head_id')
-            ->whereIN('noseri_logistik.id', $series)->get();
-
-        foreach ($data as $d) {
-            $o = json_decode($d->isi);
-            $seri[] = array(
-                'no_coo' => 'KIT10-' . str_pad($d->no_coo, 5, '0', STR_PAD_LEFT),
-                'kepada_prov' => 'Provinsi ' . $d->prov,
-                'kepada_kab' => $d->kota,
-                'seri' => $d->noseri,
-                'packer' => $d->packer,
-                'tahun' => $d->tahun,
-                'tgl' => $d->tgls != NULL ? $this->tgl_footer($d->tgls) : '-',
-                'item' => $o,
-                'no_paket' => $no_paket,
-                'deskripsi' => $deskripsi,
-                'nama' => $d->nama,
-                'ket' => $d->ket,
-                'romawi' => $d->tgls != NULL ? $this->bulan_romawi($d->tgls) : '-'
-            );
-        }
-
-        $collection = collect($seri);
-
-        $collection = $collection->map(function ($item) {
-            $item['item'] = collect($item['item'])->sortBy('produk')->values()->all();
-            return $item;
-        });
-
-        $data_urut_produk = $collection->toArray();
-
-        //  return response()->json($data_urut_produk);
-
-        $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk,'jenis' => $jenis, 'stamp' => $stamp])->setPaper('A4');
-        //return view('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk]);
-
-    }else{
-        $data = NoseriCoo::leftJoin('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
-        ->whereIN('noseri_logistik.id', $series)
-        ->get();
-
-        if($penjualan == 'ekatalog'){
-            $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat', ['data' => $data, 'count' => count($series), 'jenis' => $jenis, 'stamp' => $stamp])->setPaper('A4');
-        }else{
-            $pdf = PDF::loadView('page.dc.coo.pdf_semua_spa', ['data' => $data, 'count' => count($series), 'jenis' => $jenis, 'stamp' => $stamp])->setPaper('A4');
-        }
-
-
-    }
-    return $pdf->stream('');
+        return $pdf->stream('');
     }
 
     public function pdf_semua_coo($id, $value, $jenis, $stamp)
@@ -276,27 +274,27 @@ class DcController extends Controller
                 }
 
                 if ($data->coo_jenis == 'antro') {
-                return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id. '" target="_blank">
+                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '&produk=' . $x . '&penjualan=ekatalog&jenis=kosong&stamp=0" target="_blank">
                       <button class="dropdown-item" type="button">
                           <i class="fas fa-file"></i>
                           Coo
                       </button>
                   </a>
-                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '" target="_blank">
+                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '&produk=' . $x . '&penjualan=ekatalog&jenis=back&stamp=0" target="_blank">
                           <button class="dropdown-item" type="button">
                               <i class="fas fa-file"></i>
                               Coo + Background
                           </button>
                       </a>
-                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '" target="_blank">
+                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '&produk=' . $x . '&penjualan=ekatalog&jenis=ttd&stamp=0" target="_blank">
                       <button class="dropdown-item" type="button">
                           <i class="fas fa-file"></i>
                           Coo + Background + Ttd
                       </button>
                   </a>
-                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '" target="_blank">
+                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '&produk=' . $x . '&penjualan=ekatalog&jenis=ttd&stamp=1" target="_blank">
                       <button class="dropdown-item" type="button">
                           <i class="fas fa-file"></i>
                           Coo + Background + Ttd + Stamp
@@ -753,7 +751,7 @@ class DcController extends Controller
                     }
                 }
 
-                if ($data->ccoo > 100 && $data->cek_rw > 0) {
+                if ($data->cek_rw > 0) {
                     if ($name[1] == 'EKAT') {
 
                         return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -944,6 +942,15 @@ class DcController extends Controller
                     ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
                     ->where('produk.coo', '=', '1');
+            }, 'cek_rw' => function ($q) {
+                $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                    ->from('seri_detail_rw')
+                    ->leftjoin('noseri_barang_jadi', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                    ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                    ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
             }])->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->get();
 
         return datatables()->of($data)
@@ -1026,7 +1033,7 @@ class DcController extends Controller
                     }
                 }
 
-                if ($data->ccoo > 100) {
+                if ($data->ccoo > 100 && $data->cek_rw > 0) {
                     if ($name[1] == 'EKAT') {
 
                         return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -1333,27 +1340,26 @@ class DcController extends Controller
     }
     public function get_data_detail_seri_po($id)
     {
-        $data = NoseriCoo::select('noseri_logistik.id','noseri_barang_jadi.noseri')
-        ->leftJoin('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
-        ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-        ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-        ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-        ->leftJoin('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
-        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-        ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
-        ->where('pesanan.id', $id)
-        ->get();
+        $data = NoseriCoo::select('noseri_logistik.id', 'noseri_barang_jadi.noseri')
+            ->leftJoin('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
+            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+            ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+            ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+            ->leftJoin('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+            ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+            ->where('pesanan.id', $id)
+            ->get();
 
 
         return response()->json($data);
-
     }
     public function get_data_detail_seri_so($id, $jenis)
     {
         $data = "";
         if ($jenis == "belum") {
             $data = NoseriDetailLogistik::select('pesanan.so', 'noseri', 'detail_logistik_id', 'noseri_logistik.id', 'noseri_coo.tgl_kirim', 'noseri_coo.catatan')
-            ->selectRaw('"" AS jenis')
+                ->selectRaw('"" AS jenis')
                 ->addSelect([
                     'coo' => function ($q) {
                         $q->selectRaw('coalesce(count(noseri_coo.id),0)')
@@ -1371,8 +1377,8 @@ class DcController extends Controller
                 ->where('detail_logistik_id', $id)
                 ->doesntHave('NoseriCoo')->get();
         } else {
-            $data = NoseriDetailLogistik::select('pesanan.so', 'noseri', 'detail_logistik_id', 'noseri_logistik.id', 'noseri_coo.tgl_kirim', 'noseri_coo.catatan','noseri_coo.jenis')
-            ->addSelect([
+            $data = NoseriDetailLogistik::select('pesanan.so', 'noseri', 'detail_logistik_id', 'noseri_logistik.id', 'noseri_coo.tgl_kirim', 'noseri_coo.catatan', 'noseri_coo.jenis')
+                ->addSelect([
                     'coo' => function ($q) {
                         $q->selectRaw('coalesce(count(noseri_coo.id),0)')
                             ->from('noseri_coo')
@@ -1433,7 +1439,7 @@ class DcController extends Controller
                 }
 
                 if ($data->coo != 0) {
-                    if($data->jenis == 'antro'){
+                    if ($data->jenis == 'antro') {
                         return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a data-target="#tglkirim_modal" class="tglkirim_modal"  data-id="' . $data->id . '">
@@ -1442,32 +1448,32 @@ class DcController extends Controller
                                 Edit
                             </button>
                         </a>
-                            <a href="/dc/coo/rework/pdf?id='.$data->id.'" target="_blank">
+                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '" target="_blank">
                             <button class="dropdown-item" type="button">
                                 <i class="fas fa-file"></i>
                                 Coo
                             </button>
                         </a>
-                            <a href="/dc/coo/rework/pdf?id='.$data->id.'" target="_blank">
+                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '" target="_blank">
                                 <button class="dropdown-item" type="button">
                                     <i class="fas fa-file"></i>
                                     Coo + Background
                                 </button>
                             </a>
-                            <a href="/dc/coo/rework/pdf?id='.$data->id.'" target="_blank">
+                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '" target="_blank">
                             <button class="dropdown-item" type="button">
                                 <i class="fas fa-file"></i>
                                 Coo + Background + Ttd
                             </button>
                         </a>
-                            <a href="/dc/coo/rework/pdf?id='.$data->id.'" target="_blank">
+                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '" target="_blank">
                             <button class="dropdown-item" type="button">
                                 <i class="fas fa-file"></i>
                                 Coo + Background + Ttd + Stamp
                             </button>
                         </a>
                         </div>';
-                    }else{
+                    } else {
                         return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a data-target="#tglkirim_modal" class="tglkirim_modal"  data-id="' . $data->id . '">
@@ -1502,7 +1508,6 @@ class DcController extends Controller
                 </a>
                 </div>';
                     }
-
                 }
             })
             ->rawColumns(['checkbox', 'laporan'])

@@ -1371,10 +1371,8 @@
                 var jenis = $(this).data('jenis');
                 var stamp = $(this).data('stamp');
 
-                console.log(id, value, jenis, stamp)
-
                 // open link in new tab
-                window.open(`/dc/coo/rework/pdf?id=${data}`)
+                window.open(`/dc/coo/rework/pdf?id=${data}&produk=${id}&penjualan=${value}&jenis=${jenis}&stamp=${stamp}`)
 
             })
 
