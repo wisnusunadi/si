@@ -341,6 +341,7 @@ Route::prefix('/prd')->group(function () {
             Route::get('/detail/{id}', [ProduksiController::class, 'detail_non_jadwal']);
         });
         Route::post('/gen', [ProduksiController::class, 'generate_fg']);
+        Route::post('/non_gen', [ProduksiController::class, 'non_generate_fg']);
         Route::get('/riwayat', [ProduksiController::class, 'riwayat_fg']);
         Route::post('/gen/confirm', [ProduksiController::class, 'generate_fg_confirm']);
         Route::post('/cetak/', [ProduksiController::class, 'get_noseri_fg_cetak']);
