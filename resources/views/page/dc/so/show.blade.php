@@ -370,6 +370,7 @@
             destroy: true,
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 'url': '/api/dc/so/data/semua',
                 'type': 'POST',
@@ -416,6 +417,7 @@
                 destroy: true,
                 processing: true,
                 serverSide: true,
+                autoWidth: false,
                 ajax: {
                     'url': '/api/dc/so/selesai/semua',
                     'type': 'POST',
@@ -494,11 +496,13 @@
                         destroy: true,
                         data: data,
                         autoWidth: false,
+                        pageLength: 100,
+                        lengthChange: false,
                         columns: [{
                                 data: 'id',
                                 sortable: false,
                                 render: function(data, type, row) {
-                                    return `<input type="checkbox" name="" id="">`
+                                    return `<input type="checkbox" class="checkboxChild" name="" id="">`
                                 }
                             },
                             {
@@ -521,7 +525,31 @@
             } else {
                 $('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]').prop('checked', false)
             }
-            $('.tableNoSeriCetakCOO').DataTable().draw(false)
+        })
+
+        var table = $('.tableNoSeriCetakCOO').DataTable();
+
+        function checkNoSeriAll() {
+            if ($('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]').length == $(
+                    '.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]:checked').length) {
+                $('#checkall').prop('checked', true)
+            } else {
+                $('#checkall').prop('checked', false)
+            }
+
+            console.log($('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]:checked').length)
+        }
+
+        table.on('page.dt', function() {
+            // Uncheck the "check all" checkbox
+            setTimeout(() => {
+                checkNoSeriAll()
+            }, 200);
+        });
+
+        $(document).on('click', '.checkboxChild', function() {
+            // check if all checkbox is checked
+            checkNoSeriAll()
         })
 
         $(document).on('click', '.cetakNoSeriCOO', function(e) {
@@ -539,7 +567,16 @@
                 }
             })
 
-            console.log(data)
+            if (data.length > 100) {
+                swal.fire(
+                    'Gagal',
+                    'Maksimal cetak 100 nomor seri',
+                    'error'
+                )
+                return
+            }
+
+
 
             var id = $(this).data('id');
             var value = $(this).data('value');
@@ -547,7 +584,8 @@
             var stamp = $(this).data('stamp');
 
             console.log(id, value, jenis, stamp)
-            window.open(`/dc/coo/rework/pdf?id=${data}&produk=${id}&penjualan=${value}&jenis=${jenis}&stamp=${stamp}`)
+            window.open(
+                `/dc/coo/rework/pdf?id=${data}&produk=${id}&penjualan=${value}&jenis=${jenis}&stamp=${stamp}`)
         })
     </script>
 @stop

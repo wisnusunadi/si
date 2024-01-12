@@ -212,47 +212,47 @@
                                 </thead>
                                 <tbody>
                                     <!-- <tr>
-                                                                                                        <td class="nowrap-text">1</td>
-                                                                                                        <td class="nowrap-text">19-10-2021</td>
-                                                                                                        <td class="nowrap-text minimizechar">B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
-                                                                                                        <td class="nowrap-text">21102900256</td>
-                                                                                                        <td class="nowrap-text">X</td>
-                                                                                                        <td class="nowrap-text">5</td>
-                                                                                                        <td class="nowrap-text"><span class="badge green-text">Tersedia</span></td>
-                                                                                                        <td class="nowrap-text"></a>
-                                                                                                            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                                                                <a class="noserishow dropdown-item" type="button">
-                                                                                                                    <i class="fas fa-eye"></i>
-                                                                                                                    Detail
-                                                                                                                </a>
+                                                                                                                            <td class="nowrap-text">1</td>
+                                                                                                                            <td class="nowrap-text">19-10-2021</td>
+                                                                                                                            <td class="nowrap-text minimizechar">B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
+                                                                                                                            <td class="nowrap-text">21102900256</td>
+                                                                                                                            <td class="nowrap-text">X</td>
+                                                                                                                            <td class="nowrap-text">5</td>
+                                                                                                                            <td class="nowrap-text"><span class="badge green-text">Tersedia</span></td>
+                                                                                                                            <td class="nowrap-text"></a>
+                                                                                                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                                                                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                                                                                    <a class="noserishow dropdown-item" type="button">
+                                                                                                                                        <i class="fas fa-eye"></i>
+                                                                                                                                        Detail
+                                                                                                                                    </a>
 
-                                                                                                                    <button class="dropdown-item" type="button">
-                                                                                                                        <i class="fas fa-file"></i>
-                                                                                                                        Laporan PDF
-                                                                                                                    </button>
+                                                                                                                                        <button class="dropdown-item" type="button">
+                                                                                                                                            <i class="fas fa-file"></i>
+                                                                                                                                            Laporan PDF
+                                                                                                                                        </button>
 
-                                                                                                            </div>
-                                                                                                        </td>
-                                                                                                    </tr>
-                                                                                                    <tr>
-                                                                                                        <td>2</td>
-                                                                                                        <td>21-10-2021</td>
-                                                                                                        <td class="minimizechar">PULSE OXIMETER/OXYMETER FOX-2</td>
-                                                                                                        <td>20502210102</td>
-                                                                                                        <td></td>
-                                                                                                        <td>2</td>
-                                                                                                        <td><span class="badge red-text">Belum Tersedia</span></td>
-                                                                                                        <td class="nowrap-text"></a>
-                                                                                                            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                                                                <a class="noserishow dropdown-item" type="button">
-                                                                                                                    <i class="fas fa-eye"></i>
-                                                                                                                    Detail
-                                                                                                                </a>
-                                                                                                            </div>
-                                                                                                        </td>
-                                                                                                    </tr> -->
+                                                                                                                                </div>
+                                                                                                                            </td>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                            <td>2</td>
+                                                                                                                            <td>21-10-2021</td>
+                                                                                                                            <td class="minimizechar">PULSE OXIMETER/OXYMETER FOX-2</td>
+                                                                                                                            <td>20502210102</td>
+                                                                                                                            <td></td>
+                                                                                                                            <td>2</td>
+                                                                                                                            <td><span class="badge red-text">Belum Tersedia</span></td>
+                                                                                                                            <td class="nowrap-text"></a>
+                                                                                                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                                                                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                                                                                    <a class="noserishow dropdown-item" type="button">
+                                                                                                                                        <i class="fas fa-eye"></i>
+                                                                                                                                        Detail
+                                                                                                                                    </a>
+                                                                                                                                </div>
+                                                                                                                            </td>
+                                                                                                                        </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -1328,11 +1328,13 @@
                         }
                     },
                     autoWidth: false,
+                    pageLength: 100,
+                    lengthChange: false,
                     columns: [{
                             data: 'id',
                             sortable: false,
                             render: function(data, type, row) {
-                                return `<input type="checkbox" name="" id="">`
+                                return `<input type="checkbox" class="checkboxChild" name="" id="">`
                             }
                         },
                         {
@@ -1349,8 +1351,33 @@
                 } else {
                     $('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]').prop('checked', false)
                 }
-                $('.tableNoSeriCetakCOO').DataTable().draw(false)
             })
+
+            function checkNoSeriAll() {
+                if ($('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]').length == $(
+                        '.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]:checked').length) {
+                    $('#checkall').prop('checked', true)
+                } else {
+                    $('#checkall').prop('checked', false)
+                }
+
+                console.log($('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]:checked').length)
+            }
+
+            var table = $('.tableNoSeriCetakCOO').DataTable();
+            table.on('page.dt', function() {
+                // Uncheck the "check all" checkbox
+                setTimeout(() => {
+                    checkNoSeriAll()
+                }, 200);
+            });
+
+            $(document).on('click', '.checkboxChild', function() {
+                // check if all checkbox is checked
+                checkNoSeriAll()
+            })
+
+
 
             $(document).on('click', '.cetakNoSeriCOO', function(e) {
                 e.preventDefault()
@@ -1367,6 +1394,15 @@
                     }
                 })
 
+                if (data.length > 100) {
+                    swal.fire(
+                        'Gagal',
+                        'Maksimal cetak 100 nomor seri',
+                        'error'
+                    )
+                    return
+                }
+
                 console.log(data)
 
                 var id = $(this).data('id');
@@ -1377,7 +1413,7 @@
                 // open link in new tab
                 window.open(
                     `/dc/coo/rework/pdf?id=${data}&produk=${id}&penjualan=${value}&jenis=${jenis}&stamp=${stamp}`
-                    )
+                )
 
             })
 
