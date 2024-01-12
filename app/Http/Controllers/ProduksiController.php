@@ -387,6 +387,8 @@ class ProduksiController extends Controller
     function generate_fg_non_jadwal(Request $request)
     {
         // $obj =  json_decode(json_encode($request->all()), FALSE);
+
+        dd($request->all());
         DB::beginTransaction();
         try {
             //code...
@@ -580,7 +582,6 @@ class ProduksiController extends Controller
                         'duplicate' =>  array(),
                         'available' => array(),
                         'id' =>  $jd_id,
-
                         'produk_id' => $obj->id,
                         'date_in' => $jd->created_at
                     ],200);
