@@ -182,12 +182,12 @@ export default {
                 } catch (error) {
                     console.log(error);
                     const { message, seri, duplicate, available } = error.response.data
-                    this.seri = seri.map(item => {
+                    this.seri = seri
+                    this.available = available.map(item => {
                         return {
                             noseri: item,
                         }
                     })
-                    this.available = available
                     this.duplicate = duplicate.map(item => {
                         return {
                             noseri: item,
@@ -213,10 +213,10 @@ export default {
         async simpanSeri() {
             try {
                 const kirim = {
-                    seri: this.seri,
-                    available: this.available,
+                    ...this.form,
+                    noseri: this.available
                 }
-                const { data } = await axios.post('/api/prd/fg/gen/confirm', kirim)
+                const { data } = await axios.post('/api/prd/fg/non_jadwal/gen', kirim)
                 this.$swal('Berhasil', 'Data berhasil disimpan', 'success')
                 const { noseri, id, produk_id, date_in } = data
                 this.hasilGenerate = noseri
@@ -494,7 +494,7 @@ export default {
                                                     placeholder="Cari...">
                                             </div>
                                         </div>
-                                        <DataTable :headers="headers" :items="seri" :search="searchPreview" />
+                                        <DataTable :headers="headers" :items="available" :search="searchPreview" />
                                     </div>
                                     <div class="tab-pane fade" id="pills-duplikasi" role="tabpanel"
                                         aria-labelledby="pills-duplikasi-tab">
@@ -521,13 +521,18 @@ export default {
                                             form.produk?.isGenerate ? 'Generate' : 'Simpan'
                                         }}</span>
                                     </button>
-                                    <button class="btn btn-success" v-if="seri.length > 0"
-                                        @click="simpanSeri">Simpan</button>
+                                    <button class="btn btn-success" v-if="seri.length > 0" @click="simpanSeri">
+                                        <div class="spinner-border" role="status" v-if="loading">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                        <span v-if="loading">Loading...</span>
+                                        <span v-else>Simpan</span>
+                                    </button>
                                 </div>
 
                                 <div v-else>
                                     <button class="btn btn-primary" @click="cetakSeri">Cetak Barcode</button>
-                                    <button class="btn btn-success" @click="exportBarcode">Export Barcode</button>
+                                    <!-- <button class="btn btn-success" @click="exportBarcode">Export Barcode</button> -->
                                 </div>
                             </div>
 

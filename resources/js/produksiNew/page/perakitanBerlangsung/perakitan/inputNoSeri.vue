@@ -388,7 +388,7 @@ export default {
                                     <input type="text" ref="noseri" class="form-control" v-model="item.noseri">
                                 </template>
                             </DataTable> -->
-                                <button class="btn btn-primary" @click="showSeriText">Input No Seri Via Text</button>
+                                <button class="btn btn-primary" @click="showSeriText" v-if="!idCetakHasilGenerate">Input No Seri Via Text</button>
                                 <div class="scrollable">
                                     <table class="table" v-if="!loadingNoSeri">
                                         <thead>
@@ -420,7 +420,7 @@ export default {
 
                                 <div class="d-flex bd-highlight">
                                     <div class="p-2 flex-grow-1 bd-highlight">
-                                        <button class="btn btn-primary" @click="simpan" :disabled="isDisabled">
+                                        <button class="btn btn-primary" @click="simpan" :disabled="isDisabled" v-if="!idCetakHasilGenerate">
                                             <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
                                                 <span class="sr-only">Loading...</span>
                                             </div>

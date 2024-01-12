@@ -323,7 +323,7 @@ export default {
 
                                 <div v-else>
                                     <button class="btn btn-primary" @click="cetakSeri">Cetak Barcode</button>
-                                    <button class="btn btn-success" @click="exportBarcode">Export Barcode</button>
+                                    <!-- <button class="btn btn-success" @click="exportBarcode">Export Barcode</button> -->
                                 </div>
                             </div>
                             <div class="p-2 bd-highlight">
