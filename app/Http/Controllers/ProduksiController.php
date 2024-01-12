@@ -599,6 +599,7 @@ class ProduksiController extends Controller
             return response()->json([
                 'status' => 500,
                 'message' => 'Gagal Ditambahkan',
+                'catch' => $th->getMessage(),
                 'seri' => array(),
                 'duplicate' =>  array(),
                 'available' => array(),

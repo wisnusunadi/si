@@ -2,10 +2,12 @@
 import axios from 'axios'
 import DataTable from '../../../components/DataTable.vue'
 import modalPilihan from '../perakitan/modalPilihan.vue'
+import Seriviatext from '../../../../gbj/page/PermintaanReworkGBJ/permintaan/formPermintaan/seriviatext.vue'
 export default {
     components: {
         DataTable,
-        modalPilihan
+        modalPilihan,
+        Seriviatext
     },
     props: ['detailRakit'],
     data() {
@@ -39,6 +41,10 @@ export default {
             searchPreview: '',
             searchDuplikasi: '',
             linkExport: '',
+            noseri: [],
+            noseridiisi: 0,
+            showmodalviatext: false,
+            loadingNoSeri: false,
         }
     },
     methods: {
@@ -66,7 +72,8 @@ export default {
                             const nama = variasi.nama == null || variasi.nama == '' ? '' : `${variasi.nama}`
                             acc.push({
                                 label: `${item.nama} ${nama}`,
-                                value: variasi.id
+                                value: variasi.id,
+                                isGenerate: item.generate_seri == 1 ? true : false,
                             })
                         })
                     }
@@ -156,6 +163,93 @@ export default {
         },
         exportBarcode() {
             window.open(this.linkExport, '_blank')
+        },
+        removeSeri(index) {
+            console.log(index);
+            this.noseri.splice(index, 1)
+        },
+        showSeriText() {
+            this.showmodalviatext = true
+            $('.modalFleksibel').modal('hide')
+            this.$nextTick(() => {
+                $('.modalChecked').modal('show')
+            })
+        },
+        closeModalSeriViaText() {
+            this.showmodalviatext = false
+            this.$nextTick(() => {
+                $('.modalFleksibel').modal('show')
+            })
+        },
+        submit(noseri) {
+            let noseriarray = noseri.split(/[\n, \t]/)
+
+            // remove noseri null
+            noseriarray = noseriarray.filter((item) => {
+                return item !== null && item !== ''
+            })
+
+            // remove duplicate
+            noseriarray = [...new Set(noseriarray)]
+
+            this.noseri = []
+
+            for (let i = 0; i < noseriarray.length; i++) {
+                this.noseri.push({ noseri: noseriarray[i] })
+            }
+        },
+        autoTab(event, idx) {
+            event.target.value = event.target.value.toUpperCase();
+            if (this.noseri[idx].error) {
+                delete this.noseri[idx].error;
+                delete this.noseri[idx].message;
+            }
+
+            const noseri = this.noseri.filter((item) => {
+                return item.noseri !== null && item.noseri !== ''
+            })
+
+            const noseriUnique = noseri.filter((data, index) => {
+                return noseri.findIndex((item) => {
+                    return item.noseri === data.noseri
+                }) === index
+            })
+
+            if (noseri.length !== noseriUnique.length) {
+                this.noseri[idx].error = true;
+                this.noseri[idx].message = 'No. Seri tidak boleh sama';
+                this.$swal({
+                    title: 'Peringatan!',
+                    text: 'Nomor seri tidak boleh sama',
+                    icon: 'warning',
+                    timer: 1000, // 1 seconds
+                    showConfirmButton: false
+                });
+                this.loadingNoSeri = true;
+                this.$nextTick(() => {
+                    this.loadingNoSeri = false;
+                    setTimeout(() => {
+                        this.$refs.noseri[idx].focus();
+                    }, 100);
+                });
+                return;
+            } else {
+                this.loadingNoSeri = true;
+                delete this.noseri[idx].error;
+                this.$nextTick(() => {
+                    this.loadingNoSeri = false;
+                    setTimeout(() => {
+                        this.$refs.noseri[idx + 1].focus();
+                    }, 100);
+                });
+            }
+
+            if (idx < this.noseri.length - 1) {
+                this.$refs.noseri[idx + 1].focus();
+            } else {
+                this.$refs.noseri[idx].blur();
+            }
+
         }
     },
     created() {
@@ -171,11 +265,32 @@ export default {
                 this.form.kedatangan = val
             }
         },
+        'form.produk': function (val) {
+            if (val.isGenerate) {
+                this.form.jml = ''
+                this.form.kedatangan = 1
+            } else {
+                delete this.form.jml
+                delete this.form.kedatangan
+            }
+        },
+        noseri: {
+            handler() {
+                this.noseridiisi = 0
+                this.noseri.forEach((item) => {
+                    if (item.noseri !== '') {
+                        this.noseridiisi++
+                    }
+                })
+            },
+            deep: true,
+        }
     },
 }
 </script>
 <template>
     <div>
+        <seriviatext v-if="showmodalviatext" @closeModal="closeModalSeriViaText" @submit="submit"></seriviatext>
         <modalPilihan v-if="showModalCetak" @closeModal="closeModalCetak" :data="idCetakHasilGenerate"></modalPilihan>
         <div class="modal fade modalFleksibel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
             aria-hidden="true">
@@ -204,13 +319,13 @@ export default {
                                                 :disabled="hasilGenerate.length > 0"></v-select>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group" v-if="form.kedatangan">
                                             <label for="exampleInputEmail1">Kedatangan</label>
                                             <input type="number" class="form-control" v-model.number="form.kedatangan"
                                                 :disabled="hasilGenerate.length > 0" @keypress="numberOnly($event)">
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group" v-if="form.kedatangan">
                                             <label for="">Jumlah Rakit</label>
                                             <input type="number" class="form-control" v-model="form.jml"
                                                 @keypress="numberOnly($event)" :disabled="hasilGenerate.length > 0">
@@ -226,7 +341,47 @@ export default {
                                             <label for="">Tujuan (Minta No Seri)</label>
                                             <textarea class="form-control" v-model="form.tujuan" rows="3"
                                                 :disabled="hasilGenerate.length > 0"></textarea>
+                                        </div>
 
+                                        <div class="d-flex bd-highlight" v-if="form.produk?.isGenerate == false">
+                                            <div class="p-2 flex-grow-1 bd-highlight"><button class="btn btn-primary"
+                                                    @click="showSeriText">Input
+                                                    No Seri Via Text</button></div>
+                                            <div class="p-2 bd-highlight">
+                                                <button class="btn btn-info" @click="noseri.push({ noseri: '' })">
+                                                    Tambah No. Seri</button>
+                                            </div>
+                                        </div>
+                                        <div class="scrollable" v-if="form.produk?.isGenerate == false">
+                                            <table class="table" v-if="!loadingNoSeri">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No. Seri</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(seri, index) in noseri" :key="index">
+                                                        <td>
+                                                            <input type="text" class="form-control" 
+                                                                :class="seri.error ? 'is-invalid' : ''"
+                                                                v-model="seri.noseri"
+                                                                ref="noseri" :disabled="hasilGenerate.length > 0"
+                                                                @keyup.enter="autoTab($event, index)"
+                                                                @keyup="$event.target.value = $event.target.value.toUpperCase()">
+                                                            <div class="invalid-feedback" v-if="seri.error">
+                                                                {{ seri.message }}
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-outline-danger"
+                                                                @click="removeSeri(index)">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                     <div class="col" v-if="hasilGenerate.length > 0">
@@ -280,7 +435,9 @@ export default {
                                             <span class="sr-only">Loading...</span>
                                         </div>
                                         <span v-if="loading">Loading...</span>
-                                        <span v-else>Generate</span>
+                                        <span v-else>{{
+                                            form.produk?.isGenerate ? 'Generate' : 'Simpan'
+                                        }}</span>
                                     </button>
                                     <button class="btn btn-success" v-if="seri.length > 0"
                                         @click="simpanSeri">Simpan</button>
