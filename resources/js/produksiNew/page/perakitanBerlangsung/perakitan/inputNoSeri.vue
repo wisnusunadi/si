@@ -21,7 +21,7 @@ export default {
             isError: false,
             errorValue: '',
             loading: false,
-            hasilGenerate: []
+            hasilGenerate: [],
         }
     },
     methods: {
@@ -65,7 +65,6 @@ export default {
             })
 
             if (noseriUnique.length !== noseri.length) {
-                this.isError = true;
                 this.errorValue = 'Nomor seri tidak boleh sama';
                 this.noseri[idx].error = true;
                 this.$swal('Peringatan!', 'Nomor seri tidak boleh sama', 'warning');
@@ -133,13 +132,45 @@ export default {
                     noseri: this.noseri,
                 })
                 console.log(data);
+                this.$swal('Berhasil!', 'Data berhasil disimpan', 'success');
             } catch (error) {
                 const { message, duplicate, available } = error.response.data
+
+                this.errorValue = message;
+
+                if (duplicate) {
+                    this.noseri = this.noseri.map((item) => {
+                        item.noseri = item.noseri.trim()
+                        const find = duplicate.find((data) => data == item.noseri)
+                        if (find) {
+                            return {
+                                ...item,
+                                error: true
+                            }
+                        }
+                        return item;
+                    })
+                }
+
+                if (available) {
+                    this.noseri = this.noseri.map((item) => {
+                        item.noseri = item.noseri.trim()
+                        const find = available.find((data) => data == item.noseri)
+                        if (find) {
+                            return {
+                                ...item,
+                                error: false
+                            }
+                        }
+                        return item;
+                    })
+                }
+
+
+                this.isDisabled = false;
+            } finally {
+                this.loading = false;
             }
-
-            this.isDisabled = true;
-
-            this.$swal('Berhasil!', 'Data berhasil disimpan', 'success');
         },
         cetak() {
             // remove noseri null
@@ -154,6 +185,17 @@ export default {
             })
 
             window.open(`/produksiReworks/cetak_seri_fg_medium_sementara?data=${noseri}`, '_blank');
+        },
+        checkValidation(error) {
+            if (error !== undefined) {
+                if (error) {
+                    return 'is-invalid'
+                } else {
+                    return 'is-valid'
+                }
+            } else {
+                return ''
+            }
         }
     },
     mounted() {
@@ -266,11 +308,11 @@ export default {
                                         <tr>
                                             <td>
                                                 <input type="text" ref="noseri" class="form-control" v-model="item.noseri"
-                                                    :disabled="isDisabled" :class="item.error ? 'is-invalid' : ''"
+                                                    :disabled="isDisabled" :class="checkValidation(item.error)"
                                                     @keyup="$event.target.value = $event.target.value.toUpperCase()"
                                                     @keyup.enter="autoTab($event, index)">
                                                 <div class="invalid-feedback">
-                                                    Nomor Seri {{ errorValue }}
+                                                    {{ errorValue }}
                                                 </div>
                                             </td>
                                         </tr>
