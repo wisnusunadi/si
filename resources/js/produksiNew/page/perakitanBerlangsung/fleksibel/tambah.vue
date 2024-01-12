@@ -506,6 +506,7 @@ export default {
                                         </div>
                                         <DataTable :headers="headers" :items="duplicate" :search="searchDuplikasi" />
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
