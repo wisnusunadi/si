@@ -25,7 +25,7 @@ export default {
             headers: [
                 {
                     text: 'No Seri',
-                    value: 'seri',
+                    value: 'noseri',
                     align: 'text-left',
                 }
             ],
@@ -182,11 +182,15 @@ export default {
                 } catch (error) {
                     console.log(error);
                     const { message, seri, duplicate, available } = error.response.data
-                    this.seri = seri
+                    this.seri = seri.map(item => {
+                        return {
+                            noseri: item,
+                        }
+                    })
                     this.available = available
                     this.duplicate = duplicate.map(item => {
                         return {
-                            seri: item,
+                            noseri: item,
                         }
                     })
                     if (this.seri.length > 0 || this.available > 0 || this.duplicate.length > 0) {
