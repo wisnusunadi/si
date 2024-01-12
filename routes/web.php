@@ -112,8 +112,6 @@ Route::group(['prefix' => '/produksiReworks' , 'middleware' => 'auth'], function
     Route::get('/surat_pengiriman/{id}', [GudangController::class, 'cetakSuratPengantar']);
     Route::get('/cetakpeti/{id}', [LogistikController::class, 'cetak_peti']);
     Route::get('/viewpeti/{id}', [LogistikController::class, 'view_peti']);
-    // url ujicoba
-    Route::get('/cetak_seri_fg_medium_sementara', [ProduksiController::class, 'cetak_seri_finish_goods_medium_sementara']);
 });
 
 Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {

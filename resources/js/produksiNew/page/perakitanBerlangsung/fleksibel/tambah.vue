@@ -176,7 +176,9 @@ export default {
                     this.$swal('Berhasil', 'Data berhasil disimpan', 'success')
                     const { noseri, produk_id, date_in, id } = data
                     this.hasilGenerate = noseri
-                    this.idCetakHasilGenerate = id
+                    const tgl = moment(date_in).format('YYYY-MM-DD')
+                    const wkt_rakit = this.timeFormat(date_in)
+                    this.idCetakHasilGenerate = `${produk_id}&dd=${tgl} ${wkt_rakit}`
                 } catch (error) {
                     console.log(error);
                     const { message, seri, duplicate, available } = error.response.data

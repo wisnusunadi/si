@@ -3984,6 +3984,9 @@ class ProduksiController extends Controller
             $data = JadwalRakitNoseri::whereHas('header', function ($q) use ($id) {
                 $q->where('produk_id', $id);
             })
+                ->leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+                ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+                ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
                 ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$dd])
                 // ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])
                 ->get();
@@ -5088,27 +5091,16 @@ class ProduksiController extends Controller
     {
         $seri = $this->get_detail_noseri_rakit($request->id, $request->dd);
         foreach ($seri as $s) {
-            $data[] = $s->noseri;
+            $data[] = (object)[
+                'noseri' => $s->noseri,
+                'logo' => $s->merk == 'ELITECH' ? true : false
+            ];
         }
         $isLogo = true;
         $customPaperMedium = array(0, 0, 160.46, 170.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
         return $pdf->stream();
     }
-
-    function cetak_seri_finish_goods_medium_sementara(Request $request)
-    {
-        // $seri = $this->get_detail_noseri_rakit($request->id, $request->dd);
-        // foreach ($seri as $s) {
-        //     $data[] = $s->noseri;
-        // }
-        $data = explode(',', $request->data);
-        $isLogo = true;
-        $customPaperMedium = array(0, 0, 160.46, 170.69);
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
-        return $pdf->stream();
-    }
-
     function cetak_seri_finish_goods_small(Request $request)
     {
         $seri = $this->get_detail_noseri_rakit($request->id, $request->dd);
