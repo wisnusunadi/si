@@ -597,6 +597,7 @@
                 }
             })
             $('#checkall').prop('checked', false)
+            
         })
     </script>
 @stop
