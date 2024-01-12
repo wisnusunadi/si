@@ -386,9 +386,9 @@ class ProduksiController extends Controller
 
     function generate_fg_non_jadwal(Request $request)
     {
-        // $obj =  json_decode(json_encode($request->all()), FALSE);
+        //  $obj =  json_decode(json_encode($request->all()), FALSE);
 
-        dd($request->all());
+        // dd($obj);
         DB::beginTransaction();
         try {
             //code...
@@ -401,7 +401,7 @@ class ProduksiController extends Controller
                     'jenis' => 'tidak_terjadwal',
                     'no_bppb' => $obj->no_bppb,
                     'produk_id' => $gbj->id,
-                    'jumlah' => $obj->jml,
+                    'jumlah' => $obj->produk->isGenerate ? $obj->jml : count($obj->noseri),
                     'tanggal_mulai' => Carbon::now()->format('Y-m-d'),
                     'tanggal_selesai' => Carbon::now()->format('Y-m-d'),
                     'status' => 8,
@@ -413,28 +413,49 @@ class ProduksiController extends Controller
                     'divisi_id' => $obj->bagian->value,
                 ]);
 
+                //NOSERI GENERATE
                 $getTgl = Carbon::now();
                 // $tahun = 24;
                 $tahun = $getTgl->format('Y') % 100;
                 $bulan =  strtoupper(dechex($getTgl->format('m')));
                 //Default
-                $abjad = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-                $kedatangan =  $abjad[$obj->kedatangan - 1];
-                $max = JadwalRakitNoseri::where(['unit' => $prd->kode . $gbj->kode, 'th' => $tahun])->latest('id')->value('urutan') + 0;
 
-                for ($i = 1; $i <= $obj->jml; $i++) {
-                    $newSeri[] = $prd->kode . $gbj->kode . $tahun . $bulan . $kedatangan . str_pad($max + $i, 5, '0', STR_PAD_LEFT);
-                    $newSeries[] = array(
-                        'jadwal_id' => $jadwal->id,
-                        'no_bppb' => $obj->no_bppb,
-                        'no_urut' => $max + $i,
-                        'kode' =>  $prd->kode . $gbj->kode,
-                        'tahun' => $tahun,
-                        'bulan' => $bulan,
-                        'kedatangan' => $kedatangan,
-                        'seri' => $prd->kode . $gbj->kode . $tahun . $bulan . $kedatangan . str_pad($max + $i, 5, '0', STR_PAD_LEFT)
-                    );
+
+                if($obj->produk->isGenerate){
+                    $abjad = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+                    $kedatangan =  $abjad[$obj->kedatangan - 1];
+                    $max = JadwalRakitNoseri::where(['unit' => $prd->kode . $gbj->kode, 'th' => $tahun])->latest('id')->value('urutan') + 0;
+
+                    for ($i = 1; $i <= $obj->jml; $i++) {
+                        $newSeri[] = $prd->kode . $gbj->kode . $tahun . $bulan . $kedatangan . str_pad($max + $i, 5, '0', STR_PAD_LEFT);
+                        $newSeries[] = array(
+                            'jadwal_id' => $jadwal->id,
+                            'no_bppb' => $obj->no_bppb,
+                            'no_urut' => $max + $i,
+                            'kode' =>  $prd->kode . $gbj->kode,
+                            'tahun' => $tahun,
+                            'bulan' => $bulan,
+                            'kedatangan' => $kedatangan,
+                            'seri' => $prd->kode . $gbj->kode . $tahun . $bulan . $kedatangan . str_pad($max + $i, 5, '0', STR_PAD_LEFT)
+                        );
+                    }
+                }else{
+                    foreach ($obj->noseri as $n) {
+                        $newSeri[] = $n->noseri;
+                        $newSeries[] = array(
+                            'jadwal_id' => $jadwal->id,
+                            'no_bppb' => $obj->no_bppb,
+                            'tahun' => $tahun,
+                            'bulan' => $bulan,
+                            'seri' => $n->noseri,
+                            'no_urut' => NULL,
+                            'kode' =>  NULL,
+                            'kedatangan' =>  NULL,
+                        );
+                    }
+
                 }
+
 
                 $queryResultPrd = JadwalRakitNoseri::whereIN('noseri', $newSeri)->pluck('noseri')->toArray();
                 $queryResultGbj = NoseriBarangJadi::whereIN('noseri', $newSeri)->pluck('noseri')->toArray();
@@ -477,6 +498,8 @@ class ProduksiController extends Controller
                         'available' =>   array(),
                         'id' =>  $jd_id,
                         'noseri' =>  $jd_seri,
+                        'produk_id' => $obj->produk->value,
+                        'date_in' => $jd->created_at
                     ], 200);
                 } else {
                     if ($available) {
