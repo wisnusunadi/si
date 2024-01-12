@@ -94,11 +94,57 @@ export default {
             // validasi
             const cekForm = Object.values(this.form).every(x => x != '' && x != null && x != undefined && x != 0)
             const cekbppb = this.form.no_bppb !== null && this.form.no_bppb !== '' && this.form.no_bppb !== undefined && this.form.no_bppb !== '-'
+
+
+            const ceknoserinull = this.noseri.filter((item) => {
+                return item.noseri === null || item.noseri === ''
+            })
+
+            if (ceknoserinull.length == this.noseri.length) {
+                this.$swal('Perhatian', 'No Seri tidak boleh kosong', 'warning')
+                return
+            }
+
+            const noseriUnique = this.noseri.filter((data, index) => {
+                return this.noseri.findIndex((item) => {
+                    return item.noseri === data.noseri
+                }) === index
+            })
+
+            if (ceknoserinull.length !== noseriUnique.length) {
+                this.noseri = this.noseri.map((item) => {
+                    if (item.noseri === null || item.noseri === '') {
+                        item.error = true
+                        item.message = 'No. Seri tidak boleh sama'
+                    }
+                    return item
+                })
+                this.$swal({
+                    title: 'Peringatan!',
+                    text: 'Nomor seri tidak boleh sama',
+                    icon: 'warning',
+                    timer: 1000, // 1 seconds
+                    showConfirmButton: false
+                });
+                return;
+            }
+
+            const formNoSeri = {}
+
+            if (this.form.produk?.isGenerate) {
+                formNoSeri = this.form
+            } else {
+                formNoSeri = {
+                    ...this.form,
+                    noseri: this.noseri
+                }
+            }
+
             if (cekForm && cekbppb) {
                 // simpan
                 try {
                     this.loading = true
-                    const { data } = await axios.post('/api/prd/fg/non_jadwal/gen', this.form)
+                    const { data } = await axios.post('/api/prd/fg/non_jadwal/gen', formNoSeri)
                     this.$swal('Berhasil', 'Data berhasil disimpan', 'success')
                     const { noseri, id } = data
                     this.hasilGenerate = noseri
