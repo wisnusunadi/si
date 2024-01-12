@@ -19,9 +19,9 @@ export default {
             isDisabled: false,
             noseridiisi: 0,
             isError: false,
-            errorValue: '',
             loading: false,
             hasilGenerate: [],
+            loadingNoSeri: false,
         }
     },
     methods: {
@@ -44,9 +44,11 @@ export default {
         },
         autoTab(event, idx) {
             // key upppercase
+            this.loadingNoSeri = true;
             event.target.value = event.target.value.toUpperCase();
             if (this.noseri[idx].error) {
                 delete this.noseri[idx].error;
+                delete this.noseri[idx].message;
             }
 
             if (!this.noseri.find((data) => data?.error)) {
@@ -65,8 +67,8 @@ export default {
             })
 
             if (noseriUnique.length !== noseri.length) {
-                this.errorValue = 'Nomor seri tidak boleh sama';
                 this.noseri[idx].error = true;
+                this.noseri[idx].message = 'Nomor seri tidak boleh sama';
                 this.$swal('Peringatan!', 'Nomor seri tidak boleh sama', 'warning');
                 return
             } else {
@@ -81,6 +83,10 @@ export default {
                 this.$refs.noseri[idx].blur();
                 this.simpan();
             }
+
+            this.$nextTick(() => {
+                this.loadingNoSeri = false;
+            })
         },
         async simpan() {
             const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-' && this.dataGenerate.no_bppb !== '/'
@@ -109,10 +115,10 @@ export default {
 
             if (noseriUnique.length !== noseri.length) {
                 this.isError = true;
-                this.errorValue = 'Nomor seri tidak boleh sama';
                 this.noseri = this.noseri.map((item) => {
                     if (this.noseri.findIndex((data) => data.noseri === item.noseri) !== this.noseri.lastIndexOf(item)) {
                         item.error = true;
+                        item.message = 'Nomor seri tidak boleh sama';
                     }
                     return item;
                 })
@@ -136,8 +142,6 @@ export default {
             } catch (error) {
                 const { message, duplicate, available } = error.response.data
 
-                this.errorValue = message;
-
                 if (duplicate) {
                     this.noseri = this.noseri.map((item) => {
                         item.noseri = item.noseri.trim()
@@ -145,7 +149,8 @@ export default {
                         if (find) {
                             return {
                                 ...item,
-                                error: true
+                                error: true,
+                                message
                             }
                         }
                         return item;
@@ -159,15 +164,16 @@ export default {
                         if (find) {
                             return {
                                 ...item,
-                                error: false
+                                error: false,
+                                message: 'Nomor seri bisa digunakan'
                             }
                         }
                         return item;
                     })
                 }
 
-
                 this.isDisabled = false;
+                this.isError = true;
             } finally {
                 this.loading = false;
             }
@@ -195,6 +201,19 @@ export default {
                 }
             } else {
                 return ''
+            }
+        },
+        hapusSeriDuplikasi() {
+            const noseri = this.noseri.find((item) => {
+                return item.error === true
+            })
+
+            if (noseri) {
+                this.noseri = this.noseri.filter((item) => {
+                    return item.noseri = '',
+                        delete item.error,
+                        delete item.message
+                })
             }
         }
     },
@@ -298,7 +317,7 @@ export default {
                                 </template>
                             </DataTable> -->
                             <div class="scrollable">
-                                <table class="table">
+                                <table class="table" v-if="!loadingNoSeri">
                                     <thead>
                                         <tr>
                                             <th>No. Seri</th>
@@ -312,7 +331,7 @@ export default {
                                                     @keyup="$event.target.value = $event.target.value.toUpperCase()"
                                                     @keyup.enter="autoTab($event, index)">
                                                 <div class="invalid-feedback">
-                                                    {{ errorValue }}
+                                                    {{ item.message }}
                                                 </div>
                                             </td>
                                         </tr>
@@ -327,6 +346,8 @@ export default {
                                 <div class="p-2 flex-grow-1 bd-highlight">
                                     <button class="btn btn-primary" @click="simpan" v-if="!isDisabled">Simpan</button>
                                     <button class="btn btn-success" @click="cetak" v-else>Cetak</button>
+                                    <button class="btn btn-danger" @click="hapusSeriDuplikasi" v-if="isError">Hapus No Seri
+                                        Duplikasi</button>
                                 </div>
                                 <div class="p-2 bd-highlight">
                                     <button class="btn btn-secondary" @click="closeModal">Keluar</button>
