@@ -18,11 +18,13 @@ use PDF;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\SeriDetailRw;
+use App\Models\Spa;
 use App\Models\SystemLog;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 
 class DcController extends Controller
 {
@@ -33,47 +35,95 @@ class DcController extends Controller
         return $pdf->stream('');
     }
 
-    public function pdf_coo_semua_rework()
+    public function pdf_coo_semua_rework(Request $request)
     {
-        $series = [
-            "AK1023B009711",
-            "AK1023B000180",
-            "AK1023B008837"
-        ];
-        $data = PackRw::select('pack_rw_head.prov','pack_rw_head.kota','pack_rw.noseri','seri_detail_rw.packer','seri_detail_rw.created_at','seri_detail_rw.isi')
-        ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'pack_rw.noseri_id')
-        ->leftjoin('pack_rw_head', 'pack_rw_head.id', '=', 'pack_rw.pack_rw_head_id')
-        ->whereIN('pack_rw.noseri',$series)->get();
+        $rw_produk = $request->produk;
+        $jenis = $request->jenis;
+        $stamp = $request->stamp;
+        $penjualan = $request->penjualan;
 
-        $no = 2600;
-        foreach($data as $d)
-        {
-            $o = json_decode($d->isi);
-            $seri[] = array(
-                'no_coo' => 'KIT10-'.str_pad($no++, 5, '0', STR_PAD_LEFT),
-                'kepada_prov' => 'Provinsi '.$d->prov,
-                'kepada_kab' => $d->kota,
-                'seri' => $d->noseri,
-                'packer' => $d->packer,
-                'tgl' => Carbon::createFromFormat('Y-m-d H:i:s', $d->created_at)->format('d M Y'),
-                'item' => $o
-            );
+        // $rw_produk = 1;
+        // $penjualan = 'ekatalog';
+        // $jenis = 'kosong';
+        // $stamp = 1;
+
+
+        $series = explode(',', $request->id);
+        if ($rw_produk > 0) {
+            $pesanan = Pesanan::select('pesanan.id')
+                ->leftJoin('detail_pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                ->leftJoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
+                ->whereIN('noseri_logistik.id', $series)
+                ->pluck('id')->toArray();
+
+
+            $ekat = Ekatalog::where('pesanan_id', $pesanan[0]);
+            $spa = Spa::where('pesanan_id', $pesanan[0]);
+
+            if ($ekat->count() > 0) {
+                $no_paket = $ekat->first()->no_paket;
+                $deskripsi = $ekat->first()->deskripsi;
+            } else {
+                $no_paket = '';
+                $deskripsi = '';
+            }
+
+            $data = PackRw::select('noseri_coo.nama', 'noseri_coo.ket', 'noseri_coo.tgl_kirim as tgls', 'noseri_coo.tahun', 'noseri_coo.no_coo', 'pack_rw_head.prov', 'pack_rw_head.kota', 'pack_rw.noseri', 'seri_detail_rw.packer', 'seri_detail_rw.created_at', 'seri_detail_rw.isi')
+                ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'pack_rw.noseri_id')
+                ->leftjoin('noseri_barang_jadi', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                ->leftJoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
+                ->leftJoin('noseri_coo', 'noseri_coo.noseri_logistik_id', '=', 'noseri_logistik.id')
+                ->leftjoin('pack_rw_head', 'pack_rw_head.id', '=', 'pack_rw.pack_rw_head_id')
+                ->whereIN('noseri_logistik.id', $series)->get();
+
+            foreach ($data as $d) {
+                $o = json_decode($d->isi);
+                $seri[] = array(
+                    'no_coo' => 'KIT10-' . str_pad($d->no_coo, 5, '0', STR_PAD_LEFT),
+                    'kepada_prov' => 'Provinsi ' . $d->prov,
+                    'kepada_kab' => $d->kota,
+                    'seri' => $d->noseri,
+                    'packer' => $d->packer,
+                    'tahun' => $d->tahun,
+                    'tgl' => $d->tgls != NULL ? $this->tgl_footer($d->tgls) : '-',
+                    'item' => $o,
+                    'no_paket' => $no_paket,
+                    'deskripsi' => $deskripsi,
+                    'nama' => $d->nama,
+                    'ket' => $d->ket,
+                    'romawi' => $d->tgls != NULL ? $this->bulan_romawi($d->tgls) : '-'
+                );
+            }
+
+            $collection = collect($seri);
+
+            $collection = $collection->map(function ($item) {
+                $item['item'] = collect($item['item'])->sortBy('produk')->values()->all();
+                return $item;
+            });
+
+            $data_urut_produk = $collection->toArray();
+
+            //  return response()->json($data_urut_produk);
+
+            $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk, 'jenis' => $jenis, 'stamp' => $stamp])->setPaper('A4');
+            //return view('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk]);
+
+        } else {
+            $data = NoseriCoo::leftJoin('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
+                ->whereIN('noseri_logistik.id', $series)
+                ->get();
+
+            if ($penjualan == 'ekatalog') {
+                $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat', ['data' => $data, 'count' => count($series), 'jenis' => $jenis, 'stamp' => $stamp])->setPaper('A4');
+            } else {
+                $pdf = PDF::loadView('page.dc.coo.pdf_semua_spa', ['data' => $data, 'count' => count($series), 'jenis' => $jenis, 'stamp' => $stamp])->setPaper('A4');
+            }
         }
-
-        $collection = collect($seri);
-
-        $collection = $collection->map(function ($item) {
-            $item['item'] = collect($item['item'])->sortBy('produk')->values()->all();
-            return $item;
-        });
-
-       $data_urut_produk = $collection->toArray();
-
-
-    //  return response()->json($data_urut_produk);
-
-
-     $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_rw', ['data' => $data_urut_produk])->setPaper('A4');
         return $pdf->stream('');
     }
 
@@ -133,6 +183,7 @@ class DcController extends Controller
                 DB::raw("DATE_FORMAT(logistik.tgl_kirim, '%d-%m-%Y') as tglsjcoo"),
                 DB::raw("DATE_FORMAT(noseri_coo.tgl_kirim, '%d-%m-%Y') as tglkirim_coo"),
                 'noseri_coo.catatan as coo_catatan',
+                'noseri_coo.jenis as coo_jenis',
                 'noseri',
                 'noseri_logistik.id as noserilogistik_id',
                 'produk.no_akd',
@@ -161,7 +212,7 @@ class DcController extends Controller
             ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
             ->orderBy('noseri_coo.id', 'DESC')
             ->where(['produk.coo' => 1, 'penjualan_produk.status' => 'ekat'])
-            ->whereYear('noseri_coo.created_at',$tahun)
+            ->whereYear('noseri_coo.created_at', $tahun)
             ->get();
 
         return datatables()->of($data)
@@ -221,7 +272,37 @@ class DcController extends Controller
                 } else {
                     $x = 'spa';
                 }
-                return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+
+                if ($data->coo_jenis == 'antro') {
+                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '&produk=' . $x . '&penjualan=ekatalog&jenis=kosong&stamp=0" target="_blank">
+                      <button class="dropdown-item" type="button">
+                          <i class="fas fa-file"></i>
+                          Coo
+                      </button>
+                  </a>
+                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '&produk=' . $x . '&penjualan=ekatalog&jenis=back&stamp=0" target="_blank">
+                          <button class="dropdown-item" type="button">
+                              <i class="fas fa-file"></i>
+                              Coo + Background
+                          </button>
+                      </a>
+                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '&produk=' . $x . '&penjualan=ekatalog&jenis=ttd&stamp=0" target="_blank">
+                      <button class="dropdown-item" type="button">
+                          <i class="fas fa-file"></i>
+                          Coo + Background + Ttd
+                      </button>
+                  </a>
+                      <a href="/dc/coo/rework/pdf?id=' . $data->noserilogistik_id . '&produk=' . $x . '&penjualan=ekatalog&jenis=ttd&stamp=1" target="_blank">
+                      <button class="dropdown-item" type="button">
+                          <i class="fas fa-file"></i>
+                          Coo + Background + Ttd + Stamp
+                      </button>
+                  </a>
+                  </div>';
+                } else {
+                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       <a href="' . route('dc.seri.coo.pdf', [$data->noserilogistik_id, $x, "kosong", 0]) . '" target="_blank">
                       <button class="dropdown-item" type="button">
@@ -248,6 +329,7 @@ class DcController extends Controller
                       </button>
                   </a>
                   </div>';
+                }
             })
             ->rawColumns(['laporan'])
             ->make(true);
@@ -537,6 +619,16 @@ class DcController extends Controller
                         ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('produk.coo', 1)
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                },
+                'cek_rw' => function ($q) {
+                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                        ->from('seri_detail_rw')
+                        ->leftjoin('noseri_barang_jadi', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                        ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 }
             ])->orderBy('tgl_kontrak', 'desc')->doesntHave('SPB')->get();
 
@@ -659,8 +751,67 @@ class DcController extends Controller
                     }
                 }
 
-                if ($name[1] == 'EKAT') {
-                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                if ($data->cek_rw > 0) {
+                    if ($name[1] == 'EKAT') {
+
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
+                        <i class="fas fa-eye"></i>
+                            Detail
+                        </a>
+                     <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="ekatalog" data-jenis="kosong" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="ekatalog" data-jenis="back" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="ekatalog" data-jenis="ttd" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="ekatalog" data-jenis="ttd" data-stamp="1" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd + Stamp
+                    </button>
+                        <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="' . $data->id . '"><i class="fas fa-times text-danger"></i>
+                       <b class="text-danger">Batal</b>
+                    </button>
+
+                    </div>';
+                    } else {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a  class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'spa']) . '">
+                        <i class="fas fa-eye"></i>
+                            Detail
+                        </a>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="spa" data-jenis="kosong" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="spa" data-jenis="back" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="spa" data-jenis="ttd" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="spa" data-jenis="ttd" data-stamp="1" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd + Stamp
+                    </button>
+                    <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="' . $data->id . '"><i class="fas fa-times "></i>
+                        <b class="text-danger">Batal</b>
+                    </button>
+                    </div>';
+                    }
+                } else {
+                    if ($name[1] == 'EKAT') {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
                         <i class="fas fa-eye"></i>
@@ -691,13 +842,13 @@ class DcController extends Controller
                     </button>
                             </a>
 
-                        <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="'.$data->id.'"><i class="fas fa-times text-danger"></i>
+                        <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="' . $data->id . '"><i class="fas fa-times text-danger"></i>
                        <b class="text-danger">Batal</b>
                     </button>
 
                     </div>';
-                } else {
-                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    } else {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a  class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'spa']) . '">
                         <i class="fas fa-eye"></i>
@@ -727,10 +878,11 @@ class DcController extends Controller
                                     Coo + Background + Ttd + Stamp
                                 </button>
                             </a>
-                                <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="'.$data->id.'"><i class="fas fa-times "></i>
+                                <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="' . $data->id . '"><i class="fas fa-times "></i>
                                 <b class="text-danger">Batal</b>
                                 </button>
                     </div>';
+                    }
                 }
             })
             ->rawColumns(['button', 'status', 'batas_paket'])
@@ -790,6 +942,15 @@ class DcController extends Controller
                     ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
                     ->where('produk.coo', '=', '1');
+            }, 'cek_rw' => function ($q) {
+                $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                    ->from('seri_detail_rw')
+                    ->leftjoin('noseri_barang_jadi', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                    ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                    ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
             }])->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->get();
 
         return datatables()->of($data)
@@ -872,8 +1033,67 @@ class DcController extends Controller
                     }
                 }
 
-                if ($name[1] == 'EKAT') {
-                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                if ($data->ccoo > 100 && $data->cek_rw > 0) {
+                    if ($name[1] == 'EKAT') {
+
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
+                        <i class="fas fa-eye"></i>
+                            Detail
+                        </a>
+                     <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="ekatalog" data-jenis="kosong" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="ekatalog" data-jenis="back" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="ekatalog" data-jenis="ttd" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="ekatalog" data-jenis="ttd" data-stamp="1" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd + Stamp
+                    </button>
+                        <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="' . $data->id . '"><i class="fas fa-times text-danger"></i>
+                       <b class="text-danger">Batal</b>
+                    </button>
+
+                    </div>';
+                    } else {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a  class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'spa']) . '">
+                        <i class="fas fa-eye"></i>
+                            Detail
+                        </a>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="spa" data-jenis="kosong" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="spa" data-jenis="back" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="spa" data-jenis="ttd" data-stamp="0" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd
+                    </button>
+                    <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="spa" data-jenis="ttd" data-stamp="1" class="' . $class . '">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd + Stamp
+                    </button>
+                    <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="' . $data->id . '"><i class="fas fa-times "></i>
+                        <b class="text-danger">Batal</b>
+                    </button>
+                    </div>';
+                    }
+                } else {
+                    if ($name[1] == 'EKAT') {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
                         <i class="fas fa-eye"></i>
@@ -904,12 +1124,12 @@ class DcController extends Controller
                         Coo + Background + Ttd + Stamp
                     </button>
                             </a>
-                            <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="'.$data->id.'"><i class="fas fa-times "></i>
+                            <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="' . $data->id . '"><i class="fas fa-times "></i>
                             <b class="text-danger">Batal</b>
                             </button>
                     </div>';
-                } else {
-                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    } else {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a  class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'spa']) . '">
                         <i class="fas fa-eye"></i>
@@ -939,11 +1159,12 @@ class DcController extends Controller
                                     Coo + Background + Ttd + Stamp
                                 </button>
                             </a>
-                            <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="'.$data->id.'"><i class="fas fa-times "></i>
+                            <button class="dropdown-item batalmodal ' . $class . ' " type="button" data-id="' . $data->id . '"><i class="fas fa-times "></i>
                             <b class="text-danger">Batal</b>
                             </button>
 
                     </div>';
+                    }
                 }
             })
             ->rawColumns(['button', 'status', 'batas_paket'])
@@ -956,8 +1177,7 @@ class DcController extends Controller
         // $data = Logistik::whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($id) {
         //     $q->where('Pesanan.id', $id);
         // })->get();
-        $data = DetailLogistik::
-       addSelect([
+        $data = DetailLogistik::addSelect([
             'cek_coo' => function ($q) {
                 $q->selectRaw('coalesce(count(noseri_coo.id),0)')
                     ->from('noseri_coo')
@@ -969,17 +1189,26 @@ class DcController extends Controller
                     ->from('noseri_logistik')
                     ->whereColumn('noseri_logistik.detail_logistik_id', 'detail_logistik.id');
             },
-            ])
-        ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($id) {
-            $q->where('pesanan.id', $id);
-        })->with(['Logistik','DetailPesananProduk.GudangBarangJadi.Produk','DetailPesananProduk.DetailPesanan.Pesanan'])->get();
+            'cek_rw' => function ($q) {
+                $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                    ->from('seri_detail_rw')
+                    ->leftjoin('noseri_barang_jadi', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                    ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                    ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                    ->leftJoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
+                    ->whereColumn('noseri_logistik.detail_logistik_id', 'detail_logistik.id');
+            }
+        ])
+            ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($id) {
+                $q->where('pesanan.id', $id);
+            })->with(['Logistik', 'DetailPesananProduk.GudangBarangJadi.Produk', 'DetailPesananProduk.DetailPesanan.Pesanan'])->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl_surat', function ($data) {
                 return $data->Logistik->tgl_kirim;
             })
             ->addColumn('nama_paket', function ($data) {
-                if ($data->DetailPesananProduk->GudangBarangJadi->nama == '') {
+                if ($data->DetailPesananProduk->GudangBarangJadi->nama == ' ') {
                     return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
                 } else {
                     return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - ' . $data->DetailPesananProduk->GudangBarangJadi->nama;
@@ -1005,15 +1234,15 @@ class DcController extends Controller
                 // }
                 // $coo = NoseriCoo::whereIN('noseri_logistik_Id', $value)->get()->count();
 
-                 if ($data->DetailPesananProduk->GudangBarangJadi->Produk->coo == '0') {
-                   return '<span class="badge red-text">Bukan Produk Utama</span>';
+                if ($data->DetailPesananProduk->GudangBarangJadi->Produk->coo == '0') {
+                    return '<span class="badge red-text">Bukan Produk Utama</span>';
                 } else {
                     if ($data->cek_coo == 0) {
                         return '<span class="badge red-text">Belum Tersedia</span>';
                     } else {
                         return ' <span class="badge green-text">Tersedia</span>';
                     }
-                 }
+                }
             })
             ->addColumn('button', function ($data) {
 
@@ -1047,8 +1276,32 @@ class DcController extends Controller
                         </a>
                     </div>';
                 } else {
-
-                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    if ($data->cek_coo > 1) {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="noserishow dropdown-item" type="button" data-id="' . $data->id . '" data-count="' . $c . '">
+                            <i class="fas fa-eye"></i>
+                            Detail
+                        </a>
+                        <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="' . $x . '" data-jenis="kosong" data-stamp="0" data-produk="' . $data->cek_rw . '">
+                            <i class="fas fa-file"></i>
+                            Coo
+                        </button>
+                        <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="' . $x . '" data-jenis="back" data-stamp="0" data-produk="' . $data->cek_rw . '">
+                            <i class="fas fa-file"></i>
+                            Coo + Background
+                        </button>
+                        <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="' . $x . '" data-jenis="ttd" data-stamp="0" data-produk="' . $data->cek_rw . '">
+                            <i class="fas fa-file"></i>
+                            Coo + Background + Ttd
+                        </button>
+                        <button class="dropdown-item buttonShowModalCOO" type="button" data-id="' . $data->id . '" data-value="' . $x . '" data-jenis="ttd" data-stamp="1" data-produk="' . $data->cek_rw . '">
+                            <i class="fas fa-file"></i>
+                            Coo + Background + Ttd + Stamp
+                        </button>
+                    </div>';
+                    } else {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="noserishow dropdown-item" type="button" data-id="' . $data->id . '" data-count="' . $c . '">
                             <i class="fas fa-eye"></i>
@@ -1079,57 +1332,77 @@ class DcController extends Controller
                         </button>
                     </a>
                     </div>';
+                    }
                 }
             })
             ->rawColumns(['status', 'button'])
             ->make(true);
     }
+    public function get_data_detail_seri_po($id)
+    {
+        $data = NoseriCoo::select('noseri_logistik.id', 'noseri_barang_jadi.noseri')
+            ->leftJoin('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
+            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+            ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+            ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+            ->leftJoin('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+            ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+            ->orderBy(
+                'noseri_coo.no_coo'
+            )
+            ->where('pesanan.id', $id)
+            ->get();
+
+
+        return response()->json($data);
+    }
     public function get_data_detail_seri_so($id, $jenis)
     {
         $data = "";
         if ($jenis == "belum") {
-            $data = NoseriDetailLogistik::
-            select('pesanan.so','noseri','detail_logistik_id','noseri_logistik.id','noseri_coo.tgl_kirim','noseri_coo.catatan')
-           ->addSelect([
-                'coo' => function ($q) {
-                    $q->selectRaw('coalesce(count(noseri_coo.id),0)')
-                        ->from('noseri_coo')
-                        ->whereColumn('noseri_coo.noseri_logistik_id', 'noseri_logistik.id');
-                },
-           ])
-            ->leftJoin('noseri_coo','noseri_coo.noseri_logistik_id','=','noseri_logistik.id')
-            ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
-            ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','noseri_detail_pesanan.detail_pesanan_produk_id')
-            ->leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
-            ->leftJoin('pesanan','pesanan.id','=','detail_pesanan.pesanan_id')
-            ->leftJoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
-            ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
-            ->where('detail_logistik_id', $id)
-            ->doesntHave('NoseriCoo')->get();
+            $data = NoseriDetailLogistik::select('pesanan.so', 'noseri', 'detail_logistik_id', 'noseri_logistik.id', 'noseri_coo.tgl_kirim', 'noseri_coo.catatan')
+                ->selectRaw('"" AS jenis')
+                ->addSelect([
+                    'coo' => function ($q) {
+                        $q->selectRaw('coalesce(count(noseri_coo.id),0)')
+                            ->from('noseri_coo')
+                            ->whereColumn('noseri_coo.noseri_logistik_id', 'noseri_logistik.id');
+                    },
+                ])
+                ->leftJoin('noseri_coo', 'noseri_coo.noseri_logistik_id', '=', 'noseri_logistik.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                ->leftJoin('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+                ->where('detail_logistik_id', $id)
+                ->doesntHave('NoseriCoo')->get();
         } else {
-            $data = NoseriDetailLogistik::
-            select('pesanan.so','noseri','detail_logistik_id','noseri_logistik.id','noseri_coo.tgl_kirim','noseri_coo.catatan')
-           ->addSelect([
-                'coo' => function ($q) {
-                    $q->selectRaw('coalesce(count(noseri_coo.id),0)')
-                        ->from('noseri_coo')
-                        ->whereColumn('noseri_coo.noseri_logistik_id', 'noseri_logistik.id');
-                },
-           ])
-            ->leftJoin('noseri_coo','noseri_coo.noseri_logistik_id','=','noseri_logistik.id')
-            ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
-            ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','noseri_detail_pesanan.detail_pesanan_produk_id')
-            ->leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
-            ->leftJoin('pesanan','pesanan.id','=','detail_pesanan.pesanan_id')
-            ->leftJoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
-            ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
-            ->where('detail_logistik_id', $id)
-            ->has('NoseriCoo')
-            ->get();
+            $data = NoseriDetailLogistik::select('pesanan.so', 'noseri', 'detail_logistik_id', 'noseri_logistik.id', 'noseri_coo.tgl_kirim', 'noseri_coo.catatan', 'noseri_coo.jenis')
+                ->addSelect([
+                    'coo' => function ($q) {
+                        $q->selectRaw('coalesce(count(noseri_coo.id),0)')
+                            ->from('noseri_coo')
+                            ->whereColumn('noseri_coo.noseri_logistik_id', 'noseri_logistik.id');
+                    },
+                ])
+                ->leftJoin('noseri_coo', 'noseri_coo.noseri_logistik_id', '=', 'noseri_logistik.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                ->leftJoin('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+                ->where('detail_logistik_id', $id)
+                ->orderBy('noseri_coo.no_coo')
+                ->has('NoseriCoo')
+                ->get();
         }
 
 
-       //return response()->json(['jumlah'=> count($data) , 'data' => $data]);
+        //return response()->json(['jumlah'=> count($data) , 'data' => $data]);
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1160,7 +1433,7 @@ class DcController extends Controller
                 }
             })
             ->addColumn('laporan', function ($data) {
-                 $name = explode('/', $data->so);
+                $name = explode('/', $data->so);
 
                 if ($name[1] == 'EKAT') {
                     $x = 'ekatalog';
@@ -1169,7 +1442,42 @@ class DcController extends Controller
                 }
 
                 if ($data->coo != 0) {
-                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    if ($data->jenis == 'antro') {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a data-target="#tglkirim_modal" class="tglkirim_modal"  data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button">
+                            <i class="fas fa-pencil-alt"></i>
+                                Edit
+                            </button>
+                        </a>
+                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '&produk=1&penjualan=ekatalog&jenis=kosong&stamp=0" target="_blank">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-file"></i>
+                                Coo
+                            </button>
+                        </a>
+                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '&produk=1&penjualan=ekatalog&jenis=back&stamp=0" target="_blank">
+                                <button class="dropdown-item" type="button">
+                                    <i class="fas fa-file"></i>
+                                    Coo + Background
+                                </button>
+                            </a>
+                            <a href="/dc/coo/rework/pdf?id=' . $data->id . '&produk=1&penjualan=ekatalog&jenis=ttd&stamp=0" target="_blank">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-file"></i>
+                                Coo + Background + Ttd
+                            </button>
+                        </a>
+                            <a href="/dc/coo/rework/pdf?id=' . $data->id . 'produk=1&penjualan=ekatalog&jenis=ttd&stamp=0" target="_blank">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-file"></i>
+                                Coo + Background + Ttd + Stamp
+                            </button>
+                        </a>
+                        </div>';
+                    } else {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a data-target="#tglkirim_modal" class="tglkirim_modal"  data-id="' . $data->id . '">
                     <button class="dropdown-item" type="button">
@@ -1202,6 +1510,7 @@ class DcController extends Controller
                     </button>
                 </a>
                 </div>';
+                    }
                 }
             })
             ->rawColumns(['checkbox', 'laporan'])
@@ -1211,41 +1520,37 @@ class DcController extends Controller
     {
         $array_seri = explode(',', $id);
         if ($id == 0) {
-          //  $data =  NoseriDetailLogistik::with(['NoseriDetailPesanan.NoseriTGbj.NoseriBarangJadi'])->DoesntHave('NoseriCoo')->where('detail_logistik_id', $value)->get();
+            //  $data =  NoseriDetailLogistik::with(['NoseriDetailPesanan.NoseriTGbj.NoseriBarangJadi'])->DoesntHave('NoseriCoo')->where('detail_logistik_id', $value)->get();
 
-            $data = NoseriDetailLogistik::
-            select('noseri')
-           ->addSelect([
-                'coo' => function ($q) {
-                    $q->selectRaw('coalesce(count(noseri_coo.id),0)')
-                        ->from('noseri_coo')
-                        ->whereColumn('noseri_coo.noseri_logistik_id', 'noseri_logistik.id');
-                },
-           ])
-            ->leftJoin('noseri_coo','noseri_coo.noseri_logistik_id','=','noseri_logistik.id')
-            ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
-            ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','noseri_detail_pesanan.detail_pesanan_produk_id')
-            ->leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
-            ->leftJoin('pesanan','pesanan.id','=','detail_pesanan.pesanan_id')
-            ->leftJoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
-            ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
-            ->where('detail_logistik_id', $value)
-            ->doesntHave('NoseriCoo')->get();
-
-
+            $data = NoseriDetailLogistik::select('noseri')
+                ->addSelect([
+                    'coo' => function ($q) {
+                        $q->selectRaw('coalesce(count(noseri_coo.id),0)')
+                            ->from('noseri_coo')
+                            ->whereColumn('noseri_coo.noseri_logistik_id', 'noseri_logistik.id');
+                    },
+                ])
+                ->leftJoin('noseri_coo', 'noseri_coo.noseri_logistik_id', '=', 'noseri_logistik.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                ->leftJoin('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+                ->where('detail_logistik_id', $value)
+                ->doesntHave('NoseriCoo')->get();
         } else {
             //$data =  NoseriDetailLogistik::with(['NoseriDetailPesanan.NoseriTGbj.NoseriBarangJadi'])->whereIN('id', $array_seri)->get();
-            $data = NoseriDetailLogistik::
-            select('noseri')
-            ->leftJoin('noseri_coo','noseri_coo.noseri_logistik_id','=','noseri_logistik.id')
-            ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
-            ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','noseri_detail_pesanan.detail_pesanan_produk_id')
-            ->leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
-            ->leftJoin('pesanan','pesanan.id','=','detail_pesanan.pesanan_id')
-            ->leftJoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
-            ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
-            ->whereIn('noseri_logistik.id', $array_seri)
-            ->get();
+            $data = NoseriDetailLogistik::select('noseri')
+                ->leftJoin('noseri_coo', 'noseri_coo.noseri_logistik_id', '=', 'noseri_logistik.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                ->leftJoin('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+                ->whereIn('noseri_logistik.id', $array_seri)
+                ->get();
         }
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1357,6 +1662,7 @@ class DcController extends Controller
     }
     public function create_coo(Request $request)
     {
+
         $obj = json_decode($request->input('noseri'));
         // if ($id == 0) {
         //     $data =  NoseriDetailLogistik::where('detail_logistik_id', $obj->detail_logistik_id)->first();
@@ -1378,35 +1684,33 @@ class DcController extends Controller
         //     $noseri_id =  json_encode($value2);
         // }
 
-        $series = NoseriDetailLogistik::
-        select('noseri_barang_jadi.noseri')
-        ->leftJoin('noseri_coo','noseri_coo.noseri_logistik_id','=','noseri_logistik.id')
-        ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
-        ->leftJoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
-        ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
-        ->whereIN('noseri_logistik.id', $obj->id)
-        ->pluck('noseri')->toArray();
+        $series = NoseriDetailLogistik::select('noseri_barang_jadi.noseri')
+            ->leftJoin('noseri_coo', 'noseri_coo.noseri_logistik_id', '=', 'noseri_logistik.id')
+            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+            ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+            ->whereIN('noseri_logistik.id', $obj->id)
+            ->pluck('noseri')->toArray();
 
-        $data =  NoseriDetailLogistik::
-        select('produk.nama','produk.no_akd')
-        ->leftJoin('noseri_coo','noseri_coo.noseri_logistik_id','=','noseri_logistik.id')
-        ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
-        ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','noseri_detail_pesanan.detail_pesanan_produk_id')
-        ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','detail_pesanan_produk.gudang_barang_jadi_id')
-        ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
-        ->leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
-        ->leftJoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
-        ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
-        ->whereIN('noseri_logistik.id', $obj->id)
-        ->first();
+        $data =  NoseriDetailLogistik::select('produk.nama', 'produk.no_akd')
+            ->leftJoin('noseri_coo', 'noseri_coo.noseri_logistik_id', '=', 'noseri_logistik.id')
+            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+            ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+            ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+            ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+            ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+            ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+            ->whereIN('noseri_logistik.id', $obj->id)
+            ->first();
         $jumlah = count($obj->id);
 
-            // $seri_data = NoseriDetailLogistik::whereIN('id',  $obj->id)->get();
-            // foreach ($seri_data as $d) {
-            //     $value2[] = $d->id;
-            // }
+        // $seri_data = NoseriDetailLogistik::whereIN('id',  $obj->id)->get();
+        // foreach ($seri_data as $d) {
+        //     $value2[] = $d->id;
+        // }
 
-        return view('page.dc.coo.create', ['series'=> $series,'data' => $data, 'id' => $obj->id, 'jumlah' => $jumlah, 'noseri_id' => json_encode($obj->id)]);
+        return view('page.dc.coo.create', ['series' => $series, 'data' => $data, 'id' => $obj->id, 'jumlah' => $jumlah, 'noseri_id' => json_encode($obj->id)]);
     }
 
     public function edit_coo(Request $request)
@@ -1435,31 +1739,27 @@ class DcController extends Controller
         //     $noseri_id =  json_encode($value2);
         // }
 
-        $series = NoseriDetailLogistik::
-        select('noseri_barang_jadi.noseri')
-        ->leftJoin('noseri_coo','noseri_coo.noseri_logistik_id','=','noseri_logistik.id')
-        ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
-        ->leftJoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
-        ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
-        ->whereIN('noseri_logistik.id', $obj->id)
-        ->pluck('noseri')->toArray();
+        $series = NoseriDetailLogistik::select('noseri_barang_jadi.noseri')
+            ->leftJoin('noseri_coo', 'noseri_coo.noseri_logistik_id', '=', 'noseri_logistik.id')
+            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+            ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+            ->whereIN('noseri_logistik.id', $obj->id)
+            ->pluck('noseri')->toArray();
 
-        $data =  NoseriDetailLogistik::
-        select('produk.nama','produk.no_akd')
-        ->leftJoin('noseri_coo','noseri_coo.noseri_logistik_id','=','noseri_logistik.id')
-        ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
-        ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','noseri_detail_pesanan.detail_pesanan_produk_id')
-        ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','detail_pesanan_produk.gudang_barang_jadi_id')
-        ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
-        ->leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
-        ->leftJoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
-        ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
-        ->whereIN('noseri_logistik.id', $obj->id)
-        ->first();
+        $data =  NoseriDetailLogistik::select('produk.nama', 'produk.no_akd')
+            ->leftJoin('noseri_coo', 'noseri_coo.noseri_logistik_id', '=', 'noseri_logistik.id')
+            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+            ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+            ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+            ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+            ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+            ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+            ->whereIN('noseri_logistik.id', $obj->id)
+            ->first();
         $jumlah = count($obj->id);
-        return view('page.dc.coo.edit', ['series'=> $series,'data' => $data, 'id' => $obj->id, 'jumlah' => $jumlah, 'noseri_id' => json_encode($obj->id)]);
-
-
+        return view('page.dc.coo.edit', ['series' => $series, 'data' => $data, 'id' => $obj->id, 'jumlah' => $jumlah, 'noseri_id' => json_encode($obj->id)]);
     }
 
     public function edit_tglkirim_coo($id)
@@ -1476,136 +1776,125 @@ class DcController extends Controller
     // $check = Pesanan::whereYear('created_at', $this->getYear())->where('so', 'like', '%' . $this->getYear() . '%')->get('so');
     public function store_coo(Request $request)
     {
-
-        if ($request->diketahui == 'spa') {
-            $nama = NULL;
-            $jabatan = NULL;
-            $ket = 'spa';
-        } elseif ($request->diketahui == 'emiindo') {
-            $nama = NULL;
-            $jabatan = NULL;
-            $ket = 'emiindo';
-        } else {
-            $nama = $request->nama;
-            $jabatan = $request->jabatan;
-            $ket = NULL;
-        }
-        $array_seri = json_decode($request->id);
-        $bool = true;
-        for ($i = 0; $i < count($array_seri); $i++) {
-            $noseri = NoseriCoo::where('noseri_logistik_id', $array_seri[$i])->first();
-            if ($noseri) {
-                $l = NoseriCoo::find($noseri->id);
-                $l->nama = $nama;
-                $l->jabatan = $jabatan;
-                $l->ket = $ket;
-                $l->tgl_kirim = $request->tgl_kirim;
-                $l->catatan = $request->keterangan;
-                $l->save();
-                if (!$l) {
-                    $bool = false;
-                }
+        $array_seri = explode(',', $request->id);
+        DB::beginTransaction();
+        try {
+            $array_seri = explode(',', $request->id);
+            if ($request->diketahui == 'spa') {
+                $nama = NULL;
+                $jabatan = NULL;
+                $ket = 'spa';
+            } elseif ($request->diketahui == 'emiindo') {
+                $nama = NULL;
+                $jabatan = NULL;
+                $ket = 'emiindo';
             } else {
-                $l = NoseriDetailLogistik::find($array_seri[$i]);
-                $max = NoseriCoo::where('tahun', $this->getYear($l->DetailLogistik->Logistik->tgl_kirim))->latest('id')->value('no_coo');
-                $c = NoseriCoo::create([
-                    'no_coo' => $max + 1,
-                    'tahun' => $this->getYear($l->DetailLogistik->Logistik->tgl_kirim),
+                $nama = $request->nama;
+                $jabatan = $request->jabatan;
+                $ket = NULL;
+            }
+
+            $l = NoseriDetailLogistik::find($array_seri[0]);
+            $cek_rw = SeriDetailRw::selectRaw('coalesce(count(seri_detail_rw.id), 0) as cek')
+                ->leftjoin('noseri_barang_jadi', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                ->leftJoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
+                ->where('noseri_logistik.id', $array_seri[0])->get();
+
+            if ($cek_rw[0]->cek > 0) {
+                $max = NoseriCoo::where(['tahun' => $this->getYear($l->DetailLogistik->Logistik->tgl_kirim), 'jenis' => 'antro'])->latest('id')->value('no_coo') + 1;
+            } else {
+                $max = NoseriCoo::where(['tahun' => $this->getYear($l->DetailLogistik->Logistik->tgl_kirim), 'jenis' => 'default'])->latest('id')->value('no_coo') + 1;
+            }
+
+            $thn =  $this->getYear($l->DetailLogistik->Logistik->tgl_kirim);
+            //code...
+            for ($i = 0; $i < count($array_seri); $i++) {
+                NoseriCoo::create([
+                    'no_coo' => $max + $i,
                     'nama' => $nama,
                     'jabatan' => $jabatan,
-                    'ket' => $ket,
                     'noseri_logistik_id' => $array_seri[$i],
+                    'ket' => $ket,
                     'tgl_kirim' => $request->tgl_kirim,
-                    'catatan' => $request->keterangan,
+                    'catatan' =>  $request->keterangan,
+                    'tahun' => $thn,
+                    'jenis' => $cek_rw[0]->cek > 0 ? 'antro' : 'default'
                 ]);
-                if (!$c) {
-                    $bool = false;
-                }
             }
-        }
-        if ($bool == true) {
-            $obj = [
-                'noseri' => NoseriBarangJadi::whereIn(
-                    'id',
-                    NoseriTGbj::whereIn(
-                        'id',
-                        NoseriDetailPesanan::whereIn(
-                            'id',
-                            NoseriDetailLogistik::whereIn('id', $array_seri)
-                                ->get()->pluck('noseri_detail_pesanan_id')
-                        )
-                            ->get()->pluck('t_tfbj_noseri_id')
-                    )
-                        ->get()->pluck('noseri_id')
-                )
-                    ->get()->pluck('noseri'),
+            $series = NoseriBarangJadi::select('noseri_barang_jadi.noseri')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                ->leftJoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
+                ->whereIN('noseri_logistik.id', $array_seri)
+                ->pluck('noseri_barang_jadi.noseri')
+                ->toArray();
+
+            $item = [
+                'noseri' => $series,
                 'diketahui' => $request->diketahui,
                 'nama' => $request->nama,
                 'jabatan' => $request->jabatan,
                 'tgl_kirim' => $request->tgl_kirim,
-                'keterangan' => $request->keterangan,
+                'keterangan' => $request->keterangan
             ];
 
             SystemLog::create([
                 'tipe' => 'DC',
-                'subjek' => 'Pembuatan COO',
-                'response' => json_encode($obj),
+                'subjek' => 'Penambahan COO',
+                'response' => json_encode($item),
                 'user_id' => $request->user_id,
             ]);
+
+            DB::commit();
             return response()->json(['data' =>  'success'], 200);
-        } else {
+        } catch (\Throwable $th) {
+            DB::rollBack();
             return response()->json(['data' =>  'error'], 500);
         }
     }
 
     public function update_coo(Request $request)
     {
-        $array_seri = json_decode($request->id);
-        $bool = true;
-        for ($i = 0; $i < count($array_seri); $i++) {
-            $noseri = NoseriCoo::where('noseri_logistik_id', $array_seri[$i])->first();
-            if ($noseri) {
-                $l = NoseriCoo::find($noseri->id);
-                $l->tgl_kirim = $request->edit_tgl_kirim;
-                $l->catatan = $request->edit_keterangan;
-                $l->save();
-                if (!$l) {
-                    $bool = false;
-                }
+        DB::beginTransaction();
+        try {
+            $array_seri = explode(',', $request->id);
+            //code...
+            for ($i = 0; $i < count($array_seri); $i++) {
+                NoseriCoo::where('noseri_logistik_id', $array_seri[$i])
+                    ->update([
+                        'tgl_kirim' => $request->edit_tgl_kirim,
+                        'catatan' => $request->edit_keterangan
+                    ]);
             }
-        }
-        if ($bool == true) {
-            $obj = [
-                'noseri' => NoseriBarangJadi::whereIn(
-                    'id',
-                    NoseriTGbj::whereIn(
-                        'id',
-                        NoseriDetailPesanan::whereIn(
-                            'id',
-                            NoseriDetailLogistik::whereIn('id', $array_seri)
-                                ->get()->pluck('noseri_detail_pesanan_id')
-                        )
-                            ->get()->pluck('t_tfbj_noseri_id')
-                    )
-                        ->get()->pluck('noseri_id')
-                )
-                    ->get()->pluck('noseri'),
+            $series = NoseriBarangJadi::select('noseri_barang_jadi.noseri')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                ->leftJoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
+                ->whereIN('noseri_logistik.id', $array_seri)
+                ->pluck('noseri_barang_jadi.noseri')
+                ->toArray();
+            $item = [
+                'noseri' => $series,
                 'diketahui' => $request->diketahui,
                 'nama' => $request->nama,
                 'jabatan' => $request->jabatan,
                 'tgl_kirim' => $request->edit_tgl_kirim,
                 'keterangan' => $request->edit_keterangan,
             ];
-
             SystemLog::create([
                 'tipe' => 'DC',
-                'subjek' => 'Perubahan Beberapa COO',
-                'response' => json_encode($obj),
+                'subjek' => 'Ubah COO',
+                'response' => json_encode($item),
                 'user_id' => $request->user_id,
             ]);
-            return response()->json(['data' =>  'success']);
-        } else {
-            return response()->json(['data' =>  'error']);
+            DB::commit();
+            return response()->json(['data' =>  'success'], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            //dd($th->getMessage());
+            return response()->json(['data' =>  'error'], 500);
         }
     }
 
@@ -2620,17 +2909,17 @@ class DcController extends Controller
 
     public function cancel_so(Request $request)
     {
-       $user = User::find($request->user);
+        $user = User::find($request->user);
 
-       $cek =  str_word_count($request->alasan);
-       if($cek < 5){
-        return response()->json([
-            'data' => 'alasan_salah',
-            'message' => 'Alasan yang dimasukkan minimal 5 kata',
-        ], 200);
-       }
+        $cek =  str_word_count($request->alasan);
+        if ($cek < 5) {
+            return response()->json([
+                'data' => 'alasan_salah',
+                'message' => 'Alasan yang dimasukkan minimal 5 kata',
+            ], 200);
+        }
 
-       $get = DB::select('
+        $get = DB::select('
        select  p.no_po , group_concat(nc.id) as coo_id, group_concat(nc.tahun) as tahun , group_concat(nc.no_coo) as coo_no ,  group_concat(nbj.noseri) as seri  from noseri_coo nc
        left join  noseri_logistik nl on nc.noseri_logistik_id = nl.id
        left join noseri_detail_pesanan ndp on ndp.id = nl.noseri_detail_pesanan_id
@@ -2642,72 +2931,68 @@ class DcController extends Controller
        where p.id = ?', [$request->id]);
 
 
-    $id =  explode(',', $get[0]->coo_id);
-    $seri =  explode(',', $get[0]->seri);
-    $coo_no =  explode(',', $get[0]->coo_no);
-    $tahun =  explode(',', $get[0]->tahun);
+        $id =  explode(',', $get[0]->coo_id);
+        $seri =  explode(',', $get[0]->seri);
+        $coo_no =  explode(',', $get[0]->coo_no);
+        $tahun =  explode(',', $get[0]->tahun);
 
-    if(count($seri) > 0){
+        if (count($seri) > 0) {
 
-        try {
-            NoseriCoo::whereIn('id', $id)->delete();
-        } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'Ada kesalahan, batal transaksi gagal',
-            ], 500);
-        }
+            try {
+                NoseriCoo::whereIn('id', $id)->delete();
+            } catch (\Throwable $th) {
+                return response()->json([
+                    'message' => 'Ada kesalahan, batal transaksi gagal',
+                ], 500);
+            }
 
-        $save =   SystemLog::create([
-            'tipe' => 'DC',
-            'subjek' => 'Batalkan Transaksi',
-            'user_id' => $user->id
-        ]);
+            $save =   SystemLog::create([
+                'tipe' => 'DC',
+                'subjek' => 'Batalkan Transaksi',
+                'user_id' => $user->id
+            ]);
 
-        foreach ($seri as $key_c => $coo)
-        {
-            $seri[$key_c] = array(
-                'coo_no' =>   $coo_no[$key_c],
-                'tahun' =>   $tahun[$key_c],
-                'noseri' =>   $seri[$key_c]
+            foreach ($seri as $key_c => $coo) {
+                $seri[$key_c] = array(
+                    'coo_no' =>   $coo_no[$key_c],
+                    'tahun' =>   $tahun[$key_c],
+                    'noseri' =>   $seri[$key_c]
 
+                );
+            }
+
+            $data = array(
+                'po' => $get[0]->no_po,
+                'alasan' => $request->alasan,
+                'noseri' => $seri
             );
+
+            $data = json_encode($data);
+            $get_response = SystemLog::find($save->id);
+            $get_response->response = $data;
+            $get_response->save();
+
+
+            return response()->json([
+                'data' => 'berhasil',
+                'message' => 'Data berhasil dibatalkan',
+            ], 200);
         }
 
-        $data = array(
-            'po' => $get[0]->no_po,
-            'alasan' => $request->alasan,
-            'noseri' => $seri
-        );
-
-        $data = json_encode($data);
-        $get_response = SystemLog::find($save->id);
-        $get_response->response = $data;
-        $get_response->save();
+        return response()->json([
+            'message' => 'Ada kesalahan, batal transaksi gagal',
+        ], 500);
 
 
         return response()->json([
             'data' => 'berhasil',
             'message' => 'Data berhasil dibatalkan',
         ], 200);
-
-    }
-
-    return response()->json([
-        'message' => 'Ada kesalahan, batal transaksi gagal',
-    ], 500);
-
-
-    return response()->json([
-        'data' => 'berhasil',
-        'message' => 'Data berhasil dibatalkan',
-    ], 200);
-
     }
 
     public function cancel_so_view($id)
     {
         $data = Pesanan::find($id);
-        return view('page.dc.so.cancel',['id' => $id,'data' => $data]);
+        return view('page.dc.so.cancel', ['id' => $id, 'data' => $data]);
     }
-
 }

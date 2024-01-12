@@ -406,7 +406,7 @@ Route::group(['prefix' => 'dc'], function () {
     });
 
     Route::group(['prefix' => '/coo'], function () {
-        Route::get('/rework/pdf', [App\Http\Controllers\DcController::class, 'pdf_coo_semua_rework']);
+        Route::get('/rework/pdf', [App\Http\Controllers\DcController::class, 'pdf_coo_semua_rework'])->name('dc.seri_reworks.coo.pdf');
         Route::group(['middleware' => ['divisi:dc,dirut']], function () {
             Route::view('/show', 'page.dc.coo.show')->name('dc.coo.show');
             Route::get('/pdf/so/{id}/{value}/{jenis}/{stamp}', [App\Http\Controllers\DcController::class, 'pdf_semua_so_coo'])->name('dc.coo.semua.so.pdf');

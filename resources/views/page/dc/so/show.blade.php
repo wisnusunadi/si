@@ -74,6 +74,10 @@
                 font-size: 12px;
             }
         }
+
+        table {
+            width: 100% !important;
+        }
     </style>
 @stop
 
@@ -207,8 +211,8 @@
             </div>
         </div>
         </div>
-        <div class="modal fade" id="batalmodal" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="batalmodal"
-        aria-hidden="true">
+        <div class="modal fade" id="batalmodal" data-backdrop="static" tabindex="-1" role="dialog"
+            aria-labelledby="batalmodal" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
                     <div class="modal-header">
@@ -222,126 +226,204 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="modalCetakCOO" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cetak COO</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <small class="text-muted"><span class="text-danger">*</span>Silahkan cetak tiap 100 Nomor
+                            Seri</small>
+                        <table class="table tableNoSeriCetakCOO">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="checkall"></th>
+                                    <th>Nomor Seri</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                        <button type="button" class="btn btn-primary cetakNoSeriCOO">Cetak</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 @stop
 @section('adminlte_js')
     <script>
-
-
-$(document).on('submit', '#batal_so_dc', function(e) {
-                e.preventDefault();
-                var action = $(this).attr('action');
-                console.log(action);
-                $.ajax({
-                    url: action,
-                    type: 'POST',
-                    data: $('#batal_so_dc').serialize(),
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                            if (response['data'] == "alasan_salah") {
-                            swal.fire(
-                                'Gagal',
-                                response['message'],
-                                'error'
-                            );
-                        }
-                            if (response['data'] == "berhasil") {
-                            swal.fire(
-                                'Berhasil',
-                                response['message'],
-                                'success'
-                            ).then(function() {
-                                $('.modal').modal('hide')
-                                $('#showtable').DataTable().ajax.url('/api/dc/so/data/semua').load();
-                                selesaitable()
-
-                         });
-                        }
-
-                    },
-                    error: function(xhr, status, error) {
-                    console.log(error)
+        $(document).on('submit', '#batal_so_dc', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            console.log(action);
+            $.ajax({
+                url: action,
+                type: 'POST',
+                data: $('#batal_so_dc').serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response['data'] == "alasan_salah") {
                         swal.fire(
-                            'Error',
-                            'Ada kesalahan, batal transaksi gagal',
-                            'warning'
+                            'Gagal',
+                            response['message'],
+                            'error'
                         );
-
                     }
-                });
-                return false;
-            });
+                    if (response['data'] == "berhasil") {
+                        swal.fire(
+                            'Berhasil',
+                            response['message'],
+                            'success'
+                        ).then(function() {
+                            $('.modal').modal('hide')
+                            $('#showtable').DataTable().ajax.url('/api/dc/so/data/semua')
+                                .load();
+                            selesaitable()
 
-             $("#showtable").on('click', '.batalmodal', function(event) {
-                event.preventDefault();
-                var id = $(this).data('id');
-                swal.fire({
-                    title: 'Batalkan Transaksi',
-                    text: "Data transaksi ini akan terhapus semua",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    cancelButtonText: 'Tidak',
-                    confirmButtonText: 'Iya',
-                    }).then(function(isConfirm) {
-                        if (isConfirm.value === true) {
-                            console.log(id)
-                           $.ajax({
-                                url: '/dc/so/cancel/' + id,
-                                success: function(result) {
-                                    $('#batalmodal').modal("show");
-                                    $('#batal').html(result).show();
-                                },
-                                error: function(jqXHR, testStatus, error) {
-                                    alert("Page cannot open. Error:" + error);
-                                    $('#loader').hide();
-                                },
-                                timeout: 8000
-                              })
-                        }
+                        });
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    console.log(error)
+                    swal.fire(
+                        'Error',
+                        'Ada kesalahan, batal transaksi gagal',
+                        'warning'
+                    );
+
+                }
+            });
+            return false;
+        });
+
+        $("#showtable").on('click', '.batalmodal', function(event) {
+            event.preventDefault();
+            var id = $(this).data('id');
+            swal.fire({
+                title: 'Batalkan Transaksi',
+                text: "Data transaksi ini akan terhapus semua",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Tidak',
+                confirmButtonText: 'Iya',
+            }).then(function(isConfirm) {
+                if (isConfirm.value === true) {
+                    console.log(id)
+                    $.ajax({
+                        url: '/dc/so/cancel/' + id,
+                        success: function(result) {
+                            $('#batalmodal').modal("show");
+                            $('#batal').html(result).show();
+                        },
+                        error: function(jqXHR, testStatus, error) {
+                            alert("Page cannot open. Error:" + error);
+                            $('#loader').hide();
+                        },
+                        timeout: 8000
                     })
-            });
-             $("#selesaitable").on('click', '.batalmodal', function(event) {
-                event.preventDefault();
-                var id = $(this).data('id');
-                swal.fire({
-                    title: 'Batalkan Transaksi',
-                    text: "Data transaksi ini akan terhapus semua",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    cancelButtonText: 'Tidak',
-                    confirmButtonText: 'Iya',
-                    }).then(function(isConfirm) {
-                        if (isConfirm.value === true) {
-                            console.log(id)
-                           $.ajax({
-                                url: '/dc/so/cancel/' + id,
-                                success: function(result) {
-                                    $('#batalmodal').modal("show");
-                                    $('#batal').html(result).show();
-                                },
-                                error: function(jqXHR, testStatus, error) {
-                                    alert("Page cannot open. Error:" + error);
-                                    $('#loader').hide();
-                                },
-                                timeout: 8000
-                              })
-                        }
+                }
+            })
+        });
+        $("#selesaitable").on('click', '.batalmodal', function(event) {
+            event.preventDefault();
+            var id = $(this).data('id');
+            swal.fire({
+                title: 'Batalkan Transaksi',
+                text: "Data transaksi ini akan terhapus semua",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Tidak',
+                confirmButtonText: 'Iya',
+            }).then(function(isConfirm) {
+                if (isConfirm.value === true) {
+                    console.log(id)
+                    $.ajax({
+                        url: '/dc/so/cancel/' + id,
+                        success: function(result) {
+                            $('#batalmodal').modal("show");
+                            $('#batal').html(result).show();
+                        },
+                        error: function(jqXHR, testStatus, error) {
+                            alert("Page cannot open. Error:" + error);
+                            $('#loader').hide();
+                        },
+                        timeout: 8000
                     })
-            });
+                }
+            })
+        });
 
 
-            $(document).on('click', '#pills-selesai_coo-tab', function() {
-                selesaitable();
-            });
+        $(document).on('click', '#pills-selesai_coo-tab', function() {
+            selesaitable();
+        });
 
-            var showtable = $('#showtable').DataTable({
+        var showtable = $('#showtable').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                'url': '/api/dc/so/data/semua',
+                'type': 'POST',
+                'datatype': 'JSON',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'DT_RowIndex',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'no_po',
+            }, {
+                data: 'no_paket',
+            }, {
+                data: 'batas_paket',
+            }, {
+                data: 'nama_customer',
+            }, {
+                data: 'instansi',
+            }, {
+                data: 'status',
+            }, {
+                data: 'ket',
+                class: 'minimizechar'
+            }, {
+                data: 'button',
+            }, ]
+        })
+
+        function selesaitables() {
+            alert('ok')
+        }
+
+        function selesaitable() {
+            var showtable = $('#selesaitable').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
+                autoWidth: false,
                 ajax: {
-                    'url': '/api/dc/so/data/semua',
+                    'url': '/api/dc/so/selesai/semua',
                     'type': 'POST',
                     'datatype': 'JSON',
                     'headers': {
@@ -362,8 +444,6 @@ $(document).on('submit', '#batal_so_dc', function(e) {
                 }, {
                     data: 'no_paket',
                 }, {
-                    data: 'batas_paket',
-                }, {
                     data: 'nama_customer',
                 }, {
                     data: 'instansi',
@@ -375,67 +455,148 @@ $(document).on('submit', '#batal_so_dc', function(e) {
                 }, {
                     data: 'button',
                 }]
-            })
+            });
+        }
 
-            function selesaitables() {
-            alert('ok')
+        $('#filter').submit(function() {
+            var values = [];
+            $("input:checked").each(function() {
+                values.push($(this).val());
+            });
+            if (values != 0) {
+                var x = values;
+
+            } else {
+                var x = ['semua']
             }
-            function selesaitable() {
-                var showtable = $('#selesaitable').DataTable({
-                    destroy: true,
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        'url': '/api/dc/so/selesai/semua',
-                        'type': 'POST',
-                        'datatype': 'JSON',
-                        'headers': {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
+            console.log(x);
+            $('#showtable').DataTable().ajax.url('/api/dc/so/data/' + x).load();
+            return false;
+        });
 
-                    },
-                    language: {
-                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                    },
-                    columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    }, {
-                        data: 'no_po',
-                    }, {
-                        data: 'no_paket',
-                    }, {
-                        data: 'nama_customer',
-                    }, {
-                        data: 'instansi',
-                    }, {
-                        data: 'status',
-                    }, {
-                        data: 'ket',
-                        class: 'minimizechar'
-                    }, {
-                        data: 'button',
-                    }]
-                });
-            }
+        $(document).on('click', '.buttonShowModalCOO', function(e) {
+            e.preventDefault();
 
-            $('#filter').submit(function() {
-                var values = [];
-                $("input:checked").each(function() {
-                    values.push($(this).val());
-                });
-                if (values != 0) {
-                    var x = values;
+            var id = $(this).data('id');
+            var value = $(this).data('value');
+            var jenis = $(this).data('jenis');
+            var stamp = $(this).data('stamp');
+            console.log(id, value, jenis, stamp)
 
-                } else {
-                    var x = ['semua']
+            // implement to button cetak
+            $('.cetakNoSeriCOO').data('id', id)
+            $('.cetakNoSeriCOO').data('value', value)
+            $('.cetakNoSeriCOO').data('jenis', jenis)
+            $('.cetakNoSeriCOO').data('stamp', stamp)
+
+            $('.tableNoSeriCetakCOO').DataTable()
+
+            // create foreach for data 1000
+            $.ajax({
+                type: "post",
+                url: `/api/dc/so/detail/seri_po/${id}`,
+                success: function(data) {
+                    $('.tableNoSeriCetakCOO').DataTable({
+                        destroy: true,
+                        data: data,
+                        autoWidth: false,
+                        pageLength: 100,
+                        lengthChange: false,
+                        columns: [{
+                                data: 'id',
+                                sortable: false,
+                                render: function(data, type, row) {
+                                    return `<input type="checkbox" class="checkboxChild" name="" id="">`
+                                }
+                            },
+                            {
+                                data: 'noseri'
+                            }
+                        ]
+                    })
+                    $('#modalCetakCOO').modal('show');
+                    $('#checkall').prop('checked', false)
                 }
-                console.log(x);
-                $('#showtable').DataTable().ajax.url('/api/dc/so/data/' + x).load();
-                return false;
             });
 
+            // create datatable with data
+
+        })
+
+        $('#checkall').click(function() {
+            if ($(this).is(':checked')) {
+                $('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]').prop('checked', true)
+            } else {
+                $('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]').prop('checked', false)
+            }
+        })
+
+        var table = $('.tableNoSeriCetakCOO').DataTable();
+
+        function checkNoSeriAll() {
+            if ($('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]').length == $(
+                    '.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]:checked').length) {
+                $('#checkall').prop('checked', true)
+            } else {
+                $('#checkall').prop('checked', false)
+            }
+
+            console.log($('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]:checked').length)
+        }
+
+        table.on('page.dt', function() {
+            // Uncheck the "check all" checkbox
+            setTimeout(() => {
+                checkNoSeriAll()
+            }, 200);
+        });
+
+        $(document).on('click', '.checkboxChild', function() {
+            // check if all checkbox is checked
+            checkNoSeriAll()
+        })
+
+        $(document).on('click', '.cetakNoSeriCOO', function(e) {
+            e.preventDefault()
+
+            var data = []
+
+            var table = $('.tableNoSeriCetakCOO').DataTable()
+
+            // get all checked checkbox on datatable
+            table.$('input[type="checkbox"]').each(function() {
+                if ($(this).is(':checked')) {
+                    var row = table.row($(this).parents('tr')).data()
+                    data.push(row.id)
+                }
+            })
+
+            if (data.length > 100) {
+                swal.fire(
+                    'Gagal',
+                    'Maksimal cetak 100 nomor seri',
+                    'error'
+                )
+                return
+            }
+
+
+            var id = $(this).data('id');
+            var value = $(this).data('value');
+            var jenis = $(this).data('jenis');
+            var stamp = $(this).data('stamp');
+
+            console.log(id, value, jenis, stamp)
+            window.open(
+                `/dc/coo/rework/pdf?id=${data}&produk=${id}&penjualan=${value}&jenis=${jenis}&stamp=${stamp}`)
+
+            table.$('input[type="checkbox"]').each(function() {
+                if ($(this).is(':checked')) {
+                    // uncheck all checkbox
+                    $(this).prop('checked', false)
+                }
+            })
+            $('#checkall').prop('checked', false)
+        })
     </script>
 @stop
