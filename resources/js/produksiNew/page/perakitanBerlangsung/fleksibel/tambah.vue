@@ -95,48 +95,76 @@ export default {
             const cekForm = Object.values(this.form).every(x => x != '' && x != null && x != undefined && x != 0)
             const cekbppb = this.form.no_bppb !== null && this.form.no_bppb !== '' && this.form.no_bppb !== undefined && this.form.no_bppb !== '-'
 
-
-            const ceknoserinull = this.noseri.filter((item) => {
-                return item.noseri === null || item.noseri === ''
+            this.noseri.find((item) => {
+                if (item.error) {
+                    delete item.error;
+                    delete item.message;
+                }
             })
 
-            if (ceknoserinull.length == this.noseri.length) {
-                this.$swal('Perhatian', 'No Seri tidak boleh kosong', 'warning')
-                return
-            }
-
-            const noseriUnique = this.noseri.filter((data, index) => {
-                return this.noseri.findIndex((item) => {
-                    return item.noseri === data.noseri
-                }) === index
-            })
-
-            if (ceknoserinull.length !== noseriUnique.length) {
-                this.noseri = this.noseri.map((item) => {
-                    if (item.noseri === null || item.noseri === '') {
-                        item.error = true
-                        item.message = 'No. Seri tidak boleh sama'
-                    }
-                    return item
+            if (this.form.produk?.isGenerate == false) {
+                const ceknoserinull = this.noseri.filter((item) => {
+                    return item.noseri === null || item.noseri === ''
                 })
-                this.$swal({
-                    title: 'Peringatan!',
-                    text: 'Nomor seri tidak boleh sama',
-                    icon: 'warning',
-                    timer: 1000, // 1 seconds
-                    showConfirmButton: false
-                });
-                return;
+
+                if (ceknoserinull.length == this.noseri.length) {
+                    this.$swal('Perhatian', 'No Seri tidak boleh kosong', 'warning')
+                    return
+                }
+
+                const noseri = this.noseri.filter((item) => {
+                    return item.noseri !== null && item.noseri !== ''
+                })
+
+                const noseriUnique = noseri.filter((data, index) => {
+                    return this.noseri.findIndex((item) => {
+                        return item.noseri === data.noseri
+                    }) === index
+                })
+
+                if (noseriUnique.length !== noseri.length) {
+                    this.noseri = this.noseri.map((item) => {
+                        if (this.noseri.findIndex((data) => data.noseri === item.noseri) !== this.noseri.lastIndexOf(item)) {
+                            item.error = true;
+                            item.message = 'Nomor seri tidak boleh sama';
+                        }
+                        return item;
+                    })
+                    this.$swal({
+                        title: 'Peringatan!',
+                        text: 'Nomor seri tidak boleh sama',
+                        icon: 'warning',
+                        timer: 1000, // 1 seconds
+                        showConfirmButton: false
+                    });
+                    this.loadingNoSeri = true;
+                    this.$nextTick(() => {
+                        this.loadingNoSeri = false;
+                    });
+                    return;
+                } else {
+                    this.loadingNoSeri = true;
+                    this.noseri = this.noseri.map((item) => {
+                        delete item.error
+                        delete item.message
+                        return item
+                    })
+                    this.$nextTick(() => {
+                        this.loadingNoSeri = false;
+                    });
+                }
             }
 
-            const formNoSeri = {}
+            let formNoSeri = {}
 
             if (this.form.produk?.isGenerate) {
                 formNoSeri = this.form
             } else {
                 formNoSeri = {
                     ...this.form,
-                    noseri: this.noseri
+                    noseri: this.noseri.filter((item) => {
+                        return item.noseri !== null && item.noseri !== ''
+                    })
                 }
             }
 
@@ -146,9 +174,11 @@ export default {
                     this.loading = true
                     const { data } = await axios.post('/api/prd/fg/non_jadwal/gen', formNoSeri)
                     this.$swal('Berhasil', 'Data berhasil disimpan', 'success')
-                    const { noseri, id } = data
+                    const { noseri, produk_id, date_in, id } = data
                     this.hasilGenerate = noseri
-                    this.idCetakHasilGenerate = id
+                    const tgl = moment(date_in).format('YYYY-MM-DD')
+                    const wkt_rakit = this.timeFormat(date_in)
+                    this.idCetakHasilGenerate = `${produk_id}&dd=${tgl} ${wkt_rakit}`
                 } catch (error) {
                     console.log(error);
                     const { message, seri, duplicate, available } = error.response.data
@@ -241,16 +271,17 @@ export default {
             this.noseri = []
 
             for (let i = 0; i < noseriarray.length; i++) {
-                this.noseri.push({ noseri: noseriarray[i] })
+                this.noseri.push({ noseri: noseriarray[i].toUpperCase() })
             }
         },
         autoTab(event, idx) {
             event.target.value = event.target.value.toUpperCase();
-            if (this.noseri[idx].error) {
-                delete this.noseri[idx].error;
-                delete this.noseri[idx].message;
-            }
-
+            this.noseri.find((item) => {
+                if (item.error) {
+                    delete item.error;
+                    delete item.message;
+                }
+            })
             const noseri = this.noseri.filter((item) => {
                 return item.noseri !== null && item.noseri !== ''
             })
@@ -294,6 +325,7 @@ export default {
                 this.$refs.noseri[idx + 1].focus();
             } else {
                 this.$refs.noseri[idx].blur();
+                this.simpan();
             }
 
         }
@@ -338,8 +370,8 @@ export default {
     <div>
         <seriviatext v-if="showmodalviatext" @close="closeModalSeriViaText" @submit="submit"></seriviatext>
         <modalPilihan v-if="showModalCetak" @closeModal="closeModalCetak" :data="idCetakHasilGenerate"></modalPilihan>
-        <div class="modal fade modalFleksibel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-            aria-hidden="true">
+        <div class="modal fade modalFleksibel" data-backdrop="static" tabindex="-1" role="dialog"
+            aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -409,10 +441,10 @@ export default {
                                                 <tbody>
                                                     <tr v-for="(seri, index) in noseri" :key="index">
                                                         <td>
-                                                            <input type="text" class="form-control" 
+                                                            <input type="text" class="form-control"
                                                                 :class="seri.error ? 'is-invalid' : ''"
-                                                                v-model="seri.noseri"
-                                                                ref="noseri" :disabled="hasilGenerate.length > 0"
+                                                                v-model="seri.noseri" ref="noseri"
+                                                                :disabled="hasilGenerate.length > 0"
                                                                 @keyup.enter="autoTab($event, index)"
                                                                 @keyup="$event.target.value = $event.target.value.toUpperCase()">
                                                             <div class="invalid-feedback" v-if="seri.error">

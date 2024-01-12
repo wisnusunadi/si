@@ -2,10 +2,13 @@
 import axios from 'axios';
 import DataTable from '../../../components/DataTable.vue';
 import seriviatext from '../../../../gbj/page/PermintaanReworkGBJ/permintaan/formPermintaan/seriviatext.vue';
+import modalPilihan from '../perakitan/modalPilihan.vue'
+import moment from 'moment';
 export default {
     components: {
         DataTable,
-        seriviatext
+        seriviatext,
+        modalPilihan
     },
     props: ['dataGenerate'],
     data() {
@@ -25,7 +28,8 @@ export default {
             hasilGenerate: [],
             loadingNoSeri: false,
             showmodalviatext: false,
-            noseriok: [],
+            idCetakHasilGenerate: null,
+            showModalCetak: false
         }
     },
     methods: {
@@ -49,10 +53,12 @@ export default {
         autoTab(event, idx) {
             // key upppercase
             event.target.value = event.target.value.toUpperCase();
-            if (this.noseri[idx].error) {
-                delete this.noseri[idx].error;
-                delete this.noseri[idx].message;
-            }
+            this.noseri.find((item) => {
+                if (item.error) {
+                    delete item.error;
+                    delete item.message;
+                }
+            })
 
             if (!this.noseri.find((data) => data?.error)) {
                 this.isError = false;
@@ -112,6 +118,14 @@ export default {
             const ceknoserinull = this.noseri.filter((item) => {
                 return item.noseri === null || item.noseri === ''
             })
+
+            this.noseri.find((item) => {
+                if (item.error) {
+                    delete item.error;
+                    delete item.message;
+                }
+            })
+
             if (!cekbppb) {
                 this.$swal('Peringatan!', 'Nomor BPPB tidak boleh kosong', 'warning');
                 return;
@@ -153,7 +167,11 @@ export default {
                 this.isDisabled = true;
                 this.loading = true;
                 const { data } = await axios.post('/api/prd/fg/non_gen', formSending)
-                console.log(data);
+                console.log(data)
+                const { produk_id, date_in } = data
+                const tgl = moment(date_in).format('YYYY-MM-DD')
+                const wkt_rakit = this.timeFormat(date_in)
+                this.idCetakHasilGenerate = `${produk_id}&dd=${tgl} ${wkt_rakit}`
                 this.$swal('Berhasil!', 'Data berhasil disimpan', 'success');
             } catch (error) {
                 const { message, duplicate, available } = error.response.data
@@ -193,20 +211,6 @@ export default {
             } finally {
                 this.loading = false;
             }
-        },
-        cetak() {
-            // remove noseri null
-            const noseri = this.noseri.filter((item) => {
-                return item.noseri !== null && item.noseri !== ''
-            })
-
-            // change to array like this ['1', '2', '3']
-
-            noseri.forEach((item, index) => {
-                noseri[index] = item.noseri
-            })
-
-            window.open(`/produksiReworks/cetak_seri_fg_medium_sementara?data=${noseri}`, '_blank');
         },
         checkValidation(error) {
             if (error !== undefined) {
@@ -262,11 +266,24 @@ export default {
             for (let i = 0; i < noseriarray.length; i++) {
                 for (let j = 0; j < this.noseri.length; j++) {
                     if (this.noseri[j].noseri === '') {
-                        this.noseri[j].noseri = noseriarray[i]
+                        this.noseri[j].noseri = noseriarray[i].toUpperCase()
                         break;
                     }
                 }
             }
+        },
+        cetakSeri() {
+            this.showModalCetak = true;
+            this.$nextTick(() => {
+                $('.inputNoSeri').modal('hide');
+                $('.modalPilihan').modal('show');
+            })
+        },
+        closeModalCetak() {
+            this.showModalCetak = false
+            this.$nextTick(() => {
+                $('.inputNoSeri').modal('show');
+            })
         }
     },
     mounted() {
@@ -295,6 +312,7 @@ export default {
 <template>
     <div>
         <seriviatext v-if="showmodalviatext" @close="closeModalSeriviatext" @submit="submit" />
+        <modalPilihan v-if="showModalCetak" @closeModal="closeModalCetak" :data="idCetakHasilGenerate"></modalPilihan>
         <div class="modal fade inputNoSeri" data-backdrop="static" id="modelId" tabindex="-1" role="dialog"
             aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
@@ -408,7 +426,8 @@ export default {
                                             </div>
                                             {{ loading ? 'Loading...' : 'Simpan' }}
                                         </button>
-                                        <button class="btn btn-success" @click="cetak" v-if="noseriok.length > 0">Cetak</button>
+                                        <button class="btn btn-success" @click="cetakSeri"
+                                            v-if="idCetakHasilGenerate">Cetak</button>
                                         <button class="btn btn-danger" @click="hapusSeriDuplikasi" v-if="isError">Hapus No
                                             Seri
                                             Duplikasi</button>
@@ -429,4 +448,5 @@ export default {
 .scrollable {
     height: 300px;
     overflow-y: auto;
-}</style>
+}
+</style>
