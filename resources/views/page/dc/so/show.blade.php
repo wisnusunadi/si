@@ -74,6 +74,10 @@
                 font-size: 12px;
             }
         }
+
+        table {
+            width: 100% !important;
+        }
     </style>
 @stop
 
@@ -577,7 +581,6 @@
             }
 
 
-
             var id = $(this).data('id');
             var value = $(this).data('value');
             var jenis = $(this).data('jenis');
@@ -586,6 +589,14 @@
             console.log(id, value, jenis, stamp)
             window.open(
                 `/dc/coo/rework/pdf?id=${data}&produk=${id}&penjualan=${value}&jenis=${jenis}&stamp=${stamp}`)
+
+            table.$('input[type="checkbox"]').each(function() {
+                if ($(this).is(':checked')) {
+                    // uncheck all checkbox
+                    $(this).prop('checked', false)
+                }
+            })
+            $('#checkall').prop('checked', false)
         })
     </script>
 @stop
