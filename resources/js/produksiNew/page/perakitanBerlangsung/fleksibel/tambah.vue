@@ -336,7 +336,7 @@ export default {
 </script>
 <template>
     <div>
-        <seriviatext v-if="showmodalviatext" @closeModal="closeModalSeriViaText" @submit="submit"></seriviatext>
+        <seriviatext v-if="showmodalviatext" @close="closeModalSeriViaText" @submit="submit"></seriviatext>
         <modalPilihan v-if="showModalCetak" @closeModal="closeModalCetak" :data="idCetakHasilGenerate"></modalPilihan>
         <div class="modal fade modalFleksibel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
             aria-hidden="true">
