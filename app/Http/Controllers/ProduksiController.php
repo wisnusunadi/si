@@ -603,7 +603,7 @@ class ProduksiController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 500,
-                'message' => 'Gagal Ditambahkan'.$th->getMessage(),
+                'message' => 'Gagal Ditambahkan',
                 'seri' => array(),
                 'duplicate' =>  array(),
                 'available' => array(),

@@ -1953,6 +1953,7 @@ class MasterController extends Controller
                     'coo' => $item->coo,
                     'no_akd' => $item->no_akd,
                     'status' => $item->status == 1 ? true : false,
+                    'generate_seri' => $item->generate_seri,
                     'gudang_barang_jadi' => $item->GudangBarangJadi
                 ];
             });
