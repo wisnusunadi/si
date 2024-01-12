@@ -1348,6 +1348,9 @@ class DcController extends Controller
             ->leftJoin('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
             ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
             ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+            ->orderBy(
+                'noseri_coo.no_coo'
+            )
             ->where('pesanan.id', $id)
             ->get();
 
