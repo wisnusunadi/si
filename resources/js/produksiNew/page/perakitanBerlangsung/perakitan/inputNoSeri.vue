@@ -209,12 +209,11 @@ export default {
             })
 
             if (noseri) {
-                this.noseri = this.noseri.filter((item) => {
-                    return item.noseri = '',
-                        delete item.error,
-                        delete item.message
-                })
+                // hapus noseri duplikasi
+                
             }
+
+            this.isError = false;
         }
     },
     mounted() {
