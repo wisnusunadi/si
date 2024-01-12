@@ -496,6 +496,7 @@
                         autoWidth: false,
                         columns: [{
                                 data: 'id',
+                                sortable: false,
                                 render: function(data, type, row) {
                                     return `<input type="checkbox" name="" id="">`
                                 }
@@ -506,6 +507,7 @@
                         ]
                     })
                     $('#modalCetakCOO').modal('show');
+                    $('#checkall').prop('checked', false)
                 }
             });
 
@@ -519,6 +521,7 @@
             } else {
                 $('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]').prop('checked', false)
             }
+            $('.tableNoSeriCetakCOO').DataTable().draw(false)
         })
 
         $(document).on('click', '.cetakNoSeriCOO', function(e) {
@@ -528,12 +531,13 @@
 
             var table = $('.tableNoSeriCetakCOO').DataTable()
 
-            // get all checked checkbox id and push to array
-            $('.tableNoSeriCetakCOO tbody tr td input[type="checkbox"]:checked').each(function() {
-                var row = table.row($(this).parents('tr'));
-                var rowData = row.data();
-                data.push(rowData.id);
-            });
+            // get all checked checkbox on datatable
+            table.$('input[type="checkbox"]').each(function() {
+                if ($(this).is(':checked')) {
+                    var row = table.row($(this).parents('tr')).data()
+                    data.push(row.id)
+                }
+            })
 
             console.log(data)
 
