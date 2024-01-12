@@ -563,13 +563,14 @@ class ProduksiController extends Controller
 
 
                     foreach($seriValues as $s){
-                        JadwalRakitNoseri::create([
+                    $jd = JadwalRakitNoseri::create([
                             'jadwal_id' => $obj->jadwal_id,
                             'no_bppb' => $obj->no_bppb,
                             'noseri' => $s,
                             'status' => 11,
                             'date_in' => Carbon::now()
                         ]);
+                        $jd_id[] = $jd->id;
                     }
 
                     DB::commit();
@@ -578,6 +579,10 @@ class ProduksiController extends Controller
                         'message' => 'Berhasil Ditambahkan',
                         'duplicate' =>  array(),
                         'available' => array(),
+                        'id' =>  $jd_id,
+
+                        'produk_id' => $obj->id,
+                        'date_in' => $jd->created_at
                     ],200);
                 }
 
@@ -599,7 +604,6 @@ class ProduksiController extends Controller
             return response()->json([
                 'status' => 500,
                 'message' => 'Gagal Ditambahkan',
-                'catch' => $th->getMessage(),
                 'seri' => array(),
                 'duplicate' =>  array(),
                 'available' => array(),
