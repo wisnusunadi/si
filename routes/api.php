@@ -689,8 +689,7 @@ Route::prefix('/dc')->group(function () {
         Route::post('update', [App\Http\Controllers\DcController::class, 'update_coo']);
         Route::put('update_tgl_kirim_coo/{value}', [App\Http\Controllers\DcController::class, 'update_tgl_kirim_coo']);
         Route::post('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);
-        Route::post('selesai/{value}', [App\Http\Controllers\DcController::class, 'get_data_so_selesai']);
-        Route::post('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
+        Route::post('selesai/{years}', [App\Http\Controllers\DcController::class, 'get_data_so_selesai']);        Route::post('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
         Route::post('detail/seri/{id}/{jenis}', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_so']);
         Route::post('detail/seri_po/{id}/', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_po']);
         Route::post('detail/seri/select/{id}/{value}', [App\Http\Controllers\DcController::class, 'get_data_detail_select_seri_so']);

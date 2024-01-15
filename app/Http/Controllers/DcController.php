@@ -888,7 +888,7 @@ class DcController extends Controller
             ->rawColumns(['button', 'status', 'batas_paket'])
             ->make(true);
     }
-    public function get_data_so_selesai($value)
+    public function get_data_so_selesai($years)
     {
         $data = Pesanan::whereIn('id', function ($q) {
             $q->select('pesanan.id')

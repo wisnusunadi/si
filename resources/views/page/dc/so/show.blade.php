@@ -182,6 +182,39 @@
                                 </div>
                                 <div class="tab-pane fade show" id="pills-selesai_coo" role="tabpanel"
                                     aria-labelledby="pills-selesai_coo-tab">
+                                                                        <div class="row">
+                                        <div class="col-12">
+                                            <span class="float-right filter">
+                                                <button class="btn btn-outline-secondary" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-filter"></i> Filter
+                                                </button>
+                                                <form id="filter">
+                                                    <div class="dropdown-menu">
+                                                        <div class="px-3 py-3">
+                                                            <div class="form-group">
+                                                                <label for="status">Database (Tahun)</label>
+                                                            </div>
+                                                            {{--  --}}
+                                                            <div class="form-group">
+                                                                 @for ($i = 0; $i < 5; $i++)
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input form-years-select" type="radio"
+                                                                        value="{!! \Carbon\Carbon::now()->year - $i !!}"
+                                                                        id="status{{ $i }}" name="data_tahun"
+                                                                        @if ($i == 0) checked @endif />
+                                                                    <label class="form-check-label" for="status{{ $i }}">
+                                                                        {!! \Carbon\Carbon::now()->year - $i !!}
+                                                                    </label>
+                                                                </div>
+                                                                @endfor
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </span>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="table-responsive">
@@ -367,7 +400,8 @@
 
 
         $(document).on('click', '#pills-selesai_coo-tab', function() {
-            selesaitable();
+            var years = $('.form-years-select:checked').val()
+            selesaitable(years)
         });
 
         var showtable = $('#showtable').DataTable({
@@ -412,18 +446,14 @@
             }, ]
         })
 
-        function selesaitables() {
-            alert('ok')
-        }
-
-        function selesaitable() {
+        function selesaitable(years) {
             var showtable = $('#selesaitable').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    'url': '/api/dc/so/selesai/semua',
+                    'url': '/api/dc/so/selesai/' + years,
                     'type': 'POST',
                     'datatype': 'JSON',
                     'headers': {
@@ -597,6 +627,11 @@
                 }
             })
             $('#checkall').prop('checked', false)
+        })
+
+        $(document).on('click', '.form-years-select', function() {
+            var years = $(this).val()
+            selesaitable(years)
         })
     </script>
 @stop
