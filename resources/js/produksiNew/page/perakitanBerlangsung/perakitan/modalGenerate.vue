@@ -33,6 +33,7 @@ export default {
             idCetakHasilGenerate: [],
             showModalPilihan: false,
             linkExport: '',
+            isDisableBPPB: false,
         }
     },
     methods: {
@@ -119,19 +120,6 @@ export default {
                 $('.modalGenerate').modal('show')
             })
         },
-        async checkNoUrut() {
-            try {
-                const { data } = await axios.get(`/api/prd/ongoing/${this.dataGenerate.id}`)
-                if (data != 0) {
-                    this.form.no_urut_terakhir = data
-                } else {
-                }
-            } catch (error) {
-                console.log(error)
-            } finally {
-                this.form.kedatangan = 1
-            }
-        },
         cetakSeri() {
             this.showModalCetak = true
             this.$nextTick(() => {
@@ -149,7 +137,16 @@ export default {
         },
         exportBarcode() {
             window.open(this.linkExport, '_blank')
+        },
+        cekBPPB() {
+            const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-'
+            if (cekbppb) {
+                this.isDisableBPPB = true
+            } 
         }
+    },
+    mounted() {
+        this.cekBPPB()
     },
     computed: {
         jumlahRakit() {
@@ -167,9 +164,6 @@ export default {
             }
         },
     },
-    created() {
-        this.checkNoUrut()
-    }
 }
 </script>
 <template>
@@ -195,7 +189,7 @@ export default {
                                         <div class="card">
                                             <div class="card-body">
                                                 <input type="text" name="no_bppb" id="no_bppb" class="form-control"
-                                                    v-model="dataGenerate.no_bppb" :disabled="loading || hasilGenerate.length > 0"
+                                                    v-model="dataGenerate.no_bppb" :disabled="loading || hasilGenerate.length > 0 || isDisableBPPB"
                                                     @keyup="keyUpperCase($event)">
                                             </div>
                                         </div>

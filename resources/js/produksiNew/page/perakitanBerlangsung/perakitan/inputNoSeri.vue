@@ -29,7 +29,8 @@ export default {
             loadingNoSeri: false,
             showmodalviatext: false,
             idCetakHasilGenerate: null,
-            showModalCetak: false
+            showModalCetak: false,
+            isDisableBPPB: false
         }
     },
     methods: {
@@ -284,9 +285,16 @@ export default {
             this.$nextTick(() => {
                 $('.inputNoSeri').modal('show');
             })
+        },
+        cekBPPB() {
+            const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-'
+            if (cekbppb) {
+                this.isDisableBPPB = true
+            }
         }
     },
     mounted() {
+        this.cekBPPB()
         this.addNoSeri();
         this.$nextTick(() => {
             setTimeout(() => {
@@ -333,7 +341,7 @@ export default {
                                         <div class="card">
                                             <div class="card-body">
                                                 <input type="text" name="no_bppb" id="no_bppb" class="form-control"
-                                                    :disabled="isDisabled" v-model="dataGenerate.no_bppb"
+                                                    :disabled="isDisabled || isDisableBPPB" v-model="dataGenerate.no_bppb"
                                                     @keyup="keyUpperCase($event)">
                                             </div>
                                         </div>
@@ -388,7 +396,8 @@ export default {
                                     <input type="text" ref="noseri" class="form-control" v-model="item.noseri">
                                 </template>
                             </DataTable> -->
-                                <button class="btn btn-primary" @click="showSeriText" v-if="!idCetakHasilGenerate">Input No Seri Via Text</button>
+                                <button class="btn btn-primary" @click="showSeriText" v-if="!idCetakHasilGenerate">Input No
+                                    Seri Via Text</button>
                                 <div class="scrollable">
                                     <table class="table" v-if="!loadingNoSeri">
                                         <thead>
@@ -420,7 +429,8 @@ export default {
 
                                 <div class="d-flex bd-highlight">
                                     <div class="p-2 flex-grow-1 bd-highlight">
-                                        <button class="btn btn-primary" @click="simpan" :disabled="isDisabled" v-if="!idCetakHasilGenerate">
+                                        <button class="btn btn-primary" @click="simpan" :disabled="isDisabled"
+                                            v-if="!idCetakHasilGenerate">
                                             <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
                                                 <span class="sr-only">Loading...</span>
                                             </div>
