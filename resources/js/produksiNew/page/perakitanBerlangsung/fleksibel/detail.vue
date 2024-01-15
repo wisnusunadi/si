@@ -81,21 +81,17 @@ export default {
                                 <div class="row">
                                     <div class="col-sm">
                                         <label for="">No BPPB</label>
-                                        <div class="card-group">
-                                            <div class="card" style="background-color: #C8E1A7">
-                                                <div class="card-body">
-                                                    <p class="card-text" id="d_rakit">{{ produk.no_bppb }}</p>
-                                                </div>
+                                        <div class="card" style="background-color: #C8E1A7">
+                                            <div class="card-body">
+                                                <p class="card-text" id="d_rakit">{{ produk.no_bppb }}</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <label for="">Tanggal Perakitan</label>
-                                        <div class="card-group">
-                                            <div class="card" style="background-color: #FFECB2">
-                                                <div class="card-body">
-                                                    <p class="card-text" id="t_rakit">{{ dateFormat(produk.tgl_rakit) }}</p>
-                                                </div>
+                                        <div class="card" style="background-color: #FFECB2">
+                                            <div class="card-body">
+                                                <p class="card-text" id="t_rakit">{{ dateFormat(produk.tgl_rakit) }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -103,42 +99,34 @@ export default {
                                 <div class="row">
                                     <div class="col-sm">
                                         <label for="">Nama Produk</label>
-                                        <div class="card-group">
-                                            <div class="card" style="background-color: #F89F81">
-                                                <div class="card-body">
-                                                    <p class="card-text" id="d_rakit">{{ produk.produk }}</p>
-                                                </div>
+                                        <div class="card" style="background-color: #F89F81">
+                                            <div class="card-body">
+                                                <p class="card-text" id="d_rakit">{{ produk.produk }}</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <label for="">Jumlah Rakit</label>
-                                        <div class="card-group">
-                                            <div class="card" style="background-color: #FCF9C4">
-                                                <div class="card-body">
-                                                    <p class="card-text" id="t_rakit">{{ produk.jml }}</p>
-                                                </div>
+                                        <div class="card" style="background-color: #FCF9C4">
+                                            <div class="card-body">
+                                                <p class="card-text" id="t_rakit">{{ produk.jml }}</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <label for="">Bagian (Peminta No Seri)</label>
-                                        <div class="card-group">
-                                            <div class="card" style="background-color: #FFCC83">
-                                                <div class="card-body">
-                                                    <p class="card-text" id="t_rakit">{{ produk.bagian }}</p>
-                                                </div>
+                                        <div class="card" style="background-color: #FFCC83">
+                                            <div class="card-body">
+                                                <p class="card-text" id="t_rakit">{{ produk.bagian }}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <label for="">Tujuan (Minta No Seri)</label>
-                                <div class="card-group">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <p class="card-text" id="t_rakit">{{ riwayatRakit?.tujuan }}</p>
-                                        </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-text" id="t_rakit">{{ riwayatRakit?.tujuan }}</p>
                                     </div>
                                 </div>
                             </div>
