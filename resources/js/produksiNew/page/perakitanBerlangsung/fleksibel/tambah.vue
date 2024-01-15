@@ -254,6 +254,7 @@ export default {
             this.$nextTick(() => {
                 $('.modalChecked').modal('show')
             })
+             // catatan : -dimunculkan alert pas saat klik button
         },
         closeModalSeriViaText() {
             this.showmodalviatext = false
@@ -263,20 +264,36 @@ export default {
         },
         submit(noseri) {
             let noseriarray = noseri.split(/[\n, \t]/)
+            let noseridouble = []
 
             // remove noseri null
             noseriarray = noseriarray.filter((item) => {
                 return item !== null && item !== ''
             })
+            
+            // push noseri double ke array noseridouble
+            noseriarray.forEach((item, index) => {
+                if (noseriarray.indexOf(item) !== index) {
+                    noseridouble.push(item)
+                }
+            })
 
-            // remove duplicate
+            if (noseridouble.length > 0) {
+                this.$swal('Peringatan!', `No. Seri ${noseridouble.join(', ')} duplikasi`, 'warning')
+            }
+
             noseriarray = [...new Set(noseriarray)]
 
-            this.noseri = []
-
             for (let i = 0; i < noseriarray.length; i++) {
-                this.noseri.push({ noseri: noseriarray[i].toUpperCase() })
+                this.noseri.push({
+                    noseri: noseriarray[i]
+                })
             }
+
+            // remove noseri null or empty
+            this.noseri = this.noseri.filter((item) => {
+                return item.noseri !== null && item.noseri !== ''
+            })
         },
         autoTab(event, idx) {
             event.target.value = event.target.value.toUpperCase();
@@ -506,7 +523,7 @@ export default {
                                         </div>
                                         <DataTable :headers="headers" :items="duplicate" :search="searchDuplikasi" />
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
