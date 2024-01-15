@@ -1333,49 +1333,6 @@
   background: #2778c4;
 }
 
-.swal2-progress-steps {
-  flex-wrap: wrap;
-  align-items: center;
-  max-width: 100%;
-  margin: 1.25em auto;
-  padding: 0;
-  background: transparent;
-  font-weight: 600;
-}
-.swal2-progress-steps li {
-  display: inline-block;
-  position: relative;
-}
-.swal2-progress-steps .swal2-progress-step {
-  z-index: 20;
-  flex-shrink: 0;
-  width: 2em;
-  height: 2em;
-  border-radius: 2em;
-  background: #2778c4;
-  color: #fff;
-  line-height: 2em;
-  text-align: center;
-}
-.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step {
-  background: #2778c4;
-}
-.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step ~ .swal2-progress-step {
-  background: #add8e6;
-  color: #fff;
-}
-.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step ~ .swal2-progress-step-line {
-  background: #add8e6;
-}
-.swal2-progress-steps .swal2-progress-step-line {
-  z-index: 10;
-  flex-shrink: 0;
-  width: 2.5em;
-  height: 0.4em;
-  margin: 0 -1px;
-  background: #2778c4;
-}
-
 [class^=swal2] {
   -webkit-tap-highlight-color: transparent;
 }

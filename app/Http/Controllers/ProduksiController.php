@@ -482,7 +482,7 @@ class ProduksiController extends Controller
                             'date_in' => $getTgl
                         ]);
                         $jd_id[] = $jd->id;
-                        $jd_seri[] = (object)['seri' => $f['seri']];
+                        $jd_seri[] = (object)['noseri' => $f['seri']];
                     }
 
                     // $jp->status_tf = 12;
