@@ -952,7 +952,9 @@ class DcController extends Controller
                     ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                     ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-            }])->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->get();
+            }])->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
+            ->whereYear('created_at',$years)
+            ->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
