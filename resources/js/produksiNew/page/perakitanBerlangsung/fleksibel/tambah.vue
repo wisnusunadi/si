@@ -254,7 +254,7 @@ export default {
             this.$nextTick(() => {
                 $('.modalChecked').modal('show')
             })
-             // catatan : -dimunculkan alert pas saat klik button
+            // catatan : -dimunculkan alert pas saat klik button
         },
         closeModalSeriViaText() {
             this.showmodalviatext = false
@@ -270,7 +270,7 @@ export default {
             noseriarray = noseriarray.filter((item) => {
                 return item !== null && item !== ''
             })
-            
+
             // push noseri double ke array noseridouble
             noseriarray.forEach((item, index) => {
                 if (noseriarray.indexOf(item) !== index) {
@@ -444,10 +444,11 @@ export default {
 
                                         <div class="d-flex bd-highlight" v-if="form.produk?.isGenerate == false">
                                             <div class="p-2 flex-grow-1 bd-highlight"><button class="btn btn-primary"
-                                                    @click="showSeriText">Input
+                                                    :disabled="hasilGenerate.length > 0" @click="showSeriText">Input
                                                     No Seri Via Text</button></div>
                                             <div class="p-2 bd-highlight">
-                                                <button class="btn btn-info" @click="noseri.push({ noseri: '' })">
+                                                <button class="btn btn-info" @click="noseri.push({ noseri: '' })"
+                                                    :disabled="hasilGenerate.length > 0">
                                                     Tambah No. Seri</button>
                                             </div>
                                         </div>
@@ -474,6 +475,7 @@ export default {
                                                         </td>
                                                         <td>
                                                             <button class="btn btn-outline-danger"
+                                                                :disabled="hasilGenerate.length > 0"
                                                                 @click="removeSeri(index)">
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
