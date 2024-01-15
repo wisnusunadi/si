@@ -83,6 +83,7 @@ export default {
                             type="button" role="tab" aria-controls="pills-penggantian" aria-selected="false">Penggantian No
                             Seri</a>
                     </li> -->
+                    
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile"
                             type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat</a>
