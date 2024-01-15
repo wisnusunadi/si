@@ -836,12 +836,12 @@ return [
             'icon'    => 'fas fa-cogs',
             'auth' => [17],
             'submenu' => [
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Kamus Produk',
-                    'url'  => '/produksi/kamus_produk',
-                    'auth' => [17],
-                ],
+                // [
+                //     'icon' => 'far fa-circle',
+                //     'text' => 'Kamus Produk',
+                //     'url'  => '/produksi/kamus_produk',
+                //     'auth' => [17],
+                // ],
                 [
                     'icon' => 'far fa-circle',
                     'text' => 'Perencanaan Perakitan',
