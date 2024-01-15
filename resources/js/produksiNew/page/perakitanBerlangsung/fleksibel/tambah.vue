@@ -286,7 +286,7 @@ export default {
 
             for (let i = 0; i < noseriarray.length; i++) {
                 this.noseri.push({
-                    noseri: noseriarray[i]
+                    noseri: noseriarray[i].toUpperCase()
                 })
             }
 
