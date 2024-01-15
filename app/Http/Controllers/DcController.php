@@ -78,6 +78,7 @@ class DcController extends Controller
                 ->leftJoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
                 ->leftJoin('noseri_coo', 'noseri_coo.noseri_logistik_id', '=', 'noseri_logistik.id')
                 ->leftjoin('pack_rw_head', 'pack_rw_head.id', '=', 'pack_rw.pack_rw_head_id')
+                ->orderBy('noseri_coo.no_coo')
                 ->whereIN('noseri_logistik.id', $series)->get();
 
             foreach ($data as $d) {

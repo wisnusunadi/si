@@ -18,6 +18,7 @@ use App\Models\JadwalPerakitanRw;
 use App\Models\JadwalRakitNoseri;
 use App\Models\JadwalRakitNoseriRw;
 use App\Models\NoseriBarangJadi;
+use App\Models\NoseriCoo;
 use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
 use App\Models\PetiRw;
@@ -1103,22 +1104,27 @@ class ProduksiController extends Controller
     }
     function generate_seri_back(Request $request)
     {
+        // dd($request->all());
+        //COO
         DB::beginTransaction();
         $obj =  json_decode(json_encode($request->all()), FALSE);
         try {
             //code...
-            foreach ($obj->seri as $f) {
-                JadwalRakitNoseri::create([
-                    'jadwal_id' => 770,
-                    'noseri' => $f,
+            $no = 0;
+            foreach ($obj->seri as $key => $f) {
+                NoseriCoo::create([
+                    'no_coo' => $key + 1,
+                    'noseri_logistik_id' => $f,
+                    'jenis' => 'antro',
+                    'ket' => 'emiindo',
+                    'tahun' => 2023,
                     //'no_bppb' => 'PRD/07-BPM002/X/23',
                     // 'unit' => 'ST01',
                     // 'bln' => 'C',
                     // 'kedatangan' => 'A',
                     // 'urutan' => $f,
-                    'th' => 23,
-                    'status' => 11,
-                    'date_in' => Carbon::now()
+                    // 'catatan' => 'a',
+                    'tgl_kirim' => '2023-12-16'
                 ]);
             }
             DB::commit();
@@ -1131,6 +1137,35 @@ class ProduksiController extends Controller
                 'error' => $th->getMessage()
             ], 500);
         }
+        //PRODUKSI
+        // DB::beginTransaction();
+        // $obj =  json_decode(json_encode($request->all()), FALSE);
+        // try {
+        //     //code...
+        //     foreach ($obj->seri as $f) {
+        //         JadwalRakitNoseri::create([
+        //             'jadwal_id' => 770,
+        //             'noseri' => $f,
+        //             //'no_bppb' => 'PRD/07-BPM002/X/23',
+        //             // 'unit' => 'ST01',
+        //             // 'bln' => 'C',
+        //             // 'kedatangan' => 'A',
+        //             // 'urutan' => $f,
+        //             'th' => 23,
+        //             'status' => 11,
+        //             'date_in' => Carbon::now()
+        //         ]);
+        //     }
+        //     DB::commit();
+        // } catch (\Throwable $th) {
+        //     //throw $th;
+        //     DB::rollBack();
+        //     return response()->json([
+        //         'status' => 200,
+        //         'message' =>  'Gagal Ditambahkan',
+        //         'error' => $th->getMessage()
+        //     ], 500);
+        // }
     }
     function generate_seri_peti(Request $request)
     {
