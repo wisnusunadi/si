@@ -78,11 +78,11 @@ export default {
                         <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
                             type="button" role="tab" aria-controls="pills-home" aria-selected="true">Permintaan</a>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <!-- <li class="nav-item" role="presentation">
                         <a class="nav-link" id="pills-penggantian-tab" data-toggle="pill" data-target="#pills-penggantian"
                             type="button" role="tab" aria-controls="pills-penggantian" aria-selected="false">Penggantian No
                             Seri</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile"
                             type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat</a>
