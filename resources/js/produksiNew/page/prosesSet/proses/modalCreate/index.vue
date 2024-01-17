@@ -19,6 +19,7 @@ export default {
             errorValue: '',
             idGenerate: null,
             loading: false,
+            isPackingKardus: true,
         }
     },
     methods: {
@@ -320,11 +321,21 @@ export default {
                                         <thead>
                                             <tr>
                                                 <th>No. Seri</th>
+                                                <th class="text-right">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="defaultCheck1"
+                                                        :disabled="isDisable"
+                                                            v-model="isPackingKardus" :checked="isPackingKardus">
+                                                        <label class="form-check-label" for="defaultCheck1">
+                                                            Packing Kardus
+                                                        </label>
+                                                    </div>
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="(data, idx) in noseri" :key="idx">
-                                                <td>
+                                                <td colspan="2">
                                                     <input type="text" class="form-control" v-model="data.seri"
                                                         :class="data.error ? 'is-invalid' : ''"
                                                         @keyup.enter="autoTab($event, idx)" ref="noseri"
@@ -336,6 +347,7 @@ export default {
                                             </tr>
                                         </tbody>
                                     </table>
+
                                 </form>
                             </div>
                             <div class="col" v-if="hasilGenerate">

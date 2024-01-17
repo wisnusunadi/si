@@ -31,12 +31,20 @@ export default {
                 },
             ],
             search: '',
-            dataTable: [],
+            dataTable: [
+                {
+                    id: 1,
+                    noseri: '1234567890',
+                    tanggal_dibuat: '23 September 2023',
+                    tgl_update: '23 September 2023',
+                    packing_kardus: 'Ya',
+                    packer: 'Packer 1',
+                }
+            ],
             renderPaginate: [],
             showModal: false,
             selectSeri: {},
             showTambah: false,
-
             headers: [
                 {
                     text: 'id',
@@ -67,6 +75,12 @@ export default {
                     sortable: false,
                 },
                 {
+                    text: 'Packing Kardus',
+                    value: 'packing_kardus',
+                    align: 'text-left',
+                    sortable: false,
+                },
+                {
                     text: 'Packer',
                     value: 'packer',
                     align: 'text-left',
@@ -92,6 +106,11 @@ export default {
             tanggalAwalUpdate: '',
             tanggalAkhirUpdate: '',
             filterPerubahan: false,
+            filterPacking: [],
+            pilihanPacking: [
+                'Ya',
+                'Tidak',
+            ],
         }
     },
     methods: {
@@ -131,6 +150,7 @@ export default {
                         ...data,
                         tanggal_dibuat: this.dateFormat(data.tgl_buat),
                         tgl_update: data.tgl_ubah ? this.dateFormat(data.tgl_ubah) : '-',
+                        packing_kardus: data.packing_kardus == 1 ? 'Ya' : 'Tidak',
                     }
                 })
                 this.showTambah = belum == 0 ? true : false
@@ -241,6 +261,13 @@ export default {
                 this.filterProses.push(filter)
             }
         },
+        clickFilterPacking(filter) {
+            if (this.filterPacking.includes(filter)) {
+                this.filterPacking = this.filterPacking.filter(item => item !== filter)
+            } else {
+                this.filterPacking.push(filter)
+            }
+        },
         renderNo(data) {
             return data.map((item, index) => {
                 return {
@@ -259,6 +286,10 @@ export default {
 
             if (this.filterProses.length > 0) {
                 filtered = this.renderNo(filtered.filter(data => this.filterProses.includes(data.packer)))
+            }
+
+            if (this.filterPacking.length > 0) {
+                filtered = this.renderNo(filtered.filter(data => this.filterPacking.includes(data.packing_kardus)))
             }
 
             if (this.filterPerubahan) {
@@ -468,6 +499,30 @@ export default {
                             </span>
                         </template>
 
+                        <template #header.packing_kardus>
+                            <span class="text-bold pr-2">Packing Kardus</span>
+                            <span class="filter">
+                                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-filter"></i>
+                                </a>
+                                <form id="filter_ekat">
+                                    <div class="dropdown-menu">
+                                        <div class="px-3 py-3">
+                                            <div class="form-group" v-for="packing in pilihanPacking" :key="packing">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" :ref="packing"
+                                                        :value="packing" id="packing1" @click="clickFilterPacking(packing)" />
+                                                    <label class="form-check-label text-uppercase font-weight-normal"
+                                                        for="packing1">
+                                                        {{ packing }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </span>
+                        </template>
 
                         <template #header.packer>
                             <span class="text-bold pr-2">Packer</span>
