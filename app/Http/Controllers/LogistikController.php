@@ -1681,8 +1681,8 @@ class LogistikController extends Controller
                     $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
                         ->from('detail_logistik_part')
                         ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
-                        ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-                        ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                        // ->leftJoin('m_sparepart','m_sparepart.id','=','detail_pesanan_part.m_sparepart_id')
+                         //->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                         ->limit(1);
                 },
@@ -1754,7 +1754,7 @@ class LogistikController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data->so;
+                return  $data->so ;
             })
             ->addColumn('po', function ($data) {
                 return $data->no_po;
