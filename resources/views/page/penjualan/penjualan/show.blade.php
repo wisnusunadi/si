@@ -355,7 +355,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             {{-- perulangan selama 5 tahun --}}
-                                                            @for ($i = 0; $i < 5; $i++)
+                                                            @for ($i = 0; $i < 2; $i++)
                                                                 <div class="form-check">
                                                                     <input class="form-check-input form-years-select" type="radio"
                                                                         value="{!! \Carbon\Carbon::now()->year - $i !!}"
@@ -476,7 +476,7 @@
                                                             <label for="jenis_penjualan">Database</label>
                                                         </div>
                                                         <div class="form-group">
-                                                            @for ($i = 0; $i < 5; $i++)
+                                                            @for ($i = 0; $i < 2; $i++)
                                                                 <div class="form-check">
                                                                     <input class="form-check-input form-years-select" type="radio"
                                                                         value="{!! \Carbon\Carbon::now()->year - $i !!}"
@@ -599,7 +599,7 @@
                                                             <label for="jenis_penjualan">Database</label>
                                                         </div>
                                                         <div class="form-group">
-                                                            @for ($i = 0; $i < 5; $i++)
+                                                            @for ($i = 0; $i < 2; $i++)
                                                                 <div class="form-check">
                                                                     <input class="form-check-input form-years-select" type="radio"
                                                                         value="{!! \Carbon\Carbon::now()->year - $i !!}"
@@ -730,7 +730,7 @@
                                                             <label for="jenis_penjualan">Database</label>
                                                         </div>
                                                         <div class="form-group">
-                                                            @for ($i = 0; $i < 5; $i++)
+                                                            @for ($i = 0; $i < 2; $i++)
                                                                 <div class="form-check">
                                                                     <input class="form-check-input form-years-select" type="radio"
                                                                         value="{!! \Carbon\Carbon::now()->year - $i !!}"
