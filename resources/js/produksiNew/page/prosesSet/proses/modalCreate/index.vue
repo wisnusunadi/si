@@ -120,7 +120,8 @@ export default {
                     this.loading = true;
                     const { data } = await axios.post('/api/prd/rw/gen', {
                         ...this.$store.state.setSeri,
-                        noseri: this.noseri
+                        noseri: this.noseri,
+                        isPackingKardus: this.isPackingKardus   
                     }, {
                         headers: {
                             'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
@@ -202,7 +203,8 @@ export default {
                     this.isDisable = true;
                     this.loading = true;
                     const { data } = await axios.put(`/api/prd/rw/gen/${this.selectSeri.id}`, {
-                        noseri: this.noseri
+                        noseri: this.noseri,
+                        isPackingKardus: this.isPackingKardus
                     }, {
                         headers: {
                             'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
