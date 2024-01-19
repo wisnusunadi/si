@@ -907,6 +907,7 @@ class ProduksiController extends Controller
 
     function generate_rw(Request $request)
     {
+        $obj =  json_decode(json_encode($request->all()), FALSE);
         DB::beginTransaction();
         try {
             //code...
@@ -1016,7 +1017,8 @@ class ProduksiController extends Controller
                         // 'packer' => '-',
                         'noseri_id' => $nbj->id,
                         'noseri' =>  $produk_id->kode . $tahun . $bulan . $urutan,
-                        'isi' => json_encode($item)
+                        'isi' => json_encode($item),
+                        'is_pack' => $obj->isPackingKardus ? '1' : 0
                     ]);
                     DB::commit();
                     return response()->json([
@@ -1296,6 +1298,7 @@ class ProduksiController extends Controller
                         SeriDetailRw::where('noseri_id', $id)
                             ->update([
                                 'isi' => $item,
+                                'is_pack' => $obj->isPackingKardus ? 1 : 0,
                                 'packer' => auth()->user()->karyawan->nama,
                             ]);
 
@@ -1330,19 +1333,52 @@ class ProduksiController extends Controller
                     ], 500);
                 }
             } else {
-                DB::rollBack();
-                return response()->json([
-                    'status' => 200,
-                    'message' =>  'Tidak ada perubahan',
-                    'values' =>  $seriValues,
-                ], 500);
+                $cekSeriRw = SeriDetailRw::where('noseri_id', $id)->first()->is_pack;
+                $isPack = $obj->isPackingKardus ? 1 : 0;
+                if($cekSeriRw == $isPack){
+                    DB::rollBack();
+                    return response()->json([
+                        'status' => 200,
+                        'message' =>  'Tidak ada perubahan',
+                        'values' =>  $seriValues,
+                    ], 500);
+                }else{
+                    SeriDetailRw::where('noseri_id', $id)
+                    ->update([
+                        'is_pack' => $isPack,
+                    ]);
+
+                    $items = NoseriBarangJadi::select('produk.nama as prd', 'gdg_barang_jadi.nama as varian', 'noseri_barang_jadi.id', 'noseri_barang_jadi.noseri')
+                    ->Join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                    ->Join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                    ->whereIN('noseri_barang_jadi.noseri', $seriValues)->get();
+
+
+                    foreach ($items as $i) {
+                        $item[] = array(
+                            'id' => $i->id,
+                            'noseri' => $i->noseri,
+                            'varian' => $i->varian,
+                            'produk' => $i->prd
+                        );
+                    }
+                    $seriRwz = SeriDetailRw::where('noseri_id', $id)->first();
+
+                    DB::commit();
+                    return response()->json([
+                        'status' => 200,
+                        'id' =>  $seriRwz->id,
+                        'noseri' =>   $seriRwz->noseri,
+                        'itemnoseri' =>  $item,
+                    ], 200);
+                }
             }
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
             return response()->json([
                 'status' => 200,
-                'message' =>  'Gagal Ditambahkan',
+                'message' =>  'Gagal Ditambahkan'.$th->getMessage(),
                 'values' =>  '-',
             ], 500);
         }
@@ -1546,7 +1582,7 @@ class ProduksiController extends Controller
     }
     function proses_rw_produk($id)
     {
-        $data = SeriDetailRw::select('seri_detail_rw.isi', 'noseri_barang_jadi.noseri', 'seri_detail_rw.noseri_id', 'seri_detail_rw.packer', 'noseri_barang_jadi.is_prd', 'seri_detail_rw.created_at', 'seri_detail_rw.updated_at')
+        $data = SeriDetailRw::select('seri_detail_rw.is_pack','seri_detail_rw.isi', 'noseri_barang_jadi.noseri', 'seri_detail_rw.noseri_id', 'seri_detail_rw.packer', 'noseri_barang_jadi.is_prd', 'seri_detail_rw.created_at', 'seri_detail_rw.updated_at')
             ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
             ->where('urutan', $id)->get();
         $jadwal = JadwalPerakitanRw::addSelect([
@@ -1573,7 +1609,8 @@ class ProduksiController extends Controller
                     'status' => $d->is_prd == 0 ? 'Transfer' : 'Belum',
                     'ket' =>  $d->updated_at <= $d->created_at ? false : true,
                     'tgl_ubah' =>  $d->updated_at <= $d->created_at ? null : $d->updated_at,
-                    'seri' => json_decode($d->isi)
+                    'seri' => json_decode($d->isi),
+                    'packing_kardus' => $d->is_pack
                 );
             }
         }

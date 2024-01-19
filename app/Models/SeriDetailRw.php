@@ -10,5 +10,5 @@ class SeriDetailRw extends Model
     use HasFactory;
     protected $connection = 'erp';
     protected $table = 'seri_detail_rw';
-    protected $fillable = ['urutan','noseri_id','noseri','isi','packer'];
+    protected $fillable = ['urutan','noseri_id','noseri','isi','packer','is_pack'];
 }

@@ -121,7 +121,7 @@ export default {
                     const { data } = await axios.post('/api/prd/rw/gen', {
                         ...this.$store.state.setSeri,
                         noseri: this.noseri,
-                        isPackingKardus: this.isPackingKardus   
+                        isPackingKardus: this.isPackingKardus
                     }, {
                         headers: {
                             'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
