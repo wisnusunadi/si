@@ -907,7 +907,6 @@ class ProduksiController extends Controller
 
     function generate_rw(Request $request)
     {
-        $obj =  json_decode(json_encode($request->all()), FALSE);
         DB::beginTransaction();
         try {
             //code...
