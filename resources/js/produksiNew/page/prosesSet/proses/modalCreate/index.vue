@@ -287,6 +287,7 @@ export default {
             if (this.selectSeri?.id) {
                 this.hasilGenerate = this.selectSeri.noseri
                 this.noseriGeneratePackingList = this.selectSeri.seri
+                this.isPackingKardus = this.selectSeri.packing_kardus == 'Ya' ? true : false;
             }
         },
     },

@@ -31,16 +31,7 @@ export default {
                 },
             ],
             search: '',
-            dataTable: [
-                {
-                    id: 1,
-                    noseri: '1234567890',
-                    tanggal_dibuat: '23 September 2023',
-                    tgl_update: '23 September 2023',
-                    packing_kardus: 'Ya',
-                    packer: 'Packer 1',
-                }
-            ],
+            dataTable: [],
             renderPaginate: [],
             showModal: false,
             selectSeri: {},
