@@ -395,7 +395,7 @@ Route::prefix('/prd')->group(function () {
     Route::post('/plan-cal', [ProduksiController::class, 'calender_plan']);
 
     // on
-    Route::get('/ongoing', [ProduksiController::class, 'on_rakit']);
+    Route::post('/ongoing', [ProduksiController::class, 'on_rakit'])->middleware('jwt.verify');
     Route::get('/ongoing/{id}', [ProduksiController::class, 'on_rakit_detail']);
     Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current'])->middleware('jwt.verify');
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
