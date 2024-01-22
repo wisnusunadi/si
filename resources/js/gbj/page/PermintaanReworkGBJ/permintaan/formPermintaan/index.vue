@@ -39,7 +39,8 @@ export default {
           text: "Aksi",
           value: "aksi",
         }
-      ]
+      ],
+      loading: false,
     };
   },
   methods: {
@@ -104,11 +105,14 @@ export default {
         this.$swal("Berhasil", "Data berhasil ditransfer", "success");
         this.closeModal();
         this.$emit("refresh");
+        this.loading = false;
       };
 
       const error = () => {
         this.$swal("Gagal", "Data gagal ditransfer", "error");
       };
+
+      this.loading = true;
       try {
         axios
           .post(
@@ -137,21 +141,9 @@ export default {
 </script>
 <template>
   <div>
-    <noseri
-      :produk="produkSelected"
-      v-if="showSeri"
-      @closeModal="closeModalSeri"
-      @simpan="simpanSeri"
-    />
-    <div
-      class="modal fade modalPermintaanRework"
-      data-backdrop="static"
-      data-keyboard="false"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="modelTitleId"
-      aria-hidden="true"
-    >
+    <noseri :produk="produkSelected" v-if="showSeri" @closeModal="closeModalSeri" @simpan="simpanSeri" />
+    <div class="modal fade modalPermintaanRework" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+      aria-labelledby="modelTitleId" aria-hidden="true">
       <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -208,36 +200,27 @@ export default {
               <div class="card-body">
                 <div class="d-flex flex-row-reverse bd-highlight">
                   <div class="p-2 bd-highlight">
-                    <input
-                      type="text"
-                      v-model="search"
-                      class="form-control"
-                      placeholder="Cari..."
-                    />
+                    <input type="text" v-model="search" class="form-control" placeholder="Cari..." />
                   </div>
                 </div>
-                  <DataTable :headers="headers" :items="dataTable" :search="search">
-                    <template #item.no = "{item, index}">
-                      <div>
-                        {{ index + 1 }}
-                      </div>
-                    </template>
-                    <template #item.noseri="{item}">
-                      <div>
-                        {{ item?.noseri ? item.noseri.length : 0 }}
-                      </div>
-                    </template>
-                    <template #item.aksi = "{item}">
-                         <button
-                              type="button"
-                              class="btn btn-primary"
-                              @click="selectProduk(item)"
-                            >
-                              <i class="fa fa-qrcode"></i>
-                              Nomor Seri
-                            </button>
-                    </template>
-                  </DataTable>
+                <DataTable :headers="headers" :items="dataTable" :search="search">
+                  <template #item.no="{ item, index }">
+                    <div>
+                      {{ index + 1 }}
+                    </div>
+                  </template>
+                  <template #item.noseri="{ item }">
+                    <div>
+                      {{ item?.noseri ? item.noseri.length : 0 }}
+                    </div>
+                  </template>
+                  <template #item.aksi="{ item }">
+                    <button type="button" class="btn btn-primary" @click="selectProduk(item)">
+                      <i class="fa fa-qrcode"></i>
+                      Nomor Seri
+                    </button>
+                  </template>
+                </DataTable>
               </div>
             </div>
           </div>
@@ -245,8 +228,9 @@ export default {
             <button type="button" class="btn btn-secondary" @click="closeModal">
               Keluar
             </button>
-            <button type="button" class="btn btn-success" @click="transfer">
-              Transfer
+            <button type="button" class="btn btn-success" :disabled="loading" @click="transfer">
+              <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              {{ loading ? 'Loading...' : 'Transfer' }}
             </button>
           </div>
         </div>

@@ -22,6 +22,7 @@ export default {
             checkAll: false,
             showmodalviatext: false,
             noSeriSelected: [],
+            loadingSend: false,
         }
     },
     methods: {
@@ -66,6 +67,8 @@ export default {
                 tgl_transfer: `${this.tanggal_kirim} ${time}`,
             }
 
+            this.loadingSend = true
+
             axios.post('/api/prd/send', form, {
                 headers: {
                     'Authorization': `Bearer` + localStorage.getItem('lokal_token'),
@@ -77,6 +80,7 @@ export default {
                     this.$swal('Berhasil', 'Berhasil Transfer', 'success')
                     this.closeModal()
                     this.$emit('refresh')
+                    this.loadingSend = false
 
                 })
                 .catch((error) => {
@@ -304,7 +308,11 @@ export default {
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                         <button type="button" class="btn btn-danger" @click="noSeriSelected = []">Hapus</button>
-                        <button type="button" class="btn btn-primary" :disabled="loading" @click="simpan">Simpan</button>
+                        <button type="button" class="btn btn-primary" :disabled="loading || loadingSend" @click="simpan">
+                            <span v-if="loadingSend" class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true"></span>
+                            {{ loadingSend ? 'Loading...' : 'Simpan' }}
+                        </button>
                     </div>
                 </div>
             </div>
