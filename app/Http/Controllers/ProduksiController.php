@@ -5229,6 +5229,7 @@ class ProduksiController extends Controller
 
         // antro
         $customPaperMedium = array(0, 0, 88.46, 170.69);
+        $data = array_merge($data, $data);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperMedium, 'landscape');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakseri', compact('seri'));
