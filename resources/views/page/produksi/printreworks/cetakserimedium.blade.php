@@ -14,14 +14,14 @@
         /* medium */
         /* ukuran 100 x 50 */
         @page {
-            margin-top: 0.001cm;
+            margin-top: 0.1cm;
             font-size: 12pt;
         }
 
         .image-container-logo {
             /* margin-left: -0.85cm; */
             /* antro */
-            margin-left: -1cm;
+            margin-left: -0.9cm;
         }
 
         .image-container {
