@@ -22,11 +22,11 @@ const routes = [
         component: prosesSetReworksDetail,
         name: "prosesSetReworksDetail"
     },
-    {
-        path: "/produksi/jadwal_perakitan",
-        component: perakitanBerlangsung,
-        name: "perakitanBerlangsung"
-    },
+    // {
+    //     path: "/produksi/jadwal_perakitan",
+    //     component: perakitanBerlangsung,
+    //     name: "perakitanBerlangsung"
+    // },
         {
         path: "/produksi/pengiriman",
         component: Transfer,
