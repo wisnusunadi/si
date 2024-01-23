@@ -5215,7 +5215,7 @@ class ProduksiController extends Controller
             $seri[] = $s->noseri;
         }
         // copy seri 2x
-        $seri = array_merge($seri, $seri);
+        // $seri = array_merge($seri, $seri);
         $customPaperLarge = array(0, 0, 88.46, 290.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserilarge', compact('seri'))->setPaper($customPaperLarge, 'landscape');
         return $pdf->stream();
