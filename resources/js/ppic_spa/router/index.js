@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import GudangBarangJadi from "../views/GudangBarangJadi.vue"
 import GudangKarantina from "../views/GudangKarantina.vue"
-import Perakitan from "../views/Perakitan.vue"
+import Perakitan from "../views/Perakitan"
 import Penjualan from "../views/Penjualan.vue"
 import SalesOrder from "../views/SalesOrder.vue"
 import LaporanPesanan from "../views/LaporanPesanan.vue"
