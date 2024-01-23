@@ -352,6 +352,7 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
                                         aria-labelledby="custom-tabs-four-profile-tab">
+                                        
                                         <table class="table scan-produk1">
                                             <thead>
                                                 <tr>
@@ -1317,10 +1318,11 @@
                 "ordering": false,
                 "autoWidth": false,
                 "lengthChange": false,
+                serverSide: true,
                 processing: true,
-                serverSide: false,
                 ajax: {
                     url: '/api/gbj/noseri-done/' + id,
+                    method: 'POST',
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
                     }
@@ -1338,6 +1340,11 @@
                         data: 'used'
                     },
                 ],
+                "language": {
+                    processing: `<span class='fa-stack fa-md'>\n\
+                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                        </span>&emsp;Mohon Tunggu ...`,
+                },
                 "aoColumnDefs": [{
                         "bSearchable": true,
                         "bVisible": false,

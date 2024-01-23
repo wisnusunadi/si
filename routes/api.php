@@ -233,7 +233,7 @@ Route::prefix('/gbj')->group(function () {
 
     // noseri
     Route::get('noseri/{id}', [GudangController::class, 'getNoseri']);
-    Route::get('noseri-done/{id}', [GudangController::class, 'getNoseriDone']);
+    Route::post('noseri-done/{id}', [GudangController::class, 'getNoseriDone']);
     Route::get('history/{id}', [GudangController::class, 'getHistory']);
     Route::post('noseri/{id}', [GudangController::class, 'storeNoseri']);
     Route::post('ceknoseri', [GudangController::class, 'ceknoseri']);
