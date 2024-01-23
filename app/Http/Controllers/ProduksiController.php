@@ -5211,13 +5211,25 @@ class ProduksiController extends Controller
         // buat 10cm x 2cm
         $getData =  json_decode($request->data, true);
         $nbj = NoseriBarangJadi::select('noseri')->whereIn('id', $getData)->get();
+        // foreach ($nbj as $s) {
+        //     $seri[] = $s->noseri;
+        // }
+
+        // antro
         foreach ($nbj as $s) {
-            $seri[] = $s->noseri;
+            $data[] = (object)[
+                'noseri' => $s->noseri,
+                'logo' => true
+            ];
         }
         // copy seri 2x
         // $seri = array_merge($seri, $seri);
-        $customPaperLarge = array(0, 0, 88.46, 290.69);
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakserilarge', compact('seri'))->setPaper($customPaperLarge, 'landscape');
+        // $customPaperLarge = array(0, 0, 88.46, 290.69);
+        // $pdf = PDF::loadview('page.produksi.printreworks.cetakserilarge', compact('seri'))->setPaper($customPaperLarge, 'landscape');
+
+        // antro
+        $customPaperMedium = array(0, 0, 88.46, 170.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperMedium, 'landscape');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakseri', compact('seri'));
 

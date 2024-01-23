@@ -19,7 +19,9 @@
         }
 
         .image-container-logo {
-            margin-left: -0.85cm;
+            /* margin-left: -0.85cm; */
+            /* antro */
+            margin-left: -1cm;
         }
 
         .image-container {
