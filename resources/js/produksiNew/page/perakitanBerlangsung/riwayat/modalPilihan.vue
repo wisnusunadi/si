@@ -5,6 +5,14 @@ export default {
     data() {
         return {
             alasan: '',
+            merk: [
+                { value: 'elitech', label: 'Elitech' },
+                { value: 'vanward', label: 'Vanward' },
+                { value: 'rgb', label: 'RGB' },
+                { value: 'mentor', label: 'Mentor' },
+                { value: 'tanpa_merk', label: 'Tanpa Merk' }
+            ],
+            merkSelected: 'elitech',
         }
     },
     methods: {
@@ -22,7 +30,7 @@ export default {
             }
 
             let cetak = JSON.stringify(this.data);
-            window.open(`/produksiReworks/cetak_seri_fg_small_repeated?data=${cetak}`, '_blank')
+            window.open(`/produksiReworks/cetak_seri_fg_small_repeated?data=${cetak}&merk=${this.merkSelected}`, '_blank')
             this.postAlasan();
             this.closeModal();
         },
@@ -33,7 +41,7 @@ export default {
             }
 
             let cetak = JSON.stringify(this.data);
-            window.open(`/produksiReworks/cetak_seri_fg_medium_repeated?data=${cetak}`, '_blank')
+            window.open(`/produksiReworks/cetak_seri_fg_medium_repeated?data=${cetak}&merk=${this.merkSelected}`, '_blank')
             this.postAlasan();
             this.closeModal();
         },
@@ -73,6 +81,11 @@ export default {
                     <div class="form-group">
                         <label for="">Alasan Cetak</label>
                         <textarea class="form-control" name="" id="" rows="3" v-model="alasan"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Merk</label>
+                        <v-select :options="merk" :reduce="option => option.value" v-model="merkSelected"
+                            placeholder="Pilih Merk" />
                     </div>
                     <div class="text-center">
                         <h1>Silahkan Pilih Hasil Cetak</h1>

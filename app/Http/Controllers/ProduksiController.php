@@ -5151,7 +5151,6 @@ class ProduksiController extends Controller
         foreach ($nbj as $s) {
             $data[] = (object)[
                 'noseri' => $s->noseri,
-                'logo' => true
             ];
         }
         // copy seri 2x
@@ -5160,9 +5159,10 @@ class ProduksiController extends Controller
         // $pdf = PDF::loadview('page.produksi.printreworks.cetakserilarge', compact('seri'))->setPaper($customPaperLarge, 'landscape');
 
         // antro
+        $isLogo = 'elitech';
         $customPaperMedium = array(0, 0, 88.46, 170.69);
         $data = array_merge($data, $data);
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperMedium, 'landscape');
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
         return $pdf->stream();
         // return view('page.produksi.printreworks.cetakseri', compact('seri'));
 
@@ -5186,13 +5186,12 @@ class ProduksiController extends Controller
         foreach ($seri as $s) {
             $data[] = (object)[
                 'noseri' => $s->noseri,
-                'logo' => $s->merk == 'ELITECH' ? true : false
             ];
         }
 
-
-        $customPaperMedium = array(0, 0, 160.46, 170.69);
-        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data'))->setPaper($customPaperMedium, 'landscape');
+        $isLogo = $request->merk;
+        $customPaperMedium = array(0, 0, 88.46, 170.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
         return $pdf->stream();
     }
 
@@ -5202,11 +5201,10 @@ class ProduksiController extends Controller
         foreach ($seri as $s) {
             $data[] = (object)[
                 'noseri' => $s->noseri,
-                'logo' => $s->merk == 'ELITECH' ? true : false
             ];
         }
-        $isLogo = true;
-        $customPaperMedium = array(0, 0, 160.46, 170.69);
+        $isLogo = $request->merk;
+        $customPaperMedium = array(0, 0, 88.46, 170.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
         return $pdf->stream();
     }

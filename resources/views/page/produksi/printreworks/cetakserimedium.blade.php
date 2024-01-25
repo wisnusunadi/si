@@ -18,14 +18,38 @@
             font-size: 12pt;
         }
 
-        .image-container-logo {
+        .image-container-logo-11 {
             /* margin-left: -0.85cm; */
             /* antro */
-            margin-left: -0.9cm;
+            margin-left: -0.75cm;
         }
 
-        .image-container {
-            margin-left: -0.89cm;
+        .image-container-logo-12 {
+            margin-left: -0.86cm;
+        }
+
+        .image-container-logo-13 {
+            margin-left: -1cm;
+        }
+
+        .image-container-logo-14 {
+            margin-left: -1.12cm;
+        }
+
+        .image-container-11 {
+            margin-left: -0.58cm;
+        }
+
+        .image-container-12 {
+            margin-left: -0.8cm;
+        }
+
+        .image-container-13 {
+            margin-left: -0.85cm;
+        }
+
+        .image-container-14 {
+            margin-left: -1cm;
         }
 
         .logo {
@@ -42,46 +66,74 @@
 @foreach ($data as $item)
 @php
 $generator = new Picqer\Barcode\BarcodeGeneratorSVG();
-$sizeHeight =$item->logo ? 29 : 33;
-$sizeWidth = $item->logo ? 0.97 : 0.91;
+$merkLogo = '';
+
+switch ($isLogo) {
+    case 'elitech':
+        $merkLogo = 'Elitech';
+        break;
+    case 'vanward':
+        $merkLogo = 'Vanward';
+        break;
+    case 'rgb':
+        $merkLogo = 'RGB';
+        break;
+    case 'mentor':
+        $merkLogo = 'Mentor';
+        break;
+    default:
+        $merkLogo = '';
+        break;
+}
+
+$sizeHeight = $merkLogo != '' ? 29 : 33;
+$sizeWidth =  $merkLogo != '' ? 0.97 : 0.91;
+
+$classLogo = '';
+
+switch (strlen($item->noseri)) {
+    case 11:
+        $classLogo = 'image-container-logo-11';
+        break;
+    case 12:
+        $classLogo = 'image-container-logo-12';
+        break;
+    case 13:
+        $classLogo = 'image-container-logo-13';
+        break;
+    default:
+        $classLogo = 'image-container-logo-14';
+        break;
+}
+
+$classNotLogo = '';
+
+switch (strlen($item->noseri)) {
+    case 11:
+        $classNotLogo = 'image-container-11';
+        break;
+    case 12:
+        $classNotLogo = 'image-container-12';
+        break;
+    case 13:
+        $classNotLogo = 'image-container-13';
+        break;
+    default:
+        $classNotLogo = 'image-container-14';
+        break;
+}
+
 @endphp
 
 <div class="{{ $loop->last ? '' : 'page-break' }}">
-    <div class="{{  $item->logo ? 'image-container-logo' : 'image-container' }}">
-        @if($item->logo)
-        <span class="font-size-elitech">Elitech</span>
-        @else
-        <div class="logo"></div>
-        @endif
+    <div class="{{  $merkLogo != '' ? $classLogo : $classNotLogo }}">
+        <span class="{{ $merkLogo != '' ? 'font-size-elitech' : 'logo' }}">{{ $merkLogo }}</span>
         <img
             src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item->noseri, $generator::TYPE_CODE_128_B, $sizeWidth, $sizeHeight)) }}" />
         <div class="text-center">{{ $item->noseri }}</div>
     </div>
 </div>
 @endforeach
-
-
-{{-- LAMA --}}
-{{-- @php
-        $generator = new Picqer\Barcode\BarcodeGeneratorSVG();
-        $sizeHeight = $isLogo ? 29 : 33;
-        $sizeWidth = $isLogo ? 0.97 : 0.91;
-    @endphp --}}
-    {{-- ulangi 5 kali --}}
-    {{-- @foreach ($data as $item)
-        <div class="{{ $loop->last ? '' : 'page-break' }}">
-            <div class="{{ $isLogo ? 'image-container-logo' : 'image-container' }}">
-                @if($isLogo)
-                <span class="font-size-elitech">Elitech</span>
-                @else
-                <div class="logo"></div>
-                @endif
-                <img
-                    src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_128_B, $sizeWidth, $sizeHeight)) }}" />
-                <div class="text-center">{{ $item }}</div>
-            </div>
-        </div>
-    @endforeach --}}
 </body>
 
 </html>

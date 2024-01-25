@@ -1,6 +1,18 @@
 <script>
 export default {
     props: ['data'],
+    data() {
+        return {
+            merk: [
+                { value: 'elitech', label: 'Elitech' },
+                { value: 'vanward', label: 'Vanward' },
+                { value: 'rgb', label: 'RGB' },
+                { value: 'mentor', label: 'Mentor' },
+                { value: 'tanpa_merk', label: 'Tanpa Merk' }
+            ],
+            merkSelected: 'elitech',
+        }
+    },
     methods: {
         closeModal() {
             $('.modalPilihan').modal('hide');
@@ -10,12 +22,12 @@ export default {
             });
         },
         small() {
-            window.open(`/produksiReworks/cetak_seri_fg_small?id=${this.data}`, '_blank')
+            window.open(`/produksiReworks/cetak_seri_fg_small?id=${this.data}&merk=${this.merkSelected}`, '_blank')
             this.closeModal();
             this.$emit('closeAllModal')
         },
         medium() {
-            window.open(`/produksiReworks/cetak_seri_fg_medium?id=${this.data}`, '_blank')
+            window.open(`/produksiReworks/cetak_seri_fg_medium?id=${this.data}&merk=${this.merkSelected}`, '_blank')
             this.closeModal();
             this.$emit('closeAllModal')
         },
@@ -34,6 +46,11 @@ export default {
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Merk</label>
+                        <v-select :options="merk" :reduce="option => option.value" v-model="merkSelected"
+                            placeholder="Pilih Merk" />
+                    </div>
                     <div class="text-center">
                         <h1>Silahkan Pilih Hasil Cetak</h1>
                         <button type="button" class="btn btn-primary btn-lg" @click="small">Kertas Kecil</button>
