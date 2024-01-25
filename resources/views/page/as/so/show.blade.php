@@ -137,13 +137,10 @@
                                             <span class="float-right filter">
                                                 <button class="btn btn-outline-secondary" data-toggle="dropdown"
                                                     aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-filter"></i> Filter
+                                                    <i class="fas fa-filter"></i> Filter Pengiriman
                                                 </button>
                                                 <div class="dropdown-menu">
                                                     <div class="px-3 py-3">
-                                                        <div class="form-group">
-                                                            <label for="jenis_penjualan">Pengiriman</label>
-                                                        </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"

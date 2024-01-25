@@ -236,13 +236,10 @@
                                         <button class="btn btn-outline-secondary dropdown-toggle " type="button"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                             id="filterpenjualan">
-                                            <i class="fas fa-filter"></i> Filter
+                                            <i class="fas fa-filter"></i> Filter Status
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="filterpenjualan">
                                             <form class="px-4" style="white-space:nowrap;">
-                                                <div class="dropdown-header">
-                                                    Status
-                                                </div>
                                                 <div class="form-group">
                                                     <div class="form-check">
                                                         <input type="radio" class="form-check-input" id="dropdownStatus1"

@@ -16,7 +16,7 @@ export default {
                 no_bppb: '',
                 produk: '',
                 jml: '',
-                kedatangan: 1,
+                kedatangan: 0,
                 bagian: '',
                 tujuan: '',
             },
@@ -367,7 +367,7 @@ export default {
         'form.produk': function (val) {
             if (val.isGenerate) {
                 this.form.jml = ''
-                this.form.kedatangan = 1
+                this.form.kedatangan = 0
             } else {
                 delete this.form.jml
                 delete this.form.kedatangan
@@ -418,13 +418,13 @@ export default {
                                                 :disabled="hasilGenerate.length > 0"></v-select>
                                         </div>
 
-                                        <div class="form-group" v-if="form.kedatangan">
+                                        <div class="form-group" v-if="form.produk?.isGenerate">
                                             <label for="exampleInputEmail1">Kedatangan</label>
                                             <input type="number" class="form-control" v-model.number="form.kedatangan"
                                                 :disabled="hasilGenerate.length > 0" @keypress="numberOnly($event)">
                                         </div>
 
-                                        <div class="form-group" v-if="form.kedatangan">
+                                        <div class="form-group" v-if="form.produk?.isGenerate">
                                             <label for="">Jumlah Rakit</label>
                                             <input type="number" class="form-control" v-model="form.jml"
                                                 @keypress="numberOnly($event)" :disabled="hasilGenerate.length > 0">

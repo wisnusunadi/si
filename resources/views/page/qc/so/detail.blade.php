@@ -43,13 +43,10 @@
                             <div class="col-12">
                                 <span class="float-right filter">
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-filter"></i> Filter
+                                        <i class="fas fa-filter"></i> Filter Jenis Penjualan
                                     </button>
                                     <div class="dropdown-menu">
                                         <div class="px-3 py-3">
-                                            <div class="form-group">
-                                                <label for="jenis_penjualan">Jenis Penjualan</label>
-                                            </div>
                                             <div class="form-group">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" value="ekatalog" id="defaultCheck1" />

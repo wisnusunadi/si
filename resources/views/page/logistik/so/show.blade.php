@@ -107,14 +107,11 @@
                                             <span class="float-right filter">
                                                 <button class="btn btn-outline-secondary" data-toggle="dropdown"
                                                     aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-filter"></i> Filter
+                                                    <i class="fas fa-filter"></i> Filter Tahun
                                                 </button>
                                                 <form id="filter">
                                                     <div class="dropdown-menu">
                                                         <div class="px-3 py-3">
-                                                            <div class="form-group">
-                                                                <label for="jenis_penjualan">Database</label>
-                                                            </div>
                                                             <div class="form-group">
                                                                 {{-- show 5 years from now to old --}}
                                                                 @for ($i = date('Y'); $i >= date('Y') - 1; $i--)
@@ -190,7 +187,7 @@
                                             <span class="float-right filter">
                                                 <button class="btn btn-outline-secondary" data-toggle="dropdown"
                                                     aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-filter"></i> Filter
+                                                    <i class="fas fa-filter"></i> Filter Tahun
                                                 </button>
                                                 <form id="filterSelesaiProses">
                                                     <div class="dropdown-menu">

@@ -61,11 +61,10 @@
                                                 <button class="btn btn-outline-info dropdown-toggle" type="button"
                                                     id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true"
                                                     aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
-                                                    Filter
+                                                    Filter Kelompok Produk
                                                 </button>
                                                 <div class="dropdown-menu p-3 text-nowrap"
                                                     aria-labelledby="semuaprodukfilter">
-                                                    <div class="dropdown-header">Kelompok Produk</div>
                                                     <div class="form-group">
                                                         <div class="form-check">
                                                             <input type="checkbox" class="form-check-input" id="alkes"

@@ -108,14 +108,11 @@
                                             <span class="float-right filter">
                                                 <button class="btn btn-outline-secondary" data-toggle="dropdown"
                                                     aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-filter"></i> Filter
+                                                    <i class="fas fa-filter"></i> Filter Status
                                                 </button>
                                                 <form id="filter">
                                                     <div class="dropdown-menu">
                                                         <div class="px-3 py-3">
-                                                            <div class="form-group">
-                                                                <label for="status">Status</label>
-                                                            </div>
                                                             <div class="form-group">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="radio"
@@ -187,14 +184,11 @@
                                             <span class="float-right filter">
                                                 <button class="btn btn-outline-secondary" data-toggle="dropdown"
                                                     aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-filter"></i> Filter
+                                                    <i class="fas fa-filter"></i> Filter Tahun
                                                 </button>
                                                 <form id="filter">
                                                     <div class="dropdown-menu">
                                                         <div class="px-3 py-3">
-                                                            <div class="form-group">
-                                                                <label for="status">Database (Tahun)</label>
-                                                            </div>
                                                             {{--  --}}
                                                             <div class="form-group">
                                                                  @for ($i = 0; $i < 5; $i++)

@@ -117,14 +117,11 @@
                                             <span class="float-right filter">
                                                 <button class="btn btn-outline-secondary" data-toggle="dropdown"
                                                     aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-filter"></i> Filter
+                                                    <i class="fas fa-filter"></i> Filter Jenis Penjualan
                                                 </button>
                                                 <form id="filter">
                                                     <div class="dropdown-menu">
                                                         <div class="px-3 py-3">
-                                                            <div class="form-group">
-                                                                <label for="jenis_penjualan">Jenis Penjualan</label>
-                                                            </div>
                                                             <div class="form-group">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox"
@@ -196,14 +193,11 @@
                                             <span class="float-right filter">
                                                 <button class="btn btn-outline-secondary" data-toggle="dropdown"
                                                     aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-filter"></i> Filter
+                                                    <i class="fas fa-filter"></i> Filter Jenis Penjualan
                                                 </button>
                                                 <form id="filter_selesai">
                                                     <div class="dropdown-menu">
                                                         <div class="px-3 py-3">
-                                                            <div class="form-group">
-                                                                <label for="jenis_penjualan">Jenis Penjualan</label>
-                                                            </div>
                                                             <div class="form-group">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox"

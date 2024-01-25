@@ -86,6 +86,7 @@ export default {
                         <label for="">Merk</label>
                         <v-select :options="merk" :reduce="option => option.value" v-model="merkSelected"
                             placeholder="Pilih Merk" />
+                        <small class="text-muted"><span class="text-danger">*</span>Merk akan tampil jika cetak kertas medium</small>
                     </div>
                     <div class="text-center">
                         <h1>Silahkan Pilih Hasil Cetak</h1>

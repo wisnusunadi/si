@@ -345,14 +345,11 @@
                                         <span class="float-right filter">
                                             <button class="btn btn-outline-secondary" data-toggle="dropdown"
                                                 aria-haspopup="true" aria-expanded="false">
-                                                <i class="fas fa-filter"></i> Filter
+                                                <i class="fas fa-filter"></i> Filter Tahun
                                             </button>
                                             <form id="filter_ekat">
                                                 <div class="dropdown-menu">
                                                     <div class="px-3 py-3">
-                                                        <div class="form-group">
-                                                            <label for="jenis_penjualan">Database</label>
-                                                        </div>
                                                         <div class="form-group">
                                                             {{-- perulangan selama 5 tahun --}}
                                                             @for ($i = 0; $i < 2; $i++)
@@ -467,14 +464,11 @@
                                         <span class="float-right filter">
                                             <button class="btn btn-outline-secondary" data-toggle="dropdown"
                                                 aria-haspopup="true" aria-expanded="false">
-                                                <i class="fas fa-filter"></i> Filter
+                                                <i class="fas fa-filter"></i> Filter Tahun
                                             </button>
                                             <form id="filter_spa">
                                                 <div class="dropdown-menu">
                                                     <div class="px-3 py-3">
-                                                        <div class="form-group">
-                                                            <label for="jenis_penjualan">Database</label>
-                                                        </div>
                                                         <div class="form-group">
                                                             @for ($i = 0; $i < 2; $i++)
                                                                 <div class="form-check">
@@ -590,14 +584,11 @@
                                         <span class="float-right filter">
                                             <button class="btn btn-outline-secondary" data-toggle="dropdown"
                                                 aria-haspopup="true" aria-expanded="false">
-                                                <i class="fas fa-filter"></i> Filter
+                                                <i class="fas fa-filter"></i> Filter Tahun
                                             </button>
                                             <form id="filter_spb">
                                                 <div class="dropdown-menu">
                                                     <div class="px-3 py-3">
-                                                        <div class="form-group">
-                                                            <label for="jenis_penjualan">Database</label>
-                                                        </div>
                                                         <div class="form-group">
                                                             @for ($i = 0; $i < 2; $i++)
                                                                 <div class="form-check">
@@ -721,14 +712,11 @@
                                         <span class="float-right filter">
                                             <button class="btn btn-outline-secondary" data-toggle="dropdown"
                                                 aria-haspopup="true" aria-expanded="false">
-                                                <i class="fas fa-filter"></i> Filter
+                                                <i class="fas fa-filter"></i> Filter Tahun
                                             </button>
                                             <form id="filter_penjualan">
                                                 <div class="dropdown-menu">
                                                     <div class="px-3 py-3">
-                                                        <div class="form-group">
-                                                            <label for="jenis_penjualan">Database</label>
-                                                        </div>
                                                         <div class="form-group">
                                                             @for ($i = 0; $i < 2; $i++)
                                                                 <div class="form-check">

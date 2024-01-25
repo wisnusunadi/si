@@ -82,14 +82,11 @@
                                 <div class="col-12">
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
-                                        <i class="fas fa-filter"></i> Filter
+                                        <i class="fas fa-filter"></i> Filter Tahun
                                     </button>
                                     <form id="filter_coo">
                                         <div class="dropdown-menu">
                                             <div class="px-3 py-3">
-                                                <div class="form-group">
-                                                    <label for="jenis_penjualan">Database</label>
-                                                </div>
                                                 <div class="form-group">
                                                     @for ($i = 0; $i < 2; $i++)
                                                         <div class="form-check">

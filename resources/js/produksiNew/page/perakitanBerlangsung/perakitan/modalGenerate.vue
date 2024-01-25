@@ -12,7 +12,7 @@ export default {
         return {
             showModalCetak: false,
             form: {
-                kedatangan: 1,
+                kedatangan: 0,
                 jml_noseri: 0,
             },
             isError: false,
