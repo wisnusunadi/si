@@ -813,6 +813,7 @@ class GudangController extends Controller
 
     public function get_data_barang_jadi(Request $request)
     {
+        // dd($request->all());
         try {
             $data = GudangBarangJadi::leftJoin('produk as p', 'p.id', '=', 'gdg_barang_jadi.produk_id')
                 ->leftJoin('m_satuan as s', 's.id', '=', 'gdg_barang_jadi.satuan_id')

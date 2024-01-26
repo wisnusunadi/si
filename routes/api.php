@@ -340,6 +340,7 @@ Route::prefix('/prd')->group(function () {
             Route::get('/show', [ProduksiController::class, 'show_non_jadwal']);
             Route::get('/detail/{id}', [ProduksiController::class, 'detail_non_jadwal']);
         });
+        Route::get('/kamus_prd', [ProduksiController::class, 'kamus_produk']);
         Route::post('/gen', [ProduksiController::class, 'generate_fg']);
         Route::post('/non_gen', [ProduksiController::class, 'non_generate_fg']);
         Route::get('/riwayat', [ProduksiController::class, 'riwayat_fg']);

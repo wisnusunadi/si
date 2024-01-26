@@ -138,7 +138,7 @@ Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
     // Route::view('/manager/produk', 'manager.gbj.produksi');
 });
 
-Route::group(['prefix' => '/produksi', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => '/produksi','middleware' => ['divisi:prd']], function () {
     Route::view('/dashboard', 'page.produksi.dashboard');
     Route::view('/so', 'page.produksi.so');
     // Route::view('/jadwal_perakitan', 'page.produksi.jadwal_perakitan');
@@ -301,7 +301,7 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
 });
 
 
-Route::group(['prefix' => 'logistik'], function () {
+Route::group(['prefix' => 'logistik','middleware' => ['divisi:log']], function () {
     Route::group(['middleware' => ['divisi:log']], function () {
         Route::get('/dashboard', [App\Http\Controllers\LogistikController::class, 'dashboard'])->name('logistik.dashboard');
     });
