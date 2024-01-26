@@ -386,7 +386,7 @@ class ProduksiController extends Controller
                 'nama' => $d->Produk->nama .  ' '. $d->nama,
                  'terjadwal' => $d->cterjadwal + $d->crework,
                  'tdk_terjadwal' => $d->ctdkterjadwal,
-                 'total' => $d->cterjadwal + $d->ctdkterjadwal
+                 'total' => $d->cterjadwal + $d->ctdkterjadwal  + $d->crework
             );
         }
 
