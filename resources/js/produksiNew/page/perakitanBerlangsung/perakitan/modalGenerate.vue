@@ -1,4 +1,4 @@
-    <script>
+<script>
 import axios from 'axios';
 import DataTable from '../../../components/DataTable.vue';
 import modalPilihan from './modalPilihan.vue';
@@ -98,13 +98,14 @@ export default {
         },
         async simpanSeri() {
             try {
+                this.loading = true
                 const kirim = {
                     seri: this.seri,
                     available: this.available,
                 }
                 const { data } = await axios.post('/api/prd/fg/gen/confirm', kirim)
                 this.$swal('Berhasil', 'Berhasil menyimpan seri', 'success')
-                const { noseri, id, produk_id, date_in  } = data
+                const { noseri, id, produk_id, date_in } = data
                 this.hasilGenerate = noseri
                 const tgl = moment(date_in).format('YYYY-MM-DD')
                 const wkt_rakit = this.timeFormat(date_in)
@@ -112,6 +113,8 @@ export default {
                 this.linkExport = `/produksi/export_noseri_gen/${produk_id}/${tgl} ${wkt_rakit}`
             } catch (error) {
                 console.log(error)
+            } finally {
+                this.loading = false
             }
         },
         closeModalCetak() {
@@ -142,7 +145,7 @@ export default {
             const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-'
             if (cekbppb) {
                 this.isDisableBPPB = true
-            } 
+            }
         }
     },
     mounted() {
@@ -168,7 +171,8 @@ export default {
 </script>
 <template>
     <div>
-        <modalPilihan :data="idCetakHasilGenerate"  v-if="showModalCetak" @closeModal="closeModalCetak" @closeAllModal="closeAllModal"></modalPilihan>
+        <modalPilihan :data="idCetakHasilGenerate" v-if="showModalCetak" @closeModal="closeModalCetak"
+            @closeAllModal="closeAllModal"></modalPilihan>
         <div class="modal fade modalGenerate" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
             role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
@@ -189,7 +193,8 @@ export default {
                                         <div class="card">
                                             <div class="card-body">
                                                 <input type="text" name="no_bppb" id="no_bppb" class="form-control"
-                                                    v-model="dataGenerate.no_bppb" :disabled="loading || hasilGenerate.length > 0 || isDisableBPPB"
+                                                    v-model="dataGenerate.no_bppb"
+                                                    :disabled="loading || hasilGenerate.length > 0 || isDisableBPPB"
                                                     @keyup="keyUpperCase($event)">
                                             </div>
                                         </div>
@@ -245,15 +250,14 @@ export default {
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Kedatangan</label>
                                                 <input type="number" class="form-control" v-model.number="form.kedatangan"
-                                                :disabled="hasilGenerate.length > 0"
-                                                    @keypress="numberOnly($event)">
+                                                    :disabled="hasilGenerate.length > 0" @keypress="numberOnly($event)">
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputPassword1">Jumlah Noseri yang dibuat</label>
                                                 <input type="number" class="form-control"
                                                     :class="jumlahRakit ? 'is-valid' : 'is-invalid'"
-                                                    :disabled="hasilGenerate.length > 0"
-                                                    @keypress="numberOnly($event)" v-model.number="form.jml_noseri">
+                                                    :disabled="hasilGenerate.length > 0" @keypress="numberOnly($event)"
+                                                    v-model.number="form.jml_noseri">
                                                 <div class="invalid-feedback" v-if="!jumlahRakit">
                                                     Jumlah Noseri yang dibuat tidak boleh lebih dari jumlah rakit
                                                 </div>
@@ -310,9 +314,20 @@ export default {
                                     <!-- <button type="button" class="btn btn-success"
                                         @click="simpan">Generate</button> -->
                                     <button type="button" class="btn btn-success" v-if="!isError" :disabled="loading"
-                                        @click="simpan">Generate</button>
+                                        @click="simpan">
+                                        <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                        {{ loading ? 'Loading...' : 'Generate' }}
+                                    </button>
                                     <button type="button" class="btn btn-success" v-if="seri.length > 0"
-                                        @click="simpanSeri">Simpan</button>
+                                        :disabled="loading"
+                                        @click="simpanSeri">
+                                        <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                        {{ loading ? 'Loading...' : 'Simpan' }}
+                                    </button>
                                 </div>
 
                                 <div v-else>

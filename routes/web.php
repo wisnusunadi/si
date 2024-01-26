@@ -298,6 +298,7 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
             Route::get('/cancel/{id}', [App\Http\Controllers\QcController::class, 'cancel_so'])->name('qc.so.cancel_po');
         });
     });
+    Route::view('/{any?}', 'page.qc.qc')->where('any', '.*');
 });
 
 

@@ -21,29 +21,6 @@ export default {
             produkSelected: null,
             showModalTransfer: false,
             showModalSisaProduk: false,
-            headers: [
-                {
-                    text: 'Periode',
-                    value: 'periode',
-                    align: 'text-left'
-                },
-                {
-                    text: 'Tanggal',
-                    value: 'tanggal',
-                    children: [
-                        {
-                            text: 'Tanggal Masuk',
-                            value: 'tgl_mulai',
-                            align: 'text-left',
-                        },
-                        {
-                            text: 'Tanggal Keluar',
-                            value: 'tgl_selesai',
-                            align: 'text-left'
-                        },
-                    ],
-                },
-            ]
         }
     },
     methods: {
