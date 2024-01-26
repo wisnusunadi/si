@@ -376,7 +376,7 @@ class ProduksiController extends Controller
             $obj[] = array(
                  'id' => $d->id,
                 'kode' => $d->Produk->kode != null ? $d->Produk->kode : '-',
-                'nama' => $d->Produk->nama,
+                'nama' => $d->Produk->nama .  ' '. $d->nama,
                  'terjadwal' => $d->cterjadwal,
                  'tdk_terjadwal' => $d->ctdkterjadwal,
                  'total' => $d->cterjadwal + $d->ctdkterjadwal
