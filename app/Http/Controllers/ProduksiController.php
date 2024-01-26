@@ -375,7 +375,7 @@ class ProduksiController extends Controller
         foreach ($data as $d){
             $obj[] = array(
                  'id' => $d->id,
-                'kode' => $d->Produk->kode != null ? $d->Produk->kode : '-',
+                'kode' => $d->Produk->kode != null ? $d->Produk->kode. $d->kode : '-',
                 'nama' => $d->Produk->nama .  ' '. $d->nama,
                  'terjadwal' => $d->cterjadwal,
                  'tdk_terjadwal' => $d->ctdkterjadwal,

@@ -45,11 +45,11 @@ export default {
             <tbody v-if="renderPaginate.length > 0">
                 <tr v-for="(item, index) in renderPaginate" :key="index">
                     <td>{{ item.no }}</td>
-                    <td>{{ item.kode_produk }}</td>
-                    <td>{{ item.nama_produk }}</td>
-                    <td>{{ item.jumlah_no_seri_dirakit_terjadwal }}</td>
-                    <td>{{ item.jumlah_no_seri_dirakit_tidak_terjadwal }}</td>
-                    <td>{{ item.jumlah_no_seri_dirakit }}</td>
+                    <td>{{ item.kode }}</td>
+                    <td>{{ item.nama }}</td>
+                    <td>{{ item.terjadwal }}</td>
+                    <td>{{ item.tdk_terjadwal }}</td>
+                    <td>{{ item.total }}</td>
                 </tr>
             </tbody>
             <tbody v-else>

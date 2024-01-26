@@ -58,7 +58,12 @@ export default {
             try {
                 this.$store.dispatch('setLoading', true)
                 const { data } = await axios.get(`/api/prd/kamus_prd/${this.years}`)
-                this.items = data
+                this.items = data.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item
+                    }
+                })
             } catch (error) {
                 console.log(error)
             } finally {
