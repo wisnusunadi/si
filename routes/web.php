@@ -391,7 +391,6 @@ Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
 Route::group(['prefix' => 'dc'], function () {
     Route::group(['middleware' => ['divisi:dc']], function () {
         Route::get('/dashboard',   [App\Http\Controllers\DcController::class, 'dashboard'])->name('dc.dashboard');
-
         Route::group(['prefix' => '/so_in_process'], function () {
             Route::view('/show', 'page.dc.so.in_proses.show')->name('dc.so.in_proses.show');
         });
@@ -406,7 +405,6 @@ Route::group(['prefix' => 'dc'], function () {
             });
         });
     });
-
     Route::group(['prefix' => '/coo'], function () {
         Route::get('/rework/pdf', [App\Http\Controllers\DcController::class, 'pdf_coo_semua_rework'])->name('dc.seri_reworks.coo.pdf');
         Route::group(['middleware' => ['divisi:dc,dirut']], function () {

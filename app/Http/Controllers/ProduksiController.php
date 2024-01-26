@@ -369,6 +369,13 @@ class ProduksiController extends Controller
                     ->whereYear('jadwal_rakit_noseri.created_at', $year)
                     ->whereColumn('jadwal_perakitan.produk_id', 'gdg_barang_jadi.id');
             },
+            'crework' => function ($q) use ($year) {
+                $q->selectRaw('coalesce(count(noseri_barang_jadi.id),0)')
+                    ->from('noseri_barang_jadi')
+                    ->where('noseri_barang_jadi.unit', 'AK10')
+                    ->whereYear('noseri_barang_jadi.created_at', $year)
+                    ->whereColumn('noseri_barang_jadi.gdg_barang_jadi_id', 'gdg_barang_jadi.id');
+            },
             ])
         ->get();
 
@@ -377,9 +384,9 @@ class ProduksiController extends Controller
                  'id' => $d->id,
                 'kode' => $d->Produk->kode != null ? $d->Produk->kode. $d->kode : '-',
                 'nama' => $d->Produk->nama .  ' '. $d->nama,
-                 'terjadwal' => $d->cterjadwal,
+                 'terjadwal' => $d->cterjadwal + $d->crework,
                  'tdk_terjadwal' => $d->ctdkterjadwal,
-                 'total' => $d->cterjadwal + $d->ctdkterjadwal
+                 'total' => $d->cterjadwal + $d->ctdkterjadwal  + $d->crework
             );
         }
 
