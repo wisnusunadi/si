@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import Header from '../../components/header.vue';
 import Table from './table.vue';
 export default {
@@ -40,24 +41,7 @@ export default {
                 }
             ],
             // data produk tampil semua meskipun jumlah masih kosong, tujuannya untuk melihat kode produk
-            items: [ 
-                {
-                    no: 1,
-                    kode_produk: 'PM06',
-                    nama_produk: 'ABPM50',
-                    jumlah_no_seri_dirakit_terjadwal: 1,
-                    jumlah_no_seri_dirakit_tidak_terjadwal: 1,
-                    jumlah_no_seri_dirakit: 2,
-                },
-                {
-                    no: 2,
-                    kode_produk: 'AP01',
-                    nama_produk: 'APRON (Full)',
-                    jumlah_no_seri_dirakit_terjadwal: 1,
-                    jumlah_no_seri_dirakit_tidak_terjadwal: 1,
-                    jumlah_no_seri_dirakit: 2,
-                },
-            ],
+            items: [],
         }
     },
     computed: {
@@ -68,7 +52,28 @@ export default {
             }
             return year
         },
-    }
+    },
+    methods: {
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true)
+                const { data } = await axios.get(`/api/prd/kamus_prd/${this.years}`)
+                this.items = data.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.dispatch('setLoading', false)
+            }
+        }
+    },
+    created() {
+        this.getData()
+    },
 }
 </script>
 <template>
@@ -78,7 +83,7 @@ export default {
             <div class="card-body">
                 <div class="d-flex bd-highlight mb-3">
                     <div class="mr-auto p-2 bd-highlight">
-                        <select v-model="years" class="form-control">
+                        <select v-model="years" class="form-control" @change="getData">
                             <option v-for="year in fiveYearsBefore" :key="year" :value="year">{{ year }}</option>
                         </select>
                     </div>
