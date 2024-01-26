@@ -350,6 +350,41 @@ class ProduksiController extends Controller
         return response()->json($obj);
     }
 
+    function kamus_produk($year)
+    {
+        $data = GudangBarangJadi::addSelect([
+            'cterjadwal' => function ($q) use ($year) {
+                $q->selectRaw('coalesce(count(jadwal_rakit_noseri.id),0)')
+                    ->from('jadwal_rakit_noseri')
+                    ->leftJoin('jadwal_perakitan','jadwal_perakitan.id','=','jadwal_rakit_noseri.jadwal_id')
+                    ->where('jadwal_perakitan.jenis', 'terjadwal')
+                    ->whereYear('jadwal_rakit_noseri.created_at', $year)
+                    ->whereColumn('jadwal_perakitan.produk_id', 'gdg_barang_jadi.id');
+            },
+            'ctdkterjadwal' => function ($q) use ($year) {
+                $q->selectRaw('coalesce(count(jadwal_rakit_noseri.id),0)')
+                    ->from('jadwal_rakit_noseri')
+                    ->leftJoin('jadwal_perakitan','jadwal_perakitan.id','=','jadwal_rakit_noseri.jadwal_id')
+                    ->where('jadwal_perakitan.jenis', 'tidak_terjadwal')
+                    ->whereYear('jadwal_rakit_noseri.created_at', $year)
+                    ->whereColumn('jadwal_perakitan.produk_id', 'gdg_barang_jadi.id');
+            },
+            ])
+        ->get();
+
+        foreach ($data as $d){
+            $obj[] = array(
+                 'id' => $d->id,
+                'kode' => $d->Produk->kode != null ? $d->Produk->kode : '-',
+                'nama' => $d->Produk->nama,
+                 'terjadwal' => $d->cterjadwal,
+                 'tdk_terjadwal' => $d->ctdkterjadwal,
+                 'total' => $d->cterjadwal + $d->ctdkterjadwal
+            );
+        }
+
+        return response()->json($obj);
+    }
     function show_non_jadwal()
     {
         $data = JadwalPerakitan::select(
