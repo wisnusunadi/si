@@ -31,6 +31,7 @@ export default {
             tanggalAwal: moment().startOf('month').format('YYYY-MM-DD'),
             tanggalAkhir: moment().endOf('month').format('YYYY-MM-DD'),
             loadingRiwayat: false,
+            searchRiwayat: '',
         }
     },
     methods: {
@@ -50,7 +51,10 @@ export default {
                     }
                 })
 
-                const { data: riwayat } = await axios.get('/api/prd/fg/riwayat?tanggalAwal=' + this.tanggalAwal + '&tanggalAkhir=' + this.tanggalAkhir)
+                const { data: riwayat } = await axios.post('/api/prd/fg/riwayat', {
+                    tanggalAwal: this.tanggalAwal,
+                    tanggalAkhir: this.tanggalAkhir,
+                })
                 this.dataRiwayat = riwayat.map(item => {
                     return {
                         ...item,
@@ -79,13 +83,41 @@ export default {
         async updateRiwayat() {
             try {
                 this.loadingRiwayat = true
-                const { data } = await axios.get('/api/prd/fg/riwayat?tanggalAwal=' + this.tanggalAwal + '&tanggalAkhir=' + this.tanggalAkhir)
-                this.dataRiwayat = data.map(item => {
-                    return {
-                        ...item,
-                        tgl_buat: this.dateFormat(item.tgl_buat),
-                    }
-                })
+                if (this.tanggalAwal !== '' && this.tanggalAkhir !== '' && this.searchRiwayat !== '') {
+                    const { data } = await axios.post('/api/prd/fg/riwayat', {
+                        tanggalAwal: this.tanggalAwal,
+                        tanggalAkhir: this.tanggalAkhir,
+                        search: this.searchRiwayat
+                    })
+                    this.dataRiwayat = data.map(item => {
+                        return {
+                            ...item,
+                            tgl_buat: this.dateFormat(item.tgl_buat),
+                        }
+                    })
+                } else if (this.tanggalAwal !== '' && this.tanggalAkhir !== '') {
+                    const { data } = await axios.post('/api/prd/fg/riwayat', {
+                        tanggalAwal: this.tanggalAwal,
+                        tanggalAkhir: this.tanggalAkhir,
+                    })
+                    this.dataRiwayat = data.map(item => {
+                        return {
+                            ...item,
+                            tgl_buat: this.dateFormat(item.tgl_buat),
+                        }
+                    })
+                }
+                if (this.searchRiwayat !== '') {
+                    const { data } = await axios.post('/api/prd/fg/riwayat', {
+                        search: this.searchRiwayat
+                    })
+                    this.dataRiwayat = data.map(item => {
+                        return {
+                            ...item,
+                            tgl_buat: this.dateFormat(item.tgl_buat),
+                        }
+                    })
+                }
             } catch (error) {
                 console.log(error)
             } finally {
@@ -96,6 +128,10 @@ export default {
             const { tanggalAwal, tanggalAkhir } = tanggal
             this.tanggalAwal = tanggalAwal
             this.tanggalAkhir = tanggalAkhir
+            this.updateRiwayat()
+        },
+        updateSearch(search) {
+            this.searchRiwayat = search
             this.updateRiwayat()
         },
     },
@@ -144,10 +180,10 @@ export default {
                     <div class="card">
                         <div class="card-body">
                             <riwayat :dataRiwayat="dataRiwayat" :tanggalAwal="tanggalAwal" :tanggalAkhir="tanggalAkhir"
-                                @updateTanggal="updateTanggal" v-if="!loadingRiwayat" />
-                            <div class="spinner-border" role="status" v-else>
-                                <span class="sr-only">Loading...</span>
-                            </div>
+                                :loading="loadingRiwayat"
+                                @updateTanggal="updateTanggal"
+                                @updateSearch="updateSearch"
+                                />
                         </div>
                     </div>
                 </div>

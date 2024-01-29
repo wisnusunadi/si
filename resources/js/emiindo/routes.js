@@ -18,6 +18,9 @@ const routes = [
         path: '/penjualan/request_emiindo/daftar_penerimaan',
         name: 'penerimaan',
         component: Penerimaan
+    },
+    {
+        path: '/penjualan/buka_periode'
     }
 ];
 

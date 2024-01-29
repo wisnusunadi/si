@@ -4453,7 +4453,25 @@ class ProduksiController extends Controller
         //         ->whereYear('jadwal_rakit_noseri.created_at',  $date)->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
         // }
 
-        $data = JadwalRakitNoseri::select('jadwal_perakitan.jenis', 'jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'gdg_barang_jadi.nama as variasi', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
+        if(isset($request->tanggalAwal) && isset($request->tanggalAkhir)) {
+            $data = JadwalRakitNoseri::select('jadwal_perakitan.jenis', 'jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'gdg_barang_jadi.nama as variasi', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
+            ->leftjoin(
+                'jadwal_perakitan',
+                'jadwal_perakitan.id',
+                '=',
+                'jadwal_rakit_noseri.jadwal_id'
+            )
+                ->leftjoin(
+                    'gdg_barang_jadi',
+                    'gdg_barang_jadi.id',
+                    '=',
+                    'jadwal_perakitan.produk_id'
+                )
+                ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                ->whereBetween('jadwal_rakit_noseri.created_at', [$request->tanggalAwal, $request->tanggalAkhir]);
+        } else if (isset($request->search)) {
+            $search = $request->search;
+            $data = JadwalRakitNoseri::select('jadwal_perakitan.jenis', 'jadwal_rakit_noseri.id', 'jadwal_rakit_noseri.noseri', 'produk.nama as produk', 'gdg_barang_jadi.nama as variasi', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at')
             ->leftjoin(
                 'jadwal_perakitan',
                 'jadwal_perakitan.id',
@@ -4467,9 +4485,35 @@ class ProduksiController extends Controller
                 'jadwal_perakitan.produk_id'
             )
             ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-            ->whereBetween('jadwal_rakit_noseri.created_at', [$request->tanggalAwal, $request->tanggalAkhir])
-            ->orderBy('jadwal_rakit_noseri.created_at', 'DESC')
-            ->get();
+            ->where('jadwal_perakitan.jenis', 'like', '%' . $search . '%')
+            ->orWhere('jadwal_rakit_noseri.noseri', 'like', '%' . $search . '%')
+                ->orWhere('jadwal_rakit_noseri.created_at', 'like', '%' . $search . '%')
+            ->orWhere('produk.nama', 'like', '%' . $search . '%')
+            ->orWhere('gdg_barang_jadi.nama', 'like', '%' . $search . '%')
+            ->orWhere('jadwal_perakitan.no_bppb', 'like', '%' . $search . '%');
+        }else if(isset($request->noseri)) {
+            // show id noseri where request like this ["TD16241D00133","TD16241D00134"]
+            $tidak_ada = array();
+            $ada = array();
+
+            foreach ($request->noseri as $noseri) {
+                $data = JadwalRakitNoseri::select('id')->where('noseri', $noseri)->first();
+
+                if ($data == null) {
+                    array_push($tidak_ada, $noseri);
+                } else {
+                    array_push($ada, $data->id);
+                }
+            }
+
+            return response()->json([
+                'ada' => $ada,
+                'tidak_ada' => $tidak_ada
+            ]);
+        }
+        
+        $data = $data->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
+        
         if ($data->isEmpty()) {
             $obj = array();
         } else {

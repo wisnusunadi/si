@@ -2,12 +2,15 @@
 import DataTable from '../../../components/DataTable.vue';
 import modalPilihan from './modalPilihan.vue';
 import riwayatCetak from './riwayatCetak.vue';
+import seriviatext from '../../../../gbj/page/PermintaanReworkGBJ/permintaan/formPermintaan/seriviatext.vue';
+import axios from 'axios';
 export default {
-    props: ['dataRiwayat', 'tanggalAkhir', 'tanggalAwal'],
+    props: ['dataRiwayat', 'tanggalAkhir', 'tanggalAwal', 'loading'],
     components: {
         DataTable,
         modalPilihan,
-        riwayatCetak
+        riwayatCetak,
+        seriviatext
     },
     data() {
         return {
@@ -65,6 +68,7 @@ export default {
                 }
             ],
             jenisPerakitanSelected: [],
+            showmodalseriviatext: false,
         }
     },
     methods: {
@@ -78,7 +82,7 @@ export default {
         },
         selectNoSeri(noseri) {
             if (this.noSeriSelected.find((data) => data === noseri)) {
-                this.noSeriSelected = this.noSeriSelected.filter((data) => data.id !== noseri)
+                this.noSeriSelected = this.noSeriSelected.filter((data) => data !== noseri)
                 this.checkAll = false
             } else {
                 this.noSeriSelected.push(noseri)
@@ -120,11 +124,34 @@ export default {
             } else {
                 this.jenisPerakitanSelected.push(jenis.value)
             }
+        },
+        async submit(noseri) {
+            let noseriarray = noseri.split(/[\n, \t]/)
+
+            noseriarray = noseriarray.filter((item) => item !== '')
+
+            noseriarray = [...new Set(noseriarray)]
+
+            const { data } = await axios.post('/api/prd/fg/riwayat', {
+                noseri: noseriarray
+            })
+
+            const { ada, tidak_ada } = data
+            this.noSeriSelected = ada
+            if (tidak_ada.length > 0) {
+                swal.fire('Nomor Seri Tidak Ditemukan', tidak_ada.join(', '), 'warning')
+            }
+        },
+        showSeriViaText() {
+            this.showmodalseriviatext = true
+            this.$nextTick(() => {
+                $('.modalChecked').modal('show');
+            });
         }
     },
     computed: {
         filterData() {
-            if(this.jenisPerakitanSelected.length > 0) {
+            if (this.jenisPerakitanSelected.length > 0) {
                 return this.dataRiwayat.filter(item => {
                     return this.jenisPerakitanSelected.includes(item.jenis)
                 })
@@ -140,6 +167,7 @@ export default {
             } else {
                 this.checkAll = false
             }
+            this.$emit('updateSearch', this.search)
         },
         tanggal_awal() {
             this.$emit('updateTanggalAwal', this.tanggal_awal)
@@ -152,49 +180,20 @@ export default {
         <modalPilihan :data="cetakSeriType == 'single' ? cetakSeriSingle : noSeriSelected"
             v-if="cetakSeriSingle.length > 0 || noSeriSelected.length > 0" />
         <riwayatCetak :riwayat="riwayatSelected" v-if="showModalRiwayat" @closeModal="showModalRiwayat = false" />
+        <seriviatext v-if="showmodalseriviatext" @closeModal="showmodalseriviatext = false" @submit="submit" />
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
                 <button class="btn btn-outline-primary btn-sm" v-if="noSeriSelected.length > 0" @click="cetakBanyakSeri">
                     <i class="fa fa-print"></i>
                     Cetak Nomor Seri
                 </button>
-            </div>
-            <div class="p-2 bd-highlight">
-                <input type="text" v-model="search" class="form-control" placeholder="Cari...">
-            </div>
-        </div>
-        <DataTable :headers="headers" :items="filterData" :search="search">
-            <template #header.id>
-                <input type="checkbox" @click="checkAllSeri" :checked="checkAll">
-            </template>
-
-            <template #header.jenis>
-                <span class="text-bold pr-2">Jenis Perakitan</span>
+                <button class="btn btn-outline-primary btn-sm" @click="showSeriViaText">Pilih Nomor Seri Via Text</button>
                 <span class="filter">
                     <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-filter"></i>
-                    </a>
-                    <form id="filter_ekat">
-                        <div class="dropdown-menu">
-                            <div class="px-3 py-3 font-weight-normal">
-                                <div class="form-check" v-for="jenis in jenisPerakitanOptions" :key="jenis.value">
-                                    <input class="form-check-input" type="checkbox" @click="jenisPerakitanClicked(jenis)"
-                                        :id="jenis.value">
-                                    <label class="form-check-label" :for="jenis.value">
-                                        {{ jenis.label }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </span>
-            </template>
-
-            <template #header.tgl_buat>
-                <span class="text-bold pr-2">Tanggal Dibuat</span>
-                <span class="filter">
-                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-filter"></i>
+                        <button class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-filter"></i>
+                            Filter Tanggal
+                        </button>
                     </a>
                     <form id="filter_ekat">
                         <div class="dropdown-menu">
@@ -214,6 +213,36 @@ export default {
                                                 @change="updateTanggal" :min="tanggal_awal">
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </span>
+            </div>
+            <div class="p-2 bd-highlight">
+                <input type="text" v-model="search" class="form-control" placeholder="Cari...">
+            </div>
+        </div>
+        <DataTable :headers="headers" :items="filterData" v-if="!loading">
+            <template #header.id>
+                <input type="checkbox" @click="checkAllSeri" :checked="checkAll">
+            </template>
+
+            <template #header.jenis>
+                <span class="text-bold pr-2">Jenis Perakitan</span>
+                <span class="filter">
+                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-filter"></i>
+                    </a>
+                    <form id="filter_ekat">
+                        <div class="dropdown-menu">
+                            <div class="px-3 py-3 font-weight-normal">
+                                <div class="form-check" v-for="jenis in jenisPerakitanOptions" :key="jenis.value">
+                                    <input class="form-check-input" type="checkbox" @click="jenisPerakitanClicked(jenis)"
+                                        :id="jenis.value">
+                                    <label class="form-check-label" :for="jenis.value">
+                                        {{ jenis.label }}
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -242,5 +271,10 @@ export default {
                 </button>
             </template>
         </DataTable>
+        <div v-else class="d-flex justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
     </div>
 </template>

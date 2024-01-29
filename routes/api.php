@@ -342,7 +342,7 @@ Route::prefix('/prd')->group(function () {
         });
         Route::post('/gen', [ProduksiController::class, 'generate_fg']);
         Route::post('/non_gen', [ProduksiController::class, 'non_generate_fg']);
-        Route::get('/riwayat', [ProduksiController::class, 'riwayat_fg']);
+        Route::post('/riwayat', [ProduksiController::class, 'riwayat_fg']);
         Route::post('/gen/confirm', [ProduksiController::class, 'generate_fg_confirm']);
         Route::post('/cetak/', [ProduksiController::class, 'get_noseri_fg_cetak']);
         Route::post('/riwayat_code/', [ProduksiController::class, 'store_noseri_fg_riwayat_code'])->middleware('jwt.verify');
