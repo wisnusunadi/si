@@ -59,7 +59,6 @@ export default {
                     return {
                         ...item,
                         tgl_buat: this.dateFormat(item.tgl_buat),
-                        noseri: item.noseri.length
                     }
                 })
 
@@ -94,7 +93,6 @@ export default {
                         return {
                             ...item,
                             tgl_buat: this.dateFormat(item.tgl_buat),
-                            noseri: item.noseri.length
                         }
                     })
                 } else if (this.tanggalAwal !== '' && this.tanggalAkhir !== '') {
@@ -106,7 +104,6 @@ export default {
                         return {
                             ...item,
                             tgl_buat: this.dateFormat(item.tgl_buat),
-                            noseri: item.noseri.length
                         }
                     })
                 }
@@ -118,7 +115,6 @@ export default {
                         return {
                             ...item,
                             tgl_buat: this.dateFormat(item.tgl_buat),
-                            noseri: item.noseri.length
                         }
                     })
                 }
