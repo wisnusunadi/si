@@ -19,19 +19,19 @@
         }
 
         .margin-left-11 {
-            margin-left: -0.6cm;
+            margin-left: -0.4cm;
         }
 
         .margin-left-12 {
-            margin-left: -0.7cm;
+            margin-left: -0.5cm;
         }
 
         .margin-left-13 {
-            margin-left: -0.8cm;
+            margin-left: -0.6cm;
         }
 
         .margin-left-14 {
-            margin-left: -0.9cm;
+            margin-left: -0.7cm;
         }
 
         .small-text {
@@ -73,7 +73,7 @@
             <div class="{{ $classPage }}">
                 <img
                     src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_93, 0.9, 16)) }}" />
-                <div class="small-text">{{ $item }}</div>
+                <div class="small-text">{{ strlen($item) }}</div>
             </div>
         </div>
     @endforeach
