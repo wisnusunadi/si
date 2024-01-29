@@ -73,7 +73,7 @@
             <div class="{{ $classPage }}">
                 <img
                     src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_93, 0.9, 16)) }}" />
-                <div class="small-text">{{ strlen($item) }}</div>
+                <div class="small-text">{{ $item }}</div>
             </div>
         </div>
     @endforeach
