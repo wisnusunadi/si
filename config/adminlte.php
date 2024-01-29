@@ -1086,16 +1086,16 @@ return [
             'url' => '/penjualan/customer/show',
             'auth' => [23, 34],
         ],
-        [
-            'header' => 'INPROCESS',
-            'auth' => [23, 34]
-        ],
-        [
-            'text' => 'Barang Masuk',
-            'icon' => 'fas fa-dolly-flatbed',
-            'url' => '/qc/incoming/show',
-            'auth' => [23, 34],
-        ],
+        // [
+        //     'header' => 'INPROCESS',
+        //     'auth' => [23, 34]
+        // ],
+        // [
+        //     'text' => 'Barang Masuk',
+        //     'icon' => 'fas fa-dolly-flatbed',
+        //     'url' => '/qc/incoming/show',
+        //     'auth' => [23, 34],
+        // ],
         [
             'header' => 'OUTGOING',
             'auth' => [23, 34]

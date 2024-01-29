@@ -55,6 +55,9 @@ export default {
             this.$nextTick(() => {
                 $('.modalUji').modal('show')
             })
+        },
+        refresh() {
+            this.$emit('refresh')
         }
     },
     computed: {
@@ -126,7 +129,7 @@ export default {
 </script>
 <template>
     <div>
-        <modalUji :produk="detail" v-if="showModal" @closeModal="showModal = false" />
+        <modalUji :produk="detail" v-if="showModal" @closeModal="showModal = false" @refresh="refresh" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight"><input type="text" class="form-control" v-model="search" placeholder="Cari...">
             </div>

@@ -2,7 +2,7 @@
 import axios from 'axios';
 import Header from '../../components/header.vue';
 import incoming from './incoming';
-import riwayat from './riwayat.vue';
+import riwayat from './riwayat/index.vue';
 export default {
     components: {
         Header,
@@ -23,7 +23,13 @@ export default {
                 },
             ],
             dataIncoming: [],
-            dataRiwayat: [],    
+            dataRiwayat: [{
+                tgl_penyerahan: '24 Februari 2024',
+                wkt_penyerahan: '12:00',
+                no_bppb: 'BPPB/2020/02/001',
+                produk: 'Produk 1',
+                jml: '100',
+            }],    
         }
     },
     methods: {
@@ -69,7 +75,7 @@ export default {
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                        <incoming :data="dataIncoming" />
+                        <incoming :data="dataIncoming" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                         <riwayat :data="dataRiwayat" />
