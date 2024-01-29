@@ -1,5 +1,5 @@
 import VueRouter from "vue-router";
-import BarangMasuk from './page/barangMasuk'
+import BarangMasuk from './page/barangmasuk'
 
 const routes = [
     {
