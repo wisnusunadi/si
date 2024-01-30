@@ -881,6 +881,10 @@ return [
             ],
         ],
         [
+            'header' => 'SELAIN PERAKITAN',
+            'auth' => [17]
+        ],
+        [
             'header' => 'TRANSFER',
             'auth' => [17]
         ],
