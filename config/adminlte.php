@@ -881,8 +881,17 @@ return [
             ],
         ],
         [
-            'header' => 'SELAIN PERAKITAN',
-            'auth' => [17]
+            'icon' => 'fas fa-wrench',
+            'text' => 'Selain Perakitan',
+            'auth' => [17],
+            'submenu' => [
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Cetak Nomor Seri',
+                    'url'  => '/produksi/cetak_nomor_seri',
+                    'auth' => [17],
+                ]
+            ]
         ],
         [
             'header' => 'TRANSFER',

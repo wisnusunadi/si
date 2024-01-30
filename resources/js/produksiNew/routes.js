@@ -41,6 +41,11 @@ const routes = [
         path: '/produksi/kamus_produk',
         name: 'kamusProduk',
         component: () => import('./page/kamusProduk')
+    },
+    {
+        path: '/produksi/cetak_nomor_seri',
+        name: 'cetakNomorSeri',
+        component: () => import('./page/cetaknoseri')
     }
 ]
 const router = new VueRouter({

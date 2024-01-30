@@ -10,6 +10,7 @@ import numberOnly from "./plugins/numberOnly";
 import dateTimeFormat from "./plugins/dateTimeFormat";
 import timeFormat from "./plugins/timeFormat";
 import storeData from "./store";
+import DataTable from "./components/DataTable.vue";  
 import "vue-select/dist/vue-select.css";
 
 window.Vue = Vue;
@@ -21,6 +22,7 @@ Vue.use(dateFormat);
 Vue.use(numberOnly);
 Vue.use(dateTimeFormat);
 Vue.use(timeFormat);
+Vue.component('data-table', DataTable);
 
 const store = new Vuex.Store(storeData);
 
