@@ -679,11 +679,30 @@ class ProduksiController extends Controller
         }
     }
 
+    function get_noseri_fg_riwayat_nonstok($id)
+    {
+
+       // $data = SystemLog::where(['header'=> $id,'subjek' => 'Cetak Seri Perakitan','tipe' => 'Produksi'])->get();
+        $data = SystemLog::where(['header'=> $id,'subjek' => 'Produksi Non Stok','tipe' => 'Produksi Non Stok'])->get();
+        $seri = JadwalRakitNoseriNonStok::find($id);
+
+            foreach($data as $d){
+                $x = json_decode($d->response);
+                $isi[] = $x;
+            }
+            $obj = (object)[
+                'noseri' => $seri->noseri,
+                'tgl_buat' => $seri->created_at,
+                'user' => $seri->user,
+                 'item' => $isi
+            ];
+            return response()->json($obj);
+
+    }
 
     function show_fg_non_stok()
     {
         $data = JadwalRakitNoseriNonStok::all();
-
         foreach($data as $d){
             $obj[] = array(
                 'id' => $d->id,
@@ -694,7 +713,6 @@ class ProduksiController extends Controller
             );
         }
         return response()->json($obj);
-
     }
     function generate_fg_non_stok(Request $request)
     {
@@ -4264,6 +4282,41 @@ class ProduksiController extends Controller
         ];
 
         return response()->json($obj);
+    }
+
+    function store_noseri_fg_riwayat_nonstok(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            $seri = JadwalRakitNoseriNonStok::whereIN('id', $request->data)->get();
+            foreach ($seri as $s) {
+                $data = (object)[
+                    'seri' => $s->noseri,
+                    'ket' => $request->alasan,
+                ];
+                SystemLog::create([
+                    'subjek' => 'Cetak Seri Perakitan Non Stok',
+                    'header' => $s->id,
+                    'tipe' => 'Produksi Non Stok',
+                    'response' => json_encode($data),
+                    'user_id' => 2,
+                ]);
+            }
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Berhasil Ditambahkan',
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Gagal Ditambahkan',
+                'error' => $th->getMessage(),
+            ], 500);
+        }
     }
 
     function store_noseri_fg_riwayat_code(Request $request)
