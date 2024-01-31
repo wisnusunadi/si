@@ -70,6 +70,8 @@ export default {
             showModalRiwayat: false,
             selectRiwayat: null,
             showModalSeriViaText: false,    
+            cetakSeriType: 'all',
+            cetakSeriSingle:[],
         }
     },
     methods: {
@@ -96,6 +98,7 @@ export default {
         },
         openModalPilihan() {
             this.showModalPilihan = true;
+            this.cetakSeriType = 'all'
             this.$nextTick(() => {
                 $('.modalPilihan').modal('show');
             });
@@ -152,7 +155,14 @@ export default {
             if (noserinotfound.length > 0) {
                 this.$swal('Peringatan!', `No. Seri ${noserinotfound.join(', ')} tidak ditemukan`, 'warning')
             }
-
+        },
+        cetakSeriSatu(id) {
+            this.cetakSeriSingle = [id]
+            this.cetakSeriType = 'single'
+            this.showModalPilihan = true;
+            this.$nextTick(() => {
+                $('.modalPilihan').modal('show');
+            });
         }
     },
     watch: {
@@ -170,7 +180,7 @@ export default {
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
         <cetakseri v-if="showModal" @closeModal="showModal = false" />
-        <pilihan v-if="showModalPilihan" @closeModal="showModalPilihan = false" :data="noSeriSelected" />
+        <pilihan v-if="showModalPilihan" @closeModal="showModalPilihan = false" :data="cetakSeriType == 'single' ? cetakSeriSingle : noSeriSelected" />
         <riwayat v-if="showModalRiwayat" :riwayat="selectRiwayat" @closeModal="showModalRiwayat = false" />
         <seriviatext v-if="showModalSeriViaText" @closeModal="showModalSeriViaText = false" @submit="submit" />
         <div class="card">
@@ -212,7 +222,7 @@ export default {
                     </template>
                     <template #item.aksi="{ item }">
                         <div>
-                            <button class="btn btn-outline-primary btn-sm">
+                            <button class="btn btn-outline-primary btn-sm" @click="cetakSeriSatu(item.id)">
                                 <i class="fas fa-print"></i>
                                 Cetak No. Seri
                             </button>
