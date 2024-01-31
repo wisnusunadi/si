@@ -101,7 +101,7 @@ export default {
                 if (this.noseri.length > 0) {
                     let found = false
                     for (let j = 0; j < this.noseri.length; j++) {
-                        if (noseriarray[i] === this.noseri[j].noseri) {
+                        if (noseriarray[i].toUpperCase() === this.noseri[j].noseri) {
                             found = true
                         }
                     }
