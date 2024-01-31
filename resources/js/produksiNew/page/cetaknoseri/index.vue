@@ -182,7 +182,7 @@ export default {
         <cetakseri v-if="showModal" @closeModal="showModal = false" />
         <pilihan v-if="showModalPilihan" @closeModal="showModalPilihan = false" :data="cetakSeriType == 'single' ? cetakSeriSingle : noSeriSelected" />
         <riwayat v-if="showModalRiwayat" :riwayat="selectRiwayat" @closeModal="showModalRiwayat = false" />
-        <seriviatext v-if="showModalSeriViaText" @closeModal="showModalSeriViaText = false" @submit="submit" />
+        <seriviatext v-if="showModalSeriViaText" @close="showModalSeriViaText = false" @submit="submit" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex bd-highlight">

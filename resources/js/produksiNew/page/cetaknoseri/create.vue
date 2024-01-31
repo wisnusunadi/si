@@ -98,7 +98,19 @@ export default {
             noseriarray = [...new Set(noseriarray)];
 
             for (let i = 0; i < noseriarray.length; i++) {
-                this.noseri.push({ noseri: noseriarray[i].toUpperCase() })
+                if (this.noseri.length > 0) {
+                    let found = false
+                    for (let j = 0; j < this.noseri.length; j++) {
+                        if (noseriarray[i] === this.noseri[j].noseri) {
+                            found = true
+                        }
+                    }
+                    if (!found) {
+                        this.noseri.push({ noseri: noseriarray[i].toUpperCase() })
+                    }
+                } else {
+                    this.noseri.push({ noseri: noseriarray[i].toUpperCase() })
+                }
             }
 
             this.noseri = this.noseri.filter((item) => {
