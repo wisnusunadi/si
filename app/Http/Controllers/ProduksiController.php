@@ -697,7 +697,6 @@ class ProduksiController extends Controller
                  'item' => $isi
             ];
             return response()->json($obj);
-
     }
 
     function show_fg_non_stok()
@@ -724,26 +723,19 @@ class ProduksiController extends Controller
                 $noseri[] = $o->noseri;
             }
             $prd = JadwalRakitNoseri::whereIN('noseri',$noseri);
+            $nbj = NoseriBarangJadi::whereIN('noseri',$noseri);
             $nonstok = JadwalRakitNoseriNonStok::whereIN('noseri',$noseri);
 
 
-            if($prd->count() > 0){
+            if($prd->count() > 0 || $nbj->count() > 0 || $nonstok->count() > 0){
+                $datas = array_merge($prd->pluck('noseri')->toArray(),$nbj->pluck('noseri')->toArray(),$nonstok->pluck('noseri')->toArray());
                 DB::rollBack();
                 return response()->json([
                     'status' => 200,
-                    'message' =>  'Dupikasi No Seri Perakitan',
-                    'duplicate' =>   $prd->pluck('noseri')->toArray(),
+                    'message' =>  'Dupikasi No Seri',
+                    'duplicate' =>   array_unique($datas),
                 ], 500);
             }else{
-                if($nonstok->count() > 0){
-                    DB::rollBack();
-                    return response()->json([
-                        'status' => 200,
-                        'message' =>  'Dupikasi No Seri Non Stok',
-                        'duplicate' =>   $nonstok->pluck('noseri')->toArray(),
-                    ], 500);
-                }else{
-
                     foreach($noseri as $s){
                        $nonstok =  JadwalRakitNoseriNonStok::create([
                             'noseri' => $s,
@@ -758,8 +750,6 @@ class ProduksiController extends Controller
                         'message' =>  'No Seri Berhasil Ditambahkan',
                         'created_at' =>  $nonstok->created_at,
                     ], 200);
-                }
-
             }
 
         } catch (\Throwable $th) {
