@@ -1,7 +1,7 @@
 <script>
 import Header from '../../components/header.vue';
 import cetakseri from './create.vue';
-import pilihan from '../perakitanBerlangsung/riwayat/modalPilihan.vue'
+import pilihan from './modalPilihanRepeated.vue'
 import riwayat from './riwayat.vue';
 import seriviatext from '../../../gbj/page/PermintaanReworkGBJ/permintaan/formPermintaan/seriviatext.vue';
 import axios from 'axios';
@@ -139,8 +139,6 @@ export default {
                     if (noseriarray[i] === this.items[j].noseri) {
                         found = true
                         this.selectNoSeri(this.items[j].id)
-                    } else {
-                        found = false
                     }
                 }
                 if (!found) {

@@ -342,6 +342,8 @@ Route::prefix('/prd')->group(function () {
         });
         Route::prefix('/non_stok')->group(function () {
             Route::post('/gen', [ProduksiController::class, 'generate_fg_non_stok'])->middleware('jwt.verify');
+            Route::post('/riwayat', [ProduksiController::class, 'store_noseri_fg_riwayat_nonstok']);
+            Route::get('/riwayat/{id}', [ProduksiController::class, 'get_noseri_fg_riwayat_nonstok']);
             Route::post('/show', [ProduksiController::class, 'show_fg_non_stok']);
         });
         Route::post('/gen', [ProduksiController::class, 'generate_fg']);

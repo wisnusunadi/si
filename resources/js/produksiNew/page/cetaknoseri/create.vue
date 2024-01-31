@@ -222,7 +222,7 @@ export default {
                     }
                 })
                 const { message, created_at } = data
-                const tgl = moment(created_at).format('YYYY-MM-DD HH:mm')
+                const tgl = moment(created_at).format('YYYY-MM-DD HH:mm:ss')
                 this.idCetakHasilGenerate = tgl
                 this.$swal('Berhasil!', message, 'success');
             } catch (error) {
@@ -243,12 +243,14 @@ export default {
                     })
                 }
 
+                this.$swal('Peringatan!', message, 'warning');
+
                 this.isDisabled = false;
                 this.loading = false;
             } finally {
                 this.loading = false;
             }
-        }
+        },
     },
 }
 </script>

@@ -103,6 +103,10 @@ Route::group(['prefix' => '/produksiReworks' , 'middleware' => 'auth'], function
     Route::get('/cetak_seri_fg_medium_repeated', [ProduksiController::class, 'cetak_seri_finish_goods_medium_repeated']);
     Route::get('/cetak_seri_fg_small', [ProduksiController::class, 'cetak_seri_finish_goods_small']);;
     Route::get('/cetak_seri_fg_small_repeated', [ProduksiController::class, 'cetak_seri_finish_goods_small_repeated']);;
+    Route::get('/cetak_seri_fg_medium_nonstok', [ProduksiController::class, 'cetak_seri_finish_goods_medium_nonstok']);
+    Route::get('/cetak_seri_fg_medium_repeated_nonstok', [ProduksiController::class, 'cetak_seri_finish_goods_medium_repeated_nonstok']);
+    Route::get('/cetak_seri_fg_small_nonstok', [ProduksiController::class, 'cetak_seri_finish_goods_small_nonstok']);;
+    Route::get('/cetak_seri_fg_small_repeated_nonstok', [ProduksiController::class, 'cetak_seri_finish_goods_small_repeated_nonstok']);;
     Route::get('/cetakseriReworkAll', [ProduksiController::class, 'cetak_seri_rework_all']);
     Route::get('/cetakseriReworkAllKardus', [ProduksiController::class, 'cetak_seri_rework_all_kardus']);
     Route::get('/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);

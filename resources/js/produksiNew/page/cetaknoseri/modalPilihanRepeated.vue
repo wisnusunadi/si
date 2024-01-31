@@ -1,8 +1,10 @@
 <script>
+import axios from 'axios';
 export default {
     props: ['data'],
     data() {
         return {
+            alasan: '',
             merk: [
                 { value: 'elitech', label: 'Elitech' },
                 { value: 'vanward', label: 'Vanward' },
@@ -22,13 +24,45 @@ export default {
             });
         },
         small() {
-            window.open(`/produksiReworks/cetak_seri_fg_small_nonstok?data=${this.data}&merk=${this.merkSelected}`, '_blank')
+            if (this.alasan == '') {
+                this.$swal.fire('Perhatian', 'Alasan Cetak Harus Diisi', 'warning');
+                return;
+            }
+
+            let cetak = JSON.stringify(this.data);
+            window.open(`/produksiReworks/cetak_seri_fg_small_repeated_nonstok?data=${cetak}&merk=${this.merkSelected}`, '_blank')
+            this.postAlasan();
             this.closeModal();
         },
         medium() {
-            window.open(`/produksiReworks/cetak_seri_fg_medium_nonstok?data=${this.data}&merk=${this.merkSelected}`, '_blank')
+            if (this.alasan == '') {
+                this.$swal.fire('Perhatian', 'Alasan Cetak Harus Diisi', 'warning');
+                return;
+            }
+
+            let cetak = JSON.stringify(this.data);
+            window.open(`/produksiReworks/cetak_seri_fg_medium_repeated_nonstok?data=${cetak}&merk=${this.merkSelected}`, '_blank')
+            this.postAlasan();
             this.closeModal();
         },
+        postAlasan() {
+            let form = {
+                alasan: this.alasan,
+                data: this.data
+            }
+
+            try {
+                axios.post('/api/prd/fg/non_stok/riwayat', form, {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                    }
+                })
+            } catch (error) {
+                console.log(error);
+            } finally {
+                // this.closeModal();
+            }
+        }
     },
 }
 </script>
@@ -44,6 +78,10 @@ export default {
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Alasan Cetak</label>
+                        <textarea class="form-control" name="" id="" rows="3" v-model="alasan"></textarea>
+                    </div>
                     <div class="form-group">
                         <label for="">Merk</label>
                         <v-select :options="merk" :reduce="option => option.value" v-model="merkSelected"

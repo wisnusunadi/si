@@ -707,41 +707,33 @@ class ProduksiController extends Controller
                 $noseri[] = $o->noseri;
             }
             $prd = JadwalRakitNoseri::whereIN('noseri', $noseri);
+            $nbj = NoseriBarangJadi::whereIN('noseri', $noseri);
             $nonstok = JadwalRakitNoseriNonStok::whereIN('noseri', $noseri);
 
 
-            if ($prd->count() > 0) {
+            if ($prd->count() > 0 || $nbj->count() > 0 || $nonstok->count() > 0) {
+                $datas = array_merge($prd->pluck('noseri')->toArray(), $nbj->pluck('noseri')->toArray(), $nonstok->pluck('noseri')->toArray());
                 DB::rollBack();
                 return response()->json([
                     'status' => 200,
-                    'message' =>  'Dupikasi No Seri Perakitan',
-                    'duplicate' =>   $prd->pluck('noseri')->toArray(),
+                    'message' =>  'Dupikasi No Seri',
+                    'duplicate' =>   array_unique($datas),
                 ], 500);
             } else {
-                if ($nonstok->count() > 0) {
-                    DB::rollBack();
-                    return response()->json([
-                        'status' => 200,
-                        'message' =>  'Dupikasi No Seri Non Stok',
-                        'duplicate' =>   $nonstok->pluck('noseri')->toArray(),
-                    ], 500);
-                } else {
-
-                    foreach ($noseri as $s) {
-                        $nonstok =  JadwalRakitNoseriNonStok::create([
-                            'noseri' => $s,
-                            'user' => Auth::user()->nama,
-                            'ket' => $request->keperluan
-                        ]);
-                    }
-
-                    DB::commit();
-                    return response()->json([
-                        'status' => 200,
-                        'message' =>  'No Seri Berhasil Ditambahkan',
-                        'created_at' =>  $nonstok->created_at,
-                    ], 200);
+                foreach ($noseri as $s) {
+                    $nonstok =  JadwalRakitNoseriNonStok::create([
+                        'noseri' => $s,
+                        'user' => Auth::user()->nama,
+                        'ket' => $request->keperluan
+                    ]);
                 }
+
+                DB::commit();
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  'No Seri Berhasil Ditambahkan',
+                    'created_at' =>  $nonstok->created_at,
+                ], 200);
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -749,6 +741,7 @@ class ProduksiController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' =>  'Gagal Ditambahkan',
+                'error' => $th->getMessage()
             ], 500);
         }
     }
@@ -4263,6 +4256,41 @@ class ProduksiController extends Controller
         return response()->json($obj);
     }
 
+    function store_noseri_fg_riwayat_nonstok(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            $seri = JadwalRakitNoseriNonStok::whereIN('id', $request->data)->get();
+            foreach ($seri as $s) {
+                $data = (object)[
+                    'seri' => $s->noseri,
+                    'ket' => $request->alasan,
+                ];
+                SystemLog::create([
+                    'subjek' => 'Cetak Seri Perakitan Non Stok',
+                    'header' => $s->id,
+                    'tipe' => 'Produksi Non Stok',
+                    'response' => json_encode($data),
+                    'user_id' => 2,
+                ]);
+            }
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Berhasil Ditambahkan',
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Gagal Ditambahkan',
+                'error' => $th->getMessage(),
+            ], 500);
+        }
+    }
+
     function store_noseri_fg_riwayat_code(Request $request)
     {
         DB::beginTransaction();
@@ -5386,6 +5414,69 @@ class ProduksiController extends Controller
     {
         $getData =  json_decode($request->data, true);
         $seri = JadwalRakitNoseri::select('noseri')->whereIn('id', $getData)->get();
+        foreach ($seri as $s) {
+            $data[] = $s->noseri;
+        }
+
+        $customPaperSmall = array(0, 0, 60.46, 150.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserismall', compact('data'))->setPaper($customPaperSmall, 'landscape');
+        return $pdf->stream();
+        // return view('page.produksi.printreworks.cetakserismall', compact('data'));
+    }
+
+    function cetak_seri_finish_goods_medium_repeated_nonstok(Request $request)
+    {
+        $getData =  json_decode($request->data, true);
+        // $seri = JadwalRakitNoseri::select('noseri')->whereIn('id', $getData)->get();
+        // foreach ($seri as $s) {
+        //     $data[] = $s->noseri;
+        // }
+
+        //SetLogo
+        $seri = JadwalRakitNoseriNonStok::whereIn('id', $getData)->get();
+
+        foreach ($seri as $s) {
+            $data[] = (object)[
+                'noseri' => $s->noseri,
+            ];
+        }
+
+        $isLogo = $request->merk;
+        $customPaperMedium = array(0, 0, 88.46, 170.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
+        return $pdf->stream();
+    }
+
+    function cetak_seri_finish_goods_medium_nonstok(Request $request)
+    {
+        $seri = JadwalRakitNoseriNonStok::where('created_at', $request->data)->get();
+        foreach ($seri as $s) {
+            $data[] = (object)[
+                'noseri' => $s->noseri,
+            ];
+        }
+        $isLogo = $request->merk;
+        $customPaperMedium = array(0, 0, 88.46, 170.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
+        return $pdf->stream();
+    }
+    function cetak_seri_finish_goods_small_nonstok(Request $request)
+    {
+        $seri = JadwalRakitNoseriNonStok::where('created_at', $request->data)->get();
+        foreach ($seri as $s) {
+            $data[] = $s->noseri;
+        }
+
+        $customPaperSmall = array(0, 0, 60.46, 150.69);
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakserismall', compact('data'))->setPaper($customPaperSmall, 'landscape');
+        return $pdf->stream();
+        // return view('page.produksi.printreworks.cetakserismall', compact('data'));
+    }
+
+    function cetak_seri_finish_goods_small_repeated_nonstok(Request $request)
+    {
+        $getData =  json_decode($request->data, true);
+        $seri = JadwalRakitNoseriNonStok::whereIn('id', $getData)->get();
         foreach ($seri as $s) {
             $data[] = $s->noseri;
         }
