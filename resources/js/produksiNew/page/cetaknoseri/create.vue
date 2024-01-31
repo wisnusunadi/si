@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import seriviatext from '../../../gbj/page/PermintaanReworkGBJ/permintaan/formPermintaan/seriviatext.vue';
 import modalPilihan from './modalPilihan.vue';
 export default {
@@ -14,7 +15,8 @@ export default {
             keperluan: '',
             isDisabled: false,
             showModalPrinter: false,
-            idCetakHasilGenerate: [],
+            idCetakHasilGenerate: null,
+            loading: false,
         }
     },
     methods: {
@@ -22,6 +24,7 @@ export default {
             $('.modalcetak').modal('hide');
             this.$nextTick(() => {
                 this.$emit('closeModal');
+                this.$emit('refresh');
             });
         },
         removeSeri(index) {
@@ -143,7 +146,7 @@ export default {
                 $('.modalcetak').modal('show');
             });
         },
-        simpan() {
+        async simpan() {
             const cekKeperluan = this.keperluan.trim();
             if (cekKeperluan === '') {
                 this.$swal('Peringatan!', 'Keperluan tidak boleh kosong', 'warning');
@@ -161,7 +164,7 @@ export default {
                 return item.noseri === null || item.noseri === ''
             })
 
-            if(ceknoserinull.length == this.noseri.length){
+            if (ceknoserinull.length == this.noseri.length) {
                 this.$swal('Peringatan!', 'No. Seri tidak boleh kosong', 'warning');
                 return;
             }
@@ -172,9 +175,9 @@ export default {
 
             const noseruUnique = [...new Set(noseri.map((item) => item.noseri))];
 
-            if(noseruUnique.length !== noseri.length){
+            if (noseruUnique.length !== noseri.length) {
                 this.noseri = this.noseri.map((item) => {
-                    if(this.noseri.findIndex((item2) => item2.noseri === item.noseri) !== this.noseri.lastIndexOf(item)){
+                    if (this.noseri.findIndex((item2) => item2.noseri === item.noseri) !== this.noseri.lastIndexOf(item)) {
                         item.error = true;
                         item.message = 'No. Seri tidak boleh sama';
                     }
@@ -204,9 +207,47 @@ export default {
                 });
             }
 
-            this.$swal('Berhasil!', 'Data berhasil disimpan', 'success');
-            this.isDisabled = true;
-            this.idCetakHasilGenerate = ['242963']
+            const form = {
+                noseri: this.noseri,
+                keperluan: this.keperluan,
+            }
+
+            try {
+                this.isDisabled = true;
+                this.loading = true;
+                const { data } = await axios.post('/api/prd/fg/non_stok/gen', form, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('lokal_token')
+                    }
+                })
+                const { message, created_at } = data
+                const tgl = moment(created_at).format('YYYY-MM-DD HH:mm')
+                this.idCetakHasilGenerate = tgl
+                this.$swal('Berhasil!', message, 'success');
+            } catch (error) {
+                const { message, duplicate } = error.response.data
+
+                if (duplicate) {
+                    this.noseri = this.noseri.map((item) => {
+                        item.noseri = item.noseri.trim()
+                        const find = duplicate.find((data) => data === item.noseri)
+                        if (find) {
+                            return {
+                                ...item,
+                                error: true,
+                                message
+                            }
+                        }
+                        return item
+                    })
+                }
+
+                this.isDisabled = false;
+                this.loading = false;
+            } finally {
+                this.loading = false;
+            }
         }
     },
 }
@@ -230,11 +271,13 @@ export default {
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="">Keperluan</label>
-                                    <textarea cols="5" class="form-control" v-model="keperluan" :disabled="isDisabled"></textarea>
+                                    <textarea cols="5" class="form-control" v-model="keperluan"
+                                        :disabled="isDisabled"></textarea>
                                 </div>
                                 <div class="d-flex bd-highlight mb-3" v-if="!isDisabled">
                                     <div class="p-2 bd-highlight">
-                                        <button class="btn btn-primary" @click="showSeriText">Input No Seri Via Text</button>
+                                        <button class="btn btn-primary" @click="showSeriText">Input No Seri Via
+                                            Text</button>
                                     </div>
                                     <div class="ml-auto p-2 bd-highlight">
                                         <button class="btn btn-info" @click="noseri.push({ noseri: '' })">Tambah No.
@@ -254,15 +297,15 @@ export default {
                                                 <td>
                                                     <input type="text" class="form-control" v-model="seri.noseri"
                                                         ref="noseri" :class="seri.error ? 'is-invalid' : ''"
-                                                        :disabled="isDisabled"
-                                                        @keyup.enter="autoTab($event, index)"
+                                                        :disabled="isDisabled" @keyup.enter="autoTab($event, index)"
                                                         @keyup="$event.target.value = $event.target.value.toUpperCase()">
                                                     <div class="invalid-feedback" v-if="seri.error">
                                                         {{ seri.message }}
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-outline-danger" @click="removeSeri(index)" :disabled="isDisabled">
+                                                    <button class="btn btn-outline-danger" @click="removeSeri(index)"
+                                                        :disabled="isDisabled">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </td>
@@ -274,7 +317,12 @@ export default {
                             <div class="card-footer">
                                 <div class="d-flex bd-highlight mb-3">
                                     <div class="p-2 bd-highlight">
-                                        <button class="btn btn-primary" @click="simpan" v-if="!isDisabled">Simpan</button>
+                                        <button class="btn btn-primary" @click="simpan" v-if="!idCetakHasilGenerate">
+                                            <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                            {{ loading ? 'Loading...' : 'Simpan' }}
+                                        </button>
                                         <button class="btn btn-success" @click="cetakSeri" v-else>Cetak</button>
                                     </div>
                                     <div class="ml-auto p-2 bd-highlight">

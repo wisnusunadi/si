@@ -7,7 +7,7 @@ export default {
             search: '',
             headers: [
                 { text: 'No.', value: 'no' },
-                { text: 'Tanggal Cetak', value: 'tgl_cetak' },
+                { text: 'Tanggal Cetak', value: 'tgl_buat' },
                 { text: 'Operator', value: 'user' },
                 { text: 'Aktivitas', value: 'aktivitas' },
             ],
@@ -66,7 +66,7 @@ export default {
                         <div class="col-6">
                             <label for="">Tanggal Buat</label>
                             <div class="card nomor-akn">
-                                <div class="card-body">{{ riwayat?.tanggal_buat }}</div>
+                                <div class="card-body">{{ riwayat?.tanggal }}</div>
                             </div>
                         </div>
                         <div class="col-12">

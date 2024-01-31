@@ -4,6 +4,8 @@ import cetakseri from './create.vue';
 import pilihan from '../perakitanBerlangsung/riwayat/modalPilihan.vue'
 import riwayat from './riwayat.vue';
 import seriviatext from '../../../gbj/page/PermintaanReworkGBJ/permintaan/formPermintaan/seriviatext.vue';
+import axios from 'axios';
+import moment from 'moment'
 export default {
     components: {
         Header,
@@ -42,11 +44,11 @@ export default {
                 },
                 {
                     text: 'Tanggal Buat',
-                    value: 'tanggal_buat',
+                    value: 'tanggal',
                 },
                 {
                     text: 'Operator',
-                    value: 'operator',
+                    value: 'user',
                 },
                 {
                     text: 'Aksi',
@@ -54,24 +56,18 @@ export default {
                     sortable: false,
                 }
             ],
-            items: [
-                {
-                    id: 1,
-                    noseri: 'TD16241D00133',
-                    keperluan: 'Cetak Outer Box',
-                    tanggal_buat: '23 September 2021',
-                    operator: 'Fransisca Angelina Yustin'
-                }
-            ],
+            items: [],
             noSeriSelected: [],
             showModal: false,
             checkAll: false,
             showModalPilihan: false,
             showModalRiwayat: false,
             selectRiwayat: null,
-            showModalSeriViaText: false,    
+            showModalSeriViaText: false,
             cetakSeriType: 'all',
-            cetakSeriSingle:[],
+            cetakSeriSingle: [],
+            tanggal_awal: moment().startOf('month').format('YYYY-MM-DD'),
+            tanggal_akhir: moment().endOf('month').format('YYYY-MM-DD'),
         }
     },
     methods: {
@@ -126,7 +122,7 @@ export default {
             })
 
             noseriarray.forEach((item, index) => {
-                if(noseriarray.indexOf(item) !== index) {
+                if (noseriarray.indexOf(item) !== index) {
                     noseridouble.push(item)
                 }
             })
@@ -143,7 +139,7 @@ export default {
                     if (noseriarray[i] === this.items[j].noseri) {
                         found = true
                         this.selectNoSeri(this.items[j].id)
-                    }else{
+                    } else {
                         found = false
                     }
                 }
@@ -163,7 +159,26 @@ export default {
             this.$nextTick(() => {
                 $('.modalPilihan').modal('show');
             });
-        }
+        },
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true)
+                const { data } = await axios.post('/api/prd/fg/non_stok/show', {
+                    tanggalAwal: this.tanggal_awal,
+                    tanggalAkhir: this.tanggal_akhir,
+                })
+                this.items = data.map((item) => {
+                    return {
+                        tanggal: this.dateTimeFormat(item.tgl_buat),
+                        ...item
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.dispatch('setLoading', false)
+            }
+        },
     },
     watch: {
         noSeriSelected() {
@@ -173,31 +188,65 @@ export default {
                 this.checkAll = false;
             }
         }
+    },
+    created() {
+        this.getData()
     }
 }
 </script>
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
-        <cetakseri v-if="showModal" @closeModal="showModal = false" />
-        <pilihan v-if="showModalPilihan" @closeModal="showModalPilihan = false" :data="cetakSeriType == 'single' ? cetakSeriSingle : noSeriSelected" />
+        <cetakseri v-if="showModal" @closeModal="showModal = false" @refresh="getData" />
+        <pilihan v-if="showModalPilihan" @closeModal="showModalPilihan = false"
+            :data="cetakSeriType == 'single' ? cetakSeriSingle : noSeriSelected" />
         <riwayat v-if="showModalRiwayat" :riwayat="selectRiwayat" @closeModal="showModalRiwayat = false" />
         <seriviatext v-if="showModalSeriViaText" @close="showModalSeriViaText = false" @submit="submit" />
         <div class="card">
-            <div class="card-body">
+            <div class="card-body" v-if="!$store.state.loading">
                 <div class="d-flex bd-highlight">
                     <div class="p-2 flex-grow-1 bd-highlight">
-                        <button class="btn btn-outline-primary btn-sm" 
-                        @click="openModalPilihan"
-                        v-if="noSeriSelected.length > 0">
+                        <button class="btn btn-outline-primary btn-sm" @click="openModalPilihan"
+                            v-if="noSeriSelected.length > 0">
                             <i class="fas fa-print"></i>
                             Cetak No. Seri
                         </button>
-                        <button class="btn btn-outline-info btn-sm" @click="openModalSeriText">Pilih Nomor Seri Via Text</button>
+                        <button class="btn btn-outline-info btn-sm" @click="openModalSeriText">Pilih No. Seri Via
+                            Text</button>
                         <button class="btn btn-primary btn-sm" @click="openModalCreate">
                             <i class="fas fa-plus"></i>
                             Tambah No. Seri
-                        </button>
+                        </button> <br>
+                        <span class="filter">
+                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-outline-info btn-sm mt-2">
+                                    <i class="fas fa-filter"></i>
+                                    Filter Tanggal
+                                </button>
+                            </a>
+                            <form id="filter_ekat">
+                                <div class="dropdown-menu">
+                                    <div class="px-3 py-3">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Tanggal Awal</label>
+                                                    <input type="date" class="form-control" v-model="tanggal_awal"
+                                                        @change="getData" :max="tanggal_akhir">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Tanggal Akhir</label>
+                                                    <input type="date" class="form-control" v-model="tanggal_akhir"
+                                                        @change="getData" :min="tanggal_awal">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </span>
                     </div>
                     <div class="p-2 bd-highlight">
                         <input type="text" class="form-control" v-model="search" placeholder="Cari...">
@@ -215,9 +264,8 @@ export default {
                     </template>
                     <template #item.id="{ item }">
                         <div>
-                            <input type="checkbox" 
-                            @click="selectNoSeri(item.id)"
-                            :checked="noSeriSelected && noSeriSelected.find((noseri) => noseri === item.id)" />
+                            <input type="checkbox" @click="selectNoSeri(item.id)"
+                                :checked="noSeriSelected && noSeriSelected.find((noseri) => noseri === item.id)" />
                         </div>
                     </template>
                     <template #item.aksi="{ item }">
@@ -233,6 +281,13 @@ export default {
                         </div>
                     </template>
                 </data-table>
+            </div>
+            <div class="card-body" v-else>
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-grow text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

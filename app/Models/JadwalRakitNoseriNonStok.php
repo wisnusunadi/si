@@ -11,5 +11,4 @@ class JadwalRakitNoseriNonStok extends Model
     protected $connection = 'erp';
     protected $table = 'jadwal_rakit_noseri_nonstok';
     protected $fillable = ['noseri', 'ket', 'user'];
-
 }
