@@ -4266,6 +4266,8 @@ class ProduksiController extends Controller
                 $data = (object)[
                     'seri' => $s->noseri,
                     'ket' => $request->alasan,
+                    'waktu' => Carbon::now(),
+                    'user' => auth()->user()->nama,
                 ];
                 SystemLog::create([
                     'subjek' => 'Cetak Seri Perakitan Non Stok',
@@ -5445,6 +5447,27 @@ class ProduksiController extends Controller
         $customPaperMedium = array(0, 0, 88.46, 170.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
         return $pdf->stream();
+    }
+
+    function get_noseri_fg_riwayat_nonstok($id) {
+        $data = SystemLog::where(['header'=>$id, 'subjek' => 'Cetak Seri Perakitan Non Stok', 'tipe' => 'Produksi Non Stok'])->get();
+        $seri = JadwalRakitNoseriNonStok::find($id);
+
+        $isi = array();
+
+        foreach ($data as $d) {
+            $x = json_decode($d->response);
+            $isi[] = $x;
+        }
+
+        $obj = (object)[
+            'noseri' => $seri->noseri,
+            'tgl_buat' => $seri->created_at,
+            'user' => $seri->user,
+            'item' => $isi
+        ];
+
+        return response()->json($obj);
     }
 
     function cetak_seri_finish_goods_medium_nonstok(Request $request)

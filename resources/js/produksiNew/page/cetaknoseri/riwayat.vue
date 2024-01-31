@@ -7,9 +7,9 @@ export default {
             search: '',
             headers: [
                 { text: 'No.', value: 'no' },
-                { text: 'Tanggal Cetak', value: 'tgl_buat' },
+                { text: 'Tanggal Cetak', value: 'tgl_cetak' },
                 { text: 'Operator', value: 'user' },
-                { text: 'Aktivitas', value: 'aktivitas' },
+                { text: 'Aktivitas', value: 'ket' },
             ],
             dataRiwayatCetak: [],
             loading: false,
@@ -19,11 +19,11 @@ export default {
         async getRiwayatCetak() {
             try {
                 this.loading = true;
-                const { data } = await axios.get(`/api/prd/fg/riwayat_code/${this.riwayat.id}`)
-                this.dataRiwayatCetak = data.detail.map((item, index) => {
+                const { data } = await axios.get(`/api/prd/fg/non_stok/riwayat/${this.riwayat.id}`)
+                this.dataRiwayatCetak = data.item.map((item, index) => {
                     return {
                         no: index + 1,
-                        tgl_cetak: this.dateTimeFormat(item.tgl),
+                        tgl_cetak: this.dateTimeFormat(item.waktu),
                         ...item
                     }
                 })
