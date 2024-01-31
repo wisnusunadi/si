@@ -16,6 +16,7 @@ use App\Models\GudangKarantina;
 use App\Models\JadwalPerakitan;
 use App\Models\JadwalPerakitanRw;
 use App\Models\JadwalRakitNoseri;
+use App\Models\JadwalRakitNoseriNonStok;
 use App\Models\JadwalRakitNoseriRw;
 use App\Models\NoseriBarangJadi;
 use App\Models\NoseriCoo;
@@ -679,6 +680,81 @@ class ProduksiController extends Controller
     }
 
 
+    function show_fg_non_stok()
+    {
+        $data = JadwalRakitNoseriNonStok::all();
+
+        foreach($data as $d){
+            $obj[] = array(
+                'id' => $d->id,
+                'noseri' => $d->noseri,
+                'keperluan' => $d->ket,
+                'tgl_buat' => $d->created_at,
+                'user' => $d->user,
+            );
+        }
+        return response()->json($obj);
+
+    }
+    function generate_fg_non_stok(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+            foreach($obj->noseri as $o){
+                $noseri[] = $o->noseri;
+            }
+            $prd = JadwalRakitNoseri::whereIN('noseri',$noseri);
+            $nonstok = JadwalRakitNoseriNonStok::whereIN('noseri',$noseri);
+
+
+            if($prd->count() > 0){
+                DB::rollBack();
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  'Dupikasi No Seri Perakitan',
+                    'duplicate' =>   $prd->pluck('noseri')->toArray(),
+                ], 500);
+            }else{
+                if($nonstok->count() > 0){
+                    DB::rollBack();
+                    return response()->json([
+                        'status' => 200,
+                        'message' =>  'Dupikasi No Seri Non Stok',
+                        'duplicate' =>   $nonstok->pluck('noseri')->toArray(),
+                    ], 500);
+                }else{
+
+                    foreach($noseri as $s){
+                       $nonstok =  JadwalRakitNoseriNonStok::create([
+                            'noseri' => $s,
+                            'user' => 'Siskaeee',
+                            'ket' => $request->keperluan
+                        ]);
+                    }
+
+                    DB::commit();
+                    return response()->json([
+                        'status' => 200,
+                        'message' =>  'No Seri Berhasil Ditambahkan',
+                        'created_at' =>  $nonstok->created_at,
+                    ], 200);
+                }
+
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Gagal Ditambahkan',
+            ], 500);
+        }
+
+    }
+        // dd($request->all());
     function generate_fg(Request $request)
     {
         // dd($request->all());
@@ -4511,9 +4587,9 @@ class ProduksiController extends Controller
                 'tidak_ada' => $tidak_ada
             ]);
         }
-        
+
         $data = $data->orderBy('jadwal_rakit_noseri.created_at', 'DESC')->get();
-        
+
         if ($data->isEmpty()) {
             $obj = array();
         } else {
