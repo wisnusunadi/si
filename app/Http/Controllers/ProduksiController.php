@@ -3161,6 +3161,7 @@ class ProduksiController extends Controller
                 ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
                 ->where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->where('is_aktif', 1)->get();
 
+            return response()->json($data);
             $i = 0;
             return datatables()->of($data)
                 ->addColumn('ids', function ($d) {
