@@ -707,7 +707,7 @@ class ProduksiController extends Controller
                 $noseri[] = $o->noseri;
             }
             $prd = JadwalRakitNoseri::whereIN('noseri', $noseri);
-            $nbj = NoseriBarangJadi::whereIN('noseri', $noseri);
+            $nbj = SeriDetailRw::whereIN('noseri', $noseri);
             $nonstok = JadwalRakitNoseriNonStok::whereIN('noseri', $noseri);
 
 
