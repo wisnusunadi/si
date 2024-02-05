@@ -26,6 +26,36 @@ use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Arabic;
 class LabController extends Controller
 {
     //
+    public function export_laporan()
+    {
+        $data = UjiLabDetail::select('uji_lab.no_order','uji_lab.nama','uji_lab.alamat',
+        'uji_lab_detail.no','uji_lab_detail.no_sertifikat','uji_lab_detail.tgl_masuk'
+        )
+        ->leftJoin('uji_lab','uji_lab.id','=','uji_lab_detail.uji_lab_id')
+        ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','uji_lab_detail.detail_pesanan_produk_id')
+        ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','detail_pesanan_produk.gudang_barang_jadi_id')
+        ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
+        ->leftJoin('noseri_detail_pesanan','noseri_detail_pesanan.id','=','uji_lab_detail.noseri_id')
+        ->leftJoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
+        ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
+        ->leftJoin('detail_metode_lab','detail_metode_lab.id','=','uji_lab_detail.metode_id')
+        ->leftJoin('metode_lab','metode_lab.id','=','detail_metode_lab.metode_lab_id')
+
+        ->leftJoin('pesanan','pesanan.id','=','uji_lab.pesanan_id')
+        ->get();
+
+        foreach($data as $d){
+            $obj[] = array(
+                'no' => str_pad($d->no, 4, '0', STR_PAD_LEFT),
+                'no_order' => 'LAB-'.str_pad($d->no_order, 4, '0', STR_PAD_LEFT),
+                'tgl_masuk' => $d->tgl_masuk,
+            );
+        }
+
+        return response()->json($obj);
+
+       // return view('page.teknik.bom.detail', ['id' => $id]);
+    }
     public function bom_detail($id)
     {
         return view('page.teknik.bom.detail', ['id' => $id]);

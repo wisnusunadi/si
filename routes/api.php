@@ -853,6 +853,7 @@ Route::prefix('/labs')->group(function () {
         Route::get('seri/{id}', [App\Http\Controllers\LabController::class, 'lab_data_detail_seri']);
     });
 
+   Route::get('/laporan', [App\Http\Controllers\LabController::class, 'export_laporan']); // sertif per no kalibrasi
    Route::get('/metode_by_ruang/{ruang}', [App\Http\Controllers\LabController::class, 'metode_by_ruang']); // sertif per no kalibrasi
    Route::get('/ruang_by_metode/{metode}', [App\Http\Controllers\LabController::class, 'runag_by_metode']);
     Route::get('/ruang_and_metode', [App\Http\Controllers\LabController::class, 'ruang_and_metode']);
