@@ -1,0 +1,68 @@
+<script>
+export default {
+    props: ["dataTable"],
+    methods: {
+        edit(id) {
+            this.$emit("edit", id);
+        },
+        hapus(id) {
+            this.$swal({
+                title: "Apakah anda yakin?",
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, hapus!",
+                cancelButtonText: "Batal",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$emit("hapus", id);
+                    this.$swal(
+                        "Terhapus!",
+                        "Data berhasil dihapus.",
+                        "success"
+                    );
+                }
+            });
+        },
+        status(status){
+            return status ? 'Aktif' : 'Tidak Aktif';
+        }
+    },
+};
+</script>
+<template>
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Kode Kepemilikan</th>
+                    <th>Kepemilikan</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody v-if="dataTable.length > 0">
+                <tr v-for="(item, index) in dataTable">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ item.kode }}</td>
+                    <td>{{ item.nama }}</td>
+                    <td>
+                        <button
+                            class="btn btn-outline-warning"
+                            @click="edit(index)"
+                        >
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody v-else>
+                <tr>
+                    <td colspan="4" class="text-center">Data Kosong</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>

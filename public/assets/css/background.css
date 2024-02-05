@@ -1,0 +1,71 @@
+.user-panel-bg {
+    background: #606c88; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+        to right,
+        #606c88,
+        #3f4c6b
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+        to right,
+        #606c88,
+        #3f4c6b
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: white;
+}
+
+.layout-navbar-fixed .wrapper .brand-link.mini{
+    width: 4.6rem;
+}
+
+.layout-navbar-fixed.layout-fixed .wrapper div.sidebar {
+    margin-top: 0;
+}
+
+.txt-primary{
+    color:rgb(39, 68, 92);
+}
+
+.bc-secondary{
+    background-color:rgba(39, 68, 92, 0.2);
+}
+.txt-secondary{
+    color:rgba(39, 68, 92, 0.2);
+}
+
+.bc-success{
+    background-color:rgba(40, 167, 69, 0.2) !important;
+}
+
+.bc-danger{
+    background-color: rgba(220, 53, 69, 0.2) !important;
+}
+
+.bc-warning{
+    background-color:rgba(255, 218, 109, 0.2) !important;
+}
+
+.bc-secondary{
+    background-color: rgba(108, 117, 125, 0.2) !important;
+}
+
+.bc-grey{
+    background-color: rgb(185, 185, 185) !important;
+}
+
+.bc-primary{
+    background-color: rgba(0, 123, 255, 0.2) !important;
+}
+
+.border-top-w3{
+    border-top-width:3px!important;
+}
+
+.border-bottom-w3{
+    border-bottom-width:3px!important;
+}
+
+.btn-hover:hover {
+  color: rgb(40, 167, 69) !important;
+  transition: 0.3s;
+  cursor: pointer;
+}
