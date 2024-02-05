@@ -95,6 +95,24 @@ export default {
                 }
                 return p
             })
+        },
+        transfer() {
+            // cek jika salah satu produk belum memiliki no seri
+            let produkNoSeri = []
+
+            this.produk.forEach(paket => {
+                paket.produk.forEach(item => {
+                    if (item.noseri) {
+                        produkNoSeri.push(item)
+                    }
+                })
+            })
+
+            if (produkNoSeri.length == 0) {
+                swal.fire('Error', 'Produk belum memiliki no seri', 'error');
+            } else {
+                swal.fire('Success', 'Produk berhasil di transfer', 'success');
+            }
         }
     },
     computed: {
@@ -117,8 +135,7 @@ export default {
 <template>
     <div>
         <noseri v-if="showModal" :detailSelected="detailSelected" @close="closeModalNoseri" :paket="paketSelected"
-            :allPaket="produk"  
-            @submit="noseriSelected" />
+            :allPaket="produk" @submit="noseriSelected" />
         <div class="modal fade modalTransfer" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
@@ -169,6 +186,7 @@ export default {
                                         <tr>
                                             <th>Produk</th>
                                             <th>Jumlah</th>
+                                            <th>Jumlah No Seri Dipilih</th>
                                             <th>Merk</th>
                                             <th>Progress</th>
                                             <th>Aksi</th>
@@ -177,7 +195,7 @@ export default {
                                     <tbody v-if="filterRecursive.length > 0">
                                         <template v-for="paket in filterRecursive">
                                             <tr class="table-dark">
-                                                <td colspan="5">
+                                                <td colspan="100%">
                                                     {{ paket.nama_paket }} <br>
                                                     <span class="badge badge-light">QC: {{ paket.jml_qc_paket }} ({{ paket.
                                                         persentase_qc_paket }}%)</span>
@@ -190,6 +208,7 @@ export default {
                                             <tr v-for="item in paket.produk" :key="item.nama_produk">
                                                 <td>{{ item.nama_produk }}</td>
                                                 <td>{{ item.jml }}</td>
+                                                <td>{{ item.noseri?.length ?? 0 }}</td>
                                                 <td>{{ item.merk }}</td>
                                                 <td>
                                                     <span class="badge badge-danger">QC: {{ item.jml_qc }} ({{
@@ -217,7 +236,7 @@ export default {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-success">Transfer</button>
+                        <button class="btn btn-success" @click="transfer">Transfer</button>
                         <button class="btn btn-info">Batalkan Persiapan</button>
                         <button class="btn btn-secondary" @click="closeModal">Tutup</button>
                     </div>
