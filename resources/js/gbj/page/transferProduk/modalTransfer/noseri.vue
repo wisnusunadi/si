@@ -42,8 +42,10 @@ export default {
                         continue
                     }
                     if (this.allPaket[i].produk[j].noseri.find(noseri => noseri.id === item.id)) {
-                        found = true
-                        break
+                        if (this.allPaket[i].produk[j].id !== this.detailSelected.id) {
+                            found = true
+                            break
+                        }
                     }
                 }
             }
@@ -161,7 +163,6 @@ export default {
             let paket = { ...this.paket }
             paket.produk.find(item => item.id === this.detailSelected.id).noseri = this.noSeriSelected
             this.$emit('submit', paket)
-            console.log(paket)
             this.closeModal()
         }
     },
