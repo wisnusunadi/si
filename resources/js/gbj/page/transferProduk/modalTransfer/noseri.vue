@@ -56,6 +56,7 @@ export default {
             this.$nextTick(() => {
                 this.$emit('close')
             })
+            
         },
         checkAllData() {
             this.checkAll = !this.checkAll
