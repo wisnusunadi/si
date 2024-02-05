@@ -108,6 +108,8 @@ export default {
                 })
             })
 
+            console.log(produkNoSeri)
+
             if (produkNoSeri.length == 0) {
                 swal.fire('Error', 'Produk belum memiliki no seri', 'error');
             } else {
