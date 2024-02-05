@@ -481,6 +481,39 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="form-group row "
+                                                            id="do_detail_no">
+                                                            <label for=""
+                                                                class="col-form-label col-lg-5 col-md-12 labelket">Nomor
+                                                                PO</label>
+                                                            <div class="col-4">
+                                                                <input type="text"
+                                                                    class="form-control col-form-label @error('no_po') is-invalid @enderror"
+                                                                    id="no_po" name="no_po"
+                                                                    value="{{ $e->Pesanan->no_po }}" />
+                                                                <div class="invalid-feedback" id="msgno_po">
+                                                                    @if ($errors->has('no_po'))
+                                                                        {{ $errors->first('no_po') }}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="tanggal_po_ekat"
+                                                                class="col-lg-5 col-md-12 col-form-label labelket">Tanggal
+                                                                PO</label>
+                                                            <div class="col-lg-5 col-md-12">
+                                                                <input type="date"
+                                                                    class="form-control @error('tanggal_po_ekat') is-invalid @enderror"
+                                                                    value="{{ $e->Pesanan->tgl_po }}""
+                                                                    placeholder="Masukkan Tanggal Purchase Order"
+                                                                    id="tgl_po"
+                                                                    name="tgl_po" />
+                                                                <div class="invalid-feedback"
+                                                                    id="tgl_po">
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
 
                                                             <div class="form-group row">

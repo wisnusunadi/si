@@ -5099,6 +5099,8 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
         $bool = true;
         if ($uspa) {
             $pesanan = Pesanan::find($spa->pesanan_id);
+            $pesanan->no_po = $request->no_po;
+            $pesanan->tgl_po = $request->tgl_po;
             $pesanan->no_do = $request->no_do;
             $pesanan->tgl_do = $request->tanggal_do;
             $pesanan->ket = $request->keterangan;
@@ -5352,6 +5354,8 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
         $bool = true;
         if ($uspa) {
             $pesanan = Pesanan::find($spa->pesanan_id);
+            $pesanan->no_po = $request->no_po;
+            $pesanan->tgl_po = $request->tgl_po;
             $pesanan->no_do = $request->no_do;
             $pesanan->tgl_do = $request->tanggal_do;
             $pesanan->ket = $request->keterangan;

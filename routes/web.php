@@ -527,8 +527,6 @@ Route::group(['prefix' => '/gk', 'middleware' => ['auth', 'divisi:gk,dirut']], f
 });
 
 Route::get('/testing/pbj', [ProduksiController::class, 'cetakTest']);
-
 Route::view('/uit', 'page.login_page.index');
-
 Route::namespace('v2')->group(__DIR__ . '/kesehatan/kesehatan.php');
 Route::namespace('lab')->group(__DIR__ . '/inventory/web.php');
