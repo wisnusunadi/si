@@ -2,10 +2,12 @@
 import axios from 'axios'
 import Header from '../../components/header.vue'
 import modalTransfer from './modalTransfer'
+import modalUnggah from './modalUnggah.vue'
 export default {
     components: {
         Header,
-        modalTransfer
+        modalTransfer,
+        modalUnggah
     },
     data() {
         return {
@@ -92,6 +94,16 @@ export default {
             this.$nextTick(() => {
                 $('.modalTransfer').modal('show')
             })
+        },
+        download(id) {
+            window.open(`/api/v2/gbj/template_so/${id}`, '_blank')
+        },
+        openTemplate(item) {
+            this.showModalUnggah = true
+            this.detailSelected = item
+            this.$nextTick(() => {
+                $('.modalUnggah').modal('show')
+            })
         }
     },
     created() {
@@ -103,35 +115,37 @@ export default {
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
         <modalTransfer v-if="showModalTransfer" @closeModal="showModalTransfer = false" :data="detailSelected" />
+        <modalUnggah v-if="showModalUnggah" @closeModal="showModalUnggah = false" :data="detailSelected" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-row-reverse bd-highlight">
                     <div class="p-2 bd-highlight"><input type="text" v-model="search" class="form-control"></div>
                 </div>
                 <data-table :headers="headers" :items="items" :search="search" v-if="!$store.state.loading">
-                    <template #item.progress="{item}">
+                    <template #item.progress="{ item }">
                         <div>
                             <span class="badge badge-info">QC: {{ item.count_qc }} ({{ item.persentase_qc }}%)</span> <br>
-                            <span class="badge badge-warning">Gudang: {{ item.gudang }} ({{ item.persentase_gudang }}%)</span>
+                            <span class="badge badge-warning">Gudang: {{ item.gudang }} ({{ item.persentase_gudang
+                            }}%)</span>
                         </div>
                     </template>
-                    <template #item.status="{item}">
+                    <template #item.status="{ item }">
                         <div>
                             <span class="badge badge-success" v-if="item.status_cek == 4">Produk Sudah disiapkan</span>
                             <span class="badge badge-danger" v-else>Produk belum disiapkan</span>
                         </div>
                     </template>
-                    <template #item.aksi="{item}">
+                    <template #item.aksi="{ item }">
                         <div v-if="item.button">
                             <button class="btn btn-outline-primary btn-sm" @click="openModalTransfer(item)">
                                 <i class="fas fa-plus"></i>
                                 Siapkan Produk
                             </button>
-                            <button class="btn btn-outline-dark btn-sm">
+                            <button class="btn btn-outline-dark btn-sm" @click="download(item.id)">
                                 <i class="fas fa-download"></i>
                                 Template
                             </button>
-                            <button class="btn btn-outline-info btn-sm" v-if="item.cek == 0">
+                            <button class="btn btn-outline-info btn-sm" v-if="item.cek == 0" @click="openTemplate(item)">
                                 <i class="fas fa-file-import"></i>
                                 Unggah
                             </button>
