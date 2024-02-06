@@ -57,6 +57,8 @@ export default {
             modal: false,
             selectedSO: null,
             riwayatKalibrasi: [],
+            showTabs: 'internal',
+            years: new Date().getFullYear()
         };
     },
     methods: {
@@ -71,41 +73,55 @@ export default {
             try {
                 this.$store.dispatch("setLoading", true);
                 const { data } = await axios.get("/api/labs/tf").then((res) => res.data);
-                const { data: riwayat_kalibrasi } = await axios.get('/api/labs/tf_riwayat');
+                const { data: riwayat_kalibrasi } = await axios.get(`/api/labs/tf_riwayat?years=${this.years}`);
                 this.dataTable = data
                 this.dataTableEksternal = data
-                this.riwayatKalibrasi = riwayat_kalibrasi
+                this.riwayatKalibrasi = riwayat_kalibrasi.map(item => {
+                    return {
+                        ...item,
+                        tgl_transfer: this.formatDate(item.tgl_transfer),
+                        jenis_transaksi: 'internal'
+                    }
+                })
             } catch (error) {
                 console.log(error);
             } finally {
                 this.$store.dispatch("setLoading", false);
             }
-        }
+        },
+        changeYear(year) {
+            this.years = year;
+            this.getData();
+        },
     },
-    mounted() {
+    created() {
         this.getData();
     },
 };
 </script>
 <template>
-    <div v-if="!$store.state.loading">
+    <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home" type="button"
-                    role="tab" aria-controls="pills-home" aria-selected="true">Internal</a>
+                    @click="showTabs = 'internal'" role="tab" aria-controls="pills-home" aria-selected="true">Internal</a>
+
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile" type="button"
-                    role="tab" aria-controls="pills-profile" aria-selected="false">Eksternal</a>
+                    @click="showTabs = 'eksternal'" role="tab" aria-controls="pills-profile"
+                    aria-selected="false">Eksternal</a>
+
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-contact" type="button"
-                    role="tab" aria-controls="pills-contact" aria-selected="false">Riwayat</a>
+                    @click="showTabs = 'riwayat'" role="tab" aria-controls="pills-contact" aria-selected="false">Riwayat</a>
             </li>
         </ul>
         <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
+                v-if="showTabs == 'internal'">
                 <div class="card">
                     <div class="card-body">
                         <produk v-if="modal" @close="modal = false" :headerSO="selectedSO" @refresh="getData" />
@@ -117,17 +133,21 @@ export default {
                             </div>
                         </div>
 
-                        <data-table :headers="headers" :items="dataTable" :search="search">
+                        <data-table :headers="headers" :items="dataTable" :search="search" v-if="!$store.state.loading">
                             <template #item.aksi="{ item }">
                                 <button class="btn btn-outline-primary btn-sm" @click="transfer(item)">
                                     Transfer
                                 </button>
                             </template>
                         </data-table>
+                        <div class="spinner-border spinner-border-sm" role="status" v-else>
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
+                v-if="showTabs == 'eksternal'">
                 <div class="card">
                     <div class="card-body">
                         <produk v-if="modal" @close="modal = false" :headerSO="selectedSO" @refresh="getData" />
@@ -140,20 +160,25 @@ export default {
                             </div>
                         </div>
 
-                        <data-table :headers="headers" :items="dataTableEksternal" :search="searchEksternal">
+                        <data-table :headers="headers" :items="dataTableEksternal" :search="searchEksternal"
+                            v-if="!$store.state.loading">
                             <template #item.aksi="{ item }">
                                 <button class="btn btn-outline-primary btn-sm" @click="transfer(item)">
                                     Transfer
                                 </button>
                             </template>
                         </data-table>
+                        <div class="spinner-border spinner-border-sm" role="status" v-else>
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"
+                v-if="showTabs == 'riwayat'">
                 <div class="card">
                     <div class="card-body">
-                        <riwayat :dataTable="riwayatKalibrasi" />
+                        <riwayat :dataRiwayat="riwayatKalibrasi" @changeYear="changeYear" />
                     </div>
                 </div>
             </div>

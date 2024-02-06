@@ -101,7 +101,38 @@ export default {
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                 <div class="card">
                     <div class="card-body">
-                        <Table :dataTable="dataTable" />
+                        <div class="d-flex bd-highlight">
+                            <div class="p-2 flex-grow-1 bd-highlight">
+                                <span class="filter">
+                                    <button class="btn btn-sm btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        <i class="fas fa-filter"></i> Filter Tahun
+                                    </button>
+                                    <form id="filter_ekat">
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <div class="form-group form-check" v-for="year in getYear" :key="year">
+                                                        <input class="form-check-input" type="radio" v-model="years"
+                                                            @change="getData()" :id="`exampleRadios${year}`" :value="year"
+                                                            :checked="year ==
+                                                                new Date().getFullYear()
+                                                                " />
+                                                        <label class="form-check-label" :for="`exampleRadios${year}`">
+                                                            {{ year }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </span>
+                            </div>
+                            <div class="p-2 bd-highlight">
+                                <input type="text" class="form-control" v-model="search" placeholder="Cari" />
+                            </div>
+                        </div>
+                        <Table :dataTable="dataTable" :search="search" />
                     </div>
                 </div>
             </div>
@@ -109,7 +140,38 @@ export default {
                 <div class="card">
                     <img class="card-img-top" src="holder.js/100x180/" alt="">
                     <div class="card-body">
-                        <pengujian :produk="riwayat_pengujian" />
+                        <div class="d-flex bd-highlight">
+                            <div class="p-2 flex-grow-1 bd-highlight">
+                                <span class="filter">
+                                    <button class="btn btn-sm btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        <i class="fas fa-filter"></i> Filter Tahun
+                                    </button>
+                                    <form id="filter_ekat">
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <div class="form-group form-check" v-for="year in getYear" :key="year">
+                                                        <input class="form-check-input" type="radio" v-model="years"
+                                                            @change="getData()" :id="`exampleRadios${year}`" :value="year"
+                                                            :checked="year ==
+                                                                new Date().getFullYear()
+                                                                " />
+                                                        <label class="form-check-label" :for="`exampleRadios${year}`">
+                                                            {{ year }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </span>
+                            </div>
+                            <div class="p-2 bd-highlight">
+                                <input type="text" class="form-control" v-model="searchPengujian" placeholder="Cari" />
+                            </div>
+                        </div>
+                        <pengujian :produk="riwayat_pengujian" :search="searchPengujian" />
                     </div>
                 </div>
             </div>

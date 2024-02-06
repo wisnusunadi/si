@@ -46,10 +46,10 @@ export default {
             years: new Date().getFullYear()
         }
     },
-    props: ['dataTable'],
+    props: ['dataRiwayat'],
     methods: {
-        async getData() {
-            console.log('get data');
+        changeYear() {
+            this.$emit('changeYear', this.years);
         },
         detailProduk(data) {
             this.modal = true;
@@ -75,9 +75,6 @@ export default {
     <div>
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
-                <button class="btn btn-sm btn-success">
-                    <i class="fas fa-file-excel"></i> Export
-                </button>
                 <span class="filter">
                     <button class="btn btn-sm btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
@@ -88,7 +85,7 @@ export default {
                             <div class="px-3 py-3">
                                 <div class="form-group">
                                     <div class="form-group form-check" v-for="year in getYear" :key="year">
-                                        <input class="form-check-input" type="radio" v-model="years" @change="getData()"
+                                        <input class="form-check-input" type="radio" v-model="years" @change="changeYear()"
                                             :id="`exampleRadios${year}`" :value="year" :checked="year ==
                                                 new Date().getFullYear()
                                                 " />
@@ -107,7 +104,7 @@ export default {
             </div>
         </div>
         <produk v-if="modal" :headerSO="selectedProduk" />
-        <data-table :headers="headers" :items="dataTable" :search="search">
+        <data-table :headers="headers" :items="dataRiwayat" :search="search" v-if="!$store.state.loading">
             <template #item.aksi="{ item }">
                 <div>
                     <button class="btn btn-outline-primary" @click="detailProduk(item)">
@@ -117,5 +114,8 @@ export default {
                 </div>
             </template>
         </data-table>
+        <div class="spinner-border spinner-border-sm" role="status" v-else>
+            <span class="sr-only">Loading...</span>
+        </div>
     </div>
 </template>

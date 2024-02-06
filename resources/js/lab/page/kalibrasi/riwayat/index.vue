@@ -1,5 +1,5 @@
 <script>
-import produk from '../../transferlab/qc/produk.vue';
+import produk from './produk.vue';
 export default {
     props: ['produk'],
     components: {
@@ -11,15 +11,15 @@ export default {
             headers: [
                 {
                     text: 'No Order',
-                    value: 'no_order'
+                    value: 'order'
                 },
                 {
                     text: 'Nama Pemilik',
-                    value: 'pemilik'
+                    value: 'nama'
                 },
                 {
                     text: 'Nama Pemilik Sertifikat',
-                    value: 'pemilik_sertif'
+                    value: 'jenis_pemilik'
                 },
                 {
                     text: 'No SO',
@@ -31,7 +31,7 @@ export default {
                 },
                 {
                     text: 'Tanggal Kalibrasi',
-                    value: 'tgl_transfer'
+                    value: 'tanggal'
                 },
                 {
                     text: 'Jenis Transaksi',
@@ -48,15 +48,18 @@ export default {
         }
     },
     methods: {
-        async getData() {
-            console.log('get data');
+        changeYears() {
+            this.$emit('changeYears', this.years);
         },
         detailProduk(data) {
             this.modal = true;
             this.selectedProduk = data;
             this.$nextTick(() => {
-                $('.modalRiwayatProduk').modal('show');
+                $('.modalProduk').modal('show');
             })
+        },
+        exportLaporan() {
+            window.open(`/labs/export_laporan?years=${this.years}`, '_blank');
         }
     },
     computed: {
@@ -74,7 +77,7 @@ export default {
 <template>
     <div class="card">
         <div class="card-body">
-            <produk v-if="modal" :headerSO="selectedProduk" />
+            <produk v-if="modal" :produk="selectedProduk" />
             <div class="d-flex bd-highlight">
                 <div class="p-2 flex-grow-1 bd-highlight">
                     <span class="float-left filter">
@@ -87,7 +90,7 @@ export default {
                                 <div class="px-3 py-3">
                                     <div class="form-group">
                                         <div class="form-group form-check" v-for="year in getYear" :key="year">
-                                            <input class="form-check-input" type="radio" v-model="years" @change="getData()"
+                                            <input class="form-check-input" type="radio" v-model="years" @change="changeYears"
                                                 :id="`exampleRadios${year}`" :value="year" :checked="year ==
                                                     new Date().getFullYear()
                                                     " />
@@ -100,6 +103,9 @@ export default {
                             </div>
                         </form>
                     </span>
+                    <button class="btn btn-sm btn-success ml-2" @click="exportLaporan">
+                        <i class="fas fa-file-excel"></i> Export
+                    </button>
                 </div>
                 <div class="p-2 bd-highlight">
                     <input type="text" class="form-control" v-model="search" placeholder="Cari" />

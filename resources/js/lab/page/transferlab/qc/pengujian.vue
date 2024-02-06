@@ -4,7 +4,7 @@ export default {
     components: {
         modal,
     },
-    props: ['produk'],
+    props: ['produk', 'search'],
     data() {
         return {
             headers: [
@@ -39,7 +39,6 @@ export default {
             ],
             detailProduk: {},
             showModal: false,
-            search: '',
         }
     },
     methods: {
@@ -49,19 +48,14 @@ export default {
             this.$nextTick(() => {
                 $('.modalPengujian').modal('show');
             })
-        }
+        },
     },
 }
 </script>
 <template>
     <div>
         <modal :detail="detailProduk" v-if="showModal" @close="showModal = false"></modal>
-        <div class="d-flex flex-row-reverse bd-highlight">
-            <div class="p-2 bd-highlight">
-                <input type="text" class="form-control" v-model="search" placeholder="Cari...">
-            </div>
-        </div>
-        <data-table :headers="headers" :items="produk" :search="search">
+        <data-table :headers="headers" :items="produk" :search="search" v-if="!$store.state.loading">
             <template #item.aksi="{ item }">
                 <button class="btn btn-outline-primary btn-sm" @click="detail(item)">
                     <i class="fa fa-eye"></i>
@@ -69,5 +63,8 @@ export default {
                 </button>
             </template>
         </data-table>
+                <div class="spinner-border spinner-border-sm" role="status" v-else>
+                <span class="sr-only">Loading...</span>
+            </div>
     </div>
 </template>

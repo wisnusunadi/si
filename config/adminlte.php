@@ -1240,16 +1240,6 @@ return [
             'url'  => '/lab/transfer',
             'auth' => [22],
         ],
-        [
-            'header' => 'Riwayat',
-            'auth' => [22]
-        ],
-        [
-            'icon' => 'fa fa-history',
-            'text' => 'Riwayat Transaksi',
-            'url'  => '/lab/riwayatTransfer',
-            'auth' => [22],
-        ],
         // sertifikasi kalibrasi
         [
             'header' => 'Sertifikasi Kalibrasi',

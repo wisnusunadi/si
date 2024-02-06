@@ -25,9 +25,8 @@ export default {
                 }
             ],
             kalibrasiInternal: [],
-            riwayat_kalibrasi: [
-                { "id": 40, "so": "SO/EKAT/II/2024/15", "no_po": "potestlab", "no_order": "LAB-0001", "pemilik": "PERUSAHAAN", "pemilik_sertif": "Dinas Kesehatan", "tgl_transfer": "01 Februari 2024", "customer": "PT. EMIINDO Jaya Bersama", "jenis_transaksi": "Internal", "detail": [{ "id": 28802, "nama": "BLOOD PRESSURE MONITOR", "tipe": "ABPM50", "jumlah": 2, "noseri": [{ "id": 104, "no_seri": "PM622AB0071", "tgl_masuk": "2024-02-01", "status": "ok" }, { "id": 105, "no_seri": "PM622AB0050", "tgl_masuk": "2024-02-01", "status": "ok" }] }], "tgl": "01 Februari 2024", "jenis_transfer": "Internal" }
-            ],
+            riwayat_kalibrasi: [],
+            years: new Date().getFullYear()
         }
     },
     methods: {
@@ -35,13 +34,31 @@ export default {
             try {
                 this.$store.dispatch('setLoading', true)
                 const { data: kalibrasiInternal } = await axios.get('/api/labs/kalibrasi').then(res => res.data)
+                const { data: riwayat_kalibrasi } = await axios.get(`/api/labs/riwayat_uji?years=${this.years}`)
                 this.kalibrasiInternal = kalibrasiInternal
+                this.riwayat_kalibrasi = riwayat_kalibrasi.map(item => {
+                    return {
+                        ...item,
+                        tanggal: this.formatDate(item.tgl_kalibrasi),
+                        produk: item.produk.map(produk => {
+                            return {
+                                ...produk,
+                                hasil: item.hasil == 'ok' ? 'Lolos Kalibrasi' : 'Tidak Lolos Kalibrasi'
+                            }
+                        })
+                    }
+                })
             } catch (error) {
                 console.log(error)
             } finally {
                 this.$store.dispatch('setLoading', false)
             }
-        }
+        },
+        changeYears(years) {
+            this.years = years
+            this.getData()
+        },
+
     },
     created() {
         this.getData()
@@ -78,7 +95,7 @@ export default {
                 <KalibrasiEksternal />
             </div>
             <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                <riwayat :produk="riwayat_kalibrasi" />
+                <riwayat :produk="riwayat_kalibrasi" @changeYears="changeYears" />
             </div>
         </div>
     </div>
