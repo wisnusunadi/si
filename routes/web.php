@@ -533,6 +533,7 @@ Route::group(['prefix' => '/labs'], function () {
     Route::get('/detail/{id}',  [App\Http\Controllers\LabController::class, 'bom_detail'])->name('teknik.bom.detail');
     Route::get('/data/produk/{id}',  [App\Http\Controllers\LabController::class, 'bom_data_produk'])->name('teknik.bom.data.produk');
     Route::get('/certificate', [App\Http\Controllers\LabController::class, 'cetak_certificate'])->name('lab.certificate');
+    Route::get('/export_laporan', [App\Http\Controllers\LabController::class, 'export_laporan']);
 });
 Route::get('/testing/pbj', [ProduksiController::class, 'cetakTest']);
 
