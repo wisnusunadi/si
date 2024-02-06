@@ -119,7 +119,8 @@ export default {
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-row-reverse bd-highlight">
-                    <div class="p-2 bd-highlight"><input type="text" v-model="search" class="form-control"></div>
+                    <div class="p-2 bd-highlight"><input type="text" v-model="search" class="form-control"
+                            placeholder="Cari..."></div>
                 </div>
                 <data-table :headers="headers" :items="items" :search="search" v-if="!$store.state.loading">
                     <template #item.progress="{ item }">
