@@ -114,8 +114,8 @@ export default {
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
-        <modalTransfer v-if="showModalTransfer" @closeModal="showModalTransfer = false" :data="detailSelected" />
-        <modalUnggah v-if="showModalUnggah" @closeModal="showModalUnggah = false" :data="detailSelected" />
+        <modalTransfer v-if="showModalTransfer" @closeModal="showModalTransfer = false" :data="detailSelected" @refresh="getData" />
+        <modalUnggah v-if="showModalUnggah" @closeModal="showModalUnggah = false" :data="detailSelected" @refresh="getData" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-row-reverse bd-highlight">

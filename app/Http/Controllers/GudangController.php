@@ -3044,7 +3044,7 @@ class GudangController extends Controller
                     }
                     return response()->json([
                         'msg' => 'Nomor seri ' . implode(', ', $seri_final) . ' belum terdaftar',
-                        'error' => true, 
+                        'error' => true,
                         'data' => $html,
                         'noseri' => implode(', ', $seri_final)
                     ], 500);
@@ -3082,7 +3082,7 @@ class GudangController extends Controller
     function store_so_to_db(Request $request)
     {
         try {
-            // dd($request->all());
+            $user = auth()->user()->id;
             $reader = new ReaderXlsx();
             $spreadsheet = $reader->load(public_path('upload/so/' . $request->namafile));
             $spreadsheet->setActiveSheetIndex(0);
@@ -3159,7 +3159,7 @@ class GudangController extends Controller
                                 'state_id' => 8,
                                 'jenis' => 'keluar',
                                 'created_at' => Carbon::now(),
-                                'created_by' => auth()->user()->id
+                                'created_by' => $user
                             ]);
 
                             NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->soid]);
@@ -3177,7 +3177,7 @@ class GudangController extends Controller
                                 'stok' => count($values['noseri']),
                                 'tgl_masuk' => Carbon::now(),
                                 'jenis' => 'KELUAR',
-                                'created_by' => auth()->user()->id,
+                                'created_by' => $user,
                                 'created_at' => Carbon::now(),
                                 'ke' => 23,
                                 'tujuan' => $request->deskripsi,
@@ -3195,7 +3195,7 @@ class GudangController extends Controller
                             'tipe' => 'GBJ',
                             'subjek' => 'Sales Order Noseri By Upload',
                             'response' => json_encode($obj),
-                            'user_id' => auth()->user()->id
+                            'user_id' => $user
                         ]);
                     } else {
                         $detail = TFProduksiDetail::create([
@@ -3207,7 +3207,7 @@ class GudangController extends Controller
                             'status_id' => 2,
                             'state_id' => 8,
                             'created_at' => Carbon::now(),
-                            'created_by' => auth()->user()->id
+                            'created_by' => $request->userid
                         ]);
 
                         foreach ($values['noseri'] as $k => $v) {
@@ -3218,7 +3218,7 @@ class GudangController extends Controller
                                 'state_id' => 8,
                                 'jenis' => 'keluar',
                                 'created_at' => Carbon::now(),
-                                'created_by' => auth()->user()->id
+                                'created_by' => $user
                             ]);
 
                             NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->soid]);
@@ -3236,7 +3236,7 @@ class GudangController extends Controller
                                 'stok' => count($values['noseri']),
                                 'tgl_masuk' => Carbon::now(),
                                 'jenis' => 'KELUAR',
-                                'created_by' => auth()->user()->id,
+                                'created_by' => $user,
                                 'created_at' => Carbon::now(),
                                 'ke' => 23,
                                 'tujuan' => $request->deskripsi,
@@ -3254,7 +3254,7 @@ class GudangController extends Controller
                             'tipe' => 'GBJ',
                             'subjek' => 'Sales Order Noseri By Upload',
                             'response' => json_encode($obj),
-                            'user_id' => auth()->user()->id
+                            'user_id' => $user
                         ]);
                     }
                 }
@@ -3267,7 +3267,7 @@ class GudangController extends Controller
                     'status_id' => 2,
                     'state_id' => 8,
                     'created_at' => Carbon::now(),
-                    'created_by' => auth()->user()->id
+                    'created_by' => $user
                 ]);
 
                 foreach ($arr as $key1 => $value1) {
@@ -3280,7 +3280,7 @@ class GudangController extends Controller
                         'status_id' => 2,
                         'state_id' => 8,
                         'created_at' => Carbon::now(),
-                        'created_by' => auth()->user()->id
+                        'created_by' => $user
                     ]);
 
                     foreach ($value1['noseri'] as $k => $v) {
@@ -3291,7 +3291,7 @@ class GudangController extends Controller
                             'state_id' => 8,
                             'jenis' => 'keluar',
                             'created_at' => Carbon::now(),
-                            'created_by' => auth()->user()->id
+                            'created_by' => $user
                         ]);
 
                         NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->soid]);
@@ -3309,7 +3309,7 @@ class GudangController extends Controller
                             'stok' => count($value1['noseri']),
                             'tgl_masuk' => Carbon::now(),
                             'jenis' => 'KELUAR',
-                            'created_by' => auth()->user()->id,
+                            'created_by' => $user,
                             'created_at' => Carbon::now(),
                             'ke' => 23,
                             'tujuan' => $request->deskripsi,
@@ -3328,7 +3328,7 @@ class GudangController extends Controller
                     'tipe' => 'GBJ',
                     'subjek' => 'Sales Order Noseri By Upload',
                     'response' => json_encode($obj),
-                    'user_id' => auth()->user()->id
+                    'user_id' => $user
                 ]);
             }
 
