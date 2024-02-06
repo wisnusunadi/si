@@ -70,7 +70,9 @@ export default {
             if (this.noSeriSelected.find(noseri => noseri.id === item.id)) {
                 this.noSeriSelected = this.noSeriSelected.filter(noseri => noseri.id !== item.id)
             } else {
-                this.noSeriSelected.push(item)
+                if (!this.noseriterpakai(item)) {
+                    this.noSeriSelected.push(item)
+                }
             }
         },
         clickModalViaText() {
