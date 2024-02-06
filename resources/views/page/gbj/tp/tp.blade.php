@@ -42,12 +42,12 @@
         }
 
         /* th.prev.available {
-            visibility: hidden;
-        }
+                                                                                                                                                                                                                                                                                                    visibility: hidden;
+                                                                                                                                                                                                                                                                                                }
 
-        th.next.available {
-            visibility: hidden;
-        } */
+                                                                                                                                                                                                                                                                                                th.next.available {
+                                                                                                                                                                                                                                                                                                    visibility: hidden;
+                                                                                                                                                                                                                                                                                                } */
     </style>
     <div class="content-header">
         <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id }}">
@@ -82,7 +82,8 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <a href="#riwayatpenggantian" class="nav-link" id="riwayatpenggantian-tab" data-toggle="tab"
-                                role="tab" aria-controls="riwayatpenggantian" aria-selected="true">Penggantian Nomor Seri</a>
+                                role="tab" aria-controls="riwayatpenggantian" aria-selected="true">Penggantian Nomor
+                                Seri</a>
                         </li>
                     </ul>
                     <div class="tab-content card" id="myTabContent">
@@ -100,8 +101,7 @@
                                 </div>
                                 <div class="col-2 my-2 my-md-0">
                                     <div class="d-flex align-items-center">
-                                        <label class="mr-3 mb-0 d-none d-md-block"
-                                            for="">Dari</label>
+                                        <label class="mr-3 mb-0 d-none d-md-block" for="">Dari</label>
                                         <select name="" id="divisi" class="form-control ">
                                             <option value="">All</option>
                                         </select>
@@ -109,8 +109,7 @@
                                 </div>
                                 <div class="col-2 my-2 my-md-0">
                                     <div class="d-flex align-items-center">
-                                        <label class="mr-3 mb-0 d-none d-md-block"
-                                            for="">Tujuan</label>
+                                        <label class="mr-3 mb-0 d-none d-md-block" for="">Tujuan</label>
                                         <select name="" id="divisitujuan" class="form-control">
                                             <option value="">All</option>
                                         </select>
@@ -118,19 +117,15 @@
                                 </div>
                                 <div class="col-3 my-2 my-md-0">
                                     <div class="d-flex align-items-center">
-                                        <label class="mr-3 mb-0 d-none d-md-block"
-                                            for="">Tanggal Masuk</label>
-                                            <input type="text" class="form-control"
-                                            id="kt_datepicker_1">
+                                        <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal Masuk</label>
+                                        <input type="text" class="form-control" id="kt_datepicker_1">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-3 my-2 my-md-0">
                                     <div class="d-flex align-items-center">
-                                        <label class="mr-3 mb-0 d-none d-md-block"
-                                            for="">Tanggal Keluar</label>
-                                            <input type="text" class="form-control"
-                                            id="kt_datepicker_2">
+                                        <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal Keluar</label>
+                                        <input type="text" class="form-control" id="kt_datepicker_2">
                                         </select>
                                     </div>
                                 </div>
@@ -280,32 +275,20 @@
                             </div>
                         </div>
                         <div class="tab-pane fade card-body" id="riwayatpenggantian" role="tabpanel"
-                        aria-labelledby="riwayatpenggantian-tab">
-                        <table class="table" id="tableriwayatpenggantian">
-                            <thead>
-                                <tr>
-                                    <th>Tanggal Transfer</th>
-                                    <th>Nomor PO</th>
-                                    <th>Produk</th>
-                                    <th>Jumlah</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>08-09-2023</td>
-                                    <td>PO-12345</td>
-                                    <td>Produk 1</td>
-                                    <td>10 Unit</td>
-                                    <td>
-                                        <button class="btn btn-outline-primary detailSeriPengganti">
-                                            <i class="fas fa-eye"></i>
-                                            Detail
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            aria-labelledby="riwayatpenggantian-tab">
+                            <table class="table" id="tableriwayatpenggantian">
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal Transfer</th>
+                                        <th>Nomor SO</th>
+                                        <th>Nomor PO</th>
+                                        <th>Jumlah</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -351,29 +334,54 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalDetailSeriPengganti" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+    <div class="modal fade" id="modalDetailProdukPengganti" tabindex="-1" role="dialog"
+        aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Detail Nomor Seri</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <h5 class="modal-title">Detail Produk Pengganti</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
-                    <table class="table" id="tableDetailNoSeriPengganti">
+                    <table class="table" id="tableDetailProdukPengganti">
                         <thead>
                             <tr>
-                                <th>No Seri Gagal Uji</th>
-                                <th>No Seri Pengganti</th>
+                                <th>No</th>
+                                <th>Nama Produk</th>
+                                <th>Jumlah</th>
+                                <th>Detail</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>123456789</td>
-                                <td>123456789</td>
-                            </tr>
                         </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modalSeriPengganti" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail Seri Pengganti</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table" id="tableSeriPengganti">
+                        <thead>
+                            <tr>
+                                <th>No Seri</th>
+                                <th>No Seri Pengganti</th>
+                                <th>Keterangan</th>
+                            </tr>
+                        </thead>
                     </table>
                 </div>
             </div>
@@ -568,8 +576,8 @@
             "language": {
                 // "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                 processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </span>&emsp;Mohon Tunggu ...",
             },
             order: [
                 [0, 'desc']
@@ -674,8 +682,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </span>&emsp;Mohon Tunggu ...",
                 },
             });
             $(document).on("click", "#semua-produk-tab", function() {
@@ -697,7 +705,7 @@
             console.log(id);
 
             $.ajax({
-                url: "/api/transaksi/all-detail/" + id +"/" + tanggal ,
+                url: "/api/transaksi/all-detail/" + id + "/" + tanggal,
                 success: function(res) {
                     console.log(res);
                     $('span#title').text(res.data[0].title);
@@ -709,7 +717,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    url: "/api/transaksi/all-detail/"  + id +"/" + tanggal ,
+                    url: "/api/transaksi/all-detail/" + id + "/" + tanggal,
                 },
                 columns: [{
                         data: 'seri',
@@ -781,8 +789,8 @@
             ],
             language: {
                 processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </span>&emsp;Mohon Tunggu ...",
             }
         });
         // Sales Order Cetak
@@ -948,13 +956,128 @@
             })
         });
 
-        $('#tableriwayatpenggantian').DataTable({});
 
-        $(document).on('click', '.detailSeriPengganti', function () {
-            $('#modalDetailSeriPengganti').modal('show');
+        $(document).on('click', '#riwayatpenggantian-tab', function() {
+            $.ajax({
+                type: "get",
+                url: "/api/gbj/riwayat_ganti_unit",
+                success: function(data) {
+                    $('#tableriwayatpenggantian').DataTable({
+                        destroy: true,
+                        processing: true,
+                        responsive: true,
+                        autoWidth: false,
+                        lengthChange: false,
+                        data: data,
+                        columns: [{
+                                data: 'tgl_tf',
+                                render: function(data) {
+                                    return moment(data).format('DD-MM-YYYY');
+                                }
+                            },
+                            {
+                                data: 'so'
+                            },
+                            {
+                                data: 'po'
+                            },
+                            {
+                                data: 'jumlah_unit'
+                            },
+                            {
+                                data: function(data) {
+                                    return `<button class="btn btn-outline-primary detailProdukPengganti" data-id="${data.id}">
+                                        <i class="fas fa-eye"></i>
+                                        Detail
+                                    </button>`
+                                }
+                            }
+                        ],
+                    });
+                }
+            });
+
+
+        })
+
+        $(document).on('click', '.detailProdukPengganti', function() {
+            $('#modalDetailProdukPengganti').modal('show');
+            const id = $(this).data('id');
+
+            let dataSeriPengganti = $('#tableriwayatpenggantian').DataTable().row($(this).parents('tr')).data();
+
 
             // modal show with datatable
-            $('#tableDetailNoSeriPengganti').DataTable({});
+            $('#tableDetailProdukPengganti').DataTable({
+                destroy: true,
+                processing: true,
+                responsive: true,
+                autoWidth: false,
+                lengthChange: false,
+                data: dataSeriPengganti.isi,
+                columns: [{
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    {
+                        data: 'nama'
+                    },
+                    {
+                        data: 'jumlah'
+                    },
+                    {
+                        data: function(data) {
+                            return `<button class="btn btn-outline-primary detailSeriPengganti" data-id="${data.id}">
+                                <i class="fas fa-eye
+                                "></i>
+                                Detail
+                            </button>`
+                        }
+                    }
+                ],
+            });
+        })
+
+        $(document).on('click', '.detailSeriPengganti', function() {
+            $('#modalSeriPengganti').modal('show');
+            const id = $(this).data('id');
+
+            let dataSeriPengganti = $('#tableDetailProdukPengganti').DataTable().row($(this).parents('tr')).data();
+            const noseriData = dataSeriPengganti.noseri.map(item => item.noseri)
+            const seriGantiData = dataSeriPengganti.seri_ganti.map(item => item.noseri)
+            const stateData = dataSeriPengganti.seri_ganti.map(item => item.state)
+
+            const tableData = noseriData.map((item, index) => {
+                return {
+                    seri_baru: item,
+                    seri_lama: seriGantiData[index],
+                    keterangan: stateData[index]
+                }
+            })
+
+            $('#tableSeriPengganti').DataTable({
+                destroy: true,
+                processing: true,
+                responsive: true,
+                autoWidth: false,
+                lengthChange: false,
+                data: tableData,
+                columns: [{
+                        data: 'seri_lama'
+                    },
+                    {
+                        data: 'seri_baru'
+                    },
+                    {
+                        data: 'keterangan',
+                        render: function(data) {
+                            return data === 'qc' ? 'Tidak Lolos Pengujian' : 'Tidak Lolos Kalibrasi'
+                        }
+                    }
+                ],
+            });
         })
     </script>
 @stop

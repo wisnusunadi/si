@@ -76,7 +76,7 @@ class GudangController extends Controller
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
-          //   dd($obj);
+            //   dd($obj);
             foreach ($obj->produk as $p) {
                 for ($j = 0; $j < count($p->noseri); $j++) {
                     JadwalRakitNoseriRw::create([
@@ -90,7 +90,7 @@ class GudangController extends Controller
                         ->update([
                             'is_ready' => 1,
                             'used_by' => $p->id,
-                            'reworks_id' =>'Perakitan ' . $obj->no_urut,
+                            'reworks_id' => 'Perakitan ' . $obj->no_urut,
                         ]);
                 }
             }
@@ -121,21 +121,20 @@ class GudangController extends Controller
 
     function terima_perakitan_detail_rw($id)
     {
-        $data = SeriDetailRw::
-        select('seri_detail_rw.noseri as noseri','seri_detail_rw.noseri_id','produk.nama as nama','seri_detail_rw.created_at','seri_detail_rw.packer','seri_detail_rw.isi')
-        ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
-        ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-        ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-        ->where('noseri_barang_jadi.is_prd',0)
-        ->where('noseri_barang_jadi.is_aktif',0)
-        ->where('noseri_barang_jadi.is_ready',0)
-       ->where('seri_detail_rw.urutan',$id)
-        ->get();
+        $data = SeriDetailRw::select('seri_detail_rw.noseri as noseri', 'seri_detail_rw.noseri_id', 'produk.nama as nama', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi')
+            ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
+            ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+            ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+            ->where('noseri_barang_jadi.is_prd', 0)
+            ->where('noseri_barang_jadi.is_aktif', 0)
+            ->where('noseri_barang_jadi.is_ready', 0)
+            ->where('seri_detail_rw.urutan', $id)
+            ->get();
 
         if ($data->isEmpty()) {
             $obj = array();
         } else {
-            foreach($data as $d){
+            foreach ($data as $d) {
                 $obj[] = array(
                     'id' => $d->noseri_id,
                     'produk' => $d->nama,
@@ -158,65 +157,63 @@ class GudangController extends Controller
 
         try {
 
-            foreach($obj->item as $o){
-                if(isset($o->layout) && $o->layout != null){
+            foreach ($obj->item as $o) {
+                if (isset($o->layout) && $o->layout != null) {
                     $l = $o->layout->id;
-                }else{
+                } else {
                     $l = NULL;
                 }
 
-                NoseriBarangJadi::where('id',$o->id)
-                ->update([
-                    'is_prd' => 0,
-                    'is_aktif' => 1,
-                    'layout_id' => $l
-                ]);
-             }
+                NoseriBarangJadi::where('id', $o->id)
+                    ->update([
+                        'is_prd' => 0,
+                        'is_aktif' => 1,
+                        'layout_id' => $l
+                    ]);
+            }
 
-             SystemLog::where('id',$obj->id)->update([
+            SystemLog::where('id', $obj->id)->update([
                 'status' => 0,
             ]);
 
-         SystemLog::create([
-            'tipe' => 'GBJ',
-            'subjek' => 'Terima Reworks',
-            'user_id' => auth()->user()->id,
-             'response' => json_encode($obj)
-         ]);
+            SystemLog::create([
+                'tipe' => 'GBJ',
+                'subjek' => 'Terima Reworks',
+                'user_id' => auth()->user()->id,
+                'response' => json_encode($obj)
+            ]);
             DB::commit();
             return response()->json([
-               'status' => 200,
-               'message' =>  'Berhasil Diterima',
-           ], 200);
+                'status' => 200,
+                'message' =>  'Berhasil Diterima',
+            ], 200);
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
             return response()->json([
                 'status' => 200,
-                'message' =>  'Gagal Diterima'.$th,
+                'message' =>  'Gagal Diterima' . $th,
             ], 500);
         }
-
     }
 
     function surat_penyerahan_rw($id)
     {
 
-        $seridetail = SeriDetailRw::
-        select('seri_detail_rw.urutan as id','produk.nama as nama')
-        ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
-        ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-        ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-        ->where('noseri_barang_jadi.is_prd',0)
-        ->where('noseri_barang_jadi.is_aktif',0)
-        ->where('noseri_barang_jadi.is_ready',0)
-        ->where('seri_detail_rw.urutan',$id)
-        ->get();
+        $seridetail = SeriDetailRw::select('seri_detail_rw.urutan as id', 'produk.nama as nama')
+            ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'seri_detail_rw.noseri_id')
+            ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+            ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+            ->where('noseri_barang_jadi.is_prd', 0)
+            ->where('noseri_barang_jadi.is_aktif', 0)
+            ->where('noseri_barang_jadi.is_ready', 0)
+            ->where('seri_detail_rw.urutan', $id)
+            ->get();
 
         if ($seridetail->isEmpty()) {
             $obj = array();
-        }else{
-            foreach($seridetail as $d){
+        } else {
+            foreach ($seridetail as $d) {
                 $obj[] = array(
                     'id' => $d->id,
                     'produk_id' => $d->id,
@@ -225,12 +222,11 @@ class GudangController extends Controller
             }
         }
         return response()->json($obj);
-
     }
     function terima_perakitan_rw()
     {
 
-        $data = SystemLog::where(['tipe' => 'Produksi', 'subjek' => 'Kirim Reworks','status'=> 1])->get();
+        $data = SystemLog::where(['tipe' => 'Produksi', 'subjek' => 'Kirim Reworks', 'status' => 1])->get();
 
         if ($data->isEmpty()) {
             $obj = array();
@@ -239,17 +235,17 @@ class GudangController extends Controller
             foreach ($data as $d) {
 
                 $max = SystemLog::where('tipe', 'Produksi')
-                ->where('subjek', 'Kirim Reworks')
-                ->where('tbl_log.id', '<', $d->id)
-                ->whereYear('created_at', $d->created_at->format('Y'))
-                ->count();
+                    ->where('subjek', 'Kirim Reworks')
+                    ->where('tbl_log.id', '<', $d->id)
+                    ->whereYear('created_at', $d->created_at->format('Y'))
+                    ->count();
 
                 $x = json_decode($d->response);
                 $obj[] = array(
                     'id' => $d->id,
                     'no_surat' =>   'BPBJ' . '/' . $this->toRomawi($d->created_at->format('m')) . '/' . (strtoupper($d->created_at->format('Y')) % 100) . '/' . str_pad($max + 1, 6, '0', STR_PAD_LEFT),
                     'diserahkan' =>  $d->user_id != NULL ? User::find($d->user_id)->Karyawan->nama : '-',
-                    'urutan' => 'PRD-'.$x->urutan,
+                    'urutan' => 'PRD-' . $x->urutan,
                     'tgl_mulai' => $x->tanggal_mulai,
                     'tgl_selesai' => $x->tanggal_selesai,
                     'tgl_tf' => $d->created_at->format('Y-m-d'),
@@ -259,7 +255,6 @@ class GudangController extends Controller
             }
         }
         return response()->json($obj);
-
     }
     function belum_kirim_rw_seri($id)
     {
@@ -316,12 +311,12 @@ class GudangController extends Controller
     }
     function riwayat_rw_permintaan_detail($id)
     {
-        $data = SystemLog::where(['tipe'=>'GBJ','subjek' => 'Kirim Permintaan Rework','id' => $id])->orderBy('created_at','DESC')->get();
+        $data = SystemLog::where(['tipe' => 'GBJ', 'subjek' => 'Kirim Permintaan Rework', 'id' => $id])->orderBy('created_at', 'DESC')->get();
 
-        if($data->isEmpty()){
+        if ($data->isEmpty()) {
             $obj = array();
-        }else{
-            foreach($data as $d){
+        } else {
+            foreach ($data as $d) {
                 $x = json_decode($d->response);
                 foreach ($x->produk as $produk) {
                     if (isset($produk->noseri) && is_array($produk->noseri)) {
@@ -353,33 +348,33 @@ class GudangController extends Controller
     }
     function riwayat_rw_penerimaan()
     {
-        $data = SystemLog::where(['tipe'=>'GBJ' , 'subjek' => 'Terima Reworks'])->get();
+        $data = SystemLog::where(['tipe' => 'GBJ', 'subjek' => 'Terima Reworks'])->get();
 
 
-        if($data->isEmpty()){
+        if ($data->isEmpty()) {
             $obj = array();
         }
-            // }else{
+        // }else{
         //     $res = $data->first()->response;
         //     $getUrut = json_decode($res);
         //     $jadwal = JadwalPerakitanRw::where('urutan',$getUrut->urutan)->first()->produk_reworks_id;
         //     $produk = Produk::find($jadwal);
-            foreach($data as $d){
-                $x = json_decode($d->response);
-                $obj[] = array(
-                    'id' => $d->id,
-                    "nama"=>  $x->nama,
-                    "urutan"=>  $x->urutan,
-                    "no_surat"=> $x->no_surat,
-                    "diserahkan"=>  $x->diserahkan,
-                    "urutan"=>  $x->urutan,
-                    "tgl_mulai"=>  $x->tgl_mulai,
-                    "tgl_selesai"=>  $x->tgl_selesai,
-                    "tgl_tf"=> $d->created_at,
-                    "jumlah"=>  $x->jumlah,
-                    "item" => $x->item
-                );
-            }
+        foreach ($data as $d) {
+            $x = json_decode($d->response);
+            $obj[] = array(
+                'id' => $d->id,
+                "nama" =>  $x->nama,
+                "urutan" =>  $x->urutan,
+                "no_surat" => $x->no_surat,
+                "diserahkan" =>  $x->diserahkan,
+                "urutan" =>  $x->urutan,
+                "tgl_mulai" =>  $x->tgl_mulai,
+                "tgl_selesai" =>  $x->tgl_selesai,
+                "tgl_tf" => $d->created_at,
+                "jumlah" =>  $x->jumlah,
+                "item" => $x->item
+            );
+        }
         // }
 
         return response()->json($obj);
@@ -388,76 +383,75 @@ class GudangController extends Controller
     function surat_pengiriman($id)
     {
 
-        $data = SystemLog::where(['tipe'=>'GBJ','subjek' => 'Kirim Permintaan Rework','id' => $id])->orderBy('created_at','DESC')->first();
+        $data = SystemLog::where(['tipe' => 'GBJ', 'subjek' => 'Kirim Permintaan Rework', 'id' => $id])->orderBy('created_at', 'DESC')->first();
 
 
-        if(!$data){
+        if (!$data) {
             $datas = array();
-        }else{
+        } else {
             $result = [];
-           $date = Carbon::now();
+            $date = Carbon::now();
             $x = json_decode($data->response);
             foreach ($x->produk as $produk) {
-                            if (isset($produk->noseri) && is_array($produk->noseri)) {
-                                foreach ($produk->noseri as $noseri) {
-                                    if (isset($noseri->noseri)) {
-                                        $noseriArray[] = array(
-                                            'id' => $noseri->noseri,
-                                            'noseri' => $noseri->noseri,
-                                            'nama' => $produk->nama,
-                                            'varian' => $noseri->variasi
-                                        );
-                                    }
-                                }
-                            }
-                            }
+                if (isset($produk->noseri) && is_array($produk->noseri)) {
+                    foreach ($produk->noseri as $noseri) {
+                        if (isset($noseri->noseri)) {
+                            $noseriArray[] = array(
+                                'id' => $noseri->noseri,
+                                'noseri' => $noseri->noseri,
+                                'nama' => $produk->nama,
+                                'varian' => $noseri->variasi
+                            );
+                        }
+                    }
+                }
+            }
 
-                            foreach ($noseriArray as $item) {
-                                $key = $item['nama'] . '_' . $item['varian'];
+            foreach ($noseriArray as $item) {
+                $key = $item['nama'] . '_' . $item['varian'];
 
-                                if (!array_key_exists($key, $result)) {
-                                    $result[$key] = [
-                                        'nama' => $item['nama'],
-                                        'varian' => $item['varian'] ?? '',
-                                        'jumlah' => 0,
-                                        'noseri' => []
-                                    ];
-                                }
+                if (!array_key_exists($key, $result)) {
+                    $result[$key] = [
+                        'nama' => $item['nama'],
+                        'varian' => $item['varian'] ?? '',
+                        'jumlah' => 0,
+                        'noseri' => []
+                    ];
+                }
 
-                                $result[$key]['noseri'][] = $item['noseri'];
-                                $result[$key]['jumlah']++;
-                            }
+                $result[$key]['noseri'][] = $item['noseri'];
+                $result[$key]['jumlah']++;
+            }
 
-                            // Reindex the array to start index from 0
-                            $result = array_values($result);
+            // Reindex the array to start index from 0
+            $result = array_values($result);
 
-                            // Convert keys to numeric arrays
-                            foreach ($result as &$item) {
-                                $item['noseri'] = array_values($item['noseri']);
-                            }
+            // Convert keys to numeric arrays
+            foreach ($result as &$item) {
+                $item['noseri'] = array_values($item['noseri']);
+            }
 
-                            $max = SystemLog::
-                            where('tipe', 'GBJ')
-                            ->where('subjek', 'Kirim Permintaan Rework')
-                            ->where('tbl_log.id','<', $id)
-                            ->whereYear('created_at', $data->created_at->format('Y'))
-                            ->count();
+            $max = SystemLog::where('tipe', 'GBJ')
+                ->where('subjek', 'Kirim Permintaan Rework')
+                ->where('tbl_log.id', '<', $id)
+                ->whereYear('created_at', $data->created_at->format('Y'))
+                ->count();
 
-        $datas = new stdClass();
-        $thn_gbj = $date->format('Y')%100;
-         $urutans_gbj = str_pad($max+1, 6, '0', STR_PAD_LEFT);
-         $urutans_prd = str_pad($x->no, 6, '0', STR_PAD_LEFT);
-         $datas->tgl_dibuat = $data->created_at;
-         $datas->no_surat = 'FPBJ/'.$this->toRomawi($date->format('m')).'/'.$thn_gbj.'/'.$urutans_gbj;
-         $datas->no_referensi = $urutans_prd.'/'.$this->toRomawi( Carbon::createFromFormat('Y-m-d', $x->tgl_mulai)->month).'/'.Carbon::createFromFormat('Y-m-d', $x->tgl_mulai)->year;
-        $datas->diserahkan_oleh = $data->user_id != NULL ? User::find($data->user_id)->Karyawan->nama : '-';
-        $datas->items = $result;
-
+            $datas = new stdClass();
+            $thn_gbj = $date->format('Y') % 100;
+            $urutans_gbj = str_pad($max + 1, 6, '0', STR_PAD_LEFT);
+            $urutans_prd = str_pad($x->no, 6, '0', STR_PAD_LEFT);
+            $datas->tgl_dibuat = $data->created_at;
+            $datas->no_surat = 'FPBJ/' . $this->toRomawi($date->format('m')) . '/' . $thn_gbj . '/' . $urutans_gbj;
+            $datas->no_referensi = $urutans_prd . '/' . $this->toRomawi(Carbon::createFromFormat('Y-m-d', $x->tgl_mulai)->month) . '/' . Carbon::createFromFormat('Y-m-d', $x->tgl_mulai)->year;
+            $datas->diserahkan_oleh = $data->user_id != NULL ? User::find($data->user_id)->Karyawan->nama : '-';
+            $datas->items = $result;
         }
         return $datas;
     }
 
-    function cetakSuratPengantar($id) {
+    function cetakSuratPengantar($id)
+    {
         $data = $this->surat_pengiriman($id);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakpengantarbarangjadi', compact('data'))->setPaper('a4', 'portrait');
         return $pdf->stream();
@@ -481,12 +475,12 @@ class GudangController extends Controller
 
     function riwayat_rw_permintaan()
     {
-        $data = SystemLog::where(['tipe'=>'GBJ','subjek' => 'Kirim Permintaan Rework'])->orderBy('created_at', 'ASC')->get();
+        $data = SystemLog::where(['tipe' => 'GBJ', 'subjek' => 'Kirim Permintaan Rework'])->orderBy('created_at', 'ASC')->get();
 
-        if($data->isEmpty()){
+        if ($data->isEmpty()) {
             $obj = array();
-        }else{
-            foreach($data as $d){
+        } else {
+            foreach ($data as $d) {
                 $noseriCount = 0;
                 $x = json_decode($d->response);
                 foreach ($x->produk as $produk) {
@@ -506,8 +500,6 @@ class GudangController extends Controller
                     'tgl_tf' => $d->created_at,
                     'jumlah' => $noseriCount
                 );
-
-
             }
         }
 
@@ -968,17 +960,16 @@ class GudangController extends Controller
     function getNoseri(Request $request, $id)
     {
         try {
-            $data = NoseriBarangJadi::
-            select('noseri_barang_jadi.id','noseri_barang_jadi.noseri','seri_detail_rw.isi as isi', 'seri_detail_rw.created_at', 'seri_detail_rw.packer')
-            ->addSelect([
-                'cek_rw' => function ($q) {
-                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
-                        ->from('seri_detail_rw')
-                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
-                }
-            ])
-            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->where([
+            $data = NoseriBarangJadi::select('noseri_barang_jadi.id', 'noseri_barang_jadi.noseri', 'seri_detail_rw.isi as isi', 'seri_detail_rw.created_at', 'seri_detail_rw.packer')
+                ->addSelect([
+                    'cek_rw' => function ($q) {
+                        $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                            ->from('seri_detail_rw')
+                            ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+                    }
+                ])
+                ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->where([
                     'is_aktif' => 1,
                     'is_ready' => 0,
                     'is_change' => 1,
@@ -1001,9 +992,9 @@ class GudangController extends Controller
                     return $d->noseri;
                 })
                 ->addColumn('item', function ($d) {
-                    if($d->isi == null){
+                    if ($d->isi == null) {
                         return  array();
-                    }else{
+                    } else {
                         return json_decode($d->isi);
                     }
                 })
@@ -1036,7 +1027,7 @@ class GudangController extends Controller
                 'is_ready' => 1,
                 'is_change' => 1,
                 'is_delete' => 0
-            ])->with(['Pesanan'])->where('gdg_barang_jadi_id',$id)->get();
+            ])->with(['Pesanan'])->where('gdg_barang_jadi_id', $id)->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -1050,17 +1041,15 @@ class GudangController extends Controller
                     return $d->noseri;
                 })
                 ->addColumn('used', function ($d) {
-                    if($d->reworks_id != NULL){
-                        return 'Perakitan Rework '.$d->reworks_id;
-                    }else{
+                    if ($d->reworks_id != NULL) {
+                        return 'Perakitan Rework ' . $d->reworks_id;
+                    } else {
                         if (isset($d->Pesanan->so)) {
                             return $d->Pesanan->no_po;
                         } else {
-                           return '-';
+                            return '-';
                         }
                     }
-
-
                 })
                 ->addColumn('aksi', function ($d) {
                     return '<a data-toggle="modal" data-target="#viewStock" class="viewStock" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
@@ -3030,7 +3019,14 @@ class GudangController extends Controller
             $html .= "</tbody></table>";
 
             if ($haserror) {
-                return response()->json(['msg' => 'Ada data yang kosong, Silahkan lengkapi data', 'error' => true, 'data' => $html]);
+                return response()->json(
+                    [
+                        'msg' => 'Ada data yang kosong, Silahkan lengkapi data',
+                        'error' => true,
+                        'data' => $html
+                    ],
+                    500
+                );
             }
 
             $a = Pesanan::where('id', $request->soid1)->first();
@@ -3046,7 +3042,12 @@ class GudangController extends Controller
                             array_push($seri_final, $ns);
                         }
                     }
-                    return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri_final) . ' belum terdaftar', 'error' => true, 'data' => $html, 'noseri' => implode(', ', $seri_final)]);
+                    return response()->json([
+                        'msg' => 'Nomor seri ' . implode(', ', $seri_final) . ' belum terdaftar',
+                        'error' => true, 
+                        'data' => $html,
+                        'noseri' => implode(', ', $seri_final)
+                    ], 500);
                 } else {
                     return response()->json(['msg' => 'Sales Order Sudah Bisa Diunggah', 'error' => false, 'data' => $html]);
                 }
@@ -3055,13 +3056,13 @@ class GudangController extends Controller
                     'error' => true,
                     'success' => false,
                     'msg' => 'Nomor Sales Order Tidak Sesuai'
-                ]);
+                ], 500);
             }
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
                 'msg' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 
@@ -3158,7 +3159,7 @@ class GudangController extends Controller
                                 'state_id' => 8,
                                 'jenis' => 'keluar',
                                 'created_at' => Carbon::now(),
-                                'created_by' => $request->userid
+                                'created_by' => auth()->user()->id
                             ]);
 
                             NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->soid]);
@@ -3176,7 +3177,7 @@ class GudangController extends Controller
                                 'stok' => count($values['noseri']),
                                 'tgl_masuk' => Carbon::now(),
                                 'jenis' => 'KELUAR',
-                                'created_by' => $request->userid,
+                                'created_by' => auth()->user()->id,
                                 'created_at' => Carbon::now(),
                                 'ke' => 23,
                                 'tujuan' => $request->deskripsi,
@@ -3194,7 +3195,7 @@ class GudangController extends Controller
                             'tipe' => 'GBJ',
                             'subjek' => 'Sales Order Noseri By Upload',
                             'response' => json_encode($obj),
-                            'user_id' => $request->userid
+                            'user_id' => auth()->user()->id
                         ]);
                     } else {
                         $detail = TFProduksiDetail::create([
@@ -3206,7 +3207,7 @@ class GudangController extends Controller
                             'status_id' => 2,
                             'state_id' => 8,
                             'created_at' => Carbon::now(),
-                            'created_by' => $request->userid
+                            'created_by' => auth()->user()->id
                         ]);
 
                         foreach ($values['noseri'] as $k => $v) {
@@ -3217,7 +3218,7 @@ class GudangController extends Controller
                                 'state_id' => 8,
                                 'jenis' => 'keluar',
                                 'created_at' => Carbon::now(),
-                                'created_by' => $request->userid
+                                'created_by' => auth()->user()->id
                             ]);
 
                             NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->soid]);
@@ -3235,7 +3236,7 @@ class GudangController extends Controller
                                 'stok' => count($values['noseri']),
                                 'tgl_masuk' => Carbon::now(),
                                 'jenis' => 'KELUAR',
-                                'created_by' => $request->userid,
+                                'created_by' => auth()->user()->id,
                                 'created_at' => Carbon::now(),
                                 'ke' => 23,
                                 'tujuan' => $request->deskripsi,
@@ -3253,7 +3254,7 @@ class GudangController extends Controller
                             'tipe' => 'GBJ',
                             'subjek' => 'Sales Order Noseri By Upload',
                             'response' => json_encode($obj),
-                            'user_id' => $request->userid
+                            'user_id' => auth()->user()->id
                         ]);
                     }
                 }
@@ -3266,7 +3267,7 @@ class GudangController extends Controller
                     'status_id' => 2,
                     'state_id' => 8,
                     'created_at' => Carbon::now(),
-                    'created_by' => $request->userid
+                    'created_by' => auth()->user()->id
                 ]);
 
                 foreach ($arr as $key1 => $value1) {
@@ -3279,7 +3280,7 @@ class GudangController extends Controller
                         'status_id' => 2,
                         'state_id' => 8,
                         'created_at' => Carbon::now(),
-                        'created_by' => $request->userid
+                        'created_by' => auth()->user()->id
                     ]);
 
                     foreach ($value1['noseri'] as $k => $v) {
@@ -3290,7 +3291,7 @@ class GudangController extends Controller
                             'state_id' => 8,
                             'jenis' => 'keluar',
                             'created_at' => Carbon::now(),
-                            'created_by' => $request->userid
+                            'created_by' => auth()->user()->id
                         ]);
 
                         NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->soid]);
@@ -3308,7 +3309,7 @@ class GudangController extends Controller
                             'stok' => count($value1['noseri']),
                             'tgl_masuk' => Carbon::now(),
                             'jenis' => 'KELUAR',
-                            'created_by' => $request->userid,
+                            'created_by' => auth()->user()->id,
                             'created_at' => Carbon::now(),
                             'ke' => 23,
                             'tujuan' => $request->deskripsi,
@@ -3327,7 +3328,7 @@ class GudangController extends Controller
                     'tipe' => 'GBJ',
                     'subjek' => 'Sales Order Noseri By Upload',
                     'response' => json_encode($obj),
-                    'user_id' => $request->userid
+                    'user_id' => auth()->user()->id
                 ]);
             }
 
@@ -5862,23 +5863,22 @@ class GudangController extends Controller
 
     function history_modal_data_seri_tf($id)
     {
-        $data = NoseriBarangJadi::
-        select('noseri_barang_jadi.id','noseri_barang_jadi.noseri','seri_detail_rw.isi', 'seri_detail_rw.created_at')
-        ->leftjoin('t_gbj_noseri', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
-        ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-        ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-        ->where('t_gbj_detail.detail_pesanan_produk_id',$id)->get();
+        $data = NoseriBarangJadi::select('noseri_barang_jadi.id', 'noseri_barang_jadi.noseri', 'seri_detail_rw.isi', 'seri_detail_rw.created_at')
+            ->leftjoin('t_gbj_noseri', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+            ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+            ->where('t_gbj_detail.detail_pesanan_produk_id', $id)->get();
 
-        if($data->isEmpty()){
+        if ($data->isEmpty()) {
             $obj = array();
-        }else{
+        } else {
             foreach ($data as $d) {
                 $obj[] = array(
                     'id' => $d->id,
                     'noseri' => $d->noseri,
                     'tgl_dibuat' => $d->created_at ? $d->created_at->format('Y-m-d') : '-',
                     'packer' => $d->packer ? $d->packer : '-',
-                    'item' => $d->isi == null ? array(): json_decode($d->isi)
+                    'item' => $d->isi == null ? array() : json_decode($d->isi)
                 );
             }
         }
@@ -5945,22 +5945,21 @@ class GudangController extends Controller
     function ganti_unit_data_detail_seri($id)
     {
 
-        $did = DetailPesananProduk::select('detail_pesanan.pesanan_id as id','detail_pesanan_produk.gudang_barang_jadi_id as gbj_id')
-        ->leftJoin('detail_pesanan','detail_pesanan.id' ,'=','detail_pesanan_produk.detail_pesanan_id')
-        ->where('detail_pesanan_produk.id',$id)
-        ->first();
+        $did = DetailPesananProduk::select('detail_pesanan.pesanan_id as id', 'detail_pesanan_produk.gudang_barang_jadi_id as gbj_id')
+            ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+            ->where('detail_pesanan_produk.id', $id)
+            ->first();
 
-        $data = NoseriTGbj::
-        select('uji_lab_detail.status','t_gbj_noseri.id','t_gbj_noseri.noseri_id as noseri_id','noseri_barang_jadi.noseri','noseri_detail_pesanan.id as ndp_id','t_gbj_detail.detail_pesanan_produk_id')
-        ->leftJoin('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
-        ->leftJoin('t_gbj','t_gbj.id','=','t_gbj_detail.t_gbj_id')
-        ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
-        ->leftJoin('noseri_detail_pesanan','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
-        ->leftJoin('uji_lab_detail','uji_lab_detail.noseri_id','=','noseri_detail_pesanan.id')
-        ->where('t_gbj_noseri.status_id',10)
-        ->where('t_gbj_detail.gdg_brg_jadi_id',$did->gbj_id)
-        ->where('t_gbj.pesanan_id',$did->id)
-        ->get();
+        $data = NoseriTGbj::select('uji_lab_detail.status', 't_gbj_noseri.id', 't_gbj_noseri.noseri_id as noseri_id', 'noseri_barang_jadi.noseri', 'noseri_detail_pesanan.id as ndp_id', 't_gbj_detail.detail_pesanan_produk_id')
+            ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+            ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+            ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+            ->leftJoin('noseri_detail_pesanan', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+            ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
+            ->where('t_gbj_noseri.status_id', 10)
+            ->where('t_gbj_detail.gdg_brg_jadi_id', $did->gbj_id)
+            ->where('t_gbj.pesanan_id', $did->id)
+            ->get();
 
         // $data = NoseriDetailPesanan::select('noseri_detail_pesanan.id','detail_pesanan.pesanan_id as p_id')
         // ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id' ,'=','noseri_detail_pesanan.detail_pesanan_produk_id')
@@ -5973,7 +5972,7 @@ class GudangController extends Controller
         // // ->groupBy('noseri_detail_pesanan.id')
         // ->get();
 
-        foreach($data as $d){
+        foreach ($data as $d) {
             $obj[] = array(
                 'id' => $d->ndp_id,
                 'noseri_id' => $d->noseri_id,
@@ -5988,9 +5987,8 @@ class GudangController extends Controller
 
     function ganti_unit_data_detail($id)
     {
-        $data = DetailPesananProduk::
-        select('gdg_barang_jadi.id as gbj_id','detail_pesanan_produk.id','produk.nama','gdg_barang_jadi.nama as variasi')
-        ->addSelect([
+        $data = DetailPesananProduk::select('gdg_barang_jadi.id as gbj_id', 'detail_pesanan_produk.id', 'produk.nama', 'gdg_barang_jadi.nama as variasi')
+            ->addSelect([
                 'qc' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
                         ->from('noseri_detail_pesanan')
@@ -6008,19 +6006,19 @@ class GudangController extends Controller
                         ->where('noseri_detail_pesanan.is_ready', 0)
                         ->whereColumn('uji_lab_detail.detail_pesanan_produk_id', 'detail_pesanan_produk.id');
                 },
-        ])
-        ->leftJoin('detail_pesanan','detail_pesanan.id' ,'=','detail_pesanan_produk.detail_pesanan_id')
-        ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id' ,'=','detail_pesanan_produk.gudang_barang_jadi_id')
-        ->leftJoin('produk','produk.id' ,'=','gdg_barang_jadi.produk_id')
-        ->where('detail_pesanan.pesanan_id',$id)
-        ->havingRaw('qc > 0 OR kalibrasi > 0')
-        ->get();
+            ])
+            ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+            ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+            ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+            ->where('detail_pesanan.pesanan_id', $id)
+            ->havingRaw('qc > 0 OR kalibrasi > 0')
+            ->get();
 
-         foreach($data as $d){
+        foreach ($data as $d) {
             $obj[] = array(
                 'id' => $d->id,
                 'gbj_id' => $d->gbj_id,
-                'nama' => $d->nama.' '.$d->variasi,
+                'nama' => $d->nama . ' ' . $d->variasi,
                 'jumlah' => $d->qc + $d->kalibrasi,
                 'seri_ganti' => $this->ganti_unit_data_detail_seri($d->id)
             );
@@ -6043,9 +6041,9 @@ class GudangController extends Controller
 
     function riwayat_ganti_unit()
     {
-        $data = SystemLog::where(['tipe' => 'GBJ','subjek' => 'Penggantian Noseri'])->get();
+        $data = SystemLog::where(['tipe' => 'GBJ', 'subjek' => 'Penggantian Noseri'])->get();
 
-        foreach($data as $d){
+        foreach ($data as $d) {
             $x = json_decode($d->response);
             $obj[] = array(
                 'id' => $d->id,
@@ -6069,37 +6067,37 @@ class GudangController extends Controller
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
-             foreach($obj->produk as $o){
-                if(count($o->noseri) != count($o->seri_ganti)){
+            foreach ($obj->produk as $o) {
+                if (count($o->noseri) != count($o->seri_ganti)) {
                     DB::rollback();
                     return response()->json([
-                                'status' => 404,
-                                'message' => 'Jumlah noseri tidak sama',
-                            ], 500);
+                        'status' => 404,
+                        'message' => 'Jumlah noseri tidak sama',
+                    ], 500);
                 }
                 $noseri_lama[] = $o->seri_ganti;
                 $noseri_baru[] = $o->noseri;
-             }
+            }
 
-             foreach($noseri_lama as $key_a => $a){
-                foreach($a as $key_b => $b){
+            foreach ($noseri_lama as $key_a => $a) {
+                foreach ($a as $key_b => $b) {
                     $id_seri_compact[] = $b;
                 }
             }
 
-            foreach($noseri_baru as $key_a => $a){
-                foreach($a as $key_b => $b){
-                    NoseriTGbj::where('id',$noseri_lama[$key_a][$key_b]->t_tfbj_noseri_id)->update([
+            foreach ($noseri_baru as $key_a => $a) {
+                foreach ($a as $key_b => $b) {
+                    NoseriTGbj::where('id', $noseri_lama[$key_a][$key_b]->t_tfbj_noseri_id)->update([
                         'status_id' => 2,
                         'noseri_id' =>  $b->id
-                     ]);
-                     NoseriBarangJadi::where('id',$noseri_lama[$key_a][$key_b]->noseri_id)->update([
+                    ]);
+                    NoseriBarangJadi::where('id', $noseri_lama[$key_a][$key_b]->noseri_id)->update([
                         'is_ready' => 0,
                         'is_aktif' => 0,
                         'used_by' => NULL,
                         'keterangan' => 'Tidak OK Dari QC',
                     ]);
-                    NoseriBarangJadi::where('id',$b->id)->update([
+                    NoseriBarangJadi::where('id', $b->id)->update([
                         'is_ready' => 1,
                         'used_by' => $obj->id,
                         'keterangan' => '',
@@ -6116,11 +6114,11 @@ class GudangController extends Controller
                 }
             }
 
-               $id_seri = array_map(function ($item) {
-                        return $item->id;
-                    }, array_filter($noseri_filter, function ($item) {
-                        return $item->state == 'lab';
-                    }));
+            $id_seri = array_map(function ($item) {
+                return $item->id;
+            }, array_filter($noseri_filter, function ($item) {
+                return $item->state == 'lab';
+            }));
 
             $id_seri = array_values($id_seri);
 
@@ -6145,71 +6143,83 @@ class GudangController extends Controller
             $resultArray = array_values($resultArray);
 
 
-            foreach ($resultArray as $a){
-             SeriGanti::create([
-                'detail_pesanan_produk_id' => $a["detai_pesanan_produk_id"],
-                'isi' => json_encode($a["item"]),
-                'state' => '-'
-             ]);
+            foreach ($resultArray as $a) {
+                SeriGanti::create([
+                    'detail_pesanan_produk_id' => $a["detai_pesanan_produk_id"],
+                    'isi' => json_encode($a["item"]),
+                    'state' => '-'
+                ]);
             }
 
-            if(count($id_seri) > 0 ){
-                $uji = UjiLabDetail::select('uji_lab_detail.uji_lab_id','uji_lab_detail.id','uji_lab_detail.detail_pesanan_produk_id','uji_lab_detail.no_sertifikat',
-                'uji_lab_detail.noseri_id','uji_lab_detail.tgl_masuk','uji_lab_detail.created_at','uji_lab_detail.tgl_kalibrasi','uji_lab_detail.metode_id',
-                'uji_lab.no_order','uji_lab.pesanan_id','uji_lab.jenis_pemilik_id','uji_lab.nama','uji_lab.alamat'
+            if (count($id_seri) > 0) {
+                $uji = UjiLabDetail::select(
+                    'uji_lab_detail.uji_lab_id',
+                    'uji_lab_detail.id',
+                    'uji_lab_detail.detail_pesanan_produk_id',
+                    'uji_lab_detail.no_sertifikat',
+                    'uji_lab_detail.noseri_id',
+                    'uji_lab_detail.tgl_masuk',
+                    'uji_lab_detail.created_at',
+                    'uji_lab_detail.tgl_kalibrasi',
+                    'uji_lab_detail.metode_id',
+                    'uji_lab.no_order',
+                    'uji_lab.pesanan_id',
+                    'uji_lab.jenis_pemilik_id',
+                    'uji_lab.nama',
+                    'uji_lab.alamat'
                 )
-                ->leftJoin('uji_lab','uji_lab.id','=','uji_lab_detail.uji_lab_id')
-                ->whereIN('uji_lab_detail.noseri_id',$id_seri);
+                    ->leftJoin('uji_lab', 'uji_lab.id', '=', 'uji_lab_detail.uji_lab_id')
+                    ->whereIN('uji_lab_detail.noseri_id', $id_seri);
 
                 $lab_id = $uji->pluck('uji_lab_id')->first();
 
 
-                if($uji->count() > 0 ){
-                    foreach($uji->get() as $u){
+                if ($uji->count() > 0) {
+                    foreach ($uji->get() as $u) {
                         RiwayatGagalKalibrasi::create([
-                        'detail_pesanan_produk_id' => $u->detail_pesanan_produk_id,
-                        'isi' => json_encode(
-                            array(
-                                'id' => $u->id,
-                                'no_order' => $u->no_order,
-                                'pesanan_id' => $u->pesanan_id,
-                                'jenis_pemilik_id' => $u->jenis_pemilik_id,
-                                'nama' => $u->nama,
-                                'alamat' => $u->alamat,
-                                'detail_pesanan_produk_id' => $u->detail_pesanan_produk_id,
-                                'no_sertifikat' => $u->no_sertifikat,
-                                'noseri' => collect($id_seri_compact)->where('id',$u->noseri_id)->pluck('noseri')->first(),
-                                'tgl_masuk' => $u->tgl_masuk,
-                                'tgl_buat' =>  $u->created_at,
-                                'tgl_kalibrasi' => $u->tgl_kalibrasi,
-                                'metode_id' => $u->metode_id
-                            )
+                            'detail_pesanan_produk_id' => $u->detail_pesanan_produk_id,
+                            'isi' => json_encode(
+                                array(
+                                    'id' => $u->id,
+                                    'no_order' => $u->no_order,
+                                    'pesanan_id' => $u->pesanan_id,
+                                    'jenis_pemilik_id' => $u->jenis_pemilik_id,
+                                    'nama' => $u->nama,
+                                    'alamat' => $u->alamat,
+                                    'detail_pesanan_produk_id' => $u->detail_pesanan_produk_id,
+                                    'no_sertifikat' => $u->no_sertifikat,
+                                    'noseri' => collect($id_seri_compact)->where('id', $u->noseri_id)->pluck('noseri')->first(),
+                                    'tgl_masuk' => $u->tgl_masuk,
+                                    'tgl_buat' =>  $u->created_at,
+                                    'tgl_kalibrasi' => $u->tgl_kalibrasi,
+                                    'metode_id' => $u->metode_id
+                                )
                             ),
                         ]);
                     }
-                     $cek = UjiLabDetail::where('uji_lab_id',$uji->pluck('uji_lab_id')->first())->count();
+                    $cek = UjiLabDetail::where('uji_lab_id', $uji->pluck('uji_lab_id')->first())->count();
 
 
-                    if($uji->count() == $cek){
-                      UjiLabDetail::whereIN('uji_lab_detail.noseri_id',$id_seri)->delete();
-                       UjiLab::find($lab_id)->delete();
-                    }else{
-                   UjiLabDetail::whereIN('uji_lab_detail.noseri_id',$id_seri)->delete();
-                    }
-                 }
-                }
-                foreach($noseri_baru as $key_a => $a){
-                    foreach($a as $key_b => $b){
-                          NoseriDetailPesanan::where('id',$noseri_lama[$key_a][$key_b]->id)->delete();
+                    if ($uji->count() == $cek) {
+                        UjiLabDetail::whereIN('uji_lab_detail.noseri_id', $id_seri)->delete();
+                        UjiLab::find($lab_id)->delete();
+                    } else {
+                        UjiLabDetail::whereIN('uji_lab_detail.noseri_id', $id_seri)->delete();
                     }
                 }
-                SystemLog::create([
-                    'tipe' => 'GBJ',
-                    'header' => NULL,
-                    'subjek' => 'Penggantian Noseri',
-                    'response' => json_encode($obj),
-                ]);
-             DB::commit();
+            }
+            foreach ($noseri_baru as $key_a => $a) {
+                foreach ($a as $key_b => $b) {
+                    NoseriDetailPesanan::where('id', $noseri_lama[$key_a][$key_b]->id)->delete();
+                }
+            }
+            SystemLog::create([
+                'tipe' => 'GBJ',
+                'header' => NULL,
+                'subjek' => 'Penggantian Noseri',
+                'response' => json_encode($obj),
+            ]);
+            DB::commit();
             return response()->json([
                 'status' => 200,
                 'message' => 'Berhasil Ditambahkan'
@@ -6222,123 +6232,123 @@ class GudangController extends Controller
                 'message' => 'Transaksi gagal',
             ], 500);
         }
-    //     $obj =  json_decode(json_encode($request->all()), FALSE);
-    //    dd($obj);
-    //     DB::beginTransaction();
-    //     try {
-    //         //code...
-    //         $obj =  json_decode(json_encode($request->all()), FALSE);
-    //          //return $obj;
-    //          foreach($obj as $o){
-    //             if(count($o->noseri) != count($o->seri_ganti)){
-    //                 DB::rollback();
-    //                 return response()->json([
-    //                             'status' => 404,
-    //                             'message' => 'Jumlah noseri tidak sama',
-    //                         ], 500);
-    //             }else{
-    //                 SeriGanti::create([
-    //                 'detail_pesanan_produk_id' => $o->detail_pesanan_produk_id,
-    //                 'isi' => json_encode(
-    //                     array(
-    //                         'noseri_lama' => $o->seri,
-    //                         'noseri_ganti' => $o->seri_ganti,
-    //                     )
-    //                     ),
-    //                     'state' => 'qc'
-    //                 ]);
-    //             $noseri_lama[] =  $o->seri;
-    //             $noseri_baru[] = array('id' => $o->detail_pesanan_produk_id,
-    //                                 'seri' => $o->seri_ganti
-    //                                 );
-    //             }
-    //          }
+        //     $obj =  json_decode(json_encode($request->all()), FALSE);
+        //    dd($obj);
+        //     DB::beginTransaction();
+        //     try {
+        //         //code...
+        //         $obj =  json_decode(json_encode($request->all()), FALSE);
+        //          //return $obj;
+        //          foreach($obj as $o){
+        //             if(count($o->noseri) != count($o->seri_ganti)){
+        //                 DB::rollback();
+        //                 return response()->json([
+        //                             'status' => 404,
+        //                             'message' => 'Jumlah noseri tidak sama',
+        //                         ], 500);
+        //             }else{
+        //                 SeriGanti::create([
+        //                 'detail_pesanan_produk_id' => $o->detail_pesanan_produk_id,
+        //                 'isi' => json_encode(
+        //                     array(
+        //                         'noseri_lama' => $o->seri,
+        //                         'noseri_ganti' => $o->seri_ganti,
+        //                     )
+        //                     ),
+        //                     'state' => 'qc'
+        //                 ]);
+        //             $noseri_lama[] =  $o->seri;
+        //             $noseri_baru[] = array('id' => $o->detail_pesanan_produk_id,
+        //                                 'seri' => $o->seri_ganti
+        //                                 );
+        //             }
+        //          }
 
-    //          foreach($noseri_lama as $key_a => $a){
-    //             foreach($a as $key_b => $b){
-    //                 $id_seri_compact[] = $b;
-    //             }
-    //          }
-    //          foreach($noseri_baru as $key_a => $a){
-    //             foreach($a['seri'] as $key_b => $b){
-    //                 NoseriTGbj::where('id',$noseri_lama[$key_a][$key_b]->t_tfbj_noseri_id)->update([
-    //                             'status_id' => 2,
-    //                             'noseri_id' =>  $b->id
-    //                          ]);
-    //                 NoseriBarangJadi::where('id',$noseri_lama[$key_a][$key_b]->noseri_id)->update([
-    //                     'is_ready' => 0,
-    //                     'used_by' => NULL,
-    //                     'keterangan' => 'Tidak OK',
-    //                 ]);
-    //                 NoseriBarangJadi::where('id',$b->id)->update([
-    //                     'is_ready' => 1,
-    //                     'used_by' => NULL,
-    //                     'keterangan' => '',
-    //                 ]);
-    //                 $id_seri[] = $noseri_lama[$key_a][$key_b]->id;
-    //                 $c[] = $noseri_lama[$key_a][$key_b]->noseri_id;
-    //             }
-    //          }
+        //          foreach($noseri_lama as $key_a => $a){
+        //             foreach($a as $key_b => $b){
+        //                 $id_seri_compact[] = $b;
+        //             }
+        //          }
+        //          foreach($noseri_baru as $key_a => $a){
+        //             foreach($a['seri'] as $key_b => $b){
+        //                 NoseriTGbj::where('id',$noseri_lama[$key_a][$key_b]->t_tfbj_noseri_id)->update([
+        //                             'status_id' => 2,
+        //                             'noseri_id' =>  $b->id
+        //                          ]);
+        //                 NoseriBarangJadi::where('id',$noseri_lama[$key_a][$key_b]->noseri_id)->update([
+        //                     'is_ready' => 0,
+        //                     'used_by' => NULL,
+        //                     'keterangan' => 'Tidak OK',
+        //                 ]);
+        //                 NoseriBarangJadi::where('id',$b->id)->update([
+        //                     'is_ready' => 1,
+        //                     'used_by' => NULL,
+        //                     'keterangan' => '',
+        //                 ]);
+        //                 $id_seri[] = $noseri_lama[$key_a][$key_b]->id;
+        //                 $c[] = $noseri_lama[$key_a][$key_b]->noseri_id;
+        //             }
+        //          }
 
-    //             $uji = UjiLabDetail::select('uji_lab_detail.uji_lab_id','uji_lab_detail.id','uji_lab_detail.detail_pesanan_produk_id','uji_lab_detail.no_sertifikat',
-    //             'uji_lab_detail.noseri_id','uji_lab_detail.tgl_masuk','uji_lab_detail.created_at','uji_lab_detail.tgl_kalibrasi','uji_lab_detail.metode_id',
-    //             'uji_lab.no_order','uji_lab.pesanan_id','uji_lab.jenis_pemilik_id','uji_lab.nama','uji_lab.alamat'
-    //             )
-    //             ->leftJoin('uji_lab','uji_lab.id','=','uji_lab_detail.uji_lab_id')
-    //             ->whereIN('uji_lab_detail.noseri_id',$id_seri);
+        //             $uji = UjiLabDetail::select('uji_lab_detail.uji_lab_id','uji_lab_detail.id','uji_lab_detail.detail_pesanan_produk_id','uji_lab_detail.no_sertifikat',
+        //             'uji_lab_detail.noseri_id','uji_lab_detail.tgl_masuk','uji_lab_detail.created_at','uji_lab_detail.tgl_kalibrasi','uji_lab_detail.metode_id',
+        //             'uji_lab.no_order','uji_lab.pesanan_id','uji_lab.jenis_pemilik_id','uji_lab.nama','uji_lab.alamat'
+        //             )
+        //             ->leftJoin('uji_lab','uji_lab.id','=','uji_lab_detail.uji_lab_id')
+        //             ->whereIN('uji_lab_detail.noseri_id',$id_seri);
 
-    //             if($uji->count() > 0 ){
-    //                 foreach($uji->get() as $u){
-    //                     SeriGanti::create([
-    //                     'detail_pesanan_produk_id' => $u->detail_pesanan_produk_id,
-    //                     'isi' => json_encode(
-    //                         array(
-    //                             'id' => $u->id,
-    //                             'no_order' => $u->no_order,
-    //                             'pesanan_id' => $u->pesanan_id,
-    //                             'jenis_pemilik_id' => $u->jenis_pemilik_id,
-    //                             'nama' => $u->nama,
-    //                             'alamat' => $u->alamat,
-    //                             'detail_pesanan_produk_id' => $u->detail_pesanan_produk_id,
-    //                             'no_sertifikat' => $u->no_sertifikat,
-    //                             'noseri' => collect($id_seri_compact)->where('id',$u->noseri_id)->pluck('seri')->first(),
-    //                             'tgl_masuk' => $u->tgl_masuk,
-    //                             'tgl_buat' =>  $u->created_at,
-    //                             'tgl_kalibrasi' => $u->tgl_kalibrasi,
-    //                             'metode_id' => $u->metode_id
-    //                         )
-    //                         ),
-    //                         'state' => 'lab'
-    //                     ]);
-    //                 }
-    //                 $cek = UjiLabDetail::where('uji_lab_id',$uji->pluck('uji_lab_id')->first())->count();
-    //                 if($uji->count() == $cek){
-    //                     UjiLabDetail::whereIN('uji_lab_detail.noseri_id',$id_seri)->delete();
-    //                     UjiLab::find($uji->pluck('uji_lab_id')->first())->delete();
-    //                 }else{
-    //                     UjiLabDetail::whereIN('uji_lab_detail.noseri_id',$id_seri)->delete();
-    //                 }
-    //             }
+        //             if($uji->count() > 0 ){
+        //                 foreach($uji->get() as $u){
+        //                     SeriGanti::create([
+        //                     'detail_pesanan_produk_id' => $u->detail_pesanan_produk_id,
+        //                     'isi' => json_encode(
+        //                         array(
+        //                             'id' => $u->id,
+        //                             'no_order' => $u->no_order,
+        //                             'pesanan_id' => $u->pesanan_id,
+        //                             'jenis_pemilik_id' => $u->jenis_pemilik_id,
+        //                             'nama' => $u->nama,
+        //                             'alamat' => $u->alamat,
+        //                             'detail_pesanan_produk_id' => $u->detail_pesanan_produk_id,
+        //                             'no_sertifikat' => $u->no_sertifikat,
+        //                             'noseri' => collect($id_seri_compact)->where('id',$u->noseri_id)->pluck('seri')->first(),
+        //                             'tgl_masuk' => $u->tgl_masuk,
+        //                             'tgl_buat' =>  $u->created_at,
+        //                             'tgl_kalibrasi' => $u->tgl_kalibrasi,
+        //                             'metode_id' => $u->metode_id
+        //                         )
+        //                         ),
+        //                         'state' => 'lab'
+        //                     ]);
+        //                 }
+        //                 $cek = UjiLabDetail::where('uji_lab_id',$uji->pluck('uji_lab_id')->first())->count();
+        //                 if($uji->count() == $cek){
+        //                     UjiLabDetail::whereIN('uji_lab_detail.noseri_id',$id_seri)->delete();
+        //                     UjiLab::find($uji->pluck('uji_lab_id')->first())->delete();
+        //                 }else{
+        //                     UjiLabDetail::whereIN('uji_lab_detail.noseri_id',$id_seri)->delete();
+        //                 }
+        //             }
 
-    //             foreach($noseri_baru as $key_a => $a){
-    //                 foreach($a['seri'] as $key_b => $b){
-    //                     NoseriDetailPesanan::where('id',$noseri_lama[$key_a][$key_b]->id)->delete();
-    //                 }
-    //              }
+        //             foreach($noseri_baru as $key_a => $a){
+        //                 foreach($a['seri'] as $key_b => $b){
+        //                     NoseriDetailPesanan::where('id',$noseri_lama[$key_a][$key_b]->id)->delete();
+        //                 }
+        //              }
 
-    //         DB::commit();
-    //         return response()->json([
-    //             'status' => 200,
-    //             'message' => 'Berhasil Ditambahkan'
-    //         ], 200);
-    //     } catch (\Throwable $th) {
-    //         //throw $th;
-    //         DB::rollBack();
-    //         return response()->json([
-    //             'error' => $th->getMessage(),
-    //             'message' => 'Transaksi gagal',
-    //         ], 500);
-    //     }
+        //         DB::commit();
+        //         return response()->json([
+        //             'status' => 200,
+        //             'message' => 'Berhasil Ditambahkan'
+        //         ], 200);
+        //     } catch (\Throwable $th) {
+        //         //throw $th;
+        //         DB::rollBack();
+        //         return response()->json([
+        //             'error' => $th->getMessage(),
+        //             'message' => 'Transaksi gagal',
+        //         ], 500);
+        //     }
     }
 
     function ganti_unit_data()
@@ -6368,48 +6378,48 @@ class GudangController extends Controller
 
         $data = Pesanan::addSelect([
             'not_ok' => function ($q) {
-                        $q->selectRaw('coalesce(count(t_gbj_noseri.id),0)')
-                            ->from('t_gbj_noseri')
-                            ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-                            ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-                            ->where('t_gbj_noseri.status_id', '10')
-                            ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
-                    },
+                $q->selectRaw('coalesce(count(t_gbj_noseri.id),0)')
+                    ->from('t_gbj_noseri')
+                    ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->where('t_gbj_noseri.status_id', '10')
+                    ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
+            },
             'kalibrasi' => function ($q) {
-                        $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
-                            ->from('uji_lab_detail')
-                            ->leftjoin('uji_lab', 'uji_lab.id', '=', 'uji_lab_detail.uji_lab_id')
-                            ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
-                            ->where('uji_lab_detail.status', 'nok')
-                            ->where('uji_lab_detail.is_ready', 0)
-                            ->where('noseri_detail_pesanan.is_ready', 0)
-                            ->whereColumn('uji_lab.pesanan_id', 'pesanan.id');
-                    },
+                $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
+                    ->from('uji_lab_detail')
+                    ->leftjoin('uji_lab', 'uji_lab.id', '=', 'uji_lab_detail.uji_lab_id')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
+                    ->where('uji_lab_detail.status', 'nok')
+                    ->where('uji_lab_detail.is_ready', 0)
+                    ->where('noseri_detail_pesanan.is_ready', 0)
+                    ->whereColumn('uji_lab.pesanan_id', 'pesanan.id');
+            },
             'qc' => function ($q) {
-                        $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
-                            ->from('noseri_detail_pesanan')
-                            ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                            ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                            ->where('noseri_detail_pesanan.status', 'nok')
-                            ->where('noseri_detail_pesanan.is_ready', 0)
-                            ->where('noseri_detail_pesanan.is_lab', 0)
-                            ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-                    },
+                $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
+                    ->from('noseri_detail_pesanan')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->where('noseri_detail_pesanan.status', 'nok')
+                    ->where('noseri_detail_pesanan.is_ready', 0)
+                    ->where('noseri_detail_pesanan.is_lab', 0)
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+            },
         ])
-        ->with(['Ekatalog.Customer','Spa.Customer','Spb.Customer'])
-        ->havingRaw('not_ok > 0');
+            ->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
+            ->havingRaw('not_ok > 0');
 
 
         if ($data->get()->isEmpty()) {
             $obj = array();
         } else {
-            foreach ($data->get() as $d){
+            foreach ($data->get() as $d) {
 
-                if($d->Ekatalog){
+                if ($d->Ekatalog) {
                     $p = $d->Ekatalog->Customer->nama;
-                }elseif($d->Spa){
+                } elseif ($d->Spa) {
                     $p = $d->Spa->Customer->nama;
-                }else{
+                } else {
                     $p = $d->Spb->Customer->nama;
                 }
 
@@ -6419,8 +6429,8 @@ class GudangController extends Controller
                     'no_po' => $d->no_po,
                     'customer' => $p,
                     //  'status' => $data->belums,
-                     'jumlah_pengujian' => $d->qc,
-                     'jumlah_kalibrasi' => $d->kalibrasi
+                    'jumlah_pengujian' => $d->qc,
+                    'jumlah_kalibrasi' => $d->kalibrasi
                 );
             }
         }
