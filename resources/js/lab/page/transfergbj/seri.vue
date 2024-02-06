@@ -185,7 +185,7 @@ export default {
                 const id = this.produk.gbj_id;
                 const { data } = await axios.post(`/api/tfp/seri-so`, {
                     gdg_barang_jadi_id: id,
-                }).then((res) => res.data);
+                })
                 this.noseri = data;
             } catch (error) {
                 console.log(error);

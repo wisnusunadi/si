@@ -21,7 +21,8 @@ export default {
             search: '',
             checkAll: false,
             showmodalviatext: false,
-            isScan: false
+            isScan: false,
+            noserinotfound: []
         }
     },
     methods: {
@@ -56,7 +57,7 @@ export default {
             this.$nextTick(() => {
                 this.$emit('close')
             })
-            
+
         },
         checkAllData() {
             this.checkAll = !this.checkAll
@@ -146,14 +147,24 @@ export default {
             }
 
             if (noserinotfound.length > 0) {
-                swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: `Nomor Seri ${noserinotfound.join(', ')} Tidak Ditemukan`,
-                })
+                this.$swal('Peringatan', "Nomor seri " +
+                    (noserinotfound.length > 1
+                        ? noserinotfound.slice(0, 1).join(", ") + " ... dan " + (noserinotfound.length - 1) + " lainnya"
+                        : noserinotfound.join(", ")) +
+                    " tidak ditemukan", 'warning')
+                this.noserinotfound = noserinotfound.join('\n')
             }
         },
         simpanSeri() {
+            if (this.noSeriSelected.length === 0) {
+                swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Pilih Nomor Seri Terlebih Dahulu',
+                })
+                return
+            }
+
             if (this.noSeriSelected.length > this.detailSelected.jml) {
                 swal.fire({
                     icon: 'error',
@@ -222,6 +233,12 @@ export default {
                                 </div>
                             </template>
                         </data-table>
+                        <div v-if="noserinotfound.length > 0">
+                            <div class="form-group">
+                                <label for="">Nomor Seri Tidak Ditemukan</label>
+                                <textarea class="form-control" rows="3" disabled v-model="noserinotfound"></textarea>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-info" @click="simpanSeri">Simpan</button>
