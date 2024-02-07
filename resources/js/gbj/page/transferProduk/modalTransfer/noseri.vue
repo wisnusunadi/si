@@ -183,7 +183,7 @@ export default {
             }
 
             let paket = { ...this.paket }
-            paket.item.find(item => item.id === this.detailSelected.id).noseri = this.noSeriSelected
+            paket.item.find(produk => produk.id === this.detailSelected.id).noseri = this.noSeriSelected
             this.$emit('submit', paket)
             this.closeModal()
         }

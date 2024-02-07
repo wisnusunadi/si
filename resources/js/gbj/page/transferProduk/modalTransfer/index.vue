@@ -40,7 +40,7 @@ export default {
         },
         noseriSelected(paket) {
             this.produk = this.produk.map(p => {
-                if (p.detail_pesanan_id === paket.detail_pesanan_id) {
+                if (p.id === paket.id) {
                     p = paket
                 }
                 return p
@@ -79,7 +79,7 @@ export default {
         },
         async getData() {
             try {
-                const { data } = await axios.get(`/api/tfp/detail-so/${this.data.id}/${this.data.jenis}`)
+                const { data } = await axios.get(`/api/tfp/detail-transfer-so/${this.data.id}`)
                 this.produk = data.map(paket => {
                     return {
                         ...paket,

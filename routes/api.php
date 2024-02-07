@@ -326,6 +326,7 @@ Route::prefix('/tfp')->group(function () {
     Route::get('data-so', [ProduksiController::class, 'getOutSO']);
     Route::get('sudah-dicek', [ProduksiController::class, 'getSOCek'])->middleware('jwt.verify');
     Route::get('belum-dicek', [ProduksiController::class, 'getSOCekBelum'])->middleware('jwt.verify');
+    Route::get('detail-transfer-so/{id}', [ProduksiController::class, 'getDetailTransferSO']);
     Route::get('detail-so/{id}/{value}', [ProduksiController::class, 'getDetailSO']);
     Route::get('edit-so/{id}/{value}', [ProduksiController::class, 'getEditSO']);
     Route::get('header-so/{id}/{value}', [ProduksiController::class, 'headerSo']);
