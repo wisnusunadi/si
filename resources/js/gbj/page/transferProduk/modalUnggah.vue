@@ -84,7 +84,7 @@ export default {
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="">Sales Order File</label>
-                        <input type="file" class="form-control" @change="file = $event.target.files[0]">
+                        <input type="file" class="form-control" @change="file = $event.target.files[0]" :disabled="hasilPreview">
                     </div>
                     <button class="btn-sm btn btn-info" @click="preview" :disabled="loading">
                         <i class="fas fa-eye" v-if="!loading"></i>
