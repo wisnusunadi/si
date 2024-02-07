@@ -56,7 +56,7 @@ export default {
                         </div>
                     </div>
                 </div>
-                <data-table :headers="headers" :items="dataTable" :search="search">
+                <data-table :headers="headers" :items="dataTable" :search="search" v-if="!$store.state.loading">
                     <template #item.status="{ item }">
                         <loading :persentase="item.status" />
                     </template>
@@ -69,6 +69,11 @@ export default {
                         </div>
                     </template>
                 </data-table>
+                <div class="d-flex justify-content-center" v-else>
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

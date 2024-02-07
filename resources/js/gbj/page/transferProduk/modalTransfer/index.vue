@@ -136,16 +136,21 @@ export default {
     computed: {
         filterRecursive() {
             const includesSearch = (obj, search) => {
-                return Object.keys(obj).some(key => {
-                    if (typeof obj[key] === 'object') {
-                        return includesSearch(obj[key], search)
-                    }
-                    return String(obj[key]).toLowerCase().includes(search.toLowerCase())
-                })
-            }
+                if (obj && typeof obj === 'object') {
+                    return Object.keys(obj).some(key => {
+                        if (typeof obj[key] === 'object') {
+                            return includesSearch(obj[key], search);
+                        }
+                        return String(obj[key]).toLowerCase().includes(search.toLowerCase());
+                    });
+                }
+                return false;
+            };
+
             return this.produk.filter(paket => {
-                return includesSearch(paket, this.search)
-            })
+                return includesSearch(paket, this.search);
+            });
+
         }
     }
 }
