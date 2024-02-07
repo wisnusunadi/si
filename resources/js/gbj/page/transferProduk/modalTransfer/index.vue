@@ -207,7 +207,7 @@ export default {
                                                     </span>
                                                 </td>
                                             </tr>
-                                            <tr v-for="item in paket.item" :key="item.nama">
+                                            <tr v-for="item in paket.item" :key="item.id">
                                                 <td>{{ item.nama }}</td>
                                                 <td>{{ item.jumlah }}</td>
                                                 <td>{{ item.noseri?.length ?? 0 }}</td>

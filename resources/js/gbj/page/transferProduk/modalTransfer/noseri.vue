@@ -70,7 +70,7 @@ export default {
         checkAllData() {
             this.checkAll = !this.checkAll
             if (this.checkAll) {
-                this.noSeriSelected = this.noseri.map(item => item)
+                this.noSeriSelected = this.noseri.filter(noseri => !this.noseriterpakai(noseri))
             } else {
                 this.noSeriSelected = []
             }
