@@ -43,6 +43,8 @@ export default {
                 } finally {
                     this.loading = false
                 }
+            } else {
+                swal.fire('Error', 'File belum dipilih', 'error')
             }
         },
         async sendData() {
@@ -50,14 +52,16 @@ export default {
                 this.loadingUpload = true
                 const formData = new FormData()
                 formData.append('soid', this.data.id)
-                formData.append('file_csv', this.file)
+                formData.append('namafile', this.file.name)
                 const { data } = await axios.post('/api/v2/gbj/store-sodb', formData, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
                     }
                 })
 
-                console.log(data)
+                swal.fire('Success', data.msg, 'success')
+                this.closeModal()
+                this.emit('refresh')
             } catch (error) {
                 console.error(error)
             } finally {
@@ -80,7 +84,7 @@ export default {
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="">Sales Order File</label>
-                        <input type="file" class="form-control" @change="file = $event.target.files[0]">
+                        <input type="file" class="form-control" @change="file = $event.target.files[0]" :disabled="hasilPreview">
                     </div>
                     <button class="btn-sm btn btn-info" @click="preview" :disabled="loading">
                         <i class="fas fa-eye" v-if="!loading"></i>
@@ -97,7 +101,7 @@ export default {
                         <div class="card-footer">
                             <div class="d-flex bd-highlight">
                                 <div class="p-2 flex-grow-1 bd-highlight">
-                                    No Seri yang belum terdaftar: {{ noseri }}
+                                    <div v-if="noseri"> No Seri yang belum terdaftar: {{ noseri }}</div>
                                 </div>
                                 <div class="p-2 bd-highlight">
                                     <button class="btn btn-danger btn-sm" :disabled="error || loadingUpload"

@@ -1,14 +1,14 @@
 <script>
 import Header from '../../components/header.vue';
 import Permintaan from './permintaan';
-// import penggantianseri from './penggantianseri';
+import penggantianseri from './penggantianseri';
 import Riwayat from './riwayat';
 import axios from 'axios';
 export default {
     components: {
         Header,
         Permintaan,
-        // penggantianseri,
+        penggantianseri,
         Riwayat,
     },
     data() {
@@ -83,7 +83,7 @@ export default {
                             type="button" role="tab" aria-controls="pills-penggantian" aria-selected="false">Penggantian No
                             Seri</a>
                     </li> -->
-                    
+
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile"
                             type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat</a>
@@ -93,7 +93,8 @@ export default {
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                         <Permintaan :dataTable="permintaan" @refresh="getData" />
                     </div>
-                    <div class="tab-pane fade" id="pills-penggantian" role="tabpanel" aria-labelledby="pills-penggantian-tab">
+                    <div class="tab-pane fade" id="pills-penggantian" role="tabpanel"
+                        aria-labelledby="pills-penggantian-tab">
                         <penggantianseri :dataTable="penggantian" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">

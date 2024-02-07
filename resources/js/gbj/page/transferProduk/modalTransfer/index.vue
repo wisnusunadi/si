@@ -114,6 +114,7 @@ export default {
                 swal.fire('Error', 'Produk belum memiliki no seri', 'error');
             } else {
                 swal.fire('Success', 'Produk berhasil di transfer', 'success');
+                this.$emit('refresh')
             }
         }
     },

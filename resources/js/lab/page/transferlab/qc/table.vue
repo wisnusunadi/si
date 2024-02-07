@@ -37,10 +37,9 @@ export default {
             ],
             tanggalAwal: '',
             tanggalAkhir: '',
-            search: "",
         }
     },
-    props: ["dataTable"],
+    props: ["dataTable", 'search'],
     methods: {
         detailProduk(data) {
             this.modal = true;
@@ -89,12 +88,7 @@ export default {
 <template>
     <div>
         <produk v-if="modal" @close="modal = false" :headerSO="selectedProduk" />
-        <div class="d-flex flex-row-reverse bd-highlight">
-            <div class="p-2 bd-highlight">
-                <input type="text" class="form-control" v-model="search" placeholder="Cari...">
-            </div>
-        </div>
-        <data-table :headers="headers" :items="filterData" :search="search">
+        <data-table :headers="headers" :items="filterData" :search="search" v-if="!$store.state.loading">
             <template #header.tgl>
                 <span class="text-bold pr-2">Tanggal Transfer</span>
                 <span class="filter">
@@ -132,5 +126,8 @@ export default {
                 </button>
             </template>
         </data-table>
+        <div class="spinner-border spinner-border-sm" role="status" v-else>
+            <span class="sr-only">Loading...</span>
+        </div>
     </div>
 </template>
