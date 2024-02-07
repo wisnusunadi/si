@@ -90,8 +90,8 @@ export default {
                                 <div class="px-3 py-3">
                                     <div class="form-group">
                                         <div class="form-group form-check" v-for="year in getYear" :key="year">
-                                            <input class="form-check-input" type="radio" v-model="years" @change="changeYears"
-                                                :id="`exampleRadios${year}`" :value="year" :checked="year ==
+                                            <input class="form-check-input" type="radio" v-model="years"
+                                                @change="changeYears" :id="`exampleRadios${year}`" :value="year" :checked="year ==
                                                     new Date().getFullYear()
                                                     " />
                                             <label class="form-check-label" :for="`exampleRadios${year}`">
@@ -111,7 +111,7 @@ export default {
                     <input type="text" class="form-control" v-model="search" placeholder="Cari" />
                 </div>
             </div>
-            <data-table :headers="headers" :items="produk" :search="search">
+            <data-table :headers="headers" :items="produk" :search="search" v-if="!$store.state.loading">
                 <template #item.aksi="{ item }">
                     <div>
                         <button class="btn btn-outline-primary" @click="detailProduk(item)">
@@ -121,6 +121,11 @@ export default {
                     </div>
                 </template>
             </data-table>
+            <div class="d-flex justify-content-center" v-else>
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
         </div>
     </div>
 </template>

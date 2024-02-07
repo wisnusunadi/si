@@ -68,7 +68,7 @@ export default {
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" v-if="!$store.state.loading">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" >
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home" type="button"
                     role="tab" aria-controls="pills-home" aria-selected="true">Internal</a>
@@ -82,11 +82,6 @@ export default {
                     role="tab" aria-controls="pills-contact" aria-selected="false">Riwayat</a>
             </li>
         </ul>
-        <div class="d-flex justify-content-center" v-if="$store.state.loading">
-            <div class="spinner-border text-primary" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                 <KalibrasiInternal :dataTable="kalibrasiInternal" />
