@@ -28,7 +28,7 @@ export default {
                     value: 'customer'
                 },
                 {
-                    text: 'Tanggal Kalibrasi',
+                    text: 'Tanggal Transfer',
                     value: 'tgl_transfer'
                 },
                 {

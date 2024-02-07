@@ -80,7 +80,19 @@ export default {
                     return {
                         ...item,
                         tgl_transfer: this.formatDate(item.tgl_transfer),
-                        jenis_transaksi: 'internal'
+                        jenis_transaksi: 'internal',
+                        detail: item.detail.map((produk, index) => {
+                            return {
+                                ...produk,
+                                no: index + 1,
+                                noseri: produk.noseri.map((noseri, index) => {
+                                    return {
+                                        ...noseri,
+                                        no: index + 1,
+                                    }
+                                })
+                            }
+                        })
                     }
                 })
             } catch (error) {

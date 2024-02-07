@@ -1,19 +1,37 @@
 <script>
-import pagination from "../../../components/pagination.vue";
 import noseri from "./noseri.vue";
 export default {
     props: ["headerSO"],
     components: {
-        pagination,
         noseri,
     },
     data() {
         return {
             search: "",
-            renderPaginate: [],
             modalseri: false,
             noseriSelected: null,
-            lab: this.$route.name == "transfer-lab-riwayat" ? true : false,
+            headers: [
+                {
+                    text: 'No',
+                    value: 'no'
+                },
+                {
+                    text: 'Nama Barang',
+                    value: 'nama'
+                },
+                {
+                    text: 'Tipe Barang',
+                    value: 'tipe'
+                },
+                {
+                    text: 'Jumlah',
+                    value: 'jumlah'
+                },
+                {
+                    text: 'Aksi',
+                    value: 'aksi'
+                }
+            ]
         };
     },
     methods: {
@@ -21,10 +39,7 @@ export default {
             $(".modalRiwayatProduk").modal("hide");
             this.$emit("close");
         },
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
-        detailSeri(data){
+        detailSeri(data) {
             $(".modalRiwayatProduk").modal("hide");
             this.noseriSelected = data
             this.modalseri = true;
@@ -32,35 +47,18 @@ export default {
                 $(".modalRiwayatSeri").modal("show");
             });
         },
-        closeModalSeri(){
+        closeModalSeri() {
             this.modalseri = false;
             $(".modalRiwayatProduk").modal("show");
         }
-    },
-    computed: {
-        filteredDalamProses() {
-            return this.headerSO?.detail.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key])
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase());
-                });
-            });
-        },
     },
 };
 </script>
 <template>
     <div>
         <noseri v-if="modalseri" @close="closeModalSeri" :noseri="noseriSelected" />
-        <div
-            class="modal fade modalRiwayatProduk"
-            id="exampleModal" data-backdrop="static"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="modelTitleId"
-            aria-hidden="true"
-        >
+        <div class="modal fade modalRiwayatProduk" id="exampleModal" data-backdrop="static" tabindex="-1" role="dialog"
+            aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -74,12 +72,12 @@ export default {
                             <div class="row row-cols-2">
                                 <div class="col">
                                     <label for="">
-                                        {{ lab ? "Nomor Order" : "Nomor SO" }}
+                                        Nomor SO
                                     </label>
                                     <div class="card nomor-so">
                                         <div class="card-body">
                                             <span id="so">{{
-                                                lab ? headerSO.no_order : headerSO.so   
+                                                headerSO.so
                                             }}</span>
                                         </div>
                                     </div>
@@ -87,14 +85,12 @@ export default {
 
                                 <div class="col">
                                     <label for="">
-                                        {{ lab ? "Nama Pemilik" : "Nomor PO" }}
+                                        Nomor PO
                                     </label>
                                     <div class="card nomor-akn">
                                         <div class="card-body">
                                             <span id="akn">{{
-                                                lab
-                                                    ? headerSO.pemilik
-                                                    : headerSO.no_po
+                                                headerSO.no_po
                                             }}</span>
                                         </div>
                                     </div>
@@ -129,60 +125,20 @@ export default {
                             <div class="d-flex flex-row-reverse bd-highlight">
                                 <div class="p-2 bd-highlight">
                                     <div class="input-group">
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            placeholder="Cari..."
-                                            v-model="search"
-                                        />
+                                        <input type="text" class="form-control" placeholder="Cari..." v-model="search" />
                                     </div>
                                 </div>
                             </div>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Barang</th>
-                                        <th v-if="lab">Tipe Barang</th>
-                                        <th>Jumlah</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody v-if="renderPaginate.length > 0">
-                                    <tr
-                                        v-for="(data, index) in renderPaginate"
-                                        :key="index"
-                                    >
-                                        <td>{{ index + 1 }}</td>
-                                        <td>{{ data.nama }}</td>
-                                        <td v-if="lab">{{ data.tipe }}</td>
-                                        <td>{{ data.jumlah }}</td>
-                                        <td>
-                                            <button
-                                                v-if="!lab && data.jenis == 'produk' || lab"
-                                                class="btn btn-primary btn-sm"
-                                                @click="detailSeri(data.noseri)"
-                                            >
-                                                <i class="fa fa-qrcode"></i>
-                                                Nomor Seri
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tbody v-else>
-                                    <tr>
-                                        <td colspan="5" class="text-center">
-                                            Data tidak ditemukan
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <pagination
-                                :filteredDalamProses="filteredDalamProses"
-                                @updateFilteredDalamProses="
-                                    updateFilteredDalamProses
-                                "
-                            />
+                            <data-table :headers="headers" :items="headerSO.detail" :search="search">
+                                <template #item.aksi="{ item }">
+                                    <div>
+                                        <button class="btn btn-primary btn-sm" @click="detailSeri(item.noseri)">
+                                            <i class="fa fa-qrcode"></i>
+                                            Nomor Seri
+                                        </button>
+                                    </div>
+                                </template>
+                            </data-table>
                         </div>
                     </div>
                 </div>

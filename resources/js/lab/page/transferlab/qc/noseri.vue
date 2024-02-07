@@ -10,9 +10,21 @@ export default {
     data() {
         return {
             search: "",
-            renderPaginate: [],
             filterHasil: [],
-            lab: this.$route.name == "transfer-lab-riwayat" ? true : false,
+            headers: [
+                {
+                    text: "No",
+                    value: "no",
+                },
+                {
+                    text: "No. Seri",
+                    value: "no_seri",
+                },
+                {
+                    text: "Hasil",
+                    value: "hasil",
+                }
+            ]
         };
     },
     methods: {
@@ -24,9 +36,6 @@ export default {
             } else {
                 this.filterHasil.push(filter);
             }
-        },
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
         },
         closeModal() {
             $(".modalRiwayatSeri").modal("hide");
@@ -61,14 +70,7 @@ export default {
             } else {
                 filtered = this.noseri;
             }
-
-            return filtered.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key])
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase());
-                });
-            });
+            return filtered;
         },
         getAllStatusUnique() {
             return this.noseri
@@ -83,15 +85,8 @@ export default {
 };
 </script>
 <template>
-    <div
-        class="modal fade modalRiwayatSeri"
-        id="modelId"
-        data-backdrop="static"
-        data-keyboard="false"
-        tabindex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-    >
+    <div class="modal fade modalRiwayatSeri" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -104,44 +99,25 @@ export default {
                     <div class="d-flex bd-highlight">
                         <div class="p-2 flex-grow-1 bd-highlight">
                             <span class="float-left filter">
-                                <button
-                                    class="btn btn-outline-info"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                >
+                                <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
                                     <i class="fas fa-filter"></i> Filter
                                 </button>
                                 <form id="filter_ekat">
                                     <div class="dropdown-menu">
                                         <div class="px-3 py-3">
                                             <div class="form-group">
-                                                <label for="jenis_penjualan"
-                                                    >Keterangan</label
-                                                >
+                                                <label for="jenis_penjualan">Keterangan</label>
                                             </div>
-                                            <div
-                                                class="form-group"
-                                                v-for="status in getAllStatusUnique"
-                                                :key="status"
-                                            >
+                                            <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
                                                 <div class="form-check">
-                                                    <input
-                                                        class="form-check-input"
-                                                        type="checkbox"
-                                                        :ref="status"
-                                                        :value="status"
-                                                        id="status1"
-                                                        @click="
+                                                    <input class="form-check-input" type="checkbox" :ref="status"
+                                                        :value="status" id="status1" @click="
                                                             clickFilterHasil(
                                                                 status
                                                             )
-                                                        "
-                                                    />
-                                                    <label
-                                                        class="form-check-label text-uppercase"
-                                                        for="status1"
-                                                    >
+                                                            " />
+                                                    <label class="form-check-label text-uppercase" for="status1">
                                                         {{ statusText(status) }}
                                                     </label>
                                                 </div>
@@ -152,49 +128,15 @@ export default {
                             </span>
                         </div>
                         <div class="p-2 bd-highlight">
-                            <input
-                                type="text"
-                                class="form-control"
-                                placeholder="Cari..."
-                                v-model="search"
-                            />
+                            <input type="text" class="form-control" placeholder="Cari..." v-model="search" />
                         </div>
                     </div>
 
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>No Urut</th>
-                                <th>No. Seri</th>
-                                <th v-if="lab">Tanggal Masuk</th>
-                                <th>Hasil</th>
-                            </tr>
-                        </thead>
-                        <tbody v-if="renderPaginate.length > 0">
-                            <tr
-                                v-for="(data, index) in renderPaginate"
-                                :key="index"
-                            >
-                                <td>{{ index + 1 }}</td>
-                                <td>{{ lab ? data.no_seri : data.seri }}</td>
-                                <td v-if="lab">{{ formatDate(data.tgl_masuk) }}</td>
-                                <td>
-                                    <hasil :hasil="lab ? data.status : data.jenis" />
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tbody v-else>
-                            <tr>
-                                <td colspan="5" class="text-center">
-                                    Data tidak ditemukan
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <pagination
-                        :filteredDalamProses="filteredDalamProses"
-                        @updateFilteredDalamProses="updateFilteredDalamProses"
-                    />
+                    <data-table :headers="headers" :items="filteredDalamProses" :search="search">
+                        <template #item.hasil="{ item }">
+                            <hasil :hasil="item.status" />
+                        </template>
+                    </data-table>
                 </div>
             </div>
         </div>
