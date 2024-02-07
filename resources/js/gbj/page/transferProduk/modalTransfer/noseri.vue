@@ -173,11 +173,11 @@ export default {
                 return
             }
 
-            if (this.noSeriSelected.length > this.detailSelected.jml) {
+            if (this.noSeriSelected.length > this.detailSelected.jumlah) {
                 swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: `Nomor Seri yang dipilih tidak boleh lebih dari ${this.detailSelected.jml}`,
+                    text: `Nomor Seri yang dipilih tidak boleh lebih dari ${this.detailSelected.jumlah}`,
                 })
                 return
             }
@@ -245,19 +245,19 @@ export default {
                             <div class="spinner-border" role="status">
                             </div>
                         </div>
-                            <div v-if="noserinotfound.length > 0">
-                                <div class="form-group">
-                                    <label for="">Nomor Seri Tidak Ditemukan</label>
-                                    <textarea class="form-control" rows="3" disabled v-model="noserinotfound"></textarea>
-                                </div>
+                        <div v-if="noserinotfound.length > 0">
+                            <div class="form-group">
+                                <label for="">Nomor Seri Tidak Ditemukan</label>
+                                <textarea class="form-control" rows="3" disabled v-model="noserinotfound"></textarea>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-info" @click="simpanSeri">Simpan</button>
-                            <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" @click="simpanSeri">Simpan</button>
+                        <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </template>
