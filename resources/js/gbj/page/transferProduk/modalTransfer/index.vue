@@ -64,7 +64,11 @@ export default {
                 swal.fire('Error', 'Produk belum memiliki no seri', 'error');
             } else {
                 try {
-                    const { data } = await axios.post(`/api/tfp/byso-final`, produkNoSeri, {
+                    const produk = {
+                        pesanan_id: this.data.id,
+                        ...produkNoSeri
+                    }
+                    const { data } = await axios.post(`/api/tfp/byso-final`, produk, {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
                         }
