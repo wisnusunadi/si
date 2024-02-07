@@ -105,10 +105,22 @@ export default {
         },
         async batalkan() {
             try {
-                const { data } = await axios.post(`/api/tfp/byso-batal/${this.data.id}`)
-                swal.fire('Success', 'Persiapan berhasil dibatalkan', 'success');
-                this.closeModal()
-                this.$emit('refresh')
+                swal.fire({
+                    title: 'Apakah anda yakin?',
+                    text: "Anda tidak akan bisa mengembalikan data yang sudah dibatalkan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, batalkan!'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        const { data } = await axios.post(`/api/tfp/byso-batal/${this.data.id}`)
+                        swal.fire('Success', 'Persiapan berhasil dibatalkan', 'success');
+                        this.$emit('refresh')
+                        this.closeModal()
+                    }
+                })
             } catch (error) {
                 console.log(error)
             }
