@@ -5444,6 +5444,7 @@ class GudangController extends Controller
 
     function TfbySOFinal(Request $request)
     {
+        dd($request->all());
         try {
             $a = TFProduksi::where('pesanan_id', $request->pesanan_id)->first();
             if ($a) {

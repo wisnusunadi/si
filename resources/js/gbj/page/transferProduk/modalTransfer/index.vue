@@ -66,7 +66,7 @@ export default {
                 try {
                     const produk = {
                         pesanan_id: this.data.id,
-                        ...produkNoSeri
+                        produk: produkNoSeri
                     }
                     const { data } = await axios.post(`/api/tfp/byso-final`, produk, {
                         headers: {
