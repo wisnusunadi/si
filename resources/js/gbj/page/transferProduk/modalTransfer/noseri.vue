@@ -22,28 +22,36 @@ export default {
             checkAll: false,
             showmodalviatext: false,
             isScan: false,
-            noserinotfound: []
+            noserinotfound: [],
+            loading: false
         }
     },
     methods: {
         async getData() {
-            const { data } = await axios.post('/api/tfp/seri-so', {
-                gdg_barang_jadi_id: 67
-            })
-            this.noseri = data
-            if (this.detailSelected?.noseri) {
-                this.noSeriSelected = JSON.parse(JSON.stringify(this.detailSelected.noseri))
+            try {
+                this.loading = true
+                const { data } = await axios.post('/api/tfp/seri-so', {
+                    gdg_barang_jadi_id: this.detailSelected.gudang_id
+                })
+                this.noseri = data
+                if (this.detailSelected?.noseri) {
+                    this.noSeriSelected = JSON.parse(JSON.stringify(this.detailSelected.noseri))
+                }
+            } catch (error) {
+                console.error(error)
+            } finally {
+                this.loading = false
             }
         },
         noseriterpakai(item) {
             let found = false
             for (let i = 0; i < this.allPaket.length; i++) {
-                for (let j = 0; j < this.allPaket[i].produk.length; j++) {
-                    if (this.allPaket[i].produk[j].noseri === undefined) {
+                for (let j = 0; j < this.allPaket[i].item.length; j++) {
+                    if (this.allPaket[i].item[j].noseri === undefined) {
                         continue
                     }
-                    if (this.allPaket[i].produk[j].noseri.find(noseri => noseri.id === item.id)) {
-                        if (this.allPaket[i].produk[j].id !== this.detailSelected.id) {
+                    if (this.allPaket[i].item[j].noseri.find(noseri => noseri.id === item.id)) {
+                        if (this.allPaket[i].item[j].id !== this.detailSelected.id) {
                             found = true
                             break
                         }
@@ -175,7 +183,7 @@ export default {
             }
 
             let paket = { ...this.paket }
-            paket.produk.find(item => item.id === this.detailSelected.id).noseri = this.noSeriSelected
+            paket.item.find(item => item.id === this.detailSelected.id).noseri = this.noSeriSelected
             this.$emit('submit', paket)
             this.closeModal()
         }
@@ -217,7 +225,7 @@ export default {
                                     @keyup.enter="enterScan" />
                             </div>
                         </div>
-                        <data-table :items="noseri" :headers="headers" :search="search">
+                        <data-table :items="noseri" :headers="headers" :search="search" v-if="!loading">
                             <template #header.id>
                                 <div>
                                     <input type="checkbox" @click="checkAllData" :checked="checkAll">
@@ -233,19 +241,23 @@ export default {
                                 </div>
                             </template>
                         </data-table>
-                        <div v-if="noserinotfound.length > 0">
-                            <div class="form-group">
-                                <label for="">Nomor Seri Tidak Ditemukan</label>
-                                <textarea class="form-control" rows="3" disabled v-model="noserinotfound"></textarea>
+                        <div v-else class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-info" @click="simpanSeri">Simpan</button>
-                        <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
+                            <div v-if="noserinotfound.length > 0">
+                                <div class="form-group">
+                                    <label for="">Nomor Seri Tidak Ditemukan</label>
+                                    <textarea class="form-control" rows="3" disabled v-model="noserinotfound"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-info" @click="simpanSeri">Simpan</button>
+                            <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 </template>

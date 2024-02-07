@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 import noseri from './noseri.vue'
 export default {
     props: ['data'],
@@ -8,58 +9,7 @@ export default {
     data() {
         return {
             search: '',
-            produk: [
-                {
-                    detail_pesanan_id: 1,
-                    nama_paket: 'DIGIT-ONE BABY + TAS',
-                    jml_qc_paket: 0,
-                    persentase_qc_paket: 0,
-                    jml_gdg_paket: 1,
-                    persentase_gudang_paket: 100,
-                    produk: [
-                        {
-                            id: 1,
-                            nama_produk: 'DIGIT ONE BABY',
-                            jml: 1,
-                            merk: 'ELITECH',
-                            jml_qc: 0,
-                            persentase_qc: 0,
-                            jml_gdg: 1,
-                            persentase_gudang: 100,
-                        },
-                        {
-                            id: 2,
-                            nama_produk: 'TAS',
-                            jml: 1,
-                            merk: 'ELITECH',
-                            jml_qc: 0,
-                            persentase_qc: 0,
-                            jml_gdg: 1,
-                            persentase_gudang: 100,
-                        }
-                    ]
-                },
-                {
-                    detail_pesanan_id: 2,
-                    nama_paket: 'DIGIT-PRO IDA',
-                    jml_qc_paket: 0,
-                    persentase_qc_paket: 0,
-                    jml_gdg_paket: 1,
-                    persentase_gudang_paket: 100,
-                    produk: [
-                        {
-                            id: 3,
-                            nama_produk: 'DIGIT PRO IDA COKLAT',
-                            jml: 1,
-                            merk: 'ELITECH',
-                            jml_qc: 0,
-                            persentase_qc: 0,
-                            jml_gdg: 1,
-                            persentase_gudang: 100,
-                        },
-                    ]
-                }
-            ],
+            produk: [],
             showModal: false,
             detailSelected: null,
             paketSelected: null
@@ -96,12 +46,12 @@ export default {
                 return p
             })
         },
-        transfer() {
+        async transfer() {
             // cek jika salah satu produk belum memiliki no seri
             let produkNoSeri = []
 
             this.produk.forEach(paket => {
-                paket.produk.forEach(item => {
+                paket.item.forEach(item => {
                     if (item.noseri) {
                         produkNoSeri.push(item)
                     }
@@ -113,10 +63,59 @@ export default {
             if (produkNoSeri.length == 0) {
                 swal.fire('Error', 'Produk belum memiliki no seri', 'error');
             } else {
-                swal.fire('Success', 'Produk berhasil di transfer', 'success');
+                try {
+                    const { data } = await axios.post(`/api/tfp/byso-final`, produkNoSeri, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
+                        }
+                    })
+                    swal.fire('Success', 'Produk berhasil di transfer', 'success');
+                    this.$emit('refresh')
+                    this.closeModal()
+                } catch (error) {
+                    swal.fire('Error', 'Terjadi kesalahan', 'error');
+                }
+            }
+        },
+        async getData() {
+            try {
+                const { data } = await axios.get(`/api/tfp/detail-so/${this.data.id}/${this.data.jenis}`)
+                this.produk = data.map(paket => {
+                    return {
+                        ...paket,
+                        persentase_qc_paket: this.persentase(paket.jumlah_qc, paket.jumlah),
+                        persentase_gudang_paket: this.persentase(paket.jumlah_gudang, paket.jumlah),
+                        item: paket.item.map(item => {
+                            return {
+                                ...item,
+                                persentase_qc: this.persentase(item.jumlah_qc, item.jumlah),
+                                persentase_gudang: this.persentase(item.jumlah_gudang, item.jumlah)
+                            }
+                        })
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        persentase(jmlPerItem, jmlTotal) {
+            let item = parseInt(jmlPerItem)
+            let total = parseInt(jmlTotal)
+            return Math.round((item / total) * 100)
+        },
+        async batalkan() {
+            try {
+                const { data } = await axios.post(`/api/tfp/byso-batal/${this.data.id}`)
+                swal.fire('Success', 'Persiapan berhasil dibatalkan', 'success');
+                this.closeModal()
                 this.$emit('refresh')
+            } catch (error) {
+                console.log(error)
             }
         }
+    },
+    created() {
+        this.getData()
     },
     computed: {
         filterRecursive() {
@@ -199,32 +198,34 @@ export default {
                                         <template v-for="paket in filterRecursive">
                                             <tr class="table-dark">
                                                 <td colspan="100%">
-                                                    {{ paket.nama_paket }} <br>
-                                                    <span class="badge badge-light">QC: {{ paket.jml_qc_paket }} ({{ paket.
+                                                    {{ paket.nama }} <br>
+                                                    <span class="badge badge-light">QC: {{ paket.jumlah_qc }} ({{ paket.
                                                         persentase_qc_paket }}%)</span>
                                                     <span class="badge badge-warning">
-                                                        Gudang: {{ paket.jml_gdg_paket }} ({{ paket.persentase_gudang_paket
+                                                        Gudang: {{ paket.jumlah_gudang }} ({{ paket.persentase_gudang_paket
                                                         }}%)
                                                     </span>
                                                 </td>
                                             </tr>
-                                            <tr v-for="item in paket.produk" :key="item.nama_produk">
-                                                <td>{{ item.nama_produk }}</td>
-                                                <td>{{ item.jml }}</td>
+                                            <tr v-for="item in paket.item" :key="item.nama">
+                                                <td>{{ item.nama }}</td>
+                                                <td>{{ item.jumlah }}</td>
                                                 <td>{{ item.noseri?.length ?? 0 }}</td>
                                                 <td>{{ item.merk }}</td>
                                                 <td>
                                                     <span class="badge badge-danger">QC: {{ item.jml_qc }} ({{
                                                         item.persentase_qc
                                                     }}%)</span> <br>
-                                                    <span class="badge badge-light">Gudang: {{ item.jml_gdg }} ({{
+                                                    <span class="badge badge-light">Gudang: {{ item.jumlah_gudang }} ({{
                                                         item.persentase_gudang }}%)</span>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-primary" @click="showModalNoseri(item, paket)">
+                                                    <button class="btn btn-primary" @click="showModalNoseri(item, paket)"
+                                                        v-if="item.status">
                                                         <i class="fa fa-qrcode"></i>
                                                         Scan Barcode
                                                     </button>
+                                                    <span v-else>Siapkan Produk Dahulu</span>
                                                 </td>
                                             </tr>
                                         </template>
@@ -240,7 +241,8 @@ export default {
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-success" @click="transfer">Transfer</button>
-                        <button class="btn btn-info">Batalkan Persiapan</button>
+                        <button class="btn btn-info" v-if="data.jumlah_gdg > 0" @click="batalkan">Batalkan
+                            Persiapan</button>
                         <button class="btn btn-secondary" @click="closeModal">Tutup</button>
                     </div>
                 </div>
