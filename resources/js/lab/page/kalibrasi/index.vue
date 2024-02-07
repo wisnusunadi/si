@@ -40,12 +40,6 @@ export default {
                     return {
                         ...item,
                         tanggal: this.formatDate(item.tgl_kalibrasi),
-                        produk: item.produk.map(produk => {
-                            return {
-                                ...produk,
-                                hasil: item.hasil == 'ok' ? 'Lolos Kalibrasi' : 'Tidak Lolos Kalibrasi'
-                            }
-                        })
                     }
                 })
             } catch (error) {
@@ -68,7 +62,7 @@ export default {
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" >
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home" type="button"
                     role="tab" aria-controls="pills-home" aria-selected="true">Internal</a>

@@ -11,35 +11,39 @@ export default {
             headers: [
                 {
                     text: 'No Order',
-                    value: 'order'
+                    value: 'no_order'
+                },
+                {
+                    text: 'No Sertifikat',
+                    value: 'no_sertifikat'
                 },
                 {
                     text: 'Nama Pemilik',
-                    value: 'nama'
+                    value: 'nama_pemilik'
                 },
                 {
                     text: 'Nama Pemilik Sertifikat',
-                    value: 'jenis_pemilik'
-                },
-                {
-                    text: 'No SO',
-                    value: 'so'
-                },
-                {
-                    text: 'Customer',
-                    value: 'customer'
+                    value: 'nama_pemilik_sert'
                 },
                 {
                     text: 'Tanggal Kalibrasi',
                     value: 'tanggal'
                 },
                 {
-                    text: 'Jenis Transaksi',
-                    value: 'jenis_transaksi'
+                    text: 'Teknisi',
+                    value: 'pemeriksa'
                 },
                 {
-                    text: 'Aksi',
-                    value: 'aksi'
+                    text: 'Nama Barang',
+                    value: 'nama_alat'
+                },
+                {
+                    text: 'Tipe',
+                    value: 'type'
+                },
+                {
+                    text: 'No Seri',
+                    value: 'noseri'
                 }
             ],
             modal: false,
@@ -111,16 +115,7 @@ export default {
                     <input type="text" class="form-control" v-model="search" placeholder="Cari" />
                 </div>
             </div>
-            <data-table :headers="headers" :items="produk" :search="search" v-if="!$store.state.loading">
-                <template #item.aksi="{ item }">
-                    <div>
-                        <button class="btn btn-outline-primary" @click="detailProduk(item)">
-                            <i class="fa fa-eye"></i>
-                            Detail
-                        </button>
-                    </div>
-                </template>
-            </data-table>
+            <data-table :headers="headers" :items="produk" :search="search" v-if="!$store.state.loading" />
             <div class="d-flex justify-content-center" v-else>
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
