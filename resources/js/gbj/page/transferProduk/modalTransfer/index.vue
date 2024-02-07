@@ -241,7 +241,7 @@ export default {
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-success" @click="transfer">Transfer</button>
-                        <button class="btn btn-info" v-if="data.jumlah_gdg > 0" @click="batalkan">Batalkan
+                        <button class="btn btn-info" v-if="data.jumlah_gdg == 0" @click="batalkan">Batalkan
                             Persiapan</button>
                         <button class="btn btn-secondary" @click="closeModal">Tutup</button>
                     </div>
