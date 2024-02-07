@@ -2778,8 +2778,9 @@ class ProduksiController extends Controller
                 $obj[$key_a] = array(
                     'id' => $p->id,
                     'nama' => $p->PenjualanProduk->nama,
-                    'jumlah' => $p->jumlah,
-                    'jumlah_gudang' => $p->count_jumlah - $p->count_gudang,
+                    'jumlah' => $p->count_jumlah,
+                    'jumlah_sisa' => $p->count_jumlah - $p->count_gudang,
+                    'jumlah_gudang' => $p->count_gudang,
                     'jumlah_qc' => $p->count_qc,
                     'item' => array()
                 );
@@ -2789,10 +2790,11 @@ class ProduksiController extends Controller
                         'gudang_id' => $i->gudang_barang_jadi_id,
                         'nama' => $i->GudangBarangJadi->Produk->nama . ' ' . $i->GudangBarangJadi->nama,
                         'merk' => $i->GudangBarangJadi->Produk->merk,
-                        'jumlah' => $p->jumlah,
-                        'jumlah_gudang' => $i->count_jumlah - $i->count_gudang,
+                        'jumlah' => $i->count_jumlah,
+                        'jumlah_gudang' => $i->count_gudang,
+                        'jumlah_sisa' => $i->count_jumlah - $i->count_gudang,
                         'jumlah_qc' => $i->count_qc,
-                        'status' => $i->status_cek == NULL || $i->checked_by == NULL ? false : true,
+                        'status' => $i->status_cek == NULL || $i->checked_by == NULL || $i->count_jumlah == $i->count_gudang ? false : true,
                     );
                 }
             }
