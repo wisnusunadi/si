@@ -106,299 +106,295 @@ class QcController extends Controller
     public function get_data_seri_ekatalog($status = 'kosong', $id, $idpesanan)
     {
         if ($status == 'semua') {
-            $data = NoseriBarangJadi::select('t_gbj_noseri.id','t_gbj_noseri.id','uji_lab_detail.status as status_lab','noseri_detail_pesanan.is_lab','t_gbj_detail.detail_pesanan_produk_id','seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id' ,'noseri_detail_pesanan.is_ready')
-            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
-            ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
-            ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-            ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->addSelect([
-                'cek_rw' => function ($q) {
-                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
-                        ->from('seri_detail_rw')
-                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'uji' => function ($q) {
-                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
-                        ->from('noseri_detail_pesanan')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
-                        ->from('uji_lab_detail')
-                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'is_kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
-                        ->from('detail_pesanan')
-                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-                        ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-                        ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
-                        ->where('detail_pesanan.kalibrasi', 1)
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                }
-            ])
-            ->where('t_gbj.pesanan_id', $idpesanan)
-            ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
-            ->get();
-
+            $data = NoseriBarangJadi::select('t_gbj_noseri.id', 't_gbj_noseri.id', 'uji_lab_detail.status as status_lab', 'noseri_detail_pesanan.is_lab', 't_gbj_detail.detail_pesanan_produk_id', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id', 'noseri_detail_pesanan.is_ready')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
+                ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->addSelect([
+                    'cek_rw' => function ($q) {
+                        $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                            ->from('seri_detail_rw')
+                            ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'uji' => function ($q) {
+                        $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
+                            ->from('noseri_detail_pesanan')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
+                            ->from('uji_lab_detail')
+                            ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'is_kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
+                            ->from('detail_pesanan')
+                            ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                            ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                            ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
+                            ->where('detail_pesanan.kalibrasi', 1)
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    }
+                ])
+                ->where('t_gbj.pesanan_id', $idpesanan)
+                ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
+                ->get();
         } elseif ($status == 'belum') {
 
-            $data = NoseriBarangJadi::select('t_gbj_noseri.id','uji_lab_detail.status as status_lab','noseri_detail_pesanan.is_lab','t_gbj_detail.detail_pesanan_produk_id','seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id','noseri_detail_pesanan.is_ready')
-            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
-            ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
-            ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-            ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->addSelect([
-                'cek_rw' => function ($q) {
-                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
-                        ->from('seri_detail_rw')
-                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'uji' => function ($q) {
-                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
-                        ->from('noseri_detail_pesanan')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
-                        ->from('uji_lab_detail')
-                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'is_kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
-                        ->from('detail_pesanan')
-                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-                        ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-                        ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
-                        ->where('detail_pesanan.kalibrasi', 1)
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                }
-            ])
-            ->where('t_gbj.pesanan_id', $idpesanan)
-            ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
-            ->whereNull('noseri_detail_pesanan.id')
-            ->get();
-
+            $data = NoseriBarangJadi::select('t_gbj_noseri.id', 'uji_lab_detail.status as status_lab', 'noseri_detail_pesanan.is_lab', 't_gbj_detail.detail_pesanan_produk_id', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id', 'noseri_detail_pesanan.is_ready')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
+                ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->addSelect([
+                    'cek_rw' => function ($q) {
+                        $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                            ->from('seri_detail_rw')
+                            ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'uji' => function ($q) {
+                        $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
+                            ->from('noseri_detail_pesanan')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
+                            ->from('uji_lab_detail')
+                            ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'is_kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
+                            ->from('detail_pesanan')
+                            ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                            ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                            ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
+                            ->where('detail_pesanan.kalibrasi', 1)
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    }
+                ])
+                ->where('t_gbj.pesanan_id', $idpesanan)
+                ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
+                ->whereNull('noseri_detail_pesanan.id')
+                ->get();
         } elseif ($status == 'sudah') {
-            $data = NoseriBarangJadi::select('t_gbj_noseri.id','uji_lab_detail.status as status_lab','noseri_detail_pesanan.is_lab','t_gbj_detail.detail_pesanan_produk_id','seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id','noseri_detail_pesanan.is_ready')
-            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
-            ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
-            ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-            ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->addSelect([
-                'cek_rw' => function ($q) {
-                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
-                        ->from('seri_detail_rw')
-                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'uji' => function ($q) {
-                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
-                        ->from('noseri_detail_pesanan')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
-                        ->from('uji_lab_detail')
-                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'is_kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
-                        ->from('detail_pesanan')
-                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-                        ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-                        ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
-                        ->where('detail_pesanan.kalibrasi', 1)
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                }
-            ])
-            ->where('t_gbj.pesanan_id', $idpesanan)
-            ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
-            ->whereNotNull('noseri_detail_pesanan.id')
-            ->get();
-
+            $data = NoseriBarangJadi::select('t_gbj_noseri.id', 'uji_lab_detail.status as status_lab', 'noseri_detail_pesanan.is_lab', 't_gbj_detail.detail_pesanan_produk_id', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id', 'noseri_detail_pesanan.is_ready')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
+                ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->addSelect([
+                    'cek_rw' => function ($q) {
+                        $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                            ->from('seri_detail_rw')
+                            ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'uji' => function ($q) {
+                        $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
+                            ->from('noseri_detail_pesanan')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
+                            ->from('uji_lab_detail')
+                            ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'is_kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
+                            ->from('detail_pesanan')
+                            ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                            ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                            ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
+                            ->where('detail_pesanan.kalibrasi', 1)
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    }
+                ])
+                ->where('t_gbj.pesanan_id', $idpesanan)
+                ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
+                ->whereNotNull('noseri_detail_pesanan.id')
+                ->get();
         } elseif ($status == 'semuaKalibrasi') {
-            $data = NoseriBarangJadi::select('t_gbj_noseri.id','uji_lab_detail.status as status_lab','noseri_detail_pesanan.is_lab','t_gbj_detail.detail_pesanan_produk_id','seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id','noseri_detail_pesanan.is_ready')
-            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
-            ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
-            ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-            ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->addSelect([
-                'cek_rw' => function ($q) {
-                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
-                        ->from('seri_detail_rw')
-                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'uji' => function ($q) {
-                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
-                        ->from('noseri_detail_pesanan')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
-                        ->from('uji_lab_detail')
-                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'is_kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
-                        ->from('detail_pesanan')
-                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-                        ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-                        ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
-                        ->where('detail_pesanan.kalibrasi', 1)
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                }
-            ])
-            ->where('t_gbj.pesanan_id', $idpesanan)
-            ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
-            ->whereNotNull('uji_lab_detail.id')
-            ->get();
-
+            $data = NoseriBarangJadi::select('t_gbj_noseri.id', 'uji_lab_detail.status as status_lab', 'noseri_detail_pesanan.is_lab', 't_gbj_detail.detail_pesanan_produk_id', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id', 'noseri_detail_pesanan.is_ready')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
+                ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->addSelect([
+                    'cek_rw' => function ($q) {
+                        $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                            ->from('seri_detail_rw')
+                            ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'uji' => function ($q) {
+                        $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
+                            ->from('noseri_detail_pesanan')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
+                            ->from('uji_lab_detail')
+                            ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'is_kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
+                            ->from('detail_pesanan')
+                            ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                            ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                            ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
+                            ->where('detail_pesanan.kalibrasi', 1)
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    }
+                ])
+                ->where('t_gbj.pesanan_id', $idpesanan)
+                ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
+                ->whereNotNull('uji_lab_detail.id')
+                ->get();
         } elseif ($status == 'prosesKalibrasi') {
-            $data = NoseriBarangJadi::select('t_gbj_noseri.id','uji_lab_detail.status as status_lab','noseri_detail_pesanan.is_lab','t_gbj_detail.detail_pesanan_produk_id','seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id','noseri_detail_pesanan.is_ready')
-            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
-            ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
-            ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-            ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->addSelect([
-                'cek_rw' => function ($q) {
-                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
-                        ->from('seri_detail_rw')
-                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'uji' => function ($q) {
-                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
-                        ->from('noseri_detail_pesanan')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
-                        ->from('uji_lab_detail')
-                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'is_kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
-                        ->from('detail_pesanan')
-                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-                        ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-                        ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
-                        ->where('detail_pesanan.kalibrasi', 1)
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                }
-            ])
-            ->where('t_gbj.pesanan_id', $idpesanan)
-            ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
-            ->where('uji_lab_detail.status', 'belum')
-            ->whereNotNull('uji_lab_detail.id')
-            ->get();
+            $data = NoseriBarangJadi::select('t_gbj_noseri.id', 'uji_lab_detail.status as status_lab', 'noseri_detail_pesanan.is_lab', 't_gbj_detail.detail_pesanan_produk_id', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id', 'noseri_detail_pesanan.is_ready')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
+                ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->addSelect([
+                    'cek_rw' => function ($q) {
+                        $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                            ->from('seri_detail_rw')
+                            ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'uji' => function ($q) {
+                        $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
+                            ->from('noseri_detail_pesanan')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
+                            ->from('uji_lab_detail')
+                            ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'is_kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
+                            ->from('detail_pesanan')
+                            ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                            ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                            ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
+                            ->where('detail_pesanan.kalibrasi', 1)
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    }
+                ])
+                ->where('t_gbj.pesanan_id', $idpesanan)
+                ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
+                ->where('uji_lab_detail.status', 'belum')
+                ->whereNotNull('uji_lab_detail.id')
+                ->get();
         } elseif ($status == 'tidakLolosKalibrasi') {
-            $data = NoseriBarangJadi::select('t_gbj_noseri.id','uji_lab_detail.status as status_lab','noseri_detail_pesanan.is_lab','t_gbj_detail.detail_pesanan_produk_id','seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id','noseri_detail_pesanan.is_ready')
-            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
-            ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
-            ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-            ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->addSelect([
-                'cek_rw' => function ($q) {
-                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
-                        ->from('seri_detail_rw')
-                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'uji' => function ($q) {
-                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
-                        ->from('noseri_detail_pesanan')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
-                        ->from('uji_lab_detail')
-                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'is_kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
-                        ->from('detail_pesanan')
-                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-                        ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-                        ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
-                        ->where('detail_pesanan.kalibrasi', 1)
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                }
-            ])
-            ->where('t_gbj.pesanan_id', $idpesanan)
-            ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
-            ->where('uji_lab_detail.status', 'nok')
-            ->whereNotNull('uji_lab_detail.id')
-            ->get();
+            $data = NoseriBarangJadi::select('t_gbj_noseri.id', 'uji_lab_detail.status as status_lab', 'noseri_detail_pesanan.is_lab', 't_gbj_detail.detail_pesanan_produk_id', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id', 'noseri_detail_pesanan.is_ready')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
+                ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->addSelect([
+                    'cek_rw' => function ($q) {
+                        $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                            ->from('seri_detail_rw')
+                            ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'uji' => function ($q) {
+                        $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
+                            ->from('noseri_detail_pesanan')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
+                            ->from('uji_lab_detail')
+                            ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'is_kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
+                            ->from('detail_pesanan')
+                            ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                            ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                            ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
+                            ->where('detail_pesanan.kalibrasi', 1)
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    }
+                ])
+                ->where('t_gbj.pesanan_id', $idpesanan)
+                ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
+                ->where('uji_lab_detail.status', 'nok')
+                ->whereNotNull('uji_lab_detail.id')
+                ->get();
         } elseif ($status == 'lolosKalibrasi') {
-            $data = NoseriBarangJadi::select('t_gbj_noseri.id','uji_lab_detail.status as status_lab','noseri_detail_pesanan.is_lab','t_gbj_detail.detail_pesanan_produk_id','seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id','noseri_detail_pesanan.is_ready')
-            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
-            ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
-            ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-            ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-            ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->addSelect([
-                'cek_rw' => function ($q) {
-                    $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
-                        ->from('seri_detail_rw')
-                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'uji' => function ($q) {
-                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
-                        ->from('noseri_detail_pesanan')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
-                        ->from('uji_lab_detail')
-                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
-                        ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                },
-                'is_kalibrasi' => function ($q) {
-                    $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
-                        ->from('detail_pesanan')
-                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-                        ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-                        ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
-                        ->where('detail_pesanan.kalibrasi', 1)
-                        ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
-                }
-            ])
-            ->where('t_gbj.pesanan_id', $idpesanan)
-            ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
-            ->where('uji_lab_detail.status', 'ok')
-            ->whereNotNull('uji_lab_detail.id')
-            ->get();
+            $data = NoseriBarangJadi::select('t_gbj_noseri.id', 'uji_lab_detail.status as status_lab', 'noseri_detail_pesanan.is_lab', 't_gbj_detail.detail_pesanan_produk_id', 'seri_detail_rw.created_at', 'seri_detail_rw.packer', 'seri_detail_rw.isi as isi', 'noseri_barang_jadi.noseri as seri', 'noseri_detail_pesanan.tgl_uji', 'noseri_detail_pesanan.status', 'noseri_barang_jadi.gdg_barang_jadi_id', 'noseri_barang_jadi.id as noseri_id', 'noseri_detail_pesanan.is_ready')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
+                ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->addSelect([
+                    'cek_rw' => function ($q) {
+                        $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
+                            ->from('seri_detail_rw')
+                            ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'uji' => function ($q) {
+                        $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
+                            ->from('noseri_detail_pesanan')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
+                            ->from('uji_lab_detail')
+                            ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
+                            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'is_kalibrasi' => function ($q) {
+                        $q->selectRaw('coalesce(count(detail_pesanan.id), 0)')
+                            ->from('detail_pesanan')
+                            ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                            ->leftjoin('t_gbj_detail', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                            ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
+                            ->where('detail_pesanan.kalibrasi', 1)
+                            ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    }
+                ])
+                ->where('t_gbj.pesanan_id', $idpesanan)
+                ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
+                ->where('uji_lab_detail.status', 'ok')
+                ->whereNotNull('uji_lab_detail.id')
+                ->get();
         } else if ($status == 'kosong') {
             $data = array();
         }
@@ -408,25 +404,24 @@ class QcController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
-                if($data->uji > 0){
-                    if(!$data->kalibrasi && $data->is_ready == 1){
-                        if($data->is_kalibrasi ){
-                            if($data->status == 'ok'){
+                if ($data->uji > 0) {
+                    if (!$data->kalibrasi && $data->is_ready == 1) {
+                        if ($data->is_kalibrasi) {
+                            if ($data->status == 'ok') {
                                 return '<div class="form-check">
                                 <input class="form-check-input yet nosericheck" type="checkbox" data-value="' . $data->gdg_barang_jadi_id . '" data-id="' . $data->noseri_id . '" data-kalibrasi="' . $data->noseri_id . '"/>
                                 </div>';
-                            }else{
+                            } else {
                                 return '';
                             }
-
                         }
                         return '<div class="form-check">
                         <input class="form-check-input yet nosericheck" type="checkbox" data-value="' . $data->gdg_barang_jadi_id . '" data-id="' . $data->noseri_id . '" data-kalibrasi="' . $data->noseri_id . '"/>
                         </div>';
-                    }else{
-                       return '';
+                    } else {
+                        return '';
                     }
-                }else{
+                } else {
                     return '<div class="form-check">
                 <input class="form-check-input yet nosericheck" type="checkbox" data-value="' . $data->gdg_barang_jadi_id . '" data-id="' . $data->noseri_id . '" />
                 </div>';
@@ -434,7 +429,7 @@ class QcController extends Controller
                 return '-';
             })
             ->addColumn('seri', function ($data) {
-               // return $data->is_kalibrasi;
+                // return $data->is_kalibrasi;
                 return $data->seri;
             })
             ->addColumn('tgl_uji', function ($data) {
@@ -453,23 +448,22 @@ class QcController extends Controller
             })
             ->addColumn('status', function ($data) {
                 if ($data->uji > 0) {
-                    if($data->kalibrasi > 0 ){
-                        if($data->status_lab == 'ok'){
+                    if ($data->kalibrasi > 0) {
+                        if ($data->status_lab == 'ok') {
                             return '<i class="fas fa-check-circle ok text-success"></i>';
-                        }else if($data->status_lab == 'nok'){
+                        } else if ($data->status_lab == 'nok') {
                             return '<i class="fas fa-ban nok has-text-danger"></i>';
-                        }else{
+                        } else {
                             return '<i class="fas fa-wrench text-warning"></i>';
                         }
                         return '<i class="fas fa-wrench text-warning"></i>';
-                    }else{
+                    } else {
                         if ($data->status == 'ok') {
                             return '<i class="fas fa-check-circle ok text-success"></i>';
                         } else {
                             return '<i class="fas fa-times-circle nok has-text-danger"></i>';
                         }
                     }
-
                 } else {
                     return '<i class="fas fa-question-circle warning has-text-warning"></i>';
                 }
@@ -513,7 +507,7 @@ class QcController extends Controller
 
             })
             ->addColumn('status_seri', function ($data) {
-                if ($data->uji > 0 ) {
+                if ($data->uji > 0) {
                     if ($data->is_lab == 1) {
                         if ($data->status_lab == 'ok') {
                             return 'Lolos Kalibrasi';
@@ -908,7 +902,7 @@ class QcController extends Controller
         // $x = explode(',', $id);
         $dataprd = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($id) {
             $q->where('pesanan_id', $id);
-        }) ->groupby('gudang_barang_jadi_id')->get();
+        })->groupby('gudang_barang_jadi_id')->get();
         $datapart = DetailPesananPart::where('pesanan_id', $id)->whereHas('Sparepart', function ($q) {
             $q->where('kode', 'NOT LIKE', '%JASA%');
         })->get();
@@ -1081,40 +1075,38 @@ class QcController extends Controller
             ->make(true);
         //echo json_encode($data);
     }
-    public function get_data_riwayat_seri_ganti($gbj,$pesanan_id){
-    $dpp = DetailPesananProduk::
-    leftJoin('detail_pesanan','detail_pesanan.id','=','detail_pesanan_produk.detail_pesanan_id')
-    ->where('gudang_barang_jadi_id',$gbj)
-    ->where('detail_pesanan.pesanan_id',$pesanan_id)
-    ->pluck('detail_pesanan_produk.id')
-    ->toArray();
+    public function get_data_riwayat_seri_ganti($gbj, $pesanan_id)
+    {
+        $dpp = DetailPesananProduk::leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+            ->where('gudang_barang_jadi_id', $gbj)
+            ->where('detail_pesanan.pesanan_id', $pesanan_id)
+            ->pluck('detail_pesanan_produk.id')
+            ->toArray();
 
-    $data =   SeriGanti::whereIN('detail_pesanan_produk_id',$dpp)->get();
+        $data =   SeriGanti::whereIN('detail_pesanan_produk_id', $dpp)->get();
 
-    if($data->isEmpty() || count($data) == 0){
-        $x = array();
-    }else{
-        foreach($data as $d)
-        {
-            $o = json_decode($d->isi);
-            $seri[] = array(
-                'state'=> $d->state,
-                'item' => $o
-            );
-        }
-        foreach($seri as $a){
-            foreach($a['item'] as $b){
-                $x[] = array(
-                    'noseri'=> $b->noseri,
-                    'tgl_kirim'=> $b->tgl_kirim,
-                    'state'=> $b->state
+        if ($data->isEmpty() || count($data) == 0) {
+            $x = array();
+        } else {
+            foreach ($data as $d) {
+                $o = json_decode($d->isi);
+                $seri[] = array(
+                    'state' => $d->state,
+                    'item' => $o
                 );
-
+            }
+            foreach ($seri as $a) {
+                foreach ($a['item'] as $b) {
+                    $x[] = array(
+                        'noseri' => $b->noseri,
+                        'tgl_kirim' => $b->tgl_kirim,
+                        'state' => $b->state
+                    );
+                }
             }
         }
-    }
 
-    return response()->json($x);
+        return response()->json($x);
     }
     // public function get_data_riwayat_seri_ganti($id){
     // $data =   SeriGanti::where('detail_pesanan_produk_id',$id)->get();
@@ -1367,8 +1359,8 @@ class QcController extends Controller
                     'no_po' => $d->no_po,
                     'pengujian' => $d->cqcuji,
                     'kalibrasi' => $d->clabprd,
-                   // 'status' => $d->jumlah_part,
-                     'status' => intval($d->sudah_tf / ($d->jumlah_prd + $d->jumlah_part) * 100),
+                    // 'status' => $d->jumlah_part,
+                    'status' => intval($d->sudah_tf / ($d->jumlah_prd + $d->jumlah_part) * 100),
                     'customer' => ($d->Ekatalog) ? $d->Ekatalog->satuan : (($d->Spa) ? $d->Spa->Customer->nama : $d->Spb->Customer->nama)
                 );
             }
@@ -1614,7 +1606,7 @@ class QcController extends Controller
                 );
             }
         }
-        if($status == 'ok'){
+        if ($status == 'ok') {
             $data = array_merge($setPrd, $setPart);
         }
         $data = $setPrd;
@@ -3384,7 +3376,39 @@ class QcController extends Controller
             }
         ])->havingRaw('jumlah_pengujian > 0')->with(['Pesanan.Ekatalog', 'Pesanan.Spa', 'Pesanan.Spb'])->whereYear('created_at', $request->years)->get());
 
-        return $prd->merge($part);
+        function getCustomer($data)
+        {
+            if (isset($data->Pesanan->Ekatalog)) {
+                return [
+                    'jenis' => 'ekatalog',
+                    'nama' => $data->Pesanan->Ekatalog->Customer->nama,
+                    'satuan' => $data->Pesanan->Ekatalog->satuan,
+                    'alamat' => $data->Pesanan->Ekatalog->alamat,
+                    'provinsi' => $data->Pesanan->Ekatalog->Customer->Provinsi->nama,
+                ];
+            } elseif (isset($data->Pesanan->Spa)) {
+                return [
+                    'jenis' => 'spa',
+                    'nama' => $data->Pesanan->Spa->Customer->nama,
+                    'alamat' => $data->Pesanan->Spa->Customer->alamat,
+                    'provinsi' => $data->Pesanan->Spa->Customer->Provinsi->nama,
+                ];
+            } else {
+                return [
+                    'jenis' => 'spb',
+                    'nama' => $data->Pesanan->Spb->Customer->nama,
+                    'alamat' => $data->Pesanan->Spb->Customer->alamat,
+                    'provinsi' => $data->Pesanan->Spb->Customer->Provinsi->nama,
+                ];
+            }
+        }
+
+        $data =  $prd->merge($part);
+        $data = $data->map(function ($item) {
+            $item->customer = getCustomer($item);
+            return $item;
+        });
+        return $data;
 
         // return datatables()->of($s)
         //     ->addIndexColumn()

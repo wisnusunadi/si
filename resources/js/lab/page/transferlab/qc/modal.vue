@@ -99,8 +99,10 @@ export default {
                                     Info Customer
                                 </div>
                                 <div class="card-body text-center">
-                                    <b>{{ detail.pesanan.tujuan_kirim }}</b>
-                                    <p>{{ detail.pesanan.alamat_kirim }}</p>
+                                    <b>{{ detail.customer.nama }}</b>
+                                    <p v-if="detail.customer.jenis == 'ekatalog'">{{ detail.customer.satuan }}</p>
+                                    <p>{{ detail.customer.alamat }}</p>
+                                    <p>{{ detail.customer.provinsi }}</p>
                                 </div>
                             </div>
                             <div class="card">
@@ -146,8 +148,9 @@ export default {
                         <div class="col-6">
                             <div class="card">
                                 <div class="card-body">
-                                    <p class="text-center font-weight-bold" v-if="detail.jenis == 'produk'">Detail Produk {{ detail.nama }} {{
-                                        detail.detail_pesanan_produk[0].gudang_barang_jadi.nama }}</p>
+                                    <p class="text-center font-weight-bold" v-if="detail.jenis == 'produk'">Detail Produk {{
+                                        detail.nama }} {{
+        detail.detail_pesanan_produk[0].gudang_barang_jadi.nama }}</p>
                                     <p class="text-center font-weight-bold" v-else>Detail Part {{ detail.nama }}</p>
                                     <div class="d-flex flex-row-reverse bd-highlight">
                                         <div class="p-2 bd-highlight">
