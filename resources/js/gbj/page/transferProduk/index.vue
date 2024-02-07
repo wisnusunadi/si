@@ -80,8 +80,8 @@ export default {
                         ...item,
                         no: index + 1,
                         tgl_kontrak: this.dateFormat(item.tgl_kontrak),
-                        persentase_qc: this.persentase(item.jumlah_qc, item.jumlah),
-                        persentase_gudang: this.persentase(item.jumlah_gdg, item.jumlah)
+                        persentase_gudang: this.persentase(item.jumlah_gdg, item.jumlah),
+                        persentase_belum_transfer: this.persentase(parseInt(item.jumlah) - item.jumlah_gdg, item.jumlah)
                     }
                 })
             } catch (error) {
@@ -134,9 +134,12 @@ export default {
                 <data-table :headers="headers" :items="items" :search="search" v-if="!$store.state.loading">
                     <template #item.progress="{ item }">
                         <div>
-                            <span class="badge badge-info">QC: {{ item.jumlah_qc }} ({{ item.persentase_qc }}%)</span> <br>
-                            <span class="badge badge-warning">Gudang: {{ item.jumlah_gdg }} ({{ item.persentase_gudang
+                            <span class="badge badge-info">Belum Transfer: {{ parseInt(item.jumlah) - item.jumlah_gdg }} ({{
+                                item.persentase_belum_transfer }}%)</span> <br>
+                            <span class="badge badge-warning">Sudah Transfer: {{ item.jumlah_gdg }} ({{
+                                item.persentase_gudang
                             }}%)</span>
+
                         </div>
                     </template>
                     <template #item.status="{ item }">
@@ -151,14 +154,14 @@ export default {
                                 <i class="fas fa-plus"></i>
                                 Siapkan Produk
                             </button>
-                            <button class="btn btn-outline-dark btn-sm" @click="download(item.id)">
+                            <!-- <button class="btn btn-outline-dark btn-sm" @click="download(item.id)">
                                 <i class="fas fa-download"></i>
                                 Template
                             </button>
                             <button class="btn btn-outline-info btn-sm" @click="openTemplate(item)">
                                 <i class="fas fa-file-import"></i>
                                 Unggah
-                            </button>
+                            </button> -->
                         </div>
                         <div v-else>Siapkan Produk Dahulu</div>
                     </template>

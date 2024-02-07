@@ -2397,14 +2397,6 @@ class ProduksiController extends Controller
                         ->whereColumn('t_gbj.pesanan_id', 'pesanan.id')
                         ->limit(1);
                 },
-                'cqc' => function ($q) {
-                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
-                        ->from('noseri_detail_pesanan')
-                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                        ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-                        ->limit(1);
-                },
                 'cjumlahprd' => function ($q) {
                     $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
                         ->from('detail_pesanan')
@@ -2458,7 +2450,6 @@ class ProduksiController extends Controller
                     'no_po' => $d->no_po,
                     'tgl_po' => $d->tgl_po,
                     'tgl_kontrak' => $batas,
-                    'jumlah_qc' => $d->cqc,
                     'jumlah_gdg' => $d->cgudang,
                     'jumlah_siap' => $d->csiap,
                     'jumlah' => $d->cjumlahprd
@@ -2754,12 +2745,6 @@ class ProduksiController extends Controller
                         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 't_gbj_detail.detail_pesanan_produk_id')
                         ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
                         ->limit(1);
-                }, 'count_qc' => function ($q) {
-                    $q->selectRaw('count(noseri_detail_pesanan.id)')
-                        ->from('noseri_detail_pesanan')
-                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                        ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
-                        ->limit(1);
                 },
                 'count_jumlah' => function ($q) {
                     $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
@@ -2781,7 +2766,6 @@ class ProduksiController extends Controller
                     'jumlah' => $p->count_jumlah,
                     'jumlah_sisa' => $p->count_jumlah - $p->count_gudang,
                     'jumlah_gudang' => $p->count_gudang,
-                    'jumlah_qc' => $p->count_qc,
                     'item' => array()
                 );
                 foreach ($p->DetailPesananProdukVariasi() as $key_b => $i) {
@@ -2793,7 +2777,6 @@ class ProduksiController extends Controller
                         'jumlah' => $i->count_jumlah,
                         'jumlah_gudang' => $i->count_gudang,
                         'jumlah_sisa' => $i->count_jumlah - $i->count_gudang,
-                        'jumlah_qc' => $i->count_qc,
                         'status' => $i->status_cek == NULL || $i->checked_by == NULL || $i->count_jumlah == $i->count_gudang ? false : true,
                     );
                 }

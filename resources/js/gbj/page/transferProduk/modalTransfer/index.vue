@@ -87,13 +87,13 @@ export default {
                 this.produk = data.map(paket => {
                     return {
                         ...paket,
-                        persentase_qc_paket: this.persentase(paket.jumlah_qc, paket.jumlah),
-                        persentase_gudang_paket: this.persentase(paket.jumlah_gudang, paket.jumlah),
+                        persentase_belum: this.persentase(paket.jumlah_sisa, paket.jumlah),
+                        persentase_sudah: this.persentase(paket.jumlah_gudang, paket.jumlah),
                         item: paket.item.map(item => {
                             return {
                                 ...item,
-                                persentase_qc: this.persentase(item.jumlah_qc, item.jumlah),
-                                persentase_gudang: this.persentase(item.jumlah_gudang, item.jumlah)
+                                persentase_belum: this.persentase(paket.jumlah_sisa, paket.jumlah),
+                                persentase_sudah: this.persentase(paket.jumlah_gudang, paket.jumlah),
                             }
                         })
                     }
@@ -220,25 +220,30 @@ export default {
                                             <tr class="table-dark">
                                                 <td colspan="100%">
                                                     {{ paket.nama }} <br>
-                                                    <span class="badge badge-light">QC: {{ paket.jumlah_qc }} ({{ paket.
-                                                        persentase_qc_paket }}%)</span>
+                                                    <span class="badge badge-light">Belum Transfer: {{ paket.jumlah_sisa }}
+                                                        ({{ paket.
+                                                            persentase_belum }}%)</span>
                                                     <span class="badge badge-warning">
-                                                        Gudang: {{ paket.jumlah_gudang }} ({{ paket.persentase_gudang_paket
+                                                        Sudah Transfer: {{ paket.jumlah_gudang }} ({{
+                                                            paket.persentase_gudang
                                                         }}%)
                                                     </span>
                                                 </td>
                                             </tr>
                                             <tr v-for="item in paket.item" :key="item.id">
                                                 <td>{{ item.nama }}</td>
-                                                <td>{{ item.jumlah }}</td>
+                                                <td>{{ item.jumlah_sisa }}</td>
                                                 <td>{{ item.noseri?.length ?? 0 }}</td>
                                                 <td>{{ item.merk }}</td>
                                                 <td>
-                                                    <span class="badge badge-danger">QC: {{ item.jml_qc }} ({{
-                                                        item.persentase_qc
-                                                    }}%)</span> <br>
-                                                    <span class="badge badge-light">Gudang: {{ item.jumlah_gudang }} ({{
-                                                        item.persentase_gudang }}%)</span>
+                                                    <span class="badge badge-info">Belum Transfer: {{ item.jumlah_sisa }}
+                                                        ({{
+                                                            item.persentase_belum }}%)</span> <br>
+                                                    <span class="badge badge-warning">Sudah Transfer: {{ item.jumlah_gudang
+                                                    }}
+                                                        ({{
+                                                            item.persentase_sudah
+                                                        }}%)</span>
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-primary" @click="showModalNoseri(item, paket)"
@@ -246,7 +251,9 @@ export default {
                                                         <i class="fa fa-qrcode"></i>
                                                         Scan Barcode
                                                     </button>
-                                                    <span v-else>Siapkan Produk Dahulu</span>
+                                                    <span v-else>
+                                                        {{ item.persentase_sudah == 100 ? 'Produk Sudah Ditransfer' : 'Siapkan Produk Dahulu'}}
+                                                    </span>
                                                 </td>
                                             </tr>
                                         </template>
