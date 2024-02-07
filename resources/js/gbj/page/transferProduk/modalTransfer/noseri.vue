@@ -208,7 +208,7 @@ export default {
                     <div class="modal-body">
                         <small>
                             <span class="text-danger">*</span>
-                            Nomor seri yang dipilih tidak boleh lebih dari {{ detailSelected.jml }}
+                            Nomor seri yang dipilih tidak boleh lebih dari {{ detailSelected.jumlah }}
                         </small>
                         <div class="d-flex bd-highlight">
                             <div class="p-2 flex-grow-1 bd-highlight">
