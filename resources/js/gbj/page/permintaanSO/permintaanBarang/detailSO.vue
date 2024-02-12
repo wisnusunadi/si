@@ -1,0 +1,159 @@
+<script>
+import pagination from '../../../components/pagination.vue'
+export default {
+    components: {
+        pagination,
+    },
+    props: ['detailSelected'],
+    data() {
+        return {
+            produk: [
+                {
+                    id: 1,
+                    jumlah: 8,
+                    jumlah_gudang: 0,
+                    jumlah_sisa: 8,
+                    nama: "TIMBANGAN DIGITAL IBU & ANAK DIGIT-PRO IDA NEW",
+                    persentase_belum: 100,
+                    persentase_sudah: 0,
+                    item: [
+                        {
+                            produk: 'TIMBANGAN DIGITAL IBU & ANAK DIGIT-PRO IDA NEW UNGU',
+                            jumlah: 2,
+                        }
+                    ]
+                }
+            ],
+            search: '',
+            renderPaginate: [],
+        }
+    },
+    methods: {
+        closeModal() {
+            $('.modalDetailSO').modal('hide')
+            this.$nextTick(() => {
+                this.$emit('closeModal')
+            })
+        },
+        updateFilteredDalamProses(data) {
+            this.renderPaginate = data;
+        },
+    },
+    computed: {
+        filterRecursive() {
+            const includeSearch = (obj, search) => {
+                if (obj && typeof obj === 'object') {
+                    return Object.keys(obj).some(key => {
+                        if (typeof obj[key] === 'object') {
+                            return includeSearch(obj[key], search)
+                        }
+                        return String(obj[key]).toLowerCase().includes(search.toLowerCase())
+                    })
+                }
+                return false
+            }
+
+            return this.produk.filter(obj => includeSearch(obj, this.search))
+        }
+    }
+}
+</script>
+<template>
+    <div class="modal fade modalDetailSO" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" @click="closeModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row row-cols-2">
+
+                                <div class="col"> <label for="">Nomor SO</label>
+                                    <div class="card nomor-so">
+                                        <div class="card-body">
+                                            <span id="so">{{ detailSelected.so }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col"> <label for="">Nomor AKN</label>
+                                    <div class="card nomor-akn">
+                                        <div class="card-body">
+                                            <span id="akn">{{ detailSelected.akn ?? '-' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col"> <label for="">Nomor PO</label>
+                                    <div class="card nomor-po">
+                                        <div class="card-body">
+                                            <span id="po">{{ detailSelected.po }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col"> <label for="">Instansi</label>
+                                    <div class="card instansi">
+                                        <div class="card-body">
+                                            <span id="instansi">{{ detailSelected.customer }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-row-reverse bd-highlight">
+                                <div class="p-2 bd-highlight">
+                                    <input type="text" class="form-control" v-model="search">
+                                </div>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Produk</th>
+                                        <th>Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody v-if="filterRecursive.length > 0">
+                                    <template v-for="paket in filterRecursive">
+                                        <tr class="table-dark">
+                                            <td colspan="100%">
+                                                {{ paket.nama }} <br>
+                                                <span class="badge badge-light">Belum Transfer: {{ paket.jumlah_sisa }}
+                                                    ({{ paket.
+                                                        persentase_belum }}%)</span>
+                                                <span class="badge badge-warning">
+                                                    Sudah Transfer: {{ paket.jumlah_gudang }} ({{
+                                                        paket.persentase_gudang
+                                                    }}%)
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr v-for="item in paket.item" :key="item.id">
+                                            <td>
+                                                {{ item.produk }}
+                                            </td>
+                                            <td>{{ item.jumlah }}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                                <tbody v-else>
+                                    <tr>
+                                        <td colspan="100%">Data tidak ditemukan</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <pagination :filteredDalamProses="filterRecursive"
+                                @updateFilteredDalamProses="updateFilteredDalamProses" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

@@ -18,11 +18,6 @@ export default {
             required: false,
             default: '',
         },
-        scrollable: {
-            type: Boolean,
-            required: false,
-            default: false,
-        },
     },
     data() {
         return {

@@ -122,7 +122,7 @@ Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
     Route::view('/stok/{any?}', 'page.gbj.stok')->where('any', '.*');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
     Route::view('/produk/{any?}', 'page.gbj.produk')->where('any', '.*');
-    Route::view('/so/{any?}', 'page.gbj.so')->where('any', '.*');
+    // Route::view('/so/{any?}', 'page.gbj.so')->where('any', '.*');
     Route::view('/changeunit/{any?}', 'page.lab.kalibrasi_new')->where('any', '.*');
     Route::view('/transferproduk', 'page.gbj.transferproduk');
     Route::view('/transferproduk', 'page.gbj.transferproduk');
