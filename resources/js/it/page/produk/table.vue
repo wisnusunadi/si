@@ -11,7 +11,8 @@ export default {
                 { text: 'id', value: 'id', sortable: false },
                 { text: 'Nama', value: 'nama' },
                 { text: 'Kategori', value: 'kategori' },
-                { text: 'Status', value: 'status' }
+                { text: 'Status', value: 'status' },
+                { text: 'Generate', value: 'generate' }
             ],
             selectAll: false,
             selectProduct: [],
@@ -54,13 +55,26 @@ export default {
         async updateStatus(item) {
             try {
                 const { data } = await axios.post('/api/changeStatusProduk', {
-                id: item.id,
-                status: item.status
-            })
+                    id: item.id,
+                    status: item.status
+                })
 
-            this.$swal('Berhasil', 'Status berhasil diubah', 'success')
+                this.$swal('Berhasil', 'Status berhasil diubah', 'success')
             } catch (error) {
                 this.$swal('Gagal', 'Status gagal diubah', 'error')
+            }
+        },
+
+        async updateGenerate(item) {
+            try {
+                const { data } = await axios.post('/api/changeGenerateProduk', {
+                    id: item.id,
+                    generate_seri: item.generate
+                })
+
+                this.$swal('Berhasil', 'Generate No Seri Produk berhasil diubah', 'success')
+            } catch (error) {
+                this.$swal('Gagal', 'Generate No Seri Produk gagal diubah', 'error')
             }
         },
     },
@@ -68,20 +82,11 @@ export default {
 </script>
 <template>
     <div>
-        <Modal
-            @closeDialog="showDialog = false"
-            @getProduct="getProduct"
-            v-if="showDialog"
-            :selectProduct="selectProduct"
-            :dialogCreate="showDialog"
-            :product="product"
-        ></Modal>
+        <Modal @closeDialog="showDialog = false" @getProduct="getProduct" v-if="showDialog" :selectProduct="selectProduct"
+            :dialogCreate="showDialog" :product="product"></Modal>
         <div class="d-flex">
             <v-card flat class="ml-5 mr-auto">
-                <v-text-field
-                v-model="search"
-                placeholder="Cari Produk"
-                ></v-text-field>
+                <v-text-field v-model="search" placeholder="Cari Produk"></v-text-field>
             </v-card>
             <v-card flat>
                 <v-btn color="primary" @click="showDialog = true">
@@ -92,40 +97,34 @@ export default {
                 </v-btn>
             </v-card>
         </div>
-        <v-data-table
-        :headers="header"
-        :items="product"
-        :search="search"
-        :group-by="['kategori']"
-        >
-                <!-- No Data -->
-        <template #no-data>
-            <div class="d-flex justify-center">
-                <v-btn color="primary" @click="getProduct">Refresh</v-btn>
-            </div>
-        </template>
+        <v-data-table :headers="header" :items="product" :search="search" :group-by="['kategori']">
+            <!-- No Data -->
+            <template #no-data>
+                <div class="d-flex justify-center">
+                    <v-btn color="primary" @click="getProduct">Refresh</v-btn>
+                </div>
+            </template>
 
-                <template #header.id>
-                    <th class="text-left">
-                        <v-checkbox :indeterminate="selectProduct.length > 0 && selectProduct.length < product.length"
-                            @click.native="checkAll" v-model="selectAll"></v-checkbox>
-                    </th>
-                </template>
+            <template #header.id>
+                <th class="text-left">
+                    <v-checkbox :indeterminate="selectProduct.length > 0 && selectProduct.length < product.length"
+                        @click.native="checkAll" v-model="selectAll"></v-checkbox>
+                </th>
+            </template>
 
-        <template #item.id = "{ item }">
-            <v-checkbox
-                v-model="selectProduct"
-                :value="item"
-            ></v-checkbox>
-        </template>
+            <template #item.id="{ item }">
+                <v-checkbox v-model="selectProduct" :value="item"></v-checkbox>
+            </template>
 
-        <template #item.status="{ item }">
-            <v-switch
-                @click="updateStatus(item)"
-                v-model="item.status"
-                :label="item.status ? 'Aktif' : 'Tidak Aktif'"
-            ></v-switch>
-        </template>
+            <template #item.status="{ item }">
+                <v-switch @click="updateStatus(item)" v-model="item.status"
+                    :label="item.status ? 'Aktif' : 'Tidak Aktif'"></v-switch>
+            </template>
+
+            <template #item.generate="{ item }">
+                <v-switch @click="updateGenerate(item)" v-model="item.generate"
+                    :label="item.generate ? 'Aktif' : 'Tidak Aktif'"></v-switch>
+            </template>
 
         </v-data-table>
     </div>

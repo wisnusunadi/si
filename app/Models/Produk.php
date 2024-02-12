@@ -9,7 +9,7 @@ class Produk extends Model
 {
     protected $connection = 'erp';
     protected $table = 'produk';
-    protected $fillable = ['produk_id','kelompok_produk_id', 'merk', 'tipe', 'nama', 'nama_coo', 'satuan', 'coo', 'no_akd', 'ket', 'status'];
+    protected $fillable = ['produk_id', 'kelompok_produk_id', 'merk', 'tipe', 'nama', 'nama_coo', 'satuan', 'coo', 'no_akd', 'ket', 'status', 'generate_seri'];
 
     public function PenjualanProduk()
     {
@@ -38,8 +38,8 @@ class Produk extends Model
         return $this->belongsTo(Mproduk::class, 'produk_id');
     }
 
-    public function DetailProdukRw ()
+    public function DetailProdukRw()
     {
-        return $this->hasMany(DetailProdukRw::class,'produk_parent_id');
+        return $this->hasMany(DetailProdukRw::class, 'produk_parent_id');
     }
 }
