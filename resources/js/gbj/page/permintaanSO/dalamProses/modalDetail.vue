@@ -238,7 +238,7 @@ export default {
                                                     <span v-else class="badge badge-danger">Belum Diinput</span>
                                                 </td>
                                                 <td v-if="detailSelected.detailOpen">
-                                                    <button class="btn btn-sm btn-outline-info"
+                                                    <button class="btn btn-sm btn-outline-info" v-if="item.status"
                                                         @click="openModalNoseri(item)">
                                                         <i class="fa fa-info-circle"></i>
                                                         Detail No. Seri Produk
