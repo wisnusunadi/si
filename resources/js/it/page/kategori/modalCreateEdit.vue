@@ -42,6 +42,10 @@ export default {
                 nama: '',
             })
         },
+        removeCategory(item) {
+            const index = this.selectCategory.indexOf(item)
+            this.selectCategory.splice(index, 1)
+        }
     },
 }
 </script>
@@ -96,12 +100,12 @@ export default {
                             ></v-text-field>
                         </template>
 
-                        <template #item.action = "{ item, index }">
+                        <template #item.action = "{ item }">
                             <v-btn
                                 v-if="!item.id"
                                 color="red"
                                 text
-                                @click="selectCategory.splice(index, 1)"
+                                @click="removeCategory(item)"
                             >
                                 <v-icon>mdi-delete</v-icon>
                             </v-btn>

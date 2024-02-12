@@ -16,7 +16,7 @@ export default {
                 this.product = produk.map((item) => {
                     return {
                         ...item,
-                        generate: item.generate_seri == 1 ? true : false
+                        generate_seri: item.generate_seri == 1 ? true : false
                     }
                 })
                 this.$store.dispatch('setLoading', false)

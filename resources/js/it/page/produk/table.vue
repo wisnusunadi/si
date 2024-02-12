@@ -9,10 +9,11 @@ export default {
             search: '',
             header: [
                 { text: 'id', value: 'id', sortable: false },
+                { text: 'Kode Produk', value: 'kode' },
                 { text: 'Nama', value: 'nama' },
                 { text: 'Kategori', value: 'kategori' },
                 { text: 'Status', value: 'status' },
-                { text: 'Generate', value: 'generate' }
+                { text: 'Generate', value: 'generate_seri' }
             ],
             selectAll: false,
             selectProduct: [],
@@ -69,7 +70,7 @@ export default {
             try {
                 const { data } = await axios.post('/api/changeGenerateProduk', {
                     id: item.id,
-                    generate_seri: item.generate
+                    generate_seri: item.generate_seri
                 })
 
                 this.$swal('Berhasil', 'Generate No Seri Produk berhasil diubah', 'success')
@@ -121,9 +122,9 @@ export default {
                     :label="item.status ? 'Aktif' : 'Tidak Aktif'"></v-switch>
             </template>
 
-            <template #item.generate="{ item }">
-                <v-switch @click="updateGenerate(item)" v-model="item.generate"
-                    :label="item.generate ? 'Aktif' : 'Tidak Aktif'"></v-switch>
+            <template #item.generate_seri="{ item }">
+                <v-switch @click="updateGenerate(item)" v-model="item.generate_seri"
+                    :label="item.generate_seri ? 'Aktif' : 'Tidak Aktif'"></v-switch>
             </template>
 
         </v-data-table>

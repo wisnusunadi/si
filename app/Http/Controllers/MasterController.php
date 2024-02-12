@@ -1954,6 +1954,7 @@ class MasterController extends Controller
                     'no_akd' => $item->no_akd,
                     'status' => $item->status == 1 ? true : false,
                     'generate_seri' => $item->generate_seri,
+                    'kode' => $item->kode,
                     'gudang_barang_jadi' => $item->GudangBarangJadi
                 ];
             });
@@ -1980,12 +1981,14 @@ class MasterController extends Controller
                     [
                         'produk_id' => $item['produk_id'],
                         'kelompok_produk_id' => $item['kelompok_produk_id'],
+                        'kode' => $item['kode'],
                         'merk' => $item['merk'],
                         'nama' => $item['nama'],
                         'nama_coo' => isset($item['nama_coo']) ? $item['nama_coo'] : null,
                         'coo' => isset($item['coo']) ? $item['coo'] : 1,
                         'no_akd' => $item['no_akd'],
                         'status' => $item['status'],
+                        'generate_seri' => $item['generate_seri'],
                     ]
                 );
 
