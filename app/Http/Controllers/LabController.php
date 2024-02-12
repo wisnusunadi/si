@@ -63,6 +63,7 @@ class LabController extends Controller
             ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
             ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
             ->where('uji_lab_detail.status', '!=', 'belum');
+            // ->whereYear('uji_lab_detail.created_at', $request->years );
 
         $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
             ->selectRaw('"" AS no_paket')
@@ -94,25 +95,30 @@ class LabController extends Controller
 
         $dataInfo =   $ekatalog->merge($spa)->merge($spb);
 
-        foreach ($data->get() as $d) {
-            $obj[] = array(
-                'no' => str_pad($d->no, 4, '0', STR_PAD_LEFT),
-                'p_id' => $d->p_id,
-                'no_po' => $d->no_po,
-                'no_order' => 'LAB-' . str_pad($d->no_order, 4, '0', STR_PAD_LEFT),
-                'tgl_masuk' => $d->tgl_masuk,
-                'nama_alat' => $d->metode,
-                'type' => $d->produk,
-                'noseri' => $d->noseri,
-                'nama_pemilik' => $d->jp,
-                'nama_pemilik_sert' => $d->nama,
-                'alamat' => $d->alamat,
-                'tgl_kalibrasi' => $d->tgl_kalibrasi,
-                'no_sertifikat' => $d->no_sertifikat,
-                'pemeriksa' => $d->pemeriksa,
-                // 'info' => $dataInfo->where('id',$d->p_id)->toArray(),
-                'nosj' => str_pad($d->no_order, 4, '0', STR_PAD_LEFT) . '/LAB/' . date('m', strtotime($d->tgl_kalibrasi)) . '/' . date('y', strtotime($d->tgl_kalibrasi)),
-            );
+        if($data->get()->isEmpty()){
+            $obj = array();
+            return response()->json($obj);
+        }else{
+            foreach ($data->get() as $d) {
+                $obj[] = array(
+                    'no' => str_pad($d->no, 4, '0', STR_PAD_LEFT),
+                    'p_id' => $d->p_id,
+                    'no_po' => $d->no_po,
+                    'no_order' => 'LAB-' . str_pad($d->no_order, 4, '0', STR_PAD_LEFT),
+                    'tgl_masuk' => $d->tgl_masuk,
+                    'nama_alat' => $d->metode,
+                    'type' => $d->produk,
+                    'noseri' => $d->noseri,
+                    'nama_pemilik' => $d->jp,
+                    'nama_pemilik_sert' => $d->nama,
+                    'alamat' => $d->alamat,
+                    'tgl_kalibrasi' => $d->tgl_kalibrasi,
+                    'no_sertifikat' => $d->no_sertifikat,
+                    'pemeriksa' => $d->pemeriksa,
+                    // 'info' => $dataInfo->where('id',$d->p_id)->toArray(),
+                    'nosj' => str_pad($d->no_order, 4, '0', STR_PAD_LEFT) . '/LAB/' . date('m', strtotime($d->tgl_kalibrasi)) . '/' . date('y', strtotime($d->tgl_kalibrasi)),
+                );
+            }
         }
         $merge = [];
         foreach ($obj as $labItem) {

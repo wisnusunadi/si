@@ -86,7 +86,10 @@ class KontrolLabs implements WithTitle, FromView, ShouldAutoSize
             ->whereIn('ekatalog.pesanan_id', $data->pluck('p_id')->toArray())->get();
 
         $dataInfo =   $ekatalog->merge($spa)->merge($spb);
-
+        if($data->get()->isEmpty()){
+            $obj = array();
+            return view('page.lab.kontrol_lab', ['data' => $obj]);
+        }else{
         foreach ($data->get() as $index => $d) {
             $obj[] = array(
                 'no' => $index + 1,
@@ -108,7 +111,7 @@ class KontrolLabs implements WithTitle, FromView, ShouldAutoSize
             );
         }
 
-
+    }
         $merge = [];
 
         foreach ($obj as $labItem) {
