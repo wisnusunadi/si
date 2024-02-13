@@ -24,6 +24,7 @@ use Alert;
 use App\Exports\CustomerData;
 use App\Exports\EkspedisiData;
 use App\Exports\ProdukData;
+use App\Models\AktifPeriode;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananPart;
@@ -2085,10 +2086,78 @@ class MasterController extends Controller
             ], 500);
         }
     }
-    public function buka_periode(Request $request) {
-      RiwayatAktifPeriode::create([
-        'user' => Auth::user()->nama,
-        'isi' => $request->all()
-      ]);
+
+    public function update_periode(Request $request, $id) {
+        try {
+            DB::beginTransaction();
+            //code...
+            $data = RiwayatAktifPeriode::find($id);
+            $getTahun = json_decode($data->isi)->years;
+
+            if($request->status == 'terima'){
+                $aktif = AktifPeriode::first();
+                $aktif->tahun = $getTahun;
+                $aktif->save();
+
+            }
+                $data->status = $request->status;
+                $data->save();
+                DB::commit();
+                return response()->json([
+                    'success' => true,
+                    ], 200);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'success' => fals,
+                ], 500);
+        }
+
+    }
+
+    public function show_periode() {
+        $data = RiwayatAktifPeriode::all();
+        $obj = array();
+        foreach($data as $d){
+            $x= json_decode($d->isi);
+            $obj[] = array(
+                'id' => $d->id,
+                'tahun' => $x->years,
+                'alasan' => $x->alasan,
+                'user' => $d->user,
+                'durasi' => $x->maxOpenDay. ' Hari',
+                'status' => $d->status,
+                'tgl_persetujuan' => $d->tgl_konfirmasi,
+                'tgl_pengajuan' => $d->created_at
+            );
+        }
+        return response()->json($obj);
+    }
+
+    public function permintaan_periode(Request $request) {
+      try {
+        //code...
+        DB::beginTransaction();
+        RiwayatAktifPeriode::create([
+            'user' => Auth::user()->nama,
+            'isi' => json_encode($request->all()),
+            'status' => 'pengajuan'
+          ]);
+          DB::commit();
+          return response()->json([
+            'success' => true,
+            ], 200);
+
+      } catch (\Throwable $th) {
+        //throw $th;
+        DB::rollBack();
+        return response()->json([
+            'success' => false,
+            'message' => $th->getMessage()
+        ], 500);
+      }
+
     }
 }

@@ -10,5 +10,5 @@ class RiwayatAktifPeriode extends Model
     use HasFactory;
     protected $connection = 'erp';
     protected $table = 'riwayat_aktif_periode';
-    protected $fillable = ['user','isi','status'];
+    protected $fillable = ['user','isi','status','tgl_konfirmasi'];
 }
