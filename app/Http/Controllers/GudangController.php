@@ -4239,44 +4239,47 @@ class GudangController extends Controller
     function storeCekSO(Request $request)
     {
         $user = auth()->user()->id;
-        dd($request->all());
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+       // dd($obj);
         try {
-            $h = Pesanan::find($request->pesanan_id);
-            foreach ($request->data as $key => $value) {
-                $dpid = DetailPesananProduk::where('id', $key)->get()->pluck('detail_pesanan_id');
-                DetailPesanan::whereIn('id', $dpid)->update(['jumlah' => $value[1]]);
-                DetailPesananProduk::whereIn('id', [$key])
-                    ->update(['status_cek' => 4, 'checked_by' => $user, 'gudang_barang_jadi_id' => $value[0]]);
+            foreach ($obj->produk as $value) {
+                // $dpid = DetailPesananProduk::where('id', $key)->get()->pluck('detail_pesanan_id');
+                // DetailPesanan::whereIn('id', $dpid)->update(['jumlah' => $value[1]]);
+                // DetailPesananProduk::whereIn('id', [$key])
+                //     ->update(['status_cek' => 4, 'checked_by' => $user, 'gudang_barang_jadi_id' => $value[0]]);
+                $dpp = DetailPesananProduk::find($value->id);
+                $dpp->gudang_barang_jadi_id = $value->variasiSelected->id;
+                $dpp->status_cek = 4;
+                $dpp->checked_by = $user;
+                $dpp->save();
             }
 
-            $h->status_cek = 4;
-            $h->checked_by = $user;
-            $h->log_id = 6;
-            $h->save();
+            // $h->status_cek = 4;
+            // $h->checked_by = $user;
+            // $h->log_id = 6;
+            // $h->save();
 
-            $obj = [
-                'pesanan_so' => $h->so,
-                'pesanan_po' => $h->no_po,
-                'data' => $request->data,
-                'status_cek' => 'Sudah Dicek'
-            ];
+            // $obj = [
+            //     'pesanan_so' => $h->so,
+            //     'pesanan_po' => $h->no_po,
+            //     'data' => $request->data,
+            //     'status_cek' => 'Sudah Dicek'
+            // ];
 
-            SystemLog::create([
-                'tipe' => 'GBJ',
-                'subjek' => 'Persiapan Produk Gudang',
-                'response' => json_encode($obj),
-                'user_id' => $user
-            ]);
-
+            // SystemLog::create([
+            //     'tipe' => 'GBJ',
+            //     'subjek' => 'Persiapan Produk Gudang',
+            //     'response' => json_encode($obj),
+            //     'user_id' => $user
+            // ]);
             return response()->json(['msg' => 'Successfully', 'error' => false]);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
-                'msg' => $e->getMessage(),
+                'msg' => 'a'.$e->getMessage(),
             ]);
         }
     }
-
     // select
     function select_layout()
     {
