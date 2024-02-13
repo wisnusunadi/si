@@ -31,7 +31,7 @@ export default {
                             showConfirmButton: false,
                             timer: 1500
                         })
-                        axios.post('/api/master/buka_periode', this.form, {
+                        axios.post('/api/master/buka_periode/permintaan', this.form, {
                             headers: {
                                 'Authorization': 'Bearer ' + localStorage.getItem('lokal_token')
                             }

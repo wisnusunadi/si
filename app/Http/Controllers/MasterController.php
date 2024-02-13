@@ -59,14 +59,13 @@ class MasterController extends Controller
 {
     public function select_parent_rw()
     {
-        $prd = Produk::select('id','nama')->has("DetailProdukRw")->get();
+        $prd = Produk::select('id', 'nama')->has("DetailProdukRw")->get();
 
         return response()->json($prd);
     }
     public function select_item_rw($id)
     {
-        $prd = DetailProdukRw::
-        addSelect([
+        $prd = DetailProdukRw::addSelect([
                 'ckirimprd' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_barang_jadi.id),0)')
                         ->from('noseri_barang_jadi')
@@ -74,10 +73,11 @@ class MasterController extends Controller
                         ->where('noseri_barang_jadi.is_ready', '0')
                         ->whereNull('noseri_barang_jadi.used_by')
                         ->whereColumn('gdg_barang_jadi.produk_id', 'detail_produks_rw.produk_id');
-                },])
-        ->where('produk_parent_id',$id)->get();
+                },
+            ])
+            ->where('produk_parent_id', $id)->get();
 
-        return response()->json(['jumlah'=>$prd->min('ckirimprd')]);
+        return response()->json(['jumlah' => $prd->min('ckirimprd')]);
     }
     public function get_all_past_no_seri(Request $r)
     {
@@ -295,7 +295,8 @@ class MasterController extends Controller
             ->rawColumns(['status'])
             ->make(true);
     }
-    public function get_data_all_ekspedisi(Request $r) {
+    public function get_data_all_ekspedisi(Request $r)
+    {
         try {
             $ekspedisi = Ekspedisi::where('nama', 'LIKE', '%' . $r->input('term', '') . '%')->get();
 
@@ -1238,7 +1239,6 @@ class MasterController extends Controller
                 'message' => 'Cek Kembali Form',
             ], 200);
         }
-
     }
     public function update_coo_master_produk(Request $request, $id)
     {
@@ -1902,7 +1902,8 @@ class MasterController extends Controller
     }
 
     // kategori
-    public function indexKategori() {
+    public function indexKategori()
+    {
         try {
             $kategori = MProduk::all();
 
@@ -1918,9 +1919,10 @@ class MasterController extends Controller
         }
     }
 
-    public function postOrEditKategori(Request $request) {
+    public function postOrEditKategori(Request $request)
+    {
         try {
-            $kategori = collect($request->json())->map(function($item) {
+            $kategori = collect($request->json())->map(function ($item) {
                 $kategori = MProduk::updateOrCreate(
                     ['id' => isset($item['id']) ? $item['id'] : null],
                     [
@@ -1943,9 +1945,10 @@ class MasterController extends Controller
         }
     }
 
-    public function deleteKategori(Request $request) {
+    public function deleteKategori(Request $request)
+    {
         try {
-            $kategori = collect($request->json())->map(function($item) {
+            $kategori = collect($request->json())->map(function ($item) {
                 $kategori = MProduk::where('id', $item['id'])->delete();
             });
 
@@ -1962,30 +1965,30 @@ class MasterController extends Controller
         }
     }
 
-    public function indexProduk() {
+    public function indexProduk()
+    {
         try {
-            $produk = Produk::with('GudangBarangJadi')->
-            with('product')->with('KodeLab')->get()->map(function($item) {
-                $kodeLab = $item->KodeLab ? [
-                    'id' => $item->KodeLab->id,
-                    'label' => $item->KodeLab->nama
-                ] : null;
-                return [
-                    'id' => $item->id,
-                    'produk_id' => $item->produk_id,
-                    'kelompok_produk_id' => $item->kelompok_produk_id,
-                    'kode_lab' => $kodeLab,
-                    'merk' => $item->merk,
-                    'kategori' => $item->product->nama,
-                    'nama' => $item->nama,
-                    'nama_coo' => $item->nama_coo,
-                    'coo' => $item->coo,
-                    'no_akd' => $item->no_akd,
-                    'status' => $item->status == 1 ? true : false,
-                    'generate_seri' => $item->generate_seri,
-                    'gudang_barang_jadi' => $item->GudangBarangJadi
-                ];
-            });
+            $produk = Produk::with('GudangBarangJadi')->with('product')->with('KodeLab')->get()->map(function ($item) {
+                    $kodeLab = $item->KodeLab ? [
+                        'id' => $item->KodeLab->id,
+                        'label' => $item->KodeLab->nama
+                    ] : null;
+                    return [
+                        'id' => $item->id,
+                        'produk_id' => $item->produk_id,
+                        'kelompok_produk_id' => $item->kelompok_produk_id,
+                        'kode_lab' => $kodeLab,
+                        'merk' => $item->merk,
+                        'kategori' => $item->product->nama,
+                        'nama' => $item->nama,
+                        'nama_coo' => $item->nama_coo,
+                        'coo' => $item->coo,
+                        'no_akd' => $item->no_akd,
+                        'status' => $item->status == 1 ? true : false,
+                        'generate_seri' => $item->generate_seri,
+                        'gudang_barang_jadi' => $item->GudangBarangJadi
+                    ];
+                });
 
             return response()->json([
                 'success' => true,
@@ -1999,9 +2002,10 @@ class MasterController extends Controller
         }
     }
 
-    public function postOrEditProduk(Request $request) {
+    public function postOrEditProduk(Request $request)
+    {
         try {
-            $produk = collect($request->json())->map(function($item) {
+            $produk = collect($request->json())->map(function ($item) {
                 $produk = Produk::updateOrCreate(
                     [
                         'id' => isset($item['id']) ? $item['id'] : null
@@ -2039,7 +2043,6 @@ class MasterController extends Controller
                 'message' => 'Berhasil menambahkan produk',
                 'produk' => $produk
             ], 200);
-
         } catch (\Throwable $th) {
             return response()->json([
                 'success' => false,
@@ -2048,9 +2051,10 @@ class MasterController extends Controller
         }
     }
 
-    public function deleteProduk(Request $request) {
+    public function deleteProduk(Request $request)
+    {
         try {
-            $produk = collect($request->json())->map(function($item) {
+            $produk = collect($request->json())->map(function ($item) {
                 $gudang = GudangBarangJadi::where('produk_id', $item['id'])->delete();
 
                 $produk = Produk::where('id', $item['id'])->delete();
@@ -2069,14 +2073,15 @@ class MasterController extends Controller
         }
     }
 
-    public function changeStatusProduk(Request $request) {
+    public function changeStatusProduk(Request $request)
+    {
         try {
             $produk = Produk::find($request->id);
             $produk->status = $request->status;
             $produk->save();
 
             return response()->json([
-            'success' => true,
+                'success' => true,
                 'data' => $produk
             ], 200);
         } catch (\Throwable $th) {
@@ -2087,47 +2092,46 @@ class MasterController extends Controller
         }
     }
 
-    public function update_periode(Request $request, $id) {
+    public function update_periode(Request $request, $id)
+    {
         try {
             DB::beginTransaction();
             //code...
             $data = RiwayatAktifPeriode::find($id);
             $getTahun = json_decode($data->isi)->years;
 
-            if($request->status == 'terima'){
+            if ($request->status == 'terima') {
                 $aktif = AktifPeriode::first();
                 $aktif->tahun = $getTahun;
                 $aktif->save();
-
             }
-                $data->status = $request->status;
-                $data->save();
-                DB::commit();
-                return response()->json([
-                    'success' => true,
-                    ], 200);
-
+            $data->status = $request->status;
+            $data->save();
+            DB::commit();
+            return response()->json([
+                'success' => true,
+            ], 200);
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
             return response()->json([
                 'success' => fals,
-                ], 500);
+            ], 500);
         }
-
     }
 
-    public function show_periode() {
+    public function show_periode()
+    {
         $data = RiwayatAktifPeriode::all();
         $obj = array();
-        foreach($data as $d){
-            $x= json_decode($d->isi);
+        foreach ($data as $d) {
+            $x = json_decode($d->isi);
             $obj[] = array(
                 'id' => $d->id,
-                'tahun' => $x->years,
+                'periode' => $x->years,
                 'alasan' => $x->alasan,
-                'user' => $d->user,
-                'durasi' => $x->maxOpenDay. ' Hari',
+                'pemohon' => $d->user,
+                'durasi_buka' => $x->maxOpenDay . ' Hari',
                 'status' => $d->status,
                 'tgl_persetujuan' => $d->tgl_konfirmasi,
                 'tgl_pengajuan' => $d->created_at
@@ -2136,28 +2140,53 @@ class MasterController extends Controller
         return response()->json($obj);
     }
 
-    public function permintaan_periode(Request $request) {
-      try {
-        //code...
-        DB::beginTransaction();
-        RiwayatAktifPeriode::create([
-            'user' => Auth::user()->nama,
-            'isi' => json_encode($request->all()),
-            'status' => 'pengajuan'
-          ]);
-          DB::commit();
-          return response()->json([
-            'success' => true,
+    public function permintaan_periode(Request $request)
+    {
+        try {
+            //code...
+            DB::beginTransaction();
+            RiwayatAktifPeriode::create([
+                'user' => Auth::user()->nama,
+                'isi' => json_encode($request->all()),
+                'status' => 'pengajuan'
+            ]);
+            DB::commit();
+            return response()->json([
+                'success' => true,
             ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
 
-      } catch (\Throwable $th) {
-        //throw $th;
-        DB::rollBack();
-        return response()->json([
-            'success' => false,
-            'message' => $th->getMessage()
-        ], 500);
-      }
-
+    public function get_permintaan_pengajuan()
+    {
+        try {
+            $data = RiwayatAktifPeriode::where('status', 'pengajuan')->get();
+            $obj = array();
+            foreach ($data as $d) {
+                $x = json_decode($d->isi);
+                $obj[] = array(
+                    'id' => $d->id,
+                    'periode' => $x->years,
+                    'alasan' => $x->alasan,
+                    'pemohon' => $d->user,
+                    'durasi_buka' => $x->maxOpenDay . ' Hari',
+                    'status' => $d->status,
+                    'tgl_pengajuan' => $d->created_at
+                );
+            }
+            return response()->json($obj);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -4,6 +4,7 @@ export default {
         POEkat: [],
         PONonEkat: [],
         DO: [],
+        loading: false
     },
     mutations: {
         setDataSO(state, data) {
@@ -17,6 +18,14 @@ export default {
         },
         setDataDO(state, data) {
             state.DO = data;
+        },
+        setLoading(state, data) {
+            state.loading = data;
         }
+    },
+    actions: {
+        setLoading(context, data) {
+            context.commit('setLoading', data);
+        },
     }
 }
