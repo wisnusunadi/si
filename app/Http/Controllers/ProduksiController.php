@@ -2229,63 +2229,65 @@ class ProduksiController extends Controller
                 ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) != ?', ['sum(case when dpp.status_cek = 4 then 1 else 0 end)'])
                 ->get();
 
-            return datatables()->of($datax)
-                ->addIndexColumn()
-                ->addColumn('so', function ($data) {
-                    return $data->so;
-                })
-                ->addColumn('po', function ($data) {
-                    return $data->no_po;
-                })
-                ->addColumn('logs', function ($d) {
-                    if ($d->log_id == 9) {
-                        $ax = "<span class='badge badge-pill badge-secondary'>" . $d->log_nama . "</span>";
-                    } else if ($d->log_id == 6) {
-                        $ax = "<span class='badge badge-pill badge-warning'>" . $d->log_nama . "</span>";
-                    } elseif ($d->log_id == 8) {
-                        $ax = "<span class='badge badge-pill badge-info'>" . $d->log_nama . "</span>";
-                    } elseif ($d->log_id == 11) {
-                        $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
-                    } else {
-                        $ax = "<span class='badge badge-pill badge-danger'>" . $d->log_nama . "</span>";
-                    }
+            return response()->json($datax);
 
-                    return $ax;
-                })
-                ->addColumn('nama_customer', function ($data) {
-                    return $data->divisi;
-                })
-                ->addColumn('batas_out', function ($d) {
-                    if ($d->batas) {
-                        return Carbon::parse($d->batas)->isoFormat('D MMMM YYYY');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('action', function ($data) {
-                    $return = '';
-                    $x = explode('/', $data->so);
-                    if ($x[1] == 'EKAT') {
-                        $jual = 'ekatalog';
-                    } elseif ($x[1] == 'SPA') {
-                        $jual = 'spa';
-                    } elseif ($x[1] == 'SPB') {
-                        $jual = 'spb';
-                    }
+            // return datatables()->of($datax)
+            //     ->addIndexColumn()
+            //     ->addColumn('so', function ($data) {
+            //         return $data->so;
+            //     })
+            //     ->addColumn('po', function ($data) {
+            //         return $data->no_po;
+            //     })
+            //     ->addColumn('logs', function ($d) {
+            //         if ($d->log_id == 9) {
+            //             $ax = "<span class='badge badge-pill badge-secondary'>" . $d->log_nama . "</span>";
+            //         } else if ($d->log_id == 6) {
+            //             $ax = "<span class='badge badge-pill badge-warning'>" . $d->log_nama . "</span>";
+            //         } elseif ($d->log_id == 8) {
+            //             $ax = "<span class='badge badge-pill badge-info'>" . $d->log_nama . "</span>";
+            //         } elseif ($d->log_id == 11) {
+            //             $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
+            //         } else {
+            //             $ax = "<span class='badge badge-pill badge-danger'>" . $d->log_nama . "</span>";
+            //         }
 
-                    $return .= '        <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="' . $jual . '"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="' . $jual . '" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>';
+            //         return $ax;
+            //     })
+            //     ->addColumn('nama_customer', function ($data) {
+            //         return $data->divisi;
+            //     })
+            //     ->addColumn('batas_out', function ($d) {
+            //         if ($d->batas) {
+            //             return Carbon::parse($d->batas)->isoFormat('D MMMM YYYY');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('action', function ($data) {
+            //         $return = '';
+            //         $x = explode('/', $data->so);
+            //         if ($x[1] == 'EKAT') {
+            //             $jual = 'ekatalog';
+            //         } elseif ($x[1] == 'SPA') {
+            //             $jual = 'spa';
+            //         } elseif ($x[1] == 'SPB') {
+            //             $jual = 'spb';
+            //         }
 
-                    if ($data->no_po != NULL && $data->tgl_po != NULL) {
-                        $return .= ' <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
-                        <i class="fas fa-print"></i>
-                        SPPB
-                    </a>';
-                    }
-                    return $return;
-                })
-                ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd', 'logs'])
-                ->make(true);
+            //         $return .= '        <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="' . $jual . '"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+            //                         <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="' . $jual . '" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>';
+
+            //         if ($data->no_po != NULL && $data->tgl_po != NULL) {
+            //             $return .= ' <a target="_blank" class="btn btn-outline-primary btn-sm" class href="' . route('penjualan.penjualan.cetak_surat_perintah', [$data->id]) . '">
+            //             <i class="fas fa-print"></i>
+            //             SPPB
+            //         </a>';
+            //         }
+            //         return $return;
+            //     })
+            //     ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd', 'logs'])
+            //     ->make(true);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -2627,6 +2629,10 @@ class ProduksiController extends Controller
                     when substring_index(substring_index(pesanan.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
                     when pesanan.so is null then c_ekat.nama
                 end as divisi"),
+                DB::raw("case
+                    when substring_index(substring_index(pesanan.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+                    when pesanan.so is null then c_ekat.nama
+                end as akn"),
                 'e.tgl_kontrak',
                 'pesanan.id',
                 'pesanan.tgl_po'
@@ -2759,32 +2765,32 @@ class ProduksiController extends Controller
                 ->leftJoin('penjualan_produk', 'penjualan_produk.id', '=', 'detail_pesanan.penjualan_produk_id')
                 ->where('pesanan_id', $id)->get();
 
-                if($paket->isEmpty()){
-                    $obj = array();
-                }else{
-                    foreach ($paket as $key_a => $p) {
-                        $obj[$key_a] = array(
-                            'id' => $p->id,
-                            'nama' => $p->PenjualanProduk->nama,
-                            'jumlah' => $p->count_jumlah,
-                            'jumlah_sisa' => $p->count_jumlah - $p->count_gudang,
-                            'jumlah_gudang' => $p->count_gudang,
-                            'item' => array()
+            if ($paket->isEmpty()) {
+                $obj = array();
+            } else {
+                foreach ($paket as $key_a => $p) {
+                    $obj[$key_a] = array(
+                        'id' => $p->id,
+                        'nama' => $p->PenjualanProduk->nama,
+                        'jumlah' => $p->count_jumlah,
+                        'jumlah_sisa' => $p->count_jumlah - $p->count_gudang,
+                        'jumlah_gudang' => $p->count_gudang,
+                        'item' => array()
+                    );
+                    foreach ($p->DetailPesananProdukVariasi() as $key_b => $i) {
+                        $obj[$key_a]['item'][$key_b] = array(
+                            'id' => $i->id,
+                            'gudang_id' => $i->gudang_barang_jadi_id,
+                            'nama' => $i->GudangBarangJadi->Produk->nama . ' ' . $i->GudangBarangJadi->nama,
+                            'merk' => $i->GudangBarangJadi->Produk->merk,
+                            'jumlah' => $i->count_jumlah,
+                            'jumlah_gudang' => $i->count_gudang,
+                            'jumlah_sisa' => $i->count_jumlah - $i->count_gudang,
+                            'status' => $i->status_cek == NULL || $i->checked_by == NULL || $i->count_jumlah == $i->count_gudang ? false : true,
                         );
-                        foreach ($p->DetailPesananProdukVariasi() as $key_b => $i) {
-                            $obj[$key_a]['item'][$key_b] = array(
-                                'id' => $i->id,
-                                'gudang_id' => $i->gudang_barang_jadi_id,
-                                'nama' => $i->GudangBarangJadi->Produk->nama . ' ' . $i->GudangBarangJadi->nama,
-                                'merk' => $i->GudangBarangJadi->Produk->merk,
-                                'jumlah' => $i->count_jumlah,
-                                'jumlah_gudang' => $i->count_gudang,
-                                'jumlah_sisa' => $i->count_jumlah - $i->count_gudang,
-                                'status' => $i->status_cek == NULL || $i->checked_by == NULL || $i->count_jumlah == $i->count_gudang ? false : true,
-                            );
-                        }
                     }
                 }
+            }
 
 
             return response()->json($obj);
@@ -2796,7 +2802,7 @@ class ProduksiController extends Controller
         }
     }
 
-    function getDetailSO($id, $value)
+    function getDetailSO($id)
     {
 
         try {
@@ -2824,33 +2830,39 @@ class ProduksiController extends Controller
                 ->where('pesanan_id', $id)->get();
 
 
-                if($paket->isEmpty()){
-                    $obj = array();
-                }else{
-                    foreach ($paket as $key_a => $p) {
-                        $obj[$key_a] = array(
-                            'id' => $p->id,
-                            'nama' => $p->PenjualanProduk->nama,
-                            'jumlah' => $p->count_jumlah,
-                            'jumlah_sisa' => $p->count_jumlah - $p->count_gudang,
-                            'jumlah_gudang' => $p->count_gudang,
-                            'item' => array()
+            if ($paket->isEmpty()) {
+                $obj = array();
+            } else {
+                foreach ($paket as $key_a => $p) {
+                    $obj[$key_a] = array(
+                        'id' => $p->id,
+                        'nama' => $p->PenjualanProduk->nama,
+                        'jumlah' => $p->count_jumlah,
+                        'jumlah_sisa' => $p->count_jumlah - $p->count_gudang,
+                        'jumlah_gudang' => $p->count_gudang,
+                        'item' => array()
+                    );
+                    foreach ($p->DetailPesananProdukVariasi() as $key_b => $i) {
+                        $obj[$key_a]['item'][$key_b] = array(
+                            'id' => $i->id,
+                            'gudang_id' => $i->gudang_barang_jadi_id,
+                            'produk_id' => $i->GudangBarangJadi->Produk->id,
+                            'variasiSelected' => [
+                                [
+                                    'id' => $i->gudang_barang_jadi_id,
+                                    'label' => $i->GudangBarangJadi->Produk->nama . ' ' . $i->GudangBarangJadi->nama,
+                                ]
+                            ],
+                            'merk' => $i->GudangBarangJadi->Produk->merk,
+                            'jumlah' => $i->count_jumlah,
+                            'jumlah_gudang' => $i->count_gudang,
+                            'jumlah_sisa' => $i->count_jumlah - $i->count_gudang,
+                            'status' => $i->status_cek == NULL || $i->checked_by == NULL || $i->count_jumlah == $i->count_gudang ? false : true,
                         );
-                        foreach ($p->DetailPesananProdukVariasi() as $key_b => $i) {
-                            $obj[$key_a]['item'][$key_b] = array(
-                                'id' => $i->id,
-                                'gudang_id' => $i->gudang_barang_jadi_id,
-                                'nama' => $i->GudangBarangJadi->Produk->nama . ' ' . $i->GudangBarangJadi->nama,
-                                'merk' => $i->GudangBarangJadi->Produk->merk,
-                                'jumlah' => $i->count_jumlah,
-                                'jumlah_gudang' => $i->count_gudang,
-                                'jumlah_sisa' => $i->count_jumlah - $i->count_gudang,
-                                'status' => $i->status_cek == NULL || $i->checked_by == NULL || $i->count_jumlah == $i->count_gudang ? false : true,
-                            );
-                        }
                     }
                 }
-                return response()->json($obj);
+            }
+            return response()->json($obj);
         } catch (\Throwable $e) {
             //throw $th;
             return response()->json([
