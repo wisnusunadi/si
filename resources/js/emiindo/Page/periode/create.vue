@@ -22,29 +22,33 @@ export default {
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                }).then((result) => {
+                }).then(async (result) => {
                     if (result.isConfirmed) {
-                        this.$swal({
-                            title: 'Berhasil!',
-                            text: 'Pengajuan periode penjualan telah dikirim',
-                            icon: 'success',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                        axios.post('/api/master/buka_periode/permintaan', this.form, {
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('lokal_token')
-                            }
-                        })
-                        swal.fire({
-                            title: 'Berhasil!',
-                            text: 'Pengajuan periode penjualan telah dikirim',
-                            icon: 'success',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                        this.$emit('refresh');
-                        this.closeModal();
+                        try {
+                            await axios.post('/api/master/buka_periode/permintaan', this.form, {
+                                headers: {
+                                    'Authorization': 'Bearer ' + localStorage.getItem('lokal_token')
+                                }
+                            })
+                            swal.fire({
+                                title: 'Berhasil!',
+                                text: 'Pengajuan periode penjualan telah dikirim',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            this.$emit('refresh');
+                            this.closeModal();
+                        } catch (error) {
+                            console.log(error);
+                            swal.fire({
+                                title: 'Gagal!',
+                                text: 'Terjadi kesalahan saat mengajukan periode penjualan',
+                                icon: 'error',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
                     }
                 })
             } else {

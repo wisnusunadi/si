@@ -44,16 +44,20 @@ export default {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
             }).then(async (result) => {
-                await axios.post(`/api/master/buka_periode/update/${item.id}`, {
-                    status: 'terima'
-                })
-                this.$swal({
-                    text: `Permintaan periode ${item.periode} berhasil diterima!`,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                })
+                try {
+                    await axios.post(`/api/master/buka_periode/update/${item.id}`, {
+                        status: 'terima'
+                    })
+                    this.$swal({
+                        text: `Permintaan periode ${item.periode} berhasil diterima!`,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                    })
 
-                this.getData()
+                    this.getData()
+                } catch (error) {
+                    console.log(error)
+                }
             })
         },
         tolak(item) {
@@ -66,17 +70,26 @@ export default {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
             }).then(async (result) => {
-                await axios.post(`/api/master/buka_periode/update/${item.id}`, {
-                    status: 'batal'
-                })
-
-                this.$swal({
-                    text: `Permintaan periode ${item.periode} berhasil ditolak!`,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                })
-
-                this.getData()
+                try {
+                    await axios.post(`/api/master/buka_periode/update/${item.id}`, {
+                        status: 'tolak'
+                    })
+                    this.$swal({
+                        text: `Permintaan periode ${item.periode} berhasil ditolak!`,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                    })
+                    this.getData()
+                } catch (error) {
+                    console.log(error)
+                    swal.fire({
+                        title: 'Gagal!',
+                        text: 'Terjadi kesalahan saat menolak permintaan periode',
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
             })
         },
         async getData() {
