@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 export default {
     props: ['detailSelected'],
     data() {
@@ -10,11 +11,7 @@ export default {
                     align: 'text-left'
                 }
             ],
-            items: [
-                {
-                    noseri: '1234567890'
-                }
-            ],
+            items: [],
             search: '',
         }
     },
@@ -24,8 +21,28 @@ export default {
             this.$nextTick(() => {
                 this.$emit('closeModal')
             })
+        },
+        async getData() {
+            try {
+                const { data } = await axios.get(`/api/gbj/modal_data_seri_tf/${this.detailSelected.id}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
+                    }
+                })
+                this.items = data.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item,
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
         }
     },
+    created() {
+        this.getData()
+    }
 }
 </script>
 <template>

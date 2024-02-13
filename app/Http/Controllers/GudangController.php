@@ -675,7 +675,13 @@ class GudangController extends Controller
                 // ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_ekat_po,0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) > count_transfer')
                 ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_ekat_nego, 0) + coalesce(count_ekat_draft, 0) + coalesce(count_ekat_po, 0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) != 0')
                 ->orderBy(DB::raw('concat(p.nama," ",gdg_barang_jadi.nama)'))
-                ->get();
+                ->get()->map(function ($item) {
+                    $item->permintaan = intval($item->count_ekat_sepakat) + intval($item->count_ekat_po) + intval($item->count_ekat_nego) + intval($item->count_ekat_draft) + intval($item->count_spa_po) + intval($item->count_spb_po);
+                    $item->sisa = $item->permintaan - intval($item->count_transfer);
+                    return $item;
+                });
+
+            return response()->json($data);
 
             $dt = datatables()->of($data)
                 ->addIndexColumn()
@@ -707,6 +713,23 @@ class GudangController extends Controller
     function get_detail_rekap_so_produk($id)
     {
         try {
+            function customer($data)
+            {
+                if ($data->Ekatalog) {
+                    if (isset($data->Ekatalog->Customer)) {
+                        return $data->Ekatalog->Customer->nama;
+                    }
+                } else if ($data->Spa) {
+                    if (isset($data->Spa->Customer)) {
+                        return $data->Spa->Customer->nama;
+                    }
+                } else {
+                    if (isset($data->Spb->Customer)) {
+                        return $data->Spb->Customer->nama;
+                    }
+                }
+            }
+
             $data = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
                 $q->where('id', $id);
             })->addSelect([
@@ -741,7 +764,12 @@ class GudangController extends Controller
                 ->whereNotIn('log_id', ['10', '20'])
                 ->whereNotNull('pesanan.so')
                 // ->havingRaw('count_pesanan > count_transfer')
-                ->get();
+                ->get()->map(function ($item) {
+                    $item->customer = customer($item);
+                    return $item;
+                });
+
+            return response()->json($data);
 
             $dt = datatables()->of($data)
                 ->addIndexColumn()
@@ -4210,17 +4238,19 @@ class GudangController extends Controller
 
     function storeCekSO(Request $request)
     {
+        $user = auth()->user()->id;
+        dd($request->all());
         try {
             $h = Pesanan::find($request->pesanan_id);
             foreach ($request->data as $key => $value) {
                 $dpid = DetailPesananProduk::where('id', $key)->get()->pluck('detail_pesanan_id');
                 DetailPesanan::whereIn('id', $dpid)->update(['jumlah' => $value[1]]);
                 DetailPesananProduk::whereIn('id', [$key])
-                    ->update(['status_cek' => 4, 'checked_by' => $request->userid, 'gudang_barang_jadi_id' => $value[0]]);
+                    ->update(['status_cek' => 4, 'checked_by' => $user, 'gudang_barang_jadi_id' => $value[0]]);
             }
 
             $h->status_cek = 4;
-            $h->checked_by = $request->userid;
+            $h->checked_by = $user;
             $h->log_id = 6;
             $h->save();
 
@@ -4235,7 +4265,7 @@ class GudangController extends Controller
                 'tipe' => 'GBJ',
                 'subjek' => 'Persiapan Produk Gudang',
                 'response' => json_encode($obj),
-                'user_id' => $request->userid
+                'user_id' => $user
             ]);
 
             return response()->json(['msg' => 'Successfully', 'error' => false]);
@@ -4281,12 +4311,6 @@ class GudangController extends Controller
     function select_gbj()
     {
         $data = GudangBarangJadi::with('produk')->get();
-        return response()->json($data);
-    }
-
-    function select_variasi($id)
-    {
-        $data = GudangBarangJadi::where('produk_id',$id)->get();
         return response()->json($data);
     }
 
@@ -5512,7 +5536,7 @@ class GudangController extends Controller
                             't_gbj_id' => $a->id,
                             'detail_pesanan_produk_id' => $values['id'],
                             'gdg_brg_jadi_id' => $values['gudang_id'],
-                            'qty' =>count($values['noseri']),
+                            'qty' => count($values['noseri']),
                             'jenis' => 'keluar',
                             'status_id' => 2,
                             'state_id' => 8,

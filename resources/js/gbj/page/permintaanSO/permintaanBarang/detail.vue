@@ -1,6 +1,7 @@
 <script>
 import detailSO from './detailSO.vue'
 import pagination from '../../../components/pagination.vue'
+import axios from 'axios'
 export default {
     components: {
         detailSO,
@@ -10,49 +11,7 @@ export default {
     data() {
         return {
             search: '',
-            items: [
-                {
-                    no: 1,
-                    so: 'SO-2021060001',
-                    po: 'PO-2021060001',
-                    akn: 'AKN-2021060001',
-                    customer: 'PT. ABC',
-                    pesanan: 10,
-                    terkirim: 10
-                },
-                {
-                    no: 2,
-                    so: 'SO-2021060002',
-                    po: 'PO-2021060002',
-                    customer: 'PT. DEF',
-                    pesanan: 10,
-                    terkirim: 10
-                },
-                {
-                    no: 3,
-                    so: 'SO-2021060003',
-                    po: 'PO-2021060003',
-                    customer: 'PT. GHI',
-                    pesanan: 10,
-                    terkirim: 10
-                },
-                {
-                    no: 4,
-                    so: 'SO-2021060004',
-                    po: 'PO-2021060004',
-                    customer: 'PT. JKL',
-                    pesanan: 10,
-                    terkirim: 10
-                },
-                {
-                    no: 5,
-                    so: 'SO-2021060005',
-                    po: 'PO-2021060005',
-                    customer: 'PT. MNO',
-                    pesanan: 10,
-                    terkirim: 10
-                }
-            ],
+            items: [],
             renderPaginate: [],
             detailSelectedSO: {},
             showModal: false
@@ -82,7 +41,23 @@ export default {
                 $('.modalDetailSO').modal('hide')
                 $('.modalDetail').modal('show')
             })
+        },
+        async getData() {
+            try {
+                const { data } = await axios.get(`/api/v2/gbj/get_detail_rekap_so_produk/${this.detailSelected.id}`)
+                this.items = data.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item,
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
         }
+    },
+    created() {
+        this.getData()
     },
     computed: {
         filterDalamProses() {
@@ -97,7 +72,7 @@ export default {
 </script>
 <template>
     <div>
-        <detailSO :detailSelected="detailSelectedSO" @closeModal="closeModalDetailSO" />
+        <detailSO v-if="showModal" :detailSelected="detailSelectedSO" @closeModal="closeModalDetailSO" />
         <div class="modal fade modalDetail" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
             aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
@@ -114,7 +89,7 @@ export default {
                                     <div class="col"> <label for="">Total Permintaan</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                <span id="total_tf">{{ detailSelected.total }} Unit</span>
+                                                <span id="total_tf">{{ detailSelected.permintaan }} Unit</span>
                                             </div>
                                         </div>
                                     </div>
@@ -130,7 +105,7 @@ export default {
                                     <div class="col"> <label for="">Sudah Terpenuhi</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                <span id="sudah_tf">{{ detailSelected.jumlah_transfer }} Unit</span>
+                                                <span id="sudah_tf">{{ detailSelected.count_transfer }} Unit</span>
                                             </div>
                                         </div>
                                     </div>
@@ -162,10 +137,10 @@ export default {
                                         <tr v-for="(item, index) in renderPaginate" :key="index">
                                             <td>{{ item.no }}</td>
                                             <td>{{ item.so }}</td>
-                                            <td>{{ item.po }}</td>
+                                            <td>{{ item.no_po }}</td>
                                             <td>{{ item.customer }}</td>
-                                            <td>{{ item.pesanan }}</td>
-                                            <td>{{ item.terkirim }}</td>
+                                            <td>{{ item.count_pesanan }}</td>
+                                            <td>{{ item.count_transfer }}</td>
                                             <td>
                                                 <button type="button" class="btn btn-outline-primary btn-sm"
                                                     @click="openModalDetailSO(item)">

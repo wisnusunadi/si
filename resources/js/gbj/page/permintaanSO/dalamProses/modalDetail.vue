@@ -58,15 +58,28 @@ export default {
                 this.selectedProduk.push(item)
             }
         },
-        simpan() {
+        async simpan() {
             if (this.selectedProduk.length == 0) {
                 swal.fire('Peringatan', 'Pilih minimal 1 produk', 'warning')
                 return
             }
-            console.log(this.selectedProduk)
-            swal.fire('Berhasil', 'Data berhasil disimpan', 'success')
-            this.$emit('refresh')
-            closeModal()
+            try {
+                const { data } = await axios.post('/api/so/cek', {
+                    pesanan_id: this.detailSelected.id,
+                    produk: this.selectedProduk
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('lokal_token')}`
+                    }
+                })
+                swal.fire('Berhasil', 'Data berhasil disimpan', 'success')
+                this.$emit('refresh')
+                this.closeModal()
+            } catch (error) {
+                console.log(error)
+                swal.fire('Error', 'Terjadi kesalahan', 'error')
+            }
+            
         },
         persentase(jmlPerItem, jmlTotal) {
             let item = parseInt(jmlPerItem)
@@ -209,7 +222,7 @@ export default {
                                                 <td>
                                                     <v-select :options="item.variasi" v-model="item.variasiSelected"
                                                         v-if="!detailSelected.detailOpen"></v-select>
-                                                    <span v-else>{{ item.variasiSelected.label }}</span>
+                                                    <span v-else>{{ item.variasiSelected[0].label }}</span>
                                                 </td>
                                                 <td>{{ item.jumlah }}</td>
                                                 <td>

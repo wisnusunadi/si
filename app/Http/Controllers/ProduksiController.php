@@ -2124,6 +2124,8 @@ class ProduksiController extends Controller
                 ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) = ?', [0])
                 ->get();
 
+            return response()->json($datax);
+
             return datatables()->of($datax)
                 ->addIndexColumn()
                 ->addColumn('so', function ($data) {
@@ -2802,6 +2804,17 @@ class ProduksiController extends Controller
         }
     }
 
+    function select_variasi($id)
+    {
+        $data = GudangBarangJadi::where('produk_id', $id)->get();
+        return $data->map(function ($i) {
+            return [
+                'id' => $i->id,
+                'label' => $i->Produk->nama . ' ' . $i->nama,
+            ];
+        });
+    }
+
     function getDetailSO($id)
     {
 
@@ -2846,13 +2859,13 @@ class ProduksiController extends Controller
                         $obj[$key_a]['item'][$key_b] = array(
                             'id' => $i->id,
                             'gudang_id' => $i->gudang_barang_jadi_id,
-                            'produk_id' => $i->GudangBarangJadi->Produk->id,
                             'variasiSelected' => [
                                 [
                                     'id' => $i->gudang_barang_jadi_id,
                                     'label' => $i->GudangBarangJadi->Produk->nama . ' ' . $i->GudangBarangJadi->nama,
                                 ]
                             ],
+                            'variasi' => $this->select_variasi($i->GudangBarangJadi->Produk->id),
                             'merk' => $i->GudangBarangJadi->Produk->merk,
                             'jumlah' => $i->count_jumlah,
                             'jumlah_gudang' => $i->count_gudang,

@@ -89,7 +89,7 @@ export default {
 </script>
 <template>
     <div class="card">
-        <detail v-if="showModal" :detailSelected="detailSelected" @closeModal="showModal = false" />
+        <detail v-if="showModal" :detailSelected="detailSelected" @closeModal="showModal = false" @refresh="getData" />
         <div class="card-body">
             <div class="d-flex flex-row-reverse bd-highlight">
                 <div class="p-2 bd-highlight">

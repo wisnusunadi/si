@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import pagination from '../../../components/pagination.vue';
 import detail from './detail.vue';
 export default {
@@ -9,15 +10,7 @@ export default {
     data() {
         return {
             search: '',
-            items: [
-                {
-                    no: 1,
-                    nama: 'TIMBANGAN DIGITAL IBU & ANAK DIGIT-PRO IDA NEW',
-                    total: 8,
-                    sisa: 8,
-                    jumlah_transfer: 0
-                }
-            ],
+            items: [],
             renderPaginate: [],
             showModal: false,
             detailSelected: {}
@@ -33,7 +26,23 @@ export default {
             this.$nextTick(() => {
                 $('.modalDetail').modal('show')
             });
-        }
+        },
+        async getData() {
+            try {
+                const { data } = await axios.get('/api/v2/gbj/get_rekap_so_produk')
+                this.items = data.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item,
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        },
+    },
+    created() {
+        this.getData()
     },
     computed: {
         filteredDalamProses() {
@@ -72,10 +81,10 @@ export default {
                 <tbody v-if="renderPaginate.length > 0">
                     <tr v-for="(item, index) in renderPaginate" :key="index">
                         <td>{{ index + 1 }}</td>
-                        <td>{{ item.nama }}</td>
-                        <td>{{ item.total }}</td>
+                        <td>{{ item.produkk }}</td>
+                        <td>{{ item.permintaan }}</td>
                         <td>{{ item.sisa }}</td>
-                        <td>{{ item.jumlah_transfer }}</td>
+                        <td>{{ item.count_transfer }}</td>
                         <td>
                             <button class="btn btn-outline-info btn-sm" @click="openModalDetail(item)">
                                 <i class="fa fa-eye"></i>

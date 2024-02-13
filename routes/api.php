@@ -179,7 +179,7 @@ Route::prefix('/penjualan')->group(function () {
 
 Route::prefix('/so')->group(function () {
     Route::post('data', [App\Http\Controllers\PenjualanController::class, 'get_data_so']);
-    Route::post('/cek', [App\Http\Controllers\GudangController::class, 'storeCekSO']);
+    Route::post('/cek', [App\Http\Controllers\GudangController::class, 'storeCekSO'])->middleware('jwt.verify');
 });
 Route::prefix('/laporan')->group(function () {
     Route::post('/create', [App\Http\Controllers\PenjualanController::class, 'laporan']);
@@ -236,7 +236,7 @@ Route::prefix('/gbj')->group(function () {
     Route::get('sel-layout', [GudangController::class, 'select_layout']);
     Route::get('sel-divisi', [GudangController::class, 'select_divisi'])->middleware('jwt.verify');
     Route::get('sel-gbj', [GudangController::class, 'select_gbj'])->middleware('jwt.verify');
-    Route::get('sel-var', [GudangController::class, 'select_variasi']);
+    Route::get('sel-var', [ProduksiController::class, 'select_variasi']);
 
     // so
     Route::post('/createNon', [App\Http\Controllers\GudangController::class, 'tanpaSo']);
