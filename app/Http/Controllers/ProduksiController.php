@@ -626,6 +626,7 @@ class ProduksiController extends Controller
 
                     $jp = JadwalPerakitan::find($obj->jadwal_id);
                     $jp->state = 12;
+                    $jp->status_tf = 12;
                     $jp->save();
 
 
