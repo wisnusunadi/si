@@ -60,7 +60,6 @@ class DetailPesanan extends Model
         return $detail_pesanan_produk;
     }
 
-
     public function GetVariasi()
     {
         $id = $this->id;
