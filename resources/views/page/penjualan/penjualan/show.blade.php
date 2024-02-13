@@ -299,10 +299,15 @@
     <section class="content">
         <div class="container-fluid">
             <div class="col-12">
-                {{-- <div class="alert alert-danger" role="alert">
+                @php
+                    $years = \App\Models\AktifPeriode::first()->tahun;
+                @endphp
+                @if ($years != \Carbon\Carbon::now()->year)
+                <div class="alert alert-danger" role="alert">
                     <i class="fas fa-exclamation-triangle"></i>
-                    Periode yang dibuka saat ini adalah periode 2023
-                </div> --}}
+                    Periode yang dibuka saat ini adalah periode {{ $years }}
+                </div>
+                @endif
                 <div class="row">
                     <div id="auth" class="hide">{{ Auth::user()->divisi_id }}</div>
                     <div class="col-12">

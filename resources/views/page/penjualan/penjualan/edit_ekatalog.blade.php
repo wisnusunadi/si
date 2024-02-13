@@ -191,10 +191,20 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
-            {{-- <div class="alert alert-danger" role="alert">
-                <i class="fas fa-exclamation-triangle"></i>
-                Periode yang dibuka saat ini adalah periode 2023
-            </div> --}}
+@php
+                        $years = \App\Models\AktifPeriode::first()->tahun;
+                        $isOpen = false;
+                        if ($years != \Carbon\Carbon::now()->year) {
+                            $isOpen = true;
+                        }
+                        $maxDate = $isOpen ? \Carbon\Carbon::parse($years . '-12-31')->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d');
+                    @endphp
+                    @if ($isOpen)
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Periode yang dibuka saat ini adalah periode {{ $years }}
+                        </div>
+                    @endif
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="card" id="ekatalog">
@@ -647,6 +657,7 @@
                                                                                 <input type="date"
                                                                                     class="form-control col-form-label @error('tgl_buat') is-invalid @enderror"
                                                                                     name="tgl_buat" id="tgl_buat"
+                                                                                    max="{{ $maxDate }}"
                                                                                     value="{{ $e->tgl_buat }}" />
                                                                                 <div class="invalid-feedback"
                                                                                     id="msgtgl_buat">
@@ -664,6 +675,7 @@
                                                                                 <input type="date"
                                                                                     class="form-control col-form-label @error('tgl_edit') is-invalid @enderror"
                                                                                     name="tgl_edit" id="tgl_edit"
+                                                                                    max="{{ $maxDate }}"
                                                                                     value="{{ $e->tgl_edit }}" />
                                                                                 <div class="invalid-feedback"
                                                                                     id="msgtgl_edit">
@@ -682,6 +694,7 @@
                                                                                     class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror"
                                                                                     name="batas_kontrak"
                                                                                     id="batas_kontrak"
+                                                                                    max="{{ $maxDate }}"
                                                                                     value="{{ $e->tgl_kontrak }}"
                                                                                     @if ($e->status != 'sepakat') disabled="true" @endif />
                                                                                 <div class="invalid-feedback"
@@ -725,6 +738,7 @@
                                                                                 <input type="date"
                                                                                     class="form-control @error('tanggal_po_ekat') is-invalid @enderror"
                                                                                     value="{{ $e->Pesanan->tgl_po }}"
+                                                                                    max="{{ $maxDate }}"
                                                                                     placeholder="Masukkan Tanggal Purchase Order"
                                                                                     id="tanggal_po_ekat"
                                                                                     name="tanggal_po_ekat" />
@@ -782,6 +796,7 @@
                                                                                     class="form-control col-form-label @error('tanggal_do_ekat') is-invalid @enderror"
                                                                                     id="tanggal_do_ekat"
                                                                                     name="tanggal_do_ekat"
+                                                                                    max="{{ $maxDate }}"
                                                                                     value="{{ $e->Pesanan->tgl_do }}" />
                                                                                 <div class="invalid-feedback"
                                                                                     id="msgtanggal_do_ekat">

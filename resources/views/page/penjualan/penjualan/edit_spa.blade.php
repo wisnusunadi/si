@@ -157,10 +157,20 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
-            {{-- <div class="alert alert-danger" role="alert">
-                <i class="fas fa-exclamation-triangle"></i>
-                Periode yang dibuka saat ini adalah periode 2023
-            </div> --}}
+@php
+                        $years = \App\Models\AktifPeriode::first()->tahun;
+                        $isOpen = false;
+                        if ($years != \Carbon\Carbon::now()->year) {
+                            $isOpen = true;
+                        }
+                        $maxDate = $isOpen ? \Carbon\Carbon::parse($years . '-12-31')->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d');
+                    @endphp
+                    @if ($isOpen)
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Periode yang dibuka saat ini adalah periode {{ $years }}
+                        </div>
+                    @endif
             <div class="row justify-content-center">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
@@ -509,6 +519,7 @@
                                                                     <input type="date"
                                                                         class="form-control col-form-label @error('tanggal_do') is-invalid @enderror"
                                                                         id="tanggal_do" name="tanggal_do"
+                                                                        max="{{ $maxDate }}"
                                                                         value="{{ $e->Pesanan->tgl_do }}" />
                                                                     <div class="invalid-feedback" id="msgtanggal_po">
                                                                         @if ($errors->has('tanggal_do'))

@@ -95,13 +95,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                    .row {
-                                        font-size: 12px;
-                                    }
+                                            .row {
+                                                font-size: 12px;
+                                            }
 
-                                    h4 {
-                                        font-size: 20px;
-                                    } */
+                                            h4 {
+                                                font-size: 20px;
+                                            } */
             section {
                 font-size: 12px;
             }
@@ -122,13 +122,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                    .row {
-                                        font-size: 12px;
-                                    }
+                                            .row {
+                                                font-size: 12px;
+                                            }
 
-                                    h4 {
-                                        font-size: 20px;
-                                    } */
+                                            h4 {
+                                                font-size: 20px;
+                                            } */
             section {
                 font-size: 12px;
             }
@@ -157,10 +157,23 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
-            {{-- <div class="alert alert-danger" role="alert">
-                <i class="fas fa-exclamation-triangle"></i>
-                Periode yang dibuka saat ini adalah periode 2023
-            </div> --}}
+            @php
+                $years = \App\Models\AktifPeriode::first()->tahun;
+            @endphp
+@php
+                        $years = \App\Models\AktifPeriode::first()->tahun;
+                        $isOpen = false;
+                        if ($years != \Carbon\Carbon::now()->year) {
+                            $isOpen = true;
+                        }
+                        $maxDate = $isOpen ? \Carbon\Carbon::parse($years . '-12-31')->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d');
+                    @endphp
+                    @if ($isOpen)
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Periode yang dibuka saat ini adalah periode {{ $years }}
+                        </div>
+                    @endif
             <div class="row justify-content-center">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
@@ -489,6 +502,7 @@
                                                                     DO</label>
                                                                 <div class="col-lg-4 col-md-7">
                                                                     <input type="date"
+                                                                    max="{{ $maxDate }}"
                                                                         class="form-control col-form-label @error('tanggal_do') is-invalid @enderror"
                                                                         id="tanggal_do" name="tanggal_do"
                                                                         value="{{ $e->Pesanan->tgl_do }}" />
