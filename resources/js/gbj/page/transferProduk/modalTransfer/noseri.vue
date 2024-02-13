@@ -196,7 +196,7 @@ export default {
 <template>
     <div>
         <seriviatext v-if="showmodalviatext" @close="closeModalViaText" @submit="submit" />
-        <div class="modal fade modalNoSeri" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal fade modalNoSeri" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">

@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import Header from '../../components/header.vue';
 import createModal from './create.vue';
 export default {
@@ -56,54 +57,7 @@ export default {
                     sortable: false,
                 }
             ],
-            items: [
-                {
-                    no: 1,
-                    periode: 2023,
-                    durasi_buka: '10 hari',
-                    alasan: 'Penambahan po',
-                    tanggal_pengajuan: '23 September 2021',
-                    tanggal_persetujuan: '-',
-                    pemohon: 'Admin',
-                    status: 'Dalam Pengajuan',
-                    isOpened: false,
-                },
-                {
-                    no: 2,
-                    periode: 2023,
-                    durasi_buka: '10 hari',
-                    alasan: 'Penambahan po',
-                    tanggal_pengajuan: '23 September 2021',
-                    tanggal_persetujuan: '-',
-                    pemohon: 'Admin',
-                    status: 'Ditolak',
-                    isOpened: false,
-
-                },
-                {
-                    no: 3,
-                    periode: 2021,
-                    durasi_buka: '10 hari',
-                    alasan: 'Penambahan po',
-                    tanggal_pengajuan: '23 September 2021',
-                    tanggal_persetujuan: '23 September 2021',
-                    pemohon: 'Admin',
-                    status: 'Selesai',
-                    isOpened: false,
-
-                },
-                {
-                    no: 4,
-                    periode: 2022,
-                    durasi_buka: '10 hari',
-                    alasan: 'Penambahan po',
-                    tanggal_pengajuan: '23 September 2021',
-                    tanggal_persetujuan: '23 September 2021',
-                    pemohon: 'Admin',
-                    status: 'Disetujui',
-                    isOpened: true
-                }
-            ],
+            items: [],
             filterTahun: [],
             showModal: false,
         }
@@ -136,7 +90,7 @@ export default {
             })
         },
         statusBadge(status) {
-            if (status == 'Dalam Pengajuan') {
+            if (status == 'pengajuan') {
                 return 'badge badge-primary';
             } else if (status == 'Ditolak') {
                 return 'badge badge-danger';
@@ -145,7 +99,28 @@ export default {
             } else if (status == 'Selesai') {
                 return 'badge badge-secondary';
             }
+        },
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true);
+                const { data } = await axios.get('/api/master/buka_periode/show');
+                this.items = data.map((item, index) => {
+                    return {
+                        ...item,
+                        no: index + 1,
+                        tanggal_pengajuan: this.dateFormat(item.tgl_pengajuan),
+                        tanggal_persetujuan: this.dateFormat(item.tgl_persetujuan)
+                    }
+                });
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.$store.dispatch('setLoading', false);
+            }
         }
+    },
+    created() {
+        this.getData();
     },
     computed: {
         getUniqueTahun() {
@@ -193,7 +168,7 @@ export default {
                         <input v-model="search" class="form-control" placeholder="Cari...">
                     </div>
                 </div>
-                <data-table :headers="headers" :items="filterData" :search="search">
+                <data-table :headers="headers" :items="filterData" :search="search" v-if="!$store.state.loading">
                     <template #item.tanggal_pengajuan="{ item }">
                         <div>
                             <span>{{ item.tanggal_pengajuan }}</span> <br>
@@ -209,6 +184,11 @@ export default {
                         </div>
                     </template>
                 </data-table>
+                <div class="d-flex justify-content-center" v-else>
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
