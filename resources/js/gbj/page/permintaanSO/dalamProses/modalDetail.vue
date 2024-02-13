@@ -221,7 +221,7 @@ export default {
                                                 <td>
                                                     <v-select :options="item.variasi" v-model="item.variasiSelected"
                                                         v-if="!detailSelected.detailOpen"></v-select>
-                                                    <span v-else>{{ item.variasiSelected[0].label }}</span>
+                                                    <span v-else>{{ item.variasiSelected.label }}</span>
                                                 </td>
                                                 <td>{{ item.jumlah }}</td>
                                                 <td>

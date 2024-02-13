@@ -2106,6 +2106,7 @@ class MasterController extends Controller
                 $aktif->save();
             }
             $data->status = $request->status;
+            $data->tgl_konfirmasi = Carbon::now();
             $data->save();
             DB::commit();
             return response()->json([
@@ -2124,6 +2125,12 @@ class MasterController extends Controller
     public function show_periode()
     {
         $data = RiwayatAktifPeriode::all();
+        $getYearsAktif = AktifPeriode::first();
+        if ($getYearsAktif->tahun != Carbon::now()->format('Y')) {
+            $isOpen = false;
+        } else {
+            $isOpen = true;
+        }
         $obj = array();
         foreach ($data as $d) {
             $x = json_decode($d->isi);
@@ -2138,7 +2145,11 @@ class MasterController extends Controller
                 'tgl_pengajuan' => $d->created_at
             );
         }
-        return response()->json($obj);
+        return response()->json([
+            'success' => true,
+            'data' => $obj,
+            'isOpen' => $isOpen
+        ], 200);
     }
 
     public function permintaan_periode(Request $request)
