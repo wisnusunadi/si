@@ -236,6 +236,7 @@ Route::prefix('/gbj')->group(function () {
     Route::get('sel-layout', [GudangController::class, 'select_layout']);
     Route::get('sel-divisi', [GudangController::class, 'select_divisi'])->middleware('jwt.verify');
     Route::get('sel-gbj', [GudangController::class, 'select_gbj'])->middleware('jwt.verify');
+    Route::get('sel-var', [GudangController::class, 'select_variasi']);
 
     // so
     Route::post('/createNon', [App\Http\Controllers\GudangController::class, 'tanpaSo']);

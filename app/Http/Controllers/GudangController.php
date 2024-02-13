@@ -4284,6 +4284,12 @@ class GudangController extends Controller
         return response()->json($data);
     }
 
+    function select_variasi($id)
+    {
+        $data = GudangBarangJadi::where('produk_id',$id)->get();
+        return response()->json($data);
+    }
+
     // dashboard
 
     function getNoseriTerima(Request $request, $id)
