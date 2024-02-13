@@ -58,7 +58,6 @@ Route::prefix('/ppic')->group(function () {
             Route::put('/', [App\Http\Controllers\PpicController::class, 'update_ppic_rework']);
             Route::post('/delete', [App\Http\Controllers\PpicController::class, 'delete_ppic_rework']);
         });
-
     });
     Route::post('/update_pwd', [App\Http\Controllers\Auth\ResetPasswordController::class, 'updatePwd'])->middleware('jwt.verify');
     Route::post('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data'])->middleware('jwt.verify');
@@ -118,7 +117,7 @@ Route::prefix('/produk')->group(function () {
     Route::prefix('/rw')->group(function () {
         Route::get('/select', [App\Http\Controllers\MasterController::class, 'select_parent_rw']);
         Route::get('/select/{id}', [App\Http\Controllers\MasterController::class, 'select_item_rw']);
-        });
+    });
 
     Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_produk']);
     Route::get('variasi', [App\Http\Controllers\MasterController::class, 'get_data_produk_variasi']);
@@ -185,7 +184,7 @@ Route::prefix('/penjualan')->group(function () {
 
 Route::prefix('/so')->group(function () {
     Route::post('data', [App\Http\Controllers\PenjualanController::class, 'get_data_so']);
-    Route::post('/cek', [App\Http\Controllers\GudangController::class, 'storeCekSO']);
+    Route::post('/cek', [App\Http\Controllers\GudangController::class, 'storeCekSO'])->middleware('jwt.verify');
 });
 Route::prefix('/laporan')->group(function () {
     Route::post('/create', [App\Http\Controllers\PenjualanController::class, 'laporan']);
@@ -242,7 +241,7 @@ Route::prefix('/gbj')->group(function () {
     Route::get('sel-layout', [GudangController::class, 'select_layout']);
     Route::get('sel-divisi', [GudangController::class, 'select_divisi'])->middleware('jwt.verify');
     Route::get('sel-gbj', [GudangController::class, 'select_gbj'])->middleware('jwt.verify');
-    Route::get('sel-var', [GudangController::class, 'select_variasi']);
+    Route::get('sel-var', [ProduksiController::class, 'select_variasi']);
 
     // so
     Route::post('/createNon', [App\Http\Controllers\GudangController::class, 'tanpaSo']);
@@ -333,7 +332,7 @@ Route::prefix('/tfp')->group(function () {
     Route::get('sudah-dicek', [ProduksiController::class, 'getSOCek'])->middleware('jwt.verify');
     Route::get('belum-dicek', [ProduksiController::class, 'getSOCekBelum'])->middleware('jwt.verify');
     Route::get('detail-transfer-so/{id}', [ProduksiController::class, 'getDetailTransferSO']);
-    Route::get('detail-so/{id}/{value}', [ProduksiController::class, 'getDetailSO']);
+    Route::get('detail-so/{id}', [ProduksiController::class, 'getDetailSO']);
     Route::get('edit-so/{id}/{value}', [ProduksiController::class, 'getEditSO']);
     Route::get('header-so/{id}/{value}', [ProduksiController::class, 'headerSo']);
     Route::get('rakit', [GudangController::class, 'getRakit']);
@@ -626,7 +625,7 @@ Route::prefix('/qc')->group(function () {
         Route::post('data/selesai/{value}', [App\Http\Controllers\QcController::class, 'get_data_selesai_so']);
         Route::post('seri/{status}/{value}/{idpesanan}', [App\Http\Controllers\QcController::class, 'get_data_seri_ekatalog']);
         Route::post('part/{value}', [App\Http\Controllers\QcController::class, 'get_data_part_cek']);
-        Route::post('seri/select/{seri_id?}/{produk_id}/{pesanan_id}' ,[App\Http\Controllers\QcController::class, 'get_data_select_seri']);
+        Route::post('seri/select/{seri_id?}/{produk_id}/{pesanan_id}', [App\Http\Controllers\QcController::class, 'get_data_select_seri']);
         Route::get('data_test', [App\Http\Controllers\QcController::class, 'get_data_so_qc']);
         Route::post('detail/{id}', [App\Http\Controllers\QcController::class, 'get_data_detail_so']);
         Route::get('update_modal', [App\Http\Controllers\QcController::class, 'update_modal_so']);
@@ -729,7 +728,8 @@ Route::prefix('/dc')->group(function () {
         Route::post('update', [App\Http\Controllers\DcController::class, 'update_coo']);
         Route::put('update_tgl_kirim_coo/{value}', [App\Http\Controllers\DcController::class, 'update_tgl_kirim_coo']);
         Route::post('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);
-        Route::post('selesai/{years}', [App\Http\Controllers\DcController::class, 'get_data_so_selesai']);        Route::post('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
+        Route::post('selesai/{years}', [App\Http\Controllers\DcController::class, 'get_data_so_selesai']);
+        Route::post('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
         Route::post('detail/seri/{id}/{jenis}', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_so']);
         Route::post('detail/seri_po/{id}/', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_po']);
         Route::post('detail/seri/select/{id}/{value}', [App\Http\Controllers\DcController::class, 'get_data_detail_select_seri_so']);
@@ -860,15 +860,14 @@ Route::prefix('/labs')->group(function () {
         Route::get('seri/{id}', [App\Http\Controllers\LabController::class, 'lab_data_detail_seri']);
     });
 
-   Route::get('/laporan', [App\Http\Controllers\LabController::class, 'export_laporan']); // sertif per no kalibrasi
-   Route::get('/metode_by_ruang/{ruang}', [App\Http\Controllers\LabController::class, 'metode_by_ruang']); // sertif per no kalibrasi
-   Route::get('/ruang_by_metode/{metode}', [App\Http\Controllers\LabController::class, 'runag_by_metode']);
+    Route::get('/laporan', [App\Http\Controllers\LabController::class, 'export_laporan']); // sertif per no kalibrasi
+    Route::get('/metode_by_ruang/{ruang}', [App\Http\Controllers\LabController::class, 'metode_by_ruang']); // sertif per no kalibrasi
+    Route::get('/ruang_by_metode/{metode}', [App\Http\Controllers\LabController::class, 'runag_by_metode']);
     Route::get('/ruang_and_metode', [App\Http\Controllers\LabController::class, 'ruang_and_metode']);
-   Route::get('/sertif', [App\Http\Controllers\LabController::class, 'sertifikat_data']); // sertif per no kalibrasi
-   Route::get('/cetak/{jenis}/{id}/{ttd}/{hal}', [App\Http\Controllers\LabController::class, 'cetak_sertifikat']);
-   Route::post('/uji', [App\Http\Controllers\LabController::class, 'lab_store_uji']);
-   Route::get('/riwayat_uji', [App\Http\Controllers\LabController::class, 'riwayat_lab_uji']);
-
+    Route::get('/sertif', [App\Http\Controllers\LabController::class, 'sertifikat_data']); // sertif per no kalibrasi
+    Route::get('/cetak/{jenis}/{id}/{ttd}/{hal}', [App\Http\Controllers\LabController::class, 'cetak_sertifikat']);
+    Route::post('/uji', [App\Http\Controllers\LabController::class, 'lab_store_uji']);
+    Route::get('/riwayat_uji', [App\Http\Controllers\LabController::class, 'riwayat_lab_uji']);
 });
 
 Route::namespace('v2')->group(__DIR__ . '/yogi/api.php');

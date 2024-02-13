@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 import detail from './modalDetail.vue'
 export default {
     components: {
@@ -18,11 +19,11 @@ export default {
                 },
                 {
                     text: 'Nomor PO',
-                    value: 'po'
+                    value: 'no_po'
                 },
                 {
                     text: 'Customer',
-                    value: 'customer'
+                    value: 'divisi'
                 },
                 {
                     text: 'Batas Transfer',
@@ -33,16 +34,7 @@ export default {
                     value: 'aksi'
                 }
             ],
-            items: [
-                {
-                    no: 1,
-                    so: 'SO-2021-0001',
-                    po: 'PO-2021-0001',
-                    akn: 'AKN-2021-0001',
-                    customer: 'PT. ABC',
-                    batas_transfer: '18 Februari 2022',
-                }
-            ],
+            items: [],
             showModal: false,
             detailSelected: {}
         }
@@ -68,12 +60,36 @@ export default {
                 $('.modalDetail').modal('show')
             })
         },
+        async getData() {
+            try {
+                const { data } = await axios.get('/api/tfp/belum-dicek', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
+                    }
+                })
+                this.items = data.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item,
+                        batas_transfer: this.dateFormat(item.batas)
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        cetakSPPB(id) {
+            window.open(`/penjualan/penjualan/cetak_surat_perintah/${id}`, '_blank')
+        },
+    },
+    created() {
+        this.getData()
     }
 }
 </script>
 <template>
     <div class="card">
-        <detail v-if="showModal" :detailSelected="detailSelected" @closeModal="showModal = false" />
+        <detail v-if="showModal" :detailSelected="detailSelected" @closeModal="showModal = false" @refresh="getData" />
         <div class="card-body">
             <div class="d-flex flex-row-reverse bd-highlight">
                 <div class="p-2 bd-highlight">
@@ -91,7 +107,8 @@ export default {
                             <i class="fas fa-plus"></i>
                             Siapkan Produk
                         </button>
-                        <button class="btn btn-sm btn-outline-primary">
+                        <button class="btn btn-sm btn-outline-primary" v-if="item.no_po != null && item.tgl_po != null"
+                            @click="cetakSPPB(item.id)">
                             <i class="fas fa-print"></i>
                             SPPB
                         </button>

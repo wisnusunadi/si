@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 import modalNoSeri from './modalNoSeri.vue'
 export default {
     props: ['detailSelected'],
@@ -7,57 +8,7 @@ export default {
     },
     data() {
         return {
-            produk: [
-                {
-                    id: 1,
-                    jumlah: 8,
-                    jumlah_gudang: 0,
-                    jumlah_sisa: 8,
-                    nama: "TIMBANGAN DIGITAL IBU & ANAK DIGIT-PRO IDA NEW + LINEAR PROBE",
-                    persentase_belum: 100,
-                    persentase_sudah: 0,
-                    item: [
-                        {
-                            id: 1,
-                            variasi: [
-                                {
-                                    gbj_id: 1,
-                                    label: "DIGIT PRO IDA NEW COKLAT"
-                                },
-                                {
-                                    gbj_id: 2,
-                                    label: "DIGIT PRO IDA NEW HIJAU"
-                                },
-                                {
-                                    gbj_id: 3,
-                                    label: "DIGIT PRO IDA NEW MERAH"
-                                },
-                            ],
-                            variasiSelected: {
-                                gbj_id: 1,
-                                label: "DIGIT PRO IDA NEW COKLAT"
-                            },
-                            jumlah: 2,
-                            status: false
-                        },
-                        {
-                            id: 2,
-                            variasi: [
-                                {
-                                    gbj_id: 1,
-                                    label: "LINEAR PROBE"
-                                },
-                            ],
-                            variasiSelected: {
-                                gbj_id: 1,
-                                label: "LINEAR PROBE"
-                            },
-                            jumlah: 2,
-                            status: true
-                        }
-                    ]
-                }
-            ],
+            produk: [],
             search: '',
             showModalNoseri: false,
             detailSelectedNoSeri: {},
@@ -107,15 +58,54 @@ export default {
                 this.selectedProduk.push(item)
             }
         },
-        simpan() {
+        async simpan() {
             if (this.selectedProduk.length == 0) {
                 swal.fire('Peringatan', 'Pilih minimal 1 produk', 'warning')
                 return
             }
-            console.log(this.selectedProduk)
-            swal.fire('Berhasil', 'Data berhasil disimpan', 'success')
-            this.$emit('refresh')
-            closeModal()
+            try {
+                const { data } = await axios.post('/api/so/cek', {
+                    pesanan_id: this.detailSelected.id,
+                    produk: this.selectedProduk
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('lokal_token')}`
+                    }
+                })
+                swal.fire('Berhasil', 'Data berhasil disimpan', 'success')
+                this.$emit('refresh')
+                this.closeModal()
+            } catch (error) {
+                console.log(error)
+                swal.fire('Error', 'Terjadi kesalahan', 'error')
+            }
+            
+        },
+        persentase(jmlPerItem, jmlTotal) {
+            let item = parseInt(jmlPerItem)
+            let total = parseInt(jmlTotal)
+            return Math.round((item / total) * 100)
+        },
+        async getData() {
+            try {
+                const { data } = await axios.get(`/api/tfp/detail-so/${this.detailSelected.id}`)
+                this.produk = data.map(paket => {
+                    return {
+                        ...paket,
+                        persentase_belum: this.persentase(paket.jumlah_sisa, paket.jumlah),
+                        persentase_sudah: this.persentase(paket.jumlah_gudang, paket.jumlah),
+                        item: paket.item.map(item => {
+                            return {
+                                ...item,
+                                persentase_belum: this.persentase(paket.jumlah_sisa, paket.jumlah),
+                                persentase_sudah: this.persentase(paket.jumlah_gudang, paket.jumlah),
+                            }
+                        })
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
         }
     },
     computed: {
@@ -134,6 +124,9 @@ export default {
 
             return this.produk.filter(obj => includeSearch(obj, this.search))
         }
+    },
+    created() {
+        this.getData()
     }
 }
 </script>
@@ -174,7 +167,7 @@ export default {
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                <span id="po">{{ detailSelected.po }}</span>
+                                                <span id="po">{{ detailSelected.no_po }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -182,7 +175,7 @@ export default {
                                     <div class="col"> <label for="">Instansi</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                <span id="instansi">{{ detailSelected.customer }}</span>
+                                                <span id="instansi">{{ detailSelected.divisi }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -215,7 +208,7 @@ export default {
                                                             persentase_belum }}%)</span>
                                                     <span class="badge badge-warning">
                                                         Sudah Transfer: {{ paket.jumlah_gudang }} ({{
-                                                            paket.persentase_gudang
+                                                            paket.persentase_sudah
                                                         }}%)
                                                     </span>
                                                 </td>
@@ -229,7 +222,7 @@ export default {
                                                 <td>
                                                     <v-select :options="item.variasi" v-model="item.variasiSelected"
                                                         v-if="!detailSelected.detailOpen"></v-select>
-                                                    <span v-else>{{ item.variasiSelected.label }}</span>
+                                                    <span v-else>{{ item.variasiSelected[0].label }}</span>
                                                 </td>
                                                 <td>{{ item.jumlah }}</td>
                                                 <td>

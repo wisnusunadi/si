@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 import pagination from '../../../components/pagination.vue'
 export default {
     components: {
@@ -7,23 +8,7 @@ export default {
     props: ['detailSelected'],
     data() {
         return {
-            produk: [
-                {
-                    id: 1,
-                    jumlah: 8,
-                    jumlah_gudang: 0,
-                    jumlah_sisa: 8,
-                    nama: "TIMBANGAN DIGITAL IBU & ANAK DIGIT-PRO IDA NEW",
-                    persentase_belum: 100,
-                    persentase_sudah: 0,
-                    item: [
-                        {
-                            produk: 'TIMBANGAN DIGITAL IBU & ANAK DIGIT-PRO IDA NEW UNGU',
-                            jumlah: 2,
-                        }
-                    ]
-                }
-            ],
+            produk: [],
             search: '',
             renderPaginate: [],
         }
@@ -38,6 +23,35 @@ export default {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
+        persentase(jmlPerItem, jmlTotal) {
+            let item = parseInt(jmlPerItem)
+            let total = parseInt(jmlTotal)
+            return Math.round((item / total) * 100)
+        },
+        async getData() {
+            try {
+                const { data } = await axios.get(`/api/tfp/detail-so/${this.detailSelected.id}`)
+                this.produk = data.map(paket => {
+                    return {
+                        ...paket,
+                        persentase_belum: this.persentase(paket.jumlah_sisa, paket.jumlah),
+                        persentase_sudah: this.persentase(paket.jumlah_gudang, paket.jumlah),
+                        item: paket.item.map(item => {
+                            return {
+                                ...item,
+                                persentase_belum: this.persentase(paket.jumlah_sisa, paket.jumlah),
+                                persentase_sudah: this.persentase(paket.jumlah_gudang, paket.jumlah),
+                            }
+                        })
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    },
+    mounted() {
+        this.getData()
     },
     computed: {
         filterRecursive() {
@@ -92,7 +106,7 @@ export default {
                                 <div class="col"> <label for="">Nomor PO</label>
                                     <div class="card nomor-po">
                                         <div class="card-body">
-                                            <span id="po">{{ detailSelected.po }}</span>
+                                            <span id="po">{{ detailSelected.no_po }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -129,14 +143,14 @@ export default {
                                                         persentase_belum }}%)</span>
                                                 <span class="badge badge-warning">
                                                     Sudah Transfer: {{ paket.jumlah_gudang }} ({{
-                                                        paket.persentase_gudang
+                                                        paket.persentase_sudah
                                                     }}%)
                                                 </span>
                                             </td>
                                         </tr>
                                         <tr v-for="item in paket.item" :key="item.id">
                                             <td>
-                                                {{ item.produk }}
+                                                {{ item.variasiSelected[0].label }}
                                             </td>
                                             <td>{{ item.jumlah }}</td>
                                         </tr>
