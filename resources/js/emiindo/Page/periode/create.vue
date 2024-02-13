@@ -43,7 +43,7 @@ export default {
                             console.log(error);
                             swal.fire({
                                 title: 'Gagal!',
-                                text: 'Terjadi kesalahan saat mengajukan periode penjualan',
+                                text: `${error.response.data.message}`,
                                 icon: 'error',
                                 showConfirmButton: false,
                                 timer: 1500

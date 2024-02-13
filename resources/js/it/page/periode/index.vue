@@ -58,6 +58,13 @@ export default {
                         this.getData()
                     } catch (error) {
                         console.log(error)
+                        swal.fire({
+                            title: 'Gagal!',
+                            text: `${error.response.data.message}`,
+                            icon: 'error',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
                     }
                 }
             })
@@ -87,7 +94,7 @@ export default {
                         console.log(error)
                         swal.fire({
                             title: 'Gagal!',
-                            text: 'Terjadi kesalahan saat menolak permintaan periode',
+                            text: `${error.response.data.message}`,
                             icon: 'error',
                             showConfirmButton: false,
                             timer: 1500

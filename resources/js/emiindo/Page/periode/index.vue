@@ -73,14 +73,28 @@ export default {
                 confirmButtonColor: '#dc3545',
                 cancelButtonColor: '#6c757d',
                 confirmButtonText: 'Ya, saya yakin!',
-            }).then((result) => {
+            }).then(async (result) => {
                 if (result.isConfirmed) {
-                    this.$swal(
-                        'Berhasil!',
-                        'Periode penjualan telah diselesaikan',
-                        'success'
-                    )
-                    item.isOpened = false;
+                    try {
+                        this.$swal(
+                            'Berhasil!',
+                            'Periode penjualan telah diselesaikan',
+                            'success'
+                        )
+                        await axios.get(`/api/master/buka_periode/selesai/${item.id}`, {
+                            headers: {
+                                'Authorization': 'Bearer ' + localStorage.getItem('lokal_token')
+                            }
+                        })
+                        this.getData()
+                    } catch (error) {
+                        console.log(error)
+                        swal.fire(
+                            'Gagal!',
+                            `${error.response.data.message}`,
+                            'error'
+                        )
+                    }
                 }
             })
         },
