@@ -73,7 +73,8 @@ export default {
 }
 </script>
 <template>
-    <div class="modal fade modalDetailSO" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade modalDetailSO" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -149,7 +150,7 @@ export default {
                                         </tr>
                                         <tr v-for="item in paket.item" :key="item.id">
                                             <td>
-                                                {{ item.variasiSelected[0].label }}
+                                                {{ item.variasiSelected.label }}
                                             </td>
                                             <td>{{ item.jumlah }}</td>
                                         </tr>

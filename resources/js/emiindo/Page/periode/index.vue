@@ -60,6 +60,7 @@ export default {
             items: [],
             filterTahun: [],
             showModal: false,
+            isOpen: false
         }
     },
     methods: {
@@ -92,18 +93,19 @@ export default {
         statusBadge(status) {
             if (status == 'pengajuan') {
                 return 'badge badge-primary';
-            } else if (status == 'Ditolak') {
+            } else if (status == 'ditolak') {
                 return 'badge badge-danger';
-            } else if (status == 'Disetujui') {
+            } else if (status == 'terima') {
                 return 'badge badge-success';
-            } else if (status == 'Selesai') {
+            } else if (status == 'selesai') {
                 return 'badge badge-secondary';
             }
         },
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true);
-                const { data } = await axios.get('/api/master/buka_periode/show');
+                const { data, isOpen } = await axios.get('/api/master/buka_periode/show').then(res => res.data);
+                this.isOpen = isOpen;
                 this.items = data.map((item, index) => {
                     return {
                         ...item,
@@ -139,12 +141,12 @@ export default {
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
-        <createModal v-if="showModal" />
+        <createModal v-if="showModal" @closeModal="showModal = false" @refresh="getData" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex bd-highlight">
                     <div class="p-2 flex-grow-1 bd-highlight">
-                        <button class="btn btn-sm btn-outline-primary" @click="showModalCreate">
+                        <button class="btn btn-sm btn-outline-primary" @click="showModalCreate" v-if="isOpen">
                             <i class="fas fa-plus"></i>
                             Tambah</button>
                         <span class=" filter">
@@ -177,7 +179,8 @@ export default {
                     </template>
                     <template #item.aksi="{ item }">
                         <div>
-                            <button class="btn btn-outline-success btn-sm" @click="tutup(item)" v-if="item.isOpened">
+                            <button class="btn btn-outline-success btn-sm" @click="tutup(item)"
+                                v-if="item.status == 'terima'">
                                 <i class="fas fa-check"></i>
                                 Selesai
                             </button>

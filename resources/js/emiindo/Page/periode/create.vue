@@ -36,7 +36,15 @@ export default {
                                 'Authorization': 'Bearer ' + localStorage.getItem('lokal_token')
                             }
                         })
-                        // this.persetujuan = true;
+                        swal.fire({
+                            title: 'Berhasil!',
+                            text: 'Pengajuan periode penjualan telah dikirim',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        this.$emit('refresh');
+                        this.closeModal();
                     }
                 })
             } else {
@@ -52,7 +60,9 @@ export default {
         closeModal() {
             $('.modalPeriode').modal('hide');
             this.$nextTick(() => {
-                this.showModal = false;
+                this.$nextTick(() => {
+                    this.$emit('closeModal');
+                })
             })
         }
     },
