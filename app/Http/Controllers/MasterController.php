@@ -66,15 +66,15 @@ class MasterController extends Controller
     public function select_item_rw($id)
     {
         $prd = DetailProdukRw::addSelect([
-                'ckirimprd' => function ($q) {
-                    $q->selectRaw('coalesce(count(noseri_barang_jadi.id),0)')
-                        ->from('noseri_barang_jadi')
-                        ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                        ->where('noseri_barang_jadi.is_ready', '0')
-                        ->whereNull('noseri_barang_jadi.used_by')
-                        ->whereColumn('gdg_barang_jadi.produk_id', 'detail_produks_rw.produk_id');
-                },
-            ])
+            'ckirimprd' => function ($q) {
+                $q->selectRaw('coalesce(count(noseri_barang_jadi.id),0)')
+                    ->from('noseri_barang_jadi')
+                    ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                    ->where('noseri_barang_jadi.is_ready', '0')
+                    ->whereNull('noseri_barang_jadi.used_by')
+                    ->whereColumn('gdg_barang_jadi.produk_id', 'detail_produks_rw.produk_id');
+            },
+        ])
             ->where('produk_parent_id', $id)->get();
 
         return response()->json(['jumlah' => $prd->min('ckirimprd')]);
@@ -1969,26 +1969,26 @@ class MasterController extends Controller
     {
         try {
             $produk = Produk::with('GudangBarangJadi')->with('product')->with('KodeLab')->get()->map(function ($item) {
-                    $kodeLab = $item->KodeLab ? [
-                        'id' => $item->KodeLab->id,
-                        'label' => $item->KodeLab->nama
-                    ] : null;
-                    return [
-                        'id' => $item->id,
-                        'produk_id' => $item->produk_id,
-                        'kelompok_produk_id' => $item->kelompok_produk_id,
-                        'kode_lab' => $kodeLab,
-                        'merk' => $item->merk,
-                        'kategori' => $item->product->nama,
-                        'nama' => $item->nama,
-                        'nama_coo' => $item->nama_coo,
-                        'coo' => $item->coo,
-                        'no_akd' => $item->no_akd,
-                        'status' => $item->status == 1 ? true : false,
-                        'generate_seri' => $item->generate_seri,
-                        'gudang_barang_jadi' => $item->GudangBarangJadi
-                    ];
-                });
+                $kodeLab = $item->KodeLab ? [
+                    'id' => $item->KodeLab->id,
+                    'label' => $item->KodeLab->nama
+                ] : null;
+                return [
+                    'id' => $item->id,
+                    'produk_id' => $item->produk_id,
+                    'kelompok_produk_id' => $item->kelompok_produk_id,
+                    'kode_lab' => $kodeLab,
+                    'merk' => $item->merk,
+                    'kategori' => $item->product->nama,
+                    'nama' => $item->nama,
+                    'nama_coo' => $item->nama_coo,
+                    'coo' => $item->coo,
+                    'no_akd' => $item->no_akd,
+                    'status' => $item->status == 1 ? true : false,
+                    'generate_seri' => $item->generate_seri,
+                    'gudang_barang_jadi' => $item->GudangBarangJadi
+                ];
+            });
 
             return response()->json([
                 'success' => true,
@@ -2115,7 +2115,8 @@ class MasterController extends Controller
             //throw $th;
             DB::rollBack();
             return response()->json([
-                'success' => fals,
+                'success' => false,
+                'message' => $th->getMessage()
             ], 500);
         }
     }
@@ -2176,9 +2177,9 @@ class MasterController extends Controller
                     'periode' => $x->years,
                     'alasan' => $x->alasan,
                     'pemohon' => $d->user,
-                    'durasi_buka' => $x->maxOpenDay . ' Hari',
+                    'permintaan_durasi_buka' => $x->maxOpenDay . ' Hari',
                     'status' => $d->status,
-                    'tgl_pengajuan' => $d->created_at
+                    'tgl_pengajuan' => Carbon::parse($d->created_at)->format('d-m-Y')
                 );
             }
             return response()->json($obj);

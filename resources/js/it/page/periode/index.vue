@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 export default {
     data() {
         return {
@@ -17,7 +18,7 @@ export default {
                 },
                 {
                     text: 'Tanggal Pengajuan',
-                    value: 'tanggal_pengajuan'
+                    value: 'tgl_pengajuan'
                 },
                 {
                     text: 'Pemohon',
@@ -28,15 +29,7 @@ export default {
                     value: 'aksi'
                 }
             ],
-            items: [
-                {
-                    periode: '2021',
-                    permintaan_durasi_buka: '2 Hari',
-                    alasan: 'Mengurangi beban kerja',
-                    tanggal_pengajuan: '2021-01-01',
-                    pemohon: 'Admin',
-                }
-            ],
+            items: [],
             search: '',
         }
     },
@@ -51,8 +44,16 @@ export default {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
             }).then(async (result) => {
-                this.$swal('Berhasil', 'Permintaan periode berhasil diterima', 'success')
-                this.items = this.items.filter(i => i.periode !== item.periode)
+                await axios.post(`/api/master/buka_periode/update/${item.id}`, {
+                    status: 'terima'
+                })
+                this.$swal({
+                    text: `Permintaan periode ${item.periode} berhasil diterima!`,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                })
+
+                this.getData()
             })
         },
         tolak(item) {
@@ -65,11 +66,31 @@ export default {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
             }).then(async (result) => {
-                this.$swal('Berhasil', 'Permintaan periode berhasil diterima', 'success')
-                this.items = this.items.filter(i => i.periode !== item.periode)
+                await axios.post(`/api/master/buka_periode/update/${item.id}`, {
+                    status: 'batal'
+                })
+
+                this.$swal({
+                    text: `Permintaan periode ${item.periode} berhasil ditolak!`,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                })
+
+                this.getData()
             })
+        },
+        async getData() {
+            try {
+                const { data } = await axios.get('/api/permintaan_pengajuan_periode')
+                this.items = data
+            } catch (error) {
+                console.log(error)
+            }
         }
     },
+    created() {
+        this.getData()
+    }
 }
 </script>
 <template>
