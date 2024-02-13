@@ -261,7 +261,7 @@
                     @endif
                     <div class="card">
                         <div class="card-header bg-info">
-                            <div class="card-title">Form Tambah Data {{ $maxDate }}</div>
+                            <div class="card-title">Form Tambah Data</div>
                         </div>
                         <div class="card-body">
                             <form method="post" id="create_penjualan" autocomplete="off"
