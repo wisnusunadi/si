@@ -2092,6 +2092,35 @@ class MasterController extends Controller
         }
     }
 
+    public function reset_periode($id)
+    {
+        try {
+            DB::beginTransaction();
+            //code...
+            $data = RiwayatAktifPeriode::find($id);
+            $data->status = 'selesai';
+            $data->save();
+
+
+            $aktif = AktifPeriode::first();
+            $aktif->tahun = Carbon::now()->year;
+            $aktif->save();
+
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+            ], 200);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
     public function update_periode(Request $request, $id)
     {
         try {
