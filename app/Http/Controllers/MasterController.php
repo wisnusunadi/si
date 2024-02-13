@@ -2146,15 +2146,26 @@ class MasterController extends Controller
         try {
             //code...
             DB::beginTransaction();
-            RiwayatAktifPeriode::create([
-                'user' => Auth::user()->nama,
-                'isi' => json_encode($request->all()),
-                'status' => 'pengajuan'
-            ]);
-            DB::commit();
-            return response()->json([
-                'success' => true,
-            ], 200);
+            $cek = RiwayatAktifPeriode::where(['user' => Auth::user()->nama ,'status' => 'pengajuan'])->count();
+            if($cek > 0){
+                DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pengajuan Lama Belum di proses'
+                ], 500);
+            }else{
+                RiwayatAktifPeriode::create([
+                    'user' => Auth::user()->nama,
+                    'isi' => json_encode($request->all()),
+                    'status' => 'pengajuan'
+                ]);
+                DB::commit();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Permintaan Periode Berhasil Di kirim'
+                ], 200);
+            }
+
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
