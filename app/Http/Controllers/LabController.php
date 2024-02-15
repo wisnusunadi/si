@@ -45,6 +45,7 @@ class LabController extends Controller
             'uji_lab_detail.no',
             'uji_lab_detail.no_sertifikat',
             'uji_lab_detail.tgl_masuk',
+            'uji_lab_detail.status',
             'metode_lab.metode',
             'produk.nama as produk',
             'noseri_barang_jadi.noseri',
@@ -63,7 +64,7 @@ class LabController extends Controller
             ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
             ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
             ->where('uji_lab_detail.status', '!=', 'belum');
-            // ->whereYear('uji_lab_detail.created_at', $request->years );
+        // ->whereYear('uji_lab_detail.created_at', $request->years );
 
         $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
             ->selectRaw('"" AS no_paket')
@@ -95,10 +96,10 @@ class LabController extends Controller
 
         $dataInfo =   $ekatalog->merge($spa)->merge($spb);
 
-        if($data->get()->isEmpty()){
+        if ($data->get()->isEmpty()) {
             $obj = array();
             return response()->json($obj);
-        }else{
+        } else {
             foreach ($data->get() as $d) {
                 $obj[] = array(
                     'no' => str_pad($d->no, 4, '0', STR_PAD_LEFT),
@@ -115,6 +116,7 @@ class LabController extends Controller
                     'tgl_kalibrasi' => $d->tgl_kalibrasi,
                     'no_sertifikat' => $d->no_sertifikat,
                     'pemeriksa' => $d->pemeriksa,
+                    'hasil' => $d->status == 'ok' ? 'Lolos Kalibrasi' : 'Tidak Lolos Kalibrasi',
                     // 'info' => $dataInfo->where('id',$d->p_id)->toArray(),
                     'nosj' => str_pad($d->no_order, 4, '0', STR_PAD_LEFT) . '/LAB/' . date('m', strtotime($d->tgl_kalibrasi)) . '/' . date('y', strtotime($d->tgl_kalibrasi)),
                 );

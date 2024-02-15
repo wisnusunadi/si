@@ -303,10 +303,10 @@
                     $years = \App\Models\AktifPeriode::first()->tahun;
                 @endphp
                 @if ($years != \Carbon\Carbon::now()->year)
-                <div class="alert alert-danger" role="alert">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Periode yang dibuka saat ini adalah periode {{ $years }}
-                </div>
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Periode yang dibuka saat ini adalah periode {{ $years }}
+                    </div>
                 @endif
                 <div class="row">
                     <div id="auth" class="hide">{{ Auth::user()->divisi_id }}</div>
@@ -362,12 +362,12 @@
                                                     <div class="px-3 py-3">
                                                         <div class="form-group">
                                                             {{-- perulangan selama 5 tahun --}}
-                                                            @for ($i = 0; $i < 2; $i++)
+                                                            @for ($i = 0; $i < 5; $i++)
                                                                 <div class="form-check">
                                                                     <input class="form-check-input form-years-select"
                                                                         type="radio" value="{!! \Carbon\Carbon::now()->year - $i !!}"
                                                                         id="status{{ $i }}" name="data_tahun"
-                                                                        @if ($i === 0) checked @endif />
+                                                                        @if (\Carbon\Carbon::now()->year - $i === $years) checked @endif />
                                                                     <label class="form-check-label"
                                                                         for="status{{ $i }}">
                                                                         {!! \Carbon\Carbon::now()->year - $i !!}
@@ -480,13 +480,13 @@
                                                 <div class="dropdown-menu">
                                                     <div class="px-3 py-3">
                                                         <div class="form-group">
-                                                            @for ($i = 0; $i < 2; $i++)
+                                                            @for ($i = 0; $i < 5; $i++)
                                                                 <div class="form-check">
                                                                     <input class="form-check-input form-years-select"
                                                                         type="radio" value="{!! \Carbon\Carbon::now()->year - $i !!}"
                                                                         id="status{{ $i }}"
                                                                         name="data_tahun_spa"
-                                                                        @if ($i === 0) checked @endif />
+                                                                        @if (\Carbon\Carbon::now()->year - $i === $years) checked @endif />
                                                                     <label class="form-check-label"
                                                                         for="status{{ $i }}">
                                                                         {!! \Carbon\Carbon::now()->year - $i !!}
@@ -600,13 +600,13 @@
                                                 <div class="dropdown-menu">
                                                     <div class="px-3 py-3">
                                                         <div class="form-group">
-                                                            @for ($i = 0; $i < 2; $i++)
+                                                            @for ($i = 0; $i < 5; $i++)
                                                                 <div class="form-check">
                                                                     <input class="form-check-input form-years-select"
                                                                         type="radio" value="{!! \Carbon\Carbon::now()->year - $i !!}"
                                                                         id="status{{ $i }}"
                                                                         name="data_tahun_spb"
-                                                                        @if ($i === 0) checked @endif />
+                                                                        @if (\Carbon\Carbon::now()->year - $i === $years) checked @endif />
                                                                     <label class="form-check-label"
                                                                         for="status{{ $i }}">
                                                                         {!! \Carbon\Carbon::now()->year - $i !!}
@@ -728,13 +728,13 @@
                                                 <div class="dropdown-menu">
                                                     <div class="px-3 py-3">
                                                         <div class="form-group">
-                                                            @for ($i = 0; $i < 2; $i++)
+                                                            @for ($i = 0; $i < 5; $i++)
                                                                 <div class="form-check">
                                                                     <input class="form-check-input form-years-select"
                                                                         type="radio" value="{!! \Carbon\Carbon::now()->year - $i !!}"
                                                                         id="status{{ $i }}"
                                                                         name="data_tahun_pen"
-                                                                        @if ($i === 0) checked @endif />
+                                                                        @if (\Carbon\Carbon::now()->year - $i === $years) checked @endif />
                                                                     <label class="form-check-label"
                                                                         for="status{{ $i }}">
                                                                         {!! \Carbon\Carbon::now()->year - $i !!}
@@ -937,7 +937,7 @@
 @section('adminlte_js')
     <script>
         $(function() {
-            var years = {{ \Carbon\Carbon::now()->year }};
+            var years = {{ $years }};
             document.querySelector('#spa-tab').addEventListener('click', spa_show);
             document.querySelector('#spb-tab').addEventListener('click', spb_show);
             document.querySelector('#semua-penjualan-tab').addEventListener('click', p_show);

@@ -44,6 +44,10 @@ export default {
                 {
                     text: 'No Seri',
                     value: 'noseri'
+                },
+                {
+                    text: 'Hasil',
+                    value: 'hasil'
                 }
             ],
             modal: false,
