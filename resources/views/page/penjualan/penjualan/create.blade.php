@@ -259,6 +259,7 @@
                             Periode yang dibuka saat ini adalah periode {{ $years }}
                         </div>
                     @endif
+
                     <div class="card">
                         <div class="card-header bg-info">
                             <div class="card-title">Form Tambah Data</div>

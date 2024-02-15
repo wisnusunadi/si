@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\LaporanPenjualan;
 use App\Exports\LaporanPenjualanAll;
+use App\Models\AktifPeriode;
 use App\Models\Customer;
 use App\Models\DetailEkatalog;
 use App\Models\DetailPesanan;
@@ -3715,7 +3716,17 @@ class PenjualanController extends Controller
 
     public function create_penjualan(Request $request)
     {
-  //dd($request->all());
+        $tahunSekarang = Carbon::now()->format('Y');
+        $periode = AktifPeriode::first()->tahun;
+
+        if($tahunSekarang !=  $periode){
+            $month = mt_rand(1, 12); // Random month between 1 and 12
+            $day = mt_rand(1, Carbon::createFromDate($periode, $month)->daysInMonth); // Random day within the chosen month
+            // Create Carbon instance with the random date
+            $randomDate = Carbon::createFromDate( $periode, $month, $day)->toDateTimeString();
+        }else{
+            $randomDate =  Carbon::now()->toDateTimeString();
+        }
 
         if ($request->jenis_penjualan == 'ekatalog') {
             if ($request->status == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL") ) {
@@ -3764,7 +3775,7 @@ class PenjualanController extends Controller
             $log_id = "7";
 
             if ($request->no_po_ekat != "") {
-                $so = $this->createSO('EKAT');
+                $so = $this->createSObyPeriod('EKAT',$periode);
                 $no_po = $request->no_po_ekat;
                 $tgl_po = $request->tanggal_po_ekat;
                 $no_do = $request->no_do_ekat;
@@ -3788,8 +3799,8 @@ class PenjualanController extends Controller
                 'kemasan' => $request->kemasan,
                 'ekspedisi_id' => $request->ekspedisi,
                 'ket_kirim' => $request->keterangan_pengiriman,
-                'created_at' => Carbon::now()->toDateTimeString(),
-                'updated_at' => Carbon::now()->toDateTimeString(),
+                'created_at' => $randomDate,
+                'updated_at' => $randomDate,
             ]);
 
             $x = $pesanan->id;
@@ -3820,7 +3831,9 @@ class PenjualanController extends Controller
                 'tgl_buat' => $request->tanggal_pemesanan,
                 'tgl_edit' => $request->tanggal_edit,
                 'ket' => $request->keterangan,
-                'log' => 'penjualan'
+                'log' => 'penjualan',
+                'created_at' => $randomDate,
+                'updated_at' => $randomDate,
             ]);
 
             $bool = true;
@@ -4043,7 +4056,6 @@ class PenjualanController extends Controller
                                   ]);
                                   }
                               }
-
                               for ($i = 0; $i < count($penjualan_produk_id_dsb); $i++) {
                                     $dsb = DetailPesananDsb::create([
                                   'pesanan_id' => $x,
@@ -4116,7 +4128,7 @@ class PenjualanController extends Controller
                 ], 500);
             }
         } else if ($request->jenis_penjualan == 'spa' || $request->jenis_penjualan == 'spb') {
-if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NULL &&  $request->kemasan != NULL){
+        if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NULL &&  $request->kemasan != NULL){
             $count_array = count($request->jenis_pen);
             if (in_array("jasa", $request->jenis_pen) && $count_array == 1) {
                 $k = '11';
@@ -4129,7 +4141,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 $var = 'SPB';
             }
             $pesanan = Pesanan::create([
-                'so' => $this->createSO($var),
+                'so' => $this->createSObyPeriod($var,$periode),
                 'no_po' => $request->no_po,
                 'tgl_po' => $request->tanggal_po,
                 'no_do' => $request->no_do,
@@ -4140,7 +4152,9 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 'kemasan' => $request->kemasan,
                 'ekspedisi_id' => $request->ekspedisi,
                 'ket_kirim' => $request->keterangan_pengiriman,
-                'log_id' => $k
+                'log_id' => $k,
+                'created_at' => $randomDate,
+                'updated_at' => $randomDate,
             ]);
             $x = $pesanan->id;
             $no_po_nonekat = $pesanan->no_po;
@@ -4149,7 +4163,9 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                     'customer_id' => $request->customer_id,
                     'pesanan_id' => $x,
                     'ket' => $request->keterangan,
-                    'log' => 'po'
+                    'log' => 'po',
+                    'created_at' => $randomDate,
+                    'updated_at' => $randomDate,
                 ]);
                // $p = 'a';
             } else if ($request->jenis_penjualan == 'spb') {
@@ -4157,7 +4173,9 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                     'customer_id' => $request->customer_id,
                     'pesanan_id' => $x,
                     'ket' => $request->keterangan,
-                    'log' => 'po'
+                    'log' => 'po',
+                    'created_at' => $randomDate,
+                    'updated_at' => $randomDate,
                 ]);
             }
             $bool = true;
@@ -4896,7 +4914,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                     'harga' => $d->harga,
                     'ongkir' => $d->ongkir,
                     'kalibrasi' => $d->kalibrasi,
-                    'is_kalibrasi' => $d->PenjualanProduk->produk,
+                    'is_kalibrasi' => $d->PenjualanProduk->produk->whereNotNull('kode_lab_id')->count() > 0 ? 'gen' : 'not_gen',
                     'ppn' => $d->ppn,
                     'detail' => array(),
                     'seri' =>  ""
@@ -4934,6 +4952,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                         'ongkir' => $d->ongkir,
                         'ppn' => $d->ppn,
                         'kalibrasi' => 0,
+                        'is_kalibrasi' => $d->PenjualanProduk->produk->whereNotNull('kode_lab_id')->count() > 0 ? true : false,
                         'detail' => array(),
                         'seri' => $seri
                     );
@@ -4950,7 +4969,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                 $data = array_merge($item, $item_dsb);
             }
         }
-          //  return response()->json($data);
+          // return response()->json($data);
             return view('page.penjualan.penjualan.edit_spa', ['e' => $spa ,'item' => $data]);
         } else {
             $spb = Spb::find($id);
@@ -4968,6 +4987,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                     'harga' => $d->harga,
                     'ongkir' => $d->ongkir,
                     'kalibrasi' => $d->kalibrasi,
+                    'is_kalibrasi' => $d->PenjualanProduk->produk->whereNotNull('kode_lab_id')->count() > 0 ? true : false,
                     'ppn' => $d->ppn,
                     'detail' => array(),
                     'seri' =>  ""
@@ -5005,6 +5025,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
                         'ongkir' => $d->ongkir,
                         'ppn' => $d->ppn,
                         'kalibrasi' => 0,
+                        'is_kalibrasi' => $d->PenjualanProduk->produk->whereNotNull('kode_lab_id')->count() > 0 ? true : false,
                         'detail' => array(),
                         'seri' => $seri
                     );
@@ -5029,6 +5050,22 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
     {
 
           // dd($request->all());
+
+
+          $tahunSekarang = Carbon::now()->format('Y');
+          $periode = AktifPeriode::first()->tahun;
+
+        //   if($tahunSekarang !=  $periode){
+        //       $month = mt_rand(1, 12); // Random month between 1 and 12
+        //       $day = mt_rand(1, Carbon::createFromDate($periode, $month)->daysInMonth); // Random day within the chosen month
+        //       // Create Carbon instance with the random date
+        //       $randomDate = Carbon::createFromDate( $periode, $month, $day)->toDateTimeString();
+        //   }else{
+        //       $randomDate =  Carbon::now()->toDateTimeString();
+        //   }
+
+
+
            if ($request->status_akn == 'sepakat' && ($request->namadistributor == 'belum' ||$request->provinsi == "NULL")) {
             return response()->json([
                 'message' => 'Cek Form Kembali',
@@ -5081,7 +5118,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
 
         $p = Pesanan::find($poid);
         if ($p->so == NULL && $request->no_po_ekat != NULL && ($request->status_akn != "draft" || $request->status_akn != "batal")) {
-            $p->so = $this->createSO('EKAT');
+            $p->so = $this->createSObyPeriod('EKAT',$periode);
         }
         $p->no_po = $request->no_po_ekat;
         $p->tgl_po = $request->tanggal_po_ekat;
@@ -5448,6 +5485,7 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
             $pesanan = Pesanan::find($spa->pesanan_id);
             $pesanan->no_do = $request->no_do;
             $pesanan->tgl_do = $request->tanggal_do;
+            $pesanan->no_po = $request->no_po;
             $pesanan->ket = $request->keterangan;
             $pesanan->tujuan_kirim = $request->perusahaan_pengiriman_nonakn;
             $pesanan->alamat_kirim = $request->alamat_pengiriman;
@@ -7134,6 +7172,26 @@ if( $request->perusahaan_pengiriman != NULL && $request->alamat_pengiriman != NU
         $no = 'SO/' . $value . '/' . $this->getMonth() . '/' . $this->getYear() . '/' . ($max_number + 1) . '';
         return $no;
     }
+
+    function createSObyPeriod($value, $years)
+    {
+        $check = Pesanan::whereYear('created_at', $years)->where('so', 'like', '%' . $years . '%')->get('so');
+        $max_number = 0;
+        foreach ($check as $c) {
+            if ($c->so == NULL) {
+                $no = 'SO/' . $value . '/' . $this->getMonth() . '/' .$years. '/1';
+            } else {
+                $get = explode('/', $c->so);
+                if ($get[1] == $value) {
+                    if ($get[4] > $max_number)
+                        $max_number = $get[4];
+                }
+            }
+        }
+        $no = 'SO/' . $value . '/' . $this->getMonth() . '/' . $years . '/' . ($max_number + 1) . '';
+        return $no;
+    }
+
     public function check_no_paket($id, $val)
     {
         if ($id != "0") {
