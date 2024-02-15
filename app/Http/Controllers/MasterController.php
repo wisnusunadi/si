@@ -2009,12 +2009,14 @@ class MasterController extends Controller
                     [
                         'produk_id' => $item['produk_id'],
                         'kelompok_produk_id' => $item['kelompok_produk_id'],
+                        'kode' => $item['kode'],
                         'merk' => $item['merk'],
                         'nama' => $item['nama'],
                         'nama_coo' => isset($item['nama_coo']) ? $item['nama_coo'] : null,
                         'coo' => isset($item['coo']) ? $item['coo'] : 1,
                         'no_akd' => $item['no_akd'],
                         'status' => $item['status'],
+                        'generate_seri' => $item['generate_seri'],
                     ]
                 );
 
@@ -2107,7 +2109,6 @@ class MasterController extends Controller
             return response()->json([
                 'success' => true,
             ], 200);
-
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
@@ -2182,14 +2183,14 @@ class MasterController extends Controller
         try {
             //code...
             DB::beginTransaction();
-            $cek = RiwayatAktifPeriode::where(['user' => Auth::user()->nama ,'status' => 'pengajuan'])->count();
-            if($cek > 0){
+            $cek = RiwayatAktifPeriode::where(['user' => Auth::user()->nama, 'status' => 'pengajuan'])->count();
+            if ($cek > 0) {
                 DB::rollBack();
                 return response()->json([
                     'success' => false,
                     'message' => 'Pengajuan Lama Belum di proses'
                 ], 500);
-            }else{
+            } else {
                 RiwayatAktifPeriode::create([
                     'user' => Auth::user()->nama,
                     'isi' => json_encode($request->all()),
@@ -2201,7 +2202,6 @@ class MasterController extends Controller
                     'message' => 'Permintaan Periode Berhasil Di kirim'
                 ], 200);
             }
-
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();

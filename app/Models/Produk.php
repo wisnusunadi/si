@@ -9,7 +9,7 @@ class Produk extends Model
 {
     protected $connection = 'erp';
     protected $table = 'produk';
-    protected $fillable = ['produk_id', 'kode_lab_id', 'kelompok_produk_id', 'merk', 'tipe', 'nama', 'nama_coo', 'satuan', 'coo', 'no_akd', 'ket', 'status'];
+    protected $fillable = ['produk_id', 'kelompok_produk_id', 'merk', 'tipe', 'nama', 'nama_coo', 'satuan', 'coo', 'no_akd', 'ket', 'status', 'generate_seri', 'kode'];
 
     public function KodeLab()
     {
