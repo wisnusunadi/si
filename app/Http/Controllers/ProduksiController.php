@@ -2861,8 +2861,8 @@ class ProduksiController extends Controller
                             'gudang_id' => $i->gudang_barang_jadi_id,
                             'variasiSelected' => [
 
-                                    'id' => $i->gudang_barang_jadi_id,
-                                    'label' => $i->GudangBarangJadi->Produk->nama . ' ' . $i->GudangBarangJadi->nama,
+                                'id' => $i->gudang_barang_jadi_id,
+                                'label' => $i->GudangBarangJadi->Produk->nama . ' ' . $i->GudangBarangJadi->nama,
 
                             ],
                             'variasi' => $this->select_variasi($i->GudangBarangJadi->Produk->id),

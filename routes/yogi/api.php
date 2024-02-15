@@ -39,7 +39,7 @@ Route::prefix('/v2')->group(function () {
         Route::post('delete_paket_so', [GudangController::class, 'deleteCekSO']);
         Route::get('template_so/{id}', [GudangController::class, 'download_template_so']);
         Route::post('preview-so', [GudangController::class, 'preview_so']);
-        Route::post('store-sodb', [GudangController::class, 'store_so_to_db'])->middleware('jwt.verify');
+        Route::post('store-sodb', [GudangController::class, 'store_so_to_db']);
 
         Route::get('template_nonso', [GudangController::class, 'template_tanpa_so']);
         Route::post('preview-nonso', [GudangController::class, 'preview_tanpa_so']);

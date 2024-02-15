@@ -202,48 +202,48 @@
                                                                                 </span>
                                                                             </a>
                                                                             <!-- <span class="float-right filter">
-                                                                        <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                            <i class="fas fa-filter"></i> Filter
-                                                                        </button>
-                                                                        <div class="dropdown-menu">
-                                                                            <div class="px-3 py-3">
-                                                                                <div class="form-group">
-                                                                                    <label for="jenis_penjualan">Status</label>
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <div class="form-check">
-                                                                                        <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
-                                                                                        <label class="form-check-label" for="status1">
-                                                                                            Sudah Dikirim
-                                                                                        </label>
+                                                                            <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                                <i class="fas fa-filter"></i> Filter
+                                                                            </button>
+                                                                            <div class="dropdown-menu">
+                                                                                <div class="px-3 py-3">
+                                                                                    <div class="form-group">
+                                                                                        <label for="jenis_penjualan">Status</label>
                                                                                     </div>
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <div class="form-check">
-                                                                                        <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
-                                                                                        <label class="form-check-label" for="status2">
-                                                                                            Sebagian Dikirim
-                                                                                        </label>
+                                                                                    <div class="form-group">
+                                                                                        <div class="form-check">
+                                                                                            <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
+                                                                                            <label class="form-check-label" for="status1">
+                                                                                                Sudah Dikirim
+                                                                                            </label>
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <div class="form-check">
-                                                                                        <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
-                                                                                        <label class="form-check-label" for="status3">
-                                                                                            Belum Dikirim
-                                                                                        </label>
+                                                                                    <div class="form-group">
+                                                                                        <div class="form-check">
+                                                                                            <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
+                                                                                            <label class="form-check-label" for="status2">
+                                                                                                Sebagian Dikirim
+                                                                                            </label>
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <span class="float-right">
-                                                                                        <button class="btn btn-primary">
-                                                                                            Cari
-                                                                                        </button>
-                                                                                    </span>
+                                                                                    <div class="form-group">
+                                                                                        <div class="form-check">
+                                                                                            <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
+                                                                                            <label class="form-check-label" for="status3">
+                                                                                                Belum Dikirim
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <span class="float-right">
+                                                                                            <button class="btn btn-primary">
+                                                                                                Cari
+                                                                                            </button>
+                                                                                        </span>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    </span> -->
+                                                                        </span> -->
                                                                         </div>
                                                                     </div>
                                                                     <div class="row">
@@ -333,37 +333,37 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         <!-- <tr>
-                                                                                    <td><input type="checkbox" name="detail_produk_id" id="detail_produk_id" class="detail_produk_id" disabled></td>
-                                                                                    <td>26-10-2021</td>
-                                                                                    <td>ELITECH MINI/MEDICAL COMPRESSOR NEBULIZER PROMIST 2</td>
-                                                                                    <td>2</td>
-                                                                                    <td><span class="badge green-text">Sudah Dikirim</span></td>
-                                                                                    <td><a type="button" class="noserishow" data-id="1"><i class="fas fa-search"></i></a></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td><input type="checkbox" name="detail_produk_id" id="detail_produk_id" class="detail_produk_id" disabled></td>
-                                                                                    <td>26-10-2021</td>
-                                                                                    <td>ELITECH ULTRASONIC POCKET DOPPLER</td>
-                                                                                    <td>5</td>
-                                                                                    <td><span class="badge green-text">Sudah Dikirim</span></td>
-                                                                                    <td><a type="button" class="noserishow" data-id="2"><i class="fas fa-search"></i></a></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td><input type="checkbox" name="detail_produk_id" id="detail_produk_id" class="detail_produk_id available"></td>
-                                                                                    <td>-</td>
-                                                                                    <td>MTB 2 MTR</td>
-                                                                                    <td>10</td>
-                                                                                    <td><span class="badge red-text">Belum Dikirim</span></td>
-                                                                                    <td><a type="button" class="noserishow" data-id="3"><i class="fas fa-search"></i></a></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td><input type="checkbox" name="detail_produk_id" id="detail_produk_id" class="detail_produk_id available"></td>
-                                                                                    <td>-</td>
-                                                                                    <td>CENTRAL MONITOR PM-9000+ + PC + INSTALASI</td>
-                                                                                    <td>1</td>
-                                                                                    <td><span class="badge red-text">Belum Dikirim</span></td>
-                                                                                    <td><a type="button" class="noserishow" data-id="3"><i class="fas fa-search"></i></a></td>
-                                                                                </tr> -->
+                                                                                        <td><input type="checkbox" name="detail_produk_id" id="detail_produk_id" class="detail_produk_id" disabled></td>
+                                                                                        <td>26-10-2021</td>
+                                                                                        <td>ELITECH MINI/MEDICAL COMPRESSOR NEBULIZER PROMIST 2</td>
+                                                                                        <td>2</td>
+                                                                                        <td><span class="badge green-text">Sudah Dikirim</span></td>
+                                                                                        <td><a type="button" class="noserishow" data-id="1"><i class="fas fa-search"></i></a></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td><input type="checkbox" name="detail_produk_id" id="detail_produk_id" class="detail_produk_id" disabled></td>
+                                                                                        <td>26-10-2021</td>
+                                                                                        <td>ELITECH ULTRASONIC POCKET DOPPLER</td>
+                                                                                        <td>5</td>
+                                                                                        <td><span class="badge green-text">Sudah Dikirim</span></td>
+                                                                                        <td><a type="button" class="noserishow" data-id="2"><i class="fas fa-search"></i></a></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td><input type="checkbox" name="detail_produk_id" id="detail_produk_id" class="detail_produk_id available"></td>
+                                                                                        <td>-</td>
+                                                                                        <td>MTB 2 MTR</td>
+                                                                                        <td>10</td>
+                                                                                        <td><span class="badge red-text">Belum Dikirim</span></td>
+                                                                                        <td><a type="button" class="noserishow" data-id="3"><i class="fas fa-search"></i></a></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td><input type="checkbox" name="detail_produk_id" id="detail_produk_id" class="detail_produk_id available"></td>
+                                                                                        <td>-</td>
+                                                                                        <td>CENTRAL MONITOR PM-9000+ + PC + INSTALASI</td>
+                                                                                        <td>1</td>
+                                                                                        <td><span class="badge red-text">Belum Dikirim</span></td>
+                                                                                        <td><a type="button" class="noserishow" data-id="3"><i class="fas fa-search"></i></a></td>
+                                                                                    </tr> -->
                                                                     </tbody>
                                                                 </table>
                                                             </div>

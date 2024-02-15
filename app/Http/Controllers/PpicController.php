@@ -792,9 +792,9 @@ class PpicController extends Controller
     {
         try {
             $data = JadwalRakitNoseri::leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-            ->whereNull('waktu_tf')
-            ->where('produk_id', $request->id)
-            ->count();
+                ->whereNull('waktu_tf')
+                ->where('produk_id', $request->id)
+                ->count();
 
             return response()->json([
                 'status' => 200,

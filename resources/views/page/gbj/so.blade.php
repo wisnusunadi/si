@@ -744,8 +744,8 @@
                     "language": {
                         // url: "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json",
                         processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                    </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                        </span>&emsp;Mohon Tunggu ...",
                     },
                     "columnDefs": [{
                             "targets": [5],
@@ -799,8 +799,8 @@
                     "language": {
                         // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                         processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                    </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                        </span>&emsp;Mohon Tunggu ...",
                     },
                     "columnDefs": [{
                             "targets": [5],
@@ -849,8 +849,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                    </span>&emsp;Mohon Tunggu ...",
                 }
             });
 
@@ -1362,8 +1362,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                    </span>&emsp;Mohon Tunggu ...",
                 },
                 "order": [
                     [5, 'asc']
@@ -1465,7 +1465,7 @@
             $.ajax({
                 url: "/api/gbj/modal_data_seri_tf/" + id,
                 // before loaded
-                beforeSend: function () {
+                beforeSend: function() {
                     // sweetalert loading
                     swal.fire({
                         title: 'Please wait',
@@ -1505,8 +1505,8 @@
                         "language": {
                             // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                             processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                                </span>&emsp;Mohon Tunggu ...",
                         }
                     })
                     $('#modalDetailNoSeri').modal('show');

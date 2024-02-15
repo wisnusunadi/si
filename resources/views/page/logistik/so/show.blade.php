@@ -316,14 +316,15 @@
         </div>
         @include('page.logistik.so.modalsj')
 
-        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Edit Surat Jalan</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                     <div class="modal-body" id="editsj">
                     </div>
@@ -596,7 +597,7 @@
                 let years = $('input[name="tahun"]:checked').val() ?? yearsNow
 
                 $('#showtable').DataTable().ajax.url('/logistik/so/data/' + pengiriman + '/' + years)
-            .load();
+                    .load();
                 return false;
 
             });
@@ -655,7 +656,11 @@
                             render: function(data, type, row, meta) {
                                 return '<a target="_blank" href="/logistik/pengiriman/prints/' +
                                     data.id +
-                                    '" class="btn btn-sm btn-primary"><i class="fa fa-print"></i></a><button data-id="'+data.id+'" class="btn btn-warning btn-sm btnEditSJ"><i class="fa fa-pen"></i></button> <a target="_blank" href="/logistik/pengiriman/prints/' + data.id + '" class="btn btn-sm btn-primary"><i class="fa fa-print"></i></a>'
+                                    '" class="btn btn-sm btn-primary"><i class="fa fa-print"></i></a><button data-id="' +
+                                    data.id +
+                                    '" class="btn btn-warning btn-sm btnEditSJ"><i class="fa fa-pen"></i></button> <a target="_blank" href="/logistik/pengiriman/prints/' +
+                                    data.id +
+                                    '" class="btn btn-sm btn-primary"><i class="fa fa-print"></i></a>'
                             }
                         }
                     ]
@@ -806,43 +811,49 @@
                         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                     },
                     columns: [{
-                        data: null,
-                        orderable: false,
-                        searchable: false,
-                        render: function(data, type, row, meta) {
-                            // checkbox
-                            return '<input type="checkbox" class="check_detail" value="' + data.id + '" />';
-                        }
-                    }, {
-                        data: 'nama',
-                    },
-                    {
-                        data: 'jumlah',
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, row, meta) {
-                            var rowIndex = meta.row;
-                            return '<input type="text" class="form-control form-control-sm jumlah'+rowIndex+'" name="jumlah[' + rowIndex + ']" id="jumlah[' + rowIndex + ']" value="0" disabled/>';
-                        }
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, row, meta) {
-                            var rowIndex = meta.row;
-                            return '<button class="btn btn-outline-primary btn-sm noseri" data-index="' + rowIndex + '">No Seri</button>';
-                        }
-                    },
-                    {
-                        // hidden text
-                        data: null,
-                        render: function(data, type, row, meta) {
-                            var rowIndex = meta.row;
+                            data: null,
+                            orderable: false,
+                            searchable: false,
+                            render: function(data, type, row, meta) {
+                                // checkbox
+                                return '<input type="checkbox" class="check_detail" value="' +
+                                    data.id + '" />';
+                            }
+                        }, {
+                            data: 'nama',
+                        },
+                        {
+                            data: 'jumlah',
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, row, meta) {
+                                var rowIndex = meta.row;
+                                return '<input type="text" class="form-control form-control-sm jumlah' +
+                                    rowIndex + '" name="jumlah[' + rowIndex + ']" id="jumlah[' +
+                                    rowIndex + ']" value="0" disabled/>';
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, row, meta) {
+                                var rowIndex = meta.row;
+                                return '<button class="btn btn-outline-primary btn-sm noseri" data-index="' +
+                                    rowIndex + '">No Seri</button>';
+                            }
+                        },
+                        {
+                            // hidden text
+                            data: null,
+                            render: function(data, type, row, meta) {
+                                var rowIndex = meta.row;
 
-                            return '<div class="keterangannoseri'+rowIndex+'" name="keterangan[' + rowIndex + ']" id="keterangan[' + rowIndex + ']"></div>';
+                                return '<div class="keterangannoseri' + rowIndex +
+                                    '" name="keterangan[' + rowIndex + ']" id="keterangan[' +
+                                    rowIndex + ']"></div>';
 
-                        }
-                    },
+                            }
+                        },
                     ]
                 })
             }
@@ -905,11 +916,11 @@
                 let id = $(this).data('id');
                 // open modal
                 $.ajax({
-                    url: "/logistik/pengiriman/edit_sj_draft/"+id,
+                    url: "/logistik/pengiriman/edit_sj_draft/" + id,
                     beforeSend: function() {
                         $('#loader').show();
                     },
-                    success: function(result){
+                    success: function(result) {
                         $('#modalEdit').modal('show');
                         $('#editsj').html(result).show();
                     },
@@ -919,12 +930,12 @@
                 })
             });
 
-            $(document).on('click', '.batalEdit', function (event) {
+            $(document).on('click', '.batalEdit', function(event) {
                 event.preventDefault();
                 $('#modalEdit').modal('hide');
             })
 
-            $(document).on('click', '.btnSimpanSuratJalan', function (e) {
+            $(document).on('click', '.btnSimpanSuratJalan', function(e) {
                 $('.btnSimpanSuratJalan').attr('disabled', true)
 
                 let id = $('input[name="ideditsj"]').val()
@@ -934,7 +945,7 @@
                 let sj = jenis_sj_edit + '' + no_invoice_sj_edit
 
                 // validasi not null
-                if(sj == null || tgl_sj == null) {
+                if (sj == null || tgl_sj == null) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -966,9 +977,10 @@
                         $('#modalEdit').modal('hide');
                         $('#loader').hide();
                         $.ajax({
-                            'url': '/api/logistik/so/data/sj_draft/' + response.pesanan_id,
+                            'url': '/api/logistik/so/data/sj_draft/' + response
+                                .pesanan_id,
                             'dataType': 'json',
-                            success: function (data) {
+                            success: function(data) {
                                 sjlama(data.data)
                             }
                         });
