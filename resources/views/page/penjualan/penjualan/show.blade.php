@@ -938,6 +938,7 @@
     <script>
         $(function() {
             var years = {{ $years }};
+            document.querySelector('#ekatalog-tab').addEventListener('click', ekat_show);
             document.querySelector('#spa-tab').addEventListener('click', spa_show);
             document.querySelector('#spb-tab').addEventListener('click', spb_show);
             document.querySelector('#semua-penjualan-tab').addEventListener('click', p_show);
@@ -1651,15 +1652,15 @@
                             if (label == 'ekatalog') {
                                 $('#ekatalogtable').DataTable().ajax.url(
                                     '/penjualan/penjualan/ekatalog/data/semua/' +
-                                    {{ \Carbon\Carbon::now()->year }}).load();
+                                    years).load();
                             } else if (label == 'spa') {
                                 $('#spatable').DataTable().ajax.url(
                                     '/penjualan/penjualan/spa/data/semua/' +
-                                    {{ \Carbon\Carbon::now()->year }}).load();
+                                    years).load();
                             } else if (label == 'spb') {
                                 $('#spatable').DataTable().ajax.url(
                                     '/penjualan/penjualan/spb/data/semua/' +
-                                    {{ \Carbon\Carbon::now()->year }}).load();
+                                    years).load();
                             }
                             $("#deletemodal").modal('hide');
                         } else if (response['data'] == "error") {
