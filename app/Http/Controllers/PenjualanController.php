@@ -3272,7 +3272,7 @@ class PenjualanController extends Controller
                                 ';
                                 }
                             } else {
-                                if ($divisi_id == "26" || $isOpen == false) {
+                                if ($divisi_id == "26" && $isOpen == false) {
                                     $return .= '<a data-toggle="modal" data-jenis="spa" class="editmodal" data-id="' . $data->id . '">
                                     <button class="dropdown-item" type="button" >
                                     <i class="fas fa-pencil-alt"></i>
@@ -3643,7 +3643,7 @@ class PenjualanController extends Controller
                                     ';
                                 }
                             } else {
-                                if ($divisi_id == "26" || $isOpen == false) {
+                                if ($divisi_id == "26" && $isOpen == false) {
                                     $return .= '<a data-toggle="modal" data-jenis="spb" class="editmodal" data-id="' . $data->id . '">
                                         <button class="dropdown-item" type="button" >
                                         <i class="fas fa-pencil-alt"></i>
