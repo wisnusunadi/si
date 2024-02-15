@@ -53,12 +53,12 @@ export default {
                     <td>{{ item.nama }}</td>
 
                     <td>
-                        <button
+                        <!-- <button
                             class="btn btn-outline-info"
                             @click="detail(index)"
                         >
                             <i class="fas fa-eye"></i>
-                        </button>
+                        </button> -->
                         <button
                             class="btn btn-outline-warning"
                             @click="edit(item.id)"
