@@ -2827,7 +2827,7 @@ class PenjualanController extends Controller
                 $return = "";
                 $yearsAktif = AktifPeriode::first()->tahun;
                 $isOpen = false;
-                if ($yearsAktif == Carbon::now()->format('Y')) {
+                if ($yearsAktif == $data->created_at->format('Y')) {
                     $isOpen = true;
                 }
                 if ($data->status != 'draft') {
@@ -2882,7 +2882,7 @@ class PenjualanController extends Controller
                 if ($divisi_id == "26") {
                     if (!empty($data->Pesanan->log_id)) {
                         if ($data->Pesanan->State->nama == "Penjualan" || $data->cgudang == 0) {
-                            if (!$isOpen == false) {
+                            if ($isOpen == false) {
                                 $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">
                                     <button class="dropdown-item" type="button" >
                                     <i class="fas fa-pencil-alt"></i>
@@ -2918,7 +2918,7 @@ class PenjualanController extends Controller
                                 </a>
                                 ';
                         } else {
-                        if (!$isOpen == false) {
+                        if ($isOpen == false) {
                             $return .= '<a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="' . $data->id . '">
                                 <button class="dropdown-item" type="button">
                                 <i class="fas fa-pencil-alt"></i>
@@ -2938,7 +2938,7 @@ class PenjualanController extends Controller
                             }
                         }
                     } else if (empty($data->Pesanan->log_id)) {
-                    if (!$isOpen == false) {
+                    if ($isOpen == false) {
                         $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">
                             <button class="dropdown-item" type="button" >
                             <i class="fas fa-pencil-alt"></i>
@@ -3225,7 +3225,7 @@ class PenjualanController extends Controller
                 $return = "";
                 $yearsAktif = AktifPeriode::first()->tahun;
                 $isOpen = false;
-                if ($yearsAktif == Carbon::now()->format('Y')) {
+                if ($yearsAktif == $data->created_at->format('Y')) {
                     $isOpen = true;
                 }
 
@@ -3254,7 +3254,7 @@ class PenjualanController extends Controller
                             }
 
                             if ($data->Pesanan->State->nama == "PO" ||count($item) == 0 ) {
-                                if (!$isOpen == false) {
+                                if ($isOpen == false) {
                                     $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">
                                         <button class="dropdown-item" type="button" >
                                         <i class="fas fa-pencil-alt"></i>
@@ -3273,7 +3273,7 @@ class PenjualanController extends Controller
                                 ';
                             }
                             } else {
-                                if ($divisi_id == "26" || !$isOpen == false) {
+                                if ($divisi_id == "26" || $isOpen == false) {
                                 $return .= '<a data-toggle="modal" data-jenis="spa" class="editmodal" data-id="' . $data->id . '">
                                     <button class="dropdown-item" type="button" >
                                     <i class="fas fa-pencil-alt"></i>
@@ -3303,7 +3303,7 @@ class PenjualanController extends Controller
                                 </a>';
                             }
                         } else {
-                            if (!$isOpen == false) {
+                            if ($isOpen == false) {
                             $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">
                                 <button class="dropdown-item" type="button" >
                                 <i class="fas fa-pencil-alt"></i>
@@ -3598,7 +3598,7 @@ class PenjualanController extends Controller
                 $return = "";
                 $yearsAktif = AktifPeriode::first()->tahun;
                 $isOpen = false;
-                if ($yearsAktif == Carbon::now()->format('Y')) {
+                if ($yearsAktif == $data->created_at->format('Y')) {
                     $isOpen = true;
                 }
 
@@ -3628,7 +3628,7 @@ class PenjualanController extends Controller
                             }
 
                             if ($data->Pesanan->State->nama == "PO" ||count($item) == 0) {
-                            if (!$isOpen == false) {
+                            if ($isOpen == false) {
                                 $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">
                                     <button class="dropdown-item" type="button" >
                                     <i class="fas fa-pencil-alt"></i>
@@ -3646,7 +3646,7 @@ class PenjualanController extends Controller
                                     ';
                                 }
                             } else {
-                                if ($divisi_id == "26" || !$isOpen == false) {
+                                if ($divisi_id == "26" || $isOpen == false) {
                                     $return .= '<a data-toggle="modal" data-jenis="spb" class="editmodal" data-id="' . $data->id . '">
                                         <button class="dropdown-item" type="button" >
                                         <i class="fas fa-pencil-alt"></i>
@@ -3676,7 +3676,7 @@ class PenjualanController extends Controller
                                 </a>';
                             }
                         } else {
-                        if (!$isOpen == false) {
+                        if ($isOpen == false) {
                             $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">
                                 <button class="dropdown-item" type="button" >
                                 <i class="fas fa-pencil-alt"></i>
