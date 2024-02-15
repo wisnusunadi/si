@@ -351,7 +351,7 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
                                         aria-labelledby="custom-tabs-four-profile-tab">
-                                        
+
                                         <table class="table scan-produk1">
                                             <thead>
                                                 <tr>
@@ -986,26 +986,29 @@
         })
 
         $('#alkes').click(function() {
+            let datatable = $('#gudang-barang').DataTable();
             if ($(this).prop('checked') == true) {
-                datatable.column(6).search($(this).val()).draw();
+                datatable.column(5).search($(this).val()).draw();
             } else {
-                datatable.column(6).search('').draw();
+                datatable.column(5).search('').draw();
             }
         })
 
         $('#sarkes').click(function() {
+            let datatable = $('#gudang-barang').DataTable();
             if ($(this).prop('checked') == true) {
-                datatable.column(6).search($(this).val()).draw();
+                datatable.column(5).search($(this).val()).draw();
             } else {
-                datatable.column(6).search('').draw();
+                datatable.column(5).search('').draw();
             }
         })
 
         $('#water').click(function() {
+            let datatable = $('#gudang-barang').DataTable();
             if ($(this).prop('checked') == true) {
-                datatable.column(6).search($(this).val()).draw();
+                datatable.column(5).search($(this).val()).draw();
             } else {
-                datatable.column(6).search('').draw();
+                datatable.column(5).search('').draw();
             }
         })
 
