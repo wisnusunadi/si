@@ -9,7 +9,7 @@ class Ekatalog extends Model
 {
     protected $connection = 'erp';
     protected $table = 'ekatalog';
-    protected $fillable = ['customer_id', 'provinsi_id', 'pesanan_id', 'no_paket', 'no_urut', 'deskripsi', 'instansi', 'alamat', 'satuan', 'status', 'tgl_kontrak', 'tgl_buat', 'tgl_edit', 'ket', 'log'];
+    protected $fillable = ['created_at','updated_at','customer_id', 'provinsi_id', 'pesanan_id', 'no_paket', 'no_urut', 'deskripsi', 'instansi', 'alamat', 'satuan', 'status', 'tgl_kontrak', 'tgl_buat', 'tgl_edit', 'ket', 'log'];
 
     public function Customer()
     {

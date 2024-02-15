@@ -10,7 +10,7 @@ class Pesanan extends Model
 {
     protected $connection = 'erp';
     protected $table = 'pesanan';
-    protected $fillable = ['no_po', 'so', 'tgl_po', 'no_do', 'tgl_do', 'ket', 'log_id', 'checked_by', 'status_cek', 'tujuan_kirim', 'alamat_kirim', 'kemasan', 'ekspedisi_id', 'ket_kirim'];
+    protected $fillable = ['created_at','updated_at','no_po', 'so', 'tgl_po', 'no_do', 'tgl_do', 'ket', 'log_id', 'checked_by', 'status_cek','tujuan_kirim','alamat_kirim','kemasan','ekspedisi_id','ket_kirim'];
 
     public function UjiLab()
     {
