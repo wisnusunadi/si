@@ -26,12 +26,12 @@ export default {
                     <td>{{ index + 1 }}</td>
                     <td>{{ data.nama }}</td>
                     <td>
-                        <button
+                        <!-- <button
                             class="btn btn-outline-info"
                             @click="detail(data.id)"
                         >
                             <i class="fas fa-eye"></i>
-                        </button>
+                        </button> -->
                         <button class="btn btn-outline-warning" @click="edit(data.id)">
                             <i class="fas fa-edit"></i>
                         </button>
