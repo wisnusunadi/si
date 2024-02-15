@@ -1968,16 +1968,11 @@ class MasterController extends Controller
     public function indexProduk()
     {
         try {
-            $produk = Produk::with('GudangBarangJadi')->with('product')->with('KodeLab')->get()->map(function ($item) {
-                $kodeLab = $item->KodeLab ? [
-                    'id' => $item->KodeLab->id,
-                    'label' => $item->KodeLab->nama
-                ] : null;
+            $produk = Produk::with('GudangBarangJadi')->with('product')->get()->map(function ($item) {
                 return [
                     'id' => $item->id,
                     'produk_id' => $item->produk_id,
                     'kelompok_produk_id' => $item->kelompok_produk_id,
-                    'kode_lab' => $kodeLab,
                     'merk' => $item->merk,
                     'kategori' => $item->product->nama,
                     'nama' => $item->nama,
@@ -1986,6 +1981,7 @@ class MasterController extends Controller
                     'no_akd' => $item->no_akd,
                     'status' => $item->status == 1 ? true : false,
                     'generate_seri' => $item->generate_seri,
+                    'kode' => $item->kode,
                     'gudang_barang_jadi' => $item->GudangBarangJadi
                 ];
             });
@@ -2238,6 +2234,25 @@ class MasterController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function changeGenerateProduk(Request $request)
+    {
+        try {
+            $produk = Produk::find($request->id);
+            $produk->generate_seri = $request->generate_seri;
+            $produk->save();
+
+            return response()->json([
+                'success' => true,
+                'data' => $produk
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
             ], 500);
         }
     }

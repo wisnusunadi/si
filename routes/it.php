@@ -14,4 +14,5 @@ Route::delete('/produk', [App\Http\Controllers\MasterController::class, 'deleteP
 Route::post('/changeStatusProduk', [App\Http\Controllers\MasterController::class, 'changeStatusProduk']);
 
 // Pengajuan
+Route::post('/changeGenerateProduk', [App\Http\Controllers\MasterController::class, 'changeGenerateProduk']);
 Route::get('/permintaan_pengajuan_periode', [App\Http\Controllers\MasterController::class, 'get_permintaan_pengajuan']);
