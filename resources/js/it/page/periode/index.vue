@@ -22,6 +22,10 @@ export default {
                     value: 'tanggal_pengajuan'
                 },
                 {
+                    text: 'Tanggal Tutup',
+                    value: 'tanggal_tutup'
+                },
+                {
                     text: 'Pemohon',
                     value: 'pemohon'
                 },
@@ -109,6 +113,7 @@ export default {
                 const { data } = await axios.get('/api/master/buka_periode/show').then(res => res.data)
                 this.items = data.map(item => ({
                     tanggal_pengajuan: this.dateFormat(item.tgl_pengajuan),
+                    tanggal_tutup: this.dateFormat(item.tgl_tutup),
                     ...item
                 }))
             } catch (error) {
@@ -210,10 +215,6 @@ export default {
                             <v-list-item two-line>
                                 <v-list-item-content>
                                     <v-list-item-title>{{ item.tanggal_pengajuan }}</v-list-item-title>
-                                    <v-list-item-subtitle v-if="item.status == 'terima'">
-                                        <span :class="cekTglTutup(item.tgl_tutup).color">{{ cekTglTutup(item.tgl_tutup).text
-                                        }}</span>
-                                    </v-list-item-subtitle>
                                     <v-list-item-subtitle>
                                         <v-chip :color="statusBadge(item.status)?.badge"
                                             :text-color="statusBadge(item.status)?.text" small>{{
@@ -223,6 +224,19 @@ export default {
                             </v-list-item>
                         </div>
                     </template>
+                    <template #item.tanggal_tutup="{ item }">
+                            <div>
+                                <v-list-item two-line>
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{ item.tanggal_tutup }}</v-list-item-title>
+                                        <v-list-item-subtitle v-if="item.status == 'terima'">
+                                            <span :class="cekTglTutup(item.tgl_tutup).color">{{ cekTglTutup(item.tgl_tutup).text
+                                            }}</span>
+                                        </v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </div>
+                        </template>
                     <template #item.aksi="{ item }">
                         <div v-if="item.status == 'pengajuan'">
                             <v-btn outlined small color="primary" @click="terima(item)">
