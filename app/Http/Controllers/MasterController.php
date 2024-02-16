@@ -2132,7 +2132,7 @@ class MasterController extends Controller
                 $aktif->save();
             }
             $data->status = $request->status;
-            $data->tgl_konfirmasi = Carbon::now();
+            $data->tgl_konfirmasi = Carbon::now()->format('Y-m-d H:i:s');
             $data->save();
             DB::commit();
             return response()->json([
@@ -2168,7 +2168,8 @@ class MasterController extends Controller
                 'durasi_buka' => $x->maxOpenDay . ' Hari',
                 'status' => $d->status,
                 'tgl_persetujuan' => $d->tgl_konfirmasi,
-                'tgl_pengajuan' => $d->created_at
+                'tgl_pengajuan' => $d->created_at,
+                'tgl_tutup' => $d->created_at->addDays($x->maxOpenDay),
             );
         }
         return response()->json([
