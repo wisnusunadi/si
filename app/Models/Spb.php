@@ -9,7 +9,7 @@ class Spb extends Model
 {
     protected $connection = 'erp';
     protected $table = 'spb';
-    protected $fillable = ['customer_id', 'pesanan_id', 'status', 'ket', 'log'];
+    protected $fillable = ['customer_id', 'pesanan_id', 'status', 'ket', 'log', 'created_at', 'updated_at'];
 
     public function Customer()
     {

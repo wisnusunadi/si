@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -12,4 +13,7 @@ Route::get('/produk', [App\Http\Controllers\MasterController::class, 'indexProdu
 Route::post('/produk', [App\Http\Controllers\MasterController::class, 'postOrEditProduk']);
 Route::delete('/produk', [App\Http\Controllers\MasterController::class, 'deleteProduk']);
 Route::post('/changeStatusProduk', [App\Http\Controllers\MasterController::class, 'changeStatusProduk']);
+
+// Pengajuan
 Route::post('/changeGenerateProduk', [App\Http\Controllers\MasterController::class, 'changeGenerateProduk']);
+Route::get('/permintaan_pengajuan_periode', [App\Http\Controllers\MasterController::class, 'get_permintaan_pengajuan']);

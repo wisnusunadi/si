@@ -20,7 +20,9 @@ const routes = [
         component: Penerimaan
     },
     {
-        path: '/penjualan/buka_periode'
+        path: '/penjualan/periode',
+        name: 'periode',
+        component: () => import('./Page/periode')
     }
 ];
 

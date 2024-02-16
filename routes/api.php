@@ -30,6 +30,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::prefix('/master')->group(function () {
+    Route::prefix('/buka_periode')->group(function () {
+        Route::post('/permintaan', [App\Http\Controllers\MasterController::class, 'permintaan_periode'])->middleware('jwt.verify');
+        Route::get('/selesai/{id}', [App\Http\Controllers\MasterController::class, 'reset_periode'])->middleware('jwt.verify');
+        Route::get('/show', [App\Http\Controllers\MasterController::class, 'show_periode']);
+        Route::post('/update/{id}', [App\Http\Controllers\MasterController::class, 'update_periode']);
+    });
     Route::post('/produk/no_akd', [App\Http\Controllers\MasterController::class, 'check_no_akd']);
     Route::put('/produk/update_coo/{id}', [App\Http\Controllers\MasterController::class, 'update_coo_master_produk'])->name('master.produk.update_coo');
 });

@@ -457,6 +457,12 @@ return [
             'icon' => 'fas fa-search',
             'auth' => [26]
         ],
+        [
+            'text' => 'Periode Penjualan',
+            'url'  => '/penjualan/periode',
+            'icon' => 'fas fa-calendar-alt',
+            'auth' => [26]
+        ],
 
         // [
         //     'text' => 'Nama & Alamat',
@@ -1807,6 +1813,12 @@ return [
         [
             'header' => 'Setting',
             'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 14]
+        ],
+        [
+            'text' => 'Pengajuan Periode',
+            'icon' => 'fas fa-calendar-alt',
+            'url' => '/administrator/periode',
+            'auth' => [14]
         ],
         [
             'text' => 'Ubah Password',

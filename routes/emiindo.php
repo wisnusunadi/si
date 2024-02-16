@@ -11,4 +11,5 @@ Route::group(['prefix' => '/penjualan', 'middleware' => 'auth'], function (){
         Route::view('/status_penjualan', 'page.penjualan.request_emiindo.status_penjualan');
         Route::view('/daftar_penerimaan', 'page.penjualan.request_emiindo.daftar_penerimaan');
     });
+    Route::view('/{any?}', 'page.penjualan.request_emiindo.penjualan')->where('any', '.*');
 });

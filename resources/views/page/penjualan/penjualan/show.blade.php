@@ -201,9 +201,10 @@
             width: 25%;
             border-top-right-radius: 0;
             border-bottom-left-radius: calc(0.25rem - 1px);
-        }                                                                                                                                                                                                                                                                                                                                                                                                                } */
+        }
+        }
 
-        .bg-chart-light {
+        */ .bg-chart-light {
             background: rgba(192, 192, 192, 0.2);
         }
 
@@ -298,6 +299,15 @@
     <section class="content">
         <div class="container-fluid">
             <div class="col-12">
+                @php
+                    $years = \App\Models\AktifPeriode::first()->tahun;
+                @endphp
+                @if ($years != \Carbon\Carbon::now()->year)
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Periode yang dibuka saat ini adalah periode {{ $years }}
+                    </div>
+                @endif
                 <div class="row">
                     <div id="auth" class="hide">{{ Auth::user()->divisi_id }}</div>
                     <div class="col-12">
@@ -352,12 +362,12 @@
                                                     <div class="px-3 py-3">
                                                         <div class="form-group">
                                                             {{-- perulangan selama 5 tahun --}}
-                                                            @for ($i = 0; $i < 2; $i++)
+                                                            @for ($i = 0; $i < 5; $i++)
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input form-years-select" type="radio"
-                                                                        value="{!! \Carbon\Carbon::now()->year - $i !!}"
+                                                                    <input class="form-check-input form-years-select"
+                                                                        type="radio" value="{!! \Carbon\Carbon::now()->year - $i !!}"
                                                                         id="status{{ $i }}" name="data_tahun"
-                                                                        @if ($i === 0) checked @endif />
+                                                                        @if (\Carbon\Carbon::now()->year - $i === $years) checked @endif />
                                                                     <label class="form-check-label"
                                                                         for="status{{ $i }}">
                                                                         {!! \Carbon\Carbon::now()->year - $i !!}
@@ -470,13 +480,13 @@
                                                 <div class="dropdown-menu">
                                                     <div class="px-3 py-3">
                                                         <div class="form-group">
-                                                            @for ($i = 0; $i < 2; $i++)
+                                                            @for ($i = 0; $i < 5; $i++)
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input form-years-select" type="radio"
-                                                                        value="{!! \Carbon\Carbon::now()->year - $i !!}"
+                                                                    <input class="form-check-input form-years-select"
+                                                                        type="radio" value="{!! \Carbon\Carbon::now()->year - $i !!}"
                                                                         id="status{{ $i }}"
                                                                         name="data_tahun_spa"
-                                                                        @if ($i === 0) checked @endif />
+                                                                        @if (\Carbon\Carbon::now()->year - $i === $years) checked @endif />
                                                                     <label class="form-check-label"
                                                                         for="status{{ $i }}">
                                                                         {!! \Carbon\Carbon::now()->year - $i !!}
@@ -590,13 +600,13 @@
                                                 <div class="dropdown-menu">
                                                     <div class="px-3 py-3">
                                                         <div class="form-group">
-                                                            @for ($i = 0; $i < 2; $i++)
+                                                            @for ($i = 0; $i < 5; $i++)
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input form-years-select" type="radio"
-                                                                        value="{!! \Carbon\Carbon::now()->year - $i !!}"
+                                                                    <input class="form-check-input form-years-select"
+                                                                        type="radio" value="{!! \Carbon\Carbon::now()->year - $i !!}"
                                                                         id="status{{ $i }}"
                                                                         name="data_tahun_spb"
-                                                                        @if ($i === 0) checked @endif />
+                                                                        @if (\Carbon\Carbon::now()->year - $i === $years) checked @endif />
                                                                     <label class="form-check-label"
                                                                         for="status{{ $i }}">
                                                                         {!! \Carbon\Carbon::now()->year - $i !!}
@@ -718,13 +728,13 @@
                                                 <div class="dropdown-menu">
                                                     <div class="px-3 py-3">
                                                         <div class="form-group">
-                                                            @for ($i = 0; $i < 2; $i++)
+                                                            @for ($i = 0; $i < 5; $i++)
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input form-years-select" type="radio"
-                                                                        value="{!! \Carbon\Carbon::now()->year - $i !!}"
+                                                                    <input class="form-check-input form-years-select"
+                                                                        type="radio" value="{!! \Carbon\Carbon::now()->year - $i !!}"
                                                                         id="status{{ $i }}"
                                                                         name="data_tahun_pen"
-                                                                        @if ($i === 0) checked @endif />
+                                                                        @if (\Carbon\Carbon::now()->year - $i === $years) checked @endif />
                                                                     <label class="form-check-label"
                                                                         for="status{{ $i }}">
                                                                         {!! \Carbon\Carbon::now()->year - $i !!}
@@ -927,7 +937,8 @@
 @section('adminlte_js')
     <script>
         $(function() {
-            var years = {{ \Carbon\Carbon::now()->year }};
+            var years = {{ $years }};
+            document.querySelector('#ekatalog-tab').addEventListener('click', ekat_show);
             document.querySelector('#spa-tab').addEventListener('click', spa_show);
             document.querySelector('#spb-tab').addEventListener('click', spb_show);
             document.querySelector('#semua-penjualan-tab').addEventListener('click', p_show);
@@ -1150,6 +1161,7 @@
                     ],
                 });
             }
+
             function validasi_batal() {
                 if ($('#tanggal').val() != "" && $('#alasan').val() != "") {
                     $('#btnkirimbatal').attr('disabled', false);
@@ -1640,15 +1652,15 @@
                             if (label == 'ekatalog') {
                                 $('#ekatalogtable').DataTable().ajax.url(
                                     '/penjualan/penjualan/ekatalog/data/semua/' +
-                                    {{ \Carbon\Carbon::now()->year }}).load();
+                                    years).load();
                             } else if (label == 'spa') {
                                 $('#spatable').DataTable().ajax.url(
                                     '/penjualan/penjualan/spa/data/semua/' +
-                                    {{ \Carbon\Carbon::now()->year }}).load();
+                                    years).load();
                             } else if (label == 'spb') {
                                 $('#spatable').DataTable().ajax.url(
                                     '/penjualan/penjualan/spb/data/semua/' +
-                                    {{ \Carbon\Carbon::now()->year }}).load();
+                                    years).load();
                             }
                             $("#deletemodal").modal('hide');
                         } else if (response['data'] == "error") {
@@ -2060,24 +2072,24 @@
 
             });
 
-            
+
             // make global variable
-            $(document).on('click', '.form-years-select', function () {
+            $(document).on('click', '.form-years-select', function() {
                 years = $(this).val();
                 console.log('years', years);
 
                 // remove all checked on class form-years-select
-                $('.form-years-select').each(function () {
+                $('.form-years-select').each(function() {
                     $(this).prop('checked', false);
                 });
 
                 // implement checked on class form-years-select when value == years
-                $('.form-years-select').each(function () {
+                $('.form-years-select').each(function() {
                     if ($(this).val() == years) {
                         $(this).prop('checked', true);
                     }
                 });
-                
+
             })
         })
     </script>

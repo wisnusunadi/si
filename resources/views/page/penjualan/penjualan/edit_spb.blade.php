@@ -95,13 +95,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                    .row {
-                        font-size: 12px;
-                    }
+                                .row {
+                                    font-size: 12px;
+                                }
 
-                    h4 {
-                        font-size: 20px;
-                    } */
+                                h4 {
+                                    font-size: 20px;
+                                } */
             section {
                 font-size: 12px;
             }
@@ -122,13 +122,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                    .row {
-                        font-size: 12px;
-                    }
+                                .row {
+                                    font-size: 12px;
+                                }
 
-                    h4 {
-                        font-size: 20px;
-                    } */
+                                h4 {
+                                    font-size: 20px;
+                                } */
             section {
                 font-size: 12px;
             }
@@ -158,230 +158,261 @@
     <section class="content">
         <div class="container-fluid">
 
-                <div class="row justify-content-center">
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-11 col-md-12">
-                                        <h5 class="margin">Info Penjualan SPB</h5>
-                                        <div class="row d-flex justify-content-between">
-                                            <div class="p-2 cust">
-                                                <div class="margin">
-                                                    <small>Info Customer</small>
-                                                </div>
-                                                <div id="nama_customer" class="margin"><b>{{ $e->customer->nama }}</b></div>
-                                                <div id="alamat" class="margin"><b>{{ $e->customer->alamat }}</b></div>
-                                                <div id="provinsi" class="margin"><b>{{ $e->customer->provinsi->nama }}</b>
-                                                </div>
-                                                <div id="telepon" class="margin"><b>{{ $e->customer->telp }}</b></div>
+            <div class="row justify-content-center">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    @php
+                        $years = \App\Models\AktifPeriode::first()->tahun;
+                    @endphp
+                    @php
+                        $years = \App\Models\AktifPeriode::first()->tahun;
+                        $isOpen = false;
+                        if ($years != \Carbon\Carbon::now()->year) {
+                            $isOpen = true;
+                        }
+                        $maxDate = $isOpen ? \Carbon\Carbon::parse($years . '-12-31')->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d');
+                    @endphp
+                    @if ($isOpen)
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Periode yang dibuka saat ini adalah periode {{ $years }}
+                        </div>
+                    @endif
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-11 col-md-12">
+                                    <h5 class="margin">Info Penjualan SPB</h5>
+                                    <div class="row d-flex justify-content-between">
+                                        <div class="p-2 cust">
+                                            <div class="margin">
+                                                <small>Info Customer</small>
                                             </div>
-                                            <div class="p-2">
-                                                <div class="margin">
-                                                    <div><small class="text-muted">No PO</small></div>
-                                                    <div id="no_po">
-                                                        <b>
-                                                            @if ($e->Pesanan)
-                                                                {{ $e->Pesanan->no_po }}
-                                                            @endif
-                                                        </b>
-                                                    </div>
-                                                </div>
-                                                <div class="margin">
-                                                    <div><small class="text-muted">Tanggal PO</small></div>
-                                                    <div id="no_po">
-                                                        <b>
-                                                            @if ($e->Pesanan)
-                                                                @if (empty($e->Pesanan->tgl_po) || $e->Pesanan->tgl_po == '0000-00-00')
-                                                                    -
-                                                                @else
-                                                                    {{ $e->Pesanan->tgl_po }}
-                                                                @endif
-                                                            @endif
-                                                        </b>
-                                                    </div>
-                                                </div>
+                                            <div id="nama_customer" class="margin"><b>{{ $e->customer->nama }}</b></div>
+                                            <div id="alamat" class="margin"><b>{{ $e->customer->alamat }}</b></div>
+                                            <div id="provinsi" class="margin"><b>{{ $e->customer->provinsi->nama }}</b>
                                             </div>
-                                            <div class="p-2">
-                                                <div class="margin">
-                                                    <div><small class="text-muted">No DO</small></div>
-                                                    <div id="no_po">
-                                                        <b>
-                                                            @if ($e->Pesanan != '')
-                                                                @if (!empty($e->Pesanan->no_do))
-                                                                    {{ $e->Pesanan->no_do }}
-                                                                @else
-                                                                    -
-                                                                @endif
-                                                            @endif
-                                                        </b>
-                                                    </div>
-                                                </div>
-                                                <div class="margin">
-                                                    <div><small class="text-muted">Tanggal DO</small></div>
-                                                    <div id="no_po">
-                                                        <b>
-                                                            @if ($e->Pesanan != '')
-                                                                @if (!empty($e->Pesanan->tanggal_do))
-                                                                    {{ $e->Pesanan->tanggal_do }}
-                                                                @else
-                                                                    -
-                                                                @endif
-                                                            @endif
-                                                        </b>
-                                                    </div>
+                                            <div id="telepon" class="margin"><b>{{ $e->customer->telp }}</b></div>
+                                        </div>
+                                        <div class="p-2">
+                                            <div class="margin">
+                                                <div><small class="text-muted">No PO</small></div>
+                                                <div id="no_po">
+                                                    <b>
+                                                        @if ($e->Pesanan)
+                                                            {{ $e->Pesanan->no_po }}
+                                                        @endif
+                                                    </b>
                                                 </div>
                                             </div>
-                                            <div class="p-2">
-                                                <div class="margin">
-                                                    <div><small class="text-muted">No SO</small></div>
-                                                    <div id="no_so">
-                                                        <b>
-                                                            @if ($e->Pesanan != '')
-                                                                @if (!empty($e->Pesanan->so))
-                                                                    {{ $e->Pesanan->so }}
-                                                                @else
-                                                                    -
-                                                                @endif
+                                            <div class="margin">
+                                                <div><small class="text-muted">Tanggal PO</small></div>
+                                                <div id="no_po">
+                                                    <b>
+                                                        @if ($e->Pesanan)
+                                                            @if (empty($e->Pesanan->tgl_po) || $e->Pesanan->tgl_po == '0000-00-00')
+                                                                -
+                                                            @else
+                                                                {{ $e->Pesanan->tgl_po }}
                                                             @endif
-                                                        </b>
-                                                    </div>
-                                                </div>
-                                                <div class="margin">
-                                                    <div><small class="text-muted">Status</small></div>
-
-                                                    @if ($e->log == 'penjualan')
-                                                        <div id="status" class="badge red-text ">Penjualan</div>
-                                                    @elseif($e->log == 'po')
-                                                        <div id="status" class="badge purple-text ">PO</div>
-                                                    @elseif($e->log == 'gudang')
-                                                        <div id="status" class="badge orange-text ">Gudang</div>
-                                                    @elseif($e->log == 'qc')
-                                                        <div id="status" class="badge yellow-text ">QC</div>
-                                                    @elseif($e->log == 'logistik')
-                                                        <div id="status" class="badge blue-text ">Logistik</div>
-                                                    @elseif($e->log == 'pengiriman')
-                                                        <div id="status" class="badge green-text ">Pengiriman</div>
-                                                    @endif
+                                                        @endif
+                                                    </b>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="p-2">
+                                            <div class="margin">
+                                                <div><small class="text-muted">No DO</small></div>
+                                                <div id="no_po">
+                                                    <b>
+                                                        @if ($e->Pesanan != '')
+                                                            @if (!empty($e->Pesanan->no_do))
+                                                                {{ $e->Pesanan->no_do }}
+                                                            @else
+                                                                -
+                                                            @endif
+                                                        @endif
+                                                    </b>
+                                                </div>
+                                            </div>
+                                            <div class="margin">
+                                                <div><small class="text-muted">Tanggal DO</small></div>
+                                                <div id="no_po">
+                                                    <b>
+                                                        @if ($e->Pesanan != '')
+                                                            @if (!empty($e->Pesanan->tanggal_do))
+                                                                {{ $e->Pesanan->tanggal_do }}
+                                                            @else
+                                                                -
+                                                            @endif
+                                                        @endif
+                                                    </b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-2">
+                                            <div class="margin">
+                                                <div><small class="text-muted">No SO</small></div>
+                                                <div id="no_so">
+                                                    <b>
+                                                        @if ($e->Pesanan != '')
+                                                            @if (!empty($e->Pesanan->so))
+                                                                {{ $e->Pesanan->so }}
+                                                            @else
+                                                                -
+                                                            @endif
+                                                        @endif
+                                                    </b>
+                                                </div>
+                                            </div>
+                                            <div class="margin">
+                                                <div><small class="text-muted">Status</small></div>
 
+                                                @if ($e->log == 'penjualan')
+                                                    <div id="status" class="badge red-text ">Penjualan</div>
+                                                @elseif($e->log == 'po')
+                                                    <div id="status" class="badge purple-text ">PO</div>
+                                                @elseif($e->log == 'gudang')
+                                                    <div id="status" class="badge orange-text ">Gudang</div>
+                                                @elseif($e->log == 'qc')
+                                                    <div id="status" class="badge yellow-text ">QC</div>
+                                                @elseif($e->log == 'logistik')
+                                                    <div id="status" class="badge blue-text ">Logistik</div>
+                                                @elseif($e->log == 'pengiriman')
+                                                    <div id="status" class="badge green-text ">Pengiriman</div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="p-2">
+                                            <div class="margin">
+                                                <div><small class="text-muted">Cetak SPPB</small></div>
+                                                @if ($e->Pesanan->no_po != null && $e->Pesanan->tgl_po != null)
+                                                    <a target="_blank"
+                                                        href="{{ route('penjualan.penjualan.cetak_surat_perintah', [$e->Pesanan->id]) }}">
+                                                        <button class="btn btn-sm btn-outline-primary" type="button">
+                                                            <i class="fas fa-print"></i>
+                                                            SPPB
+                                                        </button>
+                                                    </a>
+                                                @else
+                                                    <div>-</div>
+                                                @endif
+                                            </div>
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div class="card">
-                            <div class="card-header bg-warning">
-                                <div class="card-title">Form Ubah Data</div>
-                            </div>
-                            <div class="card-body">
-                                @if (session()->has('error') || count($errors) > 0)
-                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        <strong>Gagal mengubah data!</strong> Periksa
-                                        kembali data yang diinput
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                @elseif(session()->has('success'))
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        <strong>Berhasil mengubah data</strong>,
-                                        Terima kasih
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                @endif
-                                <div class="content">
-                                    <form method="post"
-                                        action="{{ route('penjualan.penjualan.update_spb', ['id' => $e->id]) }}"  id="edit_penjualan">
-                                        {{ csrf_field() }}
-                                        {{ method_field('PUT') }}
-                                        <div class="row d-flex justify-content-center">
-                                            <div class="col-lg-10 col-md-12">
-                                                <h4>Info Customer</h4>
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div class="form-horizontal">
-                                                            <div class="form-group row">
-                                                                <label for=""
-                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Nama
-                                                                    Customer</label>
-                                                                <div class="col-lg-5 col-md-12">
-                                                                    <select name="customer_id" id="customer_id"
-                                                                        class="form-control customer_id custom-select @error('customer_id') is-invalid @enderror">
-                                                                        <option value="{{ $e->customer_id }}" selected>
-                                                                            {{ $e->customer->nama }}</option>
-                                                                    </select>
-                                                                    <div class="invalid-feedback" id="msgcustomer_id">
-                                                                        @if ($errors->has('customer_id'))
-                                                                            {{ $errors->first('customer_id') }}
-                                                                        @endif
-                                                                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-header bg-warning">
+                            <div class="card-title">Form Ubah Data</div>
+                        </div>
+                        <div class="card-body">
+                            @if (session()->has('error') || count($errors) > 0)
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Gagal mengubah data!</strong> Periksa
+                                    kembali data yang diinput
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @elseif(session()->has('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>Berhasil mengubah data</strong>,
+                                    Terima kasih
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @endif
+                            <div class="content">
+                                <form method="post"
+                                    action="{{ route('penjualan.penjualan.update_spb', ['id' => $e->id]) }}"
+                                    id="edit_penjualan">
+                                    {{ csrf_field() }}
+                                    {{ method_field('PUT') }}
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col-lg-10 col-md-12">
+                                            <h4>Info Customer</h4>
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="form-horizontal">
+                                                        <div class="form-group row">
+                                                            <label for=""
+                                                                class="col-form-label col-lg-5 col-md-12 labelket">Nama
+                                                                Customer</label>
+                                                            <div class="col-lg-5 col-md-12">
+                                                                <select name="customer_id" id="customer_id"
+                                                                    class="form-control customer_id custom-select @error('customer_id') is-invalid @enderror">
+                                                                    <option value="{{ $e->customer_id }}" selected>
+                                                                        {{ $e->customer->nama }}</option>
+                                                                </select>
+                                                                <div class="invalid-feedback" id="msgcustomer_id">
+                                                                    @if ($errors->has('customer_id'))
+                                                                        {{ $errors->first('customer_id') }}
+                                                                    @endif
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group row">
-                                                                <label for=""
-                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Alamat</label>
-                                                                <div class="col-lg-7 col-md-12">
-                                                                    <input type="text"
-                                                                        class="form-control col-form-label" name="alamat"
-                                                                        id="alamat_customer" readonly
-                                                                        value="{{ $e->customer->alamat }}" />
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for=""
+                                                                class="col-form-label col-lg-5 col-md-12 labelket">Alamat</label>
+                                                            <div class="col-lg-7 col-md-12">
+                                                                <input type="text" class="form-control col-form-label"
+                                                                    name="alamat" id="alamat_customer" readonly
+                                                                    value="{{ $e->customer->alamat }}" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for=""
+                                                                class="col-form-label col-lg-5 col-md-12 labelket">Telepon</label>
+                                                            <div class="col-lg-5 col-md-12">
+                                                                <input type="text" class="form-control col-form-label"
+                                                                    name="telepon" id="telepon_customer" readonly
+                                                                    value="{{ $e->customer->telp }}" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="penjualan"
+                                                                class="col-form-label col-lg-5 col-md-12 labelket">Barang</label>
+                                                            <div class="col-5 col-form-label">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                        id="jenis_pen" value="produk" name="jenis_pen[]"
+                                                                        @if (count($e->pesanan->detailpesanan) > 0) checked @endif>
+                                                                    <label class="form-check-label"
+                                                                        for="inlineCheckbox1">Produk</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                        id="jenis_pen" value="sparepart"
+                                                                        name="jenis_pen[]"
+                                                                        @if ($e->pesanan->getJumlahPesananNonJasa()) checked @endif>
+                                                                    <label class="form-check-label"
+                                                                        for="inlineCheckbox1">Sparepart</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                        id="jasacheck" name="jasacheck[]"
+                                                                        @if ($e->pesanan->getJumlahPesananJasa()) checked @endif
+                                                                        disabled>
+                                                                    <label class="form-check-label"
+                                                                        for="inlineCheckbox1">Jasa </label>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group row">
-                                                                <label for=""
-                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Telepon</label>
-                                                                <div class="col-lg-5 col-md-12">
-                                                                    <input type="text"
-                                                                        class="form-control col-form-label" name="telepon"
-                                                                        id="telepon_customer" readonly
-                                                                        value="{{ $e->customer->telp }}" />
-                                                                </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-7">
+                                                                <input type="text" class="d-none" id="c_produk"
+                                                                    value="{{ count($e->pesanan->detailpesanan) }}" />
+                                                                <input type="text" class="d-none" id="c_part"
+                                                                    value="{{ $e->pesanan->getJumlahPesananNonJasa() }}" />
                                                             </div>
-                                                            <div class="form-group row">
-                                                                <label for="penjualan"
-                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Barang</label>
-                                                                <div class="col-5 col-form-label">
-                                                                    <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            id="jenis_pen" value="produk"
-                                                                            name="jenis_pen[]"
-                                                                            @if (count($e->pesanan->detailpesanan) > 0) checked @endif>
-                                                                        <label class="form-check-label"
-                                                                            for="inlineCheckbox1">Produk</label>
-                                                                    </div>
-                                                                    <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            id="jenis_pen" value="sparepart"
-                                                                            name="jenis_pen[]"
-                                                                            @if ($e->pesanan->getJumlahPesananNonJasa()) checked @endif>
-                                                                        <label class="form-check-label"
-                                                                            for="inlineCheckbox1">Sparepart</label>
-                                                                    </div>
-                                                                    <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            id="jasacheck" name="jasacheck[]"
-                                                                            @if ($e->pesanan->getJumlahPesananJasa()) checked @endif
-                                                                            disabled>
-                                                                        <label class="form-check-label"
-                                                                            for="inlineCheckbox1">Jasa </label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <div class="col-7">
-                                                                    <input type="text" class="d-none" id="c_produk"
-                                                                        value="{{ count($e->pesanan->detailpesanan) }}" />
-                                                                    <input type="text" class="d-none" id="c_part"
-                                                                        value="{{ $e->pesanan->getJumlahPesananNonJasa() }}" />
-                                                                </div>
-                                                            </div>
-                                                            {{-- <div class="form-group row">
+                                                        </div>
+                                                        {{-- <div class="form-group row">
                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Barang</label>
                                                         <div class="col-lg-5 col-md-12">
                                                             <div class="form-check form-check-inline col-form-label" id="penj_prd">
@@ -398,18 +429,18 @@
                                                             </div>
                                                         </div>
                                                     </div> --}}
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row d-flex justify-content-center">
-                                            <div class="col-lg-10 col-md-12">
-                                                <h4>Info Penjualan</h4>
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab"
-                                                    role="tablist">
+                                    </div>
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col-lg-10 col-md-12">
+                                            <h4>Info Penjualan</h4>
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab"
+                                                        role="tablist">
                                                         <li class="nav-item" role="presentation">
                                                             <a class="nav-link active" id="pills-pononakn-tab"
                                                                 data-toggle="pill" href="#pills-pononakn" role="tab"
@@ -417,14 +448,15 @@
                                                                 aria-selected="true">Purchase Order</a>
                                                         </li>
                                                         <li class="nav-item" role="presentation">
-                                                            <a class="nav-link" id="pills-pengirimannonakn-tab" data-toggle="pill"
-                                                                href="#pills-pengirimannonakn" role="tab"
-                                                                aria-controls="pills-pengirimannonakn"
+                                                            <a class="nav-link" id="pills-pengirimannonakn-tab"
+                                                                data-toggle="pill" href="#pills-pengirimannonakn"
+                                                                role="tab" aria-controls="pills-pengirimannonakn"
                                                                 aria-selected="false">Pengiriman</a>
                                                         </li>
                                                     </ul>
                                                     <div class="tab-content" id="pills-tabContent">
-                                                        <div class="tab-pane fade show active" id="pills-pononakn" role="tabpanel" aria-labelledby="pills-pononakn-tab">
+                                                        <div class="tab-pane fade show active" id="pills-pononakn"
+                                                            role="tabpanel" aria-labelledby="pills-pononakn-tab">
                                                             <div class="form-group row">
                                                                 <label for=""
                                                                     class="col-form-label col-lg-5 col-md-12 labelket">Delivery
@@ -441,7 +473,8 @@
                                                                         <input class="form-check-input" type="radio"
                                                                             name="do" id="no" value="no"
                                                                             {{ empty($e->Pesanan->no_do) ? 'checked' : '' }} />
-                                                                        <label class="form-check-label" for="no">Tidak
+                                                                        <label class="form-check-label"
+                                                                            for="no">Tidak
                                                                             tersedia</label>
                                                                     </div>
                                                                 </div>
@@ -481,39 +514,36 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group row "
-                                                            id="do_detail_no">
-                                                            <label for=""
-                                                                class="col-form-label col-lg-5 col-md-12 labelket">Nomor
-                                                                PO</label>
-                                                            <div class="col-4">
-                                                                <input type="text"
-                                                                    class="form-control col-form-label @error('no_po') is-invalid @enderror"
-                                                                    id="no_po" name="no_po"
-                                                                    value="{{ $e->Pesanan->no_po }}" />
-                                                                <div class="invalid-feedback" id="msgno_po">
-                                                                    @if ($errors->has('no_po'))
-                                                                        {{ $errors->first('no_po') }}
-                                                                    @endif
+                                                            <div class="form-group row " id="do_detail_no">
+                                                                <label for=""
+                                                                    class="col-form-label col-lg-5 col-md-12 labelket">Nomor
+                                                                    PO</label>
+                                                                <div class="col-4">
+                                                                    <input type="text"
+                                                                        class="form-control col-form-label @error('no_po') is-invalid @enderror"
+                                                                        id="no_po" name="no_po"
+                                                                        value="{{ $e->Pesanan->no_po }}" />
+                                                                    <div class="invalid-feedback" id="msgno_po">
+                                                                        @if ($errors->has('no_po'))
+                                                                            {{ $errors->first('no_po') }}
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="tanggal_po_ekat"
-                                                                class="col-lg-5 col-md-12 col-form-label labelket">Tanggal
-                                                                PO</label>
-                                                            <div class="col-lg-5 col-md-12">
-                                                                <input type="date"
-                                                                    class="form-control @error('tanggal_po_ekat') is-invalid @enderror"
-                                                                    value="{{ $e->Pesanan->tgl_po }}""
-                                                                    placeholder="Masukkan Tanggal Purchase Order"
-                                                                    id="tgl_po"
-                                                                    name="tgl_po" />
-                                                                <div class="invalid-feedback"
-                                                                    id="tgl_po">
+                                                            <div class="form-group row">
+                                                                <label for="tanggal_po_ekat"
+                                                                    class="col-lg-5 col-md-12 col-form-label labelket">Tanggal
+                                                                    PO</label>
+                                                                <div class="col-lg-5 col-md-12">
+                                                                    <input type="date"
+                                                                        class="form-control @error('tanggal_po_ekat') is-invalid @enderror"
+                                                                        value="{{ $e->Pesanan->tgl_po }}""
+                                                                        placeholder="Masukkan Tanggal Purchase Order"
+                                                                        id="tgl_po" name="tgl_po" />
+                                                                    <div class="invalid-feedback" id="tgl_po">
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
 
                                                             <div class="form-group row">
@@ -524,67 +554,85 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="tab-pane fade" id="pills-pengirimannonakn" role="tabpanel" aria-labelledby="pills-pengirimannonakn-tab">
+                                                        <div class="tab-pane fade" id="pills-pengirimannonakn"
+                                                            role="tabpanel" aria-labelledby="pills-pengirimannonakn-tab">
                                                             <div class="card-body">
                                                                 <div class="form-group row">
-                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Pengiriman</label>
+                                                                    <label for=""
+                                                                        class="col-lg-5 col-md-12 col-form-label labelket">Alamat
+                                                                        Pengiriman</label>
                                                                     <div class="col-lg-6 col-md-12 col-form-label">
                                                                         <div class="form-check form-check-inline">
-                                                                            <input type="radio" class="form-check-input" name="pilihan_pengiriman_nonakn" id="pengiriman0" value="distributor" />
-                                                                            <label for="pengiriman0" class="form-check-label">Sama dengan Distributor</label>
+                                                                            <input type="radio" class="form-check-input"
+                                                                                name="pilihan_pengiriman_nonakn"
+                                                                                id="pengiriman0" value="distributor" />
+                                                                            <label for="pengiriman0"
+                                                                                class="form-check-label">Sama dengan
+                                                                                Distributor</label>
                                                                         </div>
                                                                         <div class="form-check form-check-inline">
-                                                                            <input type="radio" class="form-check-input" name="pilihan_pengiriman_nonakn" id="lainnya" value="lainnya" />
-                                                                            <label for="lainnya" class="form-check-label">Lainnya</label>
+                                                                            <input type="radio" class="form-check-input"
+                                                                                name="pilihan_pengiriman_nonakn"
+                                                                                id="lainnya" value="lainnya" />
+                                                                            <label for="lainnya"
+                                                                                class="form-check-label">Lainnya</label>
                                                                         </div>
                                                                         <input type="text"
-                                                                        value="{{ $e->pesanan->tujuan_kirim }}"
-                                                                        name="perusahaan_pengiriman_nonakn" id="perusahaan_pengiriman_nonakn" class="form-control col-form-label" readonly>
+                                                                            value="{{ $e->pesanan->tujuan_kirim }}"
+                                                                            name="perusahaan_pengiriman_nonakn"
+                                                                            id="perusahaan_pengiriman_nonakn"
+                                                                            class="form-control col-form-label" readonly>
                                                                         <input type="text"
-                                                                        value="{{ $e->pesanan->alamat_kirim }}"
-                                                                            class="form-control col-form-label mt-2 alamat_pengiriman_nonakn" name="alamat_pengiriman" id="alamat_pengiriman_nonakn" readonly/>
+                                                                            value="{{ $e->pesanan->alamat_kirim }}"
+                                                                            class="form-control col-form-label mt-2 alamat_pengiriman_nonakn"
+                                                                            name="alamat_pengiriman"
+                                                                            id="alamat_pengiriman_nonakn" readonly />
                                                                         <div class="invalid-feedback"
                                                                             id="msg_alamat_pengiriman_nonakn">
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group row">
-                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
+                                                                    <label for=""
+                                                                        class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
                                                                     <div class="col-lg-6 col-md-12 col-form-label">
                                                                         <div class="form-check form-check-inline">
-                                                                            <input type="radio" class="form-check-input" name="kemasan" id="kemasan0" value="peti"
-                                                                            @if ($e->pesanan->kemasan == "peti")
-                                                                                checked
-                                                                            @endif
-                                                                            />
-                                                                            <label for="kemasan0" class="form-check-label">PETI</label>
+                                                                            <input type="radio" class="form-check-input"
+                                                                                name="kemasan" id="kemasan0"
+                                                                                value="peti"
+                                                                                @if ($e->pesanan->kemasan == 'peti') checked @endif />
+                                                                            <label for="kemasan0"
+                                                                                class="form-check-label">PETI</label>
                                                                         </div>
                                                                         <div class="form-check form-check-inline">
-                                                                            <input type="radio" class="form-check-input" name="kemasan" id="kemasan1" value="nonpeti"
-                                                                            @if ($e->pesanan->kemasan == "nonpeti")
-                                                                                checked
-                                                                            @endif
-                                                                            />
-                                                                            <label for="kemasan1" class="form-check-label">NON PETI</label>
+                                                                            <input type="radio" class="form-check-input"
+                                                                                name="kemasan" id="kemasan1"
+                                                                                value="nonpeti"
+                                                                                @if ($e->pesanan->kemasan == 'nonpeti') checked @endif />
+                                                                            <label for="kemasan1"
+                                                                                class="form-check-label">NON PETI</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group row">
-                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Ekspedisi</label>
+                                                                    <label for=""
+                                                                        class="col-lg-5 col-md-12 col-form-label labelket">Ekspedisi</label>
                                                                     <div class="col-lg-6 col-md-12 col-form-label">
-                                                                        <select name="ekspedisi" id="ekspedisi_nonakn" class="form-control ekspedisi_nonakn">
-                                                                            @if ($e->pesanan->ekspedisi_id != NULL || $e->pesanan->ekspedisi_id != "" )
-                                                                            <option
-                                                                                value="{{ $e->pesanan->ekspedisi_id }}"
-                                                                                selected>
-                                                                                {{ $e->pesanan->Ekspedisi->nama }}
-                                                                            </option>
-                                                                        @endif
+                                                                        <select name="ekspedisi" id="ekspedisi_nonakn"
+                                                                            class="form-control ekspedisi_nonakn">
+                                                                            @if ($e->pesanan->ekspedisi_id != null || $e->pesanan->ekspedisi_id != '')
+                                                                                <option
+                                                                                    value="{{ $e->pesanan->ekspedisi_id }}"
+                                                                                    selected>
+                                                                                    {{ $e->pesanan->Ekspedisi->nama }}
+                                                                                </option>
+                                                                            @endif
                                                                         </select>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group row">
-                                                                    <label for="" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
+                                                                    <label for=""
+                                                                        class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
                                                                     <div class="col-lg-6 col-md-12 col-form-label">
                                                                         <textarea class="form-control col-form-label" name="keterangan_pengiriman">{{ $e->pesanan->ket_kirim }}</textarea>
                                                                     </div>
@@ -592,244 +640,120 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
 
 
 
-                                        @if (isset($e->pesanan))
-                                            <div class="row d-flex justify-content-center @if (count($e->pesanan->detailpesanan) <= 0) hide @endif"
-                                                id="dataproduk">
-                                                <div class="col-lg-10 col-md-12">
-                                                    <h4>Data Produk</h4>
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-12">
-                                                                    <div class="table-responsive">
-                                                                        <table class="table" style="text-align: center;"
-                                                                            id="produktable">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th colspan="7">
-                                                                                        <button type="button"
-                                                                                            class="btn btn-primary float-right"
-                                                                                            id="addrowproduk">
-                                                                                            <i class="fas fa-plus"></i>
-                                                                                            Produk
-                                                                                        </button>
-                                                                                    </th>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <th width="2%">No</th>
-                                                                                    <th width="35%">Nama Paket</th>
-                                                                                    <th width="15%">Jumlah</th>
+                                    @if (isset($e->pesanan))
+                                        <div class="row d-flex justify-content-center @if (count($e->pesanan->detailpesanan) <= 0) hide @endif"
+                                            id="dataproduk">
+                                            <div class="col-lg-10 col-md-12">
+                                                <h4>Data Produk</h4>
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="table-responsive">
+                                                                    <table class="table" style="text-align: center;"
+                                                                        id="produktable">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th colspan="7">
+                                                                                    <button type="button"
+                                                                                        class="btn btn-primary float-right"
+                                                                                        id="addrowproduk">
+                                                                                        <i class="fas fa-plus"></i>
+                                                                                        Produk
+                                                                                    </button>
+                                                                                </th>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th width="2%">No</th>
+                                                                                <th width="35%">Nama Paket</th>
+                                                                                <th width="15%">Jumlah</th>
 
-                                                                                    <th width="20%">Harga</th>
-                                                                                    <th width="20%">Subtotal</th>
-                                                                                    <th width="20%">PPN</th>
-                                                                                    <th width="10%">
-                                                                                        Stok Distributor <br>
-                                                                                        <input type="checkbox" class="checkAllDistributor">
-                                                                                    </th>
-                                                                                    <th width="2%">Aksi</th>
-                                                                                </tr>
-                                                                            </thead>
+                                                                                <th width="20%">Harga</th>
+                                                                                <th width="20%">Subtotal</th>
+                                                                                <th width="20%">PPN</th>
+                                                                                <th width="10%">
+                                                                                    Stok Distributor <br>
+                                                                                    <input type="checkbox"
+                                                                                        class="checkAllDistributor">
+                                                                                </th>
+                                                                                <th width="2%">Aksi</th>
+                                                                            </tr>
+                                                                        </thead>
 
-                                                                            <tbody>
+                                                                        <tbody>
 
 
-                                                                                <?php
-                                                                                $produkpenjualan = 0;
-                                                                                $no= 1;
-                                                                                ?>
-                                                                                @if (count($item) > 0)
-                                                                                    @foreach ($item as $f)
-                                                                                        <tr>
-                                                                                            <td>{{ $no++ }}</td>
-                                                                                            <td>
-                                                                                                <div
-                                                                                                    class="form-group select_item">
-                                                                                                    <select
-                                                                                                        name="penjualan_produk_id[]"
-                                                                                                        id="{{ $no - 2 }}"
-                                                                                                        class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror"
-                                                                                                        style="width:100%;">
-                                                                                                        <option
-                                                                                                            value="{{ $f['penjualan_produk_id'] }}"
-                                                                                                            selected>
-                                                                                                            {{ $f['nama'] }}
-                                                                                                        </option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                                <div class="detail_produk"
-                                                                                                    id="detail_produk{{ $loop->iteration - 1 }}">
-                                                                                                    <fieldset>
-                                                                                                        <legend><b>Detail
-                                                                                                                Produk</b>
-                                                                                                        </legend>
-                                                                                                        <?php $variasi = 0; ?>
-                                                                                                        @foreach ($f['detail'] as $g)
-                                                                                                            <div>
-                                                                                                                <div
-                                                                                                                    class="card-body blue-bg">
-                                                                                                                    <h6>{{ $g['nama'] }}
-                                                                                                                    </h6>
-                                                                                                                    <select
-                                                                                                                        class="form-control variasi"
-                                                                                                                        name="variasi[{{ $produkpenjualan }}][{{ $variasi }}]"
-                                                                                                                        id="variasi{{ $produkpenjualan }}{{ $variasi }}"
-                                                                                                                        style="width:100%;"
-                                                                                                                        data-attr="variasi{{ $variasi }}"
-                                                                                                                        data-id="{{ $variasi }}">
-                                                                                                                        <option
-                                                                                                                            value="{{ $g['gbj_id'] }}"
-                                                                                                                            selected>
-                                                                                                                            @if (!empty(trim($g['variasi'])))
-                                                                                                                                {{ $g['variasi'] }}
-                                                                                                                            @else
-                                                                                                                                {{ $g['nama'] }}
-                                                                                                                            @endif
-                                                                                                                        </option>
-                                                                                                                    </select>
-                                                                                                                    <span
-                                                                                                                        class=" invalid-feedback d-block ketstok"
-                                                                                                                        name="ketstok[{{ $produkpenjualan }}][{{ $variasi }}]"
-                                                                                                                        id="ketstok{{ $produkpenjualan }}{{ $variasi }}"
-                                                                                                                        data-attr="ketstok{{ $variasi }}"
-                                                                                                                        data-id="{{ $variasi }}"></span>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <?php $variasi = $variasi + 1; ?>
-                                                                                                        @endforeach
-                                                                                                    </fieldset>
-                                                                                                </div>
-                                                                                                <div class="detailjual"
-                                                                                                    id="tes0">
-                                                                                                </div>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div
-                                                                                                    class="form-group d-flex justify-content-center">
-                                                                                                    <div
-                                                                                                        class="input-group">
-                                                                                                        <input
-                                                                                                            type="number"
-                                                                                                            class="form-control produk_jumlah"
-                                                                                                            aria-label="produk_satuan"
-                                                                                                            name="produk_jumlah[{{ $produkpenjualan }}]"
-                                                                                                            id="produk_jumlah{{ $produkpenjualan }}"
-                                                                                                            style="width:100%;"
-                                                                                                            value="{{ $f['jumlah'] }}">
-
-                                                                                                    </div>
-                                                                                                    <small
-                                                                                                        id="produk_ketersediaan"></small>
-                                                                                                </div>
-                                                                                            </td>
-
-                                                                                            <td>
-                                                                                                <div
-                                                                                                    class="form-group d-flex justify-content-center">
-
-                                                                                                    <input type="text"
-                                                                                                        class="form-control produk_harga"
-                                                                                                        name="produk_harga[{{ $produkpenjualan }}]"
-                                                                                                        id="produk_harga{{ $produkpenjualan }}"
-                                                                                                        placeholder="Masukkan Harga"
-                                                                                                        style="width:100%;"
-                                                                                                        aria-describedby="prdhrg"
-                                                                                                        value="{{ number_format($f['harga'], 0, ',', '.') }}" />
-                                                                                                </div>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div
-                                                                                                    class="form-group d-flex justify-content-center">
-
-                                                                                                    <input type="text"
-                                                                                                        class="form-control produk_subtotal"
-                                                                                                        name="produk_subtotal[{{ $produkpenjualan }}]"
-                                                                                                        id="produk_subtotal{{ $produkpenjualan }}"
-                                                                                                        placeholder="Masukkan Subtotal"
-                                                                                                        style="width:100%;"
-                                                                                                        value="{{ number_format($f['harga'] * $f['jumlah'] + $f['ongkir'], 0, ',', '.') }}"
-                                                                                                        aria-describedby="prdsub"
-                                                                                                        readonly />
-                                                                                                </div>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div class="custom-control custom-switch">
-                                                                                                    <input type="checkbox" class="custom-control-input produk_ppn"
-                                                                                                    id="produk_ppn{{ $produkpenjualan }}"
-                                                                                                    name="produk_ppn[{{ $produkpenjualan }}]"
-                                                                                                    value="{{ $f['ppn'] }}"
-                                                                                                    @if ($f['ppn'] == 1)
-                                                                                                    checked
-                                                                                                @endif
-                                                                                                    >
-                                                                                                    <label class="custom-control-label produk_ppn_label" for="produk_ppn{{ $produkpenjualan }}">
-                                                                                                        @if ($f['ppn'] == 1)
-                                                                                                        PPN
-                                                                                                    @else
-                                                                                                        Non PPN
-                                                                                                    @endif
-                                                                                                    </label>
-                                                                                                  </div>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div
-                                                                                                    class="form-group d-flex align-items-center">
-                                                                                                    <input type="checkbox"
-                                                                                                        class="stok_distributor"
-                                                                                                        name="stok_distributor[{{ $produkpenjualan }}]"
-                                                                                                        id="stok_distributor{{ $produkpenjualan }}"
-                                                                                                        value="{{ $produkpenjualan }}"
-                                                                                                        @if ($f['jenis'] == 'dsb' )
-                                                                                                            checked
-                                                                                                        @endif
-                                                                                                        style="width:100%;" />
-                                                                                                </div>
-                                                                                                @if ($f['jenis'] == 'dsb' )
-                                                                                                <button type="button" class="btn btn-sm btn-outline-primary btnNoSeri" >No Seri</button>
-                                                                                                @else
-                                                                                                <button type="button" class="btn btn-sm btn-outline-primary btnNoSeri" hidden >No Seri</button>
-                                                                                                 @endif
-
-                                                                                                <input type="hidden" name="noSeriDistributor[{{ $produkpenjualan }}]" class="noSeriDistributor" value="{{$f['seri']}}">
-                                                                                            </td>
-                                                                                            <td hidden>
-                                                                                                <input type="hidden"
-                                                                                                    class="rencana_id"
-                                                                                                    name="rencana_id[{{ $produkpenjualan }}]"
-                                                                                                    id="rencana_id{{ $produkpenjualan }}"
-                                                                                                    readonly
-                                                                                                    value="{{ $f['detail_rencana_penjualan_id'] }}">
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <a id="removerowproduk"><i
-                                                                                                        class="fas fa-minus"
-                                                                                                        style="color: red"></i></a>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <?php $produkpenjualan = $produkpenjualan + 1; ?>
-                                                                                    @endforeach
-                                                                                @else
+                                                                            <?php
+                                                                            $produkpenjualan = 0;
+                                                                            $no = 1;
+                                                                            ?>
+                                                                            @if (count($item) > 0)
+                                                                                @foreach ($item as $f)
                                                                                     <tr>
-                                                                                        <td>1</td>
+                                                                                        <td>{{ $no++ }}</td>
                                                                                         <td>
                                                                                             <div
                                                                                                 class="form-group select_item">
                                                                                                 <select
-                                                                                                    name="penjualan_produk_id[0]"
-                                                                                                    id="0"
+                                                                                                    name="penjualan_produk_id[]"
+                                                                                                    id="{{ $no - 2 }}"
                                                                                                     class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror"
                                                                                                     style="width:100%;">
+                                                                                                    <option
+                                                                                                        value="{{ $f['penjualan_produk_id'] }}"
+                                                                                                        selected>
+                                                                                                        {{ $f['nama'] }}
+                                                                                                    </option>
                                                                                                 </select>
                                                                                             </div>
                                                                                             <div class="detail_produk"
-                                                                                                id="detail_produk0">
+                                                                                                id="detail_produk{{ $loop->iteration - 1 }}">
+                                                                                                <fieldset>
+                                                                                                    <legend><b>Detail
+                                                                                                            Produk</b>
+                                                                                                    </legend>
+                                                                                                    <?php $variasi = 0; ?>
+                                                                                                    @foreach ($f['detail'] as $g)
+                                                                                                        <div>
+                                                                                                            <div
+                                                                                                                class="card-body blue-bg">
+                                                                                                                <h6>{{ $g['nama'] }}
+                                                                                                                </h6>
+                                                                                                                <select
+                                                                                                                    class="form-control variasi"
+                                                                                                                    name="variasi[{{ $produkpenjualan }}][{{ $variasi }}]"
+                                                                                                                    id="variasi{{ $produkpenjualan }}{{ $variasi }}"
+                                                                                                                    style="width:100%;"
+                                                                                                                    data-attr="variasi{{ $variasi }}"
+                                                                                                                    data-id="{{ $variasi }}">
+                                                                                                                    <option
+                                                                                                                        value="{{ $g['gbj_id'] }}"
+                                                                                                                        selected>
+                                                                                                                        @if (!empty(trim($g['variasi'])))
+                                                                                                                            {{ $g['variasi'] }}
+                                                                                                                        @else
+                                                                                                                            {{ $g['nama'] }}
+                                                                                                                        @endif
+                                                                                                                    </option>
+                                                                                                                </select>
+                                                                                                                <span
+                                                                                                                    class=" invalid-feedback d-block ketstok"
+                                                                                                                    name="ketstok[{{ $produkpenjualan }}][{{ $variasi }}]"
+                                                                                                                    id="ketstok{{ $produkpenjualan }}{{ $variasi }}"
+                                                                                                                    data-attr="ketstok{{ $variasi }}"
+                                                                                                                    data-id="{{ $variasi }}"></span>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <?php $variasi = $variasi + 1; ?>
+                                                                                                    @endforeach
+                                                                                                </fieldset>
                                                                                             </div>
                                                                                             <div class="detailjual"
                                                                                                 id="tes0">
@@ -842,28 +766,29 @@
                                                                                                     <input type="number"
                                                                                                         class="form-control produk_jumlah"
                                                                                                         aria-label="produk_satuan"
-                                                                                                        name="produk_jumlah[]"
-                                                                                                        id="produk_jumlah"
+                                                                                                        name="produk_jumlah[{{ $produkpenjualan }}]"
+                                                                                                        id="produk_jumlah{{ $produkpenjualan }}"
                                                                                                         style="width:100%;"
-                                                                                                        value="">
+                                                                                                        value="{{ $f['jumlah'] }}">
 
                                                                                                 </div>
                                                                                                 <small
                                                                                                     id="produk_ketersediaan"></small>
                                                                                             </div>
                                                                                         </td>
+
                                                                                         <td>
                                                                                             <div
                                                                                                 class="form-group d-flex justify-content-center">
 
                                                                                                 <input type="text"
                                                                                                     class="form-control produk_harga"
-                                                                                                    name="produk_harga[0]"
-                                                                                                    id="produk_harga0"
+                                                                                                    name="produk_harga[{{ $produkpenjualan }}]"
+                                                                                                    id="produk_harga{{ $produkpenjualan }}"
                                                                                                     placeholder="Masukkan Harga"
                                                                                                     style="width:100%;"
                                                                                                     aria-describedby="prdhrg"
-                                                                                                    value="" />
+                                                                                                    value="{{ number_format($f['harga'], 0, ',', '.') }}" />
                                                                                             </div>
                                                                                         </td>
                                                                                         <td>
@@ -872,34 +797,68 @@
 
                                                                                                 <input type="text"
                                                                                                     class="form-control produk_subtotal"
-                                                                                                    name="produk_subtotal[0]"
-                                                                                                    id="produk_subtotal0"
+                                                                                                    name="produk_subtotal[{{ $produkpenjualan }}]"
+                                                                                                    id="produk_subtotal{{ $produkpenjualan }}"
                                                                                                     placeholder="Masukkan Subtotal"
                                                                                                     style="width:100%;"
-                                                                                                    value=""
+                                                                                                    value="{{ number_format($f['harga'] * $f['jumlah'] + $f['ongkir'], 0, ',', '.') }}"
                                                                                                     aria-describedby="prdsub"
                                                                                                     readonly />
                                                                                             </div>
                                                                                         </td>
                                                                                         <td>
-                                                                                            <div class="custom-control custom-switch">
-                                                                                                <input type="checkbox" class="custom-control-input produk_ppn"
-                                                                                                id="produk_ppn0" name="produk_ppn[0]" value="1" checked>
-                                                                                                <label class="custom-control-label produk_ppn_label" for="produk_ppn0">PPN</label>
-                                                                                              </div>
+                                                                                            <div
+                                                                                                class="custom-control custom-switch">
+                                                                                                <input type="checkbox"
+                                                                                                    class="custom-control-input produk_ppn"
+                                                                                                    id="produk_ppn{{ $produkpenjualan }}"
+                                                                                                    name="produk_ppn[{{ $produkpenjualan }}]"
+                                                                                                    value="{{ $f['ppn'] }}"
+                                                                                                    @if ($f['ppn'] == 1) checked @endif>
+                                                                                                <label
+                                                                                                    class="custom-control-label produk_ppn_label"
+                                                                                                    for="produk_ppn{{ $produkpenjualan }}">
+                                                                                                    @if ($f['ppn'] == 1)
+                                                                                                        PPN
+                                                                                                    @else
+                                                                                                        Non PPN
+                                                                                                    @endif
+                                                                                                </label>
+                                                                                            </div>
                                                                                         </td>
                                                                                         <td>
                                                                                             <div
                                                                                                 class="form-group d-flex align-items-center">
                                                                                                 <input type="checkbox"
                                                                                                     class="stok_distributor"
-                                                                                                    name="stok_distributor[0]"
-                                                                                                    id="stok_distributor0"
-                                                                                                    value="0"
+                                                                                                    name="stok_distributor[{{ $produkpenjualan }}]"
+                                                                                                    id="stok_distributor{{ $produkpenjualan }}"
+                                                                                                    value="{{ $produkpenjualan }}"
+                                                                                                    @if ($f['jenis'] == 'dsb') checked @endif
                                                                                                     style="width:100%;" />
                                                                                             </div>
-                                                                                            <button type="button" class="btn btn-sm btn-outline-primary btnNoSeri" hidden>No Seri</button>
-                                                                                            <input type="hidden" name="noSeriDistributor[0]" class="noSeriDistributor">
+                                                                                            @if ($f['jenis'] == 'dsb')
+                                                                                                <button type="button"
+                                                                                                    class="btn btn-sm btn-outline-primary btnNoSeri">No
+                                                                                                    Seri</button>
+                                                                                            @else
+                                                                                                <button type="button"
+                                                                                                    class="btn btn-sm btn-outline-primary btnNoSeri"
+                                                                                                    hidden>No Seri</button>
+                                                                                            @endif
+
+                                                                                            <input type="hidden"
+                                                                                                name="noSeriDistributor[{{ $produkpenjualan }}]"
+                                                                                                class="noSeriDistributor"
+                                                                                                value="{{ $f['seri'] }}">
+                                                                                        </td>
+                                                                                        <td hidden>
+                                                                                            <input type="hidden"
+                                                                                                class="rencana_id"
+                                                                                                name="rencana_id[{{ $produkpenjualan }}]"
+                                                                                                id="rencana_id{{ $produkpenjualan }}"
+                                                                                                readonly
+                                                                                                value="{{ $f['detail_rencana_penjualan_id'] }}">
                                                                                         </td>
                                                                                         <td>
                                                                                             <a id="removerowproduk"><i
@@ -907,261 +866,122 @@
                                                                                                     style="color: red"></i></a>
                                                                                         </td>
                                                                                     </tr>
-                                                                                @endif
-                                                                            </tbody>
-                                                                            <tfoot>
+                                                                                    <?php $produkpenjualan = $produkpenjualan + 1; ?>
+                                                                                @endforeach
+                                                                            @else
                                                                                 <tr>
-                                                                                    <th colspan="5"
-                                                                                        style="text-align:right;">Total
-                                                                                        Harga</th>
-                                                                                    <th colspan="2" id="totalhargaprd"
-                                                                                        class="align-right">Rp.
-                                                                                        @if (isset($e->pesanan->detailpesanan))
-                                                                                            <?php $x = 0;
-                                                                                            foreach ($e->pesanan->detailpesanan as $f) {
-                                                                                                $x += $f->harga * $f->jumlah;
-                                                                                            }
-                                                                                            ?>
-                                                                                            {{ number_format($x, 0, ',', '.') }}
-                                                                                        @endif
-                                                                                    </th>
-                                                                                </tr>
-                                                                            </tfoot>
+                                                                                    <td>1</td>
+                                                                                    <td>
+                                                                                        <div
+                                                                                            class="form-group select_item">
+                                                                                            <select
+                                                                                                name="penjualan_produk_id[0]"
+                                                                                                id="0"
+                                                                                                class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror"
+                                                                                                style="width:100%;">
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <div class="detail_produk"
+                                                                                            id="detail_produk0">
+                                                                                        </div>
+                                                                                        <div class="detailjual"
+                                                                                            id="tes0">
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div
+                                                                                            class="form-group d-flex justify-content-center">
+                                                                                            <div class="input-group">
+                                                                                                <input type="number"
+                                                                                                    class="form-control produk_jumlah"
+                                                                                                    aria-label="produk_satuan"
+                                                                                                    name="produk_jumlah[]"
+                                                                                                    id="produk_jumlah"
+                                                                                                    style="width:100%;"
+                                                                                                    value="">
 
+                                                                                            </div>
+                                                                                            <small
+                                                                                                id="produk_ketersediaan"></small>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div
+                                                                                            class="form-group d-flex justify-content-center">
 
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                                                            <input type="text"
+                                                                                                class="form-control produk_harga"
+                                                                                                name="produk_harga[0]"
+                                                                                                id="produk_harga0"
+                                                                                                placeholder="Masukkan Harga"
+                                                                                                style="width:100%;"
+                                                                                                aria-describedby="prdhrg"
+                                                                                                value="" />
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div
+                                                                                            class="form-group d-flex justify-content-center">
 
-
-                                            <div class="row d-flex justify-content-center  @if ($e->pesanan->getJumlahPesananNonJasa() <= 0) hide @endif"
-                                                id="datapart">
-                                                <div class="col-lg-10 col-md-12">
-                                                    <h4>Data Part</h4>
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-12">
-                                                                    <div class="table-responsive">
-                                                                        <table class="table" style="text-align: center;"
-                                                                            id="parttable">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th colspan="7">
+                                                                                            <input type="text"
+                                                                                                class="form-control produk_subtotal"
+                                                                                                name="produk_subtotal[0]"
+                                                                                                id="produk_subtotal0"
+                                                                                                placeholder="Masukkan Subtotal"
+                                                                                                style="width:100%;"
+                                                                                                value=""
+                                                                                                aria-describedby="prdsub"
+                                                                                                readonly />
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div
+                                                                                            class="custom-control custom-switch">
+                                                                                            <input type="checkbox"
+                                                                                                class="custom-control-input produk_ppn"
+                                                                                                id="produk_ppn0"
+                                                                                                name="produk_ppn[0]"
+                                                                                                value="1" checked>
+                                                                                            <label
+                                                                                                class="custom-control-label produk_ppn_label"
+                                                                                                for="produk_ppn0">PPN</label>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div
+                                                                                            class="form-group d-flex align-items-center">
+                                                                                            <input type="checkbox"
+                                                                                                class="stok_distributor"
+                                                                                                name="stok_distributor[0]"
+                                                                                                id="stok_distributor0"
+                                                                                                value="0"
+                                                                                                style="width:100%;" />
+                                                                                        </div>
                                                                                         <button type="button"
-                                                                                            class="btn btn-primary float-right"
-                                                                                            id="addrowpart">
-                                                                                            <i class="fas fa-plus"></i>
-                                                                                            Part
-                                                                                        </button>
-                                                                                    </th>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <th width="5%">No</th>
-                                                                                    <th width="35%">Nama Part</th>
-                                                                                    <th width="15%">Jumlah</th>
-                                                                                    <th width="20%">Harga</th>
-                                                                                    <th width="20%">Subtotal</th>
-                                                                                    <th width="5%">Aksi</th>
-                                                                                </tr>
-                                                                            </thead>
-
-                                                                            <tbody>
-                                                                                @if (isset($e->pesanan->detailpesananpart))
-                                                                                    @foreach ($e->pesanan->DetailPesananPartNonJasa() as $f)
-                                                                                        <tr>
-                                                                                            <td>{{ $loop->iteration }}</td>
-                                                                                            <td>
-                                                                                                <div
-                                                                                                    class="form-group select_item">
-                                                                                                    <select
-                                                                                                        class="select2 form-control select-info custom-select part_id"
-                                                                                                        name="part_id[]"
-                                                                                                        id="part_id{{ $loop->iteration - 1 }}"
-                                                                                                        width="100%">
-                                                                                                        <option
-                                                                                                            value="{{ $f->sparepart->id }}"
-                                                                                                            selected>
-                                                                                                            {{ $f->sparepart->nama }}
-                                                                                                        </option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div
-                                                                                                    class="form-group d-flex justify-content-center">
-                                                                                                    <div
-                                                                                                        class="input-group">
-                                                                                                        <input
-                                                                                                            type="number"
-                                                                                                            class="form-control part_jumlah"
-                                                                                                            aria-label="produk_satuan"
-                                                                                                            name="part_jumlah[]"
-                                                                                                            id="part_jumlah{{ $loop->iteration - 1 }}"
-                                                                                                            style="width:100%;"
-                                                                                                            value="{{ $f->jumlah }}">
-
-                                                                                                    </div>
-                                                                                                    <small
-                                                                                                        id="part_ketersediaan"></small>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div
-                                                                                                    class="form-group d-flex justify-content-center">
-
-                                                                                                    <input type="text"
-                                                                                                        class="form-control part_harga"
-                                                                                                        name="part_harga[]"
-                                                                                                        id="part_harga{{ $loop->iteration - 1 }}"
-                                                                                                        placeholder="Masukkan Harga"
-                                                                                                        style="width:100%;"
-                                                                                                        value="{{ number_format($f->harga, 0, ',', '.') }}" />
-                                                                                                </div>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div
-                                                                                                    class="form-group d-flex justify-content-center">
-
-                                                                                                    <input type="text"
-                                                                                                        class="form-control part_subtotal"
-                                                                                                        name="part_subtotal[]"
-                                                                                                        id="part_subtotal{{ $loop->iteration - 1 }}"
-                                                                                                        placeholder="Masukkan Subtotal"
-                                                                                                        style="width:100%;"
-                                                                                                        value="{{ number_format($f->jumlah * $f->harga, 0, ',', '.') }}"
-                                                                                                        readonly />
-                                                                                                </div>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div class="custom-control custom-switch">
-                                                                                                    <input type="checkbox" class="custom-control-input part_ppn"
-                                                                                                     id="part_ppn{{ $loop->iteration - 1 }}" name="part_ppn[{{ $loop->iteration - 1 }}]" value="{{ $f->ppn }}"
-                                                                                                    @if ($f->ppn == 1)
-                                                                                                        checked
-                                                                                                    @endif
-                                                                                                     >
-                                                                                                    <label class="custom-control-label part_ppn_label" for="part_ppn{{ $loop->iteration - 1 }}">
-                                                                                                        @if ($f->ppn == 1)
-                                                                                                            PPN
-                                                                                                        @else
-                                                                                                            Non PPN
-                                                                                                        @endif
-                                                                                                    </label>
-                                                                                                  </div>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <a id="removerowpart"><i
-                                                                                                        class="fas fa-minus"
-                                                                                                        style="color: red"></i></a>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    @endforeach
-                                                                                @endif
-                                                                            </tbody>
-                                                                            <tfoot>
-                                                                                <th colspan="5"
-                                                                                    style="text-align:right;">Total Harga
-                                                                                </th>
-                                                                                <th id="totalhargapart"
-                                                                                    class="align-right">Rp.
-                                                                                    @if (isset($e->pesanan->detailpesananpart))
-                                                                                        <?php $x = 0;
-                                                                                        foreach ($e->pesanan->detailpesananpart as $f) {
-                                                                                            $x += $f->harga * $f->jumlah;
-                                                                                        }
-                                                                                        ?>
-                                                                                        {{ number_format($x, 0, ',', '.') }}
-                                                                                    @endif
-                                                                                </th>
-                                                                            </tfoot>
-
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                        <div class="row d-flex justify-content-center  @if ($e->pesanan->getJumlahPesananJasa() <= 0) hide @endif"
-                                            id="datajasa">
-                                            <div class="col-lg-10 col-md-12">
-                                                <h4>Jasa</h4>
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <div class="table-responsive justify-content-center">
-                                                                    <table class="table" style="text-align: center;"
-                                                                        id="jasatable">
-                                                                        <thead>
-
-                                                                            <tr>
-                                                                                <th width="5%">No</th>
-                                                                                <th width="35%">Nama Jasa</th>
-                                                                                <th width="20%">Harga</th>
-                                                                                <th width="20%">Subtotal</th>
-
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-
-                                                                            @foreach ($e->pesanan->DetailPesananPartJasa() as $f)
-                                                                                <tr>
-                                                                                    <td>{{ $loop->iteration }}</td>
-                                                                                    <td>
-                                                                                        <div class="form-group">
-                                                                                            <input width="100%"
-                                                                                                class="form-control "
-                                                                                                style="text-align: center"
-                                                                                                value="{{ $f->sparepart->nama }}"
-                                                                                                readonly>
-                                                                                        </div>
+                                                                                            class="btn btn-sm btn-outline-primary btnNoSeri"
+                                                                                            hidden>No Seri</button>
+                                                                                        <input type="hidden"
+                                                                                            name="noSeriDistributor[0]"
+                                                                                            class="noSeriDistributor">
                                                                                     </td>
                                                                                     <td>
-                                                                                        <div
-                                                                                            class="form-group d-flex justify-content-center">
-
-                                                                                            <input type="text"
-                                                                                                class="form-control "
-                                                                                                style="width:100%;"
-                                                                                                value="{{ number_format($f->harga, 0, ',', '.') }}"
-                                                                                                readonly />
-                                                                                        </div>
+                                                                                        <a id="removerowproduk"><i
+                                                                                                class="fas fa-minus"
+                                                                                                style="color: red"></i></a>
                                                                                     </td>
-                                                                                    <td>
-                                                                                        <div
-                                                                                            class="form-group d-flex justify-content-center">
-
-                                                                                            <input type="text"
-                                                                                                class="form-control "
-                                                                                                style="width:100%;"
-                                                                                                value="{{ number_format($f->jumlah * $f->harga, 0, ',', '.') }}"
-                                                                                                readonly />
-                                                                                        </div>
-                                                                                    </td>
-
                                                                                 </tr>
-                                                                            @endforeach
-
+                                                                            @endif
                                                                         </tbody>
                                                                         <tfoot>
                                                                             <tr>
-                                                                                <th colspan="3"
-                                                                                    style="text-align:right;">Total Harga
-                                                                                </th>
-                                                                                <th id="totalhargajasa"
+                                                                                <th colspan="5"
+                                                                                    style="text-align:right;">Total
+                                                                                    Harga</th>
+                                                                                <th colspan="2" id="totalhargaprd"
                                                                                     class="align-right">Rp.
-                                                                                    @if ($e->pesanan->getJumlahPesananJasa() > 0)
+                                                                                    @if (isset($e->pesanan->detailpesanan))
                                                                                         <?php $x = 0;
-                                                                                        foreach ($e->pesanan->DetailPesananPartJasa() as $f) {
+                                                                                        foreach ($e->pesanan->detailpesanan as $f) {
                                                                                             $x += $f->harga * $f->jumlah;
                                                                                         }
                                                                                         ?>
@@ -1170,6 +990,8 @@
                                                                                 </th>
                                                                             </tr>
                                                                         </tfoot>
+
+
                                                                     </table>
                                                                 </div>
                                                             </div>
@@ -1179,29 +1001,271 @@
                                             </div>
                                         </div>
 
-                                        <div class="row d-flex justify-content-center">
+
+                                        <div class="row d-flex justify-content-center  @if ($e->pesanan->getJumlahPesananNonJasa() <= 0) hide @endif"
+                                            id="datapart">
                                             <div class="col-lg-10 col-md-12">
-                                                <span>
-                                                    <a href="{{ route('penjualan.penjualan.show') }}" type="button"
-                                                        class="btn btn-danger">
-                                                        Batal
-                                                    </a>
-                                                </span>
-                                                <span class="float-right">
-                                                    <button type="submit" class="btn btn-warning" id="btnsimpan">
-                                                        Simpan
-                                                    </button>
-                                                </span>
+                                                <h4>Data Part</h4>
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="table-responsive">
+                                                                    <table class="table" style="text-align: center;"
+                                                                        id="parttable">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th colspan="7">
+                                                                                    <button type="button"
+                                                                                        class="btn btn-primary float-right"
+                                                                                        id="addrowpart">
+                                                                                        <i class="fas fa-plus"></i>
+                                                                                        Part
+                                                                                    </button>
+                                                                                </th>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th width="5%">No</th>
+                                                                                <th width="35%">Nama Part</th>
+                                                                                <th width="15%">Jumlah</th>
+                                                                                <th width="20%">Harga</th>
+                                                                                <th width="20%">Subtotal</th>
+                                                                                <th width="5%">Aksi</th>
+                                                                            </tr>
+                                                                        </thead>
+
+                                                                        <tbody>
+                                                                            @if (isset($e->pesanan->detailpesananpart))
+                                                                                @foreach ($e->pesanan->DetailPesananPartNonJasa() as $f)
+                                                                                    <tr>
+                                                                                        <td>{{ $loop->iteration }}</td>
+                                                                                        <td>
+                                                                                            <div
+                                                                                                class="form-group select_item">
+                                                                                                <select
+                                                                                                    class="select2 form-control select-info custom-select part_id"
+                                                                                                    name="part_id[]"
+                                                                                                    id="part_id{{ $loop->iteration - 1 }}"
+                                                                                                    width="100%">
+                                                                                                    <option
+                                                                                                        value="{{ $f->sparepart->id }}"
+                                                                                                        selected>
+                                                                                                        {{ $f->sparepart->nama }}
+                                                                                                    </option>
+                                                                                                </select>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <div
+                                                                                                class="form-group d-flex justify-content-center">
+                                                                                                <div class="input-group">
+                                                                                                    <input type="number"
+                                                                                                        class="form-control part_jumlah"
+                                                                                                        aria-label="produk_satuan"
+                                                                                                        name="part_jumlah[]"
+                                                                                                        id="part_jumlah{{ $loop->iteration - 1 }}"
+                                                                                                        style="width:100%;"
+                                                                                                        value="{{ $f->jumlah }}">
+
+                                                                                                </div>
+                                                                                                <small
+                                                                                                    id="part_ketersediaan"></small>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <div
+                                                                                                class="form-group d-flex justify-content-center">
+
+                                                                                                <input type="text"
+                                                                                                    class="form-control part_harga"
+                                                                                                    name="part_harga[]"
+                                                                                                    id="part_harga{{ $loop->iteration - 1 }}"
+                                                                                                    placeholder="Masukkan Harga"
+                                                                                                    style="width:100%;"
+                                                                                                    value="{{ number_format($f->harga, 0, ',', '.') }}" />
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <div
+                                                                                                class="form-group d-flex justify-content-center">
+
+                                                                                                <input type="text"
+                                                                                                    class="form-control part_subtotal"
+                                                                                                    name="part_subtotal[]"
+                                                                                                    id="part_subtotal{{ $loop->iteration - 1 }}"
+                                                                                                    placeholder="Masukkan Subtotal"
+                                                                                                    style="width:100%;"
+                                                                                                    value="{{ number_format($f->jumlah * $f->harga, 0, ',', '.') }}"
+                                                                                                    readonly />
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <div
+                                                                                                class="custom-control custom-switch">
+                                                                                                <input type="checkbox"
+                                                                                                    class="custom-control-input part_ppn"
+                                                                                                    id="part_ppn{{ $loop->iteration - 1 }}"
+                                                                                                    name="part_ppn[{{ $loop->iteration - 1 }}]"
+                                                                                                    value="{{ $f->ppn }}"
+                                                                                                    @if ($f->ppn == 1) checked @endif>
+                                                                                                <label
+                                                                                                    class="custom-control-label part_ppn_label"
+                                                                                                    for="part_ppn{{ $loop->iteration - 1 }}">
+                                                                                                    @if ($f->ppn == 1)
+                                                                                                        PPN
+                                                                                                    @else
+                                                                                                        Non PPN
+                                                                                                    @endif
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <a id="removerowpart"><i
+                                                                                                    class="fas fa-minus"
+                                                                                                    style="color: red"></i></a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                @endforeach
+                                                                            @endif
+                                                                        </tbody>
+                                                                        <tfoot>
+                                                                            <th colspan="5" style="text-align:right;">
+                                                                                Total Harga
+                                                                            </th>
+                                                                            <th id="totalhargapart" class="align-right">
+                                                                                Rp.
+                                                                                @if (isset($e->pesanan->detailpesananpart))
+                                                                                    <?php $x = 0;
+                                                                                    foreach ($e->pesanan->detailpesananpart as $f) {
+                                                                                        $x += $f->harga * $f->jumlah;
+                                                                                    }
+                                                                                    ?>
+                                                                                    {{ number_format($x, 0, ',', '.') }}
+                                                                                @endif
+                                                                            </th>
+                                                                        </tfoot>
+
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
+                                    @endif
+                                    <div class="row d-flex justify-content-center  @if ($e->pesanan->getJumlahPesananJasa() <= 0) hide @endif"
+                                        id="datajasa">
+                                        <div class="col-lg-10 col-md-12">
+                                            <h4>Jasa</h4>
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="table-responsive justify-content-center">
+                                                                <table class="table" style="text-align: center;"
+                                                                    id="jasatable">
+                                                                    <thead>
 
-                                    </form>
+                                                                        <tr>
+                                                                            <th width="5%">No</th>
+                                                                            <th width="35%">Nama Jasa</th>
+                                                                            <th width="20%">Harga</th>
+                                                                            <th width="20%">Subtotal</th>
 
-                                </div>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+
+                                                                        @foreach ($e->pesanan->DetailPesananPartJasa() as $f)
+                                                                            <tr>
+                                                                                <td>{{ $loop->iteration }}</td>
+                                                                                <td>
+                                                                                    <div class="form-group">
+                                                                                        <input width="100%"
+                                                                                            class="form-control "
+                                                                                            style="text-align: center"
+                                                                                            value="{{ $f->sparepart->nama }}"
+                                                                                            readonly>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div
+                                                                                        class="form-group d-flex justify-content-center">
+
+                                                                                        <input type="text"
+                                                                                            class="form-control "
+                                                                                            style="width:100%;"
+                                                                                            value="{{ number_format($f->harga, 0, ',', '.') }}"
+                                                                                            readonly />
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div
+                                                                                        class="form-group d-flex justify-content-center">
+
+                                                                                        <input type="text"
+                                                                                            class="form-control "
+                                                                                            style="width:100%;"
+                                                                                            value="{{ number_format($f->jumlah * $f->harga, 0, ',', '.') }}"
+                                                                                            readonly />
+                                                                                    </div>
+                                                                                </td>
+
+                                                                            </tr>
+                                                                        @endforeach
+
+                                                                    </tbody>
+                                                                    <tfoot>
+                                                                        <tr>
+                                                                            <th colspan="3" style="text-align:right;">
+                                                                                Total Harga
+                                                                            </th>
+                                                                            <th id="totalhargajasa" class="align-right">
+                                                                                Rp.
+                                                                                @if ($e->pesanan->getJumlahPesananJasa() > 0)
+                                                                                    <?php $x = 0;
+                                                                                    foreach ($e->pesanan->DetailPesananPartJasa() as $f) {
+                                                                                        $x += $f->harga * $f->jumlah;
+                                                                                    }
+                                                                                    ?>
+                                                                                    {{ number_format($x, 0, ',', '.') }}
+                                                                                @endif
+                                                                            </th>
+                                                                        </tr>
+                                                                    </tfoot>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col-lg-10 col-md-12">
+                                            <span>
+                                                <a href="{{ route('penjualan.penjualan.show') }}" type="button"
+                                                    class="btn btn-danger">
+                                                    Batal
+                                                </a>
+                                            </span>
+                                            <span class="float-right">
+                                                <button type="submit" class="btn btn-warning" id="btnsimpan">
+                                                    Simpan
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </form>
+
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
         </div>
         @include('page.penjualan.penjualan.modalSeriDistributor')
@@ -1210,7 +1274,7 @@
 
 @section('adminlte_js')
     <script>
-           $(document).on('submit', '#edit_penjualan', function(e) {
+        $(document).on('submit', '#edit_penjualan', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
             $.ajax({
@@ -1232,7 +1296,8 @@
                         'Data Berhasil di Update',
                         'success'
                     ).then(function() {
-                        window.location.href = '/penjualan/penjualan/edit_ekatalog/' + {{ $e->id }} + '/spb';
+                        window.location.href = '/penjualan/penjualan/edit_ekatalog/' +
+                            {{ $e->id }} + '/spb';
                     });
                 },
                 error: function(xhr, status, error, response) {
@@ -1246,7 +1311,7 @@
                     );
                 }
             });
-          });
+        });
 
 
 
@@ -1297,7 +1362,7 @@
             let provinsi_customer = null
             let nama_customer = null
 
-            $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman_nonakn"]', function () {
+            $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman_nonakn"]', function() {
                 let pilihan_pengiriman = $(this).val();
                 let alamat = $('#alamat_customer').val();
                 $('#perusahaan_pengiriman_nonakn').attr('readonly', true);
@@ -1314,15 +1379,16 @@
                     $('#msg_alamat_pengiriman_nonakn').text(msg);
                 }
 
-                if(pilihan_pengiriman == 'distributor'){
+                if (pilihan_pengiriman == 'distributor') {
                     $('#perusahaan_pengiriman_nonakn').val(nama_customer);
                     $('#alamat_pengiriman_nonakn').val($('#alamat_customer').val());
-                }else{
+                } else {
                     $('#perusahaan_pengiriman_nonakn').attr('readonly', false);
                     $('#alamat_pengiriman_nonakn').attr('readonly', false);
                 }
 
-                alamat == '-' ? checkValidasi('Alamat Customer harus diisi') : ekspedisi_nonakn(provinsi_customer);
+                alamat == '-' ? checkValidasi('Alamat Customer harus diisi') : ekspedisi_nonakn(
+                    provinsi_customer);
 
 
             });
@@ -1724,7 +1790,8 @@
                         $('#alamat_customer').val(data[0].alamat);
                         $('#telepon_customer').val(data[0].telp);
 
-                        if($('input[type="radio"][name="pilihan_pengiriman_nonakn"]:checked').val() == 'distributor'){
+                        if ($('input[type="radio"][name="pilihan_pengiriman_nonakn"]:checked')
+                            .val() == 'distributor') {
                             $('#perusahaan_pengiriman_nonakn').val(data[0].nama);
                             $('#alamat_pengiriman_nonakn').val(data[0].alamat);
                         }
@@ -2071,7 +2138,8 @@
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi
                                     .length; y++) {
                                     var nama_var = "";
-                                    if (res[0].produk[x].gudang_barang_jadi[y].nama.trim() != "") {
+                                    if (res[0].produk[x].gudang_barang_jadi[y].nama.trim() !=
+                                        "") {
                                         nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
                                     } else {
                                         nama_var = res[0].produk[x].nama;
@@ -2121,7 +2189,7 @@
 
             function load_variasi() {
                 produk = [];
-                produk = <?php  echo json_encode($item)?>;
+                produk = <?php echo json_encode($item); ?>;
                 if (produk.length > 0) {
                     for (var w = 0; w < produk.length; w++) {
                         $.ajax({
@@ -2384,56 +2452,56 @@
         });
 
         $('.checkAllDistributor').click(function() {
-                if ($(this).is(':checked')) {
-                    $('.stok_distributor').prop('checked', true);
-                    // show all button
-                    $('.btnNoSeri').prop('hidden', false);
-                } else {
-                    $('.stok_distributor').prop('checked', false);
-                    // hide all button
-                    $('.btnNoSeri').prop('hidden', true);
-                }
+            if ($(this).is(':checked')) {
+                $('.stok_distributor').prop('checked', true);
+                // show all button
+                $('.btnNoSeri').prop('hidden', false);
+            } else {
+                $('.stok_distributor').prop('checked', false);
+                // hide all button
+                $('.btnNoSeri').prop('hidden', true);
+            }
+        });
+
+        $(document).on('click', '.stok_distributor', function() {
+            // check if checkbox is checked
+            if ($(this).is(':checked')) {
+                // check if all checkboxes are selected find button hidden false
+                $(this).closest('td').find('button').prop('hidden', false);
+            } else {
+                // check if all checkboxes are selected find button hidden true
+                $(this).closest('td').find('button').prop('hidden', true);
+            }
+
+
+        });
+
+
+        $(document).on('click', '.btnNoSeri', function() {
+            let indexDistributor = $(this).closest('tr').index();
+            $('.indexSeriDistributor').val(indexDistributor);
+            // find index by indexDistributor class noSeriDistributor
+            let noSeri = $('.noSeriDistributor').eq(indexDistributor).val();
+            $('.indexSeriDistributor').val(indexDistributor);
+            let jumlah = $('.produk_jumlah').eq(indexDistributor).val();
+            $('.jumlahSeriDistributor').val(jumlah);
+            // change array to string with comma
+            let noSeriArray = noSeri.split(',');
+            // remove empty string
+            noSeriArray = noSeriArray.filter(function(el) {
+                return el != '';
             });
+            // set value to input
+            $('.nomorSeriDistributor').val(noSeriArray);
+            // open modal Distributor
+            $('.modalDistributor').modal('show');
 
-            $(document).on('click', '.stok_distributor', function() {
-                // check if checkbox is checked
-                if ($(this).is(':checked')) {
-                    // check if all checkboxes are selected find button hidden false
-                    $(this).closest('td').find('button').prop('hidden', false);
-                } else {
-                    // check if all checkboxes are selected find button hidden true
-                    $(this).closest('td').find('button').prop('hidden', true);
-                }
+        })
 
 
-            });
-
-
-            $(document).on('click', '.btnNoSeri', function() {
-                let indexDistributor = $(this).closest('tr').index();
-                $('.indexSeriDistributor').val(indexDistributor);
-                // find index by indexDistributor class noSeriDistributor
-                let noSeri = $('.noSeriDistributor').eq(indexDistributor).val();
-                $('.indexSeriDistributor').val(indexDistributor);
-                let jumlah = $('.produk_jumlah').eq(indexDistributor).val();
-                $('.jumlahSeriDistributor').val(jumlah);
-                // change array to string with comma
-                let noSeriArray = noSeri.split(',');
-                // remove empty string
-                noSeriArray = noSeriArray.filter(function (el) {
-                    return el != '';
-                });
-                // set value to input
-                $('.nomorSeriDistributor').val(noSeriArray);
-                // open modal Distributor
-                $('.modalDistributor').modal('show');
-
-            })
-
-
-        $(function () {
+        $(function() {
             let customer = $('#customer_id').val();
-            if(customer){
+            if (customer) {
                 // trigger event select2
                 $('#customer_id').trigger('change');
             }

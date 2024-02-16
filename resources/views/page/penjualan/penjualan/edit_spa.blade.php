@@ -160,6 +160,20 @@
 
                 <div class="row justify-content-center">
                     <div class="col-lg-12 col-md-12 col-sm-12">
+                        @php
+                        $years = \App\Models\AktifPeriode::first()->tahun;
+                        $isOpen = false;
+                        if ($years != \Carbon\Carbon::now()->year) {
+                            $isOpen = true;
+                        }
+                        $maxDate = $isOpen ? \Carbon\Carbon::parse($years . '-12-31')->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d');
+                    @endphp
+                    @if ($isOpen)
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Periode yang dibuka saat ini adalah periode {{ $years }}
+                        </div>
+                    @endif
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -265,6 +279,22 @@
                                                     @endif
                                                 </div>
                                             </div>
+                                                                                    <div class="p-2">
+                                            <div class="margin">
+                                                <div><small class="text-muted">Cetak SPPB</small></div>
+                                                @if ($e->Pesanan->no_po != null && $e->Pesanan->tgl_po != null)
+                                                    <a target="_blank"
+                                                        href="{{ route('penjualan.penjualan.cetak_surat_perintah', [$e->Pesanan->id]) }}">
+                                                        <button class="btn btn-sm btn-outline-primary" type="button">
+                                                            <i class="fas fa-print"></i>
+                                                            SPPB
+                                                        </button>
+                                                    </a>
+                                                @else
+                                                    <div>-</div>
+                                                @endif
+                                            </div>
+                                        </div>
                                         </div>
 
                                     </div>

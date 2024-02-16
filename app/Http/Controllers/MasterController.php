@@ -2,56 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
-use App\Models\DetailEkatalog;
-use App\Models\DetailPenjualanProduk;
-use App\Models\Ekatalog;
-use App\Models\KelompokProduk;
-use App\Models\PenjualanProduk;
-use App\Models\RencanaPenjualan;
-use App\Models\Pesanan;
-use App\Models\Provinsi;
+use Alert;
 use App\Models\Spa;
 use App\Models\Spb;
-use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Carbon;
-use Alert;
-use App\Exports\CustomerData;
-use App\Exports\EkspedisiData;
-use App\Exports\ProdukData;
-use App\Models\DetailLogistik;
-use App\Models\DetailPesanan;
-use App\Models\DetailPesananPart;
-use App\Models\DetailPesananProduk;
-use App\Models\DetailProdukRw;
-use App\Models\Ekspedisi;
+use App\Models\Produk;
+use App\Models\Mproduk;
+use App\Models\Pesanan;
+use App\Models\UserLog;
+use App\Models\Customer;
+use App\Models\Ekatalog;
 use App\Models\Logistik;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Models\Provinsi;
+use App\Models\Ekspedisi;
+use App\Models\Sparepart;
+use App\Models\SystemLog;
+use App\Exports\ProdukData;
 use Illuminate\Support\Arr;
+use App\Models\AktifPeriode;
+use Illuminate\Http\Request;
+use App\Exports\CustomerData;
+use App\Models\DetailPesanan;
+use App\Exports\EkspedisiData;
+use App\Models\DetailEkatalog;
+use App\Models\DetailLogistik;
+use App\Models\DetailProdukRw;
+use App\Models\JalurEkspedisi;
+use App\Models\KelompokProduk;
+use Illuminate\Support\Carbon;
+use App\Models\PenjualanProduk;
+use App\Models\SparepartGudang;
+use App\Models\GudangBarangJadi;
+use App\Models\NoseriBarangJadi;
+use App\Models\RencanaPenjualan;
+use App\Models\DetailPesananPart;
+use App\Models\kesehatan\Karyawan;
+use Illuminate\Support\Facades\DB;
+use App\Models\DetailPesananProduk;
+use App\Models\RiwayatAktifPeriode;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\DetailPenjualanProduk;
 use App\Models\GudangKarantinaDetail;
 use App\Models\GudangKarantinaNoseri;
-use App\Models\JalurEkspedisi;
-use App\Models\kesehatan\Karyawan;
-use App\Models\NoseriBarangJadi;
-use App\Models\Sparepart;
-use App\Models\SparepartGudang;
-use App\Models\SystemLog;
-use App\Models\UserLog;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Maatwebsite\Excel\Facades\Excel;
 
 // produk
-use App\Models\Mproduk;
-use App\Models\Produk;
-use App\Models\GudangBarangJadi;
+use Illuminate\Support\Facades\Session;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
 
 use function PHPUnit\Framework\returnValueMap;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class MasterController extends Controller
 {
@@ -2060,6 +2062,156 @@ class MasterController extends Controller
             ], 500);
         }
     }
+
+    public function reset_periode($id)
+    {
+        try {
+            DB::beginTransaction();
+            //code...
+            $data = RiwayatAktifPeriode::find($id);
+            $data->status = 'selesai';
+            $data->save();
+
+
+            $aktif = AktifPeriode::first();
+            $aktif->tahun = Carbon::now()->year;
+            $aktif->save();
+
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+    public function update_periode(Request $request, $id)
+    {
+        try {
+            DB::beginTransaction();
+            //code...
+            $data = RiwayatAktifPeriode::find($id);
+            $getTahun = json_decode($data->isi)->years;
+
+            if ($request->status == 'terima') {
+                $aktif = AktifPeriode::first();
+                $aktif->tahun = $getTahun;
+                $aktif->save();
+            }
+            $data->status = $request->status;
+            $data->tgl_konfirmasi = Carbon::now()->format('Y-m-d H:i:s');
+            $data->save();
+            DB::commit();
+            return response()->json([
+                'success' => true,
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function show_periode()
+    {
+        $data = RiwayatAktifPeriode::all();
+        $getYearsAktif = AktifPeriode::first();
+        if ($getYearsAktif->tahun != Carbon::now()->format('Y')) {
+            $isOpen = false;
+        } else {
+            $isOpen = true;
+        }
+        $obj = array();
+        foreach ($data as $d) {
+            $x = json_decode($d->isi);
+            $obj[] = array(
+                'id' => $d->id,
+                'periode' => $x->years,
+                'alasan' => $x->alasan,
+                'pemohon' => $d->user,
+                'durasi_buka' => $x->maxOpenDay . ' Hari',
+                'status' => $d->status,
+                'tgl_persetujuan' => $d->tgl_konfirmasi,
+                'tgl_pengajuan' => $d->created_at,
+                'tgl_tutup' => $d->created_at->addDays($x->maxOpenDay),
+            );
+        }
+        return response()->json([
+            'success' => true,
+            'data' => $obj,
+            'isOpen' => $isOpen
+        ], 200);
+    }
+
+    public function permintaan_periode(Request $request)
+    {
+        try {
+            //code...
+            DB::beginTransaction();
+            $cek = RiwayatAktifPeriode::where(['user' => Auth::user()->nama, 'status' => 'pengajuan'])->count();
+            if ($cek > 0) {
+                DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pengajuan Lama Belum di proses'
+                ], 500);
+            } else {
+                RiwayatAktifPeriode::create([
+                    'user' => Auth::user()->nama,
+                    'isi' => json_encode($request->all()),
+                    'status' => 'pengajuan'
+                ]);
+                DB::commit();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Permintaan Periode Berhasil Di kirim'
+                ], 200);
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function get_permintaan_pengajuan()
+    {
+        try {
+            $data = RiwayatAktifPeriode::where('status', 'pengajuan')->get();
+            $obj = array();
+            foreach ($data as $d) {
+                $x = json_decode($d->isi);
+                $obj[] = array(
+                    'id' => $d->id,
+                    'periode' => $x->years,
+                    'alasan' => $x->alasan,
+                    'pemohon' => $d->user,
+                    'permintaan_durasi_buka' => $x->maxOpenDay . ' Hari',
+                    'status' => $d->status,
+                    'tgl_pengajuan' => Carbon::parse($d->created_at)->format('d-m-Y')
+                );
+            }
+            return response()->json($obj);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
     public function changeGenerateProduk(Request $request)
     {

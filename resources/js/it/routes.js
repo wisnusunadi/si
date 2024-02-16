@@ -18,6 +18,11 @@ const routes = [
         path: "/administrator/produk_rework",
         component: ProdukRework,
         name: "produkRework"
+    },
+    {
+        path: "/administrator/periode",
+        component: () => import("./page/periode"),
+        name: "periode"
     }
 ];
 

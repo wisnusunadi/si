@@ -9,7 +9,7 @@ class Spa extends Model
 {
     protected $connection = 'erp';
     protected $table = 'spa';
-    protected $fillable = ['customer_id', 'pesanan_id', 'ket', 'log'];
+    protected $fillable = ['customer_id', 'pesanan_id', 'ket', 'log', 'created_at', 'updated_at'];
 
     public function Customer()
     {
