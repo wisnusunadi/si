@@ -26,12 +26,12 @@ export default {
                     <td>{{ data.metode }}</td>
                     <td>{{ data.no_dokumen }}</td>
                     <td>
-                        <button
+                        <!-- <button
                             class="btn btn-outline-info"
                             @click="detail(data.id)"
                         >
                             <i class="fas fa-eye"></i>
-                        </button>
+                        </button> -->
                         <button class="btn btn-outline-warning" @click="edit(data.id)">
                             <i class="fas fa-edit"></i>
                         </button>

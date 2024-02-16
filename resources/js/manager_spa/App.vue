@@ -3,10 +3,7 @@
     <Navbar />
     <Sidebar />
 
-    <div
-      class="is-loading-bar has-text-centered"
-      v-bind:class="{ 'is-loading': $store.state.isLoading }"
-    >
+    <div class="is-loading-bar has-text-centered" v-bind:class="{ 'is-loading': $store.state.isLoading }">
       <div class="lds-dual-ring"></div>
     </div>
 
@@ -16,7 +13,7 @@
 
     <footer class="footer">
       <p class="has-text-centered">
-        Copyright by IT team Sinko Prima Alloy 2021
+        Copyright by IT team Sinko Prima Alloy {{ yearNow }}
       </p>
     </footer>
   </div>
@@ -32,6 +29,12 @@ export default {
   components: {
     Navbar,
     Sidebar,
+  },
+
+  data() {
+    return {
+      yearNow: new Date().getFullYear(),
+    }
   },
 
   beforeCreate() {
@@ -52,6 +55,7 @@ export default {
   width: 80px;
   height: 80px;
 }
+
 .lds-dual-ring:after {
   content: " ";
   display: block;
@@ -63,10 +67,12 @@ export default {
   border-color: #ccc transparent #ccc transparent;
   animation: lds-dual-ring 1.2s linear infinite;
 }
+
 @keyframes lds-dual-ring {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -83,6 +89,7 @@ export default {
     height: 80px;
   }
 }
+
 /* loading animation */
 
 /* costum */
@@ -99,10 +106,11 @@ export default {
 }
 
 @media screen and (min-width: 769px) {
+
   .modal-content,
   .modal-card {
     width: 900px;
   }
 }
-/* costum */
-</style>
+
+/* costum */</style>
