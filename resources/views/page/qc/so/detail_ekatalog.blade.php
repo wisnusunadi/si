@@ -113,18 +113,18 @@
 
         /* @media screen and (min-width: 1440px) {
 
-                                                                                            section {
-                                                                                                font-size: 16px;
-                                                                                            }
+                                                                                                section {
+                                                                                                    font-size: 16px;
+                                                                                                }
 
-                                                                                            #detailmodal {
-                                                                                                font-size: 16px;
-                                                                                            }
+                                                                                                #detailmodal {
+                                                                                                    font-size: 16px;
+                                                                                                }
 
-                                                                                            .btn {
-                                                                                                font-size: 16px;
-                                                                                            }
-                                                                                        } */
+                                                                                                .btn {
+                                                                                                    font-size: 16px;
+                                                                                                }
+                                                                                            } */
 
         @media screen and (min-width: 993px) {
 
@@ -243,7 +243,7 @@
                                             </div>
                                             <div class="p-2">
                                                 <div class="margin">
-                                                    <div><small class="text-muted">Status</small></div>
+                                                    <div><small class="text-muted">Status Transfer</small></div>
                                                     <div class="align-center">{!! $status !!}</div>
                                                 </div>
                                             </div>
@@ -520,7 +520,7 @@
                 </div>
             </div>
     </section>
-        @include('page/gbj/modalserireworks/detailnoseri')
+    @include('page/gbj/modalserireworks/detailnoseri')
 @stop
 @section('adminlte_js')
     <script>

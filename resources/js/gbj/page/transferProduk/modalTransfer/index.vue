@@ -225,7 +225,7 @@ export default {
                                                             persentase_belum }}%)</span>
                                                     <span class="badge badge-warning">
                                                         Sudah Transfer: {{ paket.jumlah_gudang }} ({{
-                                                            paket.persentase_gudang
+                                                            paket.persentase_sudah
                                                         }}%)
                                                     </span>
                                                 </td>

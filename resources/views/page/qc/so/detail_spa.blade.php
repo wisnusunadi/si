@@ -94,18 +94,18 @@
 
         /* @media screen and (min-width: 1440px) {
 
-                                                                                                                section {
-                                                                                                                    font-size: 14px;
-                                                                                                                }
+                                                                                                                                                            section {
+                                                                                                                                                                font-size: 14px;
+                                                                                                                                                            }
 
-                                                                                                                #detailmodal {
-                                                                                                                    font-size: 14px;
-                                                                                                                }
+                                                                                                                                                            #detailmodal {
+                                                                                                                                                                font-size: 14px;
+                                                                                                                                                            }
 
-                                                                                                                .btn {
-                                                                                                                    font-size: 14px;
-                                                                                                                }
-                                                                                                            } */
+                                                                                                                                                            .btn {
+                                                                                                                                                                font-size: 14px;
+                                                                                                                                                            }
+                                                                                                                                                        } */
 
         @media screen and (min-width: 993px) {
 
@@ -190,7 +190,7 @@
                                                     <div><b id="no_so_pesanan">{{ $d->pesanan->so }}</b></div>
                                                 </div>
                                                 <div class="margin">
-                                                    <div><small class="text-muted">Status</small></div>
+                                                    <div><small class="text-muted">Status Transfer</small></div>
                                                     <div id="status" class="align-center">{!! $status !!}</div>
                                                     {{-- <div id="status" class="align-center">{{ $status }}</div> --}}
                                                 </div>
@@ -611,7 +611,8 @@
                                 $('#noseripengganti').DataTable().row.add([
                                     value.noseri,
                                     value.tgl_kirim,
-                                    value.state == 'qc' ? 'Gagal Pengujian QC' : 'Gagal Kalibrasi'
+                                    value.state == 'qc' ? 'Gagal Pengujian QC' :
+                                    'Gagal Kalibrasi'
                                 ]).draw(false);
                             });
                         }
@@ -1220,6 +1221,8 @@
                 var dataHeader = datatableOld.row(rows).data();
                 var noSO = $('#no_so_pesanan').text();
 
+                console.log(dataHeader);
+
 
 
                 $('#edit').html(`
@@ -1232,34 +1235,34 @@
                                     <h5 class="card-title">Info Produk</h5>
                                 </div>
                                 ${datajenis == "produk" ? `
-                                                                <div class="card-body">
-                                                                    <div class="margin">
-                                                                        <input type="hidden" name="user_idd" value="{{ Auth::user()->id }}">
-                                                                        <div><small class="text-muted">Nama Produk</small></div>
-                                                                        <div><b>${dataHeader?.nama}</b></div>
-                                                                    </div>
-                                                                    <div class="margin">
-                                                                        <div><small class="text-muted">No SO</small></div>
-                                                                        <div><b>${noSO}</b></div>
-                                                                    </div>
-                                                                </div>
-                                                                ` : `
-                                                                <div class="card-body">
-                                                                    <div class="margin">
-                                                                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                                                        <div><small class="text-muted">Nama Part</small></div>
-                                                                        <div><b>${dataHeader?.nama}</b></div>
-                                                                    </div>
-                                                                    <div class="margin">
-                                                                        <div><small class="text-muted">No SO</small></div>
-                                                                        <div><b>${noSO}</b></div>
-                                                                    </div>
-                                                                    <div class="margin">
-                                                                        <div><small class="text-muted">Jumlah</small></div>
-                                                                        <div><b>${dataHeader?.jumlah}</b></div>
-                                                                    </div>
-                                                                </div>
-                                                                `}
+                                        <div class="card-body">
+                                            <div class="margin">
+                                                <input type="hidden" name="user_idd" value="{{ Auth::user()->id }}">
+                                                <div><small class="text-muted">Nama Produk</small></div>
+                                                <div><b>${dataHeader?.nama_produk}</b></div>
+                                            </div>
+                                            <div class="margin">
+                                                <div><small class="text-muted">No SO</small></div>
+                                                <div><b>${noSO}</b></div>
+                                            </div>
+                                        </div>
+                                        ` : `
+                                        <div class="card-body">
+                                            <div class="margin">
+                                                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                                <div><small class="text-muted">Nama Part</small></div>
+                                                <div><b>${dataHeader?.nama_produk}</b></div>
+                                            </div>
+                                            <div class="margin">
+                                                <div><small class="text-muted">No SO</small></div>
+                                                <div><b>${noSO}</b></div>
+                                            </div>
+                                            <div class="margin">
+                                                <div><small class="text-muted">Jumlah</small></div>
+                                                <div><b>${dataHeader?.jumlah}</b></div>
+                                            </div>
+                                        </div>
+                                        `}
                             </div>
                         </div>
                         <div class="col-lg-8 col-12">
@@ -1290,52 +1293,52 @@
                                             </div>
                                         </div>
                                         ${datajenis == "produk" ? `
-                                                                    <div class="form-group row">
-                                                                        <label for="" class="col-form-label col-5" style="text-align: right">Hasil Cek</label>
-                                                                        <div class="col-5 col-form-label">
-                                                                            <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio" name="cek" id="yes" value="ok" />
-                                                                                <label class="form-check-label" for="yes"><i class="fas fa-check-circle ok"></i> OK</label>
-                                                                            </div>
-                                                                            <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio" name="cek" id="no" value="nok" />
-                                                                                <label class="form-check-label" for="no"><i class="fas fa-times-circle nok"></i> Tidak OK</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <h5>No Seri </h5>
-                                                                    <div class="form-group row">
-                                                                        <div class="table-responsive overflowy">
-                                                                            <table class="table table-striped align-center" id="listnoseri" style="width:100%;">
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th>No</th>
-                                                                                        <th>No Seri</th>
-                                                                                        <th>No Seri ID</th>
-                                                                                        <th>No Detail Produk ID</th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                    </div>
-                                                                    ` : `
-                                                                    <div class="form-group row">
-                                                                        <label for="" class="col-form-label col-5" style="text-align: right">Jumlah OK</label>
-                                                                        <div class="col-3">
-                                                                            <input type="number" class="form-control  col-form-label" name="jumlah_ok" id="jumlah_ok">
-                                                                            <div class="invalid-feedback" id="msgjumlah_ok"></div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label for="" class="col-form-label col-5" style="text-align: right">Jumlah NOK</label>
-                                                                        <div class="col-3">
-                                                                            <input type="number" class="form-control  col-form-label" name="jumlah_nok" id="jumlah_nok">
-                                                                            <div class="invalid-feedback" id="msgjumlah_nok"></div>
-                                                                        </div>
-                                                                    </div>
-                                                                    `}
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Hasil Cek</label>
+                                                        <div class="col-5 col-form-label">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="cek" id="yes" value="ok" />
+                                                                <label class="form-check-label" for="yes"><i class="fas fa-check-circle ok"></i> OK</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="cek" id="no" value="nok" />
+                                                                <label class="form-check-label" for="no"><i class="fas fa-times-circle nok"></i> Tidak OK</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <h5>No Seri </h5>
+                                                    <div class="form-group row">
+                                                        <div class="table-responsive overflowy">
+                                                            <table class="table table-striped align-center" id="listnoseri" style="width:100%;">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>No</th>
+                                                                        <th>No Seri</th>
+                                                                        <th>No Seri ID</th>
+                                                                        <th>No Detail Produk ID</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    ` : `
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Jumlah OK</label>
+                                                        <div class="col-3">
+                                                            <input type="number" class="form-control  col-form-label" name="jumlah_ok" id="jumlah_ok">
+                                                            <div class="invalid-feedback" id="msgjumlah_ok"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Jumlah NOK</label>
+                                                        <div class="col-3">
+                                                            <input type="number" class="form-control  col-form-label" name="jumlah_nok" id="jumlah_nok">
+                                                            <div class="invalid-feedback" id="msgjumlah_nok"></div>
+                                                        </div>
+                                                    </div>
+                                                    `}
                                     </div>
                                 </div>
                                 <div class="card-footer">
@@ -1412,6 +1415,7 @@
                 var rows = datatableOld.$('tr.bgcolor').closest('tr');
                 var dataHeader = datatableOld.row(rows).data();
 
+
                 $('#modalKalibrasi').modal("show");
                 $('#kalibrasi').html(`
                 <form method="POST" action="/api/qc/kalibrasi/store" id="form-kalibrasi-update">
@@ -1422,34 +1426,34 @@
                                     <h5 class="card-title">Info Produk</h5>
                                 </div>
                                ${datajenis == 'produk' ? `
-                                                        <div class="card-body">
-                                                            <div class="margin">
-                                                                <input type="hidden" name="user_idd" value="{{ Auth::user()->id }}">
-                                                                <div><small class="text-muted">Nama Produk</small></div>
-                                                                <div><b>${dataHeader.nama}</b></div>
-                                                            </div>
-                                                            <div class="margin">
-                                                                <div><small class="text-muted">No SO</small></div>
-                                                                <div><b>{{ $d->pesanan->so }}</b></div>
-                                                            </div>
-                                                        </div>
-                                                        ` : `
-                                                        <div class="card-body">
-                                                            <div class="margin">
-                                                                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                                                <div><small class="text-muted">Nama Part</small></div>
-                                                                <div><b></b></div>
-                                                            </div>
-                                                            <div class="margin">
-                                                                <div><small class="text-muted">No SO</small></div>
-                                                                <div><b>{{ $d->pesanan->so }}</b></div>
-                                                            </div>
-                                                            <div class="margin">
-                                                                <div><small class="text-muted">Jumlah</small></div>
-                                                                <div><b></b></div>
-                                                            </div>
-                                                        </div>
-                                                        `}
+                                            <div class="card-body">
+                                                <div class="margin">
+                                                    <input type="hidden" name="user_idd" value="{{ Auth::user()->id }}">
+                                                    <div><small class="text-muted">Nama Produk</small></div>
+                                                    <div><b>${dataHeader.nama_produk}</b></div>
+                                                </div>
+                                                <div class="margin">
+                                                    <div><small class="text-muted">No SO</small></div>
+                                                    <div><b>{{ $d->pesanan->so }}</b></div>
+                                                </div>
+                                            </div>
+                                            ` : `
+                                            <div class="card-body">
+                                                <div class="margin">
+                                                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                                    <div><small class="text-muted">Nama Part</small></div>
+                                                    <div><b></b></div>
+                                                </div>
+                                                <div class="margin">
+                                                    <div><small class="text-muted">No SO</small></div>
+                                                    <div><b>{{ $d->pesanan->so }}</b></div>
+                                                </div>
+                                                <div class="margin">
+                                                    <div><small class="text-muted">Jumlah</small></div>
+                                                    <div><b></b></div>
+                                                </div>
+                                            </div>
+                                            `}
                             </div>
                         </div>
                         <div class="col-lg-8 col-12">
@@ -1482,38 +1486,38 @@
                                             </div>
                                         </div>
                                        ${datajenis == "produk" ? `
-                                                                <h5>No Seri </h5>
-                                                                <div class="form-group row">
-                                                                    <div class="table-responsive overflowy">
-                                                                        <table class="table table-striped align-center" id="listnoserikalibrasi" style="width:100%;">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>No</th>
-                                                                                    <th>No Seri</th>
-                                                                                    <th>No Seri ID</th>
-                                                                                    <th>No Detail Produk ID</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                           <tbody></tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                                ` : `
-                                                                <div class="form-group row">
-                                                                    <label for="" class="col-form-label col-5" style="text-align: right">Jumlah OK</label>
-                                                                    <div class="col-3">
-                                                                        <input type="number" class="form-control  col-form-label" name="jumlah_ok" id="jumlah_ok">
-                                                                        <div class="invalid-feedback" id="msgjumlah_ok"></div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group row">
-                                                                    <label for="" class="col-form-label col-5" style="text-align: right">Jumlah NOK</label>
-                                                                    <div class="col-3">
-                                                                        <input type="number" class="form-control  col-form-label" name="jumlah_nok" id="jumlah_nok">
-                                                                        <div class="invalid-feedback" id="msgjumlah_nok"></div>
-                                                                    </div>
-                                                                </div>
-                                                                `}
+                                                    <h5>No Seri </h5>
+                                                    <div class="form-group row">
+                                                        <div class="table-responsive overflowy">
+                                                            <table class="table table-striped align-center" id="listnoserikalibrasi" style="width:100%;">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>No</th>
+                                                                        <th>No Seri</th>
+                                                                        <th>No Seri ID</th>
+                                                                        <th>No Detail Produk ID</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    ` : `
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Jumlah OK</label>
+                                                        <div class="col-3">
+                                                            <input type="number" class="form-control  col-form-label" name="jumlah_ok" id="jumlah_ok">
+                                                            <div class="invalid-feedback" id="msgjumlah_ok"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Jumlah NOK</label>
+                                                        <div class="col-3">
+                                                            <input type="number" class="form-control  col-form-label" name="jumlah_nok" id="jumlah_nok">
+                                                            <div class="invalid-feedback" id="msgjumlah_nok"></div>
+                                                        </div>
+                                                    </div>
+                                                    `}
                                     </div>
                                 </div>
                                 <div class="card-footer">
@@ -1590,6 +1594,17 @@
                 }
             });
 
+            const cekvalidasipart = () => {
+                if (($("input[name='tanggal_uji']").val() != "") && ($("input[name='jumlah_ok']").val() != "" &&
+                        !$("input[name='jumlah_ok']").hasClass(
+                            'is-invalid')) && ($("input[name='jumlah_nok']").val() != "" && !$(
+                        "input[name='jumlah_nok']").hasClass('is-invalid'))) {
+                    $('#btnsimpan').removeAttr('disabled');
+                } else {
+                    $('#btnsimpan').attr('disabled', true);
+                }
+            }
+
             // validasi detail pengujian
             $(document).on('keyup change', 'input[type="date"][name="tanggal_uji"]', function(event) {
                 console.log(isListNoseriEmpty());
@@ -1603,17 +1618,7 @@
                             $('#btnsimpan').attr('disabled', true);
                         }
                     } else {
-                        if (($("input[name='jumlah_ok']").val() != "" && !$(
-                                    "input[name='jumlah_ok']")
-                                .hasClass('is-invalid')) && ($("input[name='jumlah_nok']").val() !=
-                                "" && !
-                                $("input[name='jumlah_nok']").hasClass('is-invalid'))) {
-                            if (!isListNoseriEmpty()) {
-                                $('#btnsimpan').removeAttr('disabled');
-                            }
-                        } else {
-                            $('#btnsimpan').attr('disabled', true);
-                        }
+                        cekvalidasipart();
                     }
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -1637,159 +1642,104 @@
 
             $(document).on('keyup change', 'input[type="number"][name="jumlah_ok"]', function(event) {
                 if (datajenis == "part") {
-                    var valok = $(this).val();
+                    var datatableOld = $('#showtable').DataTable();
+                    var rows = datatableOld.$('tr.bgcolor').closest('tr');
+                    var dataHeader = datatableOld.row(rows).data();
+                    let jumlahttl = dataHeader.jumlah;
+                    let ok = $(this).val();
+                    let nok = parseInt(jumlahttl) - parseInt(ok);
+                    $("input[type='number'][name='jumlah_nok']").val(nok);
+
                     if ($(this).val() !== "") {
-                        $.ajax({
-                            type: "POST",
-                            url: '/api/qc/so/cek/part/' + dataid,
-                            dataType: 'json',
-                            success: function(data) {
-                                if (valok > data) {
-                                    $('input[type="number"][name="jumlah_ok"]')
-                                        .addClass(
-                                            'is-invalid');
-                                    $('#btnsimpan').attr('disabled', true);
-                                    $("#msgjumlah_ok").text(
-                                        "Data melebihi jumlah Part");
-                                } else if (valok <= data) {
-                                    $('input[type="number"][name="jumlah_ok"]')
-                                        .removeClass(
-                                            'is-invalid');
+                        if (ok > jumlahttl) {
+                            $('input[type="number"][name="jumlah_ok"]').addClass('is-invalid');
+                            $("#msgjumlah_ok").text("Data melebihi jumlah Part");
+                        } else {
+                            $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
+                            $("#msgjumlah_ok").text("");
+
+                            if (nok !== "") {
+                                var jumlahcurr = parseInt(ok) + parseInt(nok);
+
+                                if (jumlahcurr > jumlahttl) {
+                                    $('input[type="number"][name="jumlah_ok"]').addClass('is-invalid');
+                                    $("#msgjumlah_ok").text("Data melebihi jumlah Part");
+                                } else {
+                                    $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
                                     $("#msgjumlah_ok").text("");
-                                    if ($("input[type='number'][name='jumlah_nok']")
-                                        .val() !==
-                                        "") {
-                                        var jumlahnok = $(
-                                            "input[type='number'][name='jumlah_nok']"
-                                        ).val();
-                                        var jumlahcurr = jumlahnok + valok;
-                                        if (jumlahcurr > data) {
-                                            $('input[type="number"][name="jumlah_ok"]')
-                                                .addClass('is-invalid');
-                                            $("#msgjumlah_ok").text(
-                                                "Data melebihi jumlah Part");
-                                            $('#btnsimpan').attr('disabled', true);
-                                        } else if (jumlahcurr <= data) {
-                                            if ($("input[name='tanggal_uji']").val() !=
-                                                "") {
-                                                $('input[type="number"][name="jumlah_ok"]')
-                                                    .removeClass('is-invalid');
-                                                $("#msgjumlah_ok").text("");
-                                                $('#btnsimpan').removeAttr('disabled');
-                                            } else {
-                                                $('input[type="number"][name="jumlah_nok"]')
-                                                    .removeClass('is-invalid');
-                                                $("#msgjumlah_ok").text("");
-                                                $('#btnsimpan').attr('disabled', true);
-                                            }
-                                        }
-                                    } else {
-                                        $("input[type='number'][name='jumlah_nok']")
-                                            .val("0");
-                                        if ($("input[name='tanggal_uji']").val() !=
-                                            "") {
-                                            $('input[type="number"][name="jumlah_ok"]')
-                                                .removeClass('is-invalid');
-                                            $('#btnsimpan').removeAttr('disabled');
-                                        } else {
-                                            $('#btnsimpan').attr('disabled', true);
-                                        }
+
+                                    if ($("input[name='tanggal_uji']").val() !== "") {
+                                        $('input[type="number"][name="jumlah_ok"]').removeClass(
+                                            'is-invalid');
                                     }
                                 }
-                            },
-                            error: function() {
-                                alert('Error occured');
+                            } else {
+                                if ($("input[name='tanggal_uji']").val() !== "") {
+                                    $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
+                                }
                             }
-                        });
-                    } else {
-                        $('#btnsimpan').attr('disabled', true);
+                        }
                     }
+                    cekvalidasipart();
                 }
             });
 
             $(document).on('keyup change', 'input[type="number"][name="jumlah_nok"]', function(event) {
                 if (datajenis == "part") {
-                    var valnok = $(this).val();
+                    var datatableOld = $('#showtable').DataTable();
+                    var rows = datatableOld.$('tr.bgcolor').closest('tr');
+                    var dataHeader = datatableOld.row(rows).data();
+                    let jumlahttl = dataHeader.jumlah;
+                    let nok = $(this).val();
+                    let ok = parseInt(jumlahttl) - parseInt(nok);
+                    $("input[type='number'][name='jumlah_ok']").val(ok);
+
                     if ($(this).val() !== "") {
-                        $.ajax({
-                            type: "POST",
-                            url: '/api/qc/so/cek/part/' + dataid,
-                            dataType: 'json',
-                            success: function(data) {
-                                if (valnok > data) {
-                                    $('input[type="number"][name="jumlah_nok"]')
-                                        .addClass(
-                                            'is-invalid');
-                                    $('#btnsimpan').attr('disabled', true);
-                                    $("#msgjumlah_nok").text(
-                                        "Data melebihi jumlah Part");
-                                } else if (valnok <= data) {
-                                    $('input[type="number"][name="jumlah_nok"]')
-                                        .removeClass(
-                                            'is-invalid');
+                        if (nok > jumlahttl) {
+                            $('input[type="number"][name="jumlah_nok"]').addClass('is-invalid');
+                            $("#msgjumlah_nok").text("Data melebihi jumlah Part");
+                        } else {
+                            $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                            $("#msgjumlah_nok").text("");
+
+                            if (ok !== "") {
+                                var jumlahcurr = parseInt(ok) + parseInt(nok);
+
+                                if (jumlahcurr > jumlahttl) {
+                                    $('input[type="number"][name="jumlah_nok"]').addClass('is-invalid');
+                                    $("#msgjumlah_nok").text("Data melebihi jumlah Part");
+                                } else {
+                                    $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
                                     $("#msgjumlah_nok").text("");
-                                    if ($("input[type='number'][name='jumlah_ok']")
-                                        .val() !==
-                                        "") {
-                                        var jumlahok = $(
-                                            "input[type='number'][name='jumlah_ok']"
-                                        ).val();
-                                        var jumlahcurr = jumlahok + valnok;
-                                        if (jumlahcurr > data) {
-                                            $('input[type="number"][name="jumlah_nok"]')
-                                                .addClass('is-invalid');
-                                            $("#msgjumlah_nok").text(
-                                                "Data melebihi jumlah Part");
-                                            $('#btnsimpan').attr('disabled', true);
-                                        } else if (jumlahcurr <= data) {
-                                            $("#msgjumlah_nok").text("");
-                                            if ($("input[name='tanggal_uji']").val() !=
-                                                "") {
-                                                $('input[type="number"][name="jumlah_nok"]')
-                                                    .removeClass('is-invalid');
-                                                $('#btnsimpan').removeAttr('disabled');
-                                            } else {
-                                                $('input[type="number"][name="jumlah_nok"]')
-                                                    .removeClass('is-invalid');
-                                                $('#btnsimpan').attr('disabled', true);
-                                            }
-                                        }
-                                    } else {
-                                        $("input[type='number'][name='jumlah_ok']").val(
-                                            "0");
-                                        if ($("input[name='tanggal_uji']").val() !=
-                                            "") {
-                                            $('input[type="number"][name="jumlah_nok"]')
-                                                .removeClass('is-invalid');
-                                            $("#msgjumlah_nok").text("");
-                                            $('#btnsimpan').removeAttr('disabled');
-                                        } else {
-                                            $('#btnsimpan').attr('disabled', true);
-                                        }
+
+                                    if ($("input[name='tanggal_uji']").val() !== "") {
+                                        $('input[type="number"][name="jumlah_nok"]').removeClass(
+                                            'is-invalid');
                                     }
                                 }
-                            },
-                            error: function() {
-                                alert('Error occured');
+                            } else {
+                                if ($("input[name='tanggal_uji']").val() !== "") {
+                                    $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                }
                             }
-                        });
-                    } else {
-                        $('#btnsimpan').attr('disabled', true);
+                        }
                     }
+                    cekvalidasipart();
                 }
             });
+        });
 
 
 
-            $('input[type=radio][name=filter]').change(function() {
-                // $('input[name ="check_all"]').prop('checked', false);
-                // $(".cek_header").css("display", "block");
-                var stat = this.value;
-                console.log('/api/qc/so/seri/' + stat + '/' + dataid + '/{{ $id }}');
-                var dat = $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + stat + '/' +
-                    dataid +
-                    '/{{ $id }}').load();
-            });
-        })
+
+        $('input[type=radio][name=filter]').change(function() {
+            // $('input[name ="check_all"]').prop('checked', false);
+            // $(".cek_header").css("display", "block");
+            var stat = this.value;
+            console.log('/api/qc/so/seri/' + stat + '/' + dataid + '/{{ $id }}');
+            var dat = $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + stat + '/' +
+                dataid +
+                '/{{ $id }}').load();
+        });
     </script>
 @stop

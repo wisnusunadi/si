@@ -694,7 +694,6 @@
                                                                                     class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror"
                                                                                     name="batas_kontrak"
                                                                                     id="batas_kontrak"
-                                                                                    max="{{ $maxDate }}"
                                                                                     value="{{ $e->tgl_kontrak }}"
                                                                                     @if ($e->status != 'sepakat') disabled="true" @endif />
                                                                                 <div class="invalid-feedback"

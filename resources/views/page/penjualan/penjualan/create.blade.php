@@ -129,13 +129,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                                                                                                                                        .row {
-                                                                                                                                                                                            font-size: 12px;
-                                                                                                                                                                                        }
+                                                                                                                                                                                            .row {
+                                                                                                                                                                                                font-size: 12px;
+                                                                                                                                                                                            }
 
-                                                                                                                                                                                        h4 {
-                                                                                                                                                                                            font-size: 20px;
-                                                                                                                                                                                        } */
+                                                                                                                                                                                            h4 {
+                                                                                                                                                                                                font-size: 20px;
+                                                                                                                                                                                            } */
             body {
                 font-size: 12px;
             }
@@ -152,13 +152,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                                                                                                                                                        .row {
-                                                                                                                                                                                            font-size: 12px;
-                                                                                                                                                                                        }
+                                                                                                                                                                                            .row {
+                                                                                                                                                                                                font-size: 12px;
+                                                                                                                                                                                            }
 
-                                                                                                                                                                                        h4 {
-                                                                                                                                                                                            font-size: 20px;
-                                                                                                                                                                                        } */
+                                                                                                                                                                                            h4 {
+                                                                                                                                                                                                font-size: 20px;
+                                                                                                                                                                                            } */
             section {
                 font-size: 12px;
             }
@@ -607,7 +607,6 @@
                                                                         <div class="col-lg-4 col-md-12">
                                                                             <input type="date"
                                                                                 class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror"
-                                                                                max="{{ $maxDate }}"
                                                                                 name="batas_kontrak" id="batas_kontrak" />
                                                                             <div class="invalid-feedback"
                                                                                 id="msgbatas_kontrak">
@@ -3637,7 +3636,7 @@
             $('#addrowjasa').on('click', function() {
                 if ($('#jasatable > tbody > tr').length <= 0) {
                     $('#jasatable tbody').append(trjasatable());
-                    numberRowsPart($("#jasatable"));
+                    numberRowsJasa($("#jasatable"));
                 } else {
                     $('#jasatable tbody tr:last').after(trjasatable());
                     numberRowsJasa($("#jasatable"));
