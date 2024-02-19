@@ -129,13 +129,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                                                                                                                                            .row {
-                                                                                                                                                                                                font-size: 12px;
-                                                                                                                                                                                            }
+                                                                                                                                                                        .row {
+                                                                                                                                                                            font-size: 12px;
+                                                                                                                                                                        }
 
-                                                                                                                                                                                            h4 {
-                                                                                                                                                                                                font-size: 20px;
-                                                                                                                                                                                            } */
+                                                                                                                                                                        h4 {
+                                                                                                                                                                            font-size: 20px;
+                                                                                                                                                                        } */
             body {
                 font-size: 12px;
             }
@@ -152,13 +152,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                                                                                                                                                            .row {
-                                                                                                                                                                                                font-size: 12px;
-                                                                                                                                                                                            }
+            .row {
+                font-size: 12px;
+            }
 
-                                                                                                                                                                                            h4 {
-                                                                                                                                                                                                font-size: 20px;
-                                                                                                                                                                                            } */
+            h4 {
+                font-size: 20px;
+            } */
             section {
                 font-size: 12px;
             }
@@ -259,7 +259,6 @@
                             Periode yang dibuka saat ini adalah periode {{ $years }}
                         </div>
                     @endif
-
                     <div class="card">
                         <div class="card-header bg-info">
                             <div class="card-title">Form Tambah Data</div>
@@ -444,6 +443,12 @@
                                                                 role="tab" aria-controls="pills-pengiriman"
                                                                 aria-selected="false">Pengiriman</a>
                                                         </li>
+                                                        {{-- <li class="nav-item" role="presentation">
+                                                            <a class="nav-link disabled d-none" id="pills-produk-tab"
+                                                                data-toggle="pill" href="#pills-produk" role="tab"
+                                                                aria-controls="pills-produk" aria-selected="false">Rencana
+                                                                Penjualan</a>
+                                                        </li> --}}
                                                     </ul>
                                                     <div class="tab-content" id="pills-tabContent">
                                                         <div class="tab-pane fade show active" id="pills-penjualan"
@@ -574,6 +579,7 @@
                                                                                 {{-- if isOpenTrue set max date to end date of years --}}
                                                                                 max="{{ $maxDate }}"
                                                                                 name="tanggal_pemesanan"
+                                                                                max="{{ $maxDate }}"
                                                                                 id="tanggal_pemesanan" />
                                                                             <div class="invalid-feedback"
                                                                                 id="msgtanggal_pemesanan">
@@ -589,6 +595,7 @@
                                                                             Edit</label>
                                                                         <div class="col-lg-4">
                                                                             <input type="date"
+                                                                                max="{{ $maxDate }}"
                                                                                 class="form-control col-form-label @error('tanggal_edit') is-invalid @enderror"
                                                                                 max="{{ $maxDate }}"
                                                                                 name="tanggal_edit" id="tanggal_edit" />
@@ -1701,9 +1708,9 @@
             var alamat_instansi_array = [];
             today = yyyy + '-' + mm + '-' + dd;
             // $("#tanggal_pemesanan").attr("max", today);
-            // $("#batas_kontrak").attr("min", today);
+            $("#batas_kontrak").attr("min", today);
             // $("#tanggal_po").attr("max", today);
-            // $("#tanggal_do").attr("min", today);
+            $("#tanggal_do").attr("min", today);
             select_data(prm);
             load_part();
             load_jasa();
