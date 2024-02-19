@@ -94,13 +94,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                                            .row {
-                                                                                                                                                                                                                                                                                                                                font-size: 12px;
-                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                .row {
+                                                                                                                                                                                                                                                                                                                                    font-size: 12px;
+                                                                                                                                                                                                                                                                                                                                }
 
-                                                                                                                                                                                                                                                                                                                            h4 {
-                                                                                                                                                                                                                                                                                                                                font-size: 20px;
-                                                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                                                h4 {
+                                                                                                                                                                                                                                                                                                                                    font-size: 20px;
+                                                                                                                                                                                                                                                                                                                                } */
             body {
                 font-size: 12px;
             }
@@ -121,13 +121,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                                            .row {
-                                                                                                                                                                                                                                                                                                                                font-size: 12px;
-                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                .row {
+                                                                                                                                                                                                                                                                                                                                    font-size: 12px;
+                                                                                                                                                                                                                                                                                                                                }
 
-                                                                                                                                                                                                                                                                                                                            h4 {
-                                                                                                                                                                                                                                                                                                                                font-size: 20px;
-                                                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                                                h4 {
+                                                                                                                                                                                                                                                                                                                                    font-size: 20px;
+                                                                                                                                                                                                                                                                                                                                } */
             body {
                 font-size: 12px;
             }
@@ -494,12 +494,12 @@
                                                                 role="tab" aria-controls="pills-pengiriman"
                                                                 aria-selected="false">Pengiriman</a>
                                                         </li>
-                                                        <li class="nav-item" role="presentation">
+                                                        {{-- <li class="nav-item" role="presentation">
                                                             <a class="nav-link" id="pills-produk-tab" data-toggle="pill"
                                                                 href="#pills-produk" role="tab"
                                                                 aria-controls="pills-produk" aria-selected="false">Rencana
                                                                 Penjualan</a>
-                                                        </li>
+                                                        </li> --}}
                                                     </ul>
 
                                                     <div class="form-horizontal">
@@ -592,9 +592,9 @@
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
                                                                             <div class="col-lg-5 col-md-12 col-form-label">
                                                                                 <!-- <div class="form-check form-check-inline">
-                                                                                                                                                                                                                                                                                                                                                                                                    <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
-                                                                                                                                                                                                                                                                                                                                                                                                    <label class="form-check-label" for="status_akn4">Draft</label>
-                                                                                                                                                                                                                                                                                                                                                                                                </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
+                                                                                                                                                                                                                                                                                                                                                                                                        <label class="form-check-label" for="status_akn4">Draft</label>
+                                                                                                                                                                                                                                                                                                                                                                                                    </div> -->
                                                                                 <div class="form-check form-check-inline">
                                                                                     <input class="form-check-input"
                                                                                         type="radio" name="status_akn"
