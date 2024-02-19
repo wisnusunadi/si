@@ -91,6 +91,7 @@ export default {
             }
         },
         async simpan() {
+            console.log(this.form);
             // validasi
             const cekForm = Object.values(this.form).every(x => x != '' && x != null && x != undefined && x != 0)
             const cekbppb = this.form.no_bppb !== null && this.form.no_bppb !== '' && this.form.no_bppb !== undefined && this.form.no_bppb !== '-'
@@ -354,18 +355,24 @@ export default {
     created() {
         this.getData()
     },
+    computed: {
+        cekKedatangan() {
+            let idValue = [319, 149]
+            return idValue.includes(this.form.produk?.value)
+        }
+    },
     watch: {
         'form.kedatangan': function (val) {
             if (val > 26) {
                 this.form.kedatangan = 26
             } else if (val <= 1) {
-                this.form.kedatangan = 1
+                this.form.kedatangan = 0
             } else {
                 this.form.kedatangan = val
             }
         },
         'form.produk': function (val) {
-            if (val.isGenerate) {
+            if (val.isGenerate && !this.cekKedatangan) {
                 this.form.jml = ''
                 this.form.kedatangan = 0
             } else {
@@ -418,7 +425,7 @@ export default {
                                                 :disabled="hasilGenerate.length > 0"></v-select>
                                         </div>
 
-                                        <div class="form-group" v-if="form.produk?.isGenerate">
+                                        <div class="form-group" v-if="form.produk?.isGenerate && !cekKedatangan">
                                             <label for="exampleInputEmail1">Kedatangan</label>
                                             <input type="number" class="form-control" v-model.number="form.kedatangan"
                                                 :disabled="hasilGenerate.length > 0" @keypress="numberOnly($event)">
