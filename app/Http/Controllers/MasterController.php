@@ -2,50 +2,50 @@
 
 namespace App\Http\Controllers;
 
-use Alert;
+use App\Models\Customer;
+use App\Models\DetailEkatalog;
+use App\Models\DetailPenjualanProduk;
+use App\Models\Ekatalog;
+use App\Models\KelompokProduk;
+use App\Models\PenjualanProduk;
+use App\Models\RencanaPenjualan;
+use App\Models\Pesanan;
+use App\Models\Provinsi;
 use App\Models\Spa;
 use App\Models\Spb;
-use App\Models\Produk;
-use App\Models\Mproduk;
-use App\Models\Pesanan;
-use App\Models\UserLog;
-use App\Models\Customer;
-use App\Models\Ekatalog;
-use App\Models\Logistik;
-use App\Models\Provinsi;
-use App\Models\Ekspedisi;
-use App\Models\Sparepart;
-use App\Models\SystemLog;
-use App\Exports\ProdukData;
-use Illuminate\Support\Arr;
-use App\Models\AktifPeriode;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
+use Alert;
 use App\Exports\CustomerData;
-use App\Models\DetailPesanan;
 use App\Exports\EkspedisiData;
 use App\Exports\ProdukData;
 use App\Models\AktifPeriode;
 use App\Models\DetailLogistik;
-use App\Models\DetailProdukRw;
-use App\Models\JalurEkspedisi;
-use App\Models\KelompokProduk;
-use Illuminate\Support\Carbon;
-use App\Models\PenjualanProduk;
-use App\Models\SparepartGudang;
-use App\Models\GudangBarangJadi;
-use App\Models\NoseriBarangJadi;
-use App\Models\RencanaPenjualan;
+use App\Models\DetailPesanan;
 use App\Models\DetailPesananPart;
-use App\Models\kesehatan\Karyawan;
-use Illuminate\Support\Facades\DB;
 use App\Models\DetailPesananProduk;
-use App\Models\RiwayatAktifPeriode;
-use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Models\DetailPenjualanProduk;
+use App\Models\DetailProdukRw;
+use App\Models\Ekspedisi;
+use App\Models\Logistik;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Arr;
 use App\Models\GudangKarantinaDetail;
 use App\Models\GudangKarantinaNoseri;
+use App\Models\JalurEkspedisi;
+use App\Models\kesehatan\Karyawan;
+use App\Models\NoseriBarangJadi;
+use App\Models\Sparepart;
+use App\Models\SparepartGudang;
+use App\Models\SystemLog;
+use App\Models\UserLog;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 // produk
 use App\Models\Mproduk;
@@ -54,8 +54,6 @@ use App\Models\GudangBarangJadi;
 use App\Models\RiwayatAktifPeriode;
 
 use function PHPUnit\Framework\returnValueMap;
-use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class MasterController extends Controller
 {
