@@ -91,7 +91,6 @@ export default {
             }
         },
         async simpan() {
-            console.log(this.form);
             // validasi
             const cekForm = Object.values(this.form).every(x => x != '' && x != null && x != undefined && x != 0)
             const cekbppb = this.form.no_bppb !== null && this.form.no_bppb !== '' && this.form.no_bppb !== undefined && this.form.no_bppb !== '-'
