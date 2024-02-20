@@ -16,16 +16,22 @@ export default {
                 },
                 {
                     text: "No. Seri",
-                    value: "seri",
+                    value: "no_seri",
                 },
                 {
                     text: "Hasil",
-                    value: "jenis",
+                    value: "status",
                 }
             ]
-        };
+        }
     },
     methods: {
+        closeModal() {
+            $(".modalRiwayatSeri").modal("hide");
+            this.$nextTick(() => {
+                this.$emit("close");
+            });
+        },
         clickFilterHasil(filter) {
             if (this.filterHasil.includes(filter)) {
                 this.filterHasil = this.filterHasil.filter(
@@ -35,19 +41,15 @@ export default {
                 this.filterHasil.push(filter);
             }
         },
-        closeModal() {
-            $(".modalRiwayatSeri").modal("hide");
-            this.$emit("close");
-        },
         statusText(text) {
             if (typeof text == "string") {
                 text = text.toLowerCase();
             }
             switch (text) {
-                case "lolos_kalibrasi":
+                case "ok":
                     return "lolos kalibrasi";
                     break;
-                case "tidak_lolos_kalibrasi":
+                case "not_ok":
                     return "tidak lolos kalibrasi";
                     break;
                 case "lolos_pengujian":
@@ -68,7 +70,7 @@ export default {
             if (this.filterHasil.length > 0) {
                 this.filterHasil.forEach((filter) => {
                     filtered = filtered.concat(
-                        this.noseri.filter((data) => data.jenis == filter)
+                        this.noseri.filter((item) => item.status == filter)
                     );
                 });
             } else {
@@ -83,11 +85,10 @@ export default {
         },
         getAllStatusUnique() {
             return [
-                ...new Set(this.noseri.map((item) => item.jenis)),
-            ];
-        },
-    },
-};
+                ...new Set(this.noseri.map((item) => item.status))]
+        }
+    }
+}
 </script>
 <template>
     <div class="modal fade modalRiwayatSeri" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
@@ -136,10 +137,9 @@ export default {
                             <input type="text" class="form-control" placeholder="Cari..." v-model="search" />
                         </div>
                     </div>
-
                     <data-table :headers="headers" :items="filteredDalamProses" :search="search">
-                        <template #item.jenis="{ item }">
-                            <hasil :hasil="item.jenis" />
+                        <template #item.status="{ item }">
+                            <hasil :hasil="item.status" />
                         </template>
                     </data-table>
                 </div>

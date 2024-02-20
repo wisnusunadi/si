@@ -1,5 +1,5 @@
 <script>
-import produk from './qc/produk.vue'
+import produk from './produk.vue'
 export default {
     components: {
         produk
@@ -30,10 +30,6 @@ export default {
                 {
                     text: 'Tanggal Transfer',
                     value: 'tgl_transfer'
-                },
-                {
-                    text: 'Jenis Transaksi',
-                    value: 'jenis_transaksi'
                 },
                 {
                     text: 'Aksi',
@@ -103,7 +99,7 @@ export default {
                 <input type="text" class="form-control" v-model="search" placeholder="Cari" />
             </div>
         </div>
-        <produk v-if="modal" :headerSO="selectedProduk" />
+        <produk v-if="modal" @close="modal = false" :headerSO="selectedProduk" />
         <data-table :headers="headers" :items="dataRiwayat" :search="search" v-if="!$store.state.loading">
             <template #item.aksi="{ item }">
                 <div>

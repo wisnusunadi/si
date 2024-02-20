@@ -172,7 +172,6 @@
                                                         <th>No</th>
                                                         <th>No SO</th>
                                                         <th>No PO</th>
-                                                        <th>Jenis</th>
                                                         <th>Batas Pengiriman</th>
                                                         <th>Customer</th>
                                                         <th>Keterangan</th>
@@ -365,12 +364,6 @@
                     {
                         data: 'no_po',
                         className: 'nowrap-text'
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, row, meta) {
-                            return 'Internal'
-                        }
                     },
                     {
                         data: 'batas',

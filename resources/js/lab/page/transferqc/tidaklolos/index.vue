@@ -16,7 +16,6 @@ export default {
             dataTable: [],
             modal: false,
             selectedSO: null,
-            produkSelected: [],
         };
     },
     methods: {
@@ -25,7 +24,10 @@ export default {
         },
         transfer(data) {
             this.selectedSO = data;
-            this.getProduk(data.id);
+            this.modal = true;
+            this.$nextTick(() => {
+                $(".modalProduk").modal("show");
+            });
         },
         async getData() {
             try {
@@ -38,18 +40,6 @@ export default {
                 console.log(error);
             } finally {
                 this.$store.dispatch("setLoading", false);
-            }
-        },
-        async getProduk(id) {
-            try {
-                const { data } = await axios.get(`/api/qc/tf/data/nok/${id}`);
-                this.produkSelected = data
-                this.modal = true;
-                this.$nextTick(() => {
-                    $(".modalProduk").modal("show");
-                });
-            } catch (error) {
-                console.log(error);
             }
         },
     },
@@ -71,7 +61,7 @@ export default {
 </script>
 <template>
     <div v-if="!$store.state.loading">
-        <produk v-if="modal" @close="modal = false" :headerSO="selectedSO" :produk="produkSelected" @refresh="getData" />
+        <produk v-if="modal" @close="modal = false" :headerSO="selectedSO" @refresh="getData" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <div class="input-group">

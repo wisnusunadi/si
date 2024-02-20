@@ -4,7 +4,7 @@
             <th>No</th>
             <th>No Order</th>
             <th>Tgl Masuk</th>
-            <th>Nama Alamat</th>
+            <th>Nama Alat</th>
             <th>Type</th>
             <th>No Seri</th>
             <th>Nama Pemilik</th>

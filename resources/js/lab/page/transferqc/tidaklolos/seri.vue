@@ -1,117 +1,59 @@
 <script>
-function checkAll(checkboxName, condition) {
-    var checkboxes = this.$refs[checkboxName];
-    var checked = true;
-    for (var i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i].value.includes(condition)) {
-            if (!checkboxes[i].checked) {
-                checked = false;
-                break;
-            }
-        }
-    }
-    for (var i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i].value.includes(condition)) {
-            checkboxes[i].checked = !checked;
-        }
-    }
-}
-
-import pagination from "../../../components/pagination.vue";
+import axios from 'axios';
+import seriviatext from "../../kalibrasi/kalibrasi_internal/detail/modalchecked.vue";
 export default {
     components: {
-        pagination,
+        seriviatext,
     },
-    props: ["produk", "noseri"],
+    props: ["produk"],
     data() {
         return {
             search: "",
-            renderPaginate: [],
             filterHasil: [],
-            checkModel: false,
+            headers: [
+                {
+                    text: "No",
+                    value: "no",
+                },
+                {
+                    text: "Nomor Seri",
+                    value: "seri",
+                },
+                {
+                    text: "Hasil",
+                    value: "hasil",
+                }
+            ],
+            checkAll: false,
+            noseri: [],
+            noseriSelected: [],
+            modalseriviatext: false,
         };
     },
     methods: {
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
         closeModal() {
             $(".modalSeri").modal("hide");
             this.$emit("close");
         },
         selectNoSeri(noseri) {
-            if (this.produk.noseri) {
-                if (this.produk.noseri.find((data) => data.seri === noseri.seri)) {
-                    this.produk.noseri = this.produk.noseri.filter(
-                        (data) => data.seri !== noseri.seri
-                    );
-                    this.$refs.checkAll.checked = false;
-                    this.checkModel = false;
-                } else {
-                    this.produk.noseri.push(noseri);
-                }
+            if (this.noseriSelected.find((data) => data.id === noseri.id)) {
+                this.noseriSelected = this.noseriSelected.filter(
+                    (data) => data.id !== noseri.id
+                );
             } else {
-                this.produk.noseri = [];
-                this.produk.noseri.push(noseri);
-            }
-
-            if (this.produk.noseri.length === this.noseri.length) {
-                this.$refs.checkAll.checked = true;
-                this.checkModel = true;
+                this.noseriSelected.push(noseri);
             }
         },
-        checkAll() {
-            if (this.filterHasil.length > 0) {
-                if (!this.checkModel) {
-                    if (!this.produk.noseri) {
-                        this.produk.noseri = [];
-                    }
-                    this.renderPaginate.forEach((data) => {
-                        this.produk.noseri.push(data);
-                    });
-                    checkAll.call(this, "noseri", "");
-                } else {
-                    this.renderPaginate.forEach((data) => {
-                        this.produk.noseri = this.produk.noseri.filter(
-                            (item) => item.seri !== data.seri
-                        );
-                    });
-                }
-            } else if (this.produk.noseri) {
-                if (this.produk.noseri.length === this.noseri.length) {
-                    this.produk.noseri = [];
-                    checkAll.call(this, "noseri", "");
-                } else {
-                    this.produk.noseri = [];
-                    this.noseri.forEach((data) => {
-                        this.produk.noseri.push(data);
-                    });
-                    checkAll.call(this, "noseri", "");
-                }
+        checkedAll() {
+            this.checkAll = !this.checkAll;
+            if (this.checkAll) {
+                this.noseriSelected = JSON.parse(JSON.stringify(this.noseri));
             } else {
-                this.produk.noseri = [];
-                this.noseri.forEach((data) => {
-                    this.produk.noseri.push(data);
-                });
-                checkAll.call(this, "noseri", "");
-            }
-        },
-        checkNoSeriCheckAll() {
-            if (this.produk.noseri) {
-                if (this.produk.noseri.length === this.noseri.length) {
-                    this.$refs.checkAll.checked = true;
-                    this.checkModel = true;
-                } else {
-                    this.$refs.checkAll.checked = false;
-                    this.checkModel = false;
-                }
-            } else {
-                this.$refs.checkAll.checked = false;
-                this.checkModel = false;
+                this.noseriSelected = [];
             }
         },
         simpan() {
-            if (!this.produk.noseri || this.produk.noseri.length === 0) {
+            if (this.noseriSelected.length == 0) {
                 this.$swal(
                     "Peringatan",
                     "Pilih nomor seri terlebih dahulu",
@@ -121,7 +63,7 @@ export default {
             }
 
             // nomor seri lebih dari jumlah
-            if (this.produk.noseri.length > this.produk.jumlah) {
+            if (this.noseriSelected.length > this.produk.jumlah) {
                 this.$swal(
                     "Peringatan",
                     "Jumlah nomor seri lebih dari jumlah produk",
@@ -130,29 +72,26 @@ export default {
                 return;
             }
 
-            this.$emit("simpan", this.produk);
+            const produk = {
+                ...this.produk,
+                noseri: this.noseriSelected,
+            };
+
+            this.$emit("simpan", produk);
         },
         hasil_noseri(text) {
             switch (text) {
                 case "tidak_lolos_pengujian":
-                    return "<i class='fas fa-times text-warning'></i>";
+                    return {
+                        icon: "<i class='fas fa-times text-warning'></i>",
+                        text: "Tidak Lolos Pengujian",
+                    };
 
                 default:
-                    return "<i class='fas fa-times text-danger'></i>";
-                    break;
-            }
-        },
-        statusText(text) {
-            if (typeof text == "string") {
-                text = text.toLowerCase();
-            }
-            switch (text) {
-                case "tidak_lolos_pengujian":
-                    return "Tidak Lolos Pengujian";
-                    break;
-                default:
-                    return "Tidak Lolos Kalibrasi";
-                    break;
+                    return {
+                        icon: "<i class='fas fa-times text-pink'></i>",
+                        text: "Tidak Lolos Kalibrasi",
+                    }
             }
         },
         clickFilterHasil(filter) {
@@ -163,15 +102,58 @@ export default {
             } else {
                 this.filterHasil.push(filter);
             }
-
-            if (this.filterHasil.length == 0) {
-                if (this.noseri.length == this.produk.noseri.length) {
-                    this.$refs.checkAll.checked = true;
-                } else {
-                    this.$refs.checkAll.checked = false;
-                }
+        },
+        async getData() {
+            try {
+                const { data } = await axios.get(`/api/qc/tf/data_seri/nok/${this.produk.id}`);
+                this.noseri = data
+            } catch (error) {
+                console.log(error);
             }
         },
+        openModalSeriViaText() {
+            this.modalseriviatext = true;
+            this.$nextTick(() => {
+                $(".modalChecked").modal("show");
+                $(".modalSeri").modal("hide");
+            });
+        },
+        closeModalSeriViaText() {
+            this.modalseriviatext = false;
+            this.$nextTick(() => {
+                $(".modalChecked").modal("hide");
+                $(".modalSeri").modal("show");
+            });
+        },
+        submit(noseri) {
+            let noserinotfound = []
+            let noseriarray = noseri.split(/[\n, \t]/)
+            noseriarray = noseriarray.filter((data) => data !== "")
+            noseriarray = [...new Set(noseriarray)]
+            for (let i = 0; i < noseriarray.length; i++) {
+                let found = false
+                for (let j = 0; j < this.noseri.length; j++) {
+                    if (noseriarray[i] === this.noseri[j].seri) {
+                        this.selectNoSeri(this.noseri[j])
+                        found = true
+                        break
+                    }
+                }
+                if (!found) {
+                    noserinotfound.push(noseriarray[i])
+                }
+            }
+
+            noserinotfound = [...new Set(noserinotfound)]
+
+            if (noserinotfound.length > 0) {
+                this.$swal(
+                    "Peringatan",
+                    `Nomor seri ${noserinotfound.join(", ")} tidak ditemukan`,
+                    "warning"
+                );
+            }
+        }
     },
     computed: {
         filteredDalamProses() {
@@ -179,129 +161,115 @@ export default {
             if (this.filterHasil.length > 0) {
                 this.filterHasil.forEach((filter) => {
                     filtered = filtered.concat(
-                        this.noseri.filter((data) => data.hasil == filter)
+                        this.noseri.filter((data) => data.jenis == filter)
                     );
                 });
             } else {
                 filtered = this.noseri;
             }
 
-            return filtered.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key])
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase());
-                });
-            });
+            return filtered
         },
         getAllStatusUnique() {
             return this.noseri
                 .map((hasil) => {
-                    return hasil.hasil;
+                    return hasil.jenis;
                 })
                 .filter((value, index, self) => {
                     return self.indexOf(value) === index;
                 });
         },
     },
-    mounted() {
-        this.checkNoSeriCheckAll();
+    watch: {
+        noseriSelected() {
+            if (this.noseriSelected.length === this.noseri.length) {
+                this.checkAll = true;
+            } else {
+                this.checkAll = false;
+            }
+        }
+    },
+    created() {
+        this.getData();
     },
 };
 </script>
 <template>
-    <div class="modal fade modalSeri" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detail Produk</h5>
-                    <button type="button" class="close" @click="closeModal">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="d-flex bd-highlight">
-                        <div class="p-2 flex-grow-1 bd-highlight">
-                            <span class="float-left filter">
-                                <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    <i class="fas fa-filter"></i> Filter
+    <div>
+        <seriviatext v-if="modalseriviatext" @close="closeModalSeriViaText" @submit="submit" />
+        <div class="modal fade modalSeri" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detail Produk</h5>
+                        <button type="button" class="close" @click="closeModal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex bd-highlight">
+                            <div class="p-2 flex-grow-1 bd-highlight">
+                                <button class="btn btn-sm btn-primary" @click="openModalSeriViaText">
+                                    Pilih Nomor Seri Via Text
                                 </button>
-                                <form id="filter_ekat">
-                                    <div class="dropdown-menu">
-                                        <div class="px-3 py-3">
-                                            <div class="form-group">
-                                                <label for="jenis_penjualan">Keterangan</label>
-                                            </div>
-                                            <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" :ref="status"
-                                                        :value="status" id="status1" @click="
-                                                            clickFilterHasil(
-                                                                status
-                                                            )
-                                                            " />
-                                                    <label class="form-check-label text-uppercase" for="status1">
-                                                        {{ statusText(status) }}
-                                                    </label>
+                                <span class="filter">
+                                    <button class="btn btn-outline-info btn-sm" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        <i class="fas fa-filter"></i> Filter
+                                    </button>
+                                    <form id="filter_ekat">
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Keterangan</label>
+                                                </div>
+                                                <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" :ref="status"
+                                                            :value="status" id="status1" @click="
+                                                                clickFilterHasil(
+                                                                    status
+                                                                )
+                                                                " />
+                                                        <label class="form-check-label text-uppercase" for="status1">
+                                                            {{ hasil_noseri(status).text }}
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </form>
-                            </span>
-                        </div>
-                        <div class="p-2 bd-highlight">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Cari..." v-model="search" />
+                                    </form>
+                                </span>
+                            </div>
+                            <div class="p-2 bd-highlight">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Cari..." v-model="search" />
+                                </div>
                             </div>
                         </div>
+                        <data-table :headers="headers" :items="filteredDalamProses" :search="search">
+                            <template #header.no>
+                                <input type="checkbox" :checked="checkAll" @click="checkedAll">
+                            </template>
+                            <template #item.no="{ item }">
+                                <input type="checkbox" :checked="noseriSelected && noseriSelected.find(
+                                    (data) => data.id === item.id
+                                )" @click="selectNoSeri(item)" />
+                            </template>
+                            <template #item.hasil="{ item }">
+                                <span v-html="hasil_noseri(item.jenis).icon"></span>
+                            </template>
+                        </data-table>
                     </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input type="checkbox" @click="checkAll" ref="checkAll" v-model="checkModel"
-                                        :checked="checkModel" />
-                                </th>
-                                <th>Nomor Seri</th>
-                                <th>Hasil</th>
-                            </tr>
-                        </thead>
-                        <tbody v-if="renderPaginate.length > 0">
-                            <tr v-for="(data, index) in renderPaginate" :key="index">
-                                <td>
-                                    <input type="checkbox" ref="noseri" :checked="produk.noseri &&
-                                        produk.noseri.find(
-                                            (item) => item.seri == data.seri
-                                        )
-                                        " @click="selectNoSeri(data)" />
-                                </td>
-                                <td>{{ data.seri }}</td>
-                                <td>
-                                    <span v-html="hasil_noseri(data.hasil)"></span>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tbody v-else>
-                            <tr>
-                                <td colspan="2" class="text-center">
-                                    Data tidak ditemukan
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <pagination :filteredDalamProses="filteredDalamProses"
-                        @updateFilteredDalamProses="updateFilteredDalamProses" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="closeModal">
-                        Keluar
-                    </button>
-                    <button type="button" class="btn btn-primary" @click="simpan">
-                        Simpan
-                    </button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="closeModal">
+                            Keluar
+                        </button>
+                        <button type="button" class="btn btn-primary" @click="simpan">
+                            Simpan
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

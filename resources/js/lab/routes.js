@@ -26,6 +26,11 @@ import ChangeUnit from "./page/transfergbj";
 
 const routes = [
     {
+        path: '/lab/laporan',
+        component: () => import('./page/laporan'),
+        name: 'laporan'
+    },
+    {
         path: "/lab/kalibrasi",
         component: Kalibrasi,
         name: "kalibrasi"
