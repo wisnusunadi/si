@@ -1575,7 +1575,7 @@
                                                                     </tbody>
                                                                     <tfoot>
                                                                         <tr>
-                                                                            <th colspan="4" style="text-align:right;">
+                                                                            <th colspan="5" style="text-align:right;">
                                                                                 Total Harga</th>
                                                                             <th id="totalhargaprd" class="align-right">Rp.
                                                                                 @if (isset($e->pesanan))
