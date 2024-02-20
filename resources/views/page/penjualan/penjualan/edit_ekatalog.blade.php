@@ -94,13 +94,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                                                                .row {
-                                                                                                                                                                                                                                                                                                                                                    font-size: 12px;
-                                                                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                            .row {
+                                                                                                                                                                                                                                                                                                                                                                font-size: 12px;
+                                                                                                                                                                                                                                                                                                                                                            }
 
-                                                                                                                                                                                                                                                                                                                                                h4 {
-                                                                                                                                                                                                                                                                                                                                                    font-size: 20px;
-                                                                                                                                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                                                                            h4 {
+                                                                                                                                                                                                                                                                                                                                                                font-size: 20px;
+                                                                                                                                                                                                                                                                                                                                                            } */
             body {
                 font-size: 12px;
             }
@@ -121,13 +121,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                                                                .row {
-                                                                                                                                                                                                                                                                                                                                                    font-size: 12px;
-                                                                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                            .row {
+                                                                                                                                                                                                                                                                                                                                                                font-size: 12px;
+                                                                                                                                                                                                                                                                                                                                                            }
 
-                                                                                                                                                                                                                                                                                                                                                h4 {
-                                                                                                                                                                                                                                                                                                                                                    font-size: 20px;
-                                                                                                                                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                                                                            h4 {
+                                                                                                                                                                                                                                                                                                                                                                font-size: 20px;
+                                                                                                                                                                                                                                                                                                                                                            } */
             body {
                 font-size: 12px;
             }
@@ -207,20 +207,6 @@
             @endif
             <div class="row justify-content-center">
                 <div class="col-12">
-                    @php
-                        $years = \App\Models\AktifPeriode::first()->tahun;
-                        $isOpen = false;
-                        if ($years != \Carbon\Carbon::now()->year) {
-                            $isOpen = true;
-                        }
-                        $maxDate = $isOpen ? \Carbon\Carbon::parse($years . '-12-31')->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d');
-                    @endphp
-                    @if ($isOpen)
-                        <div class="alert alert-danger" role="alert">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            Periode yang dibuka saat ini adalah periode {{ $years }}
-                        </div>
-                    @endif
                     <div class="card" id="ekatalog">
                         <div class="card-body">
                             <h4 class="margin">Data Penjualan </h4>
@@ -402,7 +388,7 @@
                         <div class="card-title">Form Ubah Data</div>
                     </div>
                     <div class="card-body">
-                        @if (session()->has('error') || count($errors) > 0)
+                        {{-- @if (session()->has('error') || count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <strong>Gagal mengubah data!</strong> Periksa
                                 kembali data yang diinput
@@ -418,11 +404,9 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                        @endif
+                        @endif --}}
                         <div class="content">
                             <form method="post" autocomplete="off"
-                                action="{{ route('penjualan.penjualan.update_ekatalog', ['id' => $e->id]) }}"
-                                id="edit_penjualan">
                                 action="{{ route('penjualan.penjualan.update_ekatalog', ['id' => $e->id]) }}"
                                 id="edit_penjualan">
                                 {{ csrf_field() }}
@@ -537,7 +521,7 @@
                                                                 aria-controls="pills-produk" aria-selected="false">Rencana
                                                                 Penjualan</a>
                                                         </li> --}}
-                                                    </li> --}}
+                                                    {{-- </li> --}}
                                                 </ul>
 
                                                 <div class="form-horizontal">
@@ -627,9 +611,9 @@
                                                                             class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
                                                                         <div class="col-lg-5 col-md-12 col-form-label">
                                                                             <!-- <div class="form-check form-check-inline">
-                                                                                                                                                                                                                                                                                                                                                                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
-                                                                                                                                                                                                                                                                                                                                                                                                                        <label class="form-check-label" for="status_akn4">Draft</label>
-                                                                                                                                                                                                                                                                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <label class="form-check-label" for="status_akn4">Draft</label>
+                                                                                                                                                                                                                                                                                                                                                                                                                                </div> -->
                                                                             <div class="form-check form-check-inline">
                                                                                 <input class="form-check-input"
                                                                                     type="radio" name="status_akn"
@@ -690,7 +674,6 @@
                                                                                 class="form-control col-form-label @error('tgl_buat') is-invalid @enderror"
                                                                                 name="tgl_buat" id="tgl_buat"
                                                                                 max="{{ $maxDate }}"
-                                                                                max="{{ $maxDate }}"
                                                                                 value="{{ $e->tgl_buat }}" />
                                                                             <div class="invalid-feedback"
                                                                                 id="msgtgl_buat">
@@ -708,7 +691,6 @@
                                                                             <input type="date"
                                                                                 class="form-control col-form-label @error('tgl_edit') is-invalid @enderror"
                                                                                 name="tgl_edit" id="tgl_edit"
-                                                                                max="{{ $maxDate }}"
                                                                                 max="{{ $maxDate }}"
                                                                                 value="{{ $e->tgl_edit }}" />
                                                                             <div class="invalid-feedback"
@@ -771,7 +753,6 @@
                                                                                 class="form-control @error('tanggal_po_ekat') is-invalid @enderror"
                                                                                 max="{{ $maxDate }}"
                                                                                 value="{{ $e->Pesanan->tgl_po }}"
-                                                                                max="{{ $maxDate }}"
                                                                                 placeholder="Masukkan Tanggal Purchase Order"
                                                                                 id="tanggal_po_ekat"
                                                                                 name="tanggal_po_ekat" />
@@ -1732,8 +1713,8 @@
                                                                 <div class="custom-control custom-switch">
                                                                     <input type="checkbox"
                                                                         class="custom-control-input produk_kalibrasi custom-control-input-kalibrasi"
-                                                                        id="produk_kalibrasi0"
-                                                                        name="produk_kalibrasi[0]" value="0">
+                                                                        id="produk_kalibrasi0" name="produk_kalibrasi[0]"
+                                                                        value="0">
                                                                     <label
                                                                         class="custom-control-label produk_kalibrasi_label custom-control-label-kalibrasi"
                                                                         for="produk_kalibrasi0">Tidak</label>
