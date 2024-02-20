@@ -1240,6 +1240,12 @@ return [
             'url'  => '/lab/transfer',
             'auth' => [22],
         ],
+        [
+            'icon' => 'fa fa-book-open',
+            'text' => 'Laporan',
+            'url'  => '/lab/laporan',
+            'auth' => [22],
+        ],
         // sertifikasi kalibrasi
         [
             'header' => 'Sertifikasi Kalibrasi',

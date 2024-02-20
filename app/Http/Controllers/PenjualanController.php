@@ -8981,55 +8981,55 @@ class PenjualanController extends Controller
 
         //GET SPAREPART
         $detail_pesanan_part = DetailPesananPart::select(
-                'detail_pesanan_part.id',
-                'detail_pesanan_part.pesanan_id',
-                'detail_pesanan_part.m_sparepart_id',
-                'm_sparepart.nama',
-                'm_sparepart.nama as item',
-                'detail_pesanan_part.harga',
-                'detail_pesanan_part.jumlah',
-                'detail_pesanan_part.ongkir',
-            )
+            'detail_pesanan_part.id',
+            'detail_pesanan_part.pesanan_id',
+            'detail_pesanan_part.m_sparepart_id',
+            'm_sparepart.nama',
+            'm_sparepart.nama as item',
+            'detail_pesanan_part.harga',
+            'detail_pesanan_part.jumlah',
+            'detail_pesanan_part.ongkir',
+        )
             ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
             ->whereIN('detail_pesanan_part.pesanan_id', $data->pluck('id')->toArray())->get();
 
 
         //GET DETAIL PESANAN DSB
         $detail_pesanan_dsb = DetailPesananDsb::select(
-                'detail_pesanan_dsb.id',
-                'detail_pesanan_dsb.pesanan_id',
-                'detail_pesanan_dsb.penjualan_produk_id',
-                'penjualan_produk.nama as nama',
-                'penjualan_produk.nama_alias as nama_alias',
-                'detail_pesanan_dsb.harga',
-                'detail_pesanan_dsb.jumlah',
-                'detail_pesanan_dsb.ongkir',
-                DB::raw('(SELECT GROUP_CONCAT(CONCAT(produk.nama," ", gdg_barang_jadi.nama))
+            'detail_pesanan_dsb.id',
+            'detail_pesanan_dsb.pesanan_id',
+            'detail_pesanan_dsb.penjualan_produk_id',
+            'penjualan_produk.nama as nama',
+            'penjualan_produk.nama_alias as nama_alias',
+            'detail_pesanan_dsb.harga',
+            'detail_pesanan_dsb.jumlah',
+            'detail_pesanan_dsb.ongkir',
+            DB::raw('(SELECT GROUP_CONCAT(CONCAT(produk.nama," ", gdg_barang_jadi.nama))
     FROM detail_pesanan_produk_dsb AS dpp
     LEFT JOIN gdg_barang_jadi ON gdg_barang_jadi.id = dpp.gudang_barang_jadi_id
     LEFT JOIN produk ON gdg_barang_jadi.produk_id = produk.id
     WHERE dpp.detail_pesanan_dsb_id = detail_pesanan_dsb.id ) AS item')
-            )
+        )
             ->leftJoin('penjualan_produk', 'penjualan_produk.id', '=', 'detail_pesanan_dsb.penjualan_produk_id')
             ->whereIN('detail_pesanan_dsb.pesanan_id', $data->pluck('id')->toArray())->get();
 
 
         //GET DETAIL PESANAN
         $detail_pesanan = DetailPesanan::select(
-                'detail_pesanan.id',
-                'detail_pesanan.pesanan_id',
-                'detail_pesanan.penjualan_produk_id',
-                'penjualan_produk.nama as nama',
-                'penjualan_produk.nama_alias as nama_alias',
-                'detail_pesanan.harga',
-                'detail_pesanan.jumlah',
-                'detail_pesanan.ongkir',
-                DB::raw('(SELECT GROUP_CONCAT(CONCAT(produk.nama," ", gdg_barang_jadi.nama))
+            'detail_pesanan.id',
+            'detail_pesanan.pesanan_id',
+            'detail_pesanan.penjualan_produk_id',
+            'penjualan_produk.nama as nama',
+            'penjualan_produk.nama_alias as nama_alias',
+            'detail_pesanan.harga',
+            'detail_pesanan.jumlah',
+            'detail_pesanan.ongkir',
+            DB::raw('(SELECT GROUP_CONCAT(CONCAT(produk.nama," ", gdg_barang_jadi.nama))
     FROM detail_pesanan_produk AS dpp
     LEFT JOIN gdg_barang_jadi ON gdg_barang_jadi.id = dpp.gudang_barang_jadi_id
     LEFT JOIN produk ON gdg_barang_jadi.produk_id = produk.id
     WHERE dpp.detail_pesanan_id = detail_pesanan.id ) AS item')
-            )
+        )
             ->leftJoin('penjualan_produk', 'penjualan_produk.id', '=', 'detail_pesanan.penjualan_produk_id')
             ->whereIN('detail_pesanan.pesanan_id', $data->pluck('id')->toArray())->get();
 

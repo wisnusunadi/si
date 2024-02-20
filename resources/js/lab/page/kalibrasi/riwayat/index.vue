@@ -14,10 +14,6 @@ export default {
                     value: 'no_order'
                 },
                 {
-                    text: 'No Sertifikat',
-                    value: 'no_sertifikat'
-                },
-                {
                     text: 'Nama Pemilik',
                     value: 'nama_pemilik'
                 },
@@ -66,9 +62,6 @@ export default {
                 $('.modalProduk').modal('show');
             })
         },
-        exportLaporan() {
-            window.open(`/labs/export_laporan?years=${this.years}`, '_blank');
-        }
     },
     computed: {
         // get 5 years from now
@@ -111,9 +104,6 @@ export default {
                             </div>
                         </form>
                     </span>
-                    <button class="btn btn-sm btn-success ml-2" @click="exportLaporan">
-                        <i class="fas fa-file-excel"></i> Export
-                    </button>
                 </div>
                 <div class="p-2 bd-highlight">
                     <input type="text" class="form-control" v-model="search" placeholder="Cari" />

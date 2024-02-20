@@ -57,7 +57,12 @@ export default {
                     return {
                         ...item,
                         tgl: this.formatDate(item.tgl_transfer),
-                        jenis_transfer: 'Internal'
+                        detail: item.detail.map((detail, index) => {
+                            return {
+                                ...detail,
+                                no: index + 1,
+                            };
+                        }),
                     }
                 });
 

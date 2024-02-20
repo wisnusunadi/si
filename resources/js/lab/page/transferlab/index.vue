@@ -4,7 +4,7 @@ import Header from "../../components/header.vue";
 import produk from "./produk.vue";
 import loading from '../../components/loading.vue';
 import axios from 'axios';
-import riwayat from "./riwayat.vue";
+import riwayat from "./riwayat/index.vue";
 export default {
     components: {
         pagination,
@@ -80,7 +80,6 @@ export default {
                     return {
                         ...item,
                         tgl_transfer: this.formatDate(item.tgl_transfer),
-                        jenis_transaksi: 'internal',
                         detail: item.detail.map((produk, index) => {
                             return {
                                 ...produk,

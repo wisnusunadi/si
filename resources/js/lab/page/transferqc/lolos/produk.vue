@@ -1,10 +1,8 @@
 <script>
-import pagination from "../../../components/pagination.vue";
 import seri from "./seri.vue";
 import axios from "axios";
 export default {
     components: {
-        pagination,
         seri,
     },
     props: {
@@ -12,25 +10,34 @@ export default {
             type: Object,
             required: true,
         },
-        produk: {
-            type: Array,
-            required: true,
-            default: () => [],
-        },
     },
     data() {
         return {
             search: "",
-            renderPaginate: [],
             modalSeri: false,
             produkSelected: null,
-            nomorSeri: [],
+            produk: [],
+            headers: [
+                {
+                    text: "No",
+                    value: "no",
+                },
+                {
+                    text: "Produk",
+                    value: "nama",
+                },
+                {
+                    text: "Jumlah",
+                    value: "jumlah",
+                },
+                {
+                    text: "Aksi",
+                    value: "aksi",
+                },
+            ]
         };
     },
     methods: {
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
         closeModal() {
             $(".modalProduk").modal("hide");
             this.$emit("close");
@@ -38,19 +45,10 @@ export default {
         detailNoSeri(data) {
             $(".modalProduk").modal("hide");
             this.produkSelected = JSON.parse(JSON.stringify(data));
-            this.getNoSeri(data.id);
-        },
-        async getNoSeri(id) {
-            try {
-                const { data } = await axios.get(`/api/qc/tf/data_seri/ok/${id}`);
-                this.nomorSeri = data;
-                this.modalSeri = true;
-                this.$nextTick(() => {
-                    $(".modalSeri").modal("show");
-                });
-            } catch (error) {
-                console.log(error);
-            }
+            this.modalSeri = true;
+            this.$nextTick(() => {
+                $(".modalSeri").modal("show");
+            });
         },
         closeModalSeri() {
             $(".modalSeri").modal("hide");
@@ -96,26 +94,28 @@ export default {
                 this.$swal('Error', error.response.data.message, 'error');
             }
         },
-
-    },
-    computed: {
-        filteredDalamProses() {
-            if (this.produk) {
-                return this.produk.filter((data) => {
-                    return Object.keys(data).some((key) => {
-                        return String(data[key])
-                            .toLowerCase()
-                            .includes(this.search.toLowerCase());
-                    });
+        async getData() {
+            try {
+                const { data } = await axios.get(`/api/qc/tf/data/ok/${this.headerSO.id}`);
+                this.produk = data.map((data, index) => {
+                    return {
+                        no: index + 1,
+                        ...data,
+                    };
                 });
+            } catch (error) {
+                console.log(error);
             }
-        },
+        }
+    },
+    created() {
+        this.getData();
     },
 };
 </script>
 <template>
     <div v-if="!$store.state.loading">
-        <seri v-if="modalSeri" @close="closeModalSeri" :noseri="nomorSeri" :produk="produkSelected" @simpan="simpanSeri" />
+        <seri v-if="modalSeri" @close="closeModalSeri" :produk="produkSelected" @simpan="simpanSeri" />
         <div class="modal fade modalProduk" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -171,41 +171,17 @@ export default {
                                         </div>
                                     </div>
                                 </div>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Produk</th>
-                                            <th>Jumlah</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody v-if="renderPaginate.length > 0">
-                                        <tr v-for="(
-                                                data, index
-                                            ) in renderPaginate" :key="index">
-                                            <td>{{ index + 1 }}</td>
-                                            <td>{{ data.nama }}</td>
-                                            <td>{{ data.jumlah }}</td>
-                                            <td>
-                                                <button @click="detailNoSeri(data)" class="btn btn-primary btn-sm"
-                                                    v-if="data.jenis === 'produk'">
-                                                    <i class="fa fa-qrcode"></i>
-                                                    Nomor Seri
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody v-else>
-                                        <tr>
-                                            <td colspan="5" class="text-center">
-                                                Data tidak ditemukan
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses
-                                    " />
+                                <data-table :headers="headers" :items="produk" :search="search">
+                                    <template #item.aksi="{ item }">
+                                        <div>
+                                            <button @click="detailNoSeri(item)" class="btn btn-primary btn-sm"
+                                                v-if="item.jenis === 'produk'">
+                                                <i class="fa fa-qrcode"></i>
+                                                Nomor Seri
+                                            </button>
+                                        </div>
+                                    </template>
+                                </data-table>
                             </div>
                         </div>
                     </div>

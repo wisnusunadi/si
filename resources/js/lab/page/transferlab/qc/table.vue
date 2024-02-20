@@ -27,10 +27,6 @@ export default {
                     sortable: false,
                 },
                 {
-                    text: "Jenis Transfer",
-                    value: "jenis_transfer",
-                },
-                {
                     text: "Aksi",
                     value: "aksi",
                 }

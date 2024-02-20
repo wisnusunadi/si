@@ -4240,7 +4240,7 @@ class GudangController extends Controller
     {
         $user = auth()->user()->id;
         $obj =  json_decode(json_encode($request->all()), FALSE);
-       // dd($obj);
+        // dd($obj);
         try {
             foreach ($obj->produk as $value) {
                 // $dpid = DetailPesananProduk::where('id', $key)->get()->pluck('detail_pesanan_id');
@@ -4276,7 +4276,7 @@ class GudangController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
-                'msg' => 'a'.$e->getMessage(),
+                'msg' => 'a' . $e->getMessage(),
             ]);
         }
     }
@@ -6076,7 +6076,7 @@ class GudangController extends Controller
     function riwayat_ganti_unit()
     {
         $data = SystemLog::where(['tipe' => 'GBJ', 'subjek' => 'Penggantian Noseri'])->get();
-
+        $obj = [];
         foreach ($data as $d) {
             $x = json_decode($d->response);
             $obj[] = array(
@@ -6089,7 +6089,9 @@ class GudangController extends Controller
             );
         }
 
-        return response()->json($obj);
+        return response()->json([
+            'data' => $obj
+        ]);
     }
 
 

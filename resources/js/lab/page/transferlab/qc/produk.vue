@@ -16,12 +16,8 @@ export default {
                     value: 'no'
                 },
                 {
-                    text: 'Nama Barang',
+                    text: 'Nama Produk',
                     value: 'nama'
-                },
-                {
-                    text: 'Tipe Barang',
-                    value: 'tipe'
                 },
                 {
                     text: 'Jumlah',
