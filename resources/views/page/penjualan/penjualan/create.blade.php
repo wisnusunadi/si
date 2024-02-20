@@ -579,7 +579,6 @@
                                                                                 {{-- if isOpenTrue set max date to end date of years --}}
                                                                                 max="{{ $maxDate }}"
                                                                                 name="tanggal_pemesanan"
-                                                                                max="{{ $maxDate }}"
                                                                                 id="tanggal_pemesanan" />
                                                                             <div class="invalid-feedback"
                                                                                 id="msgtanggal_pemesanan">
