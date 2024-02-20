@@ -95,13 +95,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                            .row {
-                                                font-size: 12px;
-                                            }
+                                                    .row {
+                                                        font-size: 12px;
+                                                    }
 
-                                            h4 {
-                                                font-size: 20px;
-                                            } */
+                                                    h4 {
+                                                        font-size: 20px;
+                                                    } */
             section {
                 font-size: 12px;
             }
@@ -122,13 +122,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                            .row {
-                                                font-size: 12px;
-                                            }
+                                                    .row {
+                                                        font-size: 12px;
+                                                    }
 
-                                            h4 {
-                                                font-size: 20px;
-                                            } */
+                                                    h4 {
+                                                        font-size: 20px;
+                                                    } */
             section {
                 font-size: 12px;
             }
@@ -160,20 +160,20 @@
             @php
                 $years = \App\Models\AktifPeriode::first()->tahun;
             @endphp
-@php
-                        $years = \App\Models\AktifPeriode::first()->tahun;
-                        $isOpen = false;
-                        if ($years != \Carbon\Carbon::now()->year) {
-                            $isOpen = true;
-                        }
-                        $maxDate = $isOpen ? \Carbon\Carbon::parse($years . '-12-31')->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d');
-                    @endphp
-                    @if ($isOpen)
-                        <div class="alert alert-danger" role="alert">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            Periode yang dibuka saat ini adalah periode {{ $years }}
-                        </div>
-                    @endif
+            @php
+                $years = \App\Models\AktifPeriode::first()->tahun;
+                $isOpen = false;
+                if ($years != \Carbon\Carbon::now()->year) {
+                    $isOpen = true;
+                }
+                $maxDate = $isOpen ? \Carbon\Carbon::parse($years . '-12-31')->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d');
+            @endphp
+            @if ($isOpen)
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Periode yang dibuka saat ini adalah periode {{ $years }}
+                </div>
+            @endif
             <div class="row justify-content-center">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
@@ -439,18 +439,6 @@
                                                 <div class="card-body">
                                                     <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab"
                                                         role="tablist">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row d-flex justify-content-center">
-                                        <div class="col-lg-10 col-md-12">
-                                            <h4>Info Penjualan</h4>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab"
-                                                        role="tablist">
                                                         <li class="nav-item" role="presentation">
                                                             <a class="nav-link active" id="pills-pononakn-tab"
                                                                 data-toggle="pill" href="#pills-pononakn" role="tab"
@@ -461,15 +449,10 @@
                                                             <a class="nav-link" id="pills-pengirimannonakn-tab"
                                                                 data-toggle="pill" href="#pills-pengirimannonakn"
                                                                 role="tab" aria-controls="pills-pengirimannonakn"
-                                                            <a class="nav-link" id="pills-pengirimannonakn-tab"
-                                                                data-toggle="pill" href="#pills-pengirimannonakn"
-                                                                role="tab" aria-controls="pills-pengirimannonakn"
                                                                 aria-selected="false">Pengiriman</a>
                                                         </li>
                                                     </ul>
                                                     <div class="tab-content" id="pills-tabContent">
-                                                        <div class="tab-pane fade show active" id="pills-pononakn"
-                                                            role="tabpanel" aria-labelledby="pills-pononakn-tab">
                                                         <div class="tab-pane fade show active" id="pills-pononakn"
                                                             role="tabpanel" aria-labelledby="pills-pononakn-tab">
                                                             <div class="form-group row">
@@ -488,8 +471,6 @@
                                                                         <input class="form-check-input" type="radio"
                                                                             name="do" id="no" value="no"
                                                                             {{ empty($e->Pesanan->no_do) ? 'checked' : '' }} />
-                                                                        <label class="form-check-label"
-                                                                            for="no">Tidak
                                                                         <label class="form-check-label"
                                                                             for="no">Tidak
                                                                             tersedia</label>
@@ -520,8 +501,7 @@
                                                                     class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
                                                                     DO</label>
                                                                 <div class="col-lg-4 col-md-7">
-                                                                    <input type="date"
-                                                                    max="{{ $maxDate }}"
+                                                                    <input type="date" max="{{ $maxDate }}"
                                                                         class="form-control col-form-label @error('tanggal_do') is-invalid @enderror"
                                                                         id="tanggal_do" name="tanggal_do"
                                                                         value="{{ $e->Pesanan->tgl_do }}" />
@@ -544,13 +524,8 @@
                                                         </div>
                                                         <div class="tab-pane fade" id="pills-pengirimannonakn"
                                                             role="tabpanel" aria-labelledby="pills-pengirimannonakn-tab">
-                                                        <div class="tab-pane fade" id="pills-pengirimannonakn"
-                                                            role="tabpanel" aria-labelledby="pills-pengirimannonakn-tab">
                                                             <div class="card-body">
                                                                 <div class="form-group row">
-                                                                    <label for=""
-                                                                        class="col-lg-5 col-md-12 col-form-label labelket">Alamat
-                                                                        Pengiriman</label>
                                                                     <label for=""
                                                                         class="col-lg-5 col-md-12 col-form-label labelket">Alamat
                                                                         Pengiriman</label>
@@ -562,12 +537,6 @@
                                                                             <label for="pengiriman0"
                                                                                 class="form-check-label">Sama dengan
                                                                                 Distributor</label>
-                                                                            <input type="radio" class="form-check-input"
-                                                                                name="pilihan_pengiriman_nonakn"
-                                                                                id="pengiriman0" value="distributor" />
-                                                                            <label for="pengiriman0"
-                                                                                class="form-check-label">Sama dengan
-                                                                                Distributor</label>
                                                                         </div>
                                                                         <div class="form-check form-check-inline">
                                                                             <input type="radio" class="form-check-input"
@@ -575,26 +544,13 @@
                                                                                 id="lainnya" value="lainnya" />
                                                                             <label for="lainnya"
                                                                                 class="form-check-label">Lainnya</label>
-                                                                            <input type="radio" class="form-check-input"
-                                                                                name="pilihan_pengiriman_nonakn"
-                                                                                id="lainnya" value="lainnya" />
-                                                                            <label for="lainnya"
-                                                                                class="form-check-label">Lainnya</label>
                                                                         </div>
                                                                         <input type="text"
                                                                             value="{{ $e->pesanan->tujuan_kirim }}"
                                                                             name="perusahaan_pengiriman_nonakn"
                                                                             id="perusahaan_pengiriman_nonakn"
                                                                             class="form-control col-form-label" readonly>
-                                                                            value="{{ $e->pesanan->tujuan_kirim }}"
-                                                                            name="perusahaan_pengiriman_nonakn"
-                                                                            id="perusahaan_pengiriman_nonakn"
-                                                                            class="form-control col-form-label" readonly>
                                                                         <input type="text"
-                                                                            value="{{ $e->pesanan->alamat_kirim }}"
-                                                                            class="form-control col-form-label mt-2 alamat_pengiriman_nonakn"
-                                                                            name="alamat_pengiriman"
-                                                                            id="alamat_pengiriman_nonakn" readonly />
                                                                             value="{{ $e->pesanan->alamat_kirim }}"
                                                                             class="form-control col-form-label mt-2 alamat_pengiriman_nonakn"
                                                                             name="alamat_pengiriman"
@@ -607,8 +563,6 @@
                                                                 <div class="form-group row">
                                                                     <label for=""
                                                                         class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
-                                                                    <label for=""
-                                                                        class="col-lg-5 col-md-12 col-form-label labelket">Kemasan</label>
                                                                     <div class="col-lg-6 col-md-12 col-form-label">
                                                                         <div class="form-check form-check-inline">
                                                                             <input type="radio" class="form-check-input"
@@ -617,20 +571,8 @@
                                                                                 @if ($e->pesanan->kemasan == 'peti') checked @endif />
                                                                             <label for="kemasan0"
                                                                                 class="form-check-label">PETI</label>
-                                                                            <input type="radio" class="form-check-input"
-                                                                                name="kemasan" id="kemasan0"
-                                                                                value="peti"
-                                                                                @if ($e->pesanan->kemasan == 'peti') checked @endif />
-                                                                            <label for="kemasan0"
-                                                                                class="form-check-label">PETI</label>
                                                                         </div>
                                                                         <div class="form-check form-check-inline">
-                                                                            <input type="radio" class="form-check-input"
-                                                                                name="kemasan" id="kemasan1"
-                                                                                value="nonpeti"
-                                                                                @if ($e->pesanan->kemasan == 'nonpeti') checked @endif />
-                                                                            <label for="kemasan1"
-                                                                                class="form-check-label">NON PETI</label>
                                                                             <input type="radio" class="form-check-input"
                                                                                 name="kemasan" id="kemasan1"
                                                                                 value="nonpeti"
@@ -643,18 +585,7 @@
                                                                 <div class="form-group row">
                                                                     <label for=""
                                                                         class="col-lg-5 col-md-12 col-form-label labelket">Ekspedisi</label>
-                                                                    <label for=""
-                                                                        class="col-lg-5 col-md-12 col-form-label labelket">Ekspedisi</label>
                                                                     <div class="col-lg-6 col-md-12 col-form-label">
-                                                                        <select name="ekspedisi" id="ekspedisi_nonakn"
-                                                                            class="form-control ekspedisi_nonakn">
-                                                                            @if ($e->pesanan->ekspedisi_id != null || $e->pesanan->ekspedisi_id != '')
-                                                                                <option
-                                                                                    value="{{ $e->pesanan->ekspedisi_id }}"
-                                                                                    selected>
-                                                                                    {{ $e->pesanan->Ekspedisi->nama }}
-                                                                                </option>
-                                                                            @endif
                                                                         <select name="ekspedisi" id="ekspedisi_nonakn"
                                                                             class="form-control ekspedisi_nonakn">
                                                                             @if ($e->pesanan->ekspedisi_id != null || $e->pesanan->ekspedisi_id != '')
@@ -670,8 +601,6 @@
                                                                 <div class="form-group row">
                                                                     <label for=""
                                                                         class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
-                                                                    <label for=""
-                                                                        class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
                                                                     <div class="col-lg-6 col-md-12 col-form-label">
                                                                         <textarea class="form-control col-form-label" name="keterangan_pengiriman">{{ $e->pesanan->ket_kirim }}</textarea>
                                                                     </div>
@@ -679,10 +608,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -732,89 +657,8 @@
                                                                         </thead>
 
                                                                         <tbody>
-                                                                        <tbody>
 
 
-                                                                            <?php
-                                                                            $produkpenjualan = 0;
-                                                                            $no = 1;
-                                                                            ?>
-                                                                            @if (count($item) > 0)
-                                                                                @foreach ($item as $f)
-                                                                                    <tr>
-                                                                                        <td>{{ $no++ }}</td>
-                                                                                        <td>
-                                                                                            <div
-                                                                                                class="form-group select_item">
-                                                                                                <select
-                                                                                                    name="penjualan_produk_id[]"
-                                                                                                    id="{{ $no - 2 }}"
-                                                                                                    class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror"
-                                                                                                    style="width:100%;">
-                                                                                                    <option
-                                                                                                        value="{{ $f['penjualan_produk_id'] }}"
-                                                                                                        selected>
-                                                                                                        {{ $f['nama'] }}
-                                                                                                    </option>
-                                                                                                </select>
-                                                                                            </div>
-                                                                                            <div class="detail_produk"
-                                                                                                id="detail_produk{{ $loop->iteration - 1 }}">
-                                                                                                <fieldset>
-                                                                                                    <legend><b>Detail
-                                                                                                            Produk</b>
-                                                                                                    </legend>
-                                                                                                    <?php $variasi = 0; ?>
-                                                                                                    @foreach ($f['detail'] as $g)
-                                                                                                        <div>
-                                                                                                            <div
-                                                                                                                class="card-body blue-bg">
-                                                                                                                <h6>{{ $g['nama'] }}
-                                                                                                                </h6>
-                                                                                                                <select
-                                                                                                                    class="form-control variasi"
-                                                                                                                    name="variasi[{{ $produkpenjualan }}][{{ $variasi }}]"
-                                                                                                                    id="variasi{{ $produkpenjualan }}{{ $variasi }}"
-                                                                                                                    style="width:100%;"
-                                                                                                                    data-attr="variasi{{ $variasi }}"
-                                                                                                                    data-id="{{ $variasi }}">
-                                                                                                                    <option
-                                                                                                                        value="{{ $g['gbj_id'] }}"
-                                                                                                                        selected>
-                                                                                                                        @if (!empty(trim($g['variasi'])))
-                                                                                                                            {{ $g['variasi'] }}
-                                                                                                                        @else
-                                                                                                                            {{ $g['nama'] }}
-                                                                                                                        @endif
-                                                                                                                    </option>
-                                                                                                                </select>
-                                                                                                                <span
-                                                                                                                    class=" invalid-feedback d-block ketstok"
-                                                                                                                    name="ketstok[{{ $produkpenjualan }}][{{ $variasi }}]"
-                                                                                                                    id="ketstok{{ $produkpenjualan }}{{ $variasi }}"
-                                                                                                                    data-attr="ketstok{{ $variasi }}"
-                                                                                                                    data-id="{{ $variasi }}"></span>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <?php $variasi = $variasi + 1; ?>
-                                                                                                    @endforeach
-                                                                                                </fieldset>
-                                                                                            </div>
-                                                                                            <div class="detailjual"
-                                                                                                id="tes0">
-                                                                                            </div>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <div
-                                                                                                class="form-group d-flex justify-content-center">
-                                                                                                <div class="input-group">
-                                                                                                    <input type="number"
-                                                                                                        class="form-control produk_jumlah"
-                                                                                                        aria-label="produk_satuan"
-                                                                                                        name="produk_jumlah[{{ $produkpenjualan }}]"
-                                                                                                        id="produk_jumlah{{ $produkpenjualan }}"
-                                                                                                        style="width:100%;"
-                                                                                                        value="{{ $f['jumlah'] }}">
                                                                             <?php
                                                                             $produkpenjualan = 0;
                                                                             $no = 1;
@@ -901,32 +745,11 @@
                                                                                                     id="produk_ketersediaan"></small>
                                                                                             </div>
                                                                                         </td>
-                                                                                                </div>
-                                                                                                <small
-                                                                                                    id="produk_ketersediaan"></small>
-                                                                                            </div>
-                                                                                        </td>
 
                                                                                         <td>
                                                                                             <div
                                                                                                 class="form-group d-flex justify-content-center">
-                                                                                        <td>
-                                                                                            <div
-                                                                                                class="form-group d-flex justify-content-center">
 
-                                                                                                <input type="text"
-                                                                                                    class="form-control produk_harga"
-                                                                                                    name="produk_harga[{{ $produkpenjualan }}]"
-                                                                                                    id="produk_harga{{ $produkpenjualan }}"
-                                                                                                    placeholder="Masukkan Harga"
-                                                                                                    style="width:100%;"
-                                                                                                    aria-describedby="prdhrg"
-                                                                                                    value="{{ number_format($f['harga'], 0, ',', '.') }}" />
-                                                                                            </div>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <div
-                                                                                                class="form-group d-flex justify-content-center">
                                                                                                 <input type="text"
                                                                                                     class="form-control produk_harga"
                                                                                                     name="produk_harga[{{ $produkpenjualan }}]"
@@ -1068,58 +891,6 @@
                                                                                                     id="produk_jumlah"
                                                                                                     style="width:100%;"
                                                                                                     value="">
-                                                                                            <input type="hidden"
-                                                                                                name="noSeriDistributor[{{ $produkpenjualan }}]"
-                                                                                                class="noSeriDistributor"
-                                                                                                value="{{ $f['seri'] }}">
-                                                                                        </td>
-                                                                                        <td hidden>
-                                                                                            <input type="hidden"
-                                                                                                class="rencana_id"
-                                                                                                name="rencana_id[{{ $produkpenjualan }}]"
-                                                                                                id="rencana_id{{ $produkpenjualan }}"
-                                                                                                readonly
-                                                                                                value="{{ $f['detail_rencana_penjualan_id'] }}">
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <a id="removerowproduk"><i
-                                                                                                    class="fas fa-minus"
-                                                                                                    style="color: red"></i></a>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <?php $produkpenjualan = $produkpenjualan + 1; ?>
-                                                                                @endforeach
-                                                                            @else
-                                                                                <tr>
-                                                                                    <td>1</td>
-                                                                                    <td>
-                                                                                        <div
-                                                                                            class="form-group select_item">
-                                                                                            <select
-                                                                                                name="penjualan_produk_id[0]"
-                                                                                                id="0"
-                                                                                                class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror"
-                                                                                                style="width:100%;">
-                                                                                            </select>
-                                                                                        </div>
-                                                                                        <div class="detail_produk"
-                                                                                            id="detail_produk0">
-                                                                                        </div>
-                                                                                        <div class="detailjual"
-                                                                                            id="tes0">
-                                                                                        </div>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <div
-                                                                                            class="form-group d-flex justify-content-center">
-                                                                                            <div class="input-group">
-                                                                                                <input type="number"
-                                                                                                    class="form-control produk_jumlah"
-                                                                                                    aria-label="produk_satuan"
-                                                                                                    name="produk_jumlah[]"
-                                                                                                    id="produk_jumlah"
-                                                                                                    style="width:100%;"
-                                                                                                    value="">
 
                                                                                             </div>
                                                                                             <small
@@ -1129,28 +900,7 @@
                                                                                     <td>
                                                                                         <div
                                                                                             class="form-group d-flex justify-content-center">
-                                                                                            </div>
-                                                                                            <small
-                                                                                                id="produk_ketersediaan"></small>
-                                                                                        </div>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <div
-                                                                                            class="form-group d-flex justify-content-center">
 
-                                                                                            <input type="text"
-                                                                                                class="form-control produk_harga"
-                                                                                                name="produk_harga[0]"
-                                                                                                id="produk_harga0"
-                                                                                                placeholder="Masukkan Harga"
-                                                                                                style="width:100%;"
-                                                                                                aria-describedby="prdhrg"
-                                                                                                value="" />
-                                                                                        </div>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <div
-                                                                                            class="form-group d-flex justify-content-center">
                                                                                             <input type="text"
                                                                                                 class="form-control produk_harga"
                                                                                                 name="produk_harga[0]"
@@ -1229,7 +979,7 @@
                                                                         </tbody>
                                                                         <tfoot>
                                                                             <tr>
-                                                                                <th colspan="5"
+                                                                                <th colspan="4"
                                                                                     style="text-align:right;">Total
                                                                                     Harga</th>
                                                                                 <th colspan="2" id="totalhargaprd"
@@ -1255,47 +1005,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
 
 
-                                        <div class="row d-flex justify-content-center  @if ($e->pesanan->getJumlahPesananNonJasa() <= 0) hide @endif"
-                                            id="datapart">
-                                            <div class="col-lg-10 col-md-12">
-                                                <h4>Data Part</h4>
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <div class="table-responsive">
-                                                                    <table class="table" style="text-align: center;"
-                                                                        id="parttable">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th colspan="7">
-                                                                                    <button type="button"
-                                                                                        class="btn btn-primary float-right"
-                                                                                        id="addrowpart">
-                                                                                        <i class="fas fa-plus"></i>
-                                                                                        Part
-                                                                                    </button>
-                                                                                </th>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th width="5%">No</th>
-                                                                                <th width="35%">Nama Part</th>
-                                                                                <th width="15%">Jumlah</th>
-                                                                                <th width="20%">Harga</th>
-                                                                                <th width="20%">Subtotal</th>
-                                                                                <th width="5%">Aksi</th>
-                                                                            </tr>
-                                                                        </thead>
                                         <div class="row d-flex justify-content-center  @if ($e->pesanan->getJumlahPesananNonJasa() <= 0) hide @endif"
                                             id="datapart">
                                             <div class="col-lg-10 col-md-12">
@@ -1360,38 +1071,6 @@
                                                                                                         id="part_jumlah{{ $loop->iteration - 1 }}"
                                                                                                         style="width:100%;"
                                                                                                         value="{{ $f->jumlah }}">
-                                                                        <tbody>
-                                                                            @if (isset($e->pesanan->detailpesananpart))
-                                                                                @foreach ($e->pesanan->DetailPesananPartNonJasa() as $f)
-                                                                                    <tr>
-                                                                                        <td>{{ $loop->iteration }}</td>
-                                                                                        <td>
-                                                                                            <div
-                                                                                                class="form-group select_item">
-                                                                                                <select
-                                                                                                    class="select2 form-control select-info custom-select part_id"
-                                                                                                    name="part_id[]"
-                                                                                                    id="part_id{{ $loop->iteration - 1 }}"
-                                                                                                    width="100%">
-                                                                                                    <option
-                                                                                                        value="{{ $f->sparepart->id }}"
-                                                                                                        selected>
-                                                                                                        {{ $f->sparepart->nama }}
-                                                                                                    </option>
-                                                                                                </select>
-                                                                                            </div>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <div
-                                                                                                class="form-group d-flex justify-content-center">
-                                                                                                <div class="input-group">
-                                                                                                    <input type="number"
-                                                                                                        class="form-control part_jumlah"
-                                                                                                        aria-label="produk_satuan"
-                                                                                                        name="part_jumlah[]"
-                                                                                                        id="part_jumlah{{ $loop->iteration - 1 }}"
-                                                                                                        style="width:100%;"
-                                                                                                        value="{{ $f->jumlah }}">
 
                                                                                                 </div>
                                                                                                 <small
@@ -1401,27 +1080,7 @@
                                                                                         <td>
                                                                                             <div
                                                                                                 class="form-group d-flex justify-content-center">
-                                                                                                </div>
-                                                                                                <small
-                                                                                                    id="part_ketersediaan"></small>
-                                                                                            </div>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <div
-                                                                                                class="form-group d-flex justify-content-center">
 
-                                                                                                <input type="text"
-                                                                                                    class="form-control part_harga"
-                                                                                                    name="part_harga[]"
-                                                                                                    id="part_harga{{ $loop->iteration - 1 }}"
-                                                                                                    placeholder="Masukkan Harga"
-                                                                                                    style="width:100%;"
-                                                                                                    value="{{ number_format($f->harga, 0, ',', '.') }}" />
-                                                                                            </div>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <div
-                                                                                                class="form-group d-flex justify-content-center">
                                                                                                 <input type="text"
                                                                                                     class="form-control part_harga"
                                                                                                     name="part_harga[]"
@@ -1475,7 +1134,7 @@
                                                                             @endif
                                                                         </tbody>
                                                                         <tfoot>
-                                                                            <th colspan="5" style="text-align:right;">
+                                                                            <th colspan="4" style="text-align:right;">
                                                                                 Total Harga
                                                                             </th>
                                                                             <th id="totalhargapart" class="align-right">
@@ -1512,61 +1171,17 @@
                                                                 <table class="table" style="text-align: center;"
                                                                     id="jasatable">
                                                                     <thead>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-                                    <div class="row d-flex justify-content-center  @if ($e->pesanan->getJumlahPesananJasa() <= 0) hide @endif"
-                                        id="datajasa">
-                                        <div class="col-lg-10 col-md-12">
-                                            <h4>Jasa</h4>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <div class="table-responsive justify-content-center">
-                                                                <table class="table" style="text-align: center;"
-                                                                    id="jasatable">
-                                                                    <thead>
 
                                                                         <tr>
                                                                             <th width="5%">No</th>
                                                                             <th width="35%">Nama Jasa</th>
                                                                             <th width="20%">Harga</th>
                                                                             <th width="20%">Subtotal</th>
-                                                                        <tr>
-                                                                            <th width="5%">No</th>
-                                                                            <th width="35%">Nama Jasa</th>
-                                                                            <th width="20%">Harga</th>
-                                                                            <th width="20%">Subtotal</th>
-
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
+                                                                            <th width="20%">Pajak</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
 
-                                                                        @foreach ($e->pesanan->DetailPesananPartJasa() as $f)
-                                                                            <tr>
-                                                                                <td>{{ $loop->iteration }}</td>
-                                                                                <td>
-                                                                                    <div class="form-group">
-                                                                                        <input width="100%"
-                                                                                            class="form-control "
-                                                                                            style="text-align: center"
-                                                                                            value="{{ $f->sparepart->nama }}"
-                                                                                            readonly>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <div
-                                                                                        class="form-group d-flex justify-content-center">
                                                                         @foreach ($e->pesanan->DetailPesananPartJasa() as $f)
                                                                             <tr>
                                                                                 <td>{{ $loop->iteration }}</td>
@@ -1593,68 +1208,42 @@
                                                                                 <td>
                                                                                     <div
                                                                                         class="form-group d-flex justify-content-center">
+
                                                                                         <input type="text"
                                                                                             class="form-control "
                                                                                             style="width:100%;"
-                                                                                            value="{{ number_format($f->harga, 0, ',', '.') }}"
+                                                                                            value="{{ number_format($f->jumlah * $f->harga, 0, ',', '.') }}"
                                                                                             readonly />
                                                                                     </div>
                                                                                 </td>
                                                                                 <td>
                                                                                     <div
-                                                                                        class="form-group d-flex justify-content-center">
-
-                                                                                        <input type="text"
-                                                                                            class="form-control "
-                                                                                            style="width:100%;"
-                                                                                            value="{{ number_format($f->jumlah * $f->harga, 0, ',', '.') }}"
-                                                                                            readonly />
+                                                                                        class="custom-control custom-switch">
+                                                                                        <input type="checkbox"
+                                                                                            class="custom-control-input custom-control-input-pajak part_ppn"
+                                                                                            id="part_ppn{{ $loop->iteration - 1 }}"
+                                                                                            name="part_ppn[{{ $loop->iteration - 1 }}]"
+                                                                                            value="{{ $f->ppn }}"
+                                                                                            disabled
+                                                                                            @if ($f->ppn == 1) checked @endif>
+                                                                                        <label
+                                                                                            class="custom-control-label custom-control-label-pajak part_ppn_label"
+                                                                                            for="part_ppn{{ $loop->iteration - 1 }}">
+                                                                                            @if ($f->ppn == 1)
+                                                                                                PPN
+                                                                                            @else
+                                                                                                Non PPN
+                                                                                            @endif
+                                                                                        </label>
                                                                                     </div>
                                                                                 </td>
-                                                                                        <input type="text"
-                                                                                            class="form-control "
-                                                                                            style="width:100%;"
-                                                                                            value="{{ number_format($f->jumlah * $f->harga, 0, ',', '.') }}"
-                                                                                            readonly />
-                                                                                    </div>
-                                                                                </td>
-
-                                                                            </tr>
-                                                                        @endforeach
                                                                             </tr>
                                                                         @endforeach
 
                                                                     </tbody>
                                                                     <tfoot>
                                                                         <tr>
-                                                                            <th colspan="3" style="text-align:right;">
-                                                                                Total Harga
-                                                                            </th>
-                                                                            <th id="totalhargajasa" class="align-right">
-                                                                                Rp.
-                                                                                @if ($e->pesanan->getJumlahPesananJasa() > 0)
-                                                                                    <?php $x = 0;
-                                                                                    foreach ($e->pesanan->DetailPesananPartJasa() as $f) {
-                                                                                        $x += $f->harga * $f->jumlah;
-                                                                                    }
-                                                                                    ?>
-                                                                                    {{ number_format($x, 0, ',', '.') }}
-                                                                                @endif
-                                                                            </th>
-                                                                        </tr>
-                                                                    </tfoot>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                                                    </tbody>
-                                                                    <tfoot>
-                                                                        <tr>
-                                                                            <th colspan="3" style="text-align:right;">
+                                                                            <th colspan="4" style="text-align:right;">
                                                                                 Total Harga
                                                                             </th>
                                                                             <th id="totalhargajasa" class="align-right">
@@ -1694,30 +1283,9 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="row d-flex justify-content-center">
-                                        <div class="col-lg-10 col-md-12">
-                                            <span>
-                                                <a href="{{ route('penjualan.penjualan.show') }}" type="button"
-                                                    class="btn btn-danger">
-                                                    Batal
-                                                </a>
-                                            </span>
-                                            <span class="float-right">
-                                                <button type="submit" class="btn btn-warning" id="btnsimpan">
-                                                    Simpan
-                                                </button>
-                                            </span>
-                                        </div>
-                                    </div>
 
                                 </form>
-                                </form>
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
                             </div>
                         </div>
                     </div>
@@ -1731,7 +1299,6 @@
 
 @section('adminlte_js')
     <script>
-        $(document).on('submit', '#edit_penjualan', function(e) {
         $(document).on('submit', '#edit_penjualan', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
@@ -1756,8 +1323,6 @@
                     ).then(function() {
                         window.location.href = '/penjualan/penjualan/edit_ekatalog/' +
                             {{ $e->id }} + '/spb';
-                        window.location.href = '/penjualan/penjualan/edit_ekatalog/' +
-                            {{ $e->id }} + '/spb';
                     });
                 },
                 error: function(xhr, status, error, response) {
@@ -1771,7 +1336,6 @@
                     );
                 }
             });
-        });
         });
 
 
@@ -1824,7 +1388,6 @@
             let nama_customer = null
 
             $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman_nonakn"]', function() {
-            $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman_nonakn"]', function() {
                 let pilihan_pengiriman = $(this).val();
                 let alamat = $('#alamat_customer').val();
                 $('#perusahaan_pengiriman_nonakn').attr('readonly', true);
@@ -1842,17 +1405,13 @@
                 }
 
                 if (pilihan_pengiriman == 'distributor') {
-                if (pilihan_pengiriman == 'distributor') {
                     $('#perusahaan_pengiriman_nonakn').val(nama_customer);
                     $('#alamat_pengiriman_nonakn').val($('#alamat_customer').val());
-                } else {
                 } else {
                     $('#perusahaan_pengiriman_nonakn').attr('readonly', false);
                     $('#alamat_pengiriman_nonakn').attr('readonly', false);
                 }
 
-                alamat == '-' ? checkValidasi('Alamat Customer harus diisi') : ekspedisi_nonakn(
-                    provinsi_customer);
                 alamat == '-' ? checkValidasi('Alamat Customer harus diisi') : ekspedisi_nonakn(
                     provinsi_customer);
 
@@ -2258,8 +1817,6 @@
 
                         if ($('input[type="radio"][name="pilihan_pengiriman_nonakn"]:checked')
                             .val() == 'distributor') {
-                        if ($('input[type="radio"][name="pilihan_pengiriman_nonakn"]:checked')
-                            .val() == 'distributor') {
                             $('#perusahaan_pengiriman_nonakn').val(data[0].nama);
                             $('#alamat_pengiriman_nonakn').val(data[0].alamat);
                         }
@@ -2631,8 +2188,6 @@
                                     var nama_var = "";
                                     if (res[0].produk[x].gudang_barang_jadi[y].nama.trim() !=
                                         "") {
-                                    if (res[0].produk[x].gudang_barang_jadi[y].nama.trim() !=
-                                        "") {
                                         nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
                                     } else {
                                         nama_var = res[0].produk[x].nama;
@@ -2682,7 +2237,6 @@
 
             function load_variasi() {
                 produk = [];
-                produk = <?php echo json_encode($item); ?>;
                 produk = <?php echo json_encode($item); ?>;
                 if (produk.length > 0) {
                     for (var w = 0; w < produk.length; w++) {
@@ -3027,33 +2581,12 @@
             $('.nomorSeriDistributor').val(noSeriArray);
             // open modal Distributor
             $('.modalDistributor').modal('show');
-        $(document).on('click', '.btnNoSeri', function() {
-            let indexDistributor = $(this).closest('tr').index();
-            $('.indexSeriDistributor').val(indexDistributor);
-            // find index by indexDistributor class noSeriDistributor
-            let noSeri = $('.noSeriDistributor').eq(indexDistributor).val();
-            $('.indexSeriDistributor').val(indexDistributor);
-            let jumlah = $('.produk_jumlah').eq(indexDistributor).val();
-            $('.jumlahSeriDistributor').val(jumlah);
-            // change array to string with comma
-            let noSeriArray = noSeri.split(',');
-            // remove empty string
-            noSeriArray = noSeriArray.filter(function(el) {
-                return el != '';
-            });
-            // set value to input
-            $('.nomorSeriDistributor').val(noSeriArray);
-            // open modal Distributor
-            $('.modalDistributor').modal('show');
 
         })
-        })
 
 
-        $(function() {
         $(function() {
             let customer = $('#customer_id').val();
-            if (customer) {
             if (customer) {
                 // trigger event select2
                 $('#customer_id').trigger('change');

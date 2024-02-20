@@ -129,13 +129,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                                                                                                                        .row {
-                                                                                                                                                                            font-size: 12px;
-                                                                                                                                                                        }
+                                                                                                                                                                                                    .row {
+                                                                                                                                                                                                        font-size: 12px;
+                                                                                                                                                                                                    }
 
-                                                                                                                                                                        h4 {
-                                                                                                                                                                            font-size: 20px;
-                                                                                                                                                                        } */
+                                                                                                                                                                                                    h4 {
+                                                                                                                                                                                                        font-size: 20px;
+                                                                                                                                                                                                    } */
             body {
                 font-size: 12px;
             }
@@ -152,13 +152,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-            .row {
-                font-size: 12px;
-            }
+                                        .row {
+                                            font-size: 12px;
+                                        }
 
-            h4 {
-                font-size: 20px;
-            } */
+                                        h4 {
+                                            font-size: 20px;
+                                        } */
             section {
                 font-size: 12px;
             }
@@ -579,7 +579,6 @@
                                                                                 {{-- if isOpenTrue set max date to end date of years --}}
                                                                                 max="{{ $maxDate }}"
                                                                                 name="tanggal_pemesanan"
-                                                                                max="{{ $maxDate }}"
                                                                                 id="tanggal_pemesanan" />
                                                                             <div class="invalid-feedback"
                                                                                 id="msgtanggal_pemesanan">
@@ -1167,7 +1166,7 @@
                                                                 id="produktable">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th colspan="9">
+                                                                        <th colspan="100%">
                                                                             <button type="button"
                                                                                 class="btn btn-primary float-right"
                                                                                 id="addrowproduk">
@@ -1308,7 +1307,7 @@
                                                                 </tbody>
                                                                 <tfoot>
                                                                     <tr>
-                                                                        <th colspan="7" style="text-align:right;">Total
+                                                                        <th colspan="6" style="text-align:right;">Total
                                                                             Harga</th>
                                                                         <th colspan="2" id="totalhargaprd"
                                                                             class="align-left">Rp. 0
@@ -1418,7 +1417,7 @@
                                                                 </tbody>
                                                                 <tfoot>
                                                                     <tr>
-                                                                        <th colspan="6" style="text-align:right;">Total
+                                                                        <th colspan="3" style="text-align:right;">Total
                                                                             Harga</th>
                                                                         <th id="totalhargapart" class="align-right">Rp. 0
                                                                         </th>

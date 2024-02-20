@@ -95,13 +95,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                .row {
-                                    font-size: 12px;
-                                }
+                                                            .row {
+                                                                font-size: 12px;
+                                                            }
 
-                                h4 {
-                                    font-size: 20px;
-                                } */
+                                                            h4 {
+                                                                font-size: 20px;
+                                                            } */
             body {
                 font-size: 12px;
             }
@@ -122,13 +122,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                .row {
-                                    font-size: 12px;
-                                }
+                                                            .row {
+                                                                font-size: 12px;
+                                                            }
 
-                                h4 {
-                                    font-size: 20px;
-                                } */
+                                                            h4 {
+                                                                font-size: 20px;
+                                                            } */
             body {
                 font-size: 12px;
             }
@@ -157,126 +157,10 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
-
-                <div class="row justify-content-center">
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        @php
-                        $years = \App\Models\AktifPeriode::first()->tahun;
-                        $isOpen = false;
-                        if ($years != \Carbon\Carbon::now()->year) {
-                            $isOpen = true;
-                        }
-                        $maxDate = $isOpen ? \Carbon\Carbon::parse($years . '-12-31')->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d');
-                    @endphp
-                    @if ($isOpen)
-                        <div class="alert alert-danger" role="alert">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            Periode yang dibuka saat ini adalah periode {{ $years }}
-                        </div>
-                    @endif
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-11 col-md-12">
-                                        <h5 class="margin">Info Penjualan SPA</h5>
-                                        <div class="row d-flex justify-content-between">
-                                            <div class="p-2 cust">
-                                                <div class="margin">
-                                                    <small>Info Customer</small>
-                                                </div>
-                                                <div id="nama_customer" class="margin"><b>{{ $e->customer->nama }}</b></div>
-                                                <div id="alamat" class="margin"><b>{{ $e->customer->alamat }}</b></div>
-                                                <div id="provinsi" class="margin"><b>{{ $e->customer->provinsi->nama }}</b>
-                                                </div>
-                                                <div id="telepon" class="margin"><b>{{ $e->customer->telp }}</b></div>
-                                            </div>
-                                            <div class="p-2">
-                                                <div class="margin">
-                                                    <div><small class="text-muted">No PO</small></div>
-                                                    <div id="no_po">
-                                                        <b>
-                                                            @if ($e->Pesanan)
-                                                                {{ $e->Pesanan->no_po }}
-                                                            @endif
-                                                        </b>
-                                                    </div>
-                                                </div>
-                                                <div class="margin">
-                                                    <div><small class="text-muted">Tanggal PO</small></div>
-                                                    <b>
-                                                        <div id="tgl_po">
-                                                            @if ($e->Pesanan)
-                                                                @if (empty($e->Pesanan->tgl_po) || $e->Pesanan->tgl_po == '0000-00-00')
-                                                                    -
-                                                                @else
-                                                                    {{ $e->Pesanan->tgl_po }}
-                                                                @endif
-                                                            @endif
-                                                        </div>
-                                                    </b>
-                                                </div>
-                                            </div>
-                                            <div class="p-2">
-                                                <div class="margin">
-                                                    <div><small class="text-muted">No DO</small></div>
-                                                    <div id="no_po">
-                                                        <b>
-                                                            @if ($e->Pesanan != '')
-                                                                @if (!empty($e->Pesanan->no_do))
-                                                                    {{ $e->Pesanan->no_do }}
-                                                                @else
-                                                                    -
-                                                                @endif
-                                                            @endif
-                                                        </b>
-                                                    </div>
-                                                </div>
-                                                <div class="margin">
-                                                    <div><small class="text-muted">Tanggal DO</small></div>
-                                                    <div id="no_po">
-                                                        <b>
-                                                            @if ($e->Pesanan != '')
-                                                                @if (!empty($e->Pesanan->tanggal_do))
-                                                                    {{ $e->Pesanan->tanggal_do }}
-                                                                @else
-                                                                    -
-                                                                @endif
-                                                            @endif
-                                                        </b>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="p-2">
-                                                <div class="margin">
-                                                    <div><small class="text-muted">No SO</small></div>
-                                                    <div id="no_so">
-                                                        <b>
-                                                            @if ($e->Pesanan != '')
-                                                                @if (!empty($e->Pesanan->so))
-                                                                    {{ $e->Pesanan->so }}
-                                                                @else
-                                                                    -
-                                                                @endif
-                                                            @endif
-                                                        </b>
-                                                    </div>
-                                                </div>
-                                                <div class="margin">
-                                                    <div><small class="text-muted">Status</small></div>
-@php
-                        $years = \App\Models\AktifPeriode::first()->tahun;
-                        $isOpen = false;
-                        if ($years != \Carbon\Carbon::now()->year) {
-                            $isOpen = true;
-                        }
-                        $maxDate = $isOpen ? \Carbon\Carbon::parse($years . '-12-31')->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d');
-                    @endphp
-                    @if ($isOpen)
-                        <div class="alert alert-danger" role="alert">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            Periode yang dibuka saat ini adalah periode {{ $years }}
-                        </div>
-                    @endif
+            {{-- <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-triangle"></i>
+                Periode yang dibuka saat ini adalah periode 2023
+            </div> --}}
             <div class="row justify-content-center">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
@@ -369,38 +253,6 @@
                                             <div class="margin">
                                                 <div><small class="text-muted">Status</small></div>
 
-                                                    @if ($e->log == 'penjualan')
-                                                        <div id="status" class="badge red-text ">Penjualan</div>
-                                                    @elseif($e->log == 'po')
-                                                        <div id="status" class="badge purple-text ">PO</div>
-                                                    @elseif($e->log == 'gudang')
-                                                        <div id="status" class="badge orange-text ">Gudang</div>
-                                                    @elseif($e->log == 'qc')
-                                                        <div id="status" class="badge yellow-text ">QC</div>
-                                                    @elseif($e->log == 'logistik')
-                                                        <div id="status" class="badge blue-text ">Logistik</div>
-                                                    @elseif($e->log == 'pengiriman')
-                                                        <div id="status" class="badge green-text ">Pengiriman</div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                                                                    <div class="p-2">
-                                            <div class="margin">
-                                                <div><small class="text-muted">Cetak SPPB</small></div>
-                                                @if ($e->Pesanan->no_po != null && $e->Pesanan->tgl_po != null)
-                                                    <a target="_blank"
-                                                        href="{{ route('penjualan.penjualan.cetak_surat_perintah', [$e->Pesanan->id]) }}">
-                                                        <button class="btn btn-sm btn-outline-primary" type="button">
-                                                            <i class="fas fa-print"></i>
-                                                            SPPB
-                                                        </button>
-                                                    </a>
-                                                @else
-                                                    <div>-</div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        </div>
                                                 @if ($e->log == 'penjualan')
                                                     <div id="status" class="badge red-text ">Penjualan</div>
                                                 @elseif($e->log == 'po')
@@ -657,7 +509,6 @@
                                                                     <input type="date"
                                                                         class="form-control col-form-label @error('tanggal_do') is-invalid @enderror"
                                                                         id="tanggal_do" name="tanggal_do"
-                                                                        max="{{ $maxDate }}"
                                                                         value="{{ $e->Pesanan->tgl_do }}" />
                                                                     <div class="invalid-feedback" id="msgtanggal_po">
                                                                         @if ($errors->has('tanggal_do'))
@@ -1132,7 +983,7 @@
                                                                         </tbody>
                                                                         <tfoot>
                                                                             <tr>
-                                                                                <th colspan="5"
+                                                                                <th colspan="4"
                                                                                     style="text-align:right;">Total
                                                                                     Harga</th>
                                                                                 <th colspan="2" id="totalhargaprd"
@@ -1171,7 +1022,7 @@
                                                                         id="parttable" width="100%">
                                                                         <thead>
                                                                             <tr>
-                                                                                <th colspan="7">
+                                                                                <th colspan="100%">
                                                                                     <button type="button"
                                                                                         class="btn btn-primary float-right"
                                                                                         id="addrowpart">
@@ -1285,7 +1136,7 @@
                                                                             @endif
                                                                         </tbody>
                                                                         <tfoot>
-                                                                            <th colspan="5" style="text-align:right;">
+                                                                            <th colspan="4" style="text-align:right;">
                                                                                 Total Harga
                                                                             </th>
                                                                             <th id="totalhargapart" class="align-right">
@@ -1367,6 +1218,27 @@
                                                                                             style="width:100%;"
                                                                                             value="{{ number_format($f->jumlah * $f->harga, 0, ',', '.') }}"
                                                                                             readonly />
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div
+                                                                                        class="custom-control custom-switch">
+                                                                                        <input type="checkbox"
+                                                                                            class="custom-control-input custom-control-input-pajak part_ppn"
+                                                                                            id="part_ppn{{ $loop->iteration - 1 }}"
+                                                                                            name="part_ppn[{{ $loop->iteration - 1 }}]"
+                                                                                            value="{{ $f->ppn }}"
+                                                                                            disabled
+                                                                                            @if ($f->ppn == 1) checked @endif>
+                                                                                        <label
+                                                                                            class="custom-control-label custom-control-label-pajak part_ppn_label"
+                                                                                            for="part_ppn{{ $loop->iteration - 1 }}">
+                                                                                            @if ($f->ppn == 1)
+                                                                                                PPN
+                                                                                            @else
+                                                                                                Non PPN
+                                                                                            @endif
+                                                                                        </label>
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>
