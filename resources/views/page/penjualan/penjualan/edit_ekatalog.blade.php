@@ -94,13 +94,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                                                            .row {
-                                                                                                                                                                                                                                                                                                                                                font-size: 12px;
-                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                .row {
+                                                                                                                                                                                                                                                                                                                                                    font-size: 12px;
+                                                                                                                                                                                                                                                                                                                                                }
 
-                                                                                                                                                                                                                                                                                                                                            h4 {
-                                                                                                                                                                                                                                                                                                                                                font-size: 20px;
-                                                                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                                                                h4 {
+                                                                                                                                                                                                                                                                                                                                                    font-size: 20px;
+                                                                                                                                                                                                                                                                                                                                                } */
             body {
                 font-size: 12px;
             }
@@ -121,13 +121,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                                                            .row {
-                                                                                                                                                                                                                                                                                                                                                font-size: 12px;
-                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                .row {
+                                                                                                                                                                                                                                                                                                                                                    font-size: 12px;
+                                                                                                                                                                                                                                                                                                                                                }
 
-                                                                                                                                                                                                                                                                                                                                            h4 {
-                                                                                                                                                                                                                                                                                                                                                font-size: 20px;
-                                                                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                                                                h4 {
+                                                                                                                                                                                                                                                                                                                                                    font-size: 20px;
+                                                                                                                                                                                                                                                                                                                                                } */
             body {
                 font-size: 12px;
             }
@@ -627,9 +627,9 @@
                                                                             class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
                                                                         <div class="col-lg-5 col-md-12 col-form-label">
                                                                             <!-- <div class="form-check form-check-inline">
-                                                                                                                                                                                                                                                                                                                                                                                                                    <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
-                                                                                                                                                                                                                                                                                                                                                                                                                    <label class="form-check-label" for="status_akn4">Draft</label>
-                                                                                                                                                                                                                                                                                                                                                                                                                </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
+                                                                                                                                                                                                                                                                                                                                                                                                                        <label class="form-check-label" for="status_akn4">Draft</label>
+                                                                                                                                                                                                                                                                                                                                                                                                                    </div> -->
                                                                             <div class="form-check form-check-inline">
                                                                                 <input class="form-check-input"
                                                                                     type="radio" name="status_akn"
@@ -2261,601 +2261,601 @@
                             });
 
                             $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function() {
-                                    $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function() {
-                                                let pilihan_pengiriman = $(this).val();
-                                                let provinsi_instansi = $('#provinsi').val();
-                                                $('#perusahaan_pengiriman').attr('readonly', true);
-                                                $('#alamat_pengiriman').attr('readonly', true);
-                                                $('#perusahaan_pengiriman').val('');
-                                                // add placeholder
-                                                $('#perusahaan_pengiriman').attr('placeholder', 'Masukkan Nama Perusahaan');
-                                                $('#alamat_pengiriman').val('');
-                                                $('#alamat_pengiriman').removeClass('is-invalid');
-                                                // add placeholder
-                                                $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
-                                                $('#msg_alamat_pengiriman').text('');
+                                $(document).on('change', 'input[type="radio"][name="pilihan_pengiriman"]', function() {
+                                        let pilihan_pengiriman = $(this).val();
+                                        let provinsi_instansi = $('#provinsi').val();
+                                        $('#perusahaan_pengiriman').attr('readonly', true);
+                                        $('#alamat_pengiriman').attr('readonly', true);
+                                        $('#perusahaan_pengiriman').val('');
+                                        // add placeholder
+                                        $('#perusahaan_pengiriman').attr('placeholder', 'Masukkan Nama Perusahaan');
+                                        $('#alamat_pengiriman').val('');
+                                        $('#alamat_pengiriman').removeClass('is-invalid');
+                                        // add placeholder
+                                        $('#alamat_pengiriman').attr('placeholder', 'Masukkan Alamat Pengiriman');
+                                        $('#msg_alamat_pengiriman').text('');
 
-                                                const checkValidasi = (msg) => {
-                                                    $('#alamat_pengiriman').addClass('is-invalid');
-                                                    $('#msg_alamat_pengiriman').text(msg);
-                                                }
+                                        const checkValidasi = (msg) => {
+                                            $('#alamat_pengiriman').addClass('is-invalid');
+                                            $('#msg_alamat_pengiriman').text(msg);
+                                        }
 
-                                                if (pilihan_pengiriman == 'distributor') {
-                                                    if (pilihan_pengiriman == 'distributor') {
-                                                        $('#perusahaan_pengiriman').val(nama_customer);
-                                                        $('#alamat_pengiriman').val($('#alamat_customer').val());
-                                                        provinsi_customer ? ekspedisi(provinsi_customer) : checkValidasi(
-                                                            'Provinsi Customer harus diisi');
-                                                    } else if (pilihan_pengiriman == 'instansi') {
-                                                        provinsi_customer ? ekspedisi(provinsi_customer) : checkValidasi(
-                                                            'Provinsi Customer harus diisi');
-                                                    } else if (pilihan_pengiriman == 'instansi') {
-                                                        $('#perusahaan_pengiriman').val($('#satuan_kerja').val());
-                                                        $('#alamat_pengiriman').val($('#alamatinstansi').val());
-                                                        provinsi_instansi != 'NULL' ? ekspedisi(provinsi_instansi) :
-                                                            checkValidasi(
-                                                                'Provinsi Instansi harus diisi');
-                                                    } else {
-                                                        provinsi_instansi != 'NULL' ? ekspedisi(provinsi_instansi) :
-                                                            checkValidasi(
-                                                                'Provinsi Instansi harus diisi');
-                                                    } else {
-                                                        $('#perusahaan_pengiriman').attr('readonly', false);
-                                                        $('#alamat_pengiriman').attr('readonly', false);
-                                                        ekspedisi(provinsi_instansi);
-                                                    }
-                                                });
+                                        if (pilihan_pengiriman == 'distributor') {
+                                            if (pilihan_pengiriman == 'distributor') {
+                                                $('#perusahaan_pengiriman').val(nama_customer);
+                                                $('#alamat_pengiriman').val($('#alamat_customer').val());
+                                                provinsi_customer ? ekspedisi(provinsi_customer) : checkValidasi(
+                                                    'Provinsi Customer harus diisi');
+                                            } else if (pilihan_pengiriman == 'instansi') {
+                                                provinsi_customer ? ekspedisi(provinsi_customer) : checkValidasi(
+                                                    'Provinsi Customer harus diisi');
+                                            } else if (pilihan_pengiriman == 'instansi') {
+                                                $('#perusahaan_pengiriman').val($('#satuan_kerja').val());
+                                                $('#alamat_pengiriman').val($('#alamatinstansi').val());
+                                                provinsi_instansi != 'NULL' ? ekspedisi(provinsi_instansi) :
+                                                    checkValidasi(
+                                                        'Provinsi Instansi harus diisi');
+                                            } else {
+                                                provinsi_instansi != 'NULL' ? ekspedisi(provinsi_instansi) :
+                                                    checkValidasi(
+                                                        'Provinsi Instansi harus diisi');
+                                            } else {
+                                                $('#perusahaan_pengiriman').attr('readonly', false);
+                                                $('#alamat_pengiriman').attr('readonly', false);
+                                                ekspedisi(provinsi_instansi);
+                                            }
+                                        });
 
-                                            if ('{{ $e->customer_id }}' == 484) {
-                                                var cust_id = 'belum';
+                                    if ('{{ $e->customer_id }}' == 484) {
+                                        var cust_id = 'belum';
+                                        $("#customer_id").attr('disabled', true);
+                                        $("#customer_id").val("484").trigger('change');
+                                        $("#alamat").val("");
+                                        $("#telepon").val("");
+                                    } else {
+                                        var cust_id = 'sudah';
+                                    }
+                                    if ('{{ $e->provinsi_id }}' == "") {
+                                        $('.provinsi').append($('<option>', {
+                                            value: 'NULL',
+                                            text: 'Pilih Provinsi'
+                                        }));
+                                    }
+
+                                    if (status_akn != 'sepakat') {
+                                        if (status_akn == 'draft' || status_akn == 'batal') {
+
+                                            if (jum_produk <= 0) {
+                                                $("#dataproduk").addClass("hide");
+                                            }
+                                            // $("#provinsi").attr('disabled', true);
+                                            // $("#provinsi").empty().trigger('change')
+                                            $("#batas_kontrak").attr('disabled', true);
+                                        }
+                                    }
+
+                                    $('input[type="radio"][name="namadistributor"]').on('change', function() {
+                                        if ($(this).val() != "") {
+                                            if ($(this).val() == "sudah") {
+                                                $("#customer_id").attr('disabled', false);
+                                                var $newOption = $("<option selected='selected'></option>").val(
+                                                    "213").text(
+                                                    "PT. EMIINDO Jaya Bersama")
+                                                $(".customer_id").append($newOption).trigger('change');
+                                            } else {
                                                 $("#customer_id").attr('disabled', true);
-                                                $("#customer_id").val("484").trigger('change');
+                                                var $newOption = $("<option selected='selected'></option>").val(
+                                                    "484").text(
+                                                    "BELUM DIKETAHUI")
+                                                $(".customer_id").append($newOption).trigger('change');
                                                 $("#alamat").val("");
                                                 $("#telepon").val("");
-                                            } else {
-                                                var cust_id = 'sudah';
                                             }
-                                            if ('{{ $e->provinsi_id }}' == "") {
-                                                $('.provinsi').append($('<option>', {
-                                                    value: 'NULL',
-                                                    text: 'Pilih Provinsi'
-                                                }));
-                                            }
+                                        } else {
+                                            $("#msgstatus").text("Status Harus dipilih");
+                                            $("#status").addClass('is-invalid');
+                                            $('#btntambah').attr("disabled", true);
+                                        }
+                                        checkvalidasi();
+                                    });
 
-                                            if (status_akn != 'sepakat') {
-                                                if (status_akn == 'draft' || status_akn == 'batal') {
+                                    $('input[name="status_akn"][value={{ $e->status }}]').attr('checked',
+                                        'checked'); $('input[name="namadistributor"][value=' + cust_id + ']').attr(
+                                        'checked', 'checked'); $('#customer_id').on('keyup change', function() {
+                                        if ($(this).val() != "") {
+                                            $('#msgcustomer_id').text("");
+                                            $('#customer_id').removeClass('is-invalid');
+                                        } else if ($(this).val() == "") {
+                                            $('#msgcustomer_id').text("Silahkan Pilih Customer");
+                                            $('#customer_id').addClass('is-invalid');
+                                        }
+                                    });
 
-                                                    if (jum_produk <= 0) {
-                                                        $("#dataproduk").addClass("hide");
-                                                    }
-                                                    // $("#provinsi").attr('disabled', true);
-                                                    // $("#provinsi").empty().trigger('change')
-                                                    $("#batas_kontrak").attr('disabled', true);
+                                    $('input[type="radio"][name="status_akn"]').on('change', function() {
+                                        $('#isi_produk_input').addClass('hide');
+
+                                        if ($(this).val() != "") {
+                                            if ($(this).val() == "sepakat") {
+                                                $('#checkbox_nopaket').addClass('hide');
+                                                $('#isi_nopaket').prop("checked", false);
+                                                $('#no_paket').attr('readonly', true);
+                                                $("#dataproduk").removeClass("hide");
+                                                $("#batas_kontrak").attr('disabled', false);
+                                                $("#provinsi").attr('disabled', false);
+                                                // var $newOption = $("<option selected='selected'></option>").val("11").text(
+                                                //     "Jawa Timur")
+                                                // $(".provinsi").append($newOption).trigger('change');
+                                                if (nopaketubah == false) {
+                                                    $('#no_paket').val(nopaketdb);
                                                 }
-                                            }
-
-                                            $('input[type="radio"][name="namadistributor"]').on('change', function() {
-                                                if ($(this).val() != "") {
-                                                    if ($(this).val() == "sudah") {
-                                                        $("#customer_id").attr('disabled', false);
-                                                        var $newOption = $("<option selected='selected'></option>").val(
-                                                            "213").text(
-                                                            "PT. EMIINDO Jaya Bersama")
-                                                        $(".customer_id").append($newOption).trigger('change');
-                                                    } else {
-                                                        $("#customer_id").attr('disabled', true);
-                                                        var $newOption = $("<option selected='selected'></option>").val(
-                                                            "484").text(
-                                                            "BELUM DIKETAHUI")
-                                                        $(".customer_id").append($newOption).trigger('change');
-                                                        $("#alamat").val("");
-                                                        $("#telepon").val("");
-                                                    }
-                                                } else {
-                                                    $("#msgstatus").text("Status Harus dipilih");
-                                                    $("#status").addClass('is-invalid');
-                                                    $('#btntambah').attr("disabled", true);
+                                                if (jum_produk <= 0) {
+                                                    $("#produktable tbody").empty();
+                                                    $('#produktablve tbody').append(trproduktable());
                                                 }
-                                                checkvalidasi();
-                                            });
+                                                numberRowsProduk($("#produktable"));
+                                                $('#pills-pengiriman-tab').removeClass('disabled');
+                                            } else if ($(this).val() == "draft" || $(this).val() == "batal") {
+                                                $('#isi_produk_input').removeClass('hide');
+                                                $('#checkbox_nopaket').removeClass('hide');
+                                                // $('#no_paket').val("");
+                                                // $('#no_paket').attr('readonly', true);
+                                                $("#batas_kontrak").attr('disabled', true);
+                                                // $("#provinsi").attr('disabled', true);
+                                                // $("#provinsi").empty().trigger('change');
 
-                                            $('input[name="status_akn"][value={{ $e->status }}]').attr('checked',
-                                                'checked'); $('input[name="namadistributor"][value=' + cust_id + ']').attr(
-                                                'checked', 'checked'); $('#customer_id').on('keyup change', function() {
-                                                if ($(this).val() != "") {
-                                                    $('#msgcustomer_id').text("");
-                                                    $('#customer_id').removeClass('is-invalid');
-                                                } else if ($(this).val() == "") {
-                                                    $('#msgcustomer_id').text("Silahkan Pilih Customer");
-                                                    $('#customer_id').addClass('is-invalid');
-                                                }
-                                            });
-
-                                            $('input[type="radio"][name="status_akn"]').on('change', function() {
-                                                $('#isi_produk_input').addClass('hide');
-
-                                                if ($(this).val() != "") {
-                                                    if ($(this).val() == "sepakat") {
-                                                        $('#checkbox_nopaket').addClass('hide');
-                                                        $('#isi_nopaket').prop("checked", false);
-                                                        $('#no_paket').attr('readonly', true);
-                                                        $("#dataproduk").removeClass("hide");
-                                                        $("#batas_kontrak").attr('disabled', false);
-                                                        $("#provinsi").attr('disabled', false);
-                                                        // var $newOption = $("<option selected='selected'></option>").val("11").text(
-                                                        //     "Jawa Timur")
-                                                        // $(".provinsi").append($newOption).trigger('change');
-                                                        if (nopaketubah == false) {
-                                                            $('#no_paket').val(nopaketdb);
-                                                        }
-                                                        if (jum_produk <= 0) {
-                                                            $("#produktable tbody").empty();
-                                                            $('#produktablve tbody').append(trproduktable());
-                                                        }
-                                                        numberRowsProduk($("#produktable"));
-                                                        $('#pills-pengiriman-tab').removeClass('disabled');
-                                                    } else if ($(this).val() == "draft" || $(this).val() == "batal") {
-                                                        $('#isi_produk_input').removeClass('hide');
-                                                        $('#checkbox_nopaket').removeClass('hide');
-                                                        // $('#no_paket').val("");
-                                                        // $('#no_paket').attr('readonly', true);
-                                                        $("#batas_kontrak").attr('disabled', true);
-                                                        // $("#provinsi").attr('disabled', true);
-                                                        // $("#provinsi").empty().trigger('change');
-
-                                                        if ($('#no_paket').val() != '') {
-                                                            $('#no_paket').attr('readonly', false);
-                                                            $('#isi_nopaket').prop("checked", true);
-                                                        } else {
-                                                            $('#no_paket').attr('readonly', true);
-                                                        }
-
-
-                                                        if (jum_produk <= 0) {
-                                                            $('input[type="checkbox"][name="isi_produk"]').attr(
-                                                                'checked', false);
-                                                            $("#produktable tbody").empty();
-                                                            $('#produktable tbody').append(trproduktable());
-                                                            $("#totalhargaprd").text("Rp. 0");
-                                                            $("#dataproduk").addClass("hide");
-                                                            $('#isi_nopaket').prop("checked", false);
-                                                        }
-                                                        if ($('input[type="checkbox"][name="isi_produk"]:checked')
-                                                            .length <= 0) {
-                                                            $("#dataproduk").addClass("hide");
-                                                        }
-                                                        $('#pills-pengiriman-tab').addClass('disabled');
-                                                    } else if ($(this).val() == "negosiasi") {
-                                                        $('#checkbox_nopaket').addClass('hide');
-                                                        $('#isi_nopaket').prop("checked", false);
-                                                        $('#no_paket').attr('readonly', true);
-                                                        $("#batas_kontrak").val("");
-                                                        $("#batas_kontrak").attr('disabled', true);
-                                                        $("#dataproduk").removeClass("hide");
-                                                        // $("#provinsi").attr('disabled', true);
-                                                        // $("#provinsi").empty().trigger('change')
-                                                        if (nopaketubah == false) {
-                                                            $('#no_paket').val(nopaketdb);
-                                                        }
-                                                        if (jum_produk <= 0) {
-                                                            $("#produktable tbody").empty();
-                                                            $('#produktable tbody').append(trproduktable());
-                                                        }
-                                                        numberRowsProduk($("#produktable"));
-                                                        $('#pills-pengiriman-tab').addClass('disabled');
-                                                    }
-                                                } else {
-                                                    $('#checkbox_nopaket').addClass('hide');
-                                                    $('#isi_nopaket').prop("checked", false);
+                                                if ($('#no_paket').val() != '') {
                                                     $('#no_paket').attr('readonly', false);
-                                                    $("#msgstatus").text("Status Harus dipilih");
-                                                    $("#status").addClass('is-invalid');
-                                                    if (nopaketubah == false) {
-                                                        $('#no_paket').val(nopaketdb);
-                                                    }
-                                                }
-                                                checkvalidasi();
-                                            });
-
-
-                                            $('input[type="checkbox"][name="isi_nopaket"]').change(function() {
-                                                if ($('input[type="checkbox"][name="isi_nopaket"]:checked').length >
-                                                    0) {
-                                                    $('#no_paket').attr('readonly', false);
-                                                    if (nopaketubah == false) {
-                                                        $('#no_paket').val(nopaketdb);
-                                                    }
+                                                    $('#isi_nopaket').prop("checked", true);
                                                 } else {
                                                     $('#no_paket').attr('readonly', true);
-                                                    $('#no_paket').val("");
                                                 }
-                                            }) $('input[type="checkbox"][name="isi_produk"]').change(function() {
-                                                $("#produktable tbody").empty();
-                                                $('#produktable tbody').append(trproduktable());
-                                                numberRowsProduk($("#produktable"));
-                                                $("#totalhargaprd").text("Rp. 0");
 
-                                                if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
-                                                    $("#dataproduk").removeClass("hide");
-                                                } else {
+
+                                                if (jum_produk <= 0) {
+                                                    $('input[type="checkbox"][name="isi_produk"]').attr(
+                                                        'checked', false);
+                                                    $("#produktable tbody").empty();
+                                                    $('#produktable tbody').append(trproduktable());
+                                                    $("#totalhargaprd").text("Rp. 0");
+                                                    $("#dataproduk").addClass("hide");
+                                                    $('#isi_nopaket').prop("checked", false);
+                                                }
+                                                if ($('input[type="checkbox"][name="isi_produk"]:checked')
+                                                    .length <= 0) {
                                                     $("#dataproduk").addClass("hide");
                                                 }
-                                                checkvalidasi();
-                                            }); $(document).on('keyup', '#no_paket', function() {
-                                                nopaketubah = true;
-                                            })
-
-
-                                            $('#tanggal_pemesanan').on('keyup change', function() {
-                                                if ($(this).val() != "") {
-                                                    $("#msgtanggal_pemesanan").text("");
-                                                    $("#tanggal_pemesanan").removeClass('is-invalid');
-                                                } else if ($(this).val() == "") {
-                                                    $("#msgtanggal_pemesanan").text("Isi Tanggal Pemesanan");
-                                                    $("#tanggal_pemesanan").addClass('is-invalid');
+                                                $('#pills-pengiriman-tab').addClass('disabled');
+                                            } else if ($(this).val() == "negosiasi") {
+                                                $('#checkbox_nopaket').addClass('hide');
+                                                $('#isi_nopaket').prop("checked", false);
+                                                $('#no_paket').attr('readonly', true);
+                                                $("#batas_kontrak").val("");
+                                                $("#batas_kontrak").attr('disabled', true);
+                                                $("#dataproduk").removeClass("hide");
+                                                // $("#provinsi").attr('disabled', true);
+                                                // $("#provinsi").empty().trigger('change')
+                                                if (nopaketubah == false) {
+                                                    $('#no_paket').val(nopaketdb);
                                                 }
-                                                checkvalidasi();
-                                            });
-
-                                            $('input[type="radio"][name="do_akn"]').on('change', function() {
-                                                if ($(this).val() == "yes") {
-                                                    $("#do_detail_no_akn").removeClass("hide");
-                                                    $("#do_detail_tgl_akn").removeClass("hide");
-                                                } else if ($(this).val() == "no") {
-                                                    $("#do_detail_no_akn").addClass("hide");
-                                                    $("#do_detail_tgl_akn").addClass("hide");
+                                                if (jum_produk <= 0) {
+                                                    $("#produktable tbody").empty();
+                                                    $('#produktable tbody').append(trproduktable());
                                                 }
-                                                checkvalidasi();
-                                            });
-
-                                            $('#batas_kontrak').on('keyup change', function() {
-                                                if ($(this).val() != "") {
-                                                    $("#msgbatas_kontrak").text("");
-                                                    $("#batas_kontrak").removeClass('is-invalid');
-                                                } else if ($(this).val() == "") {
-                                                    $("#msgbatas_kontrak").text("Batas Kontrak Harus diisi");
-                                                    $("#batas_kontrak").addClass('is-invalid');
-                                                }
-                                                checkvalidasi();
-                                            });
-
-                                            $('#tgl_edit').on('keyup change', function() {
-                                                if ($(this).val() != "") {
-                                                    $("#msgtgl_edit").text("");
-                                                    $("#tgl_edit").removeClass('is-invalid');
-                                                } else if ($(this).val() == "") {
-                                                    $("#msgtgl_edit").text("Tanggal Edit Harus diisi");
-                                                    $("#tgl_edit").addClass('is-invalid');
-                                                }
-                                                checkvalidasi();
-                                            });
-
-                                            $('#pills-produk-tab').on('click', function() {
-                                                var cust = $('#customer_id').val();
-                                                var instansi = $('#instansi').val();
-                                                perencanaan(cust, instansi);
-                                                checkvalidasi();
-                                            });
-
-                                            $('input[name="instansi"]').on('keyup change', function() {
-                                                if ($(this).val() != "") {
-                                                    var cust = $('.customer_id').val();
-                                                    $("#msginstansi").text("");
-                                                    $("#instansi").removeClass('is-invalid');
-                                                    perencanaan(cust, $(this).val());
-                                                } else if ($(this).val() == "") {
-                                                    $("#msginstansi").text("Instansi Harus diisi");
-                                                    $("#instansi").addClass('is-invalid');
-                                                }
-                                                checkvalidasi();
-                                            });
-
-                                            $('#deskripsi').on('keyup change', function() {
-                                                if ($(this).val() != "") {
-                                                    $("#msgdeskripsi").text("");
-                                                    $("#deskripsi").removeClass('is-invalid');
-                                                } else if ($(this).val() == "") {
-                                                    $("#msgdeskripsi").text("Deskripsi harus diisi");
-                                                    $("#deskripsi").addClass('is-invalid');
-                                                }
-                                                checkvalidasi();
-                                            });
-
-                                            $('#no_urut').on('keyup change', function() {
-                                                if ($(this).val() != "") {
-                                                    var values = $(this).val();
-                                                    $.ajax({
-                                                        type: 'POST',
-                                                        dataType: 'JSON',
-                                                        url: '/api/penjualan/check_no_urut/' +
-                                                            '{{ $e->id }}' + '/' +
-                                                            values,
-                                                        success: function(data) {
-                                                            if (data > 0) {
-                                                                $("#msgno_urut").text(
-                                                                    "No Urut tidak boleh sama");
-                                                                $("#no_urut").addClass('is-invalid');
-                                                                $('#btntambah').attr("disabled", true);
-                                                            } else {
-                                                                $("#msgno_urut").text("");
-                                                                $("#no_urut").removeClass('is-invalid');
-                                                            }
-                                                        },
-                                                        error: function(data) {
-                                                            $("#msgno_urut").text(
-                                                                "No Urut tidak boleh sama");
-                                                            $("#no_urut").addClass('is-invalid');
-                                                            $('#btntambah').attr("disabled", true);
-                                                        }
-                                                    });
-                                                } else if ($(this).val() == "") {
-                                                    $("#msgno_urut").text("");
-                                                    $("#no_urut").removeClass('is-invalid');
-                                                }
-                                                checkvalidasi();
-                                            });
-
-                                            $('#no_po_akn').on('keyup change', function() {
-                                                if ($(this).val() != "") {
-                                                    $("#msgno_po_akn").text("");
-                                                    $("#no_po_akn").removeClass('is-invalid');
-                                                } else if ($(this).val() == "") {
-                                                    $("#msgno_po_akn").text("Nomor PO Harus diisi");
-                                                    $("#no_po_akn").addClass('is-invalid');
-                                                }
-                                                checkvalidasi();
-                                            });
-
-                                            $('#tanggal_po_akn').on('keyup', function() {
-                                                if ($(this).val() != "") {
-                                                    $("#msgtanggal_po_akn").text("");
-                                                    $("#tanggal_po_akn").removeClass('is-invalid');
-                                                } else if ($(this).val() == "") {
-                                                    $("#msgtanggal_po_akn").text("Tanggal PO Harus diisi");
-                                                    $("#tanggal_po_akn").addClass('is-invalid');
-                                                }
-                                                checkvalidasi();
-                                            });
-
-                                            function formatmoney(bilangan) {
-                                                var number_string = bilangan.toString(),
-                                                    sisa = number_string.length % 3,
-                                                    rupiah = number_string.substr(0, sisa),
-                                                    ribuan = number_string.substr(sisa).match(/\d{3}/g);
-
-                                                if (ribuan) {
-                                                    separator = sisa ? '.' : '';
-                                                    rupiah += separator + ribuan.join('.');
-                                                }
-                                                return rupiah;
+                                                numberRowsProduk($("#produktable"));
+                                                $('#pills-pengiriman-tab').addClass('disabled');
                                             }
-
-                                            function replaceAll(string, search, replace) {
-                                                return string.split(search).join(replace);
+                                        } else {
+                                            $('#checkbox_nopaket').addClass('hide');
+                                            $('#isi_nopaket').prop("checked", false);
+                                            $('#no_paket').attr('readonly', false);
+                                            $("#msgstatus").text("Status Harus dipilih");
+                                            $("#status").addClass('is-invalid');
+                                            if (nopaketubah == false) {
+                                                $('#no_paket').val(nopaketdb);
                                             }
+                                        }
+                                        checkvalidasi();
+                                    });
 
-                                            function totalhargaprd() {
-                                                var totalharga = 0;
-                                                $('#produktable').find('tr .produk_subtotal').each(function() {
-                                                    var subtotal = replaceAll($(this).val(), '.', '');
-                                                    totalharga = parseInt(totalharga) + parseInt(subtotal);
-                                                    $("#totalhargaprd").text("Rp. " + totalharga.toString().replace(
-                                                        /(\d)(?=(\d{3})+(?!\d))/g, "$1."));
-                                                })
+
+                                    $('input[type="checkbox"][name="isi_nopaket"]').change(function() {
+                                        if ($('input[type="checkbox"][name="isi_nopaket"]:checked').length >
+                                            0) {
+                                            $('#no_paket').attr('readonly', false);
+                                            if (nopaketubah == false) {
+                                                $('#no_paket').val(nopaketdb);
                                             }
+                                        } else {
+                                            $('#no_paket').attr('readonly', true);
+                                            $('#no_paket').val("");
+                                        }
+                                    }) $('input[type="checkbox"][name="isi_produk"]').change(function() {
+                                        $("#produktable tbody").empty();
+                                        $('#produktable tbody').append(trproduktable());
+                                        numberRowsProduk($("#produktable"));
+                                        $("#totalhargaprd").text("Rp. 0");
 
-                                            function numberRowsProduk($t) {
-                                                var c = 0 - 2;
-                                                $t.find("tr").each(function(ind, el) {
-                                                    $(el).find("td:eq(0)").html(++c);
-                                                    var j = c - 1;
-                                                    $(el).find('.penjualan_produk_id').attr('name',
-                                                        'penjualan_produk_id[' + j + ']');
-                                                    $(el).find('.penjualan_produk_id').attr('id', j);
-                                                    var variasi = $(el).find('.variasi');
-                                                    for (var k = 0; k < variasi.length; k++) {
-                                                        $(el).find('select[name="variasi[' + j + '][' + k + ']"')
-                                                            .select2();
-                                                        $(el).find('select[data-attr="variasi' + k + '"]').attr(
-                                                            'name', 'variasi[' + j +
-                                                            '][' + k + ']');
-                                                        $(el).find('select[data-attr="variasi' + k + '"]').attr(
-                                                            'id', 'variasi' + j + '' +
-                                                            k);
-                                                        $(el).find('span[data-attr="ketstok' + k + '"]').attr(
-                                                            'name', 'ketstok[' + j +
-                                                            '][' + k + ']');
-                                                        $(el).find('span[data-attr="ketstok' + k + '"]').attr('id',
-                                                            'ketstok' + j + '' + k);
+                                        if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
+                                            $("#dataproduk").removeClass("hide");
+                                        } else {
+                                            $("#dataproduk").addClass("hide");
+                                        }
+                                        checkvalidasi();
+                                    }); $(document).on('keyup', '#no_paket', function() {
+                                        nopaketubah = true;
+                                    })
+
+
+                                    $('#tanggal_pemesanan').on('keyup change', function() {
+                                        if ($(this).val() != "") {
+                                            $("#msgtanggal_pemesanan").text("");
+                                            $("#tanggal_pemesanan").removeClass('is-invalid');
+                                        } else if ($(this).val() == "") {
+                                            $("#msgtanggal_pemesanan").text("Isi Tanggal Pemesanan");
+                                            $("#tanggal_pemesanan").addClass('is-invalid');
+                                        }
+                                        checkvalidasi();
+                                    });
+
+                                    $('input[type="radio"][name="do_akn"]').on('change', function() {
+                                        if ($(this).val() == "yes") {
+                                            $("#do_detail_no_akn").removeClass("hide");
+                                            $("#do_detail_tgl_akn").removeClass("hide");
+                                        } else if ($(this).val() == "no") {
+                                            $("#do_detail_no_akn").addClass("hide");
+                                            $("#do_detail_tgl_akn").addClass("hide");
+                                        }
+                                        checkvalidasi();
+                                    });
+
+                                    $('#batas_kontrak').on('keyup change', function() {
+                                        if ($(this).val() != "") {
+                                            $("#msgbatas_kontrak").text("");
+                                            $("#batas_kontrak").removeClass('is-invalid');
+                                        } else if ($(this).val() == "") {
+                                            $("#msgbatas_kontrak").text("Batas Kontrak Harus diisi");
+                                            $("#batas_kontrak").addClass('is-invalid');
+                                        }
+                                        checkvalidasi();
+                                    });
+
+                                    $('#tgl_edit').on('keyup change', function() {
+                                        if ($(this).val() != "") {
+                                            $("#msgtgl_edit").text("");
+                                            $("#tgl_edit").removeClass('is-invalid');
+                                        } else if ($(this).val() == "") {
+                                            $("#msgtgl_edit").text("Tanggal Edit Harus diisi");
+                                            $("#tgl_edit").addClass('is-invalid');
+                                        }
+                                        checkvalidasi();
+                                    });
+
+                                    $('#pills-produk-tab').on('click', function() {
+                                        var cust = $('#customer_id').val();
+                                        var instansi = $('#instansi').val();
+                                        perencanaan(cust, instansi);
+                                        checkvalidasi();
+                                    });
+
+                                    $('input[name="instansi"]').on('keyup change', function() {
+                                        if ($(this).val() != "") {
+                                            var cust = $('.customer_id').val();
+                                            $("#msginstansi").text("");
+                                            $("#instansi").removeClass('is-invalid');
+                                            perencanaan(cust, $(this).val());
+                                        } else if ($(this).val() == "") {
+                                            $("#msginstansi").text("Instansi Harus diisi");
+                                            $("#instansi").addClass('is-invalid');
+                                        }
+                                        checkvalidasi();
+                                    });
+
+                                    $('#deskripsi').on('keyup change', function() {
+                                        if ($(this).val() != "") {
+                                            $("#msgdeskripsi").text("");
+                                            $("#deskripsi").removeClass('is-invalid');
+                                        } else if ($(this).val() == "") {
+                                            $("#msgdeskripsi").text("Deskripsi harus diisi");
+                                            $("#deskripsi").addClass('is-invalid');
+                                        }
+                                        checkvalidasi();
+                                    });
+
+                                    $('#no_urut').on('keyup change', function() {
+                                        if ($(this).val() != "") {
+                                            var values = $(this).val();
+                                            $.ajax({
+                                                type: 'POST',
+                                                dataType: 'JSON',
+                                                url: '/api/penjualan/check_no_urut/' +
+                                                    '{{ $e->id }}' + '/' +
+                                                    values,
+                                                success: function(data) {
+                                                    if (data > 0) {
+                                                        $("#msgno_urut").text(
+                                                            "No Urut tidak boleh sama");
+                                                        $("#no_urut").addClass('is-invalid');
+                                                        $('#btntambah').attr("disabled", true);
+                                                    } else {
+                                                        $("#msgno_urut").text("");
+                                                        $("#no_urut").removeClass('is-invalid');
                                                     }
-                                                    $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
-                                                    $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
-                                                    $(el).find('.produk_harga').attr('name', 'produk_harga[' + j +
-                                                        ']');
-                                                    $(el).find('.produk_ongkir').attr('id', 'produk_ongkir' + j);
-                                                    $(el).find('.produk_ongkir').attr('name', 'produk_ongkir[' + j +
-                                                        ']');
-                                                    $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
-                                                    $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j +
-                                                        ']');
-                                                    $(el).find('.produk_ppn').attr('id', 'produk_ppn' + j);
-                                                    $(el).find('.produk_ppn').attr('name', 'produk_ppn[' + j + ']');
-                                                    $(el).find('.produk_kalibrasi').attr('id', 'produk_kalibrasi' +
-                                                        j);
-                                                    $(el).find('.produk_kalibrasi').attr('name',
-                                                        'produk_kalibrasi[' + j + ']');
-                                                    $(el).find('.produk_kalibrasi_label').attr('for',
-                                                        'produk_kalibrasi' + j);
-                                                    $(el).find('.produk_ppn_label').attr('for', 'produk_ppn' + j);
-                                                    $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' +
-                                                    j);
-                                                    $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' +
-                                                        j + ']');
-                                                    $(el).find('.stok_distributor').attr('name',
-                                                        'stok_distributor[' + j + ']');
-                                                    $(el).find('.stok_distributor').attr('id', 'stok_distributor' +
-                                                        j);
-                                                    $(el).find('.stok_distributor').attr('value', j);
-                                                    $(el).find('.noSeriDistributor').attr('name',
-                                                        'noSeriDistributor[' + j + ']');
-                                                    $(el).find('.rencana_id').attr('id', 'rencana_id' + j);
-                                                    $(el).find('.rencana_id').attr('name', 'rencana_id[' + j + ']');
-                                                    $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
-                                                    select_data($(el).find('.penjualan_produk_id').attr('id'));
-                                                });
+                                                },
+                                                error: function(data) {
+                                                    $("#msgno_urut").text(
+                                                        "No Urut tidak boleh sama");
+                                                    $("#no_urut").addClass('is-invalid');
+                                                    $('#btntambah').attr("disabled", true);
+                                                }
+                                            });
+                                        } else if ($(this).val() == "") {
+                                            $("#msgno_urut").text("");
+                                            $("#no_urut").removeClass('is-invalid');
+                                        }
+                                        checkvalidasi();
+                                    });
+
+                                    $('#no_po_akn').on('keyup change', function() {
+                                        if ($(this).val() != "") {
+                                            $("#msgno_po_akn").text("");
+                                            $("#no_po_akn").removeClass('is-invalid');
+                                        } else if ($(this).val() == "") {
+                                            $("#msgno_po_akn").text("Nomor PO Harus diisi");
+                                            $("#no_po_akn").addClass('is-invalid');
+                                        }
+                                        checkvalidasi();
+                                    });
+
+                                    $('#tanggal_po_akn').on('keyup', function() {
+                                        if ($(this).val() != "") {
+                                            $("#msgtanggal_po_akn").text("");
+                                            $("#tanggal_po_akn").removeClass('is-invalid');
+                                        } else if ($(this).val() == "") {
+                                            $("#msgtanggal_po_akn").text("Tanggal PO Harus diisi");
+                                            $("#tanggal_po_akn").addClass('is-invalid');
+                                        }
+                                        checkvalidasi();
+                                    });
+
+                                    function formatmoney(bilangan) {
+                                        var number_string = bilangan.toString(),
+                                            sisa = number_string.length % 3,
+                                            rupiah = number_string.substr(0, sisa),
+                                            ribuan = number_string.substr(sisa).match(/\d{3}/g);
+
+                                        if (ribuan) {
+                                            separator = sisa ? '.' : '';
+                                            rupiah += separator + ribuan.join('.');
+                                        }
+                                        return rupiah;
+                                    }
+
+                                    function replaceAll(string, search, replace) {
+                                        return string.split(search).join(replace);
+                                    }
+
+                                    function totalhargaprd() {
+                                        var totalharga = 0;
+                                        $('#produktable').find('tr .produk_subtotal').each(function() {
+                                            var subtotal = replaceAll($(this).val(), '.', '');
+                                            totalharga = parseInt(totalharga) + parseInt(subtotal);
+                                            $("#totalhargaprd").text("Rp. " + totalharga.toString().replace(
+                                                /(\d)(?=(\d{3})+(?!\d))/g, "$1."));
+                                        })
+                                    }
+
+                                    function numberRowsProduk($t) {
+                                        var c = 0 - 2;
+                                        $t.find("tr").each(function(ind, el) {
+                                            $(el).find("td:eq(0)").html(++c);
+                                            var j = c - 1;
+                                            $(el).find('.penjualan_produk_id').attr('name',
+                                                'penjualan_produk_id[' + j + ']');
+                                            $(el).find('.penjualan_produk_id').attr('id', j);
+                                            var variasi = $(el).find('.variasi');
+                                            for (var k = 0; k < variasi.length; k++) {
+                                                $(el).find('select[name="variasi[' + j + '][' + k + ']"')
+                                                    .select2();
+                                                $(el).find('select[data-attr="variasi' + k + '"]').attr(
+                                                    'name', 'variasi[' + j +
+                                                    '][' + k + ']');
+                                                $(el).find('select[data-attr="variasi' + k + '"]').attr(
+                                                    'id', 'variasi' + j + '' +
+                                                    k);
+                                                $(el).find('span[data-attr="ketstok' + k + '"]').attr(
+                                                    'name', 'ketstok[' + j +
+                                                    '][' + k + ']');
+                                                $(el).find('span[data-attr="ketstok' + k + '"]').attr('id',
+                                                    'ketstok' + j + '' + k);
                                             }
+                                            $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
+                                            $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
+                                            $(el).find('.produk_harga').attr('name', 'produk_harga[' + j +
+                                                ']');
+                                            $(el).find('.produk_ongkir').attr('id', 'produk_ongkir' + j);
+                                            $(el).find('.produk_ongkir').attr('name', 'produk_ongkir[' + j +
+                                                ']');
+                                            $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
+                                            $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j +
+                                                ']');
+                                            $(el).find('.produk_ppn').attr('id', 'produk_ppn' + j);
+                                            $(el).find('.produk_ppn').attr('name', 'produk_ppn[' + j + ']');
+                                            $(el).find('.produk_kalibrasi').attr('id', 'produk_kalibrasi' +
+                                                j);
+                                            $(el).find('.produk_kalibrasi').attr('name',
+                                                'produk_kalibrasi[' + j + ']');
+                                            $(el).find('.produk_kalibrasi_label').attr('for',
+                                                'produk_kalibrasi' + j);
+                                            $(el).find('.produk_ppn_label').attr('for', 'produk_ppn' + j);
+                                            $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' +
+                                                j);
+                                            $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' +
+                                                j + ']');
+                                            $(el).find('.stok_distributor').attr('name',
+                                                'stok_distributor[' + j + ']');
+                                            $(el).find('.stok_distributor').attr('id', 'stok_distributor' +
+                                                j);
+                                            $(el).find('.stok_distributor').attr('value', j);
+                                            $(el).find('.noSeriDistributor').attr('name',
+                                                'noSeriDistributor[' + j + ']');
+                                            $(el).find('.rencana_id').attr('id', 'rencana_id' + j);
+                                            $(el).find('.rencana_id').attr('name', 'rencana_id[' + j + ']');
+                                            $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
+                                            select_data($(el).find('.penjualan_produk_id').attr('id'));
+                                        });
+                                    }
 
-                                            $("#produktable").on('keyup change', '.penjualan_produk_id', function() {
-                                                var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
-                                                var harga = $(this).closest('tr').find('.produk_harga').val();
-                                                var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
-                                                var subtotal = $(this).closest('tr').find('.produk_subtotal');
-                                                $(this).closest('tr').find('.rencana_id').val("");
-                                                if (jumlah != "" && harga != "") {
-                                                    var hargacvrt = replaceAll(harga, '.', '');
-                                                    var ongkircvrt = replaceAll(ongkir, '.', '');
-                                                    subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(
-                                                        ongkircvrt)));
-                                                    totalhargaprd();
-                                                } else {
-                                                    subtotal.val(formatmoney("0"));
-                                                    totalhargaprd();
-                                                }
-                                                checkvalidasi();
-                                            });
+                                    $("#produktable").on('keyup change', '.penjualan_produk_id', function() {
+                                        var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+                                        var harga = $(this).closest('tr').find('.produk_harga').val();
+                                        var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
+                                        var subtotal = $(this).closest('tr').find('.produk_subtotal');
+                                        $(this).closest('tr').find('.rencana_id').val("");
+                                        if (jumlah != "" && harga != "") {
+                                            var hargacvrt = replaceAll(harga, '.', '');
+                                            var ongkircvrt = replaceAll(ongkir, '.', '');
+                                            subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(
+                                                ongkircvrt)));
+                                            totalhargaprd();
+                                        } else {
+                                            subtotal.val(formatmoney("0"));
+                                            totalhargaprd();
+                                        }
+                                        checkvalidasi();
+                                    });
 
-                                            $("#produktable").on('keyup change', '.produk_jumlah', function() {
-                                                var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
-                                                var harga = $(this).closest('tr').find('.produk_harga').val();
-                                                var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
-                                                var subtotal = $(this).closest('tr').find('.produk_subtotal');
-                                                var ketstok = $(this).closest('tr').find('.ketstok');
-                                                var variasi = $(this).closest('tr').find('.variasi');
-                                                var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr(
-                                                'id');
-                                                if (jumlah != "" && harga != "") {
-                                                    var hargacvrt = replaceAll(harga, '.', '');
-                                                    var ongkircvrt = replaceAll(ongkir, '.', '');
-                                                    if (ongkircvrt == "") {
-                                                        ongkircvrt = "0";
-                                                        $(this).closest('tr').find('.produk_ongkir').val("0");
-                                                    }
-                                                    subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(
-                                                        ongkircvrt)));
-                                                    totalhargaprd();
-                                                    for (var i = 0; i < variasi.length; i++) {
-                                                        var variasires = $('select[name="variasi[' + ppid + '][' + i +
-                                                            ']"]').select2(
-                                                            'data')[0];
-                                                        var kebutuhan = jumlah * variasires.jumlah;
-                                                        if (cek_stok(variasires.id) < kebutuhan) {
-                                                            var jumlah_kekurangan = 0;
-                                                            if (cek_stok(variasires.id) < 0) {
-                                                                jumlah_kekurangan = kebutuhan;
-                                                            } else {
-                                                                jumlah_kekurangan = Math.abs(cek_stok(variasires.id) -
-                                                                    kebutuhan);
-                                                            }
-                                                            $('select[name="variasi[' + ppid + '][' + i + ']"]')
-                                                                .addClass('is-invalid');
-                                                            $('span[name="ketstok[' + ppid + '][' + i + ']"]').text(
-                                                                'Jumlah Kurang ' +
-                                                                jumlah_kekurangan + ' dari Permintaan');
-                                                        } else if (cek_stok(variasires.id) >= kebutuhan) {
-                                                            $('select[name="variasi[' + ppid + '][' + i + ']"]')
-                                                                .removeClass('is-invalid');
-                                                            $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('');
-                                                        }
-                                                    }
-                                                } else {
-                                                    subtotal.val(formatmoney("0"));
-                                                    totalhargaprd();
-                                                    variasi.removeClass('is-invalid');
-                                                    ketstok.text('');
-                                                }
-
-                                                checkvalidasi();
-                                            });
-
-                                            $('#produktable').on('keyup change', '.variasi', function() {
-                                                $(this).val();
-                                                var name = $(this).attr('name');
-                                                var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
-                                                var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr(
-                                                'id');
-                                                val = $('select[name="' + name + '"]').val();
-                                                id = $('select[name="' + name + '"]').attr('data-id');
-                                                vals = $('select[name="' + name + '"]').select2('data')[0];
-                                                var kebutuhan = jumlah * vals.jumlah;
-                                                if (vals.stok < kebutuhan) {
+                                    $("#produktable").on('keyup change', '.produk_jumlah', function() {
+                                        var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+                                        var harga = $(this).closest('tr').find('.produk_harga').val();
+                                        var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
+                                        var subtotal = $(this).closest('tr').find('.produk_subtotal');
+                                        var ketstok = $(this).closest('tr').find('.ketstok');
+                                        var variasi = $(this).closest('tr').find('.variasi');
+                                        var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr(
+                                            'id');
+                                        if (jumlah != "" && harga != "") {
+                                            var hargacvrt = replaceAll(harga, '.', '');
+                                            var ongkircvrt = replaceAll(ongkir, '.', '');
+                                            if (ongkircvrt == "") {
+                                                ongkircvrt = "0";
+                                                $(this).closest('tr').find('.produk_ongkir').val("0");
+                                            }
+                                            subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(
+                                                ongkircvrt)));
+                                            totalhargaprd();
+                                            for (var i = 0; i < variasi.length; i++) {
+                                                var variasires = $('select[name="variasi[' + ppid + '][' + i +
+                                                    ']"]').select2(
+                                                    'data')[0];
+                                                var kebutuhan = jumlah * variasires.jumlah;
+                                                if (cek_stok(variasires.id) < kebutuhan) {
                                                     var jumlah_kekurangan = 0;
-                                                    if (vals.stok < 0) {
+                                                    if (cek_stok(variasires.id) < 0) {
                                                         jumlah_kekurangan = kebutuhan;
                                                     } else {
-                                                        jumlah_kekurangan = Math.abs(vals.stok - kebutuhan);
+                                                        jumlah_kekurangan = Math.abs(cek_stok(variasires.id) -
+                                                            kebutuhan);
                                                     }
-                                                    $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass(
-                                                        'is-invalid');
-                                                    $('span[name="ketstok[' + ppid + '][' + id + ']"]').text(
+                                                    $('select[name="variasi[' + ppid + '][' + i + ']"]')
+                                                        .addClass('is-invalid');
+                                                    $('span[name="ketstok[' + ppid + '][' + i + ']"]').text(
                                                         'Jumlah Kurang ' +
                                                         jumlah_kekurangan + ' dari Permintaan');
-                                                } else if (vals.stok >= kebutuhan) {
-                                                    $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass(
-                                                        'is-invalid');
-                                                    $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
+                                                } else if (cek_stok(variasires.id) >= kebutuhan) {
+                                                    $('select[name="variasi[' + ppid + '][' + i + ']"]')
+                                                        .removeClass('is-invalid');
+                                                    $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('');
                                                 }
-                                                checkvalidasi();
-                                            });
+                                            }
+                                        } else {
+                                            subtotal.val(formatmoney("0"));
+                                            totalhargaprd();
+                                            variasi.removeClass('is-invalid');
+                                            ketstok.text('');
+                                        }
 
-                                            $("#produktable").on('keyup change', '.produk_harga', function() {
-                                                var result = $(this).val().replace(/\D/g, "").replace(
-                                                    /\B(?=(\d{3})+(?!\d))/g, ".");
-                                                $(this).val(result);
-                                                var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
-                                                var harga = $(this).closest('tr').find('.produk_harga').val();
-                                                var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
-                                                var subtotal = $(this).closest('tr').find('.produk_subtotal');
-                                                if (jumlah != "" && harga != "") {
-                                                    var hargacvrt = replaceAll(harga, '.', '');
-                                                    var ongkircvrt = replaceAll(ongkir, '.', '');
-                                                    if (ongkircvrt == "") {
-                                                        ongkircvrt = "0";
-                                                        $(this).closest('tr').find('.produk_ongkir').val("0");
-                                                    }
-                                                    subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(
-                                                        ongkircvrt)));
-                                                    totalhargaprd();
-                                                } else {
-                                                    subtotal.val(formatmoney("0"));
-                                                    totalhargaprd();
-                                                }
+                                        checkvalidasi();
+                                    });
 
-                                                checkvalidasi();
-                                            });
+                                    $('#produktable').on('keyup change', '.variasi', function() {
+                                        $(this).val();
+                                        var name = $(this).attr('name');
+                                        var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+                                        var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr(
+                                            'id');
+                                        val = $('select[name="' + name + '"]').val();
+                                        id = $('select[name="' + name + '"]').attr('data-id');
+                                        vals = $('select[name="' + name + '"]').select2('data')[0];
+                                        var kebutuhan = jumlah * vals.jumlah;
+                                        if (vals.stok < kebutuhan) {
+                                            var jumlah_kekurangan = 0;
+                                            if (vals.stok < 0) {
+                                                jumlah_kekurangan = kebutuhan;
+                                            } else {
+                                                jumlah_kekurangan = Math.abs(vals.stok - kebutuhan);
+                                            }
+                                            $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass(
+                                                'is-invalid');
+                                            $('span[name="ketstok[' + ppid + '][' + id + ']"]').text(
+                                                'Jumlah Kurang ' +
+                                                jumlah_kekurangan + ' dari Permintaan');
+                                        } else if (vals.stok >= kebutuhan) {
+                                            $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass(
+                                                'is-invalid');
+                                            $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
+                                        }
+                                        checkvalidasi();
+                                    });
 
-                                            $("#produktable").on('keyup change', '.produk_ongkir', function() {
-                                                var result = $(this).val().replace(/\D/g, "").replace(
-                                                    /\B(?=(\d{3})+(?!\d))/g, ".");
-                                                $(this).val(result);
-                                                var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
-                                                var harga = $(this).closest('tr').find('.produk_harga').val();
-                                                var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
-                                                var subtotal = $(this).closest('tr').find('.produk_subtotal');
-                                                if (jumlah != "" && harga != "") {
-                                                    var hargacvrt = replaceAll(harga, '.', '');
-                                                    var ongkircvrt = replaceAll(ongkir, '.', '');
-                                                    subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(
-                                                        ongkircvrt)));
-                                                    totalhargaprd();
-                                                } else {
-                                                    subtotal.val(formatmoney("0"));
-                                                    totalhargaprd();
-                                                }
-                                                checkvalidasi();
-                                            });
+                                    $("#produktable").on('keyup change', '.produk_harga', function() {
+                                        var result = $(this).val().replace(/\D/g, "").replace(
+                                            /\B(?=(\d{3})+(?!\d))/g, ".");
+                                        $(this).val(result);
+                                        var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+                                        var harga = $(this).closest('tr').find('.produk_harga').val();
+                                        var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
+                                        var subtotal = $(this).closest('tr').find('.produk_subtotal');
+                                        if (jumlah != "" && harga != "") {
+                                            var hargacvrt = replaceAll(harga, '.', '');
+                                            var ongkircvrt = replaceAll(ongkir, '.', '');
+                                            if (ongkircvrt == "") {
+                                                ongkircvrt = "0";
+                                                $(this).closest('tr').find('.produk_ongkir').val("0");
+                                            }
+                                            subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(
+                                                ongkircvrt)));
+                                            totalhargaprd();
+                                        } else {
+                                            subtotal.val(formatmoney("0"));
+                                            totalhargaprd();
+                                        }
 
-                                            function trproduktable() {
-                                                var data = `<tr>
+                                        checkvalidasi();
+                                    });
+
+                                    $("#produktable").on('keyup change', '.produk_ongkir', function() {
+                                        var result = $(this).val().replace(/\D/g, "").replace(
+                                            /\B(?=(\d{3})+(?!\d))/g, ".");
+                                        $(this).val(result);
+                                        var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+                                        var harga = $(this).closest('tr').find('.produk_harga').val();
+                                        var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
+                                        var subtotal = $(this).closest('tr').find('.produk_subtotal');
+                                        if (jumlah != "" && harga != "") {
+                                            var hargacvrt = replaceAll(harga, '.', '');
+                                            var ongkircvrt = replaceAll(ongkir, '.', '');
+                                            subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(
+                                                ongkircvrt)));
+                                            totalhargaprd();
+                                        } else {
+                                            subtotal.val(formatmoney("0"));
+                                            totalhargaprd();
+                                        }
+                                        checkvalidasi();
+                                    });
+
+                                    function trproduktable() {
+                                        var data = `<tr>
                     <td></td>
                     <td>
                         <div class="form-group select_item">
@@ -2920,434 +2920,434 @@
                         <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
                     </td>
                 </tr>`;
-                                                return data;
-                                            }
+                                        return data;
+                                    }
 
-                                            $('#addrowproduk').on('click', function() {
-                                                if ($('#produktable > tbody > tr').length <= 0) {
-                                                    $('#produktable tbody').append(trproduktable());
-                                                    numberRowsProduk($("#produktable"));
-                                                } else {
-                                                    $('#produktable tbody tr:last').after(trproduktable());
-                                                    numberRowsProduk($("#produktable"));
-                                                }
-                                                checkvalidasi();
-                                            });
+                                    $('#addrowproduk').on('click', function() {
+                                        if ($('#produktable > tbody > tr').length <= 0) {
+                                            $('#produktable tbody').append(trproduktable());
+                                            numberRowsProduk($("#produktable"));
+                                        } else {
+                                            $('#produktable tbody tr:last').after(trproduktable());
+                                            numberRowsProduk($("#produktable"));
+                                        }
+                                        checkvalidasi();
+                                    });
 
-                                            $('#produktable').on('click', '#removerowproduk', function(e) {
-                                                $(this).closest('tr').remove();
-                                                numberRowsProduk($("#produktable"));
-                                                totalhargaprd();
-                                                if ($('#produktable > tbody > tr').length <= 0) {
-                                                    $('#produktable tbody').append(trproduktable());
-                                                    numberRowsProduk($("#produktable"));
-                                                    $("#totalhargaprd").text("Rp. 0");
-                                                }
+                                    $('#produktable').on('click', '#removerowproduk', function(e) {
+                                        $(this).closest('tr').remove();
+                                        numberRowsProduk($("#produktable"));
+                                        totalhargaprd();
+                                        if ($('#produktable > tbody > tr').length <= 0) {
+                                            $('#produktable tbody').append(trproduktable());
+                                            numberRowsProduk($("#produktable"));
+                                            $("#totalhargaprd").text("Rp. 0");
+                                        }
 
-                                                checkvalidasi();
-                                            });
+                                        checkvalidasi();
+                                    });
 
-                                            function select_data(i) {
-                                                $('#' + i).select2({
-                                                    placeholder: "Pilih Produk",
-                                                    ajax: {
-                                                        minimumResultsForSearch: 20,
-                                                        dataType: 'json',
+                                    function select_data(i) {
+                                        $('#' + i).select2({
+                                            placeholder: "Pilih Produk",
+                                            ajax: {
+                                                minimumResultsForSearch: 20,
+                                                dataType: 'json',
 
-                                                        delay: 250,
-                                                        type: 'GET',
-                                                        url: '/api/penjualan_produk/select_param/ekatalog',
-                                                        data: function(params) {
-                                                            return {
-                                                                term: params.term
-                                                            }
-                                                        },
-                                                        processResults: function(data) {
-                                                            return {
-                                                                results: $.map(data, function(obj) {
-                                                                    return {
-                                                                        id: obj.id,
-                                                                        text: obj.nama
-                                                                    };
-                                                                })
-                                                            };
-                                                        },
+                                                delay: 250,
+                                                type: 'GET',
+                                                url: '/api/penjualan_produk/select_param/ekatalog',
+                                                data: function(params) {
+                                                    return {
+                                                        term: params.term
                                                     }
-                                                }).change(function(i) {
-                                                        var index = $(this).attr('id');
-                                                        var id = $(this).val();
-                                                        $.ajax({
-                                                                url: '/api/penjualan_produk/select/' + id,
-                                                                type: 'GET',
-                                                                dataType: 'json',
-                                                                success: function(res) {
-                                                                    $('#produk_harga' + index).val(formatmoney(
-                                                                        res[0].harga));
-                                                                    $('#produk_subtotal' + index).val(
-                                                                        formatmoney(res[0].harga * $(
-                                                                                '#produk_jumlah' + index)
-                                                                            .val()));
-                                                                    $('#rencana_id' + index).val("");
-                                                                    totalhargaprd();
-                                                                    var tes = $('#detail_produk' + index);
-                                                                    var produkKalibrasi = $(
-                                                                        '#produk_kalibrasi' + index);
-                                                                    tes.empty();
-                                                                    var datas = "";
-                                                                    tes.append(
-                                                                        `<fieldset><legend><b>Detail Produk</b></legend>`
-                                                                        );
-                                                                    for (var x = 0; x < res[0].produk
-                                                                        .length; x++) {
-                                                                        if (res[0].is_kalibrasi == true) {
-                                                                            produkKalibrasi.attr('disabled',
-                                                                                false);
-                                                                            produkKalibrasi.attr(
-                                                                                'data-kalibrasi', true);
-                                                                        } else {
-                                                                            produkKalibrasi.attr(
-                                                                                'data-kalibrasi', 'false');
-                                                                            produkKalibrasi.attr('disabled',
-                                                                                true);
-                                                                            produkKalibrasi.prop('checked',
-                                                                                false);
-                                                                            produkKalibrasi.val("0");
-                                                                            var labelElement = $("label[for='" +
-                                                                                produkKalibrasi.attr(
-                                                                                    'id') +
-                                                                                "']");
-                                                                            var label = labelElement.text(
-                                                                                'Tidak');
-                                                                        }
-                                                                        var data = [];
-                                                                        tes.append(`<div>`);
-                                                                        tes.append(`<div class="card-body blue-bg">
+                                                },
+                                                processResults: function(data) {
+                                                    return {
+                                                        results: $.map(data, function(obj) {
+                                                            return {
+                                                                id: obj.id,
+                                                                text: obj.nama
+                                                            };
+                                                        })
+                                                    };
+                                                },
+                                            }
+                                        }).change(function(i) {
+                                                var index = $(this).attr('id');
+                                                var id = $(this).val();
+                                                $.ajax({
+                                                        url: '/api/penjualan_produk/select/' + id,
+                                                        type: 'GET',
+                                                        dataType: 'json',
+                                                        success: function(res) {
+                                                            $('#produk_harga' + index).val(formatmoney(
+                                                                res[0].harga));
+                                                            $('#produk_subtotal' + index).val(
+                                                                formatmoney(res[0].harga * $(
+                                                                        '#produk_jumlah' + index)
+                                                                    .val()));
+                                                            $('#rencana_id' + index).val("");
+                                                            totalhargaprd();
+                                                            var tes = $('#detail_produk' + index);
+                                                            var produkKalibrasi = $(
+                                                                '#produk_kalibrasi' + index);
+                                                            tes.empty();
+                                                            var datas = "";
+                                                            tes.append(
+                                                                `<fieldset><legend><b>Detail Produk</b></legend>`
+                                                            );
+                                                            for (var x = 0; x < res[0].produk
+                                                                .length; x++) {
+                                                                if (res[0].is_kalibrasi == true) {
+                                                                    produkKalibrasi.attr('disabled',
+                                                                        false);
+                                                                    produkKalibrasi.attr(
+                                                                        'data-kalibrasi', true);
+                                                                } else {
+                                                                    produkKalibrasi.attr(
+                                                                        'data-kalibrasi', 'false');
+                                                                    produkKalibrasi.attr('disabled',
+                                                                        true);
+                                                                    produkKalibrasi.prop('checked',
+                                                                        false);
+                                                                    produkKalibrasi.val("0");
+                                                                    var labelElement = $("label[for='" +
+                                                                        produkKalibrasi.attr(
+                                                                            'id') +
+                                                                        "']");
+                                                                    var label = labelElement.text(
+                                                                        'Tidak');
+                                                                }
+                                                                var data = [];
+                                                                tes.append(`<div>`);
+                                                                tes.append(`<div class="card-body blue-bg">
                                             <h6>` + res[0].produk[x].nama + `</h6>
                                             <select class="form-control variasi" name="variasi[` + index + `][` + x +
-                                                                            `]" id="variasi` + index + `` +
-                                                                            x +
-                                                                            `" style="width:100%;" data-attr="variasi` +
-                                                                            x +
-                                                                            `" data-id="` + x + `"></select>
+                                                                    `]" id="variasi` + index + `` +
+                                                                    x +
+                                                                    `" style="width:100%;" data-attr="variasi` +
+                                                                    x +
+                                                                    `" data-id="` + x + `"></select>
                                             <span class="invalid-feedback d-block ketstok" name="ketstok[` + index +
-                                                                            `][` + x + `]" id="ketstok` +
-                                                                            index + `` + x +
-                                                                            `" data-attr="ketstok` + x +
-                                                                            `" data-id="` + x + `"></span>
+                                                                    `][` + x + `]" id="ketstok` +
+                                                                    index + `` + x +
+                                                                    `" data-attr="ketstok` + x +
+                                                                    `" data-id="` + x + `"></span>
                                         </div>`);
-                                                                        for (var y = 0; y < res[0].produk[x]
-                                                                            .gudang_barang_jadi
-                                                                            .length; y++) {
-                                                                            var nama_var = "";
-                                                                            if (res[0].produk[x]
-                                                                                .gudang_barang_jadi[y].nama
-                                                                                .trim() !=
-                                                                                "") {
-                                                                                if (res[0].produk[x]
-                                                                                    .gudang_barang_jadi[y].nama
-                                                                                    .trim() !=
-                                                                                    "") {
-                                                                                    nama_var = res[0].produk[x]
-                                                                                        .gudang_barang_jadi[y]
-                                                                                        .nama;
-                                                                                } else {
-                                                                                    nama_var = res[0].produk[x]
-                                                                                        .nama;
-                                                                                }
-                                                                                data.push({
-                                                                                    id: res[0].produk[x]
-                                                                                        .gudang_barang_jadi[
-                                                                                            y].id,
-                                                                                    text: nama_var,
-                                                                                    jumlah: res[0]
-                                                                                        .produk[x].pivot
-                                                                                        .jumlah,
-                                                                                    qt: res[0].produk[x]
-                                                                                        .gudang_barang_jadi[
-                                                                                            y].stok
-                                                                                });
-                                                                            }
-
-                                                                            $(`select[name="variasi[` + index +
-                                                                                `][` + x + `]"]`).select2({
-                                                                                placeholder: 'Pilih Variasi',
-                                                                                data: data,
-                                                                                templateResult: function(
-                                                                                    data) {
-                                                                                    var $span = $(
-                                                                                        `<div><span class="col-form-label">` +
-                                                                                        data
-                                                                                        .text +
-                                                                                        `</span><span class="badge blue-text float-right col-form-label stok" data-id="` +
-                                                                                        data
-                                                                                        .qt +
-                                                                                        `">` +
-                                                                                        data
-                                                                                        .qt +
-                                                                                        `</span></div>`
-                                                                                        );
-                                                                                    return $span;
-                                                                                },
-                                                                                templateSelection: function(
-                                                                                    data) {
-                                                                                    var $span = $(
-                                                                                        `<div><span class="col-form-label">` +
-                                                                                        data
-                                                                                        .text +
-                                                                                        `</span><span class="badge blue-text float-right col-form-label stok" data-id="` +
-                                                                                        data
-                                                                                        .qt +
-                                                                                        `">` +
-                                                                                        data
-                                                                                        .qt +
-                                                                                        `</span></div>`
-                                                                                        );
-                                                                                    return $span;
-                                                                                }
-                                                                            });
-
-                                                                            $(`select[name="variasi[` + index +
-                                                                                `][` + x + `]"]`).trigger(
-                                                                                "change");
-                                                                            tes.append(`</div>`)
-                                                                        }
-                                                                        tes.append(`</fieldset>`);
-                                                                    }
-                                                                }); checkvalidasi();
-                                                        });
-                                                }
-
-                                                function load_variasi() {
-                                                    produk = [];
-                                                    produk = <?php echo json_encode($item); ?>;
-                                                    produk = <?php echo json_encode($item); ?>;
-                                                    // console.log(produk)
-                                                    if (produk.length > 0) {
-                                                        for (var w = 0; w < produk.length; w++) {
-                                                            $.ajax({
-                                                                url: '/api/penjualan_produk/select/' + produk[w][
-                                                                    'penjualan_produk_id'
-                                                                ],
-                                                                type: 'GET',
-                                                                dataType: 'json',
-                                                                async: false,
-                                                                success: function(res) {
-                                                                    for (var x = 0; x < res[0].produk
-                                                                        .length; x++) {
-                                                                        var data = [];
-                                                                        for (var y = 0; y < res[0].produk[x]
-                                                                            .gudang_barang_jadi
-                                                                            .length; y++) {
-                                                                            var nama_var = "";
-                                                                            if (res[0].produk[x]
-                                                                                .gudang_barang_jadi[y].nama
-                                                                                .trim() != "") {
-                                                                                nama_var = res[0].produk[x]
-                                                                                    .gudang_barang_jadi[y].nama;
-                                                                            } else {
-                                                                                nama_var = res[0].produk[x]
+                                                                for (var y = 0; y < res[0].produk[x]
+                                                                    .gudang_barang_jadi
+                                                                    .length; y++) {
+                                                                    var nama_var = "";
+                                                                    if (res[0].produk[x]
+                                                                        .gudang_barang_jadi[y].nama
+                                                                        .trim() !=
+                                                                        "") {
+                                                                        if (res[0].produk[x]
+                                                                            .gudang_barang_jadi[y].nama
+                                                                            .trim() !=
+                                                                            "") {
+                                                                            nama_var = res[0].produk[x]
+                                                                                .gudang_barang_jadi[y]
                                                                                 .nama;
-                                                                            }
-                                                                            data.push({
-                                                                                id: res[0].produk[x]
-                                                                                    .gudang_barang_jadi[
-                                                                                        y].id,
-                                                                                text: nama_var,
-                                                                                jumlah: res[0].produk[x]
-                                                                                    .pivot.jumlah,
-                                                                                qt: res[0].produk[x]
-                                                                                    .gudang_barang_jadi[
-                                                                                        y]
-                                                                                    .stok
-                                                                            });
+                                                                        } else {
+                                                                            nama_var = res[0].produk[x]
+                                                                                .nama;
                                                                         }
-
-                                                                        $('select[name="variasi[' + w + '][' +
-                                                                            x + ']"]').select2({
-                                                                            placeholder: 'Pilih Variasi',
-                                                                            data: data,
-                                                                            templateResult: function(
-                                                                                data) {
-                                                                                var $span = $(
-                                                                                    `<div><span class="col-form-label">` +
-                                                                                    data.text +
-                                                                                    `</span><span class="badge blue-text float-right col-form-label stok" data-id="` +
-                                                                                    data.qt +
-                                                                                    `">` + data
-                                                                                    .qt +
-                                                                                    `</span></div>`
-                                                                                    );
-                                                                                return $span;
-                                                                            },
-                                                                            templateSelection: function(
-                                                                                data) {
-                                                                                var $span = $(
-                                                                                    `<div><span class="col-form-label">` +
-                                                                                    data.text +
-                                                                                    `</span><span class="badge blue-text float-right col-form-label stok" data-id="` +
-                                                                                    data.qt +
-                                                                                    `">` + data
-                                                                                    .qt +
-                                                                                    `</span></div>`
-                                                                                    );
-                                                                                return $span;
-                                                                            }
+                                                                        data.push({
+                                                                            id: res[0].produk[x]
+                                                                                .gudang_barang_jadi[
+                                                                                    y].id,
+                                                                            text: nama_var,
+                                                                            jumlah: res[0]
+                                                                                .produk[x].pivot
+                                                                                .jumlah,
+                                                                            qt: res[0].produk[x]
+                                                                                .gudang_barang_jadi[
+                                                                                    y].stok
                                                                         });
-
-                                                                        $('select[name="variasi[' + w + '][' +
-                                                                            x + ']"]').trigger("change");
                                                                     }
+
+                                                                    $(`select[name="variasi[` + index +
+                                                                        `][` + x + `]"]`).select2({
+                                                                        placeholder: 'Pilih Variasi',
+                                                                        data: data,
+                                                                        templateResult: function(
+                                                                            data) {
+                                                                            var $span = $(
+                                                                                `<div><span class="col-form-label">` +
+                                                                                data
+                                                                                .text +
+                                                                                `</span><span class="badge blue-text float-right col-form-label stok" data-id="` +
+                                                                                data
+                                                                                .qt +
+                                                                                `">` +
+                                                                                data
+                                                                                .qt +
+                                                                                `</span></div>`
+                                                                            );
+                                                                            return $span;
+                                                                        },
+                                                                        templateSelection: function(
+                                                                            data) {
+                                                                            var $span = $(
+                                                                                `<div><span class="col-form-label">` +
+                                                                                data
+                                                                                .text +
+                                                                                `</span><span class="badge blue-text float-right col-form-label stok" data-id="` +
+                                                                                data
+                                                                                .qt +
+                                                                                `">` +
+                                                                                data
+                                                                                .qt +
+                                                                                `</span></div>`
+                                                                            );
+                                                                            return $span;
+                                                                        }
+                                                                    });
+
+                                                                    $(`select[name="variasi[` + index +
+                                                                        `][` + x + `]"]`).trigger(
+                                                                        "change");
+                                                                    tes.append(`</div>`)
                                                                 }
-                                                            });
+                                                                tes.append(`</fieldset>`);
+                                                            }
+                                                        }); checkvalidasi();
+                                                });
+                                        }
+
+                                        function load_variasi() {
+                                            produk = [];
+                                            produk = <?php echo json_encode($item); ?>;
+                                            produk = <?php echo json_encode($item); ?>;
+                                            // console.log(produk)
+                                            if (produk.length > 0) {
+                                                for (var w = 0; w < produk.length; w++) {
+                                                    $.ajax({
+                                                        url: '/api/penjualan_produk/select/' + produk[w][
+                                                            'penjualan_produk_id'
+                                                        ],
+                                                        type: 'GET',
+                                                        dataType: 'json',
+                                                        async: false,
+                                                        success: function(res) {
+                                                            for (var x = 0; x < res[0].produk
+                                                                .length; x++) {
+                                                                var data = [];
+                                                                for (var y = 0; y < res[0].produk[x]
+                                                                    .gudang_barang_jadi
+                                                                    .length; y++) {
+                                                                    var nama_var = "";
+                                                                    if (res[0].produk[x]
+                                                                        .gudang_barang_jadi[y].nama
+                                                                        .trim() != "") {
+                                                                        nama_var = res[0].produk[x]
+                                                                            .gudang_barang_jadi[y].nama;
+                                                                    } else {
+                                                                        nama_var = res[0].produk[x]
+                                                                            .nama;
+                                                                    }
+                                                                    data.push({
+                                                                        id: res[0].produk[x]
+                                                                            .gudang_barang_jadi[
+                                                                                y].id,
+                                                                        text: nama_var,
+                                                                        jumlah: res[0].produk[x]
+                                                                            .pivot.jumlah,
+                                                                        qt: res[0].produk[x]
+                                                                            .gudang_barang_jadi[
+                                                                                y]
+                                                                            .stok
+                                                                    });
+                                                                }
+
+                                                                $('select[name="variasi[' + w + '][' +
+                                                                    x + ']"]').select2({
+                                                                    placeholder: 'Pilih Variasi',
+                                                                    data: data,
+                                                                    templateResult: function(
+                                                                        data) {
+                                                                        var $span = $(
+                                                                            `<div><span class="col-form-label">` +
+                                                                            data.text +
+                                                                            `</span><span class="badge blue-text float-right col-form-label stok" data-id="` +
+                                                                            data.qt +
+                                                                            `">` + data
+                                                                            .qt +
+                                                                            `</span></div>`
+                                                                        );
+                                                                        return $span;
+                                                                    },
+                                                                    templateSelection: function(
+                                                                        data) {
+                                                                        var $span = $(
+                                                                            `<div><span class="col-form-label">` +
+                                                                            data.text +
+                                                                            `</span><span class="badge blue-text float-right col-form-label stok" data-id="` +
+                                                                            data.qt +
+                                                                            `">` + data
+                                                                            .qt +
+                                                                            `</span></div>`
+                                                                        );
+                                                                        return $span;
+                                                                    }
+                                                                });
+
+                                                                $('select[name="variasi[' + w + '][' +
+                                                                    x + ']"]').trigger("change");
+                                                            }
                                                         }
-                                                    }
-
+                                                    });
                                                 }
+                                            }
 
-                                                $("#alamatinstansi").autocomplete({
-                                                    source: function(request, response) {
+                                        }
 
-                                                        $.ajax({
-                                                            dataType: 'json',
-                                                            url: "/api/penjualan/check_alamat",
-                                                            data: {
-                                                                term: request.term
-                                                            },
+                                        $("#alamatinstansi").autocomplete({
+                                            source: function(request, response) {
 
-                                                            success: function(data) {
+                                                $.ajax({
+                                                    dataType: 'json',
+                                                    url: "/api/penjualan/check_alamat",
+                                                    data: {
+                                                        term: request.term
+                                                    },
 
-                                                                var transformed = $.map(data,
-                                                                    function(el) {
-                                                                        return {
-                                                                            label: el.alamat,
-                                                                            id: el.id
-                                                                        };
-                                                                    });
-                                                                response(transformed);
-                                                            },
-                                                            error: function() {
-                                                                response([]);
-                                                            }
-                                                        });
+                                                    success: function(data) {
+
+                                                        var transformed = $.map(data,
+                                                            function(el) {
+                                                                return {
+                                                                    label: el.alamat,
+                                                                    id: el.id
+                                                                };
+                                                            });
+                                                        response(transformed);
+                                                    },
+                                                    error: function() {
+                                                        response([]);
                                                     }
                                                 });
+                                            }
+                                        });
 
-                                                $("#instansi").autocomplete({
-                                                    source: function(request, response) {
-                                                        $.ajax({
-                                                            dataType: 'json',
-                                                            url: '/api/customer/get_instansi/' + $(
-                                                                    '#customer_id').val() + '/' +
-                                                                yyyy,
-                                                            data: {
-                                                                term: request.term
-                                                            },
-                                                            success: function(data) {
+                                        $("#instansi").autocomplete({
+                                            source: function(request, response) {
+                                                $.ajax({
+                                                    dataType: 'json',
+                                                    url: '/api/customer/get_instansi/' + $(
+                                                            '#customer_id').val() + '/' +
+                                                        yyyy,
+                                                    data: {
+                                                        term: request.term
+                                                    },
+                                                    success: function(data) {
 
-                                                                var transformed = $.map(data,
-                                                                    function(el) {
-                                                                        return {
-                                                                            label: el,
-                                                                        };
-                                                                    });
-                                                                response(transformed);
-                                                            },
-                                                            error: function() {
-                                                                response([]);
-                                                            }
-                                                        });
+                                                        var transformed = $.map(data,
+                                                            function(el) {
+                                                                return {
+                                                                    label: el,
+                                                                };
+                                                            });
+                                                        response(transformed);
+                                                    },
+                                                    error: function() {
+                                                        response([]);
                                                     }
                                                 });
+                                            }
+                                        });
 
-                                                $("#satuan_kerja").autocomplete({
-                                                    source: function(request, response) {
-                                                        $.ajax({
-                                                            dataType: 'json',
-                                                            url: "/api/ekatalog/all_satuan",
-                                                            data: {
-                                                                term: request.term
-                                                            },
-                                                            success: function(data) {
+                                        $("#satuan_kerja").autocomplete({
+                                            source: function(request, response) {
+                                                $.ajax({
+                                                    dataType: 'json',
+                                                    url: "/api/ekatalog/all_satuan",
+                                                    data: {
+                                                        term: request.term
+                                                    },
+                                                    success: function(data) {
 
-                                                                var transformed = $.map(data,
-                                                                    function(el) {
-                                                                        return {
-                                                                            label: el.satuan,
-                                                                            id: el.id
-                                                                        };
-                                                                    });
-                                                                response(transformed);
-                                                            },
-                                                            error: function() {
-                                                                response([]);
-                                                            }
-                                                        });
+                                                        var transformed = $.map(data,
+                                                            function(el) {
+                                                                return {
+                                                                    label: el.satuan,
+                                                                    id: el.id
+                                                                };
+                                                            });
+                                                        response(transformed);
+                                                    },
+                                                    error: function() {
+                                                        response([]);
                                                     }
                                                 });
+                                            }
+                                        });
 
-                                                $("#deskripsi").autocomplete({
-                                                    source: function(request, response) {
+                                        $("#deskripsi").autocomplete({
+                                            source: function(request, response) {
 
-                                                        $.ajax({
-                                                            dataType: 'json',
-                                                            url: "/api/ekatalog/all_deskripsi",
-                                                            data: {
-                                                                term: request.term
-                                                            },
+                                                $.ajax({
+                                                    dataType: 'json',
+                                                    url: "/api/ekatalog/all_deskripsi",
+                                                    data: {
+                                                        term: request.term
+                                                    },
 
-                                                            success: function(data) {
+                                                    success: function(data) {
 
-                                                                var transformed = $.map(data,
-                                                                    function(el) {
-                                                                        return {
-                                                                            label: el.deskripsi,
-                                                                            id: el.id
-                                                                        };
-                                                                    });
-                                                                response(transformed);
-                                                            },
-                                                            error: function() {
-                                                                response([]);
-                                                            }
-                                                        });
+                                                        var transformed = $.map(data,
+                                                            function(el) {
+                                                                return {
+                                                                    label: el.deskripsi,
+                                                                    id: el.id
+                                                                };
+                                                            });
+                                                        response(transformed);
+                                                    },
+                                                    error: function() {
+                                                        response([]);
                                                     }
                                                 });
+                                            }
+                                        });
 
-                                                $('#perencanaantable').on('click', '#btntransfer', function() {
-                                                    var id = $(this).closest('tr').find('#btntransfer').attr(
-                                                        'data-id');
-                                                    var nama_produk = $(this).closest('tr').find('#btntransfer')
-                                                        .attr('data-nama_produk');
-                                                    var produk_id = $(this).closest('tr').find('#btntransfer').attr(
-                                                        'data-produk');
-                                                    var jumlah = $(this).closest('tr').find('#btntransfer').attr(
-                                                        'data-jumlah');
-                                                    var harga = $(this).closest('tr').find('#btntransfer').attr(
-                                                        'data-harga');
-                                                    transferproduk(id, nama_produk, produk_id, jumlah, harga);
-                                                });
+                                        $('#perencanaantable').on('click', '#btntransfer', function() {
+                                            var id = $(this).closest('tr').find('#btntransfer').attr(
+                                                'data-id');
+                                            var nama_produk = $(this).closest('tr').find('#btntransfer')
+                                                .attr('data-nama_produk');
+                                            var produk_id = $(this).closest('tr').find('#btntransfer').attr(
+                                                'data-produk');
+                                            var jumlah = $(this).closest('tr').find('#btntransfer').attr(
+                                                'data-jumlah');
+                                            var harga = $(this).closest('tr').find('#btntransfer').attr(
+                                                'data-harga');
+                                            transferproduk(id, nama_produk, produk_id, jumlah, harga);
+                                        });
 
-                                                $('input[type="radio"][name="do_ekat"]').on('change', function() {
-                                                    $('#btntambah').attr("disabled", true);
-                                                    $("#no_do_ekat").val("");
-                                                    $("#tanggal_do_ekat").val("");
-                                                    if ($(this).val() == "yes") {
-                                                        $("#do_detail_no_ekat").removeClass("hide");
-                                                        $("#do_detail_tgl_ekat").removeClass("hide");
-                                                    } else if ($(this).val() == "no") {
-                                                        $("#do_detail_no_ekat").addClass("hide");
-                                                        $("#do_detail_tgl_ekat").addClass("hide");
-                                                    }
-                                                });
+                                        $('input[type="radio"][name="do_ekat"]').on('change', function() {
+                                            $('#btntambah').attr("disabled", true);
+                                            $("#no_do_ekat").val("");
+                                            $("#tanggal_do_ekat").val("");
+                                            if ($(this).val() == "yes") {
+                                                $("#do_detail_no_ekat").removeClass("hide");
+                                                $("#do_detail_tgl_ekat").removeClass("hide");
+                                            } else if ($(this).val() == "no") {
+                                                $("#do_detail_no_ekat").addClass("hide");
+                                                $("#do_detail_tgl_ekat").addClass("hide");
+                                            }
+                                        });
 
-                                                function transferproduk(id, nama_produk, produk_id, jumlah, harga) {
-                                                    var data = `<tr>
+                                        function transferproduk(id, nama_produk, produk_id, jumlah, harga) {
+                                            var data = `<tr>
                         <td></td>
                         <td>
                             <div class="form-group select_item">
                                 <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                     <option value="` + produk_id + `">` + nama_produk +
-                                                        `</option>
+                                                `</option>
                                 </select>
                                 <div class="detailjual" id="tes0">
                                 </div>
@@ -3358,8 +3358,8 @@
                             <div class="form-group d-flex justify-content-center">
                                 <div class="input-group">
                                     <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah0" value="` +
-                                                        jumlah +
-                                                        `" style="width:100%;">
+                                                jumlah +
+                                                `" style="width:100%;">
 
                                 </div>
                                 <small id="produk_ketersediaan"></small>
@@ -3369,8 +3369,8 @@
                             <div class="form-group d-flex justify-content-center">
 
                                 <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" value="` +
-                                                        formatmoney(harga) +
-                                                        `" placeholder="Masukkan Harga" style="width:100%;"/>
+                                                formatmoney(harga) +
+                                                `" placeholder="Masukkan Harga" style="width:100%;"/>
                             </div>
                         </td>
                         <td>
@@ -3382,8 +3382,8 @@
                         <td>
                             <div class="form-group d-flex justify-content-center">
                                 <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" value="` +
-                                                        formatmoney(jumlah * parseInt(harga)) +
-                                                        `" style="width:100%;" readonly/>
+                                                formatmoney(jumlah * parseInt(harga)) +
+                                                `" style="width:100%;" readonly/>
                             </div>
                         </td>
                         <td>
@@ -3406,218 +3406,220 @@
                             <input type="hidden" name="noSeriDistributor[0]" class="noSeriDistributor">
                         </td>
                         <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly value="` +
-                                                        id + `"></td>
+                                                id + `"></td>
                         <td>
                             <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
                         </td>
                     </tr>`;
 
-                                                    if ($('#produktable > tbody > tr').length <= 0) {
-                                                        $('#produktable tbody').append(data);
-                                                        select_data();
-                                                        numberRowsProduk($("#produktable"));
-                                                        totalhargaprd();
-                                                    } else {
-                                                        $('#produktable tbody tr:last').after(data);
-                                                        select_data();
-                                                        numberRowsProduk($("#produktable"));
-                                                        totalhargaprd();
-                                                    }
-                                                    var index = $('#produktable > tbody > tr').length - 1;
-                                                    $.ajax({
-                                                        url: '/api/penjualan_produk/select/' + produk_id,
-                                                        type: 'GET',
-                                                        dataType: 'json',
-                                                        success: function(res) {
-                                                            var tes = $('#detail_produk' + index);
-                                                            tes.empty();
-                                                            var datas = "";
-                                                            tes.append(
-                                                                `<fieldset><legend><b>Detail Produk</b></legend>`
-                                                                );
-                                                            for (var x = 0; x < res[0].produk.length; x++) {
-                                                                var data = [];
-                                                                tes.append(`<div>`);
-                                                                tes.append(`<div class="card-body blue-bg">
+                                            if ($('#produktable > tbody > tr').length <= 0) {
+                                                $('#produktable tbody').append(data);
+                                                select_data();
+                                                numberRowsProduk($("#produktable"));
+                                                totalhargaprd();
+                                            } else {
+                                                $('#produktable tbody tr:last').after(data);
+                                                select_data();
+                                                numberRowsProduk($("#produktable"));
+                                                totalhargaprd();
+                                            }
+                                            var index = $('#produktable > tbody > tr').length - 1;
+                                            $.ajax({
+                                                url: '/api/penjualan_produk/select/' + produk_id,
+                                                type: 'GET',
+                                                dataType: 'json',
+                                                success: function(res) {
+                                                    var tes = $('#detail_produk' + index);
+                                                    tes.empty();
+                                                    var datas = "";
+                                                    tes.append(
+                                                        `<fieldset><legend><b>Detail Produk</b></legend>`
+                                                    );
+                                                    for (var x = 0; x < res[0].produk.length; x++) {
+                                                        var data = [];
+                                                        tes.append(`<div>`);
+                                                        tes.append(`<div class="card-body blue-bg">
                                             <h6>` + res[0].produk[x].nama + `</h6>
                                             <select class="form-control variasi" name="variasi[` + index + `][` + x +
-                                                                    `]" style="width:100%;" id="variasi` +
-                                                                    index + `` + x +
-                                                                    `" data-attr="variasi` + x +
-                                                                    `" data-id="` + x + `"></select>
+                                                            `]" style="width:100%;" id="variasi` +
+                                                            index + `` + x +
+                                                            `" data-attr="variasi` + x +
+                                                            `" data-id="` + x + `"></select>
                                             <span class="invalid-feedback d-block ketstok" name="ketstok[` + index +
-                                                                    `][` + x + `]" id="ketstok` + index +
-                                                                    `` + x +
-                                                                    `" data-attr="ketstok` + x +
-                                                                    `" data-id="` + x + `"></span>
+                                                            `][` + x + `]" id="ketstok` + index +
+                                                            `` + x +
+                                                            `" data-attr="ketstok` + x +
+                                                            `" data-id="` + x + `"></span>
                                         </div>`);
 
-                                                                for (var y = 0; y < res[0].produk[x]
-                                                                    .gudang_barang_jadi.length; y++) {
-                                                                    var nama_var = "";
-                                                                    if (res[0].produk[x].gudang_barang_jadi[y]
-                                                                        .nama.trim() != "") {
-                                                                        nama_var = res[0].produk[x]
-                                                                            .gudang_barang_jadi[y].nama;
-                                                                    } else {
-                                                                        nama_var = res[0].produk[x].nama;
-                                                                    }
-                                                                    data.push({
-                                                                        id: res[0].produk[x]
-                                                                            .gudang_barang_jadi[y].id,
-                                                                        text: nama_var,
-                                                                        jumlah: res[0].produk[x].pivot
-                                                                            .jumlah,
-                                                                        qt: res[0].produk[x]
-                                                                            .gudang_barang_jadi[y].stok
-                                                                    });
-                                                                }
-
-                                                                $(`select[name="variasi[` + index + `][` + x +
-                                                                    `]"]`).select2({
-                                                                    placeholder: 'Pilih Variasi',
-                                                                    data: data,
-                                                                    templateResult: function(data) {
-                                                                        var $span = $(
-                                                                            `<div><span class="col-form-label">` +
-                                                                            data.text +
-                                                                            `</span><span class="badge blue-text float-right col-form-label stok" data-id="` +
-                                                                            data.qt + `">` +
-                                                                            data.qt +
-                                                                            `</span></div>`);
-                                                                        return $span;
-                                                                    },
-                                                                    templateSelection: function(data) {
-                                                                        var $span = $(
-                                                                            `<div><span class="col-form-label">` +
-                                                                            data.text +
-                                                                            `</span><span class="badge blue-text float-right col-form-label stok" data-id="` +
-                                                                            data.qt + `">` +
-                                                                            data.qt +
-                                                                            `</span></div>`);
-                                                                        return $span;
-                                                                    }
-                                                                });
-
-                                                                $(`select[name="variasi[` + index + `][` + x +
-                                                                    `]"]`).trigger("change");
-                                                                tes.append(`</div>`)
+                                                        for (var y = 0; y < res[0].produk[x]
+                                                            .gudang_barang_jadi.length; y++) {
+                                                            var nama_var = "";
+                                                            if (res[0].produk[x].gudang_barang_jadi[y]
+                                                                .nama.trim() != "") {
+                                                                nama_var = res[0].produk[x]
+                                                                    .gudang_barang_jadi[y].nama;
+                                                            } else {
+                                                                nama_var = res[0].produk[x].nama;
                                                             }
-                                                            tes.append(`</fieldset>`);
-                                                            // tes.html(datas);
+                                                            data.push({
+                                                                id: res[0].produk[x]
+                                                                    .gudang_barang_jadi[y].id,
+                                                                text: nama_var,
+                                                                jumlah: res[0].produk[x].pivot
+                                                                    .jumlah,
+                                                                qt: res[0].produk[x]
+                                                                    .gudang_barang_jadi[y].stok
+                                                            });
                                                         }
-                                                    });
+
+                                                        $(`select[name="variasi[` + index + `][` + x +
+                                                            `]"]`).select2({
+                                                            placeholder: 'Pilih Variasi',
+                                                            data: data,
+                                                            templateResult: function(data) {
+                                                                var $span = $(
+                                                                    `<div><span class="col-form-label">` +
+                                                                    data.text +
+                                                                    `</span><span class="badge blue-text float-right col-form-label stok" data-id="` +
+                                                                    data.qt + `">` +
+                                                                    data.qt +
+                                                                    `</span></div>`);
+                                                                return $span;
+                                                            },
+                                                            templateSelection: function(data) {
+                                                                var $span = $(
+                                                                    `<div><span class="col-form-label">` +
+                                                                    data.text +
+                                                                    `</span><span class="badge blue-text float-right col-form-label stok" data-id="` +
+                                                                    data.qt + `">` +
+                                                                    data.qt +
+                                                                    `</span></div>`);
+                                                                return $span;
+                                                            }
+                                                        });
+
+                                                        $(`select[name="variasi[` + index + `][` + x +
+                                                            `]"]`).trigger("change");
+                                                        tes.append(`</div>`)
+                                                    }
+                                                    tes.append(`</fieldset>`);
+                                                    // tes.html(datas);
                                                 }
+                                            });
+                                        }
 
-                                                $(document).on('change', '.custom-control-input-pajak', function() {
-                                                    var labelElement = $(this).closest('tr').find(
-                                                        '.custom-control-label-pajak')
-                                                    var label = labelElement.text();
-                                                    // not checked
+                                        $(document).on('change', '.custom-control-input-pajak', function() {
+                                            var labelElement = $(this).closest('tr').find(
+                                                '.custom-control-label-pajak')
+                                            var label = labelElement.text();
+                                            // not checked
 
-                                                    if ($(this).val() == '0') {
-                                                        $(this).val('1');
-                                                        // change label text
-                                                        label = label.replace('Non PPN', 'PPN');
-                                                    } else {
-                                                        $(this).val('0');
-                                                        // change label text
-                                                        label = label.replace('PPN', 'Non PPN');
-                                                    }
-                                                    labelElement.text(label);
-                                                });
+                                            if ($(this).val() == '0') {
+                                                $(this).val('1');
+                                                // change label text
+                                                label = label.replace('Non PPN', 'PPN');
+                                            } else {
+                                                $(this).val('0');
+                                                // change label text
+                                                label = label.replace('PPN', 'Non PPN');
+                                            }
+                                            labelElement.text(label);
+                                        });
 
-                                                $(document).on('change', '.custom-control-input-kalibrasi', function() {
-                                                    var labelElement = $(this).closest('tr').find(
-                                                        '.custom-control-label-kalibrasi')
-                                                    var label = labelElement.text();
-                                                    // not checked
+                                        $(document).on('change', '.custom-control-input-kalibrasi', function() {
+                                            var labelElement = $(this).closest('tr').find(
+                                                '.custom-control-label-kalibrasi')
+                                            var label = labelElement.text();
+                                            // not checked
 
-                                                    if ($(this).val() == '0') {
-                                                        $(this).val('1');
-                                                        // change label text
-                                                        label = label.replace('Tidak', 'Ya');
-                                                    } else {
-                                                        $(this).val('0');
-                                                        // change label text
-                                                        label = label.replace('Ya', 'Tidak');
-                                                    }
-                                                    labelElement.text(label);
-                                                });
+                                            if ($(this).val() == '0') {
+                                                $(this).val('1');
+                                                // change label text
+                                                label = label.replace('Tidak', 'Ya');
+                                            } else {
+                                                $(this).val('0');
+                                                // change label text
+                                                label = label.replace('Ya', 'Tidak');
+                                            }
+                                            labelElement.text(label);
+                                        });
 
-                                                $('.checkAllDistributor').click(function() {
+                                        $('.checkAllDistributor').click(function() {
 
-                                                    if ($(this).is(':checked')) {
-                                                        let kalibrasi = $('.custom-control-input-kalibrasi');
-                                                        let labelKalibrasi = $('.custom-control-label-kalibrasi');
-                                                        $('.stok_distributor').prop('checked', true);
+                                            if ($(this).is(':checked')) {
+                                                let kalibrasi = $('.custom-control-input-kalibrasi');
+                                                let labelKalibrasi = $('.custom-control-label-kalibrasi');
+                                                $('.stok_distributor').prop('checked', true);
 
-                                                        kalibrasi.prop('checked', false);
-                                                        kalibrasi.val('0');
-                                                        labelKalibrasi.text('Tidak');
-                                                        kalibrasi.prop('disabled', true);
-                                                        // show all button
-                                                        $('.btnNoSeri').prop('hidden', false);
-                                                    } else {
-                                                        let kalibrasi = $('#produktable').find(
-                                                            '.custom-control-input-kalibrasi');
-                                                        kalibrasi.each(function() {
-                                                            if ($(this).attr('data-kalibrasi') == 'true') {
-                                                                $(this).attr('disabled', false)
-                                                            }
-                                                        });
-                                                        $('.stok_distributor').prop('checked', false);
-                                                        // hide all button
-                                                        $('.btnNoSeri').prop('hidden', true);
+                                                kalibrasi.prop('checked', false);
+                                                kalibrasi.val('0');
+                                                labelKalibrasi.text('Tidak');
+                                                kalibrasi.prop('disabled', true);
+                                                // show all button
+                                                $('.btnNoSeri').prop('hidden', false);
+                                            } else {
+                                                let kalibrasi = $('#produktable').find(
+                                                    '.custom-control-input-kalibrasi');
+                                                kalibrasi.each(function() {
+                                                    if ($(this).attr('data-kalibrasi') == 'true') {
+                                                        $(this).attr('disabled', false)
                                                     }
                                                 });
+                                                $('.stok_distributor').prop('checked', false);
+                                                // hide all button
+                                                $('.btnNoSeri').prop('hidden', true);
+                                            }
+                                        });
 
-                                                $(document).on('click', '.stok_distributor', function() {
-                                                    // check if checkbox is checked
-                                                    let kalibrasi = $(this).closest('tr').find(
-                                                        '.custom-control-input-kalibrasi');
-                                                    let labelKalibrasi = $(this).closest('tr').find(
-                                                        '.custom-control-label-kalibrasi');
-                                                    if ($(this).is(':checked')) {
-                                                        // check if all checkboxes are selected find button hidden false
-                                                        kalibrasi.prop('checked', false);
-                                                        kalibrasi.val('0');
-                                                        kalibrasi.attr('disabled', true)
-                                                        labelKalibrasi.text('Tidak');
-                                                        $(this).closest('td').find('button').prop('hidden', false);
-                                                    } else {
-                                                        // check if all checkboxes are selected find button hidden true
-                                                        $(this).closest('td').find('button').prop('hidden', true);
-                                                        if (kalibrasi.attr('data-kalibrasi') == 'true') {
-                                                            kalibrasi.attr('disabled', false)
-                                                            console.log('kalibrasi', kalibrasi.attr(
-                                                                'data-kalibrasi'))
-                                                        }
-                                                    }
+                                        $(document).on('click', '.stok_distributor', function() {
+                                            // check if checkbox is checked
+                                            let kalibrasi = $(this).closest('tr').find(
+                                                '.custom-control-input-kalibrasi');
+                                            let labelKalibrasi = $(this).closest('tr').find(
+                                                '.custom-control-label-kalibrasi');
+                                            if ($(this).is(':checked')) {
+                                                // check if all checkboxes are selected find button hidden false
+                                                kalibrasi.prop('checked', false);
+                                                kalibrasi.val('0');
+                                                kalibrasi.attr('disabled', true)
+                                                labelKalibrasi.text('Tidak');
+                                                $(this).closest('td').find('button').prop('hidden', false);
+                                            } else {
+                                                // check if all checkboxes are selected find button hidden true
+                                                $(this).closest('td').find('button').prop('hidden', true);
+                                                if (kalibrasi.attr('data-kalibrasi') == 'true') {
+                                                    kalibrasi.attr('disabled', false)
+                                                    console.log('kalibrasi', kalibrasi.attr(
+                                                        'data-kalibrasi'))
+                                                }
+                                            }
+                                        });
+
+
+                                        $(document).on('click', '.btnNoSeri', function() {
+                                            let indexDistributor = $(this).closest('tr').index();
+                                            $('.indexSeriDistributor').val(indexDistributor);
+                                            let jumlah = $('.produk_jumlah').eq(indexDistributor).val();
+                                            $('.jumlahSeriDistributor').val(jumlah);
+                                            // find index by indexDistributor class noSeriDistributor
+                                            let noSeri = $('.noSeriDistributor').eq(indexDistributor).val();
+                                            $('.indexSeriDistributor').val(indexDistributor);
+                                            // change array to string with comma
+                                            let noSeriArray = noSeri.split(',');
+                                            // remove empty string
+                                            noSeriArray = noSeriArray.filter(function(el) {
+                                                noSeriArray = noSeriArray.filter(function(el) {
+                                                    return el != '';
                                                 });
+                                                // set value to input
+                                                $('.nomorSeriDistributor').val(noSeriArray);
+                                                // open modal Distributor
+                                                $('.modalDistributor').modal('show');
 
-
-                                                $(document).on('click', '.btnNoSeri', function() {
-                                                    let indexDistributor = $(this).closest('tr').index();
-                                                    $('.indexSeriDistributor').val(indexDistributor);
-                                                    let jumlah = $('.produk_jumlah').eq(indexDistributor).val();
-                                                    $('.jumlahSeriDistributor').val(jumlah);
-                                                    // find index by indexDistributor class noSeriDistributor
-                                                    let noSeri = $('.noSeriDistributor').eq(indexDistributor).val();
-                                                    $('.indexSeriDistributor').val(indexDistributor);
-                                                    // change array to string with comma
-                                                    let noSeriArray = noSeri.split(',');
-                                                    // remove empty string
-                                                    noSeriArray = noSeriArray.filter(function(el) {
-                                                        noSeriArray = noSeriArray.filter(function(el) {
-                                                            return el != '';
-                                                        });
-                                                        // set value to input
-                                                        $('.nomorSeriDistributor').val(noSeriArray);
-                                                        // open modal Distributor
-                                                        $('.modalDistributor').modal('show');
-
-                                                    })
-                                                });
+                                            })
+                                        });
+                                    })
+                            })
     </script>
 @stop
