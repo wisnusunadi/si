@@ -1110,7 +1110,7 @@
                                                                                                 <input type="checkbox"
                                                                                                     class="custom-control-input custom-control-input-pajak part_ppn"
                                                                                                     id="part_ppn{{ $loop->iteration - 1 }}"
-                                                                                                    name="part_ppn[]"
+                                                                                                    name="part_ppn[{{ $loop->iteration - 1 }}]"
                                                                                                     value="{{ $f->ppn }}"
                                                                                                     @if ($f->ppn == 1) checked @endif>
                                                                                                 <label
