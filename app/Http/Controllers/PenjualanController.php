@@ -5480,7 +5480,6 @@ class PenjualanController extends Controller
     }
     public function update_spa(Request $request, $id)
     {
-        dd($request->all());
         if ($request->perusahaan_pengiriman_nonakn == NULL || $request->alamat_pengiriman == NULL ||  $request->kemasan == NULL) {
             return response()->json([
                 'message' => 'Cek Form Kembali',
@@ -5687,7 +5686,7 @@ class PenjualanController extends Controller
                                     'm_sparepart_id' => $request->part_id[$i],
                                     'jumlah' => $request->part_jumlah[$i],
                                     'harga' => str_replace('.', "", $request->part_harga[$i]),
-                                    'ppn' => isset($request->produk_ppn[$i]) ? $request->produk_ppn[$i] : 0,
+                                    'ppn' => isset($request->part_ppn[$i]) ? $request->part_ppn[$i] : 0,
                                     'ongkir' => 0,
                                 ]);
                                 if (!$dspb) {
@@ -5733,7 +5732,6 @@ class PenjualanController extends Controller
     }
     public function update_spb(Request $request, $id)
     {
-        // dd($request->all());
         if ($request->perusahaan_pengiriman_nonakn == NULL || $request->alamat_pengiriman == NULL ||  $request->kemasan == NULL) {
             return response()->json([
                 'message' => 'Cek Form Kembali',
