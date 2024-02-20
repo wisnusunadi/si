@@ -95,13 +95,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                            .row {
-                                                                font-size: 12px;
-                                                            }
+                                                                .row {
+                                                                    font-size: 12px;
+                                                                }
 
-                                                            h4 {
-                                                                font-size: 20px;
-                                                            } */
+                                                                h4 {
+                                                                    font-size: 20px;
+                                                                } */
             body {
                 font-size: 12px;
             }
@@ -122,13 +122,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                            .row {
-                                                                font-size: 12px;
-                                                            }
+                                                                .row {
+                                                                    font-size: 12px;
+                                                                }
 
-                                                            h4 {
-                                                                font-size: 20px;
-                                                            } */
+                                                                h4 {
+                                                                    font-size: 20px;
+                                                                } */
             body {
                 font-size: 12px;
             }
@@ -1224,15 +1224,15 @@
                                                                                     <div
                                                                                         class="custom-control custom-switch">
                                                                                         <input type="checkbox"
-                                                                                            class="custom-control-input custom-control-input-pajak part_ppn"
-                                                                                            id="part_ppn{{ $loop->iteration - 1 }}"
-                                                                                            name="part_ppn[{{ $loop->iteration - 1 }}]"
+                                                                                            class="custom-control-input custom-control-input-pajak jasa_ppn"
+                                                                                            id="jasa_ppn{{ $loop->iteration - 1 }}"
+                                                                                            name="jasa_ppn[{{ $loop->iteration - 1 }}]"
                                                                                             value="{{ $f->ppn }}"
                                                                                             disabled
                                                                                             @if ($f->ppn == 1) checked @endif>
                                                                                         <label
-                                                                                            class="custom-control-label custom-control-label-pajak part_ppn_label"
-                                                                                            for="part_ppn{{ $loop->iteration - 1 }}">
+                                                                                            class="custom-control-label custom-control-label-pajak jasa_ppn_label"
+                                                                                            for="jasa_ppn{{ $loop->iteration - 1 }}">
                                                                                             @if ($f->ppn == 1)
                                                                                                 PPN
                                                                                             @else

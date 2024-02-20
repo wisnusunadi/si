@@ -4805,6 +4805,7 @@ class PenjualanController extends Controller
 
     public function update_penjualan($id, $jenis)
     {
+        dd($id, $jenis);
 
         if ($jenis == 'ekatalog') {
             $ekatalog = Ekatalog::find($id);
