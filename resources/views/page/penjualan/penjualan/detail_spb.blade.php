@@ -227,8 +227,8 @@
                                     <h6><b>Detail Produk</b></h6>
                                     <div class="table-responsive overflowcard">
                                         <?php $totalharga = 0;
-                                         $no_dsb = 0;
-                                         if (isset($data->Pesanan->detailpesanandsb)) {
+                                        $no_dsb = 0;
+                                        if (isset($data->Pesanan->detailpesanandsb)) {
                                             $no = count($data->Pesanan->detailpesanandsb);
                                         } else {
                                             $no = 0;
@@ -247,6 +247,11 @@
                                                         <th rowspan="2">Qty</th>
                                                         <th rowspan="2">Harga</th>
                                                         <th rowspan="2">Subtotal</th>
+                                                        <th rowspan="2">PPN</th>
+                                                        <th rowspan="2">Kalibrasi</th>
+                                                        @if (isset($data->Pesanan->detailpesanandsb) && count($data->Pesanan->detailpesanandsb) > 0)
+                                                            <th rowspan="2">Stok Distributor</th>
+                                                        @endif
                                                         @if (Auth::user()->divisi_id == '8')
                                                             <th rowspan="2">Aksi</th>
                                                         @endif
@@ -274,6 +279,22 @@
                                                                     class="nowraptxt tabnum">@currency($e->harga)</td>
                                                                 <td rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
                                                                     class="nowraptxt tabnum">@currency($e->harga * $e->jumlah + $e->ongkir)</td>
+                                                                <td rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
+                                                                    class="nowraptxt tabnum">
+                                                                    {{ $e->ppn ? 'Ya' : 'Tidak' }}
+                                                                </td>
+                                                                <td rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
+                                                                    class="nowraptxt tabnum">
+                                                                    {{ $e->kalibrasi ? 'Ya' : 'Tidak' }}
+                                                                </td>
+                                                                <td rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
+                                                                    class="nowraptxt tabnum">
+                                                                    @foreach ($e->NoseriDsb as $key => $noseri)
+                                                                        {{ $noseri->noseri }}@if (!$loop->last)
+                                                                            ,<br>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </td>
                                                                 <?php $totalharga = $totalharga + ($e->harga * $e->jumlah + $e->ongkir); ?>
                                                             </tr>
                                                             @if (isset($e->DetailPesananProdukDsb))
@@ -322,6 +343,14 @@
                                                                     class="nowraptxt tabnum">@currency($e->harga)</td>
                                                                 <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
                                                                     class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
+                                                                <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
+                                                                    class="nowraptxt tabnum">
+                                                                    {{ $e->ppn ? 'Ya' : 'Tidak' }}
+                                                                </td>
+                                                                <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
+                                                                    class="nowraptxt tabnum">
+                                                                    {{ $e->kalibrasi ? 'Ya' : 'Tidak' }}
+                                                                </td>
                                                                 @if (Auth::user()->divisi_id == '8')
                                                                     <td
                                                                         rowspan="{{ count($e->DetailPesananProduk) + 1 }}">
@@ -376,7 +405,6 @@
                                                                             data-id="{{ $e->id }}"
                                                                             data-produk="part"><i
                                                                                 class="fas fa-eye"></i></button>
-                                                                                
                                                                     @endif
                                                                 </td>
                                                                 <td class="nowraptxt tabnum"><span

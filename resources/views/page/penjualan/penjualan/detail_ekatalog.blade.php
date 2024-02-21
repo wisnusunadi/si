@@ -174,15 +174,15 @@
 
                         <?php $totalharga = 0; ?>
                         <?php
-
+                        
                         $no_dsb = 0;
-
+                        
                         if (isset($data->Pesanan->detailpesanandsb)) {
                             $no = count($data->Pesanan->detailpesanandsb);
                         } else {
                             $no = 0;
                         }
-
+                        
                         ?>
                         @if (count($data->Pesanan->DetailPesanan) > 0)
                             <div class="row">
@@ -265,6 +265,12 @@
                                                         <th rowspan="2">Harga</th>
                                                         <th rowspan="2">Ongkir</th>
                                                         <th rowspan="2">Subtotal</th>
+                                                        <th rowspan="2">PPN</th>
+                                                        <th rowspan="2">Kalibrasi</th>
+                                                        {{-- cek length --}}
+                                                        @if (isset($data->Pesanan->detailpesanandsb) && count($data->Pesanan->detailpesanandsb) > 0)
+                                                            <th rowspan="2">Stok Distributor</th>
+                                                        @endif
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -277,9 +283,11 @@
                                                                 <td rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
                                                                     class="nowraptxt">{{ $no_dsb }}
                                                                 </td>
-                                                                <td><div class="mb-1"><b
-                                                                        class="wb">{{ $e->PenjualanProduk->nama }}</b></div> <small class="badge info-text mx-1">Stok
-                                                                            distributor</small>
+                                                                <td>
+                                                                    <div class="mb-1"><b
+                                                                            class="wb">{{ $e->PenjualanProduk->nama }}</b>
+                                                                    </div> <small class="badge info-text mx-1">Stok
+                                                                        distributor</small>
                                                                 </td>
                                                                 <td class="nowraptxt"></td>
                                                                 {{-- <td class="nowraptxt" rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
@@ -295,6 +303,21 @@
                                                                     class="nowraptxt tabnum">@currency($e->ongkir)</td>
                                                                 <td rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
                                                                     class="nowraptxt tabnum">@currency($e->harga * $e->jumlah + $e->ongkir)</td>
+                                                                <td rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
+                                                                    class="nowraptxt tabnum">
+                                                                    {{ $e->ppn ? 'Ya' : 'Tidak' }}
+                                                                </td>
+                                                                <td rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
+                                                                    class="nowraptxt tabnum">
+                                                                    {{ $e->kalibrasi ? 'Ya' : 'Tidak' }}
+                                                                </td>
+                                                                <td rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
+                                                                    class="nowraptxt tabnum">
+                                                                    @foreach ($e->NoseriDsb as $key => $noseri)
+                                                                        {{ $noseri->noseri }}@if (!$loop->last),<br>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </td>
                                                                 <?php $totalharga = $totalharga + ($e->harga * $e->jumlah + $e->ongkir); ?>
                                                             </tr>
                                                             @if (isset($e->DetailPesananProdukDsb))
@@ -344,6 +367,14 @@
                                                                     class="nowraptxt tabnum">@currency($e->ongkir)</td>
                                                                 <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
                                                                     class="nowraptxt tabnum">@currency($e->harga * $e->jumlah + $e->ongkir)</td>
+                                                                <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
+                                                                    class="nowraptxt tabnum">
+                                                                    {{ $e->ppn ? 'Ya' : 'Tidak' }}
+                                                                </td>
+                                                                <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
+                                                                    class="nowraptxt tabnum">
+                                                                    {{ $e->kalibrasi ? 'Ya' : 'Tidak' }}
+                                                                </td>
                                                                 <?php $totalharga = $totalharga + ($e->harga * $e->jumlah + $e->ongkir); ?>
                                                             </tr>
                                                             @if (isset($e->DetailPesananProduk))
