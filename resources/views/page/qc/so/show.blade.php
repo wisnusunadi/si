@@ -178,7 +178,7 @@
                                                             <th rowspan="2">Customer</th>
                                                             <th rowspan="2">Keterangan</th>
                                                             <th colspan="2">Hasil</th>
-                                                            <th rowspan="2">Status</th>
+                                                            <th rowspan="2">Status Transfer</th>
                                                             <th rowspan="2">Aksi</th>
                                                         </tr>
                                                         <tr>

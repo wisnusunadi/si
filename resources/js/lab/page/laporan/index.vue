@@ -110,7 +110,7 @@ export default {
             }
             this.hasil = []
         },
-        cetak() {
+        async cetak() {
             const cekFormNotEmpty = Object.keys(this.form).every(key => {
                 if (Array.isArray(this.form[key])) {
                     return this.form[key].length > 0
@@ -120,12 +120,21 @@ export default {
             })
 
             if (cekFormNotEmpty) {
-                axios.get(`/api/labs/riwayat_uji?years=2024`).then(({ data }) => {
+                // axios.get(`/api/labs/riwayat_uji`).then(({ data }) => {
+                //     this.hasil = data.map(d => ({
+                //         nama_distributor: d.info.nama,
+                //         ...d
+                //     }))
+                // })
+                try {
+                    const { data } = await axios.post('/api/labs/riwayat_uji', this.form)
                     this.hasil = data.map(d => ({
                         nama_distributor: d.info.nama,
                         ...d
                     }))
-                })
+                } catch (error) {
+                    
+                }
             } else {
                 swal.fire('Peringatan', 'Form pencarian tidak boleh kosong', 'warning')
                 return

@@ -869,7 +869,7 @@ Route::prefix('/labs')->group(function () {
     Route::get('/sertif', [App\Http\Controllers\LabController::class, 'sertifikat_data']); // sertif per no kalibrasi
     Route::get('/cetak/{jenis}/{id}/{ttd}/{hal}', [App\Http\Controllers\LabController::class, 'cetak_sertifikat']);
     Route::post('/uji', [App\Http\Controllers\LabController::class, 'lab_store_uji']);
-    Route::get('/riwayat_uji', [App\Http\Controllers\LabController::class, 'riwayat_lab_uji']);
+    Route::post('/riwayat_uji', [App\Http\Controllers\LabController::class, 'riwayat_lab_uji']);
 });
 
 Route::namespace('v2')->group(__DIR__ . '/yogi/api.php');

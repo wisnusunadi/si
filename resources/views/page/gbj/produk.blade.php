@@ -388,8 +388,8 @@
                                                     <th>No</th>
                                                     <th>No. Seri Lama</th>
                                                     <th>No. Seri Baru</th>
-                                                    <th>Status</th>
-                                                    <th>Aksi</th>
+                                                    <th>Tanggal Kirim</th>
+                                                    <th>Keterangan</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -1397,30 +1397,36 @@
                 "lengthChange": false,
                 pageLength: 5,
                 ajax: {
-                    url: '/api/v2/gbj/riwayat_perubahan_noseri',
-                    type: 'post',
-                    data: {
-                        gbj: id
-                    },
-                    beforeSend: function(xhr) {
-                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
-                    }
+                    url: `/api/gbj/riwayat_ganti_unit/${id}`,
+                },
+                processing: true,
+                language: {
+                    processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                        </span>&emsp;Mohon Tunggu ...",
                 },
                 columns: [{
-                        data: 'DT_RowIndex'
+                        data: null,
+                        // buat no urut
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
                     },
                     {
-                        data: 'data_lama'
+                        data: 'seri_lama'
                     },
 
                     {
-                        data: 'data_baru'
+                        data: 'seri_baru'
                     },
                     {
-                        data: 'status'
+                        data: 'tgl_kirim'
                     },
                     {
-                        data: 'aksi'
+                        data: 'state',
+                        render: function(data) {
+                            return data === 'qc' ? 'Tidak Lolos Pengujian' : 'Tidak Lolos Kalibrasi'
+                        }
                     },
                 ],
             });

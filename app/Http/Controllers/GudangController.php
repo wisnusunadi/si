@@ -6095,19 +6095,22 @@ class GudangController extends Controller
     }
     function riwayat_ganti_unit_produk($id)
     {
-        $data = SeriGanti::join('detail_pesanan_produk','detail_pesanan_produk.id','=','seri_ganti.detail_pesanan_produk_id')
-        ->where('detail_pesanan_produk.gudang_barang_jadi_id',$id)->get();
+        $data = SeriGanti::join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'seri_ganti.detail_pesanan_produk_id')
+            ->where('detail_pesanan_produk.gudang_barang_jadi_id', $id)->get();
 
         $obj = [];
         foreach ($data as $d) {
             $x = json_decode($d->isi);
-            foreach($x as $y){
-                $obj[] = $y->noseri;
-            }
+            $obj[] = array(
+                'seri_lama' => $x[0]->noseri,
+                'seri_baru' => $x[0]->noseri_baru,
+                'tgl_kirim' => $x[0]->tgl_kirim,
+                'state' => $x[0]->state
+            );
         }
 
         return response()->json([
-            'noseri' => $obj
+            'data' => $obj
         ]);
     }
 
@@ -6161,6 +6164,7 @@ class GudangController extends Controller
                     $riwayat[] = array(
                         'detai_pesanan_produk_id' =>  $noseri_lama[$key_a][$key_b]->detail_pesanan_produk_id,
                         'noseri' =>  $noseri_lama[$key_a][$key_b]->noseri,
+                        'noseri_baru' =>  $noseri_baru[$key_a][$key_b]->noseri,
                         'state' =>  $noseri_lama[$key_a][$key_b]->state,
                         'tgl_kirim' => Carbon::now()->format('Y-m-d')
                     );
@@ -6187,6 +6191,7 @@ class GudangController extends Controller
                 }
                 $resultArray[$parentId]["item"][] = [
                     "noseri" => $item["noseri"],
+                    "noseri_baru" => $item["noseri_baru"],
                     "tgl_kirim" => $item["tgl_kirim"],
                     "state" => $item["state"]
                 ];
