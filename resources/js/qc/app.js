@@ -10,19 +10,22 @@ import numberOnly from "./plugins/numberOnly";
 import dateTimeFormat from "./plugins/dateTimeFormat";
 import timeFormat from "./plugins/timeFormat";
 import storeData from "./store";
-import DataTable from './components/DataTable.vue';
+import DataTable from "./components/DataTable.vue";
 import "vue-select/dist/vue-select.css";
+import VueTimepicker from "vue2-timepicker";
+import "vue2-timepicker/dist/VueTimepicker.css";
 
 window.Vue = Vue;
 Vue.use(VueRouter);
 Vue.use(VueSweetalert2);
 Vue.use(Vuex);
 Vue.component("v-select", vSelect);
-Vue.component('data-table', DataTable);
+Vue.component("data-table", DataTable);
 Vue.use(dateFormat);
 Vue.use(numberOnly);
 Vue.use(dateTimeFormat);
 Vue.use(timeFormat);
+Vue.component("time-picker", VueTimepicker);
 
 const store = new Vuex.Store(storeData);
 
@@ -31,6 +34,6 @@ const app = new Vue({
     router,
     store,
     components: {
-        index: Index
-    }
+        index: Index,
+    },
 });

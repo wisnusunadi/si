@@ -129,13 +129,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                                                                                                                                                    .row {
-                                                                                                                                                                                                        font-size: 12px;
-                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                        .row {
+                                                                                                                                                                                                                                            font-size: 12px;
+                                                                                                                                                                                                                                        }
 
-                                                                                                                                                                                                    h4 {
-                                                                                                                                                                                                        font-size: 20px;
-                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                        h4 {
+                                                                                                                                                                                                                                            font-size: 20px;
+                                                                                                                                                                                                                                        } */
             body {
                 font-size: 12px;
             }
@@ -152,13 +152,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                        .row {
-                                            font-size: 12px;
-                                        }
+                                                                            .row {
+                                                                                font-size: 12px;
+                                                                            }
 
-                                        h4 {
-                                            font-size: 20px;
-                                        } */
+                                                                            h4 {
+                                                                                font-size: 20px;
+                                                                            } */
             section {
                 font-size: 12px;
             }
@@ -1307,10 +1307,9 @@
                                                                 </tbody>
                                                                 <tfoot>
                                                                     <tr>
-                                                                        <th colspan="6" style="text-align:right;">Total
+                                                                        <th colspan="8" style="text-align:right;">Total
                                                                             Harga</th>
-                                                                        <th colspan="2" id="totalhargaprd"
-                                                                            class="align-left">Rp. 0
+                                                                        <th id="totalhargaprd" class="align-left">Rp. 0
                                                                         </th>
                                                                     </tr>
                                                                 </tfoot>
@@ -1417,7 +1416,7 @@
                                                                 </tbody>
                                                                 <tfoot>
                                                                     <tr>
-                                                                        <th colspan="3" style="text-align:right;">Total
+                                                                        <th colspan="5" style="text-align:right;">Total
                                                                             Harga</th>
                                                                         <th id="totalhargapart" class="align-right">Rp. 0
                                                                         </th>
@@ -1454,10 +1453,10 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <th width="5%">No</th>
-                                                                        <th width="35%">Nama Jasa</th>
-                                                                        <th width="20%">Harga</th>
-                                                                        <th width="20%">Subtotal</th>
-                                                                        <th width="20%">Pajak</th>
+                                                                        <th width="45%">Nama Jasa</th>
+                                                                        <th width="25%">Harga</th>
+                                                                        <th width="25%">Subtotal</th>
+                                                                        <th width="10%">Pajak</th>
                                                                         <th width="5%">Aksi</th>
                                                                     </tr>
                                                                 </thead>
