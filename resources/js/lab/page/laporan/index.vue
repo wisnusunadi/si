@@ -127,13 +127,13 @@ export default {
                 //     }))
                 // })
                 try {
-                    const { data } = await axios.post('/api/labs/riwayat_uji', this.form)
+                    const { data } = await axios.post('/api/labs/riwayat_uji_laporan', this.form)
                     this.hasil = data.map(d => ({
                         nama_distributor: d.info.nama,
                         ...d
                     }))
                 } catch (error) {
-                    
+
                 }
             } else {
                 swal.fire('Peringatan', 'Form pencarian tidak boleh kosong', 'warning')

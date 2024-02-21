@@ -29,13 +29,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     ]);
 });
 
-    Route::prefix('/master')->group(function () {
-        Route::prefix('/buka_periode')->group(function () {
-            Route::post('/permintaan', [App\Http\Controllers\MasterController::class, 'permintaan_periode'])->middleware('jwt.verify');
-            Route::get('/selesai/{id}', [App\Http\Controllers\MasterController::class, 'reset_periode'])->middleware('jwt.verify');
-            Route::get('/show', [App\Http\Controllers\MasterController::class, 'show_periode']);
-            Route::post('/update/{id}', [App\Http\Controllers\MasterController::class, 'update_periode']);
-        });
+Route::prefix('/master')->group(function () {
+    Route::prefix('/buka_periode')->group(function () {
+        Route::post('/permintaan', [App\Http\Controllers\MasterController::class, 'permintaan_periode'])->middleware('jwt.verify');
+        Route::get('/selesai/{id}', [App\Http\Controllers\MasterController::class, 'reset_periode'])->middleware('jwt.verify');
+        Route::get('/show', [App\Http\Controllers\MasterController::class, 'show_periode']);
+        Route::post('/update/{id}', [App\Http\Controllers\MasterController::class, 'update_periode']);
+    });
 
     Route::post('/produk/no_akd', [App\Http\Controllers\MasterController::class, 'check_no_akd']);
     Route::put('/produk/update_coo/{id}', [App\Http\Controllers\MasterController::class, 'update_coo_master_produk'])->name('master.produk.update_coo');
@@ -869,7 +869,8 @@ Route::prefix('/labs')->group(function () {
     Route::get('/sertif', [App\Http\Controllers\LabController::class, 'sertifikat_data']); // sertif per no kalibrasi
     Route::get('/cetak/{jenis}/{id}/{ttd}/{hal}', [App\Http\Controllers\LabController::class, 'cetak_sertifikat']);
     Route::post('/uji', [App\Http\Controllers\LabController::class, 'lab_store_uji']);
-    Route::post('/riwayat_uji', [App\Http\Controllers\LabController::class, 'riwayat_lab_uji']);
+    Route::get('/riwayat_uji', [App\Http\Controllers\LabController::class, 'riwayat_uji']);
+    Route::post('/riwayat_uji_laporan', [App\Http\Controllers\LabController::class, 'riwayat_uji_laporan']);
 });
 
 Route::namespace('v2')->group(__DIR__ . '/yogi/api.php');
