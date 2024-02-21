@@ -6093,6 +6093,23 @@ class GudangController extends Controller
             'data' => $obj
         ]);
     }
+    function riwayat_ganti_unit_produk($id)
+    {
+        $data = SeriGanti::join('detail_pesanan_produk','detail_pesanan_produk.id','=','seri_ganti.detail_pesanan_produk_id')
+        ->where('detail_pesanan_produk.gudang_barang_jadi_id',$id)->get();
+
+        $obj = [];
+        foreach ($data as $d) {
+            $x = json_decode($d->isi);
+            foreach($x as $y){
+                $obj[] = $y->noseri;
+            }
+        }
+
+        return response()->json([
+            'noseri' => $obj
+        ]);
+    }
 
 
     function tf_ganti_unit_data(Request $request)

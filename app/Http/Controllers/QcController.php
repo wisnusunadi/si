@@ -405,7 +405,7 @@ class QcController extends Controller
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
                 if ($data->uji > 0) {
-                    if (!$data->kalibrasi && $data->is_ready == 1) {
+                    if (!$data->kalibrasi && ($data->is_ready == 1 || $data->is_ready == 2)) {
                         if ($data->is_kalibrasi) {
                             if ($data->status == 'ok') {
                                 return '<div class="form-check">
@@ -552,6 +552,9 @@ class QcController extends Controller
             })
             ->addColumn('button', function () {
                 return '';
+            })
+            ->addColumn('is_kalibrasi', function ($data) {
+                return $data->is_kalibrasi ? 1 : 0;
             })
             ->rawColumns(['checkbox', 'status', 'button'])
             ->make(true);
@@ -987,7 +990,7 @@ class QcController extends Controller
             })
             ->addColumn('button', function ($data) use ($id) {
                 if (isset($data->gudang_barang_jadi_id)) {
-                    $kalibrasi = $data->Gudangbarangjadi->Produk->kode_lab_id != null ? "true" : "false";
+                    $kalibrasi = $data->DetailPesanan->kalibrasi == 1 ? "true" : "false";
                 } else {
                     $kalibrasi = "false";
                 }
@@ -1158,6 +1161,7 @@ class QcController extends Controller
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 1)
+                        ->where('noseri_detail_pesanan.is_kalibrasi', 0)
                         ->where('noseri_detail_pesanan.is_lab', 0)
                         ->whereNull('uji_lab_detail.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
@@ -1179,6 +1183,7 @@ class QcController extends Controller
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         // ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 1)
+                        ->where('noseri_detail_pesanan.is_kalibrasi', 0)
                         ->where('noseri_detail_pesanan.is_lab', 0)
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
@@ -1557,6 +1562,7 @@ class QcController extends Controller
                         ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 1)
+                        ->where('noseri_detail_pesanan.is_kalibrasi', 0)
                         ->where('noseri_detail_pesanan.is_lab', 0)
                         ->whereNull('uji_lab_detail.id')
                         ->whereColumn('noseri_detail_pesanan.detail_pesanan_produk_id', 'detail_pesanan_produk.id');
@@ -3932,6 +3938,7 @@ class QcController extends Controller
     //Tambah
     public function create_data_qc( /*$seri_id, $tfgbj_id, */$jenis, $pesanan_id, $produk_id, Request $request)
     {
+       // dd($request->all());
         // $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($pesanan_id) {
         //     $q->where('Pesanan_id', $pesanan_id);
         // })->where('gudang_barang_jadi_id', $produk_id)->first();
@@ -3972,7 +3979,8 @@ class QcController extends Controller
                         't_tfbj_noseri_id' => $request->noseri_id[$i]['id'],
                         'status' => $request->cek,
                         'tgl_uji' => $request->tanggal_uji,
-                        'is_ready' => 1,
+                        'is_ready' =>  1,
+                        'is_kalibrasi' =>   $request->noseri_id[$i]['is_kalibrasi'] == 1 ? 1 : 0,
                     ]);
                     if (!$c) {
                         $bool = false;

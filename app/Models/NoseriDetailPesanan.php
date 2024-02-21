@@ -9,7 +9,7 @@ class NoseriDetailPesanan extends Model
 {
     protected $connection = 'erp';
     protected $table = 'noseri_detail_pesanan';
-    protected $fillable = ['detail_pesanan_produk_id', 't_tfbj_noseri_id', 'status', 'tgl_uji','is_ready','is_lab'];
+    protected $fillable = ['detail_pesanan_produk_id', 't_tfbj_noseri_id', 'status', 'tgl_uji','is_ready','is_lab','is_kalibrasi'];
 
     public function DetailPesananProduk()
     {

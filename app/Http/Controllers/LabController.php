@@ -34,6 +34,8 @@ class LabController extends Controller
     //
     public function riwayat_lab_uji(Request $request)
     {
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+        if($request->customer->value == null){
         $data = UjiLabDetail::select(
             'jenis_pemilik.nama as jp',
             'pesanan.no_po',
@@ -63,7 +65,8 @@ class LabController extends Controller
             ->leftJoin('erp_kesehatan.karyawans', 'karyawans.id', '=', 'uji_lab_detail.pemeriksa_id')
             ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
             ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
-            ->where('uji_lab_detail.status', '!=', 'belum');
+            ->where('uji_lab_detail.status', '!=', 'belum')
+            ->whereBetween('uji_lab_detail.tgl_masuk',[$obj->tanggal_awal, $obj->tanggal_akhir]);
         // ->whereYear('uji_lab_detail.created_at', $request->years );
 
         $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
@@ -95,6 +98,78 @@ class LabController extends Controller
             ->whereIn('ekatalog.pesanan_id', $data->pluck('p_id')->toArray())->get();
 
         $dataInfo =   $ekatalog->merge($spa)->merge($spb);
+
+        }else{
+            $data = UjiLabDetail::select(
+                'jenis_pemilik.nama as jp',
+                'pesanan.no_po',
+                'uji_lab.pesanan_id as p_id',
+                'karyawans.nama as pemeriksa',
+                'uji_lab.no_order',
+                'uji_lab.nama',
+                'uji_lab.alamat',
+                'uji_lab_detail.no',
+                'uji_lab_detail.no_sertifikat',
+                'uji_lab_detail.tgl_masuk',
+                'uji_lab_detail.status',
+                'metode_lab.metode',
+                'produk.nama as produk',
+                'noseri_barang_jadi.noseri',
+                'uji_lab_detail.tgl_kalibrasi'
+            )
+                ->leftJoin('uji_lab', 'uji_lab.id', '=', 'uji_lab_detail.uji_lab_id')
+                ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'uji_lab_detail.detail_pesanan_produk_id')
+                ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'uji_lab_detail.noseri_id')
+                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+                ->leftJoin('detail_metode_lab', 'detail_metode_lab.id', '=', 'uji_lab_detail.metode_id')
+                ->leftJoin('metode_lab', 'metode_lab.id', '=', 'detail_metode_lab.metode_lab_id')
+                ->leftJoin('erp_kesehatan.karyawans', 'karyawans.id', '=', 'uji_lab_detail.pemeriksa_id')
+                ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
+                ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
+                ->where('uji_lab_detail.status', '!=', 'belum')
+                ->whereBetween('uji_lab_detail.tgl_masuk',[$obj->tanggal_awal, $obj->tanggal_akhir]);
+            // ->whereYear('uji_lab_detail.created_at', $request->years );
+
+            $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
+                ->selectRaw('"" AS no_paket')
+                ->selectRaw('"-" AS instansi')
+                ->selectRaw('"-" AS alamat_instansi')
+                ->selectRaw('"-" AS status')
+                ->selectRaw('"-" AS satuan')
+                ->selectRaw('"-" AS no_urut')
+                ->selectRaw('"-" AS tgl_buat')
+                ->selectRaw('"-" AS tgl_kontrak')
+                ->leftJoin('customer', 'customer.id', '=', 'spb.customer_id')
+                ->where('customer.id',$obj->customer->value)
+                ->whereIn('spb.pesanan_id', $data->pluck('p_id')->toArray())->get();
+
+            $spa = Spa::select('spa.pesanan_id as id', 'customer.nama', 'spa.ket')
+                ->selectRaw('"" AS no_paket')
+                ->selectRaw('"-" AS instansi')
+                ->selectRaw('"-" AS alamat_instansi')
+                ->selectRaw('"-" AS status')
+                ->selectRaw('"-" AS satuan')
+                ->selectRaw('"-" AS no_urut')
+                ->selectRaw('"-" AS tgl_buat')
+                ->selectRaw('"-" AS tgl_kontrak')
+                ->leftJoin('customer', 'customer.id', '=', 'spa.customer_id')
+                ->where('customer.id',$obj->customer->value)
+                ->whereIn('spa.pesanan_id', $data->pluck('p_id')->toArray())->get();
+
+            $ekatalog = Ekatalog::select('ekatalog.pesanan_id as id', 'ekatalog.ket', 'ekatalog.tgl_buat', 'ekatalog.tgl_kontrak', 'ekatalog.no_urut as no_urut', 'customer.nama', 'ekatalog.no_paket', 'ekatalog.instansi', 'ekatalog.alamat as alamat_instansi', 'ekatalog.satuan', 'ekatalog.status')
+                ->leftJoin('customer', 'customer.id', '=', 'ekatalog.customer_id')
+                ->where('customer.id',$obj->customer->value)
+                ->whereIn('ekatalog.pesanan_id', $data->pluck('p_id')->toArray())
+                ->get();
+
+            $dataInfo =   $ekatalog->merge($spa)->merge($spb);
+        }
+
+
+
 
         if ($data->get()->isEmpty()) {
             $obj = array();
@@ -164,7 +239,7 @@ class LabController extends Controller
     {
         $waktu = Carbon::now();
         $years = $request->years;
-        return Excel::download(new KontrolLabs(), 'Kontrol Kalibrasi  ' . $waktu->toDateTimeString() . '.xlsx');
+        return Excel::download(new KontrolLabs($request->dsb, $request->tanggal_awal, $request->tanggal_akhir), 'Kontrol Kalibrasi  ' . $waktu->toDateTimeString() . '.xlsx');
 
         $data = UjiLabDetail::select(
             'jenis_pemilik.nama as jp',
