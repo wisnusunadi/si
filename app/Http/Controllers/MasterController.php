@@ -1965,6 +1965,24 @@ class MasterController extends Controller
         }
     }
 
+    public function indexProdukWithKodeLab()
+    {
+        try {
+            $produkLab = Produk::with('KodeLab')->where('kode_lab_id', '!=', null)->get();
+            $produkNonLab = Produk::where('kode_lab_id', null)->get();
+            return response()->json([
+                'success' => true,
+                'produk' => $produkLab,
+                'produkNonLab' => $produkNonLab
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
     public function indexProduk()
     {
         try {
@@ -1982,6 +2000,7 @@ class MasterController extends Controller
                     'status' => $item->status == 1 ? true : false,
                     'generate_seri' => $item->generate_seri,
                     'kode' => $item->kode,
+                    'alat' => $item->KodeLab->nama,
                     'gudang_barang_jadi' => $item->GudangBarangJadi
                 ];
             });

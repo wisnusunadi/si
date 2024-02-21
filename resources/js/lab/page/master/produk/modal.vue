@@ -1,74 +1,122 @@
 <script>
-import axios from 'axios';
+import axios from 'axios'
 export default {
-    props: ["produk"],
+    props: ['produk'],
     data() {
         return {
             alat: [],
+            produkNonLab: [],
+            produkSelected: [],
         }
     },
     methods: {
         closeModal() {
-            $(".modalProduk").modal("hide");
-            this.$emit("closeModal");
-        },
-        async simpan() {
-            const success = () => {
-                this.$swal('Berhasil!', 'Data berhasil disimpan.', 'success')
-                this.$emit("refresh")
-                this.closeModal()
-            }
-
-            const error = () => {
-                this.$swal('Gagal!', 'Data gagal disimpan.', 'error')
-            }
-
-            // check null value
-            if (this.produk.kode_lab == null || this.produk.kode_lab == '') {
-                this.$swal('Gagal!', 'Data gagal disimpan. Alat tidak boleh kosong.', 'error')
-                return
-            }
-
-            const { data } = await axios.put(`/api/labs/produk/${this.produk.id}`, {
-                kode_lab_id: this.produk.kode_lab.id,
-            }).then(success).catch(error)
-            this.closeModal()
+            $('.modalProduk').modal('hide')
+            this.$nextTick(() => {
+                this.$emit('closeModal')
+            })
         },
         async getAlat() {
             try {
-                const { data } = await axios.get("/api/labs/kode")
-                this.alat = data.data.map((data) => {
+                const { data: alat } = await axios.get('/api/labs/kode').then(res => res.data)
+                const { produkNonLab } = await axios.get('/api/produkLab').then(res => res.data)
+                this.produkNonLab = produkNonLab.map(item => {
                     return {
-                        id: data.id,
-                        label: data.nama,
-                    };
-                });
+                        label: item.nama,
+                        value: item.id
+                    }
+                })
+                this.alat = alat.map(item => {
+                    return {
+                        label: item.nama,
+                        value: item.id
+                    }
+                })
+                this.produkSelected = JSON.parse(JSON.stringify(this.produk))
             } catch (error) {
-                console.log(error);
+                console.log(error)
             }
+        },
+        tambahProduk() {
+            this.produkSelected.push({
+                nama: '',
+                alat_selected: null
+            })
+        },
+        simpan() {
+            const cekProdukNotNull = Object.keys(this.produkSelected).some(key => {
+                return this.produkSelected[key].nama === '' || this.produkSelected[key].alat_selected === null
+            })
+
+            if (cekProdukNotNull) {
+                swal.fire('Peringatan', 'Nama Produk dan Alat tidak boleh kosong', 'warning')
+                return
+            }
+
+            console.log(this.produkSelected)
+        },
+        hapusProduk(item) {
+            const index = this.produkSelected.findIndex(produk => produk === item)
+            this.produkSelected.splice(index, 1)
         }
     },
-    mounted() {
-        this.getAlat();
+    computed: {
+        // jika produk sudah ada di produkSelected maka tidak akan ditampilkan
+        produkNonLabFilter() {
+            return this.produkNonLab.filter(item => {
+                return !this.produkSelected.some(produk => produk?.nama.value === item.value)
+            })
+        }
+    },
+    created() {
+        this.getAlat()
     }
 }
 </script>
 <template>
-    <div class="modal fade modalProduk" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
+    <div class="modal fade modalProduk" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Alat Produk {{ produk.nama }}</h5>
-                        <button type="button" class="close" @click="closeModal">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <h5 class="modal-title">Form Alat Produk</h5>
+                    <button type="button" class="close" @click="closeModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group row">
-                      <label for="" class="col-2">Nama Alat</label>
-                      <v-select :options="alat" class="col-10" v-model="produk.kode_lab"
-                      ></v-select>
+                    <div class="d-flex bd-highlight">
+                        <div class="p-2 flex-grow-1 bd-highlight">
+                            <button class="btn btn-primary" @click="tambahProduk">Tambah</button>
+                        </div>
+                        <div class="p-2 bd-highlight">
+                        </div>
                     </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nama Produk</th>
+                                <th>Alat</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in produkSelected" :key="index">
+                                <td>
+                                    <v-select :options="produkNonLabFilter" v-model="item.nama" v-if="!item.id"></v-select>
+                                    <span v-else>{{ item.nama }}</span>
+                                </td>
+                                <td>
+                                    <v-select :options="alat" v-model="item.alat_selected"></v-select>
+                                </td>
+                                <td>
+                                    <button class="btn btn-outline-danger" v-if="!item.id" @click="hapusProduk(item)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
