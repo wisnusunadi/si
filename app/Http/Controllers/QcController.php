@@ -405,7 +405,7 @@ class QcController extends Controller
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
                 if ($data->uji > 0) {
-                    if (!$data->kalibrasi && ($data->is_ready == 1 || $data->is_ready == 2)) {
+                    if (!$data->kalibrasi && $data->is_ready == 1) {
                         if ($data->is_kalibrasi) {
                             if ($data->status == 'ok') {
                                 return '<div class="form-check">
