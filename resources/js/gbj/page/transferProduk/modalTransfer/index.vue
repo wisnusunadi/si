@@ -159,7 +159,8 @@ export default {
     <div>
         <noseri v-if="showModal" :detailSelected="detailSelected" @close="closeModalNoseri" :paket="paketSelected"
             :allPaket="produk" @submit="noseriSelected" />
-        <div class="modal fade modalTransfer" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade modalTransfer" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -252,7 +253,7 @@ export default {
                                                         Scan Barcode
                                                     </button>
                                                     <span v-else>
-                                                        {{ item.persentase_sudah == 100 ? 'Produk Sudah Ditransfer' : 'Siapkan Produk Dahulu'}}
+                                                        {{ item.persentase_sudah == 100 || item.jumlah_sisa == 0 ? 'Produk Sudah Ditransfer' : 'Siapkan Produk Dahulu'}}
                                                     </span>
                                                 </td>
                                             </tr>

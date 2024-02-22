@@ -113,18 +113,18 @@
 
         /* @media screen and (min-width: 1440px) {
 
-                                                                                                    section {
-                                                                                                        font-size: 16px;
-                                                                                                    }
+                                                                                                        section {
+                                                                                                            font-size: 16px;
+                                                                                                        }
 
-                                                                                                    #detailmodal {
-                                                                                                        font-size: 16px;
-                                                                                                    }
+                                                                                                        #detailmodal {
+                                                                                                            font-size: 16px;
+                                                                                                        }
 
-                                                                                                    .btn {
-                                                                                                        font-size: 16px;
-                                                                                                    }
-                                                                                                } */
+                                                                                                        .btn {
+                                                                                                            font-size: 16px;
+                                                                                                        }
+                                                                                                    } */
 
         @media screen and (min-width: 993px) {
 
@@ -587,10 +587,12 @@
                     $('.btnKalibrasi').removeClass('hide');
                     $('.kalibrasi-hide').removeClass('hide');
                     $('#pills-home-tab').text('Pengujian dan Kalibrasi');
+                    $('#pills-profile-tab').removeClass('hide');
                 } else {
                     $('.btnKalibrasi').addClass('hide');
                     $('.kalibrasi-hide').addClass('hide');
                     $('#pills-home-tab').text('Pengujian');
+                    $('#pills-profile-tab').addClass('hide');
                 }
                 // console.log(datacount);
                 // if (datacount == 0) {
