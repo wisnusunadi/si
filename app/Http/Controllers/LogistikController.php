@@ -1658,16 +1658,16 @@ class LogistikController extends Controller
                         ->from('outgoing_pesanan_part')
                         ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
                         ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-                        // ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-                        ->where('m_sparepart.jenis','part')
+                         ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                        //->where('m_sparepart.jenis','part')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
                 },
                 'ctfjasa' => function ($q) {
                     $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah), 0)')
                         ->from('detail_pesanan_part')
                         ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-                        // ->whereRaw('m_sparepart.kode LIKE "%JASA%"')
-                        ->where('m_sparepart.jenis','jasa')
+                         ->whereRaw('m_sparepart.kode LIKE "%JASA%"')
+                        //->where('m_sparepart.jenis','jasa')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
                 },
                 'clogprd' => function ($q) {
@@ -1682,9 +1682,9 @@ class LogistikController extends Controller
                 'clogpart' => function ($q) {
                     $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
                         ->from('detail_logistik_part')
-                        ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
-                        // ->leftJoin('m_sparepart','m_sparepart.id','=','detail_pesanan_part.m_sparepart_id')
-                         //->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                        ->Join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                        ->Join('m_sparepart','m_sparepart.id','=','detail_pesanan_part.m_sparepart_id')
+                        ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                         ->limit(1);
                 },
@@ -1693,8 +1693,8 @@ class LogistikController extends Controller
                         ->from('detail_logistik_part')
                         ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                         ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-                        // ->whereRaw('m_sparepart.kode LIKE "%JASA%"')
-                        ->where('m_sparepart.jenis','jasa')
+                        ->whereRaw('m_sparepart.kode LIKE "%JASA%"')
+                        //->where('m_sparepart.jenis','jasa')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                         ->limit(1);
                 },
@@ -1710,8 +1710,8 @@ class LogistikController extends Controller
                     $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah), 0)')
                         ->from('detail_pesanan_part')
                         ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-                        // ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-                        // ->where('m_sparepart.jenis','part')
+                         ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                         //->where('m_sparepart.jenis','part')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
                 }
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
@@ -1801,7 +1801,7 @@ class LogistikController extends Controller
                 $res = $data->cqcprd + $data->cqcpart + $data->ctfjasa;
                 $tes = $data->clogprd + $data->clogpart + $data->clogjasa;
                 if ($res > 0) {
-                    $hitung = floor(((($data->clogprd + $data->clogpart + $data->clogjasa) / ($data->cpoprd + $data->cpopart)) * 100));
+                    $hitung = floor(((($data->clogprd + $data->clogpart + $data->clogjasa) / ($data->cpoprd + $data->cpopart + $data->ctfjasa)) * 100));
                     if ($hitung > 0) {
                         $datas = '<div class="progress">
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="' . $hitung . '"  style="width: ' . $hitung . '%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
