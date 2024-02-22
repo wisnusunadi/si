@@ -1711,7 +1711,7 @@ class LogistikController extends Controller
                         ->from('detail_pesanan_part')
                         ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
                         // ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-                        ->where('m_sparepart.jenis','part')
+                        // ->where('m_sparepart.jenis','part')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
                 }
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
