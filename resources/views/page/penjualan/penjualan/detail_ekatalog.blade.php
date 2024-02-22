@@ -1,5 +1,6 @@
 <div class="row filter">
     <div class="col-12">
+
         <div class="card card-detail removeshadow">
             {{-- <img src="https://picsum.photos/200/200" class="card-img-top" alt="..."> --}}
             {{-- <div id="profileImage" class="center card-img-top"></div> --}}
@@ -313,10 +314,11 @@
                                                                 </td>
                                                                 <td rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
                                                                     class="nowraptxt tabnum">
-                                                                    @foreach ($e->NoseriDsb as $key => $noseri)
-                                                                        {{ $noseri->noseri }}@if (!$loop->last),<br>
-                                                                        @endif
-                                                                    @endforeach
+
+                                                                    <button
+                                                                        class=" btn btn-outline-primary btn-sm buttonNoSeri"
+                                                                        data-noseri="{{ $e->NoSeriDsb }}">No
+                                                                        Seri</button>
                                                                 </td>
                                                                 <?php $totalharga = $totalharga + ($e->harga * $e->jumlah + $e->ongkir); ?>
                                                             </tr>

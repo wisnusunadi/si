@@ -293,11 +293,10 @@
                                                                 </td>
                                                                 <td rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
                                                                     class="nowraptxt tabnum">
-                                                                    @foreach ($e->NoseriDsb as $key => $noseri)
-                                                                        {{ $noseri->noseri }}@if (!$loop->last)
-                                                                            ,<br>
-                                                                        @endif
-                                                                    @endforeach
+                                                                    <button
+                                                                        class=" btn btn-outline-primary btn-sm buttonNoSeri"
+                                                                        data-noseri="{{ $e->NoSeriDsb }}">No
+                                                                        Seri</button>
                                                                 </td>
                                                                 <?php $totalharga = $totalharga + ($e->harga * $e->jumlah + $e->ongkir); ?>
                                                             </tr>

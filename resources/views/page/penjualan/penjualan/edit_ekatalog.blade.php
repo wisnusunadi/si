@@ -94,13 +94,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                                                                                                                            .row {
-                                                                                                                                                                                                                                                                                                                                                                                                                font-size: 12px;
-                                                                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                                                                                    .row {
+                                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 12px;
+                                                                                                                                                                                                                                                                                                                                                                                                                    }
 
-                                                                                                                                                                                                                                                                                                                                                                                                            h4 {
-                                                                                                                                                                                                                                                                                                                                                                                                                font-size: 20px;
-                                                                                                                                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                                                                                                                                    h4 {
+                                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 20px;
+                                                                                                                                                                                                                                                                                                                                                                                                                    } */
             body {
                 font-size: 12px;
             }
@@ -121,13 +121,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                                                                                                                            .row {
-                                                                                                                                                                                                                                                                                                                                                                                                                font-size: 12px;
-                                                                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                                                                                    .row {
+                                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 12px;
+                                                                                                                                                                                                                                                                                                                                                                                                                    }
 
-                                                                                                                                                                                                                                                                                                                                                                                                            h4 {
-                                                                                                                                                                                                                                                                                                                                                                                                                font-size: 20px;
-                                                                                                                                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                                                                                                                                    h4 {
+                                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 20px;
+                                                                                                                                                                                                                                                                                                                                                                                                                    } */
             body {
                 font-size: 12px;
             }
@@ -592,9 +592,9 @@
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
                                                                             <div class="col-lg-5 col-md-12 col-form-label">
                                                                                 <!-- <div class="form-check form-check-inline">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <label class="form-check-label" for="status_akn4">Draft</label>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <label class="form-check-label" for="status_akn4">Draft</label>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div> -->
                                                                                 <div class="form-check form-check-inline">
                                                                                     <input class="form-check-input"
                                                                                         type="radio" name="status_akn"
@@ -1575,19 +1575,21 @@
                                                                     </tbody>
                                                                     <tfoot>
                                                                         <tr>
-                                                                            <th colspan="5" style="text-align:right;">
-                                                                                Total Harga</th>
-                                                                            <th id="totalhargaprd" class="align-right">Rp.
-                                                                                @if (isset($e->pesanan))
-                                                                                    @if (isset($e->pesanan->detailpesanan))
-                                                                                        <?php $x = 0;
-                                                                                        foreach ($e->pesanan->detailpesanan as $f) {
-                                                                                            $x += $f->harga * $f->jumlah + $f->ongkir;
-                                                                                        }
-                                                                                        ?>
-                                                                                        {{ number_format($x, 0, ',', '.') }}
+                                                                            <th colspan="100%" class="text-right">
+                                                                                Total Harga
+                                                                                <span id="totalhargaprd">
+                                                                                    Rp.
+                                                                                    @if (isset($e->pesanan))
+                                                                                        @if (isset($e->pesanan->detailpesanan))
+                                                                                            <?php $x = 0;
+                                                                                            foreach ($e->pesanan->detailpesanan as $f) {
+                                                                                                $x += $f->harga * $f->jumlah + $f->ongkir;
+                                                                                            }
+                                                                                            ?>
+                                                                                            {{ number_format($x, 0, ',', '.') }}
+                                                                                        @endif
                                                                                     @endif
-                                                                                @endif
+                                                                                </span>
                                                                             </th>
                                                                         </tr>
                                                                     </tfoot>
@@ -2741,10 +2743,24 @@
                             $('#rencana_id' + index).val("");
                             totalhargaprd();
                             var tes = $('#detail_produk' + index);
+                            var produkKalibrasi = $('#produk_kalibrasi' + index);
                             tes.empty();
                             var datas = "";
                             tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
                             for (var x = 0; x < res[0].produk.length; x++) {
+                                if (res[0].is_kalibrasi == true) {
+                                    produkKalibrasi.attr('disabled', false);
+                                    produkKalibrasi.attr('data-kalibrasi', true);
+                                } else {
+                                    produkKalibrasi.attr('data-kalibrasi', 'false');
+                                    produkKalibrasi.attr('disabled', true);
+                                    produkKalibrasi.prop('checked', false);
+                                    produkKalibrasi.val("0");
+                                    var labelElement = $("label[for='" + produkKalibrasi.attr(
+                                            'id') +
+                                        "']");
+                                    var label = labelElement.text('Tidak');
+                                }
                                 var data = [];
                                 tes.append(`<div>`);
                                 tes.append(`<div class="card-body blue-bg">

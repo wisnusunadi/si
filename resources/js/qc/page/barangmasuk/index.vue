@@ -22,6 +22,7 @@ export default {
             ],
             dataIncoming: [
                 {
+                    id: 1,
                     bppb: 'BPPB-001',
                     produk: 'Produk 1',
                     jumlah: 500,

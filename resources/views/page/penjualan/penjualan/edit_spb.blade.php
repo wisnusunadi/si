@@ -95,13 +95,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                    .row {
-                                                        font-size: 12px;
-                                                    }
+                                                        .row {
+                                                            font-size: 12px;
+                                                        }
 
-                                                    h4 {
-                                                        font-size: 20px;
-                                                    } */
+                                                        h4 {
+                                                            font-size: 20px;
+                                                        } */
             section {
                 font-size: 12px;
             }
@@ -122,13 +122,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                    .row {
-                                                        font-size: 12px;
-                                                    }
+                                                        .row {
+                                                            font-size: 12px;
+                                                        }
 
-                                                    h4 {
-                                                        font-size: 20px;
-                                                    } */
+                                                        h4 {
+                                                            font-size: 20px;
+                                                        } */
             section {
                 font-size: 12px;
             }
@@ -979,19 +979,22 @@
                                                                         </tbody>
                                                                         <tfoot>
                                                                             <tr>
-                                                                                <th colspan="4"
-                                                                                    style="text-align:right;">Total
-                                                                                    Harga</th>
+                                                                                <th colspan="100%" class="text-right">
+                                                                                    Total
+                                                                                    Harga
+                                                                                    <span id="totalhargaprd">
+                                                                                        @if (isset($e->pesanan->detailpesanan))
+                                                                                            <?php $x = 0;
+                                                                                            foreach ($e->pesanan->detailpesanan as $f) {
+                                                                                                $x += $f->harga * $f->jumlah;
+                                                                                            }
+                                                                                            ?>
+                                                                                            {{ number_format($x, 0, ',', '.') }}
+                                                                                        @endif
+                                                                                    </span>
+                                                                                </th>
                                                                                 <th colspan="2" id="totalhargaprd"
-                                                                                    class="align-right">Rp.
-                                                                                    @if (isset($e->pesanan->detailpesanan))
-                                                                                        <?php $x = 0;
-                                                                                        foreach ($e->pesanan->detailpesanan as $f) {
-                                                                                            $x += $f->harga * $f->jumlah;
-                                                                                        }
-                                                                                        ?>
-                                                                                        {{ number_format($x, 0, ',', '.') }}
-                                                                                    @endif
+                                                                                    class="align-right">
                                                                                 </th>
                                                                             </tr>
                                                                         </tfoot>
@@ -1134,19 +1137,20 @@
                                                                             @endif
                                                                         </tbody>
                                                                         <tfoot>
-                                                                            <th colspan="4" style="text-align:right;">
-                                                                                Total Harga
-                                                                            </th>
-                                                                            <th id="totalhargapart" class="align-right">
-                                                                                Rp.
-                                                                                @if (isset($e->pesanan->detailpesananpart))
-                                                                                    <?php $x = 0;
-                                                                                    foreach ($e->pesanan->detailpesananpart as $f) {
-                                                                                        $x += $f->harga * $f->jumlah;
-                                                                                    }
-                                                                                    ?>
-                                                                                    {{ number_format($x, 0, ',', '.') }}
-                                                                                @endif
+                                                                            <th colspan="100%" class="text-right">Total
+                                                                                Harga
+                                                                                <span id="totalhargapart"
+                                                                                    class="text-right">
+                                                                                    Rp.
+                                                                                    @if (isset($e->pesanan->detailpesananpart))
+                                                                                        <?php $x = 0;
+                                                                                        foreach ($e->pesanan->detailpesananpart as $f) {
+                                                                                            $x += $f->harga * $f->jumlah;
+                                                                                        }
+                                                                                        ?>
+                                                                                        {{ number_format($x, 0, ',', '.') }}
+                                                                                    @endif
+                                                                                </span>
                                                                             </th>
                                                                         </tfoot>
 
@@ -1242,11 +1246,9 @@
                                                                     </tbody>
                                                                     <tfoot>
                                                                         <tr>
-                                                                            <th colspan="4" style="text-align:right;">
+                                                                            <th colspan="100%" class="text-right">
                                                                                 Total Harga
-                                                                            </th>
-                                                                            <th id="totalhargajasa" class="align-right">
-                                                                                Rp.
+                                                                                <span id="totalhargajasa">
                                                                                 @if ($e->pesanan->getJumlahPesananJasa() > 0)
                                                                                     <?php $x = 0;
                                                                                     foreach ($e->pesanan->DetailPesananPartJasa() as $f) {
@@ -1255,6 +1257,7 @@
                                                                                     ?>
                                                                                     {{ number_format($x, 0, ',', '.') }}
                                                                                 @endif
+                                                                                </span>
                                                                             </th>
                                                                         </tr>
                                                                     </tfoot>
@@ -2160,6 +2163,7 @@
                             for (var x = 0; x < res[0].produk.length; x++) {
                                 if (res[0].is_kalibrasi == true) {
                                     produkKalibrasi.attr('data-kalibrasi', true);
+                                    produkKalibrasi.attr('disabled', false);
                                 } else {
                                     produkKalibrasi.attr('data-kalibrasi', false);
                                     produkKalibrasi.attr('disabled', true);

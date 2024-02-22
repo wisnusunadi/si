@@ -931,6 +931,23 @@
                     </div>
                 </div>
             </div>
+            <!-- Modal -->
+            <div class="modal fade modalNoSeri" id="modelId" tabindex="-1" role="dialog"
+                aria-labelledby="modelTitleId" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info">
+                            <h5 class="modal-title">Nomor Seri Distributor</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <textarea cols="5" readonly class="form-control NoSeriDistri"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 @stop
@@ -2090,6 +2107,16 @@
                     }
                 });
 
+            })
+
+            $(document).on('click', '.buttonNoSeri', function() {
+                const noseri = $(this).data('noseri');
+                let noserDistri = []
+                noseri.forEach(seri => {
+                    noserDistri.push(seri.noseri)
+                });
+                $('.NoSeriDistri').text(noserDistri.join(', '));
+                $('.modalNoSeri').modal('show');
             })
         })
     </script>
