@@ -589,7 +589,6 @@ class LabController extends Controller
             'data' => $data,
         ], 200);
     }
-
     public function kode_lab_store(Request $request)
     {
         $obj =  json_decode(json_encode($request->all()), FALSE);
@@ -606,7 +605,6 @@ class LabController extends Controller
                             'kode_lab_id' => $p->alat,
                         ]);
                 }
-
             DB::commit();
             return response()->json([
                 'status' => 200,
@@ -622,7 +620,6 @@ class LabController extends Controller
             ], 500);
         }
     }
-
     public function ruang_lab_store(Request $request)
     {
         DB::beginTransaction();
@@ -630,7 +627,6 @@ class LabController extends Controller
             $ruang = RuangKalibrasi::create([
                 'nama' => $request->nama
             ]);
-
             for ($j = 0; $j < count($request->metode); $j++) {
                 DetailMetodeLab::create([
                     'metode_lab_id' => $request->metode[$j]['metode']['id'],
