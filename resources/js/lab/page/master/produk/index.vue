@@ -108,7 +108,7 @@ export default {
         <Header :title="title" :breadcumbs="breadcumbs" />
 
         <div class="card">
-            <modal v-if="showModal" :produk="produkSelected" @closeModal="showModal = false" />
+            <modal v-if="showModal" :produk="produkSelected" @closeModal="showModal = false" @refresh="getProduk" />
             <div class="card-body">
                 <div class="d-flex bd-highlight">
                     <div class="p-2 flex-grow-1 bd-highlight">

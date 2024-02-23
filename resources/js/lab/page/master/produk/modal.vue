@@ -43,7 +43,7 @@ export default {
                 alat_selected: null
             })
         },
-        simpan() {
+        async simpan() {
             const cekProdukNotNull = Object.keys(this.produkSelected).some(key => {
                 return this.produkSelected[key].nama === '' || this.produkSelected[key].alat_selected === null
             })
@@ -53,7 +53,15 @@ export default {
                 return
             }
 
-            console.log(this.produkSelected)
+            try {
+                const { data } = await axios.post('/api/labs/kode', this.produkSelected)
+                this.closeModal()
+                this.$emit('refresh')
+                swal.fire('Berhasil', 'Data berhasil disimpan', 'success')
+            } catch (error) {
+                console.log(error)
+                swal.fire('Gagal', 'Data gagal disimpan', 'error')
+            }
         },
         hapusProduk(item) {
             const index = this.produkSelected.findIndex(produk => produk === item)
@@ -95,8 +103,8 @@ export default {
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Nama Produk</th>
-                                <th>Alat</th>
+                                <th style="width: 40%;">Nama Produk</th>
+                                <th style="width: 40%;">Alat</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -126,3 +134,8 @@ export default {
         </div>
     </div>
 </template>
+<style>
+.modal-body {
+    min-height: 50vh;
+}
+</style>

@@ -595,16 +595,16 @@ class LabController extends Controller
         DB::beginTransaction();
         try {
             //code...
-            $data = KodeLab::create([
-                'kode' => $request->kode,
-                'nama' => $request->nama
-            ]);
+            // $data = KodeLab::create([
+            //     'kode' => $request->kode,
+            //     'nama' => $request->nama
+            // ]);
 
-            if (count($request->produk) > 0) {
-                for ($j = 0; $j < count($request->produk); $j++) {
-                    Produk::where('id', $request->produk[$j]['produk']['id'])
+            if (count($request->produkSelected) > 0) {
+                foreach ($request->produkSelected as $p) {
+                    Produk::where('id', $p->id)
                         ->update([
-                            'kode_lab_id' => $data->id,
+                            'kode_lab_id' => $p->alat_selected->value,
                         ]);
                 }
             }
@@ -619,6 +619,7 @@ class LabController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Cek Kembali Form',
+                'error' => $th->getMessage()
             ], 500);
         }
     }
@@ -1345,7 +1346,7 @@ class LabController extends Controller
                         ->whereColumn('uji.id', 'uji_lab_detail.id');
                 },
             ])
-            ->havingRaw('belum !=0')
+            // ->havingRaw('belum !=0')
             ->whereIN('detail_pesanan_produk_id', $get_dpp)
             ->get();
         if ($detail->isEmpty()) {

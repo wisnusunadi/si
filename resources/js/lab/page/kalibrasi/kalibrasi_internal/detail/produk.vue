@@ -149,10 +149,16 @@ export default {
         checkAllNoSeri() {
             this.checkedAllNoSeri = !this.checkedAllNoSeri;
             if (this.checkedAllNoSeri) {
-                this.noSeriSelected = this.no_seri_get;
+                this.noSeriSelected = this.no_seri_get.filter(
+                    (item) => item.status == "belum"
+                );
             } else {
                 this.noSeriSelected = [];
             }
+            this.search = "&";
+            this.$nextTick(() => {
+                this.search = "";
+            });
         },
         checkedNoSeri(item) {
             if (this.noSeriSelected.find((x) => x.id == item.id)) {
@@ -181,7 +187,7 @@ export default {
                         text: 'lolos kalibrasi',
                         class: 'fas fa-check-circle text-success'
                     }
-                case 'nok':
+                case 'not_ok':
                     return {
                         text: 'tidak lolos kalibrasi',
                         class: 'fas fa-times-circle text-danger'
@@ -268,7 +274,7 @@ export default {
             }
         },
         noSeriSelected() {
-            if (this.noSeriSelected.length == this.no_seri_get.length) {
+            if (this.noSeriSelected.length == this.no_seri_get.filter((item) => item.status == "belum").length) {
                 this.checkedAllNoSeri = true;
             } else {
                 this.checkedAllNoSeri = false;
@@ -407,7 +413,7 @@ export default {
 
                         <template #item.id="{ item }">
                             <div>
-                                <input type="checkbox" @click="checkedNoSeri(item)"
+                                <input type="checkbox" @click="checkedNoSeri(item)" v-if="item.status == 'belum'"
                                     :checked="noSeriSelected && noSeriSelected.find((x) => x.id == item.id)" />
                             </div>
                         </template>
