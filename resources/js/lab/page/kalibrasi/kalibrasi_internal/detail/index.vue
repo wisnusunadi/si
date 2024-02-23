@@ -57,7 +57,7 @@ export default {
 <template>
     <div v-if="!$store.state.loading">
         <Header :title="title" :breadcumbs="breadcumbs" />
-        <HeaderDetail :header="header" />
+        <HeaderDetail :header="header" @refresh="getDataDetail" />
         <Produk :produk="dataTable" :header="header" @refresh="getDataDetail" />
     </div>
 </template>

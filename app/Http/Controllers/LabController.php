@@ -1225,28 +1225,26 @@ class LabController extends Controller
     {
         $obj =  json_decode(json_encode($request->all()), FALSE);
         DB::beginTransaction();
-       try {
-        //code...
-        $uji = UjiLab::find($obj->id);
-        $uji->jenis_pemilik_id = $obj->pemilik->value;
-        $uji->save();
+        try {
+            //code...
+            $uji = UjiLab::find($obj->id);
+            $uji->jenis_pemilik_id = $obj->pemilik->value;
+            $uji->save();
 
-        DB::commit();
-        return response()->json([
-            'status' => 200,
-            'message' => 'Berhasil',
-        ], 200);
-
-       } catch (\Throwable $th) {
-        //throw $th;
-          //throw $th;
-          DB::rollBack();
-          return response()->json([
-              'status' => 404,
-              'message' => $th->getMessage(),
-          ], 500);
-       }
-
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 404,
+                'message' => $th->getMessage(),
+            ], 500);
+        }
     }
     public function lab_store_uji(Request $request)
     {
@@ -1274,7 +1272,7 @@ class LabController extends Controller
                 join produk p on p.id = gbj.produk_id
                 join kode_lab kl on kl.id = p.kode_lab_id
                 where dpp.id = ?', [$dp->id]);
-                $metode_id = DetailMetodeLab::where(['metode_lab_id' => $dp->metode_id->id, 'ruang' => $dp->ruang_id->id])->first();
+                $metode_id = DetailMetodeLab::where(['metode_lab_id' => $dp->metode_id->id, 'ruang' => $dp->metode_id->ruang_id])->first();
                 // dd($metode_id->id);
                 for ($j = 0; $j < count($dp->noseri); $j++) {
                     $detail = UjiLabDetail::find($dp->noseri[$j]->id);

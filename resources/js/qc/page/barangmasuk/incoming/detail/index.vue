@@ -36,7 +36,45 @@ export default {
                     persentase_lolos: 50,
                     tidak_lolos: 20,
                     persentase_tidak_lolos: 25,
-                }
+                },
+                pengemasan: [
+                    {
+                        id: 1,
+                        tgl_terima: '2024-02-01',
+                        waktu_terima: '12:00',
+                        noseri: 'TD12345',
+                        tgl_uji: '2024-02-13',
+                        waktu_uji: '12:00',
+                        hasil: 'ok',
+                    },
+                    {
+                        id: 2,
+                        tgl_terima: '2024-02-13',
+                        waktu_terima: '12:00',
+                        noseri: 'TD123456',
+                        tgl_uji: '2024-02-13',
+                        waktu_uji: '12:00',
+                        hasil: 'not_ok',
+                    },
+                    {
+                        id: 3,
+                        tgl_terima: '2024-02-01',
+                        waktu_terima: '12:00',
+                        noseri: 'TD123457',
+                        hasil: 'belum_diuji',
+                        tgl_uji: null,
+                        waktu_uji: null,
+                    },
+                    {
+                        id: 4,
+                        tgl_terima: '2024-02-03',
+                        waktu_terima: '12:00',
+                        noseri: 'TD1234578',
+                        hasil: 'belum_diuji',
+                        tgl_uji: null,
+                        waktu_uji: null,
+                    }
+                ]
             }
         }
     },
@@ -46,6 +84,6 @@ export default {
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
         <cardHeader :header="detailBarangMasuk.header" />
-        <cardProduk />
+        <cardProduk :detailBarangMasuk="detailBarangMasuk" />
     </div>
 </template>

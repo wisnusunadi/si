@@ -6,6 +6,10 @@ export default {
             search: '',
             headers: [
                 {
+                    text: 'No',
+                    value: 'no'
+                },
+                {
                     text: 'Nomor BPPB',
                     value: 'bppb'
                 },
@@ -86,6 +90,9 @@ export default {
             </div>
         </div>
         <data-table :headers="headers" :items="data" :search="search">
+            <template #item.no="{ item, index }">
+                {{ index + 1 }}
+            </template>
             <template #item.jumlah="{ item }">
                 <div>
                     {{ item.jumlah }} Unit
@@ -97,9 +104,11 @@ export default {
             <template #item.progress="{ item }">
                 <div>
                     <!-- baru -->
-                    <span class="badge badge-success">Lolos: {{ item.lolos }} Unit {{ item.persentase_lolos }}%</span> <br>
-                    <span class="badge badge-danger">Tidak Lolos: {{ item.tidak_lolos }} Unit {{ item.persentase_tidak_lolos
-                    }}%</span>
+                    <span class="badge badge-success">Lolos: {{ item.lolos }} Unit ({{ item.persentase_lolos }}%)</span>
+                    <br>
+                    <span class="badge badge-danger">Tidak Lolos: {{ item.tidak_lolos }} Unit ({{
+                        item.persentase_tidak_lolos
+                    }}%)</span>
                 </div>
             </template>
             <template #item.aksi="{ item }">

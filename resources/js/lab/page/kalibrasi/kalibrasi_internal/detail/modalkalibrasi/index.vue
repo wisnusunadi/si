@@ -13,7 +13,7 @@ export default {
                 hasil: "",
                 produk: this.productSelected,
                 gantiAlamat: 'false',
-                jenis_pemilik: null,
+                jenis_pemilik: JSON.parse(JSON.stringify(this.header.jenis_pemilik)),
             },
             pemilik: [],
             dateMax: new Date().toISOString().split("T")[0],

@@ -48,7 +48,7 @@ export default {
                                 <small class="text-muted">Jumlah</small>
                             </div>
                             <div class="margin">
-                                <b>{{ header.jumlah }}</b>
+                                <b>{{ header.jumlah }} Unit</b>
                             </div>
                             <div class="margin">
                                 <small class="text-muted">Jumlah Unit Terisi</small>

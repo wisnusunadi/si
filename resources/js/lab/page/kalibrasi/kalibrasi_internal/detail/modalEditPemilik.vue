@@ -27,6 +27,20 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+        async simpan() {
+            try {
+                const { data } = await axios.post('/api/labs/ubah_jenis_pemilik', {
+                    id: this.header.id,
+                    pemilik: this.pemilik
+                })
+                this.$swal('Berhasil!', 'Data berhasil disimpan.', 'success')
+                this.closeModal()
+                this.$emit('refresh')
+            } catch (error) {
+                console.log(error)
+                this.$swal('Gagal!', 'Data gagal disimpan.', 'error')
+            }
         }
     },
     created() {
@@ -53,7 +67,7 @@ export default {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-primary" @click="simpan">Simpan</button>
                 </div>
             </div>
         </div>
@@ -61,7 +75,7 @@ export default {
 </template>
 <style>
 .modal-body {
-    min-height: 20vh;
+    min-height: 25vh;
     overflow-y: auto;
 }
 </style>

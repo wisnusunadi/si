@@ -210,7 +210,7 @@ export default {
             <div class="card-body">
                 <div class="d-flex bd-highlight">
                     <div class="p-2 flex-grow-1 bd-highlight">
-                        <button class="btn btn-success btn-sm" @click="downloadLaporan">
+                        <button class="btn btn-success btn-sm" @click="downloadLaporan" v-if="hasil.length > 0">
                             <i class="fas fa-file-excel"></i>
                             Export
                         </button>

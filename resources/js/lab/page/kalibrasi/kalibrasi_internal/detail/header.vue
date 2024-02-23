@@ -19,12 +19,15 @@ export default {
                 $(".modalEditPemilik").modal("show");
             });
         },
+        refresh() {
+            this.$emit("refresh");
+        },
     },
 };
 </script>
 <template>
     <div class="card">
-        <modalEditPemilik :header="header" v-if="showEditPemilik" @close="showEditPemilik = false" />
+        <modalEditPemilik :header="header" v-if="showEditPemilik" @close="showEditPemilik = false" @refresh="refresh" />
         <div class="card-body">
             <h2>Info Penjualan</h2>
             <div class="card-text">
