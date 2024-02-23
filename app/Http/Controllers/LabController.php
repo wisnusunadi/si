@@ -595,16 +595,16 @@ class LabController extends Controller
         DB::beginTransaction();
         try {
             //code...
-            $data = KodeLab::create([
-                'kode' => $request->kode,
-                'nama' => $request->nama
-            ]);
+            // $data = KodeLab::create([
+            //     'kode' => $request->kode,
+            //     'nama' => $request->nama
+            // ]);
 
-            if (count($request->produk) > 0) {
-                for ($j = 0; $j < count($request->produk); $j++) {
-                    Produk::where('id', $request->produk[$j]['produk']['id'])
+            if (count($request->produkSelected) > 0) {
+                foreach ($request->produkSelected as $p ) {
+                    Produk::where('id', $p->id)
                         ->update([
-                            'kode_lab_id' => $data->id,
+                            'kode_lab_id' => $p->alat_selected->value,
                         ]);
                 }
             }
