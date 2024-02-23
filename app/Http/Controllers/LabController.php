@@ -1274,7 +1274,7 @@ class LabController extends Controller
                 join produk p on p.id = gbj.produk_id
                 join kode_lab kl on kl.id = p.kode_lab_id
                 where dpp.id = ?', [$dp->id]);
-                $metode_id = DetailMetodeLab::where(['metode_lab_id' => $dp->metode_id->id, 'ruang' => $dp->ruang_id->id])->first();
+                $metode_id = DetailMetodeLab::where(['metode_lab_id' => $dp->metode_id->metode_id, 'ruang' => $dp->metode_id->ruang_id])->first();
                 // dd($metode_id->id);
                 for ($j = 0; $j < count($dp->noseri); $j++) {
                     $detail = UjiLabDetail::find($dp->noseri[$j]->id);
@@ -1347,7 +1347,7 @@ class LabController extends Controller
                         ->whereColumn('uji.id', 'uji_lab_detail.id');
                 },
             ])
-            ->havingRaw('belum !=0')
+            // ->havingRaw('belum !=0')
             ->whereIN('detail_pesanan_produk_id', $get_dpp)
             ->get();
         if ($detail->isEmpty()) {
