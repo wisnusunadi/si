@@ -9,7 +9,7 @@ const routes = [
     },
     {
         path: "/qc/incoming/show/:id",
-        component: () => import("./page/barangmasuk/incoming/detail"),
+        component: () => import("./page/barangmasuk/dalamproses/detail"),
         name: "barangMasukDetail",
     },
 ];

@@ -53,8 +53,15 @@ export default {
                 return
             }
 
+            const produkSelected = this.produkSelected.map(item => {
+                return {
+                    id: item.id ?? item.nama.value,
+                    alat: item.alat_selected.value,
+                }
+            })
+
             try {
-                const { data } = await axios.post('/api/labs/kode', this.produkSelected)
+                const { data } = await axios.post('/api/labs/kode', produkSelected)
                 this.closeModal()
                 this.$emit('refresh')
                 swal.fire('Berhasil', 'Data berhasil disimpan', 'success')

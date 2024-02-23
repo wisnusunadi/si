@@ -592,6 +592,7 @@ class LabController extends Controller
 
     public function kode_lab_store(Request $request)
     {
+        dd($request->all());
         DB::beginTransaction();
         try {
             //code...
@@ -604,7 +605,7 @@ class LabController extends Controller
                 foreach ($request->produkSelected as $p) {
                     Produk::where('id', $p->id)
                         ->update([
-                            'kode_lab_id' => $p->alat_selected->value,
+                            'kode_lab_id' => $p->alat,
                         ]);
                 }
             }
