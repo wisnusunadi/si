@@ -869,6 +869,7 @@ Route::prefix('/labs')->group(function () {
     Route::get('/sertif', [App\Http\Controllers\LabController::class, 'sertifikat_data']); // sertif per no kalibrasi
     Route::get('/cetak/{jenis}/{id}/{ttd}/{hal}', [App\Http\Controllers\LabController::class, 'cetak_sertifikat']);
     Route::post('/uji', [App\Http\Controllers\LabController::class, 'lab_store_uji']);
+    Route::post('/ubah_jenis_pemilik', [App\Http\Controllers\LabController::class, 'ubah_jenis_pemilik']);
     Route::get('/riwayat_uji', [App\Http\Controllers\LabController::class, 'riwayat_uji']);
     Route::post('/riwayat_uji_laporan', [App\Http\Controllers\LabController::class, 'riwayat_uji_laporan']);
 });

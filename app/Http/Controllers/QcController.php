@@ -990,7 +990,7 @@ class QcController extends Controller
             })
             ->addColumn('button', function ($data) use ($id) {
                 if (isset($data->gudang_barang_jadi_id)) {
-                    $kalibrasi = $data->DetailPesanan->kalibrasi == 1 ? "true" : "false";
+                    $kalibrasi = $data->DetailPesanan->kalibrasi == 1 && $data->GudangBarangJadi->Produk->kode_lab_id != null ? "true" : "false";
                 } else {
                     $kalibrasi = "false";
                 }
