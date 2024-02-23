@@ -212,9 +212,9 @@ export default {
             noseriarray = [...new Set(noseriarray)]
             for (let i = 0; i < noseriarray.length; i++) {
                 let found = false
-                for (let j = 0; j < this.no_seri_get.length; j++) {
-                    if (noseriarray[i] == this.no_seri_get[j].no_seri) {
-                        this.checkedNoSeri(this.no_seri_get[j])
+                for (let j = 0; j < this.no_seri_get.filter((item) => item.status == "belum").length; j++) {
+                    if (noseriarray[i] == this.no_seri_get.filter((item) => item.status == "belum")[j].no_seri) {
+                        this.checkedNoSeri(this.no_seri_get.filter((item) => item.status == "belum")[j])
                         found = true
                         break
                     }
@@ -225,7 +225,7 @@ export default {
             }
 
             if (noserinotfound.length > 0) {
-                this.$swal('Peringatan', `No Seri ${noserinotfound.join(', ')} tidak ditemukan`, 'warning')
+                this.$swal('Peringatan', `No Seri ${noserinotfound.join(', ')} tidak ditemukan atau sudah diuji`, 'warning')
             }
         },
     },

@@ -12,6 +12,11 @@ const routes = [
         component: () => import("./page/barangmasuk/dalamproses/detail"),
         name: "barangMasukDetail",
     },
+    {
+        path: "/qc/riwayatUji",
+        component: () => import("./page/riwayat"),
+        name: "riwayatUji",
+    }
 ];
 
 const router = new VueRouter({

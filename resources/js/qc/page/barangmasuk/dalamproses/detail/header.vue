@@ -17,6 +17,14 @@ export default {
                                 <b>{{ header.bppb }}</b>
                             </div>
                             <div class="margin">
+                                <small class="text-muted">Nama Produk</small>
+                            </div>
+                            <div class="margin">
+                                <b>{{ header.produk }}</b>
+                            </div>
+                        </div>
+                        <div class="p-2">
+                            <div class="margin">
                                 <small class="text-muted">Lolos</small>
                             </div>
                             <div class="margin">
@@ -24,14 +32,6 @@ export default {
                                     <b>{{ header.lolos }} Unit</b>
                                     <b>({{ header.persentase_lolos }}%)</b>
                                 </span>
-                            </div>
-                        </div>
-                        <div class="p-2">
-                            <div class="margin">
-                                <small class="text-muted">Nama Produk</small>
-                            </div>
-                            <div class="margin">
-                                <b>{{ header.produk }}</b>
                             </div>
                             <div class="margin">
                                 <div class="margin">

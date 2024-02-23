@@ -1,9 +1,8 @@
 <script>
 export default {
-    props: ['data'],
+    props: ['data', 'search'],
     data() {
         return {
-            search: '',
             headers: [
                 {
                     text: 'No',
@@ -30,7 +29,6 @@ export default {
                     value: 'aksi',
                 },
             ],
-            years: new Date().getFullYear(),
         }
     },
     methods: {
@@ -38,57 +36,19 @@ export default {
             this.$router.push({
                 name: 'barangMasukDetail',
                 params: {
-                    id: detail.id
-                }
+                    id: detail.id,
+                    isRiwayat: false
+                },
             })
         },
         refresh() {
             this.$emit('refresh')
         }
     },
-    computed: {
-        // get 5 years from now
-        getYear() {
-            let year = [];
-            for (let i = 0; i < 2; i++) {
-                year.push(moment().subtract(i, "years").format("YYYY"));
-            }
-            return year;
-        },
-    },
 }
 </script>
 <template>
     <div>
-        <div class="d-flex bd-highlight">
-            <div class="p-2 flex-grow-1 bd-highlight">
-                <span class="filter">
-                    <button class="btn btn-sm btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                        <i class="fas fa-filter"></i> Filter Tahun
-                    </button>
-                    <form id="filter_ekat">
-                        <div class="dropdown-menu">
-                            <div class="px-3 py-3">
-                                <div class="form-group">
-                                    <div class="form-group form-check" v-for="year in getYear" :key="year">
-                                        <input class="form-check-input" type="radio" v-model="years" @change="getData()"
-                                            :id="`exampleRadios${year}`" :value="year" :checked="year ==
-                                                new Date().getFullYear()
-                                                " />
-                                        <label class="form-check-label" :for="`exampleRadios${year}`">
-                                            {{ year }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </span>
-            </div>
-            <div class="p-2 bd-highlight"><input type="text" class="form-control" v-model="search" placeholder="Cari...">
-            </div>
-        </div>
         <data-table :headers="headers" :items="data" :search="search">
             <template #item.no="{ item, index }">
                 {{ index + 1 }}

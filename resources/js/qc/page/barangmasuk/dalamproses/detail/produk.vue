@@ -1,9 +1,11 @@
 <script>
+import modalChecked from '../../../../../lab/page/kalibrasi/kalibrasi_internal/detail/modalchecked.vue'
 import modalSeri from './modal.vue'
 export default {
     props: ['detailBarangMasuk'],
     components: {
-        modalSeri
+        modalSeri,
+        modalChecked
     },
     data() {
         return {
@@ -40,6 +42,10 @@ export default {
                     value: 'hasil',
                     sortable: false
                 },
+                {
+                    text: 'Penguji',
+                    value: 'penguji'
+                }
             ],
             pengemasan: JSON.parse(JSON.stringify(this.detailBarangMasuk.pengemasan)),
             search: '',
@@ -51,6 +57,7 @@ export default {
             tanggalAkhirTerima: '',
             tanggalAwalUji: '',
             tanggalAkhirUji: '',
+            showModalSeri: false
         }
     },
     methods: {
@@ -63,7 +70,7 @@ export default {
         },
         statusText(status) {
             switch (status) {
-                case 'belum_diuji':
+                case 'belum':
                     return {
                         text: 'Belum Diuji',
                         class: 'text-warning fa fa-question-circle'
@@ -83,7 +90,7 @@ export default {
         checkedAll() {
             this.checkAll = !this.checkAll;
             if (this.checkAll) {
-                this.noSeriSelected = this.pengemasan.filter((item) => item.hasil === 'belum_diuji');
+                this.noSeriSelected = this.pengemasan.filter((item) => item.hasil === 'belum');
             } else {
                 this.noSeriSelected = [];
             }
@@ -100,6 +107,34 @@ export default {
             this.$nextTick(() => {
                 $('.modalIncoming').modal('show');
             });
+        },
+        openModalSeri() {
+            this.showModalSeri = true;
+            this.$nextTick(() => {
+                $('.modalChecked').modal('show');
+            });
+        },
+        submit(noseri) {
+            let noserinotfound = []
+            let noseriarray = noseri.split(/[\n, \t]/);
+            noseriarray = noseriarray.filter((item) => item != "");
+            noseriarray = [...new Set(noseriarray)];
+            for (let i = 0; i < noseriarray.length; i++) {
+                let found = false
+                for (let j = 0; j < this.pengemasan.filter((item) => item.hasil == 'belum').length; j++) {
+                    if (noseriarray[i] == this.pengemasan.filter((item) => item.hasil == 'belum')[j].noseri) {
+                        this.checkedItem(this.pengemasan.filter((item) => item.hasil == 'belum')[j])
+                        found = true
+                        break
+                    }
+                }
+                if (!found) {
+                    noserinotfound.push(noseriarray[i])
+                }
+            }
+            if (noserinotfound.length > 0) {
+                swal.fire('Peringatan', 'No Seri ' + noserinotfound.join(', ') + ' tidak ditemukan atau sudah diuji', 'warning')
+            }
         }
     },
     computed: {
@@ -173,10 +208,11 @@ export default {
         getAllStatusUnique() {
             return [...new Set(this.pengemasan.map((item) => item.hasil))]
         },
+
     },
     watch: {
         noSeriSelected() {
-            if (this.noSeriSelected.length == this.pengemasan.filter((item) => item.hasil === 'belum_diuji').length) {
+            if (this.noSeriSelected.length == this.pengemasan.filter((item) => item.hasil === 'belum').length) {
                 this.checkAll = true;
             } else {
                 this.checkAll = false;
@@ -189,9 +225,11 @@ export default {
     <div class="card">
         <modalSeri v-if="showModal" @closeModal="showModal = false" :header="detailBarangMasuk.header"
             :noseri="noSeriSelected" />
+        <modalChecked v-if="showModalSeri" @close="showModalSeri = false" @submit="submit" />
         <div class="card-body">
             <div class="d-flex bd-highlight">
                 <div class="p-2 flex-grow-1 bd-highlight">
+                    <button class="btn btn-primary" @click="openModalSeri" v-if="!$route.params.isRiwayat">Pilih No Seri Via Text</button>
                     <button class="btn btn-info" v-if="noSeriSelected.length > 0" @click="openUjiUnit">
                         <i class="fa fa-pencil"></i>
                         Uji Unit</button>
@@ -202,7 +240,9 @@ export default {
             </div>
             <data-table :headers="headers" :items="filteredDalamProses" :search="search">
                 <template #header.id>
-                    <input type="checkbox" :checked="checkAll" @click="checkedAll">
+                    <input type="checkbox" :checked="checkAll" @click="checkedAll"
+                        v-if="pengemasan.filter((item) => item.hasil === 'belum').length > 0 && !$route.params.isRiwayat" />
+                    <span v-else></span>
                 </template>
                 <template #header.tgl_terima>
                     <span class="text-bold pr-2">Tanggal Terima</span>
@@ -268,7 +308,7 @@ export default {
                 </template>
                 <template #item.id="{ item }">
                     <input type="checkbox" :checked="noSeriSelected && noSeriSelected.find((x) => x.id === item.id)"
-                        v-if="item.hasil === 'belum_diuji'" @click="checkedItem(item)" />
+                        v-if="item.hasil === 'belum' && !$route.params.isRiwayat" @click="checkedItem(item)" />
                     <span v-else></span>
                 </template>
                 <template #item.tgl_terima="{ item }">

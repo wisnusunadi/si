@@ -38,44 +38,80 @@ export default {
                     persentase_tidak_lolos: 25,
                 },
                 pengemasan: [
-                    {
-                        id: 1,
-                        tgl_terima: '2024-02-01',
-                        waktu_terima: '12:00',
-                        noseri: 'TD12345',
-                        tgl_uji: '2024-02-13',
-                        waktu_uji: '12:00',
-                        hasil: 'ok',
-                    },
-                    {
-                        id: 2,
-                        tgl_terima: '2024-02-13',
-                        waktu_terima: '12:00',
-                        noseri: 'TD123456',
-                        tgl_uji: '2024-02-13',
-                        waktu_uji: '12:00',
-                        hasil: 'not_ok',
-                    },
-                    {
-                        id: 3,
-                        tgl_terima: '2024-02-01',
-                        waktu_terima: '12:00',
-                        noseri: 'TD123457',
-                        hasil: 'belum_diuji',
-                        tgl_uji: null,
-                        waktu_uji: null,
-                    },
-                    {
-                        id: 4,
-                        tgl_terima: '2024-02-03',
-                        waktu_terima: '12:00',
-                        noseri: 'TD1234578',
-                        hasil: 'belum_diuji',
-                        tgl_uji: null,
-                        waktu_uji: null,
-                    }
+
                 ]
             }
+        }
+    },
+    created() {
+        if (!this.$route.params.isRiwayat) {
+            this.detailBarangMasuk.pengemasan = [
+                {
+                    id: 1,
+                    tgl_terima: '2024-02-01',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00074',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'ok',
+                    penguji: "Lorem",
+
+                },
+                {
+                    id: 2,
+                    tgl_terima: '2024-02-13',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00004',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'not_ok',
+                    penguji: "Lorem",
+
+                },
+                {
+                    id: 3,
+                    tgl_terima: '2024-02-01',
+                    waktu_terima: '12:00',
+                    noseri: 'US03225A00134',
+                    hasil: 'belum',
+                    tgl_uji: null,
+                    waktu_uji: null,
+                },
+                {
+                    id: 4,
+                    tgl_terima: '2024-02-03',
+                    waktu_terima: '12:00',
+                    noseri: 'US03225A00148',
+                    hasil: 'belum',
+                    tgl_uji: null,
+                    waktu_uji: null,
+                }
+            ]
+        } else {
+            this.detailBarangMasuk.pengemasan = [
+                {
+                    id: 1,
+                    tgl_terima: '2024-02-01',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00074',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'ok',
+                    penguji: "Lorem",
+
+                },
+                {
+                    id: 2,
+                    tgl_terima: '2024-02-13',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00004',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'not_ok',
+                    penguji: "Lorem",
+
+                }
+            ]
         }
     },
 }
