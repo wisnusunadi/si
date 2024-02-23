@@ -19,30 +19,23 @@ class KontrolLabs implements WithTitle, FromView, ShouldAutoSize
     /**
      * @return \Illuminate\Support\Collection
      */
-    public function collection()
-    {
-        //
-    }
 
-    public function dsb()
+
+    public function __construct(string $dsb , string $tanggal_awal, string $tanggal_akhir)
     {
-        return $this->dsb;
-    }
-    public function tanggal_awal()
-    {
-        return $this->tanggal_awal;
-    }
-    public function tanggal_akhir()
-    {
-        return $this->tanggal_akhir;
+        $this->dsb = $dsb;
+        $this->tanggal_awal = $tanggal_awal;
+        $this->tanggal_akhir = $tanggal_akhir;
     }
 
 
     public function view(): View
     {
+        // $obj = array();
+        // $d = $this->dsb;
+        // return view('page.lab.kontrol_lab', ['data' => $obj,'x' => $d]);
 
-        if($this->dsb != NULL){
-
+        if($this->dsb != "null"){
             $ekt_id = Ekatalog::where('customer_id',$this->dsb)->pluck('pesanan_id')->toArray();
             $spa_id = Spa::where('customer_id',$this->dsb)->pluck('pesanan_id')->toArray();
             $spb_id = Spb::where('customer_id',$this->dsb)->pluck('pesanan_id')->toArray();
@@ -93,8 +86,9 @@ class KontrolLabs implements WithTitle, FromView, ShouldAutoSize
             ->leftJoin('erp_kesehatan.karyawans', 'karyawans.id', '=', 'uji_lab_detail.pemeriksa_id')
             ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
             ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
+            ->where('uji_lab_detail.status', '!=', 'belum')
             ->whereIN('pesanan.id', $filterCus);
-            // ->where('uji_lab_detail.status', '!=', 'belum')
+
             // ->whereBetween('tgl_masuk',[$this->tanggal_awal, $this->tanggal_akhir]);
 
             if(count($filterCus) == 0){

@@ -252,7 +252,7 @@ class LabController extends Controller
                 ->leftJoin('erp_kesehatan.karyawans', 'karyawans.id', '=', 'uji_lab_detail.pemeriksa_id')
                 ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
                 ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
-                // ->where('uji_lab_detail.status', '!=', 'belum')
+                ->where('uji_lab_detail.status', '!=', 'belum')
                 // ->whereBetween('uji_lab_detail.tgl_masuk', [$objc->tanggal_awal, $objc->tanggal_akhir])
                 ->whereIN('pesanan.id', $filterCus);
             // ->whereYear('uji_lab_detail.created_at', $request->years );
@@ -360,6 +360,7 @@ class LabController extends Controller
 
     public function export_laporan(Request $request)
     {
+
         $waktu = Carbon::now();
         return Excel::download(new KontrolLabs($request->dsb, $request->tanggal_awal, $request->tanggal_akhir), 'Kontrol Kalibrasi  ' . $waktu->toDateTimeString() . '.xlsx');
 

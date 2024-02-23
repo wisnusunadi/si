@@ -5482,7 +5482,7 @@ class GudangController extends Controller
             $a = TFProduksi::where('pesanan_id', $request->pesanan_id)->first();
 
             if ($a) {
-                foreach ($request->produk as $key => $values) {
+                foreach ($request->produk as $values) {
                     $c = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $values['gudang_id'])->where('detail_pesanan_produk_id', $values['id'])->first();
 
                     if ($c) {
