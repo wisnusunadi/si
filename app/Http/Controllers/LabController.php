@@ -593,7 +593,6 @@ class LabController extends Controller
     public function kode_lab_store(Request $request)
     {
         $obj =  json_decode(json_encode($request->all()), FALSE);
-        dd($obj);
         DB::beginTransaction();
         try {
             //code...
@@ -602,9 +601,9 @@ class LabController extends Controller
             //     'nama' => $request->nama
             // ]);
                 foreach ($obj as $p) {
-                    Produk::where('id', $p->nama->value)
+                    Produk::where('id', $p->id)
                         ->update([
-                            'kode_lab_id' => $p->alat_selected->value,
+                            'kode_lab_id' => $p->alat,
                         ]);
                 }
 

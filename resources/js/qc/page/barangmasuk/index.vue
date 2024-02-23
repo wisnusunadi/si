@@ -1,7 +1,7 @@
 <script>
 import axios from 'axios';
 import Header from '../../components/header.vue';
-import incoming from './incoming';
+import incoming from './dalamproses';
 export default {
     components: {
         Header,
