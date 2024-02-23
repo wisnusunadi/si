@@ -592,6 +592,8 @@ class LabController extends Controller
 
     public function kode_lab_store(Request $request)
     {
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+        dd($obj);
         DB::beginTransaction();
         try {
             //code...
@@ -599,15 +601,13 @@ class LabController extends Controller
             //     'kode' => $request->kode,
             //     'nama' => $request->nama
             // ]);
-
-            if (count($request->produkSelected) > 0) {
-                foreach ($request->produkSelected as $p) {
-                    Produk::where('id', $p->id)
+                foreach ($obj as $p) {
+                    Produk::where('id', $p->nama->value)
                         ->update([
                             'kode_lab_id' => $p->alat_selected->value,
                         ]);
                 }
-            }
+
             DB::commit();
             return response()->json([
                 'status' => 200,
