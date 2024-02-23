@@ -3,11 +3,13 @@ import Table from "./table.vue";
 import pagination from "../../../components/pagination.vue";
 import Modal from "./modal.vue";
 import axios from "axios";
+import Header from "../../../components/header.vue";
 export default {
     components: {
         Table,
         pagination,
         Modal,
+        Header,
     },
     data() {
         return {
@@ -16,6 +18,17 @@ export default {
             renderPaginate: [],
             modal: false,
             dataSelected: null,
+            title: "Alat",
+            breadcumbs: [
+                {
+                    name: "Home",
+                    link: "/",
+                },
+                {
+                    name: "Alat",
+                    link: "/master/alat",
+                },
+            ]
         };
     },
     methods: {
@@ -80,35 +93,26 @@ export default {
 };
 </script>
 <template>
-    <div class="card" v-if="!$store.state.loading">
-        <modal
-            v-if="modal"
-            @close="modal = false"
-            :kode="dataSelected"
-            @refresh="getAlat"
-        />
-        <div class="card-body">
-            <div class="d-flex bd-highlight">
-                <div class="p-2 flex-grow-1 bd-highlight">
-                    <button class="btn btn-primary" @click="tambah">
-                        <i class="fas fa-plus"></i>
-                        Tambah
-                    </button>
+    <div>
+        <Header :title="title" :breadcumbs="breadcumbs" />
+        <div class="card" v-if="!$store.state.loading">
+            <modal v-if="modal" @close="modal = false" :kode="dataSelected" @refresh="getAlat" />
+            <div class="card-body">
+                <div class="d-flex bd-highlight">
+                    <div class="p-2 flex-grow-1 bd-highlight">
+                        <button class="btn btn-primary" @click="tambah">
+                            <i class="fas fa-plus"></i>
+                            Tambah
+                        </button>
+                    </div>
+                    <div class="p-2 bd-highlight">
+                        <input type="text" class="form-control" placeholder="Cari..." v-model="search" />
+                    </div>
                 </div>
-                <div class="p-2 bd-highlight">
-                    <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Cari..."
-                        v-model="search"
-                    />
-                </div>
+                <Table :dataTable="renderPaginate" @edit="edit" />
+                <pagination :filteredDalamProses="filteredDalamProses"
+                    @updateFilteredDalamProses="updateFilteredDalamProses" />
             </div>
-            <Table :dataTable="renderPaginate" @edit="edit" />
-            <pagination
-                :filteredDalamProses="filteredDalamProses"
-                @updateFilteredDalamProses="updateFilteredDalamProses"
-            />
         </div>
     </div>
 </template>

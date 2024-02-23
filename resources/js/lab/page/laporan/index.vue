@@ -80,13 +80,13 @@ export default {
                     label: 'Semua Distributor',
                     value: null
                 },
-                jenis: [],
+                // jenis: [],
                 tanggal_awal: null,
                 tanggal_akhir: null
             },
             dateNow: new Date().toISOString().substr(0, 10),
-            hasil: [],
-            search: ''
+            hasil: null,
+            search: '',
         }
     },
     methods: {
@@ -105,10 +105,11 @@ export default {
                     label: 'Semua Distributor',
                     value: null
                 },
+                // jenis: [],
                 tanggal_awal: null,
                 tanggal_akhir: null
             }
-            this.hasil = []
+            this.hasil = null
         },
         async cetak() {
             const cekFormNotEmpty = Object.keys(this.form).every(key => {
@@ -120,25 +121,26 @@ export default {
             })
 
             if (cekFormNotEmpty) {
-                // axios.get(`/api/labs/riwayat_uji`).then(({ data }) => {
-                //     this.hasil = data.map(d => ({
-                //         nama_distributor: d.info.nama,
-                //         ...d
-                //     }))
-                // })
                 try {
+                    this.hasil = null
+                    this.$store.dispatch('setLoading', true)
                     const { data } = await axios.post('/api/labs/riwayat_uji_laporan', this.form)
                     this.hasil = data.map(d => ({
                         nama_distributor: d.info.nama,
                         ...d
                     }))
                 } catch (error) {
-
+                    console.error(error)
+                } finally {
+                    this.$store.dispatch('setLoading', false)
                 }
             } else {
                 swal.fire('Peringatan', 'Form pencarian tidak boleh kosong', 'warning')
                 return
             }
+        },
+        downloadLaporan() {
+            window.open(`/api/labs/laporan?dsb=${this.form.customer.value}&tanggal_awal=${this.form.tanggal_awal}&tanggal_akhir=${this.form.tanggal_akhir}`)
         }
     },
     created() {
@@ -161,7 +163,7 @@ export default {
                         <small>Distributor / Customer boleh dikosongi</small>
                     </div>
                 </div>
-                <div class="form-group row">
+                <!-- <div class="form-group row">
                     <label for="penjualan" class="col-form-label col-lg-5 col-md-12 text-right">Jenis</label>
                     <div class="col-5 col-form-label">
                         <div class="form-check form-check-inline">
@@ -175,25 +177,28 @@ export default {
                             <label class="form-check-label" for="inlineCheckbox1">Eksternal</label>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="form-group row">
                     <label class="col-form-label col-lg-5 col-md-12 text-right">Tanggal Awal Kalibrasi</label>
                     <div class="col-3">
-                        <input type="date" class="form-control" v-model="form.tanggal_awal" :max="dateNow" />
+                        <input type="date" class="form-control" v-model="form.tanggal_awal"
+                            :max="form.tanggal_akhir ? form.tanggal_akhir : dateNow" />
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="" class="col-form-label col-lg-5 col-md-12 text-right">Tanggal Akhir Kalibrasi</label>
                     <div class="col-3">
-                        <input type="date" class="form-control" v-model="form.tanggal_akhir" :max="dateNow"
-                            :disabled="!form.tanggal_awal" />
+                        <input type="date" class="form-control" v-model="form.tanggal_akhir" :min="form.tanggal_awal"
+                            :max="dateNow" :disabled="!form.tanggal_awal" />
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-5"></div>
                     <div class="col-lg-4 col-md-12">
                         <span class="float-right filter"><button type="submit" class="btn btn-success"
-                                @click="cetak">Cetak</button></span>
+                                :disabled="$store.state.loading" @click="cetak">
+                                {{ $store.state.loading ? 'Loading...' : 'Cetak' }}
+                            </button></span>
                         <span class="float-right filter mr-1"><button type="button" class="btn btn-outline-danger"
                                 @click="resetForm" id="btnbatal">Batal</button></span>
                     </div>
@@ -201,11 +206,11 @@ export default {
             </div>
         </div>
 
-        <div class="card" v-if="hasil.length > 0">
+        <div class="card" v-if="hasil">
             <div class="card-body">
                 <div class="d-flex bd-highlight">
                     <div class="p-2 flex-grow-1 bd-highlight">
-                        <button class="btn btn-success btn-sm">
+                        <button class="btn btn-success btn-sm" @click="downloadLaporan">
                             <i class="fas fa-file-excel"></i>
                             Export
                         </button>

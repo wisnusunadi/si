@@ -225,7 +225,7 @@
                             <div class="card col-lg-8 col-md-12">
                                 <div class="card-body">
                                     <h6><b>Detail Produk</b></h6>
-                                    <div class="table-responsive overflowcard">
+                                    <div class="table-responsive">
                                         <?php $totalharga = 0; ?>
                                         <?php
                                         

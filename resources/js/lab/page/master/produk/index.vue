@@ -1,12 +1,25 @@
 <script>
 import axios from 'axios';
 import modal from './modal.vue';
+import Header from "../../../components/header.vue";
 export default {
     components: {
-        modal
+        modal,
+        Header,
     },
     data() {
         return {
+            title: "Produk",
+            breadcumbs: [
+                {
+                    name: "Home",
+                    link: "/",
+                },
+                {
+                    name: "Produk",
+                    link: "/master/alat",
+                },
+            ],
             headers: [
                 {
                     text: 'id',
@@ -91,26 +104,30 @@ export default {
 }
 </script>
 <template>
-    <div class="card">
-        <modal v-if="showModal" :produk="produkSelected" @closeModal="showModal = false" />
-        <div class="card-body">
-            <div class="d-flex bd-highlight">
-                <div class="p-2 flex-grow-1 bd-highlight">
-                    <button class="btn btn-primary" @click="openModal">Tambah / Edit Alat Produk</button>
+    <div>
+        <Header :title="title" :breadcumbs="breadcumbs" />
+
+        <div class="card">
+            <modal v-if="showModal" :produk="produkSelected" @closeModal="showModal = false" />
+            <div class="card-body">
+                <div class="d-flex bd-highlight">
+                    <div class="p-2 flex-grow-1 bd-highlight">
+                        <button class="btn btn-primary" @click="openModal">Tambah / Edit Alat Produk</button>
+                    </div>
+                    <div class="p-2 bd-highlight">
+                        <input type="text" class="form-control" v-model="search" placeholder="Cari...">
+                    </div>
                 </div>
-                <div class="p-2 bd-highlight">
-                    <input type="text" class="form-control" v-model="search" placeholder="Cari...">
-                </div>
+                <data-table :headers="headers" :items="produk" :search="search">
+                    <template #header.id>
+                        <input type="checkbox" @click="checkedAll" :checked="checkAll">
+                    </template>
+                    <template #item.id="{ item }">
+                        <input type="checkbox" @click="checkedItem(item)"
+                            :checked="produkSelected && produkSelected.find(produk => produk.id === item.id)">
+                    </template>
+                </data-table>
             </div>
-            <data-table :headers="headers" :items="produk" :search="search">
-                <template #header.id>
-                    <input type="checkbox" @click="checkedAll" :checked="checkAll">
-                </template>
-                <template #item.id="{ item }">
-                    <input type="checkbox" @click="checkedItem(item)"
-                        :checked="produkSelected && produkSelected.find(produk => produk.id === item.id)">
-                </template>
-            </data-table>
         </div>
     </div>
 </template>

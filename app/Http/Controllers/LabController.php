@@ -171,7 +171,7 @@ class LabController extends Controller
                 ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
                 ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
                 ->where('uji_lab_detail.status', '!=', 'belum')
-                  ->whereBetween('uji_lab_detail.tgl_masuk', [$objc->tanggal_awal, $objc->tanggal_akhir]);
+                ->whereBetween('uji_lab_detail.tgl_masuk', [$objc->tanggal_awal, $objc->tanggal_akhir]);
             // ->whereYear('uji_lab_detail.created_at', $request->years );
 
             $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
@@ -205,9 +205,9 @@ class LabController extends Controller
             $dataInfo =   $ekatalog->merge($spa)->merge($spb);
         } else {
 
-            $ekt_id = Ekatalog::where('customer_id',$objc->customer->value)->pluck('pesanan_id')->toArray();
-            $spa_id = Spa::where('customer_id',$objc->customer->value)->pluck('pesanan_id')->toArray();
-            $spb_id = Spb::where('customer_id',$objc->customer->value)->pluck('pesanan_id')->toArray();
+            $ekt_id = Ekatalog::where('customer_id', $objc->customer->value)->pluck('pesanan_id')->toArray();
+            $spa_id = Spa::where('customer_id', $objc->customer->value)->pluck('pesanan_id')->toArray();
+            $spb_id = Spb::where('customer_id', $objc->customer->value)->pluck('pesanan_id')->toArray();
 
             $collection1 = collect($ekt_id);
             $collection2 = collect($spa_id);
@@ -216,11 +216,11 @@ class LabController extends Controller
             $mergedCollection = $collection1->merge($collection2)->merge($collection3);
 
             $getLab = UjiLabDetail::select('uji_lab.pesanan_id as p_id',)
-            ->leftJoin('uji_lab', 'uji_lab.id', '=', 'uji_lab_detail.uji_lab_id')
-            ->where('uji_lab_detail.status', '!=', 'belum')
-            ->whereBetween('uji_lab_detail.tgl_masuk', [$objc->tanggal_awal, $objc->tanggal_akhir])
-            ->pluck('p_id')->toArray();
-            $filterCus =  array_values(array_intersect($getLab,$mergedCollection->toArray()));
+                ->leftJoin('uji_lab', 'uji_lab.id', '=', 'uji_lab_detail.uji_lab_id')
+                ->where('uji_lab_detail.status', '!=', 'belum')
+                ->whereBetween('uji_lab_detail.tgl_masuk', [$objc->tanggal_awal, $objc->tanggal_akhir])
+                ->pluck('p_id')->toArray();
+            $filterCus =  array_values(array_intersect($getLab, $mergedCollection->toArray()));
 
 
             $data = UjiLabDetail::select(
@@ -252,14 +252,14 @@ class LabController extends Controller
                 ->leftJoin('erp_kesehatan.karyawans', 'karyawans.id', '=', 'uji_lab_detail.pemeriksa_id')
                 ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
                 ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
-               // ->where('uji_lab_detail.status', '!=', 'belum')
-               // ->whereBetween('uji_lab_detail.tgl_masuk', [$objc->tanggal_awal, $objc->tanggal_akhir])
+                // ->where('uji_lab_detail.status', '!=', 'belum')
+                // ->whereBetween('uji_lab_detail.tgl_masuk', [$objc->tanggal_awal, $objc->tanggal_akhir])
                 ->whereIN('pesanan.id', $filterCus);
             // ->whereYear('uji_lab_detail.created_at', $request->years );
 
-           if(count($filterCus) == 0){
-            return response()->json(array());
-           }
+            if (count($filterCus) == 0) {
+                return response()->json(array());
+            }
 
             $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
                 ->selectRaw('"" AS no_paket')

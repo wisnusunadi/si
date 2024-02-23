@@ -25,8 +25,6 @@ export default {
                                     <b>({{ header.persentase_lolos }}%)</b>
                                 </span>
                             </div>
-                            .margin
-
                         </div>
                         <div class="p-2">
                             <div class="margin">
@@ -34,6 +32,15 @@ export default {
                             </div>
                             <div class="margin">
                                 <b>{{ header.produk }}</b>
+                            </div>
+                            <div class="margin">
+                                <div class="margin">
+                                    <small class="text-muted">Tidak Lolos</small>
+                                </div>
+                                <span>
+                                    <b>{{ header.tidak_lolos }} Unit</b>
+                                    <b>({{ header.persentase_tidak_lolos }}%)</b>
+                                </span>
                             </div>
                         </div>
                         <div class="p-2">
@@ -47,7 +54,7 @@ export default {
                                 <small class="text-muted">Jumlah Unit Terisi</small>
                             </div>
                             <div class="margin">
-                                <b>{{ header.terisi }}</b>
+                                <b>{{ header.terisi }} Unit</b>
                             </div>
                         </div>
                     </div>

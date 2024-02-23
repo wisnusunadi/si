@@ -254,7 +254,7 @@
                                 <div class="card col-lg-8 col-md-12">
                                     <div class="card-body">
                                         <h6><b>Detail Produk</b></h6>
-                                        <div class="table-responsive overflowcard">
+                                        <div class="table-responsive">
                                             <table class="table" style="max-width:100%; overflow-x: hidden;"
                                                 id="tabledetailpesan">
                                                 <thead class="bg-chart-light">

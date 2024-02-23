@@ -1,10 +1,12 @@
 <script>
 import Header from '../../../../components/header.vue';
 import cardHeader from './header.vue'
+import cardProduk from './produk.vue'
 export default {
     components: {
         Header,
         cardHeader,
+        cardProduk
     },
     data() {
         return {
@@ -44,5 +46,6 @@ export default {
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
         <cardHeader :header="detailBarangMasuk.header" />
+        <cardProduk />
     </div>
 </template>

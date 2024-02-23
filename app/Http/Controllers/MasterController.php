@@ -2000,7 +2000,6 @@ class MasterController extends Controller
                     'status' => $item->status == 1 ? true : false,
                     'generate_seri' => $item->generate_seri,
                     'kode' => $item->kode,
-                    'alat' => $item->KodeLab->nama,
                     'gudang_barang_jadi' => $item->GudangBarangJadi
                 ];
             });

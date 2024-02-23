@@ -13,9 +13,11 @@ export default {
                 hasil: "",
                 produk: this.productSelected,
                 gantiAlamat: 'false',
+                jenis_pemilik: null,
             },
             pemilik: [],
             dateMax: new Date().toISOString().split("T")[0],
+            showJenisPemilik: false,
         }
     },
     components: {
@@ -36,6 +38,9 @@ export default {
                     label: data.nama,
                 };
             });
+            if (this.header.jenis_pemilik.length > 0 || this.header.jenis_pemilik?.label) {
+                this.showJenisPemilik = true
+            }
         },
         async simpan() {
             const success = () => {
@@ -68,8 +73,8 @@ export default {
 <template>
     <div class="modal fade modalKalibrasi" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content" style="overflow: hidden;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">
                         Form Kalibrasi
@@ -94,10 +99,10 @@ export default {
                                         v-model="form.pemeriksa_id"></v-select>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group row" v-if="!showJenisPemilik">
                                 <label for="" class="col-5 col-form-label text-right">Jenis Pemilik</label>
                                 <div class="col-5">
-                                    <v-select :options="pemilik" v-model="header.jenis_pemilik"></v-select>
+                                    <v-select :options="pemilik" v-model="form.jenis_pemilik"></v-select>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -130,7 +135,8 @@ export default {
                                             id="inlineRadio2" value="true" v-model="form.gantiAlamat">
                                         <label class="form-check-label" for="inlineRadio2">Ubah Alamat</label>
                                     </div>
-                                    <textarea class="form-control" v-model="header.alamat" cols="5" :disabled="form.gantiAlamat == 'false'"></textarea>
+                                    <textarea class="form-control" v-model="header.alamat" cols="5"
+                                        :disabled="form.gantiAlamat == 'false'"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -148,4 +154,5 @@ export default {
                 </div>
             </div>
         </div>
-    </div></template>
+    </div>
+</template>

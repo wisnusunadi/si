@@ -3,24 +3,22 @@
 @section('title', 'ERP')
 
 @section('content_header')
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0  text-dark">Sales Order</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->divisi_id == '23')
-                        <li class="breadcrumb-item"><a href="{{ route('qc.dashboard') }}">Beranda</a></li>
-                    @elseif(Auth::user()->divisi_id == '2')
-                        <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
-                    @endif
-                    <li class="breadcrumb-item"><a href="{{ route('qc.so.show') }}">Sales Order QC</a></li>
-                    <li class="breadcrumb-item active">Detail</li>
-                </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+    <div class="d-flex bd-highlight">
+        <div class="p-2 flex-grow-1 bd-highlight">
+            <h1 class="text-dark">Sales Order</h1>
+        </div>
+        <div class="p-2 bd-highlight">
+            <ol class="breadcrumb float-sm-right">
+                @if (Auth::user()->divisi_id == '23')
+                    <li class="breadcrumb-item"><a href="{{ route('qc.dashboard') }}">Beranda</a></li>
+                @elseif(Auth::user()->divisi_id == '2')
+                    <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
+                @endif
+                <li class="breadcrumb-item"><a href="{{ route('qc.so.show') }}">Sales Order QC</a></li>
+                <li class="breadcrumb-item active">Detail</li>
+            </ol>
+        </div>
+    </div>
 @stop
 
 @section('adminlte_css')
@@ -142,108 +140,102 @@
                     <div class="card">
                         <div class="card-body">
                             <h4>Info Penjualan SPB</h4>
-                            <div class="row">
-                                <div class="col-lg-11 col-md-12">
-                                    @foreach ($data as $d)
-                                        <div class="row d-flex justify-content-between">
-                                            <div class="p-2 cust">
-                                                <div class="margin">
-                                                    <div><small class="text-muted">Customer</small></div>
-                                                </div>
-                                                <div class="margin">
-                                                    <b id="distributor">{{ $d->customer->nama }}</b>
-                                                </div>
-                                                <div class="margin">
-                                                    <b id="no_akn">{{ $d->customer->alamat }}</b>
-                                                </div>
-                                                <div class="margin">
-                                                    <b id="no_akn">{{ $d->customer->provinsi->nama }}</b>
-                                                </div>
-                                                <div class="margin">
-                                                    <b id="distributor">{{ $d->customer->telp }}</b>
-                                                </div>
-                                            </div>
-                                            <div class="p-2">
-                                                <div class="margin">
-                                                    <div><small class="text-muted">No SO</small></div>
-                                                    <div><b id="no_so">{{ $d->pesanan->so }}</b></div>
-                                                </div>
-                                                <div class="margin">
-                                                    <div><small class="text-muted">Status Transfer</small></div>
-                                                    <div class="align-center">{!! $status !!}</div>
-                                                </div>
-                                            </div>
-                                            <div class="p-2">
-                                                <div class="margin">
-                                                    <div><small class="text-muted">No PO</small></div>
-                                                    <div><b id="no_so">{{ $d->pesanan->no_po }}</b></div>
-                                                </div>
-                                                <div class="margin">
-                                                    <div><small class="text-muted">Tanggal PO</small></div>
-                                                    <div><b id="no_so">{{ $d->pesanan->tgl_po }}</b></div>
-                                                </div>
-                                            </div>
+                            @foreach ($data as $d)
+                                <div class="row d-flex justify-content-between">
+                                    <div class="p-2 cust">
+                                        <div class="margin">
+                                            <div><small class="text-muted">Customer</small></div>
                                         </div>
-                                    @endforeach
+                                        <div class="margin">
+                                            <b id="distributor">{{ $d->customer->nama }}</b>
+                                        </div>
+                                        <div class="margin">
+                                            <b id="no_akn">{{ $d->customer->alamat }}</b>
+                                        </div>
+                                        <div class="margin">
+                                            <b id="no_akn">{{ $d->customer->provinsi->nama }}</b>
+                                        </div>
+                                        <div class="margin">
+                                            <b id="distributor">{{ $d->customer->telp }}</b>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        <div class="margin">
+                                            <div><small class="text-muted">No SO</small></div>
+                                            <div><b id="no_so">{{ $d->pesanan->so }}</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">Status Transfer</small></div>
+                                            <div class="align-center">{!! $status !!}</div>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        <div class="margin">
+                                            <div><small class="text-muted">No PO</small></div>
+                                            <div><b id="no_so">{{ $d->pesanan->no_po }}</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">Tanggal PO</small></div>
+                                            <div><b id="no_so">{{ $d->pesanan->tgl_po }}</b></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
+                    @if ($d->ket != '')
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i> <strong>Catatan: </strong>{{ $d->ket }}
+                        </div>
+                    @endif
                 </div>
             </div>
-            @if ($d->ket != '')
-                <div class="alert alert-danger" role="alert">
-                    <i class="fas fa-exclamation-triangle"></i> <strong>Catatan: </strong>{{ $d->ket }}
-                </div>
-            @endif
+
             <div class="row">
                 <div class="col-7">
                     <div class="card">
                         <div class="card-body">
-
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="table-responsive">
-                                        <table class="table" style="text-align:center;" id="showtable">
-                                            <thead>
-                                                <tr>
-                                                    <th rowspan="2">No</th>
-                                                    <th rowspan="2">Nama Produk</th>
-                                                    <th rowspan="2">Jumlah</th>
-                                                    <th colspan="2" class="collapsable">Hasil</th>
-                                                    <th rowspan="2">Aksi</th>
-                                                </tr>
-                                                <tr>
-                                                    <th><i class="fas fa-check ok"></i></th>
-                                                    <th><i class="fas fa-times nok"></i></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                            <div class="table-responsive">
+                                <table class="table" style="text-align:center;" id="showtable">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2">No</th>
+                                            <th rowspan="2">Nama Produk</th>
+                                            <th rowspan="2">Jumlah</th>
+                                            <th colspan="2" class="collapsable">Hasil</th>
+                                            <th rowspan="2">Aksi</th>
+                                        </tr>
+                                        <tr>
+                                            <th><i class="fas fa-check ok"></i></th>
+                                            <th><i class="fas fa-times nok"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-5 hide" id="noseridetail">
-                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
-                                type="button" role="tab" aria-controls="pills-home" aria-selected="true"></a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile"
-                                type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Riwayat
-                                Nomor Seri Gagal Uji</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-                            aria-labelledby="pills-home-tab">
-                            <div class="card">
-                                <div class="card-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill"
+                                        data-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                                        aria-selected="true"></a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="pills-profile-tab" data-toggle="pill"
+                                        data-target="#pills-profile" type="button" role="tab"
+                                        aria-controls="pills-profile" aria-selected="false">Riwayat
+                                        Nomor Seri Gagal Uji</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                                    aria-labelledby="pills-home-tab">
                                     <div class="row">
                                         <div class="col-12">
                                             <span class="float-right filter hide" id="filter_form">
@@ -404,15 +396,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="pills-profile" role="tabpanel"
-                            aria-labelledby="pills-profile-tab">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Riwayat Nomor Seri Gagal Uji</h5>
-                                </div>
-                                <div class="card-body">
+                                <div class="tab-pane fade" id="pills-profile" role="tabpanel"
+                                    aria-labelledby="pills-profile-tab">
                                     <div class="scrollable">
                                         <table class="table" id="noseripengganti">
                                             <thead>
@@ -435,7 +420,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                     <div class="modal-dialog modal-xl" role="document">
@@ -543,12 +527,10 @@
                     $('.btnKalibrasi').removeClass('hide');
                     $('.kalibrasi-hide').removeClass('hide');
                     $('#pills-home-tab').text('Pengujian dan Kalibrasi');
-                    $('#pills-profile-tab').removeClass('hide');
                 } else {
                     $('.btnKalibrasi').addClass('hide');
                     $('.kalibrasi-hide').addClass('hide');
                     $('#pills-home-tab').text('Pengujian');
-                    $('#pills-profile-tab').addClass('hide');
                 }
                 if (datajenis == "produk") {
                     $('#filter_form').removeClass('hide')
@@ -556,6 +538,8 @@
                     $('#part_detail').addClass('hide');
                     $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/belum/' + dataid + '/' +
                         '{{ $id }}').load();
+                    $('#pills-profile-tab').removeClass('hide');
+                    $('#pills-home-tab').removeClass('hide');
                     $.ajax({
                         type: "GET",
                         url: "/api/qc/so/seri_riwayat_ganti/" + dataid + '/' +
@@ -587,6 +571,7 @@
                     $('#produk_detail').addClass('hide');
                     $('#part_detail').removeClass('hide');
                     $('#pills-profile-tab').addClass('hide');
+                    $('#pills-home-tab').addClass('hide');
                     listcekpart(dataid);
                     if (datacount == 0) {
                         $('#cekbrg').prop('disabled', true);
@@ -1186,34 +1171,34 @@
                                     <h5 class="card-title">Info Produk</h5>
                                 </div>
                                 ${datajenis == "produk" ? `
-                                                                    <div class="card-body">
-                                                                        <div class="margin">
-                                                                            <input type="hidden" name="user_idd" value="{{ Auth::user()->id }}">
-                                                                            <div><small class="text-muted">Nama Produk</small></div>
-                                                                            <div><b>${dataHeader?.nama_produk}</b></div>
-                                                                        </div>
-                                                                        <div class="margin">
-                                                                            <div><small class="text-muted">No SO</small></div>
-                                                                            <div><b>${noSO}</b></div>
-                                                                        </div>
-                                                                    </div>
-                                                                    ` : `
-                                                                    <div class="card-body">
-                                                                        <div class="margin">
-                                                                            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                                                            <div><small class="text-muted">Nama Part</small></div>
-                                                                            <div><b>${dataHeader?.nama_produk}</b></div>
-                                                                        </div>
-                                                                        <div class="margin">
-                                                                            <div><small class="text-muted">No SO</small></div>
-                                                                            <div><b>${noSO}</b></div>
-                                                                        </div>
-                                                                        <div class="margin">
-                                                                            <div><small class="text-muted">Jumlah</small></div>
-                                                                            <div><b>${dataHeader?.jumlah}</b></div>
-                                                                        </div>
-                                                                    </div>
-                                                                    `}
+                                                                                                    <div class="card-body">
+                                                                                                        <div class="margin">
+                                                                                                            <input type="hidden" name="user_idd" value="{{ Auth::user()->id }}">
+                                                                                                            <div><small class="text-muted">Nama Produk</small></div>
+                                                                                                            <div><b>${dataHeader?.nama_produk}</b></div>
+                                                                                                        </div>
+                                                                                                        <div class="margin">
+                                                                                                            <div><small class="text-muted">No SO</small></div>
+                                                                                                            <div><b>${noSO}</b></div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    ` : `
+                                                                                                    <div class="card-body">
+                                                                                                        <div class="margin">
+                                                                                                            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                                                                                            <div><small class="text-muted">Nama Part</small></div>
+                                                                                                            <div><b>${dataHeader?.nama_produk}</b></div>
+                                                                                                        </div>
+                                                                                                        <div class="margin">
+                                                                                                            <div><small class="text-muted">No SO</small></div>
+                                                                                                            <div><b>${noSO}</b></div>
+                                                                                                        </div>
+                                                                                                        <div class="margin">
+                                                                                                            <div><small class="text-muted">Jumlah</small></div>
+                                                                                                            <div><b>${dataHeader?.jumlah}</b></div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    `}
                             </div>
                         </div>
                         <div class="col-lg-8 col-12">
@@ -1244,52 +1229,52 @@
                                             </div>
                                         </div>
                                         ${datajenis == "produk" ? `
-                                                                                <div class="form-group row">
-                                                                                    <label for="" class="col-form-label col-5" style="text-align: right">Hasil Cek</label>
-                                                                                    <div class="col-5 col-form-label">
-                                                                                        <div class="form-check form-check-inline">
-                                                                                            <input class="form-check-input" type="radio" name="cek" id="yes" value="ok" />
-                                                                                            <label class="form-check-label" for="yes"><i class="fas fa-check-circle ok"></i> OK</label>
-                                                                                        </div>
-                                                                                        <div class="form-check form-check-inline">
-                                                                                            <input class="form-check-input" type="radio" name="cek" id="no" value="nok" />
-                                                                                            <label class="form-check-label" for="no"><i class="fas fa-times-circle nok"></i> Tidak OK</label>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <h5>No Seri </h5>
-                                                                                <div class="form-group row">
-                                                                                    <div class="table-responsive overflowy">
-                                                                                        <table class="table table-striped align-center" id="listnoseri" style="width:100%;">
-                                                                                            <thead>
-                                                                                                <tr>
-                                                                                                    <th>No</th>
-                                                                                                    <th>No Seri</th>
-                                                                                                    <th>No Seri ID</th>
-                                                                                                    <th>No Detail Produk ID</th>
-                                                                                                </tr>
-                                                                                            </thead>
-                                                                                            <tbody>
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                    </div>
-                                                                                </div>
-                                                                                ` : `
-                                                                                <div class="form-group row">
-                                                                                    <label for="" class="col-form-label col-5" style="text-align: right">Jumlah OK</label>
-                                                                                    <div class="col-3">
-                                                                                        <input type="number" class="form-control  col-form-label" name="jumlah_ok" id="jumlah_ok">
-                                                                                        <div class="invalid-feedback" id="msgjumlah_ok"></div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="form-group row">
-                                                                                    <label for="" class="col-form-label col-5" style="text-align: right">Jumlah NOK</label>
-                                                                                    <div class="col-3">
-                                                                                        <input type="number" class="form-control  col-form-label" name="jumlah_nok" id="jumlah_nok">
-                                                                                        <div class="invalid-feedback" id="msgjumlah_nok"></div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                `}
+                                                                                                                <div class="form-group row">
+                                                                                                                    <label for="" class="col-form-label col-5" style="text-align: right">Hasil Cek</label>
+                                                                                                                    <div class="col-5 col-form-label">
+                                                                                                                        <div class="form-check form-check-inline">
+                                                                                                                            <input class="form-check-input" type="radio" name="cek" id="yes" value="ok" />
+                                                                                                                            <label class="form-check-label" for="yes"><i class="fas fa-check-circle ok"></i> OK</label>
+                                                                                                                        </div>
+                                                                                                                        <div class="form-check form-check-inline">
+                                                                                                                            <input class="form-check-input" type="radio" name="cek" id="no" value="nok" />
+                                                                                                                            <label class="form-check-label" for="no"><i class="fas fa-times-circle nok"></i> Tidak OK</label>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <h5>No Seri </h5>
+                                                                                                                <div class="form-group row">
+                                                                                                                    <div class="table-responsive overflowy">
+                                                                                                                        <table class="table table-striped align-center" id="listnoseri" style="width:100%;">
+                                                                                                                            <thead>
+                                                                                                                                <tr>
+                                                                                                                                    <th>No</th>
+                                                                                                                                    <th>No Seri</th>
+                                                                                                                                    <th>No Seri ID</th>
+                                                                                                                                    <th>No Detail Produk ID</th>
+                                                                                                                                </tr>
+                                                                                                                            </thead>
+                                                                                                                            <tbody>
+                                                                                                                            </tbody>
+                                                                                                                        </table>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                ` : `
+                                                                                                                <div class="form-group row">
+                                                                                                                    <label for="" class="col-form-label col-5" style="text-align: right">Jumlah OK</label>
+                                                                                                                    <div class="col-3">
+                                                                                                                        <input type="number" class="form-control  col-form-label" name="jumlah_ok" id="jumlah_ok">
+                                                                                                                        <div class="invalid-feedback" id="msgjumlah_ok"></div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="form-group row">
+                                                                                                                    <label for="" class="col-form-label col-5" style="text-align: right">Jumlah NOK</label>
+                                                                                                                    <div class="col-3">
+                                                                                                                        <input type="number" class="form-control  col-form-label" name="jumlah_nok" id="jumlah_nok">
+                                                                                                                        <div class="invalid-feedback" id="msgjumlah_nok"></div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                `}
                                     </div>
                                 </div>
                                 <div class="card-footer">
@@ -1343,34 +1328,34 @@
                                     <h5 class="card-title">Info Produk</h5>
                                 </div>
                                ${datajenis == 'produk' ? `
-                                                                        <div class="card-body">
-                                                                            <div class="margin">
-                                                                                <input type="hidden" name="user_idd" value="{{ Auth::user()->id }}">
-                                                                                <div><small class="text-muted">Nama Produk</small></div>
-                                                                                <div><b>${dataHeader.nama_produk}</b></div>
-                                                                            </div>
-                                                                            <div class="margin">
-                                                                                <div><small class="text-muted">No SO</small></div>
-                                                                                <div><b>{{ $d->pesanan->so }}</b></div>
-                                                                            </div>
-                                                                        </div>
-                                                                        ` : `
-                                                                        <div class="card-body">
-                                                                            <div class="margin">
-                                                                                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                                                                <div><small class="text-muted">Nama Part</small></div>
-                                                                                <div><b></b></div>
-                                                                            </div>
-                                                                            <div class="margin">
-                                                                                <div><small class="text-muted">No SO</small></div>
-                                                                                <div><b>{{ $d->pesanan->so }}</b></div>
-                                                                            </div>
-                                                                            <div class="margin">
-                                                                                <div><small class="text-muted">Jumlah</small></div>
-                                                                                <div><b></b></div>
-                                                                            </div>
-                                                                        </div>
-                                                                        `}
+                                                                                                        <div class="card-body">
+                                                                                                            <div class="margin">
+                                                                                                                <input type="hidden" name="user_idd" value="{{ Auth::user()->id }}">
+                                                                                                                <div><small class="text-muted">Nama Produk</small></div>
+                                                                                                                <div><b>${dataHeader.nama_produk}</b></div>
+                                                                                                            </div>
+                                                                                                            <div class="margin">
+                                                                                                                <div><small class="text-muted">No SO</small></div>
+                                                                                                                <div><b>{{ $d->pesanan->so }}</b></div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        ` : `
+                                                                                                        <div class="card-body">
+                                                                                                            <div class="margin">
+                                                                                                                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                                                                                                <div><small class="text-muted">Nama Part</small></div>
+                                                                                                                <div><b></b></div>
+                                                                                                            </div>
+                                                                                                            <div class="margin">
+                                                                                                                <div><small class="text-muted">No SO</small></div>
+                                                                                                                <div><b>{{ $d->pesanan->so }}</b></div>
+                                                                                                            </div>
+                                                                                                            <div class="margin">
+                                                                                                                <div><small class="text-muted">Jumlah</small></div>
+                                                                                                                <div><b></b></div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        `}
                             </div>
                         </div>
                         <div class="col-lg-8 col-12">
@@ -1403,38 +1388,38 @@
                                             </div>
                                         </div>
                                        ${datajenis == "produk" ? `
-                                                                                <h5>No Seri </h5>
-                                                                                <div class="form-group row">
-                                                                                    <div class="table-responsive overflowy">
-                                                                                        <table class="table table-striped align-center" id="listnoserikalibrasi" style="width:100%;">
-                                                                                            <thead>
-                                                                                                <tr>
-                                                                                                    <th>No</th>
-                                                                                                    <th>No Seri</th>
-                                                                                                    <th>No Seri ID</th>
-                                                                                                    <th>No Detail Produk ID</th>
-                                                                                                </tr>
-                                                                                            </thead>
-                                                                                            <tbody></tbody>
-                                                                                        </table>
-                                                                                    </div>
-                                                                                </div>
-                                                                                ` : `
-                                                                                <div class="form-group row">
-                                                                                    <label for="" class="col-form-label col-5" style="text-align: right">Jumlah OK</label>
-                                                                                    <div class="col-3">
-                                                                                        <input type="number" class="form-control  col-form-label" name="jumlah_ok" id="jumlah_ok">
-                                                                                        <div class="invalid-feedback" id="msgjumlah_ok"></div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="form-group row">
-                                                                                    <label for="" class="col-form-label col-5" style="text-align: right">Jumlah NOK</label>
-                                                                                    <div class="col-3">
-                                                                                        <input type="number" class="form-control  col-form-label" name="jumlah_nok" id="jumlah_nok">
-                                                                                        <div class="invalid-feedback" id="msgjumlah_nok"></div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                `}
+                                                                                                                <h5>No Seri </h5>
+                                                                                                                <div class="form-group row">
+                                                                                                                    <div class="table-responsive overflowy">
+                                                                                                                        <table class="table table-striped align-center" id="listnoserikalibrasi" style="width:100%;">
+                                                                                                                            <thead>
+                                                                                                                                <tr>
+                                                                                                                                    <th>No</th>
+                                                                                                                                    <th>No Seri</th>
+                                                                                                                                    <th>No Seri ID</th>
+                                                                                                                                    <th>No Detail Produk ID</th>
+                                                                                                                                </tr>
+                                                                                                                            </thead>
+                                                                                                                            <tbody></tbody>
+                                                                                                                        </table>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                ` : `
+                                                                                                                <div class="form-group row">
+                                                                                                                    <label for="" class="col-form-label col-5" style="text-align: right">Jumlah OK</label>
+                                                                                                                    <div class="col-3">
+                                                                                                                        <input type="number" class="form-control  col-form-label" name="jumlah_ok" id="jumlah_ok">
+                                                                                                                        <div class="invalid-feedback" id="msgjumlah_ok"></div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="form-group row">
+                                                                                                                    <label for="" class="col-form-label col-5" style="text-align: right">Jumlah NOK</label>
+                                                                                                                    <div class="col-3">
+                                                                                                                        <input type="number" class="form-control  col-form-label" name="jumlah_nok" id="jumlah_nok">
+                                                                                                                        <div class="invalid-feedback" id="msgjumlah_nok"></div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                `}
                                     </div>
                                 </div>
                                 <div class="card-footer">

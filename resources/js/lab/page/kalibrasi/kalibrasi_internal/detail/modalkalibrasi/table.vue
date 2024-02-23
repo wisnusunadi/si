@@ -1,103 +1,77 @@
 <script>
-import pagination from "../../../../../components/pagination.vue";
 import axios from "axios";
 export default {
     props: ["dataTable"],
-    components: {
-        pagination,
-    },
     data() {
         return {
             search: "",
-            renderPaginate: [],
-            metode: [],
-            ruang: [],
+            headers: [
+                {
+                    text: "No",
+                    value: "no",
+                },
+                {
+                    text: "Nama Barang",
+                    value: "nama",
+                },
+                {
+                    text: "Tipe",
+                    value: "tipe",
+                },
+                {
+                    text: "Jumlah Dikalibrasi",
+                    value: "noseri",
+                },
+                {
+                    text: "Metode Kalibrasi",
+                    value: "metode_id",
+                },
+                {
+                    text: "Ruang Kalibrasi",
+                    value: "ruang_id",
+                }
+            ],
             getMetodeAndRuang: [],
         };
     },
     methods: {
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
         async getData() {
             try {
-                const { data: metode } = await axios.get(
-                    "/api/labs/dok"
-                );
-                this.metode = metode.data.map((item) => {
-                    return {
-                        id: item.id,
-                        label: item.metode,
-                    };
-                });
-
-                const { data: ruang } = await axios.get(
-                    "/api/labs/ruang"
-                );
-                this.ruang = ruang.data.map((item) => {
-                    return {
-                        id: item.id,
-                        label: item.nama,
-                    };
-                });
-
                 const { data: ruang_and_metode } = await axios.get(
                     "/api/labs/ruang_and_metode"
                 );
-                this.getMetodeAndRuang = ruang_and_metode;
+                this.getMetodeAndRuang = ruang_and_metode.map((item) => {
+                    return {
+                        id: item.id,
+                        metode_id: item.metode_id,
+                        ruang_id: item.ruang_id,
+                        ruang_label: item.ruang_label,
+                        label: item.metode_label,
+                    };
+                });
             } catch (error) {
                 console.log(error);
             }
         },
-        getMetode(ruang) {
-            if (ruang) {
-                const findRuang = []
-                this.getMetodeAndRuang.forEach((item) => {
-                    if (item.ruang_id === ruang.id) {
-                        findRuang.push(item)
-                    }
-                })
-                return findRuang.map((item) => {
-                    return {
-                        id: item.metode_id,
-                        label: item.metode_label,
-                        id_detail: item.id
-                    };
-                });
-            } else {
-                return this.metode;
-            }
-        },
-        getRuang(metode) {
-            if (metode) {
-                const findMetode = []
-                this.getMetodeAndRuang.forEach((item) => {
-                    if (item.metode_id === metode.id) {
-                        findMetode.push(item)
-                    }
-                })
-                return findMetode.map((item) => {
-                    return {
-                        id: item.ruang_id,
-                        label: item.ruang_label,
-                        id_detail: item.id
-                    };
-                });
-            } else {
-                return this.ruang;
-            }
-        }
-    },
-    computed: {
-        filteredDalamProses() {
-            return this.dataTable.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key])
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase());
-                });
-            });
-        },
+        // getRuang(metode) {
+        //     if (metode) {
+        //         const findMetode = []
+        //         this.getMetodeAndRuang.forEach((item) => {
+        //             if (item.metode_id === metode.id) {
+        //                 findMetode.push(item)
+        //             }
+        //         })
+        //         return findMetode.map((item) => {
+        //             return {
+        //                 id: item.ruang_id,
+        //                 label: item.ruang_label,
+        //                 id_detail: item.id
+        //             };
+        //         });
+        //     } else {
+        //         return this.ruang;
+        //     }
+        // }
     },
     created() {
         this.getData();
@@ -111,33 +85,19 @@ export default {
                 <input type="text" class="form-control" placeholder="Search" v-model="search" />
             </div>
         </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama Barang</th>
-                    <th>Tipe</th>
-                    <th>Jumlah Dikalibrasi</th>
-                    <th>Metode Kalibrasi</th>
-                    <th>Ruangan Kalibrasi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(data, index) in renderPaginate" :key="index">
-                    <td>{{ index + 1 }}</td>
-                    <td>{{ data.nama }}</td>
-                    <td>{{ data.tipe }}</td>
-                    <td>{{ data.noseri?.length }}</td>
-                    <td>
-                        <v-select v-model="data.metode_id"
-                        :options="getMetode(data.ruang_id)" />
-                    </td>
-                    <td>
-                        <v-select v-model="data.ruang_id" :options="getRuang(data.metode_id)" />
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses" />
+        <data-table :headers="headers" :items="dataTable" :search="search">
+            <template #item.no="{ item, index }">
+                {{ index + 1 }}
+            </template>
+            <template #item.noseri="{ item }">
+                {{ item.noseri?.length }}
+            </template>
+            <template #item.metode_id="{ item }">
+                <v-select v-model="item.metode_id" transition="" :options="getMetodeAndRuang" />
+            </template>
+            <template #item.ruang_id="{ item }">
+                <span>{{ item?.metode_id?.ruang_label }}</span>
+            </template>
+        </data-table>
     </div>
 </template>

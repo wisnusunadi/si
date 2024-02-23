@@ -41,7 +41,7 @@ export default {
                 }
                 this.header = data?.header;
                 this.dataTable = data?.produk
-                
+
             } catch (error) {
                 console.log(error);
             } finally {
@@ -58,6 +58,6 @@ export default {
     <div v-if="!$store.state.loading">
         <Header :title="title" :breadcumbs="breadcumbs" />
         <HeaderDetail :header="header" />
-        <Produk :dataTable="dataTable" :header="header" @refresh="getDataDetail"/>
+        <Produk :produk="dataTable" :header="header" @refresh="getDataDetail" />
     </div>
 </template>
