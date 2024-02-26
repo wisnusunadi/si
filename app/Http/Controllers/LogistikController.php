@@ -4835,6 +4835,7 @@ class LogistikController extends Controller
             }
         ])
             ->whereNotIn('log_id', ['7', '20'])
+            ->with(['Ekatalog.Customer','Spa.Customer','Spb.Customer','State'])
             ->havingRaw('clogprd < cjumlahprd OR clogpart < cjumlahpart')
             ->get();
         return datatables()->of($data)
