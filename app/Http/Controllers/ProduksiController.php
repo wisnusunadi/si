@@ -769,7 +769,6 @@ class ProduksiController extends Controller
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
-            dd($obj);
             $gbj = GudangBarangJadi::find($obj->id);
             $prd = Produk::find($obj->produk_id);
             $jp = JadwalPerakitan::find($obj->jadwal_id);
