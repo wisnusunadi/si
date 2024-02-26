@@ -219,8 +219,13 @@ export default {
                         <input type="text" class="form-control" v-model="search" placeholder="Cari..." />
                     </div>
                 </div>
-                <data-table :headers="headers" :items="hasil" :search="search" />
+                <data-table :headers="headers" :items="hasil" :search="search" class="font-medium" />
             </div>
         </div>
     </div>
 </template>
+<style>
+.font-medium {
+    font-size: 12px;
+}
+</style>

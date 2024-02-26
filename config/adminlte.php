@@ -1119,6 +1119,7 @@ return [
             'text' => 'Riwayat Pengujian',
             'icon' => 'fas fa-history',
             'url' => '/qc/riwayatUji',
+            'auth' => [23, 34]
         ],
         [
             'header' => 'OUTGOING',
