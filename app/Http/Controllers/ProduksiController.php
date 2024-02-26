@@ -796,7 +796,7 @@ class ProduksiController extends Controller
                             'kode' =>  $prd->kode . $gbj->kode,
                             'tahun' => $tahun,
                             'bulan' => $bulan,
-                            // 'kedatangan' => $kedatangan,
+                            'kedatangan' => $kedatangan,
                             'seri' => $gbj->kode . str_pad($bulan, 2, '0', STR_PAD_LEFT) . $tahun . str_pad($max + $i, 7, '0', STR_PAD_LEFT)
                         );
                     }
