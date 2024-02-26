@@ -111,18 +111,18 @@
 
         /* @media screen and (min-width: 1440px) {
 
-                                                                                                                                                            section {
-                                                                                                                                                                font-size: 16px;
-                                                                                                                                                            }
+                                                                                                                                                                        section {
+                                                                                                                                                                            font-size: 16px;
+                                                                                                                                                                        }
 
-                                                                                                                                                            #detailmodal {
-                                                                                                                                                                font-size: 16px;
-                                                                                                                                                            }
+                                                                                                                                                                        #detailmodal {
+                                                                                                                                                                            font-size: 16px;
+                                                                                                                                                                        }
 
-                                                                                                                                                            .btn {
-                                                                                                                                                                font-size: 16px;
-                                                                                                                                                            }
-                                                                                                                                                        } */
+                                                                                                                                                                        .btn {
+                                                                                                                                                                            font-size: 16px;
+                                                                                                                                                                        }
+                                                                                                                                                                    } */
 
         @media screen and (min-width: 993px) {
 
@@ -312,108 +312,116 @@
                             aria-labelledby="pills-home-tab">
                             <div class="row">
                                 <div class="col-12">
-                                    <span class="float-right filter">
-                                        <button class="btn btn-outline-secondary dropdown-toggle " type="button"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                            id="filterpenjualan">
-                                            <i class="fas fa-filter"></i> Filter
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="filterpenjualan">
-                                            <form class="px-4" style="white-space:nowrap;">
-                                                <div class="dropdown-header">
-                                                    Status Pengujian
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input type="radio" class="form-check-input"
-                                                            id="dropdownStatus1" value="semua" name='filter' />
-                                                        <label class="form-check-label" for="dropdownStatus1">
-                                                            Semua
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input type="radio" class="form-check-input"
-                                                            id="dropdownStatus2" value="belum" name='filter' />
-                                                        <label class="form-check-label" for="dropdownStatus2">
-                                                            Belum di Uji
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input type="radio" class="form-check-input"
-                                                            id="dropdownStatus3" value="sudah" name='filter' />
-                                                        <label class="form-check-label" for="dropdownStatus3">
-                                                            Sudah di Uji
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="kalibrasi-hide hide">
-                                                    <div class="dropdown-header">
-                                                        Status Kalibrasi
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="radio" class="form-check-input"
-                                                                id="dropdownStatus1" value="semuaKalibrasi"
-                                                                name='filter' />
-                                                            <label class="form-check-label" for="dropdownStatus1">
-                                                                Semua
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="radio" class="form-check-input"
-                                                                id="dropdownStatus2" value="prosesKalibrasi"
-                                                                name='filter' />
-                                                            <label class="form-check-label" for="dropdownStatus2">
-                                                                Proses Kalibrasi
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="radio" class="form-check-input"
-                                                                id="dropdownStatus2" value="tidakLolosKalibrasi"
-                                                                name='filter' />
-                                                            <label class="form-check-label" for="dropdownStatus2">
-                                                                Tidak Lolos Kalibrasi
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="radio" class="form-check-input"
-                                                                id="dropdownStatus3" value="lolosKalibrasi"
-                                                                name='filter' />
-                                                            <label class="form-check-label" for="dropdownStatus3">
-                                                                Lolos Kalibrasi
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </span>
-                                    @if (Auth::user()->divisi_id == '23')
-                                        <span class="float-right filter">
-                                            <button class="btn btn-info btnKalibrasi hide" disabled="true">
-                                                Kalibrasi
-                                            </button>
-                                        </span>
-                                        <span class="float-right filter">
-                                            <a data-toggle="modal" data-target="#editmodal" class="editmodal"
-                                                data-attr="" data-id="">
-                                                <button class="btn btn-warning" id="cekbrg" disabled="true">
-                                                    <i class="fas fa-pencil-alt"></i> Cek Barang
+                                    <div class="d-flex bd-highlight">
+                                        <div class="p-2 flex-grow-1 bd-highlight">
+                                            <span class="filter">
+                                                <button class="btn btn-outline-secondary dropdown-toggle " type="button"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                                    id="filterpenjualan">
+                                                    <i class="fas fa-filter"></i> Filter
                                                 </button>
-                                            </a>
-                                        </span>
-                                    @endif
+                                                <div class="dropdown-menu" aria-labelledby="filterpenjualan">
+                                                    <form class="px-4" style="white-space:nowrap;">
+                                                        <div class="dropdown-header">
+                                                            Status Pengujian
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input type="radio" class="form-check-input"
+                                                                    id="dropdownStatus1" value="semua" name='filter' />
+                                                                <label class="form-check-label" for="dropdownStatus1">
+                                                                    Semua
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input type="radio" class="form-check-input"
+                                                                    id="dropdownStatus2" value="belum" name='filter' />
+                                                                <label class="form-check-label" for="dropdownStatus2">
+                                                                    Belum di Uji
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input type="radio" class="form-check-input"
+                                                                    id="dropdownStatus3" value="sudah" name='filter' />
+                                                                <label class="form-check-label" for="dropdownStatus3">
+                                                                    Sudah di Uji
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="kalibrasi-hide hide">
+                                                            <div class="dropdown-header">
+                                                                Status Kalibrasi
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="form-check">
+                                                                    <input type="radio" class="form-check-input"
+                                                                        id="dropdownStatus1" value="semuaKalibrasi"
+                                                                        name='filter' />
+                                                                    <label class="form-check-label" for="dropdownStatus1">
+                                                                        Semua
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="form-check">
+                                                                    <input type="radio" class="form-check-input"
+                                                                        id="dropdownStatus2" value="prosesKalibrasi"
+                                                                        name='filter' />
+                                                                    <label class="form-check-label" for="dropdownStatus2">
+                                                                        Proses Kalibrasi
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="form-check">
+                                                                    <input type="radio" class="form-check-input"
+                                                                        id="dropdownStatus2" value="tidakLolosKalibrasi"
+                                                                        name='filter' />
+                                                                    <label class="form-check-label" for="dropdownStatus2">
+                                                                        Tidak Lolos Kalibrasi
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="form-check">
+                                                                    <input type="radio" class="form-check-input"
+                                                                        id="dropdownStatus3" value="lolosKalibrasi"
+                                                                        name='filter' />
+                                                                    <label class="form-check-label" for="dropdownStatus3">
+                                                                        Lolos Kalibrasi
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="p-2 bd-highlight">
+                                            @if (Auth::user()->divisi_id == '23')
+                                                <span class="filter">
+                                                    <a data-toggle="modal" data-target="#editmodal" class="editmodal"
+                                                        data-attr="" data-id="">
+                                                        <button class="btn btn-warning" id="cekbrg" disabled="true">
+                                                            <i class="fas fa-pencil-alt"></i> Cek Barang
+                                                        </button>
+                                                    </a>
+                                                </span>
+                                                <span class="filter">
+                                                    <button class="btn btn-info btnKalibrasi hide" disabled="true">
+                                                        Kalibrasi
+                                                    </button>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
                             <div class="row">

@@ -41,7 +41,7 @@ export default {
                     value: 'tgl'
                 },
                 {
-                    text: 'status',
+                    text: 'Hasil',
                     value: 'status',
                     sortable: false,
                 }
@@ -370,23 +370,12 @@ export default {
                 <div class="card-body">
                     <div class="d-flex bd-highlight">
                         <div class="p-2 flex-grow-1 bd-highlight">
-                            <button class="btn btn-primary" @click="showNoSeriText">
-                                Pilih No Seri Via Text
-                            </button>
-                        </div>
-                        <div class="p-2 bd-highlight">
-                            <input type="text" class="form-control" placeholder="Cari..." v-model="searchNoSeri" />
-                        </div>
-                    </div>
-                    <data-table :headers="headers" :items="filteredNoSeri" :search="searchNoSeri">
-                        <template #header.id>
-                            <input type="checkbox" @click="checkAllNoSeri" :checked="checkedAllNoSeri">
-                        </template>
-                        <template #header.status>
-                            <span class="text-bold pr-2">Hasil</span>
                             <span class="filter">
                                 <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-filter"></i>
+                                    <button class="btn btn-outline-info">
+                                        <i class="fas fa-filter"></i>
+                                        Filter
+                                    </button>
                                 </a>
                                 <form id="filter_ekat">
                                     <div class="dropdown-menu">
@@ -409,6 +398,21 @@ export default {
                                     </div>
                                 </form>
                             </span>
+                        </div>
+                        <div class="p-2 bd-highlight">
+                            <button class="btn btn-primary" @click="showNoSeriText">
+                                Pilih No Seri Via Text
+                            </button>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row-reverse bd-highlight">
+                        <div class="p-2 bd-highlight">
+                            <input type="text" class="form-control" v-model="searchNoSeri" placeholder="Cari...">
+                        </div>
+                    </div>
+                    <data-table :headers="headers" :items="filteredNoSeri" :search="searchNoSeri">
+                        <template #header.id>
+                            <input type="checkbox" @click="checkAllNoSeri" :checked="checkedAllNoSeri">
                         </template>
 
                         <template #item.id="{ item }">

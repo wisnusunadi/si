@@ -43,6 +43,15 @@ export default {
             }
         },
         async simpan() {
+            const cekFormNotNull = Object.keys(this.form).filter((key) => {
+                return this.form[key] === "" || this.form[key] === null
+            })
+
+            if (cekFormNotNull.length > 0) {
+                this.$swal('Gagal!', 'Data tidak boleh kosong.', 'error')
+                return
+            }
+
             const success = () => {
                 this.$swal('Berhasil!', 'Data berhasil disimpan.', 'success')
                 this.close()
