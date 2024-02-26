@@ -271,6 +271,7 @@ export default {
                 this.checkedAllCondition = true;
             } else {
                 this.checkallvalue = false;
+                this.checkedAllCondition = false;
             }
         },
         noSeriSelected() {
