@@ -769,7 +769,6 @@ class ProduksiController extends Controller
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
-            dd($obj);
             $gbj = GudangBarangJadi::find($obj->id);
             $prd = Produk::find($obj->produk_id);
             $jp = JadwalPerakitan::find($obj->jadwal_id);
@@ -797,7 +796,7 @@ class ProduksiController extends Controller
                             'kode' =>  $prd->kode . $gbj->kode,
                             'tahun' => $tahun,
                             'bulan' => $bulan,
-                            // 'kedatangan' => $kedatangan,
+                            'kedatangan' => $kedatangan,
                             'seri' => $gbj->kode . str_pad($bulan, 2, '0', STR_PAD_LEFT) . $tahun . str_pad($max + $i, 7, '0', STR_PAD_LEFT)
                         );
                     }
