@@ -17,17 +17,17 @@ export default {
                     value: 'produk',
                 },
                 {
-                    text: 'Tanggal Selesai Pengujian',
-                    value: 'tanggal',
-                    sortable: false,
-                },
-                {
                     text: 'Jumlah',
                     value: 'jumlah',
                 },
                 {
                     text: 'Progress',
                     value: 'progress',
+                },
+                {
+                    text: 'Tanggal Selesai Pengujian',
+                    value: 'tanggal',
+                    sortable: false,
                 },
                 {
                     text: 'Aksi',
