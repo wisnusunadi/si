@@ -759,7 +759,7 @@
                         },
                         {
                             data: 'p_nama',
-                            className: 'nowraps align-center'
+                            className: 'nowraps align-center',
                         },
                         {
                             data: null,
@@ -784,7 +784,14 @@
                         },
                         {
                             data: 'no_sj',
-                            className: 'nowraps align-center'
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                if (row.no_sj) {
+                                    return row.no_sj;
+                                } else {
+                                    return '-';
+                                }
+                            }
                         },
                         {
                             data: null,
@@ -806,7 +813,7 @@
                             className: 'nowraps align-center',
                             render: function(data, type, row) {
 
-                                if (row.state_nama != null) {
+                                if (row.state_nama) {
                                     if (row.state_nama == "Penjualan") {
                                         return '<span class="red-text badge">' + row.state_nama +
                                             '</span>';
@@ -836,10 +843,15 @@
                         }
                     ],
                     columnDefs: [{
-                        "searchable": false,
-                        "orderable": false,
-                        "targets": 0
-                    }, ],
+                            "searchable": false,
+                            "orderable": false,
+                            "targets": 0
+                        },
+                        {
+                            "defaultContent": "-",
+                            "targets": "_all"
+                        }
+                    ],
                     order: [
                         [7, 'asc']
                     ],
@@ -994,7 +1006,7 @@
                             className: 'nowraps align-center'
                         },
                         {
-                            data: 'nosurat',
+                            data: 'no_sj',
                             className: 'nowraps align-center'
                         },
                         {
@@ -1013,7 +1025,11 @@
                             data: 'status',
                             className: 'nowraps align-center'
                         }
-                    ]
+                    ],
+                    columnDefs: [{
+                        "defaultContent": "-",
+                        "targets": "_all"
+                    }]
                 });
             }
 

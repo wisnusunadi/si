@@ -323,18 +323,16 @@
                 @php
                     echo nl2br($data->dimensi);
                 @endphp
+            </div>
         @endif
         @if ($data->ekspedisi_terusan != '')
-            </div @if ($data->dimensi == '')
-            style="margin: 10px 0px;"
-        @endif
-        >
-        <b>Ekspedisi Terusan : </b><br>
-        @php
-            echo nl2br($data->ekspedisi_terusan);
-        @endphp
-        <br>
-        </div>
+            <div @if ($data->dimensi == '') style="margin: 10px 0px;" @endif>
+                <b>Ekspedisi Terusan : </b><br>
+                @php
+                    echo nl2br($data->ekspedisi_terusan);
+                @endphp
+                <br>
+            </div>
         @endif
     </main>
 </body>

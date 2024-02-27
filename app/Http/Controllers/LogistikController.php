@@ -2626,7 +2626,7 @@ class LogistikController extends Controller
                         </a>
                         <button class="dropdown-item cetaksj" type="button" data-x="' . $x . '" data-y="' . $pesanan . '" data-z="' . $z . '">
                             <i class="fas fa-print"></i>
-                            Cetak Surat Jalan
+                            Cetak Surat Jalan 
                         </button>
                     </div>
                     ';
