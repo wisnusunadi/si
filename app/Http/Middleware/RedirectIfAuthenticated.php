@@ -56,6 +56,8 @@ class RedirectIfAuthenticated
                     return redirect('/lab/kalibrasi');
                 } else if ($request->user()->hasRole("14")) {
                     return redirect('/administrator/dashboard');
+                } else if ($request->user()->hasRole("20")) {
+                    return redirect('/penjualan/lacak/show');
                 }
             }
         }

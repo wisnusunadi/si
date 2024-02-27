@@ -146,6 +146,9 @@ export default {
             if (cekbppb) {
                 this.isDisableBPPB = true
             }
+            if(this.cekKedatangan){
+                this.form.kedatangan = 1
+            }
         }
     },
     mounted() {
@@ -155,12 +158,16 @@ export default {
         jumlahRakit() {
             return this.dataGenerate.kurang >= this.form.jml_noseri ? true : false
         },
+        cekKedatangan() {
+            let idValue = [319, 149]
+            return idValue.includes(this.dataGenerate.id)
+        }
     },
     watch: {
         'form.kedatangan': function (val) {
             if (val > 26) {
                 this.form.kedatangan = 26
-            } else if (val <= 1) {
+            } else if (val < 1) {
                 this.form.kedatangan = 1
             } else {
                 this.form.kedatangan = val
@@ -247,7 +254,7 @@ export default {
                                 <div class="row">
                                     <div class="col">
                                         <form>
-                                            <div class="form-group">
+                                            <div class="form-group" v-if="!cekKedatangan">
                                                 <label for="exampleInputEmail1">Kedatangan</label>
                                                 <input type="number" class="form-control" v-model.number="form.kedatangan"
                                                     :disabled="hasilGenerate.length > 0" @keypress="numberOnly($event)">
@@ -320,8 +327,7 @@ export default {
                                         </div>
                                         {{ loading ? 'Loading...' : 'Generate' }}
                                     </button>
-                                    <button type="button" class="btn btn-success" v-if="seri.length > 0"
-                                        :disabled="loading"
+                                    <button type="button" class="btn btn-success" v-if="seri.length > 0" :disabled="loading"
                                         @click="simpanSeri">
                                         <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
                                             <span class="sr-only">Loading...</span>

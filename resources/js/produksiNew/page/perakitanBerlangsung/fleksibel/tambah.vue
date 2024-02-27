@@ -357,18 +357,15 @@ export default {
     },
     computed: {
         cekKedatangan() {
-            let idValue = [149, 319]
-            if (idValue.includes(this.form.produk.value)) {
-                return true
-            }
-            return false
-        },
+            let idValue = [319, 149]
+            return idValue.includes(this.form.produk?.value)
+        }
     },
     watch: {
         'form.kedatangan': function (val) {
             if (val > 26) {
                 this.form.kedatangan = 26
-            } else if (val <= 1) {
+            } else if (val < 1) {
                 this.form.kedatangan = 0
             } else {
                 this.form.kedatangan = val
@@ -377,7 +374,7 @@ export default {
         'form.produk': function (val) {
             if (val.isGenerate && !this.cekKedatangan) {
                 this.form.jml = ''
-                this.form.kedatangan = 0
+                this.form.kedatangan = 1
             } else {
                 delete this.form.jml
                 delete this.form.kedatangan
@@ -406,7 +403,8 @@ export default {
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Form Perakitan Tanpa Jadwal</h5>
+                        <h5 class="modal-title">Form Perakitan Tanpa Jadwal
+                        </h5>
                         <button type="button" class="close" @click="closeModal">
                             <span aria-hidden="true">&times;</span>
                         </button>
