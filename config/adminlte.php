@@ -455,7 +455,7 @@ return [
             'text' => 'Lacak',
             'url'  => '/penjualan/lacak/show',
             'icon' => 'fas fa-search',
-            'auth' => [26]
+            'auth' => [26, 20]
         ],
         [
             'text' => 'Periode Penjualan',
