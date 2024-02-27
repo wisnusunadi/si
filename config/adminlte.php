@@ -1254,18 +1254,18 @@ return [
         ],
         // sertifikasi kalibrasi
         [
-            'header' => 'Sertifikasi Kalibrasi',
+            'header' => 'Sertifikat Kalibrasi',
             'auth' => [22]
         ],
         [
             'icon' => 'fa fa-certificate',
-            'text' => 'Sertifikasi Per No Order',
+            'text' => 'Sertifikat Per No Order',
             'url'  => '/lab/sertifikasiperpo',
             'auth' => [22],
         ],
         [
             'icon' => 'fa fa-barcode',
-            'text' => 'Sertifikasi Per No Kalibrasi',
+            'text' => 'Sertifikat Per No Kalibrasi',
             'url'  => '/lab/sertifikasipernoseri',
             'auth' => [22],
         ],

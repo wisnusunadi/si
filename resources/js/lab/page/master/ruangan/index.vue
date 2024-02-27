@@ -25,14 +25,14 @@ export default {
                     },
                 ],
             },
-            title: "Ruangan",
+            title: "Master Ruangan Pengujian Laboratorium",
             breadcumbs: [
                 {
                     name: "Home",
                     link: "/",
                 },
                 {
-                    name: "Ruangan",
+                    name: "Master Ruangan Pengujian Laboratorium",
                     link: "/master/alat",
                 },
             ],

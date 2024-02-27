@@ -18,14 +18,14 @@ export default {
             renderPaginate: [],
             modal: false,
             dataSelected: null,
-            title: "Alat",
+            title: "Master Alat Laboratorium",
             breadcumbs: [
                 {
                     name: "Home",
                     link: "/",
                 },
                 {
-                    name: "Alat",
+                    name: "Master Alat Laboratorium",
                     link: "/master/alat",
                 },
             ]

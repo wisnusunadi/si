@@ -6,6 +6,7 @@ export default {
         return {
             pemilik: JSON.parse(JSON.stringify(this.header.jenis_pemilik)),
             optionPemilik: [],
+            isDropdownVisible: false
         }
     },
     methods: {
@@ -41,6 +42,9 @@ export default {
                 console.log(error)
                 this.$swal('Gagal!', 'Data gagal disimpan.', 'error')
             }
+        },
+        handleSearch(query) {
+            this.isDropdownVisible = this.optionPemilik.length > 0
         }
     },
     created() {
@@ -51,7 +55,7 @@ export default {
 <template>
     <div class="modal fade modalEditPemilik" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Pemilik</h5>
@@ -59,7 +63,7 @@ export default {
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body modal-body-pemilik">
                     <div class="form-group">
                         <label for="">Pemilik</label>
                         <v-select v-model="pemilik" :options="optionPemilik"></v-select>
@@ -74,7 +78,7 @@ export default {
     </div>
 </template>
 <style>
-.modal-body {
+.modal-body-pemilik {
     min-height: 25vh;
     overflow-y: auto;
 }

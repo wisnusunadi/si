@@ -26,14 +26,14 @@ export default {
                     },
                 ],
             },
-            title: "Dokumen",
+            title: "Master Dokumen Laboratorium",
             breadcumbs: [
                 {
                     name: "Home",
                     link: "/",
                 },
                 {
-                    name: "Dokumen",
+                    name: "Master Dokumen Laboratorium",
                     link: "/master/alat",
                 },
             ]

@@ -141,8 +141,3 @@ export default {
         </div>
     </div>
 </template>
-<style>
-.modal-body {
-    min-height: 50vh;
-}
-</style>

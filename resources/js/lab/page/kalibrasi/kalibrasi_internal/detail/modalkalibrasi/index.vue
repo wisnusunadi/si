@@ -93,65 +93,62 @@ export default {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="form-group row">
-                                <label for="" class="col-5 col-form-label text-right">Tanggal Kalibrasi</label>
-                                <div class="col-5">
-                                    <input type="date" class="form-control" v-model="form.tgl_kalibrasi" :max="dateMax">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="" class="col-5 col-form-label text-right">Nama Teknisi</label>
-                                <div class="col-5">
-                                    <v-select :options="karyawan" :reduce="karyawan => karyawan.id" label="nama"
-                                        v-model="form.pemeriksa_id"></v-select>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="!showJenisPemilik">
-                                <label for="" class="col-5 col-form-label text-right">Jenis Pemilik</label>
-                                <div class="col-5">
-                                    <v-select :options="pemilik" v-model="form.jenis_pemilik"></v-select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="" class="col-5 col-form-label text-right">Hasil Kalibrasi</label>
-                                <div class="col-5">
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="customRadioInline1" name="customRadioInline"
-                                            class="custom-control-input" value="ok" v-model="form.hasil" />
-                                        <label class="custom-control-label" for="customRadioInline1">ALAT BAIK DAN LAIK
-                                            DIGUNAKAN</label>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="">Tanggal Kalibrasi</label>
+                                        <input type="date" class="form-control" v-model="form.tgl_kalibrasi" :max="dateMax">
                                     </div>
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="customRadioInline2" name="customRadioInline"
-                                            class="custom-control-input" value="nok" v-model="form.hasil" />
-                                        <label class="custom-control-label" for="customRadioInline2">ALAT TIDAK LAIK
-                                            PAKAI</label>
+                                    <div class="form-group">
+                                        <label for="">Nama Teknisi</label>
+                                        <v-select :options="karyawan" :reduce="karyawan => karyawan.id" label="nama"
+                                            v-model="form.pemeriksa_id"></v-select>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="" class="col-lg-5 col-md-12 col-form-label text-right">Alamat Sertifikat</label>
-                                <div class="col-lg-6 col-md-12 col-form-label">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                            id="inlineRadio1" value="false" v-model="form.gantiAlamat">
-                                        <label class="form-check-label" for="inlineRadio1">Sama dengan penjualan</label>
+                                    <div class="form-group" v-if="!showJenisPemilik">
+                                        <label for="">Jenis Pemilik</label>
+                                        <v-select :options="pemilik" v-model="form.jenis_pemilik"></v-select>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                            id="inlineRadio2" value="true" v-model="form.gantiAlamat">
-                                        <label class="form-check-label" for="inlineRadio2">Ubah Alamat</label>
+                                    <div class="form-group">
+                                        <label for="">Hasil Kalibrasi</label>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" id="customRadioInline1" name="customRadioInline"
+                                                class="custom-control-input" value="ok" v-model="form.hasil" />
+                                            <label class="custom-control-label" for="customRadioInline1">ALAT BAIK DAN
+                                                LAIK
+                                                DIGUNAKAN</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" id="customRadioInline2" name="customRadioInline"
+                                                class="custom-control-input" value="nok" v-model="form.hasil" />
+                                            <label class="custom-control-label" for="customRadioInline2">ALAT TIDAK LAIK
+                                                PAKAI</label>
+                                        </div>
                                     </div>
-                                    <textarea class="form-control" v-model="header.alamat" cols="5"
-                                        :disabled="form.gantiAlamat == 'false'"></textarea>
+                                    <div class="form-group">
+                                        <label for="">Alamat Sertifikat</label>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                                id="inlineRadio1" value="false" v-model="form.gantiAlamat">
+                                            <label class="form-check-label" for="inlineRadio1">Sama dengan
+                                                penjualan</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                                id="inlineRadio2" value="true" v-model="form.gantiAlamat">
+                                            <label class="form-check-label" for="inlineRadio2">Ubah Alamat</label>
+                                        </div>
+                                        <textarea class="form-control" v-model="header.alamat" cols="5"
+                                            :disabled="form.gantiAlamat == 'false'"></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="col">
+                            <Table :dataTable="productSelected"></Table>
+                        </div>
                     </div>
-
-                    <Table :dataTable="productSelected"></Table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="close">
@@ -165,3 +162,25 @@ export default {
         </div>
     </div>
 </template>
+<!-- <style>
+.modal {
+    padding: 0 !important;
+}
+
+.modal .modal-dialog {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+}
+
+.modal .modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+}
+
+.modal .modal-body {
+    overflow-y: auto;
+}
+</style> -->

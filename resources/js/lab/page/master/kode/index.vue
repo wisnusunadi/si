@@ -18,14 +18,14 @@ export default {
             renderPaginate: [],
             modal: false,
             dataSelected: null,
-            title: "Kode",
+            title: "Master Kode Kepemilikan Laboratorium",
             breadcumbs: [
                 {
                     name: "Home",
                     link: "/",
                 },
                 {
-                    name: "Kode",
+                    name: "Master Kode Kepemilikan Laboratorium",
                     link: "/master/alat",
                 },
             ]

@@ -9,14 +9,14 @@ export default {
     },
     data() {
         return {
-            title: "Produk",
+            title: "Master Produk dan Alat Laboratorium",
             breadcumbs: [
                 {
                     name: "Home",
                     link: "/",
                 },
                 {
-                    name: "Produk",
+                    name: "Master Produk dan Alat Laboratorium",
                     link: "/master/alat",
                 },
             ],
