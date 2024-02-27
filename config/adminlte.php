@@ -1171,8 +1171,14 @@ return [
             'auth' => [22]
         ],
         [
+            'icon' => 'fas fa-cube',
+            'text' => 'Produk',
+            'url'  => '/lab/master/produk',
+            'auth' => [22],
+        ],
+        [
             'icon' => 'fas fa-cogs',
-            'text' => 'Alat',
+            'text' => 'Kode Alat',
             'url'  => '/lab/master/alat',
             'auth' => [22],
         ],
@@ -1180,12 +1186,6 @@ return [
             'icon' => 'fas fa-file-alt',
             'text' => 'Dokumen Lab',
             'url'  => '/lab/master/dokumen',
-            'auth' => [22],
-        ],
-        [
-            'icon' => 'fas fa-cube',
-            'text' => 'Produk',
-            'url'  => '/lab/master/produk',
             'auth' => [22],
         ],
         [

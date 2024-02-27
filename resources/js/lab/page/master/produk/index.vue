@@ -9,14 +9,14 @@ export default {
     },
     data() {
         return {
-            title: "Master Metode Uji Produk",
+            title: "Metode Uji Produk",
             breadcumbs: [
                 {
                     name: "Home",
                     link: "/",
                 },
                 {
-                    name: "Master Metode Uji Produk",
+                    name: "Metode Uji Produk",
                     link: "/master/alat",
                 },
             ],

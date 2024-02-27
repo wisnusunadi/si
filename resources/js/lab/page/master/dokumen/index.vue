@@ -26,14 +26,14 @@ export default {
                     },
                 ],
             },
-            title: "Master Dokumen Laboratorium",
+            title: "Dokumen Laboratorium",
             breadcumbs: [
                 {
                     name: "Home",
                     link: "/",
                 },
                 {
-                    name: "Master Dokumen Laboratorium",
+                    name: "Dokumen Laboratorium",
                     link: "/master/alat",
                 },
             ]
@@ -117,7 +117,7 @@ export default {
                         </button>
                     </div>
                     <div class="p-2 bd-highlight">
-                        <input type="search" v-model="search" class="form-control" placeholder="Cari Dokumen" />
+                        <input type="search" v-model="search" class="form-control" placeholder="Cari..." />
                     </div>
                 </div>
                 <Table :dataTable="renderPaginate" @edit="edit" />
