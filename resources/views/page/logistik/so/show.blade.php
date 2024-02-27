@@ -647,9 +647,7 @@
                         {
                             data: null,
                             render: function(data, type, row, meta) {
-                                return '<a target="_blank" href="/logistik/pengiriman/prints/' +
-                                    data.id +
-                                    '" class="btn btn-sm btn-primary"><i class="fa fa-print"></i></a><button data-id="' +
+                                return '<button data-id="' +
                                     data.id +
                                     '" class="btn btn-warning btn-sm btnEditSJ"><i class="fa fa-pen"></i></button> <a target="_blank" href="/logistik/pengiriman/prints/' +
                                     data.id +

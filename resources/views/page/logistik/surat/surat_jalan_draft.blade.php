@@ -175,64 +175,64 @@
         </table>
     </header>
 
-      <footer>
-          {{-- show when end page --}}
-          <table>
-              </tr>
-              <tr>
-                  <td class="align-left vera" width="12%">
-                      <b>Keterangan : </b><br>
-                      {{ $data->paket }}
-                      @if ($data->ket != null)
-                          - {{ $data->ket }}
-                      @else
-                          <br>
-                      @endif
-                  </td>
-              </tr>
-          </table>
-          <hr>
-          <table>
-              <tr>
-                  <td class="align-center">
-                      Diterima Oleh,
-                  </td>
-                  <td class="align-center">
-                      Dibawa Oleh,
-                  </td>
-                  <td class="align-center">
-                      Dibuat Oleh,
-                  </td>
-              </tr>
-              <td class="align-right" colspan="2">
-                  <br>
-                  <br>
-                  <br>
+    <footer>
+        {{-- show when end page --}}
+        <table>
+            </tr>
+            <tr>
+                <td class="align-left vera" width="12%">
+                    <b>Keterangan : </b><br>
+                    {{ $data->paket }}
+                    @if ($data->ket != null)
+                        - {{ $data->ket }}
+                    @else
+                        <br>
+                    @endif
+                </td>
+            </tr>
+        </table>
+        <hr>
+        <table>
+            <tr>
+                <td class="align-center">
+                    Diterima Oleh,
+                </td>
+                <td class="align-center">
+                    Dibawa Oleh,
+                </td>
+                <td class="align-center">
+                    Dibuat Oleh,
+                </td>
+            </tr>
+            <td class="align-right" colspan="2">
+                <br>
+                <br>
+                <br>
 
-                  <tr>
-                      <td class="align-center">
-                          <hr style="width:30%">
+                <tr>
+                    <td class="align-center">
+                        <hr style="width:30%">
 
-                      </td>
-                      <td class="align-center">
-                          <hr style="width:40%">
-                          {{-- KURIR --}}
-                      </td>
-                      <td class="align-center">
-                          <hr style="width:30%">
-                          {{-- LOGISTIK --}}
-                      </td>
-                  </tr>
-              <td class="align-right" colspan="3">
-                  <br>
-                  <tr>
-                  <tr>
-                      <td class="align-right" colspan="3" style="font-size: 12px">
-                          <i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
-                      </td>
-                  </tr>
-          </table>
-      </footer>
+                    </td>
+                    <td class="align-center">
+                        <hr style="width:40%">
+                        {{-- KURIR --}}
+                    </td>
+                    <td class="align-center">
+                        <hr style="width:30%">
+                        {{-- LOGISTIK --}}
+                    </td>
+                </tr>
+            <td class="align-right" colspan="3">
+                <br>
+                <tr>
+                <tr>
+                    <td class="align-right" colspan="3" style="font-size: 12px">
+                        <i>SPA-FR/GUD-04, Tanggal Terbit : 20 Maret 2020, Revisi : 02</i>
+                    </td>
+                </tr>
+        </table>
+    </footer>
     <!-- Wrap the content of your PDF inside a main tag -->
     <main>
         {{-- Hal -1 --}}
@@ -294,18 +294,18 @@
                                 <b>No Seri</b> :
                                 @foreach ($item->detail as $key => $detail)
                                     @if ($key == count($item->detail) - 1)
-                                        {{ $detail->nama }} : 
-                                        @if($detail->noseri == null)
+                                        {{ $detail->nama }} :
+                                        @if ($detail->noseri == null)
                                             -
                                         @else
-                                        {{ implode(', ', $detail->noseri) }}
+                                            {{ implode(', ', $detail->noseri) }}
                                         @endif
                                     @else
-                                        {{ $detail->nama }} : 
-                                        @if($detail->noseri == null)
+                                        {{ $detail->nama }} :
+                                        @if ($detail->noseri == null)
                                             -
                                         @else
-                                        {{ implode(', ', $detail->noseri) }} 
+                                            {{ implode(', ', $detail->noseri) }}
                                         @endif
                                         <br>
                                     @endif
