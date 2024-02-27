@@ -1,22 +1,26 @@
 <table border="1">
     <thead>
         <tr>
-            <th>No</th>
-            <th>No Order</th>
-            <th>Tgl Masuk</th>
-            <th>Nama Alat</th>
-            <th>Type</th>
-            <th>No Seri</th>
-            <th>Nama Pemilik</th>
-            <th>Nama Pemilik Sertifikat</th>
-            <th>Alamat</th>
-            <th>Tgl Kalibrasi</th>
-            <th>Teknisi</th>
-            <th>No Sertifikat</th>
-            <th>No SJ</th>
-            <th>Nama Distributor</th>
-            <th>No PO</th>
-            <th>Status</th>
+            <th>NO</th>
+            <th>NO ORDER</th>
+            <th>TGL MASUK</th>
+            <th>NAMA ALAT</th>
+            <th>TYPE</th>
+            <th>NO SERI</th>
+            <th>NAMA PEMILIK</th>
+            <th>NAMA PEMILIK SERTIFIKAT</th>
+            <th>ALAMAT</th>
+            <th>TGL KALIBRASI</th>
+            <th>TEKNISI</th>
+            <th>NOMER SERTIFIKAT</th>
+            <th>No SJ / NO. BAST</th>
+            <th>NAMA DISTRIBUTOR</th>
+            <th>NO. PO / NO. E-CAT</th>
+            <th>TGL PENYERAHAN</th>
+            <th>KETERANGAN</th>
+            <th>TANGGAL KIRIM</th>
+            <th>DICETAK</th>
+            <th>HASIL</th>
         </tr>
     </thead>
 
@@ -39,6 +43,10 @@
                 <th>{{ $d['nosj'] }}</th>
                 <th>{{ $d['info']->nama }}</th>
                 <th>{{ $d['no_po'] }}{{ $d['info']->no_paket != '' ? '/' . $d['info']->no_paket : '' }}</th>
+                <th>{{ $d['tgl_serah'] }}</th>
+                <th>{{ $d['keterangan'] }}</th>
+                <th>{{ $d['tgl_kirim'] }}</th>
+                <th>{{ $d['dicetak'] }}</th>
                 <th>{{ $d['status'] == 'ok' ? 'Lolos Kalibrasi' : 'Tidak Lolos Kalibrasi' }}</th>
             </tr>
         @endforeach

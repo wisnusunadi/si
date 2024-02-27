@@ -137,9 +137,35 @@ class LabController extends Controller
 
         return response()->json($merge);
     }
+    public function kalibrasi_riwayat(Request $request)
+    {
+        $years = $request->years;
+        $data = SystemLog::where(['tipe' => 'Lab', 'subjek' => 'Kalibrasi Produk'])->whereYear('created_at', $years)->get();
+
+        $obj = [];
+
+        foreach ($data as $d) {
+            $x = json_decode($d->response);
+            $obj[] = array(
+                'id' => $d->id,
+                'order' => $x->no_order,
+                'nama' => $x->nama,
+                'jenis_pemilik' => $x->jenis_pemilik->label,
+                'so' => $x->so,
+                'customer' => $x->customer,
+                'tgl_kalibrasi' => $x->tgl_kalibrasi,
+                'jenis_transaksi' => 'internal',
+                'hasil' => $x->hasil,
+                'produk' => $x->produk
+            );
+        }
+        return response()->json($obj);
+    }
     public function riwayat_uji_laporan(Request $request)
     {
         $objc =  json_decode(json_encode($request->all()), FALSE);
+        $tanggalAwal = Carbon::parse($objc->tanggal_awal)->startOfDay();
+        $tanggalAkhir = Carbon::parse($objc->tanggal_akhir)->endOfDay();
         if ($objc->customer->value == null) {
             $data = UjiLabDetail::select(
                 'jenis_pemilik.nama as jp',
@@ -171,7 +197,7 @@ class LabController extends Controller
                 ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
                 ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
                 ->where('uji_lab_detail.status', '!=', 'belum')
-                ->whereBetween('uji_lab_detail.tgl_masuk', [$objc->tanggal_awal, $objc->tanggal_akhir]);
+                ->whereBetween('uji_lab_detail.tgl_masuk', [$tanggalAwal, $tanggalAkhir]);
             // ->whereYear('uji_lab_detail.created_at', $request->years );
 
             $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
@@ -218,7 +244,7 @@ class LabController extends Controller
             $getLab = UjiLabDetail::select('uji_lab.pesanan_id as p_id',)
                 ->leftJoin('uji_lab', 'uji_lab.id', '=', 'uji_lab_detail.uji_lab_id')
                 ->where('uji_lab_detail.status', '!=', 'belum')
-                ->whereBetween('uji_lab_detail.tgl_masuk', [$objc->tanggal_awal, $objc->tanggal_akhir])
+                ->whereBetween('uji_lab_detail.tgl_masuk', [$tanggalAwal, $tanggalAkhir])
                 ->pluck('p_id')->toArray();
             $filterCus =  array_values(array_intersect($getLab, $mergedCollection->toArray()));
 
@@ -599,12 +625,12 @@ class LabController extends Controller
             //     'kode' => $request->kode,
             //     'nama' => $request->nama
             // ]);
-                foreach ($obj as $p) {
-                    Produk::where('id', $p->id)
-                        ->update([
-                            'kode_lab_id' => $p->alat,
-                        ]);
-                }
+            foreach ($obj as $p) {
+                Produk::where('id', $p->id)
+                    ->update([
+                        'kode_lab_id' => $p->alat,
+                    ]);
+            }
             DB::commit();
             return response()->json([
                 'status' => 200,
@@ -1272,7 +1298,7 @@ class LabController extends Controller
                 // dd($metode_id->id);
                 for ($j = 0; $j < count($dp->noseri); $j++) {
                     $detail = UjiLabDetail::find($dp->noseri[$j]->id);
-                    $no = sprintf("%04d", $detail->no);
+                    $no = sprintf("%05d", $detail->no);
                     UjiLabDetail::where('id', $dp->noseri[$j]->id)
                         ->update([
                             'no_sertifikat' => $kode[0]->kode . '/' . $pemilik_id . '/' .  $month . '-' . $tahun . '/' . $no,

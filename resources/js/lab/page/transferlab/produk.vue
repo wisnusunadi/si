@@ -38,7 +38,7 @@ export default {
             this.modalSeri = false;
             $(".modalProduk").modal("show");
         },
-        simpanSeri(produk){
+        simpanSeri(produk) {
             let index = this.produk.findIndex((data) => data.nama === produk.nama);
             this.produk[index] = JSON.parse(JSON.stringify(produk));
             this.closeModalSeri();
@@ -48,14 +48,14 @@ export default {
                 this.search = "";
             }, 1);
         },
-        async simpan(){
+        async simpan() {
             // check every produk has object has noseri
             let check = this.produk.some((data) => !data?.noseri || data.noseri.length === 0);
-            if(check){
+            if (check) {
                 this.$swal('Peringatan', 'Produk belum memiliki nomor seri', 'warning');
                 return;
             }
-                            const success = () => {
+            const success = () => {
                 this.$swal('Berhasil', 'Berhasil transfer produk', 'success');
                 this.closeModal();
                 this.$emit('refresh');
@@ -103,21 +103,9 @@ export default {
 </script>
 <template>
     <div>
-        <seri
-            v-if="modalSeri"
-            @close="closeModalSeri"
-            :produk="produkSelected"
-            @simpan="simpanSeri"
-        />
-        <div
-            class="modal fade modalProduk"
-            id="modelId"
-            data-backdrop="static"
-            data-keyboard="false"
-            tabindex="-1"
-            aria-labelledby="staticBackdropLabel"
-            aria-hidden="true"
-        >
+        <seri v-if="modalSeri" @close="closeModalSeri" :produk="produkSelected" @simpan="simpanSeri" />
+        <div class="modal fade modalProduk" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -163,17 +151,11 @@ export default {
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div
-                                    class="d-flex flex-row-reverse bd-highlight"
-                                >
+                                <div class="d-flex flex-row-reverse bd-highlight">
                                     <div class="p-2 bd-highlight">
                                         <div class="input-group">
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                placeholder="Cari..."
-                                                v-model="search"
-                                            />
+                                            <input type="text" class="form-control" placeholder="Cari..."
+                                                v-model="search" />
                                         </div>
                                     </div>
                                 </div>
@@ -184,25 +166,21 @@ export default {
                                             <th>Nama Barang</th>
                                             <th>Tipe Barang</th>
                                             <th>Jumlah</th>
+                                            <th>Jumlah No Seri Dipilih</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="renderPaginate.length > 0">
-                                        <tr
-                                            v-for="(
+                                        <tr v-for="(
                                                 data, index
-                                            ) in renderPaginate"
-                                            :key="index"
-                                        >
+                                            ) in renderPaginate" :key="index">
                                             <td>{{ index + 1 }}</td>
                                             <td>{{ data.nama }}</td>
                                             <td>{{ data.tipe }}</td>
                                             <td>{{ data.jumlah }}</td>
+                                            <td>{{ data?.noseri?.length ?? 0 }}</td>
                                             <td>
-                                                <button
-                                                    @click="detailNoSeri(data)"
-                                                    class="btn btn-primary btn-sm"
-                                                >
+                                                <button @click="detailNoSeri(data)" class="btn btn-primary btn-sm">
                                                     <i class="fa fa-qrcode"></i>
                                                     Nomor Seri
                                                 </button>
@@ -217,21 +195,13 @@ export default {
                                         </tr>
                                     </tbody>
                                 </table>
-                                <pagination
-                                    :filteredDalamProses="filteredDalamProses"
-                                    @updateFilteredDalamProses="
-                                        updateFilteredDalamProses
-                                    "
-                                />
+                                <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses
+                                    " />
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            @click="closeModal"
-                        >
+                        <button type="button" class="btn btn-secondary" @click="closeModal">
                             Keluar
                         </button>
                         <button type="button" class="btn btn-primary" @click="simpan">

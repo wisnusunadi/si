@@ -1,10 +1,6 @@
 <script>
-import produk from './produk.vue';
 export default {
     props: ['produk'],
-    components: {
-        produk,
-    },
     data() {
         return {
             search: '',
@@ -46,21 +42,13 @@ export default {
                     value: 'hasil'
                 }
             ],
-            modal: false,
-            selectedProduk: null,
             years: new Date().getFullYear()
         }
     },
     methods: {
-        changeYears() {
-            this.$emit('changeYears', this.years);
-        },
-        detailProduk(data) {
-            this.modal = true;
-            this.selectedProduk = data;
-            this.$nextTick(() => {
-                $('.modalProduk').modal('show');
-            })
+        changeYears(year) {
+            this.$store.dispatch('setYears', year);
+            this.$emit('changeYears');
         },
     },
     computed: {
@@ -78,7 +66,6 @@ export default {
 <template>
     <div class="card">
         <div class="card-body">
-            <produk v-if="modal" :produk="selectedProduk" />
             <div class="d-flex bd-highlight">
                 <div class="p-2 flex-grow-1 bd-highlight">
                     <span class="float-left filter">
@@ -91,8 +78,8 @@ export default {
                                 <div class="px-3 py-3">
                                     <div class="form-group">
                                         <div class="form-group form-check" v-for="year in getYear" :key="year">
-                                            <input class="form-check-input" type="radio" v-model="years"
-                                                @change="changeYears" :id="`exampleRadios${year}`" :value="year" :checked="year ==
+                                            <input class="form-check-input" type="radio" v-model="$store.state.years"
+                                                @change="changeYears(year)" :id="`exampleRadios${year}`" :value="year" :checked="year ==
                                                     new Date().getFullYear()
                                                     " />
                                             <label class="form-check-label" :for="`exampleRadios${year}`">

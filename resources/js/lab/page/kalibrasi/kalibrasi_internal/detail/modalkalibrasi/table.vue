@@ -19,7 +19,7 @@ export default {
                     value: "tipe",
                 },
                 {
-                    text: "Jumlah Dikalibrasi",
+                    text: "Jml Dikalibrasi",
                     value: "noseri",
                 },
                 {

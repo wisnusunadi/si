@@ -812,6 +812,7 @@ Route::get('testingJson', [GudangController::class, 'dataTesting']);
 Route::prefix('/labs')->group(function () {
     Route::prefix('/kalibrasi')->group(function () {
         Route::get('/', [App\Http\Controllers\LabController::class, 'kalibrasi_data']);
+        Route::get('/riwayat', [App\Http\Controllers\LabController::class, 'kalibrasi_riwayat']);
         Route::get('/{id}', [App\Http\Controllers\LabController::class, 'kalibrasi_detail']);
         Route::get('seri/{id}', [App\Http\Controllers\LabController::class, 'kalibrasi_detail_seri']);
     });

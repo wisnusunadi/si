@@ -1,9 +1,6 @@
 <script>
-import produk from './produk.vue'
 export default {
-    components: {
-        produk
-    },
+    props: ['noseri'],
     data() {
         return {
             headers: [
@@ -13,46 +10,38 @@ export default {
                 },
                 {
                     text: 'Nama Pemilik',
-                    value: 'pemilik'
+                    value: 'nama_pemilik'
                 },
                 {
                     text: 'Nama Pemilik Sertifikat',
-                    value: 'pemilik_sertif'
-                },
-                {
-                    text: 'No SO',
-                    value: 'so'
-                },
-                {
-                    text: 'Customer',
-                    value: 'customer'
+                    value: 'nama_pemilik_sert'
                 },
                 {
                     text: 'Tanggal Transfer',
-                    value: 'tgl_transfer'
+                    value: 'tanggal'
                 },
                 {
-                    text: 'Aksi',
-                    value: 'aksi'
+                    text: 'Teknisi',
+                    value: 'pemeriksa'
+                },
+                {
+                    text: 'Nama Barang',
+                    value: 'nama_alat'
+                },
+                {
+                    text: 'Tipe',
+                    value: 'type'
+                },
+                {
+                    text: 'No Seri',
+                    value: 'noseri'
+                },
+                {
+                    text: 'Hasil',
+                    value: 'hasil'
                 }
             ],
-            modal: false,
-            selectedProduk: null,
             search: '',
-            years: new Date().getFullYear()
-        }
-    },
-    props: ['dataRiwayat'],
-    methods: {
-        changeYear() {
-            this.$emit('changeYear', this.years);
-        },
-        detailProduk(data) {
-            this.modal = true;
-            this.selectedProduk = data;
-            this.$nextTick(() => {
-                $('.modalRiwayatProduk').modal('show');
-            })
         }
     },
     computed: {
@@ -64,6 +53,12 @@ export default {
             }
             return year;
         },
+    },
+    methods: {
+        changeYear(year) {
+            this.$store.dispatch('setYears', year);
+            this.$emit('changeYears');
+        }
     },
 }
 </script>
@@ -81,8 +76,8 @@ export default {
                             <div class="px-3 py-3">
                                 <div class="form-group">
                                     <div class="form-group form-check" v-for="year in getYear" :key="year">
-                                        <input class="form-check-input" type="radio" v-model="years" @change="changeYear()"
-                                            :id="`exampleRadios${year}`" :value="year" :checked="year ==
+                                        <input class="form-check-input" type="radio" v-model="$store.state.years"
+                                            @change="changeYear(year)" :id="`exampleRadios${year}`" :value="year" :checked="year ==
                                                 new Date().getFullYear()
                                                 " />
                                         <label class="form-check-label" :for="`exampleRadios${year}`">
@@ -96,22 +91,9 @@ export default {
                 </span>
             </div>
             <div class="p-2 bd-highlight">
-                <input type="text" class="form-control" v-model="search" placeholder="Cari" />
+                <input type="text" class="form-control" placeholder="Cari..." v-model="search">
             </div>
         </div>
-        <produk v-if="modal" @close="modal = false" :headerSO="selectedProduk" />
-        <data-table :headers="headers" :items="dataRiwayat" :search="search" v-if="!$store.state.loading">
-            <template #item.aksi="{ item }">
-                <div>
-                    <button class="btn btn-outline-primary" @click="detailProduk(item)">
-                        <i class="fa fa-eye"></i>
-                        Detail
-                    </button>
-                </div>
-            </template>
-        </data-table>
-        <div class="spinner-border spinner-border-sm" role="status" v-else>
-            <span class="sr-only">Loading...</span>
-        </div>
+        <data-table :headers="headers" :items="noseri" :search="search" />
     </div>
 </template>

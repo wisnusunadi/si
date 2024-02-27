@@ -70,7 +70,7 @@ export default {
                     </template>
                 </data-table>
                 <div class="d-flex justify-content-center" v-else>
-                    <div class="spinner-border" role="status">
+                    <div class="spinner-border spinner-border-sm" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
