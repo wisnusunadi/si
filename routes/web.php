@@ -536,6 +536,11 @@ Route::group(['prefix' => '/labs'], function () {
     Route::get('/certificate', [App\Http\Controllers\LabController::class, 'cetak_certificate'])->name('lab.certificate');
     Route::get('/export_laporan', [App\Http\Controllers\LabController::class, 'export_laporan']);
 });
+
+Route::group(['prefix' => '/gbmp'], function () {
+    Route::view('/{any?}', 'page.gbmp.view')->where('any', '.*');
+});
+
 Route::get('/testing/pbj', [ProduksiController::class, 'cetakTest']);
 
 Route::view('/uit', 'page.login_page.index');

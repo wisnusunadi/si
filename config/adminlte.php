@@ -792,17 +792,23 @@ return [
             'auth' => [11],
         ],
         [
-            'text' => 'Stok',
+            'text' => 'Permintaan Perakitan',
             'auth' => [11],
-            'icon' =>  'fas fa-boxes',
-            'url' => '/gbmp/data_view'
+            'icon' =>  'fas fa-cogs',
+            'url' => '/gbmp/perakitan'
         ],
-        [
-            'text' => 'Pesanan PPIC',
-            'auth' => [11],
-            'icon' =>  'fas fa-boxes',
-            'url' => '/gbmp/bppb_view'
-        ],
+        // [
+        //     'text' => 'Stok',
+        //     'auth' => [11],
+        //     'icon' =>  'fas fa-boxes',
+        //     'url' => '/gbmp/data_view'
+        // ],
+        // [
+        //     'text' => 'Pesanan PPIC',
+        //     'auth' => [11],
+        //     'icon' =>  'fas fa-boxes',
+        //     'url' => '/gbmp/bppb_view'
+        // ],
         // Produksi (17)
         // [
         //     'header' => 'PERSIAPAN',

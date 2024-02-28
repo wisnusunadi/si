@@ -61,6 +61,8 @@ class Divisi
             return redirect('/mtc/air/masuk');
         } else if ($request->user()->hasRole("20")) {
             return redirect('/penjualan/lacak/show');
+        } else if ($request->user()->hasRole("11")) {
+            return redirect('/gbmp/perakitan');
         }
     }
 }
