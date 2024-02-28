@@ -989,7 +989,6 @@
                 $('#nosjtable').DataTable({
                     destroy: true,
                     processing: true,
-                    serverSide: true,
                     ajax: {
                         'url': '/api/penjualan/lacak/data/no_sj/' + data,
                         'dataType': 'json',
@@ -1003,6 +1002,9 @@
                     },
                     columns: [{
                             data: null,
+                            render: function(data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
                         },
                         {
                             data: 'po',
@@ -1021,7 +1023,7 @@
                             className: 'align-center'
                         },
                         {
-                            data: 'tgl_kirim',
+                            data: 'tgl_sj',
                             className: 'nowraps align-center'
                         },
                         {
