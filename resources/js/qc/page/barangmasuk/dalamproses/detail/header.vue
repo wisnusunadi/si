@@ -11,6 +11,14 @@ export default {
                     <div class="row d-flex justify-content-between">
                         <div class="p-2">
                             <div class="margin">
+                                <button class="btn btn-outline-dark" @click="$router.push({ name: 'barangMasuk' })">
+                                    <i class="fa fa-arrow-left"></i>
+                                    Kembali
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-2">
+                            <div class="margin">
                                 <small class="text-muted">No BPPB</small>
                             </div>
                             <div class="margin">
