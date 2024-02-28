@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 export default {
     props: ["dataCetak"],
     data() {
@@ -32,6 +33,7 @@ export default {
                     break;
                 case 'seri':
                     window.open(`/api/labs/cetak/seri/${id}/${ttd}/${this.hal}`, '_blank');
+                    axios.get(`/api/labs/cetak_log?id=${id}`)
                     break;
                 default:
                     break;
@@ -41,19 +43,20 @@ export default {
 }
 </script>
 <template>
-    <div class="modal fade modalPage" id="exampleModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade modalPage" id="exampleModal" data-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Batas Halaman</h5>
-                        <button type="button" class="close" @click="closeModal">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <button type="button" class="close" @click="closeModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group row">
-                      <label class="col-4">Batas Halaman</label>
-                      <input type="text" class="form-control col-8" v-on:keypress="numberOnly" v-model="hal" />
+                        <label class="col-4">Batas Halaman</label>
+                        <input type="text" class="form-control col-8" v-on:keypress="numberOnly" v-model="hal" />
                     </div>
                 </div>
                 <div class="modal-footer">
