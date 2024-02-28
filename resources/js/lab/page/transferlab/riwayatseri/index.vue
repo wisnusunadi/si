@@ -82,6 +82,11 @@ export default {
                 <input type="text" class="form-control" placeholder="Cari..." v-model="search">
             </div>
         </div>
-        <data-table :headers="headers" :items="noseri" :search="search" />
+        <data-table :headers="headers" :items="noseri" :search="search" v-if="!$store.state.loading" />
+        <div v-else class="text-center">
+            <div class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
     </div>
 </template>

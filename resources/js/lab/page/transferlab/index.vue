@@ -219,7 +219,7 @@ export default {
                 v-if="showTabs == 'riwayat'">
                 <div class="card">
                     <div class="card-body">
-                        <riwayatseri :noseri="transferKalibrasiNoSeri" />
+                        <riwayatseri :noseri="transferKalibrasiNoSeri" @changeYears="getData" />
                     </div>
                 </div>
             </div>
