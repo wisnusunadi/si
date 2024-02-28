@@ -126,7 +126,7 @@ export default {
                                                 PAKAI</label>
                                         </div>
                                     </div>
-                                    <div class="form-group" v-if="!header.edit_alamat">
+                                    <div class="form-group" v-if="header.edit_alamat">
                                         <label for="">Alamat Sertifikat</label>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="inlineRadioOptions"
