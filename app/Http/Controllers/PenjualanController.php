@@ -1483,10 +1483,9 @@ class PenjualanController extends Controller
                 ->leftjoin('spa_on', 'spa_on.nolkpp_on', '=', 'seri_on.lkppfk_on')
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_on.pabrik_on')
                 ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spa_on.idprod_on')
-                ->where('seri_on.noseri_on', 'LIKE', '%' . $value . '%')
+                ->where('seri_on.noseri_on', $value)
                 ->whereNotNull('gudang_on.tglsj_on')
-                ->groupby('seri_on.noseri_on')
-                ->get();
+                ->groupby('seri_on.noseri_on');
 
             $si_ekat20 = DB::connection('si_20')->table('seri_on')
                 ->select(
@@ -1506,10 +1505,9 @@ class PenjualanController extends Controller
                 ->leftjoin('spa_on', 'spa_on.nolkpp_on', '=', 'seri_on.lkppfk_on')
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_on.pabrik_on')
                 ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spa_on.idprod_on')
-                ->where('seri_on.noseri_on', 'LIKE', '%' . $value . '%')
+                ->where('seri_on.noseri_on',$value)
                 ->whereNotNull('gudang_on.tglsj_on')
-                ->groupby('seri_on.noseri_on')
-                ->get();
+                ->groupby('seri_on.noseri_on');
 
 
             $si_spa21 = DB::connection('si_21')->table('seri_off')
@@ -1529,10 +1527,9 @@ class PenjualanController extends Controller
                 ->leftjoin('spa_off', 'spa_off.idorder_off', '=', 'seri_off.idorderfk_off')
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_off.pabrik_off')
                 ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spa_off.idprod_off')
-                ->where('seri_off.noseri_off', 'LIKE', '%' . $value . '%')
+                ->where('seri_off.noseri_off', $value)
                 ->whereNotNull('gudang_off.tglsj_off')
-                ->groupby('seri_off.noseri_off')
-                ->get();
+                ->groupby('seri_off.noseri_off');
 
             $si_spa20 = DB::connection('si_20')->table('seri_off')
                 ->select(
@@ -1551,10 +1548,9 @@ class PenjualanController extends Controller
                 ->leftjoin('spa_off', 'spa_off.idorder_off', '=', 'seri_off.idorderfk_off')
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_off.pabrik_off')
                 ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spa_off.idprod_off')
-                ->where('seri_off.noseri_off', 'LIKE', '%' . $value . '%')
+                ->where('seri_off.noseri_off', $value)
                 ->whereNotNull('gudang_off.tglsj_off')
-                ->groupby('seri_off.noseri_off')
-                ->get();
+                ->groupby('seri_off.noseri_off');
 
             $si_spb21 = DB::connection('si_21')->table('seri_spb')
                 ->select(
@@ -1572,10 +1568,9 @@ class PenjualanController extends Controller
                 ->leftjoin('qc_spb', 'qc_spb.noqc_spb', '=', 'seri_spb.nogdgfk')
                 ->leftjoin('spb', 'spb.nospb', '=', 'seri_spb.nogdgfk')
                 ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spb.idprod_spb')
-                ->where('seri_spb.noseri_spb', 'LIKE', '%' . $value . '%')
+                ->where('seri_spb.noseri_spb', $value)
                 ->whereNotNull('gudang_spb.tglsjgdg_spb')
-                ->groupby('seri_spb.noseri_spb')
-                ->get();
+                ->groupby('seri_spb.noseri_spb');
 
             $si_spb20 = DB::connection('si_20')->table('seri_spb')
                 ->select(
@@ -1593,10 +1588,16 @@ class PenjualanController extends Controller
                 ->leftjoin('qc_spb', 'qc_spb.noqc_spb', '=', 'seri_spb.nogdgfk')
                 ->leftjoin('spb', 'spb.nospb', '=', 'seri_spb.nogdgfk')
                 ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spb.idprod_spb')
-                ->where('seri_spb.noseri_spb', 'LIKE', '%' . $value . '%')
+                ->where('seri_spb.noseri_spb',  $value )
                 ->whereNotNull('gudang_spb.tglsjgdg_spb')
-                ->groupby('seri_spb.noseri_spb')
-                ->get();
+                ->groupby('seri_spb.noseri_spb');
+
+            $seriERP =  NoseriBarangJadi::where('noseri', $value);
+            $Istransaksi = NoseriBarangJadi::join('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+            ->where('noseri',$value)
+            ->where('t_gbj_noseri.jenis','keluar');
+
+
 
             $spa =  NoseriBarangJadi::select(
                 'noseri_barang_jadi.noseri',
@@ -1612,7 +1613,6 @@ class PenjualanController extends Controller
                 'ekatalog.satuan as satuan',
                 'm_state.nama as state_nama',
             )
-
                 ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
                 ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
                 ->leftjoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
@@ -1630,10 +1630,12 @@ class PenjualanController extends Controller
                 ->leftJoin('customer as c_spa', 'c_spa.id', '=', 'spa.customer_id')
                 ->leftJoin('spb', 'spb.pesanan_id', '=', 'pesanan.id')
                 ->leftJoin('customer as c_spb', 'c_spb.id', '=', 'spb.customer_id')
-                ->where('noseri_barang_jadi.noseri', 'LIKE', '%' . $value . '%')
-                ->whereNotNull('t_gbj.pesanan_id')
+                ->where('noseri_barang_jadi.noseri', $value)
+                // ->whereNotNull('t_gbj.pesanan_id')
                 ->orderBy('noseri_barang_jadi.noseri', 'ASC')
-                ->get();
+                ->latest('t_gbj_noseri.created_at');
+
+
 
             $noseriretur = NoseriBarangJadi::selectRaw(
                 'noseri_barang_jadi.noseri,
@@ -1656,15 +1658,103 @@ class PenjualanController extends Controller
                 ->leftjoin('pengiriman as pn', 'pn.retur_penjualan_id', '=', 'retur_penjualan.id')
                 ->leftJoin('m_state', 'm_state.id', '=', 'retur_penjualan.state_id')
                 ->leftJoin('customer', 'customer.id', '=', 'retur_penjualan.customer_id')
-                ->where('noseri_barang_jadi.noseri', 'LIKE', '%' . $value . '%')
+                ->where('noseri_barang_jadi.noseri',  $value)
                 ->whereNotNull('t_gbj.retur_penjualan_id')
                 ->orderBy('noseri_barang_jadi.noseri', 'ASC')
-                ->groupBy('retur_penjualan.id')
-                ->get();
+                ->groupBy('retur_penjualan.id');
+                //dd($Istransaksi->count());
+                $data = array();
+                if($si_spa21->count() > 0 ){
+                    $data = $si_spa21->get();
+                }
+
+                if($si_spa20->count() > 0 ){
+                    $data = $si_spa20->get();
+                }
+
+                if($si_spb20->count() > 0 ){
+                    $data = $si_spb20->get();
+                }
+
+                if($si_spb21->count() > 0 ){
+                    $data = $si_spb21->get();
+                }
+
+                if($si_ekat20->count() > 0 ){
+                    $data = $si_ekat20->get();
+                }
+
+                if($si_ekat21->count() > 0 ){
+                    $data = $si_ekat21->get();
+                }
 
 
-            $data = $si_spa21->merge($si_spa20)->merge($si_spb20)->merge($si_spb21)->merge($si_ekat20)->merge($si_ekat21)->merge($spa)->merge($noseriretur);
+                if($seriERP->count() > 0){
 
+                    if($Istransaksi->count() > 0){
+
+                     if($spa->count() > 0 ){
+                        $datas = $spa->first();
+                        $data[] = array(
+                            'noseri' => $value,
+                            'no_po' => $datas->no_po,
+                            'so' => $datas->so,
+                            'tgl_uji' => $datas->tgl_uji,
+                            'tgl_sj' => $datas->tgl_sj,
+                            'no_sj' => $datas->no_sj,
+                            'p_nama' => $datas->p_nama,
+                            'c_ekat_nama' => $datas->c_ekat_nama,
+                            'c_spb_nama' => $datas->c_spb_nama,
+                            'satuan' => $datas->satuan,
+                            'state_nama' => $datas->state_nama,
+                        );
+                    }
+
+                    if($noseriretur->count() > 0 ){
+                        $data = $noseriretur->get();
+                    }
+
+                    }else{
+                        $data[] = array(
+                            'noseri' => $value,
+                            'no_po' => '-',
+                            'so' => '-',
+                            'tgl_uji' => null,
+                            'tgl_sj' => null,
+                            'no_sj' => '-',
+                            'p_nama' => '-',
+                            'c_ekat_nama' => '-',
+                            'c_spb_nama' => '-',
+                            'satuan' => '-',
+                            'state_nama' => 'Stok Barang',
+                        );
+
+                    }
+                //  'noseri_barang_jadi.noseri',
+                // 'pesanan.no_po',
+                // 'pesanan.so',
+                // 'noseri_detail_pesanan.tgl_uji',
+                // 'logistik.tgl_kirim as tgl_sj',
+                // 'logistik.nosurat as no_sj',
+                // 'produk.nama as p_nama',
+                // 'c_ekat.nama as c_ekat_nama',
+                // 'c_spa.nama as c_spa_nama',
+                // 'c_spb.nama as c_spb_nama',
+                // 'ekatalog.satuan as satuan',
+                // 'm_state.nama as state_nama',
+
+                    // if($spa->count() > 0 ){
+                    //     $data = $spa->get();
+                    // }
+
+                    // if($noseriretur->count() > 0 ){
+                    //     $data = $noseriretur->get();
+                    // }
+
+                }
+
+
+          //  $data = $si_spa21->merge($si_spa20)->merge($si_spb20)->merge($si_spb21)->merge($si_ekat20)->merge($si_ekat21)->merge($spa)->merge($noseriretur);
 
             return response()->json(['data' => $data]);
             // $data =  NoseriBarangJadi::select(
