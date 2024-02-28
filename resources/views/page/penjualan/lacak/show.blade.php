@@ -835,6 +835,9 @@
                                     } else if (row.state_nama == "Kirim") {
                                         return '<span class="green-text badge">' + row.state_nama +
                                             '</span>';
+                                    } else if (row.state_nama == "Stok Barang") {
+                                        return '<span class="green-text badge">' + row.state_nama +
+                                            '</span>';
                                     }
                                 } else {
                                     return '<span class="green-text badge">Kirim</span>'
