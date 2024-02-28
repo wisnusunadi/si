@@ -11,7 +11,7 @@ class UjiLabDetail extends Model
     use HasFactory;
     protected $connection = 'erp';
     protected $table = 'uji_lab_detail';
-    protected $fillable = ['no','no_sertifikat','uji_lab_id','detail_pesanan_produk_id','pemeriksa_id','noseri_id','no_sertifikat','tgl_masuk','tgl_kalibrasi','metode_id','status','is_ready'];
+    protected $fillable = ['no','no_sertifikat','uji_lab_id','detail_pesanan_produk_id','pemeriksa_id','noseri_id','no_sertifikat','tgl_masuk','tgl_kalibrasi','metode_id','status','is_ready','cetak_log'];
 
     public function NoseriDetailPesanan()
     {

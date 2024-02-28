@@ -1170,6 +1170,31 @@ class LabController extends Controller
         ], 200);
     }
 
+    public function cetak_sertifikat_log(Request $request){
+        DB::beginTransaction();
+        try {
+            //code...
+            $uji = UjiLab::find($request->id);
+            $uji->cetak_log = Carbon::now();
+            $uji->save();
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Gagal Cetak',
+            ], 500);
+
+        }
+
+
+    }
+
     public function cetak_sertifikat($jenis, $id, $ttd, $hal)
     {
 
@@ -1407,6 +1432,18 @@ class LabController extends Controller
         ELSE 0
         END) AS nok",
             )
+            ->selectRaw(
+                "(CASE
+        WHEN uji_lab_detail.status = 'ok' THEN 1
+        ELSE 0
+        END) AS ok_uji",
+            )
+            ->selectRaw(
+                "(CASE
+        WHEN uji_lab_detail.status = 'nok' THEN 1
+        ELSE 0
+        END) AS nok_uji",
+            )
             // ->selectRaw(
             //     "coalesce(count(uji_lab_detail.id),0) AS jumlah",
             // )
@@ -1444,6 +1481,7 @@ class LabController extends Controller
             $data = array();
         } else {
             $produks = [];
+            $jumlah_uji = 0;
             foreach ($ujilab as $d) {
                 $gudang_barang_jadi_id = $d['gudang_barang_jadi_id'];
 
@@ -1460,6 +1498,7 @@ class LabController extends Controller
                 $produks[$gudang_barang_jadi_id]["jumlah"] += 1;
                 $produks[$gudang_barang_jadi_id]["jumlah_nok"] += $d->nok;
                 $produks[$gudang_barang_jadi_id]["jumlah_ok"] += $d->ok;
+                $jumlah_uji += $d->ok_uji + $d->nok_uji;
             }
             $produks = array_values($produks);
 
@@ -1494,7 +1533,7 @@ class LabController extends Controller
                     'alamat' => $ujilab_head->alamat,
                     'customer' => $ujilab_head->nama,
                     'status' =>  intval(($ujilab_head->GetUji()) / $ujilab_head->GetJumlah() * 100),
-                    'edit_alamat' => $ujilab_head->edit_alamat,
+                    'edit_alamat' =>  $jumlah_uji > 0 ? true : false
                 ),
                 'produk' => $produks
             );
