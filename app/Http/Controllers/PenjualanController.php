@@ -1594,7 +1594,8 @@ class PenjualanController extends Controller
 
             $seriERP =  NoseriBarangJadi::where('noseri', $value);
             $Istransaksi = NoseriBarangJadi::join('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->where('noseri',$value);
+            ->where('noseri',$value)
+            ->where('t_gbj_noseri.jenis','keluar');
 
 
 
