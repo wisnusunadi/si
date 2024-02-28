@@ -27,13 +27,15 @@ export default {
             switch (jenis) {
                 case 'po':
                     window.open(`/api/labs/cetak/po/${id}/${ttd}/${this.hal}`, '_blank');
+                    axios.post(`/api/labs/cetak_log_order?id=${id}`)
                     break;
                 case 'produk':
                     window.open(`/api/labs/cetak/produk/${id}/${ttd}/${this.hal}`, '_blank');
+                    axios.post(`/api/labs/cetak_log_prd?id=${id}`)
                     break;
                 case 'seri':
                     window.open(`/api/labs/cetak/seri/${id}/${ttd}/${this.hal}`, '_blank');
-                    axios.get(`/api/labs/cetak_log?id=${id}`)
+                    axios.post(`/api/labs/cetak_log?id=${id}`)
                     break;
                 default:
                     break;
