@@ -59,25 +59,25 @@ class MasterController extends Controller
 {
     public function select_parent_rw()
     {
-        $prd = Produk::select('id','nama')->has("DetailProdukRw")->get();
+        $prd = Produk::select('id', 'nama')->has("DetailProdukRw")->get();
 
         return response()->json($prd);
     }
     public function select_item_rw($id)
     {
-        $prd = DetailProdukRw::
-        addSelect([
-                'ckirimprd' => function ($q) {
-                    $q->selectRaw('coalesce(count(noseri_barang_jadi.id),0)')
-                        ->from('noseri_barang_jadi')
-                        ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
-                        ->where('noseri_barang_jadi.is_ready', '0')
-                        ->whereNull('noseri_barang_jadi.used_by')
-                        ->whereColumn('gdg_barang_jadi.produk_id', 'detail_produks_rw.produk_id');
-                },])
-        ->where('produk_parent_id',$id)->get();
+        $prd = DetailProdukRw::addSelect([
+            'ckirimprd' => function ($q) {
+                $q->selectRaw('coalesce(count(noseri_barang_jadi.id),0)')
+                    ->from('noseri_barang_jadi')
+                    ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                    ->where('noseri_barang_jadi.is_ready', '0')
+                    ->whereNull('noseri_barang_jadi.used_by')
+                    ->whereColumn('gdg_barang_jadi.produk_id', 'detail_produks_rw.produk_id');
+            },
+        ])
+            ->where('produk_parent_id', $id)->get();
 
-        return response()->json(['jumlah'=>$prd->min('ckirimprd')]);
+        return response()->json(['jumlah' => $prd->min('ckirimprd')]);
     }
     public function get_all_past_no_seri(Request $r)
     {
@@ -295,7 +295,8 @@ class MasterController extends Controller
             ->rawColumns(['status'])
             ->make(true);
     }
-    public function get_data_all_ekspedisi(Request $r) {
+    public function get_data_all_ekspedisi(Request $r)
+    {
         try {
             $ekspedisi = Ekspedisi::where('nama', 'LIKE', '%' . $r->input('term', '') . '%')->get();
 
@@ -1880,7 +1881,8 @@ class MasterController extends Controller
     }
 
     // kategori
-    public function indexKategori() {
+    public function indexKategori()
+    {
         try {
             $kategori = MProduk::all();
 
@@ -1896,9 +1898,10 @@ class MasterController extends Controller
         }
     }
 
-    public function postOrEditKategori(Request $request) {
+    public function postOrEditKategori(Request $request)
+    {
         try {
-            $kategori = collect($request->json())->map(function($item) {
+            $kategori = collect($request->json())->map(function ($item) {
                 $kategori = MProduk::updateOrCreate(
                     ['id' => isset($item['id']) ? $item['id'] : null],
                     [
@@ -1921,9 +1924,10 @@ class MasterController extends Controller
         }
     }
 
-    public function deleteKategori(Request $request) {
+    public function deleteKategori(Request $request)
+    {
         try {
-            $kategori = collect($request->json())->map(function($item) {
+            $kategori = collect($request->json())->map(function ($item) {
                 $kategori = MProduk::where('id', $item['id'])->delete();
             });
 
@@ -1940,10 +1944,10 @@ class MasterController extends Controller
         }
     }
 
-    public function indexProduk() {
+    public function indexProduk()
+    {
         try {
-            $produk = Produk::with('GudangBarangJadi')->
-            with('product')->get()->map(function($item) {
+            $produk = Produk::with('GudangBarangJadi')->with('product')->get()->map(function ($item) {
                 return [
                     'id' => $item->id,
                     'produk_id' => $item->produk_id,
@@ -1973,9 +1977,10 @@ class MasterController extends Controller
         }
     }
 
-    public function postOrEditProduk(Request $request) {
+    public function postOrEditProduk(Request $request)
+    {
         try {
-            $produk = collect($request->json())->map(function($item) {
+            $produk = collect($request->json())->map(function ($item) {
                 $produk = Produk::updateOrCreate(
                     [
                         'id' => isset($item['id']) ? $item['id'] : null
@@ -2015,7 +2020,6 @@ class MasterController extends Controller
                 'message' => 'Berhasil menambahkan produk',
                 'produk' => $produk
             ], 200);
-
         } catch (\Throwable $th) {
             return response()->json([
                 'success' => false,
@@ -2024,9 +2028,10 @@ class MasterController extends Controller
         }
     }
 
-    public function deleteProduk(Request $request) {
+    public function deleteProduk(Request $request)
+    {
         try {
-            $produk = collect($request->json())->map(function($item) {
+            $produk = collect($request->json())->map(function ($item) {
                 $gudang = GudangBarangJadi::where('produk_id', $item['id'])->delete();
 
                 $produk = Produk::where('id', $item['id'])->delete();
@@ -2045,7 +2050,8 @@ class MasterController extends Controller
         }
     }
 
-    public function changeStatusProduk(Request $request) {
+    public function changeStatusProduk(Request $request)
+    {
         try {
             $produk = Produk::find($request->id);
             $produk->status = $request->status;
@@ -2157,7 +2163,13 @@ class MasterController extends Controller
         try {
             //code...
             DB::beginTransaction();
-            $cek = RiwayatAktifPeriode::where(['user' => Auth::user()->nama, 'status' => 'pengajuan'])->count();
+            $cek = RiwayatAktifPeriode::where(function ($query) {
+                $query->where('user', Auth::user()->nama)
+                    ->where('status', 'pengajuan')
+                    ->orWhere('status', 'terima');
+            })
+                ->count();
+
             if ($cek > 0) {
                 DB::rollBack();
                 return response()->json([
