@@ -1280,6 +1280,7 @@ class LabController extends Controller
             $ujilab->jenis_pemilik_id = $request->jenis_pemilik['value'];
             // $ujilab->nama = 'Nama Customer';
             $ujilab->alamat = $obj->alamat;
+            $ujilab->edit_alamat = 1;
             $ujilab->save();
 
             //Dummy
@@ -1493,6 +1494,7 @@ class LabController extends Controller
                     'alamat' => $ujilab_head->alamat,
                     'customer' => $ujilab_head->nama,
                     'status' =>  intval(($ujilab_head->GetUji()) / $ujilab_head->GetJumlah() * 100),
+                    'edit_alamat' => $ujilab_head->edit_alamat,
                 ),
                 'produk' => $produks
             );

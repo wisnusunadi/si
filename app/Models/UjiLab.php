@@ -11,7 +11,7 @@ class UjiLab extends Model
     use HasFactory;
     protected $connection = 'erp';
     protected $table = 'uji_lab';
-    protected $fillable = ['no_order','pesanan_id','jenis_pemilik_id','nama','alamat'];
+    protected $fillable = ['no_order', 'pesanan_id', 'jenis_pemilik_id', 'nama', 'alamat', 'edit_alamat'];
 
     public function Pesanan()
     {
@@ -31,18 +31,15 @@ class UjiLab extends Model
         $id = $this->id;
         $produk = DB::select('select coalesce(count(uji_lab_detail.id),0) as jumlah
         from uji_lab_detail
-        where uji_lab_detail.uji_lab_id = ?',[$id]);
-            return  $produk[0]->jumlah;
-
+        where uji_lab_detail.uji_lab_id = ?', [$id]);
+        return  $produk[0]->jumlah;
     }
     public function GetUji()
     {
         $id = $this->id;
         $produk = DB::select('select coalesce(count(uji_lab_detail.id),0) as jumlah
         from uji_lab_detail
-        where uji_lab_detail.uji_lab_id = ? and uji_lab_detail.status != "belum"',[$id]);
-            return  $produk[0]->jumlah;
-
+        where uji_lab_detail.uji_lab_id = ? and uji_lab_detail.status != "belum"', [$id]);
+        return  $produk[0]->jumlah;
     }
-
 }
