@@ -143,7 +143,7 @@
                                                 <div class="invalid-feedback" id="msgdata">
                                                 </div>
                                                 <small class="text-muted">
-                                                    Silahkan isi masukkan data dengan lengkap
+                                                    Silahkan masukkan data dengan lengkap
                                                 </small>
                                             </div>
                                         </div>
