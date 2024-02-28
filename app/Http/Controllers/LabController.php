@@ -1714,6 +1714,37 @@ class LabController extends Controller
             ], 500);
         }
     }
+
+    public function transfer_riwayat_seri(Request $request)
+    {
+        $years = $request->years;
+        $data = RiwayatTf::where('dari', 22)->whereYear('created_at', $years)->get();
+        $setData = array();
+        foreach ($data as $d) {
+            $e = json_decode($d->isi);
+            foreach($e->produk as $item){
+                foreach($item->noseri as $noseri){
+                    $setData[] = array(
+                        'id' => $d->id,
+                        'so' => $e->header->so,
+                        'no_po' => $e->header->po,
+                        'no_order' => $e->header->no_order,
+                        'pemilik' => $e->header->pemilik,
+                        'pemilik_sertif' => $e->header->pemilik_sertif,
+                        'tgl_transfer' => $d->created_at->format('Y-m-d'),
+                        'customer' => $e->header->customer,
+                        'noseri' => $noseri->no_seri
+                    );
+
+                }
+            }
+
+
+        }
+        return response()->json($setData);
+
+    }
+
     public function transfer_riwayat(Request $request)
     {
         $years = $request->years;

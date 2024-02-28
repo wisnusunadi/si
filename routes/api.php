@@ -823,6 +823,7 @@ Route::prefix('/labs')->group(function () {
         Route::get('seri/{id}', [App\Http\Controllers\LabController::class, 'transfer_detail_seri']);
     });
     Route::get('/tf_riwayat', [App\Http\Controllers\LabController::class, 'transfer_riwayat']);
+    Route::post('/tf_riwayat_seri', [App\Http\Controllers\LabController::class, 'transfer_riwayat_seri']);
     Route::prefix('/produk')->group(function () {
         Route::get('detail_order/{id}', [App\Http\Controllers\LabController::class, 'produk_lab_detail_order']);
         Route::get('detail_produk/{id}', [App\Http\Controllers\LabController::class, 'produk_lab_detail_produk']);
