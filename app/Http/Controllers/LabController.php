@@ -1170,8 +1170,68 @@ class LabController extends Controller
         ], 200);
     }
 
-    public function cetak_sertifikat_log(Request $request)
-    {
+    public function cetak_sertifikat_log_prd(Request $request){
+        DB::beginTransaction();
+        try {
+            //code...
+            $uji = UjiLabDetail::
+            leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'uji_lab_detail.detail_pesanan_produk_id')
+            ->where(['lab_id' => $request->id,'detail_pesanan_produk.gudang_barang_jadi_id' => $request->gudang_barang_jadi_id])
+            ->whereNotNull('no_sertifikat')
+            ->pluck('id')
+            ->toArray();
+
+            UjiLabDetail::whereIN('id', $uji)
+            ->update([
+                'cetak_log' => Carbon::now(),
+            ]);
+
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Gagal Cetak',
+            ], 500);
+
+        }
+    }
+
+
+    public function cetak_sertifikat_log_order(Request $request){
+        DB::beginTransaction();
+        try {
+            //code...
+            $uji = UjiLabDetail::where('lab_id',$request->id)->whereNotNull('no_sertifikat')->pluck('id')->toArray();
+
+            UjiLabDetail::whereIN('id', $uji)
+            ->update([
+                'cetak_log' => Carbon::now(),
+            ]);
+
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Gagal Cetak',
+            ], 500);
+
+        }
+    }
+
+
+    public function cetak_sertifikat_log(Request $request){
         DB::beginTransaction();
         try {
             //code...
