@@ -1170,21 +1170,21 @@ class LabController extends Controller
         ], 200);
     }
 
-    public function cetak_sertifikat_log_prd(Request $request){
+    public function cetak_sertifikat_log_prd(Request $request)
+    {
         DB::beginTransaction();
         try {
             //code...
-            $uji = UjiLabDetail::
-            leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'uji_lab_detail.detail_pesanan_produk_id')
-            ->where(['lab_id' => $request->id,'detail_pesanan_produk.gudang_barang_jadi_id' => $request->gudang_barang_jadi_id])
-            ->whereNotNull('no_sertifikat')
-            ->pluck('id')
-            ->toArray();
+            $uji = UjiLabDetail::leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'uji_lab_detail.detail_pesanan_produk_id')
+                ->where(['uji_lab_detail.uji_lab_id' => $request->id, 'detail_pesanan_produk.gudang_barang_jadi_id' => $request->gudang_barang_jadi_id])
+                ->whereNotNull('no_sertifikat')
+                ->pluck('id')
+                ->toArray();
 
             UjiLabDetail::whereIN('id', $uji)
-            ->update([
-                'cetak_log' => Carbon::now(),
-            ]);
+                ->update([
+                    'cetak_log' => Carbon::now(),
+                ]);
 
             DB::commit();
             return response()->json([
@@ -1197,22 +1197,23 @@ class LabController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Gagal Cetak',
+                'error' => $th->getMessage()
             ], 500);
-
         }
     }
 
 
-    public function cetak_sertifikat_log_order(Request $request){
+    public function cetak_sertifikat_log_order(Request $request)
+    {
         DB::beginTransaction();
         try {
             //code...
-            $uji = UjiLabDetail::where('lab_id',$request->id)->whereNotNull('no_sertifikat')->pluck('id')->toArray();
+            $uji = UjiLabDetail::where('uji_lab_id', $request->id)->whereNotNull('no_sertifikat')->pluck('id')->toArray();
 
             UjiLabDetail::whereIN('id', $uji)
-            ->update([
-                'cetak_log' => Carbon::now(),
-            ]);
+                ->update([
+                    'cetak_log' => Carbon::now(),
+                ]);
 
             DB::commit();
             return response()->json([
@@ -1225,13 +1226,14 @@ class LabController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Gagal Cetak',
+                'error' => $th->getMessage()
             ], 500);
-
         }
     }
 
 
-    public function cetak_sertifikat_log(Request $request){
+    public function cetak_sertifikat_log(Request $request)
+    {
         DB::beginTransaction();
         try {
             //code...
@@ -2135,6 +2137,8 @@ class LabController extends Controller
                 if (!isset($produks[$gudang_barang_jadi_id])) {
                     $produks[$gudang_barang_jadi_id] = array(
                         'id' => $d->dpp_id,
+                        'gbj_id' => $d->gudang_barang_jadi_id,
+                        'lab_id' => $id,
                         "nama" => $d->nama,
                         "tipe" => $d->tipe . $d->variasi,
                         "jumlah_ok" => 0,

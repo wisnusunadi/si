@@ -22,10 +22,11 @@ export default {
         detail(id) {
             this.$router.push({ name: 'detailsertifikasipernoseri', params: { id: id, history: this.$route.path } })
         },
-        cetakSertifikat(id, ttd) {
+        cetakSertifikat(data, ttd) {
             this.modal = true;
             this.dataCetak = {
-                id,
+                id: data.id,
+                ...data,
                 ttd,
                 jenis: 'produk',
             };
@@ -52,64 +53,66 @@ export default {
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex bd-highlight mb-3">
-                            <div class="mr-auto p-2 bd-highlight">
-                            </div>
-                            <div class="p-2 bd-highlight">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Cari..." v-model="search">
-                                </div>
+                        <div class="mr-auto p-2 bd-highlight">
+                        </div>
+                        <div class="p-2 bd-highlight">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Cari..." v-model="search">
                             </div>
                         </div>
-                        <table class="table text-center">
-                            <thead>
-                                <tr>
-                                    <th rowspan="2">No</th>
-                                    <th rowspan="2">Nama Barang</th>
-                                    <th rowspan="2">Tipe Barang</th>
-                                    <th colspan="2">Jumlah</th>
-                                    <th rowspan="2">Aksi</th>
-                                </tr>
-                                <tr>
-                                    <th>OK</th>
-                                    <th>Tidak OK</th>
-                                </tr>
-                            </thead>
-                            <tbody v-if="renderPaginate.length > 0">
-                                <tr v-for="(data, index) in renderPaginate" :key="index">
-                                    <td>{{ index + 1 }}</td>
-                                    <td>{{ data.nama }}</td>
-                                    <td>{{ data.tipe }}</td>
-                                    <td>{{ data.jumlah_ok }}</td>
-                                    <td>{{ data.jumlah_nok }}</td>
-                                                        <td>
-                            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true"
-                                aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
-                                <a class="dropdown-item" @click="detail(data.id)">
-                                    <i class="fas fa-eye"></i>
-                                    Detail
-                                </a>
-                                <button class="dropdown-item" type="button" @click="cetakSertifikat(data.id, ttd = false)">
-                                    <i class="fas fa-file"></i>
-                                    Sertifikasi
-                                </button>
-                                <button class="dropdown-item" type="button" @click="cetakSertifikat(data.id, ttd = true)">
-                                    <i class="fas fa-file"></i>
-                                    Sertifikasi + TTD
-                                </button>
-                            </div>
-                        </td>
-                                </tr>
-                            </tbody>
-                            <tbody v-else>
-                                <tr>
-                                    <td colspan="4">Data tidak ditemukan</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses"/>
+                    </div>
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">No</th>
+                                <th rowspan="2">Nama Barang</th>
+                                <th rowspan="2">Tipe Barang</th>
+                                <th colspan="2">Jumlah</th>
+                                <th rowspan="2">Aksi</th>
+                            </tr>
+                            <tr>
+                                <th>OK</th>
+                                <th>Tidak OK</th>
+                            </tr>
+                        </thead>
+                        <tbody v-if="renderPaginate.length > 0">
+                            <tr v-for="(data, index) in renderPaginate" :key="index">
+                                <td>{{ index + 1 }}</td>
+                                <td>{{ data.nama }}</td>
+                                <td>{{ data.tipe }}</td>
+                                <td>{{ data.jumlah_ok }}</td>
+                                <td>{{ data.jumlah_nok }}</td>
+                                <td>
+                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
+                                        aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                                        <a class="dropdown-item" @click="detail(data.id)">
+                                            <i class="fas fa-eye"></i>
+                                            Detail
+                                        </a>
+                                        <button class="dropdown-item" type="button"
+                                            @click="cetakSertifikat(data, ttd = false)">
+                                            <i class="fas fa-file"></i>
+                                            Sertifikasi
+                                        </button>
+                                        <button class="dropdown-item" type="button"
+                                            @click="cetakSertifikat(data, ttd = true)">
+                                            <i class="fas fa-file"></i>
+                                            Sertifikasi + TTD
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody v-else>
+                            <tr>
+                                <td colspan="4">Data tidak ditemukan</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pagination :filteredDalamProses="filteredDalamProses"
+                        @updateFilteredDalamProses="updateFilteredDalamProses" />
                 </div>
             </div>
         </div>
-    </div>
-</template>
+</div></template>
