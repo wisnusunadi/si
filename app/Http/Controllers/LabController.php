@@ -1178,7 +1178,7 @@ class LabController extends Controller
             $uji = UjiLabDetail::leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'uji_lab_detail.detail_pesanan_produk_id')
                 ->where(['uji_lab_detail.uji_lab_id' => $request->id, 'detail_pesanan_produk.gudang_barang_jadi_id' => $request->gudang_barang_jadi_id])
                 ->whereNotNull('no_sertifikat')
-                ->pluck('id')
+                ->pluck('uji_lab_detail.id')
                 ->toArray();
 
             UjiLabDetail::whereIN('id', $uji)
@@ -1366,7 +1366,6 @@ class LabController extends Controller
             $ujilab->jenis_pemilik_id = $request->jenis_pemilik['value'];
             // $ujilab->nama = 'Nama Customer';
             $ujilab->alamat = $obj->alamat;
-            $ujilab->edit_alamat = 1;
             $ujilab->save();
 
             //Dummy
@@ -1594,7 +1593,7 @@ class LabController extends Controller
                     'alamat' => $ujilab_head->alamat,
                     'customer' => $ujilab_head->nama,
                     'status' =>  intval(($ujilab_head->GetUji()) / $ujilab_head->GetJumlah() * 100),
-                    'edit_alamat' =>  $jumlah_uji > 0 ? true : false
+                    'edit_alamat' =>  $jumlah_uji > 0 ? false :  true
                 ),
                 'produk' => $produks
             );
@@ -1767,6 +1766,7 @@ class LabController extends Controller
                     UjiLabDetail::where('id', $r->noseri[$j]->id)
                         ->update([
                             'is_ready' => 0,
+                            'tf_log' => Carbon::now(),
                         ]);
 
                     NoseriDetailPesanan::where('id', $ujilab->noseri_id)
