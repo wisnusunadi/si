@@ -1919,8 +1919,6 @@ class MasterController extends Controller
     // kategori
     public function indexKategori()
     {
-    public function indexKategori()
-    {
         try {
             $kategori = MProduk::all();
 
@@ -1938,10 +1936,7 @@ class MasterController extends Controller
 
     public function postOrEditKategori(Request $request)
     {
-    public function postOrEditKategori(Request $request)
-    {
         try {
-            $kategori = collect($request->json())->map(function ($item) {
             $kategori = collect($request->json())->map(function ($item) {
                 $kategori = MProduk::updateOrCreate(
                     ['id' => isset($item['id']) ? $item['id'] : null],
@@ -1967,10 +1962,7 @@ class MasterController extends Controller
 
     public function deleteKategori(Request $request)
     {
-    public function deleteKategori(Request $request)
-    {
         try {
-            $kategori = collect($request->json())->map(function ($item) {
             $kategori = collect($request->json())->map(function ($item) {
                 $kategori = MProduk::where('id', $item['id'])->delete();
             });
@@ -2041,10 +2033,7 @@ class MasterController extends Controller
 
     public function postOrEditProduk(Request $request)
     {
-    public function postOrEditProduk(Request $request)
-    {
         try {
-            $produk = collect($request->json())->map(function ($item) {
             $produk = collect($request->json())->map(function ($item) {
                 $produk = Produk::updateOrCreate(
                     [
@@ -2095,10 +2084,7 @@ class MasterController extends Controller
 
     public function deleteProduk(Request $request)
     {
-    public function deleteProduk(Request $request)
-    {
         try {
-            $produk = collect($request->json())->map(function ($item) {
             $produk = collect($request->json())->map(function ($item) {
                 $gudang = GudangBarangJadi::where('produk_id', $item['id'])->delete();
 
@@ -2118,8 +2104,6 @@ class MasterController extends Controller
         }
     }
 
-    public function changeStatusProduk(Request $request)
-    {
     public function changeStatusProduk(Request $request)
     {
         try {
