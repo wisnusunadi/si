@@ -11,7 +11,7 @@ class UjiLab extends Model
     use HasFactory;
     protected $connection = 'erp';
     protected $table = 'uji_lab';
-    protected $fillable = ['no_order', 'pesanan_id', 'jenis_pemilik_id', 'nama', 'alamat', 'edit_alamat'];
+    protected $fillable = ['no_order', 'pesanan_id', 'jenis_pemilik_id', 'nama', 'alamat'];
 
     public function Pesanan()
     {
