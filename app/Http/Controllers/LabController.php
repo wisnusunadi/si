@@ -1170,11 +1170,12 @@ class LabController extends Controller
         ], 200);
     }
 
-    public function cetak_sertifikat_log(Request $request){
+    public function cetak_sertifikat_log(Request $request)
+    {
         DB::beginTransaction();
         try {
             //code...
-            $uji = UjiLab::find($request->id);
+            $uji = UjiLabDetail::find($request->id);
             $uji->cetak_log = Carbon::now();
             $uji->save();
             DB::commit();
@@ -1188,11 +1189,9 @@ class LabController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Gagal Cetak',
+                'error' => $th->getMessage()
             ], 500);
-
         }
-
-
     }
 
     public function cetak_sertifikat($jenis, $id, $ttd, $hal)
@@ -1761,8 +1760,8 @@ class LabController extends Controller
         $setData = array();
         foreach ($data as $d) {
             $e = json_decode($d->isi);
-            foreach($e->produk as $item){
-                foreach($item->noseri as $noseri){
+            foreach ($e->produk as $item) {
+                foreach ($item->noseri as $noseri) {
                     $setData[] = array(
                         'id' => $d->id,
                         'so' => $e->header->so,
@@ -1774,14 +1773,10 @@ class LabController extends Controller
                         'customer' => $e->header->customer,
                         'noseri' => $noseri->no_seri
                     );
-
                 }
             }
-
-
         }
         return response()->json($setData);
-
     }
 
     public function transfer_riwayat(Request $request)
