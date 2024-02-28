@@ -9,37 +9,25 @@ export default {
                     value: 'no_order'
                 },
                 {
-                    text: 'Nama Pemilik',
-                    value: 'nama_pemilik'
+                    text: 'No Seri',
+                    value: 'noseri'
                 },
                 {
-                    text: 'Nama Pemilik Sertifikat',
-                    value: 'nama_pemilik_sert'
+                    text: 'Customer',
+                    value: 'customer'
                 },
                 {
                     text: 'Tanggal Transfer',
                     value: 'tanggal'
                 },
                 {
-                    text: 'Teknisi',
-                    value: 'pemeriksa'
+                    text: 'Nama Pemilik',
+                    value: 'pemilik'
                 },
                 {
-                    text: 'Nama Barang',
-                    value: 'nama_alat'
+                    text: 'Nama Pemilik Sertifikat',
+                    value: 'pemilik_sertif'
                 },
-                {
-                    text: 'Tipe',
-                    value: 'type'
-                },
-                {
-                    text: 'No Seri',
-                    value: 'noseri'
-                },
-                {
-                    text: 'Hasil',
-                    value: 'hasil'
-                }
             ],
             search: '',
         }

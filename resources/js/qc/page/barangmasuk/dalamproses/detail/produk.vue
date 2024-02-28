@@ -16,6 +16,10 @@ export default {
                     sortable: false
                 },
                 {
+                    text: 'No',
+                    value: 'no'
+                },
+                {
                     text: 'Tanggal Terima',
                     value: 'tgl_terima',
                     sortable: false
@@ -135,6 +139,14 @@ export default {
             if (noserinotfound.length > 0) {
                 swal.fire('Peringatan', 'No Seri ' + noserinotfound.join(', ') + ' tidak ditemukan atau sudah diuji', 'warning')
             }
+        },
+        renderNo(data) {
+            return data.map((item, index) => {
+                return {
+                    ...item,
+                    no: index + 1
+                }
+            })
         }
     },
     computed: {
@@ -203,7 +215,7 @@ export default {
             }
 
 
-            return filtered;
+            return this.renderNo(filtered);
         },
         getAllStatusUnique() {
             return [...new Set(this.pengemasan.map((item) => item.hasil))]

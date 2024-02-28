@@ -50,8 +50,14 @@ export default {
         },
         async simpan() {
             // check every produk has object has noseri
-            let check = this.produk.some((data) => !data?.noseri || data.noseri.length === 0);
-            if (check) {
+            let produkNoSeri = []
+            this.produk.forEach((data) => {
+                if (data?.noseri?.length > 0) {
+                    produkNoSeri.push(data);
+                }
+            });
+
+            if (produkNoSeri.length === 0) {
                 this.$swal('Peringatan', 'Produk belum memiliki nomor seri', 'warning');
                 return;
             }
@@ -68,7 +74,7 @@ export default {
             try {
                 const { data } = await axios.post('/api/labs/tf', {
                     header: this.headerSO,
-                    produk: this.produk
+                    produk: produkNoSeri
                 })
                 data.status ? success() : gagal();
             } catch (error) {

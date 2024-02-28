@@ -110,6 +110,116 @@ export default {
                     hasil: 'not_ok',
                     penguji: "Lorem",
 
+                },
+                {
+                    id: 1,
+                    tgl_terima: '2024-02-01',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00074',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'ok',
+                    penguji: "Lorem",
+
+                },
+                {
+                    id: 2,
+                    tgl_terima: '2024-02-13',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00004',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'not_ok',
+                    penguji: "Lorem",
+
+                },
+                {
+                    id: 1,
+                    tgl_terima: '2024-02-01',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00074',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'ok',
+                    penguji: "Lorem",
+
+                },
+                {
+                    id: 2,
+                    tgl_terima: '2024-02-13',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00004',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'not_ok',
+                    penguji: "Lorem",
+
+                },
+                {
+                    id: 1,
+                    tgl_terima: '2024-02-01',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00074',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'ok',
+                    penguji: "Lorem",
+
+                },
+                {
+                    id: 2,
+                    tgl_terima: '2024-02-13',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00004',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'not_ok',
+                    penguji: "Lorem",
+
+                },
+                {
+                    id: 1,
+                    tgl_terima: '2024-02-01',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00074',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'ok',
+                    penguji: "Lorem",
+
+                },
+                {
+                    id: 2,
+                    tgl_terima: '2024-02-13',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00004',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'not_ok',
+                    penguji: "Lorem",
+
+                },
+                {
+                    id: 1,
+                    tgl_terima: '2024-02-01',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00074',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'ok',
+                    penguji: "Lorem",
+
+                },
+                {
+                    id: 2,
+                    tgl_terima: '2024-02-13',
+                    waktu_terima: '12:00',
+                    noseri: 'US03223A00004',
+                    tgl_uji: '2024-02-13',
+                    waktu_uji: '12:00',
+                    hasil: 'not_ok',
+                    penguji: "Lorem",
+
                 }
             ]
         }

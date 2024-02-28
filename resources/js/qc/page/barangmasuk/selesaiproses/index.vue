@@ -50,7 +50,13 @@ export default {
         },
         refresh() {
             this.$emit('refresh')
-        }
+        },
+        renderNo(data) {
+            // foreach data
+            return data.forEach((item, index) => {
+
+            })
+        },
     },
     computed: {
         filterRiwayat() {
