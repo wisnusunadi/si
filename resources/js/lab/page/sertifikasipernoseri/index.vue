@@ -24,8 +24,8 @@ export default {
             dataTable: [],
             headers: [
                 {
-                    text: 'No Urut',
-                    value: 'no_urut'
+                    text: 'No',
+                    value: 'no'
                 },
                 {
                     text: 'Nomor Sertifikat',
@@ -84,7 +84,7 @@ export default {
                 this.dataTable = data.map((item, index) => {
                     return {
                         ...item,
-                        no_urut: index + 1,
+                        no: index + 1,
                         tgl: this.formatDate(item.tgl_kalibrasi),
                         batas_akhir_kalibrasi: this.formatDate(item.tgl_kalibrasi_exp),
                     }

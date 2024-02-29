@@ -140,38 +140,21 @@ export default {
                     <template #item.hasil="{ item }">
                         <hasil :hasil="item.hasil" />
                     </template>
-                    <template #item.aksi="{item}">
-                            <div
-                                class="dropdown-toggle"
-                                data-toggle="dropdown"
-                                id="dropdownMenuButton"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                            >
-                                <i class="fas fa-ellipsis-v"></i>
-                            </div>
-                            <div
-                                class="dropdown-menu"
-                                aria-labelledby="dropdownMenuButton"
-                                style=""
-                            >
-                                <button
-                                    class="dropdown-item"
-                                    type="button"
-                                    @click="cetakSertifikat(item.id, ttd = false)"
-                                >
-                                    <i class="fas fa-file"></i>
-                                    Sertifikasi
-                                </button>
-                                <button
-                                    class="dropdown-item"
-                                    type="button"
-                                    @click="cetakSertifikat(item.id, ttd = true)"
-                                >
-                                    <i class="fas fa-file"></i>
-                                    Sertifikasi + TTD
-                                </button>
-                            </div>
+                    <template #item.aksi="{ item }">
+                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true"
+                            aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                            <button class="dropdown-item" type="button" @click="cetakSertifikat(item.id, ttd = false)">
+                                <i class="fas fa-file"></i>
+                                Sertifikasi
+                            </button>
+                            <button class="dropdown-item" type="button" @click="cetakSertifikat(item.id, ttd = true)">
+                                <i class="fas fa-file"></i>
+                                Sertifikasi + TTD
+                            </button>
+                        </div>
                     </template>
                 </data-table>
             </div>

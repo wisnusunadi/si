@@ -2074,7 +2074,7 @@ class LabController extends Controller
             foreach ($detail as $d) {
                 $item[] = array(
                     'id' => $d->id,
-                    'no' => $d->no,
+                    'no' => sprintf("%05d",  $d->no),
                     'nomor_sertifikat' => $d->no_sertifikat,
                     'no_seri' => $d->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri,
                     'tgl_masuk' => $d->tgl_masuk,

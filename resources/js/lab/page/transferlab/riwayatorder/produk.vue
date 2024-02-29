@@ -11,6 +11,10 @@ export default {
             modalseri: false,
             headers: [
                 {
+                    text: 'No',
+                    value: 'no'
+                },
+                {
                     text: 'Nama Barang',
                     value: 'nama'
                 },
@@ -77,6 +81,11 @@ export default {
                                     </div>
                                 </div>
                                 <data-table :headers="headers" :items="headerSO?.produk" :search="search">
+                                    <template #item.no="{ item, index }">
+                                        <div>
+                                            {{ index + 1 }}
+                                        </div>
+                                    </template>
                                     <template #item.aksi="{ item }">
                                         <div>
                                             <button class="btn btn-outline-primary" @click="openModalSeri(item.noseri)">
