@@ -7,6 +7,8 @@ use App\Exports\LaporanPenjualanAll;
 use App\Models\AktifPeriode;
 use App\Models\Customer;
 use App\Models\DetailEkatalog;
+use App\Models\DetailLogistik;
+use App\Models\DetailLogistikPart;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananDsb;
 use App\Models\DetailPesananPart;
@@ -34,6 +36,7 @@ use App\Models\TFProduksi;
 use PDF;
 use Carbon\Doctrine\CarbonType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Carbon;
 
@@ -1971,28 +1974,109 @@ class PenjualanController extends Controller
                 ->rawColumns(['log', 'nama_customer'])
                 ->make(true);
         } else if ($parameter == 'no_sj') {
-            $data = DB::connection('si_21')->table('gudang_on')
-                ->select(
-                    // 'seri_on.noseri_on as noseri',
-                    // 'admjual_on.nopo_on as no_po',
-                    // 'qc_on.tglterima_on as tglterima_on',
-                    // 'qc_on.tglserah_on as tglserah_on',
-                    'gudang_on.tglsj_on as tgl_sj',
-                    'gudang_on.nosj_on as no_sj',
-                    // 'spa_on.satuan_on as satuan',
-                    // 'distributor.pabrik as c_ekat_nama',
-                    // 'produk_master.nam_prod as p_nama'
-                )
-                // ->leftjoin('gudang_on', 'gudang_on.nolkppgdg_on', '=', 'seri_on.lkppfk_on')
-                // ->leftjoin('admjual_on', 'admjual_on.nolkppadm_on', '=', 'seri_on.lkppfk_on')
-                // ->leftjoin('qc_on', 'qc_on.nolkppqc_on', '=', 'seri_on.lkppfk_on')
-                // ->leftjoin('spa_on', 'spa_on.nolkpp_on', '=', 'seri_on.lkppfk_on')
-                // ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_on.pabrik_on')
-                // ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spa_on.idprod_on')
-                ->where('gudang_on.nosj_on', 'LIKE', '%' . $value . '%')
-                ->groupby('gudang_on.nosj_on')
-                ->get();
-            return response()->json(['data' => $data]);
+             $data = Logistik::select(
+                'logistik.id',
+                'logistik.nosurat as no_sj',
+                'logistik.tgl_kirim as tgl_sj',
+                'logistik.noresi as resi',
+                'logistik.ket',
+
+                'c_ekat.nama as c_ekat_nama',
+
+                'c_spa_prd.nama as c_spa_prd_nama',
+                'c_spa_prt.nama as c_spa_prt_nama',
+
+                'c_spb_prd.nama as c_spb_prd_nama',
+                'c_spb_prt.nama as c_spb_prt_nama',
+
+                 'p_prd.no_po as po_prd',
+                 'p_prt.no_po as po_prt',
+
+            )
+                ->leftJoin('detail_logistik_part',  'detail_logistik_part.logistik_id',  '=',  'logistik.id')
+                ->leftJoin('detail_pesanan_part',  'detail_pesanan_part.id',  '=',  'detail_logistik_part.detail_pesanan_part_id')
+                ->leftJoin('pesanan as p_prt',  'p_prt.id',  '=',  'detail_pesanan_part.pesanan_id')
+
+                ->leftJoin('detail_logistik',  'detail_logistik.logistik_id',  '=',  'logistik.id')
+                ->leftJoin('detail_pesanan_produk',  'detail_pesanan_produk.id',  '=',  'detail_logistik.detail_pesanan_produk_id')
+                ->leftJoin('detail_pesanan',  'detail_pesanan.id',  '=',  'detail_pesanan_produk.detail_pesanan_id')
+                ->leftJoin('pesanan as p_prd',  'p_prd.id',  '=',  'detail_pesanan.pesanan_id')
+
+
+                 ->leftJoin('ekatalog',  'ekatalog.pesanan_id',  '=',  'p_prd.id')
+                 ->leftJoin('customer as c_ekat',  'c_ekat.id',  '=',  'ekatalog.customer_id')
+
+                 ->leftJoin('spa as spa_prd',  'spa_prd.pesanan_id',  '=',  'p_prd.id')
+                 ->leftJoin('customer as c_spa_prd',  'c_spa_prd.id',  '=',  'spa_prd.customer_id')
+                 ->leftJoin('spa as spa_prt',  'spa_prt.pesanan_id',  '=',  'p_prt.id')
+                 ->leftJoin('customer as c_spa_prt',  'c_spa_prt.id',  '=',  'spa_prt.customer_id')
+
+                 ->leftJoin('spb as spb_prd',  'spb_prd.pesanan_id',  '=',  'p_prd.id')
+                 ->leftJoin('customer as c_spb_prd',  'c_spb_prd.id',  '=',  'spb_prd.customer_id')
+                 ->leftJoin('spb as spb_prt',  'spb_prt.pesanan_id',  '=',  'p_prt.id')
+                 ->leftJoin('customer as c_spb_prt',  'c_spb_prt.id',  '=',  'spb_prt.customer_id')
+
+
+                ->where('logistik.nosurat',  'LIKE', '%' . $value . '%')
+                ->orderBy('logistik.id','DESC')
+                ->groupBy('logistik.id');
+
+             if($data->count() > 0){
+                    foreach($data->get() as $d){
+
+                        if($d->c_ekat_nama != null){
+                            $c = $d->c_ekat_nama;
+                        }else if($d->c_spa_prd_nama != null){
+                            $c = $d->c_spa_prd_nama;
+                        }else if($d->c_spa_prt_nama != null){
+                            $c = $d->c_spa_prt_nama;
+                        }else if($d->c_spb_prd_nama != null){
+                            $c = $d->c_spb_prd_nama;
+                        }else if($d->c_spb_prt_nama != null){
+                            $c = $d->c_spb_prt_nama;
+                        }
+
+                        if($d->po_prd != null){
+                            $po = $d->po_prd;
+                        }else{
+                            $po = $d->po_prt;
+                        }
+
+
+                        $obj[] = array(
+                            'no_sj' => $d->no_sj,
+                            'tgl_kirim' => $d->tgl_sj,
+                            'resi' => $d->resi,
+                            'po' => $po,
+                            'customer' => $c,
+                            'ket' => $d->ket
+                        );
+                    }
+             }
+
+                return response()->json(['data' =>$obj]);
+            // $data = DB::connection('si_21')->table('gudang_on')
+            //     ->select(
+            //         // 'seri_on.noseri_on as noseri',
+            //         // 'admjual_on.nopo_on as no_po',
+            //         // 'qc_on.tglterima_on as tglterima_on',
+            //         // 'qc_on.tglserah_on as tglserah_on',
+            //         'gudang_on.tglsj_on as tgl_sj',
+            //         'gudang_on.nosj_on as no_sj',
+            //         // 'spa_on.satuan_on as satuan',
+            //         // 'distributor.pabrik as c_ekat_nama',
+            //         // 'produk_master.nam_prod as p_nama'
+            //     )
+            //     // ->leftjoin('gudang_on', 'gudang_on.nolkppgdg_on', '=', 'seri_on.lkppfk_on')
+            //     // ->leftjoin('admjual_on', 'admjual_on.nolkppadm_on', '=', 'seri_on.lkppfk_on')
+            //     // ->leftjoin('qc_on', 'qc_on.nolkppqc_on', '=', 'seri_on.lkppfk_on')
+            //     // ->leftjoin('spa_on', 'spa_on.nolkpp_on', '=', 'seri_on.lkppfk_on')
+            //     // ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_on.pabrik_on')
+            //     // ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spa_on.idprod_on')
+            //     ->where('gudang_on.nosj_on', 'LIKE', '%' . $value . '%')
+            //     ->groupby('gudang_on.nosj_on')
+            //     ->get();
+            // return response()->json(['data' => $data]);
             // $data = Logistik::select(
             //     'logistik.nosurat as nosj',
             //     'logistik.noresi',

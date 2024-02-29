@@ -142,9 +142,6 @@
                                                     id="data" name="data" placeholder="Masukkan data" />
                                                 <div class="invalid-feedback" id="msgdata">
                                                 </div>
-                                                <small class="text-muted">
-                                                    Silahkan masukkan data dengan lengkap
-                                                </small>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -342,7 +339,7 @@
                                             <th>No Resi</th>
                                             <th>Customer</th>
                                             <th>Tanggal Kirim</th>
-                                            <th>Status</th>
+                                            <th>Ket</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1005,9 +1002,6 @@
                     },
                     columns: [{
                             data: null,
-                            render: function(data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            }
                         },
                         {
                             data: 'po',
@@ -1026,11 +1020,11 @@
                             className: 'align-center'
                         },
                         {
-                            data: 'tgl_sj',
+                            data: 'tgl_kirim',
                             className: 'nowraps align-center'
                         },
                         {
-                            data: 'status',
+                            data: 'ket',
                             className: 'nowraps align-center'
                         }
                     ],
