@@ -206,7 +206,7 @@ class KontrolLabs implements WithTitle, FromView, ShouldAutoSize
             foreach ($data->get() as $index => $d) {
                 $obj[] = array(
                     // create sprintf
-                    'no' => sprintf('%05d', $index + 1),
+                    'no' => sprintf('%05d', $d->no),
                     'p_id' => $d->p_id,
                     'no_po' => $d->no_po,
                     'no_order' => 'LAB-' . str_pad($d->no_order, 4, '0', STR_PAD_LEFT),

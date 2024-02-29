@@ -36,6 +36,4 @@ class UjiLabDetail extends Model
     {
         return $this->belongsTo(Karyawan::class,'pemeriksa_id');
     }
-
-
 }
