@@ -142,6 +142,9 @@
                                                     id="data" name="data" placeholder="Masukkan data" />
                                                 <div class="invalid-feedback" id="msgdata">
                                                 </div>
+                                                <small class="text-muted">
+                                                    Silahkan masukkan data dengan lengkap
+                                                </small>
                                             </div>
                                         </div>
                                         <div class="form-group row">
