@@ -11,18 +11,22 @@ export default {
             filterHasil: [],
             headers: [
                 {
-                    text: "No",
-                    value: "no",
+                    text: 'Nomor Seri',
+                    value: 'no_seri'
                 },
                 {
-                    text: "No. Seri",
-                    value: "no_seri",
+                    text: 'Tanggal Transfer',
+                    value: 'tanggal'
                 },
                 {
-                    text: "Hasil",
-                    value: "status",
-                }
-            ]
+                    text: 'Penguji',
+                    value: 'penguji'
+                },
+                {
+                    text: 'Hasil',
+                    value: 'hasil'
+                },
+            ],
         }
     },
     methods: {
@@ -70,7 +74,7 @@ export default {
             if (this.filterHasil.length > 0) {
                 this.filterHasil.forEach((filter) => {
                     filtered = filtered.concat(
-                        this.noseri.filter((item) => item.status == filter)
+                        this.noseri.filter((item) => item.hasil == filter)
                     );
                 });
             } else {
@@ -85,7 +89,7 @@ export default {
         },
         getAllStatusUnique() {
             return [
-                ...new Set(this.noseri.map((item) => item.status))]
+                ...new Set(this.noseri.map((item) => item.hasil))]
         }
     }
 }
@@ -138,8 +142,10 @@ export default {
                         </div>
                     </div>
                     <data-table :headers="headers" :items="filteredDalamProses" :search="search">
-                        <template #item.status="{ item }">
-                            <hasil :hasil="item.status" />
+                        <template #item.hasil="{ item }">
+                            <div>
+                                <hasil :hasil="item.hasil" />
+                            </div>
                         </template>
                     </data-table>
                 </div>

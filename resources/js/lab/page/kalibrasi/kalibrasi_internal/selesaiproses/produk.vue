@@ -21,10 +21,6 @@ export default {
                     value: 'jumlah'
                 },
                 {
-                    text: 'Hasil',
-                    value: 'hasil'
-                },
-                {
                     text: 'Aksi',
                     value: 'aksi'
                 }

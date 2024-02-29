@@ -11,10 +11,6 @@ export default {
             modalseri: false,
             headers: [
                 {
-                    text: 'No',
-                    value: 'no'
-                },
-                {
                     text: 'Nama Barang',
                     value: 'nama'
                 },
@@ -80,7 +76,7 @@ export default {
                                         <input type="text" class="form-control" v-model="search" placeholder="Cari..." />
                                     </div>
                                 </div>
-                                <data-table :headers="headers" :items="headerSO?.detail" :search="search">
+                                <data-table :headers="headers" :items="headerSO?.produk" :search="search">
                                     <template #item.aksi="{ item }">
                                         <div>
                                             <button class="btn btn-outline-primary" @click="openModalSeri(item.noseri)">

@@ -1,15 +1,33 @@
 <script>
+import hasil from '../../../../components/hasil.vue';
 export default {
     props: ['noseri'],
+    components: {
+        hasil
+    },
     data() {
         return {
             headers: [
                 {
                     text: 'Nomor Seri',
                     value: 'no_seri'
-                }
+                },
+                {
+                    text: 'Tanggal Kalibrasi',
+                    value: 'tanggal'
+                },
+                {
+                    text: 'Penguji',
+                    value: 'penguji'
+                },
+                {
+                    text: 'Hasil',
+                    value: 'hasil'
+                },
+
             ],
-            search: ''
+            search: '',
+            filterHasil: [],
         }
     },
     methods: {
@@ -18,8 +36,63 @@ export default {
             this.$nextTick(() => {
                 this.$emit('closeModal');
             })
-        }
+        },
+        clickFilterHasil(filter) {
+            if (this.filterHasil.includes(filter)) {
+                this.filterHasil = this.filterHasil.filter(
+                    (item) => item !== filter
+                );
+            } else {
+                this.filterHasil.push(filter);
+            }
+        },
+        statusText(text) {
+            if (typeof text == "string") {
+                text = text.toLowerCase();
+            }
+            switch (text) {
+                case "ok":
+                    return "lolos kalibrasi";
+                    break;
+                case "not_ok":
+                    return "tidak lolos kalibrasi";
+                    break;
+                case "lolos_pengujian":
+                    return "lolos pengujian";
+                    break;
+                case "tidak_lolos_pengujian":
+                    return "tidak lolos pengujian";
+                    break;
+                default:
+                    return "belum kalibrasi";
+                    break;
+            }
+        },
     },
+    computed: {
+        filteredDalamProses() {
+            let filtered = [];
+            if (this.filterHasil.length > 0) {
+                this.filterHasil.forEach((filter) => {
+                    filtered = filtered.concat(
+                        this.noseri.filter((item) => item.hasil == filter)
+                    );
+                });
+            } else {
+                filtered = this.noseri;
+            }
+            return filtered.map((item, index) => {
+                return {
+                    ...item,
+                    no: index + 1,
+                };
+            });
+        },
+        getAllStatusUnique() {
+            return [
+                ...new Set(this.noseri.map((item) => item.hasil))]
+        }
+    }
 }
 </script>
 <template>
@@ -33,12 +106,48 @@ export default {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="d-flex flex-row-reverse bd-highlight">
+                    <div class="d-flex bd-highlight">
+                        <div class="p-2 flex-grow-1 bd-highlight">
+                            <span class="float-left filter">
+                                <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                                <form id="filter_ekat">
+                                    <div class="dropdown-menu">
+                                        <div class="px-3 py-3">
+                                            <div class="form-group">
+                                                <label for="jenis_penjualan">Keterangan</label>
+                                            </div>
+                                            <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" :ref="status"
+                                                        :value="status" id="status1" @click="
+                                                            clickFilterHasil(
+                                                                status
+                                                            )
+                                                            " />
+                                                    <label class="form-check-label text-uppercase" for="status1">
+                                                        {{ statusText(status) }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </span>
+                        </div>
                         <div class="p-2 bd-highlight">
-                            <input type="text" class="form-control" v-model="search" placeholder="Cari..." />
+                            <input type="text" class="form-control" placeholder="Cari..." v-model="search" />
                         </div>
                     </div>
-                    <data-table :headers="headers" :items="noseri" />
+                    <data-table :headers="headers" :items="noseri">
+                        <template #item.hasil="{ item }">
+                            <div>
+                                <hasil :hasil="item.hasil" />
+                            </div>
+                        </template>
+                    </data-table>
                 </div>
             </div>
         </div>

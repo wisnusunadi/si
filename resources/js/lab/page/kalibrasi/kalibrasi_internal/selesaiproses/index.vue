@@ -22,8 +22,8 @@ export default {
                     value: 'jenis_pemilik'
                 },
                 {
-                    text: 'Tanggal Kalibrasi',
-                    value: 'tanggal'
+                    text: 'Customer',
+                    value: 'customer'
                 },
                 {
                     text: 'Aksi',

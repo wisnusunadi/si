@@ -29,7 +29,29 @@ export default {
                 }
             ],
             dalamProses: [],
-            selesaiProses: [],
+            selesaiProses: [
+                {
+                    order: 'LAB-001',
+                    nama: 'PT. ABC',
+                    jenis_pemilik: 'PT. ABC',
+                    customer: 'PT. ABC',
+                    produk: [
+                        {
+                            nama: 'BLOOD PRESSURE MONITOR',
+                            tipe: 'ABPM50',
+                            jumlah: 1,
+                            noseri: [
+                                {
+                                    no_seri: '1234567890',
+                                    hasil: 'ok',
+                                    penguji: 'Budi',
+                                    tanggal: '21 Februari 2024',
+                                }
+                            ]
+                        }
+                    ]
+                },
+            ],
             riwayat_kalibrasi: [],
             showTabs: 'dalamProses'
         }
@@ -39,21 +61,21 @@ export default {
             try {
                 this.$store.dispatch('setLoading', true)
                 const { data: dalamProses } = await axios.get('/api/labs/kalibrasi').then(res => res.data)
-                const { data: selesaiProses } = await axios.get(`/api/labs/kalibrasi/riwayat?years=${this.$store.state.years}`)
+                // const { data: selesaiProses } = await axios.get(`/api/labs/kalibrasi/riwayat?years=${this.$store.state.years}`)
                 const { data: riwayat_kalibrasi } = await axios.get(`/api/labs/riwayat_uji?years=${this.$store.state.years}`)
                 this.dalamProses = dalamProses
-                this.selesaiProses = selesaiProses.map(item => {
-                    return {
-                        ...item,
-                        tanggal: this.formatDate(item.tgl_kalibrasi),
-                        produk: item.produk.map(produk => {
-                            return {
-                                ...produk,
-                                hasil: item.hasil == 'ok' ? 'Lolos Kalibrasi' : 'Tidak Lolos Kalibrasi'
-                            }
-                        })
-                    }
-                })
+                // this.selesaiProses = selesaiProses.map(item => {
+                //     return {
+                //         ...item,
+                //         tanggal: this.formatDate(item.tgl_kalibrasi),
+                //         produk: item.produk.map(produk => {
+                //             return {
+                //                 ...produk,
+                //                 hasil: item.hasil == 'ok' ? 'Lolos Kalibrasi' : 'Tidak Lolos Kalibrasi'
+                //             }
+                //         })
+                //     }
+                // })
                 this.riwayat_kalibrasi = riwayat_kalibrasi.map(item => {
                     return {
                         ...item,
