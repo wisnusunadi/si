@@ -1067,7 +1067,7 @@
                             className: 'nowraps align-center',
                             render: function(data, type, row) {
                                 if (row.c_ekat_nama != null) {
-                                    return `${row.c_ekat_nama} <br /> ${row?.satuan}`;
+                                    return `${row.c_ekat_nama} <br /> <small>${row?.satuan}</small>`;
                                 } else if (row.c_spa_nama != null) {
                                     return row.c_spa_nama;
                                 } else if (row.c_spb_nama != null) {
