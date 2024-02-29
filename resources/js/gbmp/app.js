@@ -7,6 +7,7 @@ import Vuex from "vuex";
 import vSelect from "vue-select";
 import storeData from "./store";
 import DataTable from "./components/DataTable.vue";
+import persentase from "./components/persentase.vue";
 import "vue-select/dist/vue-select.css";
 
 window.Vue = Vue;
@@ -15,6 +16,7 @@ Vue.use(VueSweetalert2);
 Vue.use(Vuex);
 Vue.component("v-select", vSelect);
 Vue.component('data-table', DataTable);
+Vue.component('persentase', persentase);
 
 const store = new Vuex.Store(storeData);
 

@@ -1,8 +1,10 @@
 <script>
 import Header from '../../components/header.vue'
+import Persentase from '../../components/persentase.vue'
 export default {
     components: {
         Header,
+        Persentase,
     },
     data() {
         return {
@@ -43,6 +45,11 @@ export default {
                     sortable: false,
                 },
                 {
+                    text: 'Persentase',
+                    value: 'persentase',
+                    sortable: false,
+                },
+                {
                     text: 'Aksi',
                     value: 'aksi',
                 }
@@ -56,6 +63,7 @@ export default {
                     tanggal_permintaan: '23 September 2023',
                     tgl_akhir: '2023-10-23',
                     tanggal_akhir_persiapan: '23 Oktober 2023',
+                    persentase: 25
                 },
                 {
                     no_permintaan: '20210621002',
@@ -64,6 +72,7 @@ export default {
                     tanggal_permintaan: '30 September 2023',
                     tgl_akhir: '2023-11-23',
                     tanggal_akhir_persiapan: '23 November 2023',
+                    persentase: 50
                 }
             ],
             tanggalAwalPermintaan: '',
@@ -80,7 +89,14 @@ export default {
                     no: index + 1
                 }
             })
-        }
+        },
+        detail(item) {
+            this.showModal = true
+            this.detailSelected = item
+            this.$nextTick(() => {
+                $('.modalProduk').modal('show');
+            })
+        },
     },
     computed: {
         filterData() {
@@ -218,8 +234,13 @@ export default {
                             </form>
                         </span>
                     </template>
+                    <template #item.persentase="{ item }">
+                        <div>
+                            <persentase :persentase="item.persentase" />
+                        </div>
+                    </template>
                     <template #item.aksi="{ item }">
-                        <button class="btn btn-sm btn-outline-primary">
+                        <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
                             <i class="fas fa-eye"></i>
                             Detail
                         </button>
