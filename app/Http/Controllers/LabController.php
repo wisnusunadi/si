@@ -1482,13 +1482,13 @@ class LabController extends Controller
         $ujilab = UjiLabDetail::select('uji_lab_detail.id as lab_id', 'detail_pesanan_produk.gudang_barang_jadi_id', 'produk.nama as tipe', 'kode_lab.nama as nama', 'gdg_barang_jadi.nama as variasi', 'detail_pesanan_produk.id as dpp_id')
             ->selectRaw(
                 "(CASE
-        WHEN uji_lab_detail.status = 'ok' AND uji_lab_detail.is_ready = 1  THEN 1
+        WHEN uji_lab_detail.status = 'ok'   THEN 1
         ELSE 0
         END) AS ok",
             )
             ->selectRaw(
                 "(CASE
-        WHEN uji_lab_detail.status = 'nok'  AND uji_lab_detail.is_ready = 1 THEN 1
+        WHEN uji_lab_detail.status = 'nok'  THEN 1
         ELSE 0
         END) AS nok",
             )
@@ -1531,7 +1531,7 @@ class LabController extends Controller
             ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
             ->leftJoin('kode_lab', 'kode_lab.id', '=', 'produk.kode_lab_id')
             ->where('uji_lab_id', $id)
-            ->where('is_ready', 1)
+            // ->where('is_ready', 1)
             // ->havingRaw('belum !=0')
             ->get();
 
