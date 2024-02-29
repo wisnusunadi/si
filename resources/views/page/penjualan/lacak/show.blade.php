@@ -142,6 +142,9 @@
                                                     id="data" name="data" placeholder="Masukkan data" />
                                                 <div class="invalid-feedback" id="msgdata">
                                                 </div>
+                                                <small class="text-muted">
+                                                    Silahkan masukkan data yang ingin dilacak dengan benar
+                                                </small>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -502,7 +505,6 @@
                 $('#nosotable').DataTable({
                     destroy: true,
                     processing: true,
-                    serverSide: true,
                     ajax: {
                         'url': '/api/penjualan/lacak/data/no_so/' + data,
                         'dataType': 'json',
@@ -518,7 +520,10 @@
                         data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false,
-                        className: 'nowraps'
+                        className: 'nowraps',
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
                     }, {
                         data: 'so',
                         className: 'nowraps align-center'
@@ -527,14 +532,59 @@
                         className: 'nowraps align-center'
                     }, {
                         data: 'tgl_po',
-                        className: 'nowraps align-center'
+                        className: 'nowraps align-center',
+                        render: function(data, type, row) {
+                            return row.tgl_po != null ? moment(new Date(row.tgl_po).toString())
+                                .format('DD-MM-YYYY') : '-';
+                        }
                     }, {
                         data: 'nama_customer',
-                        className: 'align-center'
+                        className: 'align-center',
+                        render: function(data, type, row) {
+                            if (row.c_ekat_nama != null) {
+                                return `${row.c_ekat_nama} <br /> <small>${row?.satuan}</small>`;
+                            } else if (row.c_spa_nama != null) {
+                                return row.c_spa_nama;
+                            } else if (row.c_spb_nama != null) {
+                                return row.c_spb_nama;
+                            } else {
+                                return '-';
+                            }
+                        }
                     }, {
-                        data: 'log',
-                        className: 'nowraps align-center'
-                    }, ]
+                        data: 'state_nama',
+                        className: 'nowraps align-center',
+                        render: function(data, type, row) {
+                            if (row.state_nama == "Penjualan") {
+                                return '<span class="red-text badge">' + row.state_nama +
+                                    '</span>';
+                            } else if (row.state_nama == "PO") {
+                                return '<span class="purple-text badge">' + row.state_nama +
+                                    '</span>';
+                            } else if (row.state_nama == "Gudang") {
+                                return '<span class="orange-text badge">' + row.state_nama +
+                                    '</span>';
+                            } else if (row.state_nama == "QC") {
+                                return '<span class="yellow-text badge">' + row.state_nama +
+                                    '</span>';
+                            } else if (row.state_nama == "Belum Terkirim") {
+                                return '<span class="red-text badge">' + row.state_nama +
+                                    '</span>';
+                            } else if (row.state_nama == "Terkirim Sebagian") {
+                                return '<span class="blue-text badge">' + row.state_nama +
+                                    '</span>';
+                            } else if (row.state_nama == "Kirim") {
+                                return '<span class="green-text badge">' + row.state_nama +
+                                    '</span>';
+                            } else {
+                                return '-';
+                            }
+                        }
+                    }, ],
+                    columnDefs: [{
+                        "defaultContent": "-",
+                        "targets": "_all"
+                    }],
                 });
             }
 
@@ -747,13 +797,13 @@
                             className: 'nowraps align-center',
                             render: function(data, type, row) {
                                 if (row.c_ekat_nama != null) {
-                                    return row.c_ekat_nama;
+                                    return `${row.c_ekat_nama} <br /> <small>${row?.satuan}</small>`;
                                 } else if (row.c_spa_nama != null) {
                                     return row.c_spa_nama;
                                 } else if (row.c_spb_nama != null) {
                                     return row.c_spb_nama;
                                 } else {
-                                    return '-'
+                                    return '-';
                                 }
                             }
                         },
@@ -874,7 +924,6 @@
                 $('#customertable').DataTable({
                     destroy: true,
                     processing: true,
-                    serverSide: true,
                     ajax: {
                         'url': '/api/penjualan/lacak/data/customer/' + data,
                         'dataType': 'json',
@@ -889,41 +938,95 @@
                     columns: [{
                             data: 'DT_RowIndex',
                             orderable: false,
-                            searchable: false
+                            searchable: false,
+                            render: function(data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
                         },
                         {
                             data: 'noseri',
                             className: 'nowraps align-center'
                         },
                         {
-                            data: 'no_so',
+                            data: 'no_po',
                             className: 'nowraps align-center'
                         },
                         {
                             data: 'nama_customer',
-                            className: 'nowraps align-center'
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                if (row.c_ekat_nama != null) {
+                                    return `${row.c_ekat_nama} <br /> <small>${row?.satuan}</small>`;
+                                } else if (row.c_spa_nama != null) {
+                                    return row.c_spa_nama;
+                                } else if (row.c_spb_nama != null) {
+                                    return row.c_spb_nama;
+                                } else {
+                                    return '-';
+                                }
+                            }
                         },
                         {
-                            data: 'nama_produk',
+                            data: 'p_nama',
                             className: 'nowraps align-center'
                         },
                         {
                             data: 'tgl_uji',
-                            className: 'nowraps align-center'
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                return row.tgl_uji != null ? moment(new Date(row.tgl_uji)
+                                        .toString())
+                                    .format('DD-MM-YYYY') : '-';
+                            }
                         },
                         {
                             data: 'no_sj',
-                            className: 'nowraps align-center'
+                            className: 'nowraps align-center',
                         },
                         {
-                            data: 'tgl_kirim',
-                            className: 'nowraps align-center'
+                            data: 'tgl_sj',
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                return row.tgl_sj != null ? moment(new Date(row.tgl_sj)
+                                        .toString())
+                                    .format('DD-MM-YYYY') : '-';
+                            }
                         },
                         {
-                            data: 'status',
-                            className: 'nowraps align-center'
+                            data: 'state_nama',
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                if (row.state_nama == "Penjualan") {
+                                    return '<span class="red-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else if (row.state_nama == "PO") {
+                                    return '<span class="purple-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else if (row.state_nama == "Gudang") {
+                                    return '<span class="orange-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else if (row.state_nama == "QC") {
+                                    return '<span class="yellow-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else if (row.state_nama == "Belum Terkirim") {
+                                    return '<span class="red-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else if (row.state_nama == "Terkirim Sebagian") {
+                                    return '<span class="blue-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else if (row.state_nama == "Kirim") {
+                                    return '<span class="green-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else {
+                                    return '-';
+                                }
+                            }
                         }
-                    ]
+                    ],
+                    columnDefs: [{
+                        "defaultContent": "-",
+                        "targets": "_all"
+                    }]
                 });
 
             }
@@ -932,7 +1035,6 @@
                 $('#produktable').DataTable({
                     destroy: true,
                     processing: true,
-                    serverSide: true,
                     ajax: {
                         'url': '/api/penjualan/lacak/data/produk/' + data,
                         'dataType': 'json',
@@ -945,43 +1047,97 @@
                         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                     },
                     columns: [{
-                            data: 'DT_RowIndex',
+                            data: null,
                             orderable: false,
-                            searchable: false
+                            searchable: false,
+                            render: function(data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
                         },
                         {
                             data: 'noseri',
                             className: 'nowraps align-center'
                         },
                         {
-                            data: 'no_so',
+                            data: 'no_po',
                             className: 'nowraps align-center'
                         },
                         {
                             data: 'nama_customer',
-                            className: 'nowraps align-center'
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                if (row.c_ekat_nama != null) {
+                                    return `${row.c_ekat_nama} <br /> ${row?.satuan}`;
+                                } else if (row.c_spa_nama != null) {
+                                    return row.c_spa_nama;
+                                } else if (row.c_spb_nama != null) {
+                                    return row.c_spb_nama;
+                                } else {
+                                    return '-';
+                                }
+                            }
                         },
                         {
-                            data: 'nama_produk',
+                            data: 'p_nama',
                             className: 'nowraps align-center'
                         },
                         {
                             data: 'tgl_uji',
-                            className: 'nowraps align-center'
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                return row.tgl_uji != null ? moment(new Date(row.tgl_uji)
+                                        .toString())
+                                    .format('DD-MM-YYYY') : '-';
+                            }
                         },
                         {
                             data: 'no_sj',
                             className: 'nowraps align-center'
                         },
                         {
-                            data: 'tgl_kirim',
-                            className: 'nowraps align-center'
+                            data: 'tgl_sj',
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                return row.tgl_sj != null ? moment(new Date(row.tgl_sj)
+                                        .toString())
+                                    .format('DD-MM-YYYY') : '-';
+                            }
                         },
                         {
-                            data: 'status',
-                            className: 'nowraps align-center'
+                            data: 'state_nama',
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                if (row.state_nama == "Penjualan") {
+                                    return '<span class="red-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else if (row.state_nama == "PO") {
+                                    return '<span class="purple-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else if (row.state_nama == "Gudang") {
+                                    return '<span class="orange-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else if (row.state_nama == "QC") {
+                                    return '<span class="yellow-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else if (row.state_nama == "Belum Terkirim") {
+                                    return '<span class="red-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else if (row.state_nama == "Terkirim Sebagian") {
+                                    return '<span class="blue-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else if (row.state_nama == "Kirim") {
+                                    return '<span class="green-text badge">' + row.state_nama +
+                                        '</span>';
+                                } else {
+                                    return '-';
+                                }
+                            }
                         }
-                    ]
+                    ],
+                    columnDefs: [{
+                        "defaultContent": "-",
+                        "targets": "_all"
+                    }]
                 });
             }
 
@@ -1024,7 +1180,12 @@
                         },
                         {
                             data: 'tgl_kirim',
-                            className: 'nowraps align-center'
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                return row.tgl_kirim != null ? moment(new Date(row.tgl_kirim)
+                                        .toString())
+                                    .format('DD-MM-YYYY') : '-';
+                            }
                         },
                         {
                             data: 'ket',
