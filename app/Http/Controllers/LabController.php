@@ -1354,6 +1354,31 @@ class LabController extends Controller
             ], 500);
         }
     }
+    public function ubah_alamat_pemilik(Request $request)
+    {
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+        DB::beginTransaction();
+        try {
+            //code...
+            $uji = UjiLab::find($obj->id);
+            $uji->alamat = $obj->alamat;
+            $uji->save();
+
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 404,
+                'message' => $th->getMessage(),
+            ], 500);
+        }
+    }
     public function lab_store_uji(Request $request)
     {
         $obj =  json_decode(json_encode($request->all()), FALSE);

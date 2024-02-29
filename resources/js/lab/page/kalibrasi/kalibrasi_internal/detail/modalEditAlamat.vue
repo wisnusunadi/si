@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 export default {
     props: ['header'],
     data() {
@@ -12,6 +13,19 @@ export default {
             this.$nextTick(() => {
                 this.$emit('close')
             })
+        },
+        async simpan() {
+            try {
+                await axios.post('/api/labs/ubah_alamat_pemilik', {
+                    id: this.header.id,
+                    alamat: this.alamat
+                })
+                this.$swal.fire('Berhasil', 'Alamat berhasil diubah', 'success')
+                this.closeModal()
+                this.$emit('refresh')
+            } catch (error) {
+                this.$swal.fire('Gagal', 'Gagal mengubah alamat', 'error')
+            }
         }
     },
 }
@@ -35,7 +49,7 @@ export default {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-primary" @click="simpan">Simpan</button>
                 </div>
             </div>
         </div>

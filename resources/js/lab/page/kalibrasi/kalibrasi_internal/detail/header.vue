@@ -39,7 +39,7 @@ export default {
 <template>
     <div class="card">
         <modalEditPemilik :header="header" v-if="showEditPemilik" @close="showEditPemilik = false" @refresh="refresh" />
-        <modalEditAlamat :header="header" v-if="showEditAlamat" @close="showEditAlamat = false" />
+        <modalEditAlamat :header="header" v-if="showEditAlamat" @close="showEditAlamat = false" @refresh="refresh" />
         <div class="card-body">
             <h2>Info Penjualan</h2>
             <div class="card-text">
