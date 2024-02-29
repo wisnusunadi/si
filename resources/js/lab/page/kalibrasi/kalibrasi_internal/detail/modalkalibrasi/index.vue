@@ -25,8 +25,10 @@ export default {
     },
     methods: {
         close() {
-            this.$emit("close");
             $(".modalKalibrasi").modal("hide");
+            // this.$nextTick(() => {
+            //     this.$emit("close");
+            // });
         },
         async getKaryawan() {
             const { data: karyawan } = await axios.get('/api/karyawan_all')
@@ -82,7 +84,7 @@ export default {
 <template>
     <div class="modal fade modalKalibrasi" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-dialog-fullscreen modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">
@@ -94,7 +96,7 @@ export default {
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-2">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="form-group">
@@ -110,20 +112,24 @@ export default {
                                         <label for="">Jenis Pemilik</label>
                                         <v-select :options="pemilik" v-model="form.jenis_pemilik"></v-select>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="">Hasil Kalibrasi</label>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="customRadioInline1" name="customRadioInline"
-                                                class="custom-control-input" value="ok" v-model="form.hasil" />
-                                            <label class="custom-control-label" for="customRadioInline1">ALAT BAIK DAN
-                                                LAIK
-                                                DIGUNAKAN</label>
+                                    <div class="form-group row">
+                                        <div class="col-12">
+                                            <label for="">Hasil Kalibrasi</label>
                                         </div>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="customRadioInline2" name="customRadioInline"
-                                                class="custom-control-input" value="nok" v-model="form.hasil" />
-                                            <label class="custom-control-label" for="customRadioInline2">ALAT TIDAK LAIK
-                                                PAKAI</label>
+                                        <div class="col-12">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" id="customRadioInline1" name="customRadioInline"
+                                                    class="custom-control-input" value="ok" v-model="form.hasil" />
+                                                <label class="custom-control-label" for="customRadioInline1">ALAT BAIK DAN
+                                                    LAIK
+                                                    DIGUNAKAN</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" id="customRadioInline2" name="customRadioInline"
+                                                    class="custom-control-input" value="nok" v-model="form.hasil" />
+                                                <label class="custom-control-label" for="customRadioInline2">ALAT TIDAK LAIK
+                                                    PAKAI</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group" v-if="header.edit_alamat">
@@ -162,25 +168,21 @@ export default {
         </div>
     </div>
 </template>
-<!-- <style>
+<style>
 .modal {
     padding: 0 !important;
 }
 
-.modal .modal-dialog {
-    width: 100%;
+.modal .modal-dialog-fullscreen {
+    width: 90%;
     max-width: none;
-    height: 100%;
     margin: 0;
-}
-
-.modal .modal-content {
-    height: 100%;
-    border: 0;
-    border-radius: 0;
+    left: 5%;
+    top: 10%;
+    /* transform: translate(-10%, 0%); */
 }
 
 .modal .modal-body {
     overflow-y: auto;
 }
-</style> -->
+</style>

@@ -59,7 +59,7 @@ export default {
             modal: false,
             selectedSO: null,
             riwayatKalibrasi: [],
-            showTabs: 'internal',
+            showTabs: 'dalamProses',
             transferKalibrasiNoSeri: [],
         };
     },
@@ -124,14 +124,15 @@ export default {
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home" type="button"
-                    @click="showTabs = 'internal'" role="tab" aria-controls="pills-home" aria-selected="true">Kalibrasi</a>
+                    @click="showTabs = 'dalamProses'" role="tab" aria-controls="pills-home" aria-selected="true">Dalam
+                    Proses</a>
 
             </li>
-            <!-- <li class="nav-item" role="presentation">
+            <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile" type="button"
-                    @click="showTabs = 'eksternal'" role="tab" aria-controls="pills-profile"
-                    aria-selected="false">Eksternal</a>
-            </li> -->
+                    @click="showTabs = 'selesaiProses'" role="tab" aria-controls="pills-profile"
+                    aria-selected="false">Selesai Proses</a>
+            </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-contact" type="button"
                     @click="showTabs = 'riwayat'" role="tab" aria-controls="pills-contact" aria-selected="false">Riwayat</a>
@@ -139,70 +140,19 @@ export default {
         </ul>
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
-                v-if="showTabs == 'internal'">
-                <div class="card">
-                    <div class="card-body">
-                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" id="pills-dalamproses-tab" data-toggle="pill"
-                                    data-target="#pills-dalamproses" type="button" role="tab"
-                                    aria-controls="pills-dalamproses" aria-selected="true">Dalam Proses</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="pills-riwayat-tab" data-toggle="pill" data-target="#pills-riwayat"
-                                    type="button" role="tab" aria-controls="pills-riwayat" aria-selected="false">Selesai
-                                    Proses</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="pills-dalamproses" role="tabpanel"
-                                aria-labelledby="pills-dalamproses-tab">
-                                <produk v-if="modal" @close="modal = false" :headerSO="selectedSO" @refresh="getData" />
-                                <div class="d-flex flex-row-reverse bd-highlight">
-                                    <div class="p-2 bd-highlight">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Cari..."
-                                                v-model="search" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <data-table :headers="headers" :items="dataTable" :search="search"
-                                    v-if="!$store.state.loading">
-                                    <template #item.aksi="{ item }">
-                                        <button class="btn btn-outline-primary btn-sm" @click="transfer(item)">
-                                            Transfer
-                                        </button>
-                                    </template>
-                                </data-table>
-                                <div class="spinner-border spinner-border-sm" role="status" v-else>
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="pills-riwayat" role="tabpanel"
-                                aria-labelledby="pills-riwayat-tab">
-                                <riwayat :dataRiwayat="riwayatKalibrasi" @changeYears="changeYear" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
-                v-if="showTabs == 'eksternal'">
+                v-if="showTabs == 'dalamProses'">
                 <div class="card">
                     <div class="card-body">
                         <produk v-if="modal" @close="modal = false" :headerSO="selectedSO" @refresh="getData" />
                         <div class="d-flex flex-row-reverse bd-highlight">
                             <div class="p-2 bd-highlight">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Cari..."
-                                        v-model="searchEksternal" />
+                                    <input type="text" class="form-control" placeholder="Cari..." v-model="search" />
                                 </div>
                             </div>
                         </div>
 
-                        <data-table :headers="headers" :items="dataTableEksternal" :search="searchEksternal"
-                            v-if="!$store.state.loading">
+                        <data-table :headers="headers" :items="dataTable" :search="search" v-if="!$store.state.loading">
                             <template #item.aksi="{ item }">
                                 <button class="btn btn-outline-primary btn-sm" @click="transfer(item)">
                                     Transfer
@@ -212,6 +162,14 @@ export default {
                         <div class="spinner-border spinner-border-sm" role="status" v-else>
                             <span class="sr-only">Loading...</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
+                v-if="showTabs == 'selesaiProses'">
+                <div class="card">
+                    <div class="card-body">
+                        <riwayat :dataRiwayat="riwayatKalibrasi" @changeYears="changeYear" />
                     </div>
                 </div>
             </div>

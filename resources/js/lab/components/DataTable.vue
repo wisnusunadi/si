@@ -68,6 +68,7 @@ export default {
                 <tr>
                     <th scope="col" v-for="header in headers" :key="header.text"
                         :class="header.align ? header.align : 'text-left'" @click="sort(header)"
+                        :style="{width: header.width ? header.width : 'auto'}"
                         :sortable="header.sortable == false ? false : true">
                         <slot :name="`header.${header.value}`">
                             {{ header.text }}
@@ -82,7 +83,9 @@ export default {
             <tbody v-if="renderPaginate.length > 0">
                 <!-- sesuaikan dengan header -->
                 <tr v-for="(data, idx) in renderPaginate" :key="idx">
-                    <td v-for="header in headers" :key="header.value" :class="header.align ? header.align : 'text-left'">
+                    <td v-for="header in headers" :key="header.value"
+                    :style="{width: header.width ? header.width : 'auto'}"
+                    :class="header.align ? header.align : 'text-left'">
                         <slot :name="`item.${header.value}`" :item="data" :index="idx">
                             {{ data[header.value] }}
                         </slot>

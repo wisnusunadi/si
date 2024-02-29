@@ -25,6 +25,7 @@ export default {
                 {
                     text: "Metode Kalibrasi",
                     value: "metode_id",
+                    width: "25%",
                 },
                 {
                     text: "Ruang Kalibrasi",

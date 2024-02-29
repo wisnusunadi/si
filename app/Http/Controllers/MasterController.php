@@ -310,8 +310,6 @@ class MasterController extends Controller
     }
     public function get_data_all_ekspedisi(Request $r)
     {
-    public function get_data_all_ekspedisi(Request $r)
-    {
         try {
             $ekspedisi = Ekspedisi::where('nama', 'LIKE', '%' . $r->input('term', '') . '%')->get();
 

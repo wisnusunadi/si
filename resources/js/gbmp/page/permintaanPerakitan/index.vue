@@ -45,9 +45,10 @@ export default {
                     sortable: false,
                 },
                 {
-                    text: 'Persentase',
+                    text: 'Status Persiapan',
                     value: 'persentase',
                     sortable: false,
+                    align: 'text-left'
                 },
                 {
                     text: 'Aksi',
@@ -57,6 +58,7 @@ export default {
             search: '',
             permintaanPerakitan: [
                 {
+                    id: 1,
                     no_permintaan: '20210621001',
                     no_bppb: '20210621001',
                     tgl_permintaan: '2023-09-23',
@@ -66,6 +68,7 @@ export default {
                     persentase: 25
                 },
                 {
+                    id: 2,
                     no_permintaan: '20210621002',
                     no_bppb: '20210621002',
                     tgl_permintaan: '2023-09-30',
@@ -90,11 +93,12 @@ export default {
                 }
             })
         },
-        detail(item) {
-            this.showModal = true
-            this.detailSelected = item
-            this.$nextTick(() => {
-                $('.modalProduk').modal('show');
+        detail(id) {
+            this.$router.push({
+                name: 'permintaan-perakitan-detail',
+                params: {
+                    id: id
+                }
             })
         },
     },
@@ -240,7 +244,7 @@ export default {
                         </div>
                     </template>
                     <template #item.aksi="{ item }">
-                        <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
+                        <button class="btn btn-sm btn-outline-primary" @click="detail(item.id)">
                             <i class="fas fa-eye"></i>
                             Detail
                         </button>
