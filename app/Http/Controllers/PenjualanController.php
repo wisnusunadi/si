@@ -4650,7 +4650,7 @@ class PenjualanController extends Controller
         if ($jenis == 'ekatalog') {
             $ekatalog = Ekatalog::find($id);
 
-
+            $item = array();
             foreach ($ekatalog->Pesanan->DetailPesanan as $key_paket => $d) {
                 $item[$key_paket] = array(
                     'jenis' => 'po',
@@ -4752,6 +4752,7 @@ class PenjualanController extends Controller
             return view('page.penjualan.penjualan.edit_ekatalog', ['e' => $ekatalog, 'item' => $data]);
         } else if ($jenis == 'spa') {
             $spa = Spa::find($id);
+            $item = array();
             if ($spa->Pesanan->DetailPesananDsb->isEmpty() && $spa->Pesanan->DetailPesanan->isEmpty()) {
                 $data = array();
             } else {
@@ -4821,6 +4822,7 @@ class PenjualanController extends Controller
             return view('page.penjualan.penjualan.edit_spa', ['e' => $spa, 'item' => $data]);
         } else {
             $spb = Spb::find($id);
+            $item = array();
             if ($spb->Pesanan->DetailPesananDsb->isEmpty() && $spb->Pesanan->DetailPesanan->isEmpty()) {
                 $data = array();
             } else {
