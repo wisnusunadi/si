@@ -1928,24 +1928,68 @@ class LabController extends Controller
 
     public function transfer_riwayat(Request $request)
     {
+        // $years = $request->years;
+        // $data = RiwayatTf::where('dari', 22)->whereYear('created_at', $years)->get();
+        // $setData = array();
+        // foreach ($data as $d) {
+        //     $e = json_decode($d->isi);
+        //     $setData[] = array(
+        //         'no_order' => $e->header->no_order,
+        //         'id' => $d->id,
+        //         'so' => $e->header->so,
+        //         'no_po' => $e->header->po,
+        //         'no_order' => $e->header->no_order,
+        //         'pemilik' => $e->header->pemilik,
+        //         'pemilik_sertif' => $e->header->pemilik_sertif,
+        //         'tgl_transfer' => $d->created_at->format('Y-m-d'),
+        //         'customer' => $e->header->customer,
+        //         'detail' => $e->produk
+        //     );
+        // }
+        // return response()->json($setData);
         $years = $request->years;
-        $data = RiwayatTf::where('dari', 22)->whereYear('created_at', $years)->get();
-        $setData = array();
-        foreach ($data as $d) {
-            $e = json_decode($d->isi);
-            $setData[] = array(
+        $uji = UjiLab::addSelect([
+            'tf' => function ($q) {
+                $q->selectRaw('coalesce(SUM(CASE WHEN is_ready = "0" THEN 1 ELSE 0 END),0)')
+                    ->from('uji_lab_detail')
+                    ->whereColumn('uji_lab_detail.uji_lab_id', 'uji_lab.id');
+            },
+        ])
+        ->havingRaw('tf > 0')
+        ->whereYear('created_at',$years);
+
+        $uji_head = array();
+        foreach ($uji->get() as $key_d => $d) {
+            $uji_head[$key_d] = array(
                 'id' => $d->id,
-                'so' => $e->header->so,
-                'no_po' => $e->header->po,
-                'no_order' => $e->header->no_order,
-                'pemilik' => $e->header->pemilik,
-                'pemilik_sertif' => $e->header->pemilik_sertif,
-                'tgl_transfer' => $d->created_at->format('Y-m-d'),
-                'customer' => $e->header->customer,
-                'detail' => $e->produk
+                'no_order' => 'LAB-' . sprintf("%04d",  $d->no_order),
+                'jenis_pemilik' => $d->JenisPemilik->nama,
+                'customer' =>  $d->nama,
+                'produk' => array()
             );
+            foreach($d->GetDetailTf() as $key_e => $e){
+                $uji_head[$key_d]['produk'][$key_e] = array(
+                    'id' => $e->id,
+                    'lab_id' => $e->uji_lab_id,
+                    'gbj_id' => $e->DetailPesananProduk->GudangBarangjadi->id,
+                    'tipe' => $e->DetailMetodeLab->MetodeLab->metode,
+                    'nama' => $e->DetailPesananProduk->GudangBarangjadi->Produk->nama .' '. $e->DetailPesananProduk->GudangBarangjadi->nama,
+                    'no_seri' => array(),
+                );
+
+                foreach($d->GetSeriTf($e->DetailPesananProduk->GudangBarangjadi->id) as $key_f => $f){
+                    $uji_head[$key_d]['produk'][$key_e]['no_seri'][$key_f] = array(
+                        'no_seri' => $f->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri,
+                        'tgl_kalibrasi' => $f->tgl_kalibrasi,
+                        'tgl_tf' => $f->tf_log == NULL ?  $f->tgl_kalibrasi :    Carbon::parse($f->tf_log)->format('Y-m-d'),
+                        'hasil' => $f->status,
+                        'penguji' => $f->Karyawan->nama,
+                    );
+                }
+            }
         }
-        return response()->json($setData);
+
+        return response()->json($uji_head);
     }
 
     public function transfer_data()

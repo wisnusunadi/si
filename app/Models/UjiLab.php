@@ -64,4 +64,26 @@ class UjiLab extends Model
         ->get();
         return  $detail;
     }
+    public function GetDetailTf()
+    {
+        $id = $this->id;
+        $detail = UjiLabDetail::with(['NoseriDetailPesanan.NoseriTGbj.NoseriBarangJadi','DetailPesananProduk.GudangBarangjadi.Produk','Karyawan'])
+        ->leftjoin('detail_pesanan_produk','detail_pesanan_produk.id','=','uji_lab_detail.detail_pesanan_produk_id')
+        ->where('uji_lab_id',$id)
+        ->where('is_ready',0)
+        ->groupby('gudang_barang_jadi_id')
+        ->get();
+        return  $detail;
+    }
+    public function GetSeriTf($gbj)
+    {
+        $id = $this->id;
+        $detail = UjiLabDetail::with(['NoseriDetailPesanan.NoseriTGbj.NoseriBarangJadi','DetailPesananProduk.GudangBarangjadi.Produk','Karyawan'])
+        ->leftjoin('detail_pesanan_produk','detail_pesanan_produk.id','=','uji_lab_detail.detail_pesanan_produk_id')
+        ->where('uji_lab_id',$id)
+        ->where('detail_pesanan_produk.gudang_barang_jadi_id',$gbj)
+        ->where('is_ready',0)
+        ->get();
+        return  $detail;
+    }
 }
