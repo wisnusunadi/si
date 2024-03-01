@@ -2,15 +2,18 @@
 export default {
     props: ['hasil'],
     methods: {
-        hasilIcon(value){
-            if(typeof value == 'string'){
+        hasilIcon(value) {
+            if (typeof value == 'string') {
                 value = value.toLowerCase()
             }
-            switch(value){
+            switch (value) {
                 case 'ok':
                     return 'fa-check-circle text-success'
                     break;
                 case 'not_ok':
+                    return 'fa-times-circle text-danger'
+                    break;
+                case 'nok':
                     return 'fa-times-circle text-danger'
                     break;
                 case 'lolos_pengujian':

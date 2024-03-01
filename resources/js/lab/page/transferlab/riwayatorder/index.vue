@@ -9,19 +9,15 @@ export default {
             headers: [
                 {
                     text: 'No Order',
-                    value: 'order'
+                    value: 'no_order'
                 },
                 {
                     text: 'Nama Pemilik',
-                    value: 'nama'
+                    value: 'customer'
                 },
                 {
                     text: 'Nama Pemilik Sertifikat',
                     value: 'jenis_pemilik'
-                },
-                {
-                    text: 'Customer',
-                    value: 'customer'
                 },
                 {
                     text: 'Aksi',

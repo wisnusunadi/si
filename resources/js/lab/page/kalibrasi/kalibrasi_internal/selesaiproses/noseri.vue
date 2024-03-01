@@ -54,7 +54,7 @@ export default {
                 case "ok":
                     return "lolos kalibrasi";
                     break;
-                case "not_ok":
+                case "nok":
                     return "tidak lolos kalibrasi";
                     break;
                 case "lolos_pengujian":
@@ -141,7 +141,7 @@ export default {
                             <input type="text" class="form-control" placeholder="Cari..." v-model="search" />
                         </div>
                     </div>
-                    <data-table :headers="headers" :items="noseri">
+                    <data-table :headers="headers" :items="filteredDalamProses">
                         <template #item.tanggal="{ item }">
                             <div>
                                 {{ formatDate(item.tgl_kalibrasi) }}

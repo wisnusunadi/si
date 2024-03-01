@@ -97,28 +97,11 @@ export default {
             try {
                 this.$store.dispatch("setLoading", true);
                 const { data } = await axios.get("/api/labs/tf").then((res) => res.data);
-                // const { data: riwayat_kalibrasi } = await axios.get(`/api/labs/tf_riwayat?years=${this.$store.state.years}`);
+                const { data: riwayat_kalibrasi } = await axios.get(`/api/labs/tf_riwayat?years=${this.$store.state.years}`);
                 const { data: noseri } = await axios.get(`/api/labs/tf_riwayat_seri?years=${this.$store.state.years}`);
                 this.dataTable = data
                 this.dataTableEksternal = data
-                // this.riwayatKalibrasi = riwayat_kalibrasi.map(item => {
-                //     return {
-                //         ...item,
-                //         tgl_transfer: this.formatDate(item.tgl_transfer),
-                //         detail: item.detail.map((produk, index) => {
-                //             return {
-                //                 ...produk,
-                //                 no: index + 1,
-                //                 noseri: produk.noseri.map((noseri, index) => {
-                //                     return {
-                //                         ...noseri,
-                //                         no: index + 1,
-                //                     }
-                //                 })
-                //             }
-                //         })
-                //     }
-                // })
+                this.riwayatKalibrasi = riwayat_kalibrasi
                 this.transferKalibrasiNoSeri = noseri.map(item => {
                     return {
                         ...item,

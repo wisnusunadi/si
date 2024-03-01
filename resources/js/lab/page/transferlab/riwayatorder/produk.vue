@@ -16,11 +16,11 @@ export default {
                 },
                 {
                     text: 'Nama Barang',
-                    value: 'nama'
+                    value: 'tipe'
                 },
                 {
                     text: 'Tipe',
-                    value: 'tipe'
+                    value: 'nama'
                 },
                 {
                     text: 'Jumlah',
@@ -86,9 +86,14 @@ export default {
                                             {{ index + 1 }}
                                         </div>
                                     </template>
+                                    <template #item.jumlah="{item}">
+                                        <div>
+                                            {{ item.no_seri?.length ?? 0 }}
+                                        </div>
+                                    </template>
                                     <template #item.aksi="{ item }">
                                         <div>
-                                            <button class="btn btn-outline-primary" @click="openModalSeri(item.noseri)">
+                                            <button class="btn btn-outline-primary" @click="openModalSeri(item.no_seri)">
                                                 <i class="fa fa-eye"></i>
                                                 Detail
                                             </button>
