@@ -79,7 +79,7 @@ export default {
                 console.log(error)
                 swal.fire('Error', 'Terjadi kesalahan', 'error')
             }
-            
+
         },
         persentase(jmlPerItem, jmlTotal) {
             let item = parseInt(jmlPerItem)
@@ -127,13 +127,28 @@ export default {
     },
     created() {
         this.getData()
+    },
+    watch: {
+        selectedProduk() {
+            // hitung status false pada item paket
+            let statusFalse = this.produk.map(paket => {
+                return paket.item.filter(item => !item.status)
+            }).flat()
+
+            if (this.selectedProduk.length === statusFalse.length) {
+                this.checkAll = true
+            } else {
+                this.checkAll = false
+            }
+        }
     }
 }
 </script>
 <template>
     <div>
         <modalNoSeri :detailSelected="detailSelectedNoSeri" v-if="showModalNoseri" @closeModal="closeModalNoseri" />
-        <div class="modal fade modalDetail" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade modalDetail" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
