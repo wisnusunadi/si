@@ -46,8 +46,22 @@ class UjiLab extends Model
     {
         $id = $this->id;
         $detail = UjiLabDetail::with(['NoseriDetailPesanan.NoseriTGbj.NoseriBarangJadi','DetailPesananProduk.GudangBarangjadi.Produk','Karyawan'])
-       ->where('uji_lab_id',$id)
-        ->whereNotIN('status',['belum'])->get();
+        ->leftjoin('detail_pesanan_produk','detail_pesanan_produk.id','=','uji_lab_detail.detail_pesanan_produk_id')
+        ->where('uji_lab_id',$id)
+        ->whereNotIN('status',['belum'])
+        ->groupby('gudang_barang_jadi_id')
+        ->get();
+        return  $detail;
+    }
+    public function GetSeri($gbj)
+    {
+        $id = $this->id;
+        $detail = UjiLabDetail::with(['NoseriDetailPesanan.NoseriTGbj.NoseriBarangJadi','DetailPesananProduk.GudangBarangjadi.Produk','Karyawan'])
+        ->leftjoin('detail_pesanan_produk','detail_pesanan_produk.id','=','uji_lab_detail.detail_pesanan_produk_id')
+        ->where('uji_lab_id',$id)
+        ->where('detail_pesanan_produk.gudang_barang_jadi_id',$gbj)
+        ->whereNotIN('status',['belum'])
+        ->get();
         return  $detail;
     }
 }

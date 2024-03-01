@@ -193,6 +193,8 @@ class LabController extends Controller
             $uji_head[$key_d] = array(
                 'id' => $d->id,
                 'no_order' => 'LAB-' . sprintf("%04d",  $d->no_order),
+                'jenis_pemilik' => $d->JenisPemilik->nama,
+                'customer' =>  $d->nama,
                 'produk' => array()
             );
             foreach($d->GetDetail() as $key_e => $e){
@@ -200,12 +202,19 @@ class LabController extends Controller
                     'id' => $e->id,
                     'lab_id' => $e->uji_lab_id,
                     'gbj_id' => $e->DetailPesananProduk->GudangBarangjadi->id,
+                    'tipe' => $e->DetailMetodeLab->MetodeLab->metode,
                     'nama' => $e->DetailPesananProduk->GudangBarangjadi->Produk->nama .' '. $e->DetailPesananProduk->GudangBarangjadi->nama,
-                    'no_seri' => $e->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri,
-                    'tgl_kalibrasi' => $e->tgl_kalibrasi,
-                    'hasil' => $e->status,
-                    'penguji' => $e->Karyawan->nama,
+                    'no_seri' => array(),
                 );
+
+                foreach($d->GetSeri($e->DetailPesananProduk->GudangBarangjadi->id) as $key_f => $f){
+                    $uji_head[$key_d]['produk'][$key_e]['no_seri'][$key_f] = array(
+                        'no_seri' => $f->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri,
+                        'tgl_kalibrasi' => $f->tgl_kalibrasi,
+                        'hasil' => $f->status,
+                        'penguji' => $f->Karyawan->nama,
+                    );
+                }
             }
         }
 
