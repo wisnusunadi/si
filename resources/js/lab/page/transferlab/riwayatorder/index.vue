@@ -9,27 +9,19 @@ export default {
             headers: [
                 {
                     text: 'No Order',
-                    value: 'no_order'
+                    value: 'order'
                 },
                 {
                     text: 'Nama Pemilik',
-                    value: 'pemilik'
+                    value: 'nama'
                 },
                 {
                     text: 'Nama Pemilik Sertifikat',
-                    value: 'pemilik_sertif'
-                },
-                {
-                    text: 'No SO',
-                    value: 'so'
+                    value: 'jenis_pemilik'
                 },
                 {
                     text: 'Customer',
                     value: 'customer'
-                },
-                {
-                    text: 'Tanggal Transfer',
-                    value: 'tgl_transfer'
                 },
                 {
                     text: 'Aksi',
@@ -81,8 +73,8 @@ export default {
                             <div class="px-3 py-3">
                                 <div class="form-group">
                                     <div class="form-group form-check" v-for="year in getYear" :key="year">
-                                        <input class="form-check-input" type="radio" v-model="$store.state.years" @change="changeYear(year)"
-                                            :id="`exampleRadios${year}`" :value="year" :checked="year ==
+                                        <input class="form-check-input" type="radio" v-model="$store.state.years"
+                                            @change="changeYear(year)" :id="`exampleRadios${year}`" :value="year" :checked="year ==
                                                 new Date().getFullYear()
                                                 " />
                                         <label class="form-check-label" :for="`exampleRadios${year}`">

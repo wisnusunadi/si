@@ -1,15 +1,20 @@
 <script>
 import Loading from "../../../../components/loading.vue";
 import modalEditPemilik from "./modalEditPemilik.vue";
+import modalEditAlamat from "./modalEditAlamat.vue";
+import Modal from '../../../master/alat/modal.vue';
 export default {
     components: {
         Loading,
         modalEditPemilik,
+        modalEditAlamat,
+        Modal,
     },
     props: ["header"],
     data() {
         return {
             showEditPemilik: false,
+            showEditAlamat: false,
         }
     },
     methods: {
@@ -17,6 +22,12 @@ export default {
             this.showEditPemilik = true;
             this.$nextTick(() => {
                 $(".modalEditPemilik").modal("show");
+            });
+        },
+        editAlamat() {
+            this.showEditAlamat = true;
+            this.$nextTick(() => {
+                $(".modalAlamat").modal("show");
             });
         },
         refresh() {
@@ -28,6 +39,7 @@ export default {
 <template>
     <div class="card">
         <modalEditPemilik :header="header" v-if="showEditPemilik" @close="showEditPemilik = false" @refresh="refresh" />
+        <modalEditAlamat :header="header" v-if="showEditAlamat" @close="showEditAlamat = false" @refresh="refresh" />
         <div class="card-body">
             <h2>Info Penjualan</h2>
             <div class="card-text">
@@ -44,6 +56,9 @@ export default {
                         <br v-if="header.jenis_pemilik.label">
                         <span>{{ header.nama }}</span> <br />
                         <span class="d-inline-block text-truncate" style="max-width: 150px;">{{ header.alamat }}</span>
+                        <button class="btn btn-outline-warning btn-sm" @click="editAlamat" v-if="!header.edit_alamat">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
                         <br />
                     </div>
                     <div class="p-2 flex-fill bd-highlight">

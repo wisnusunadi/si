@@ -875,6 +875,7 @@ Route::prefix('/labs')->group(function () {
     Route::get('/cetak_log_prd', [App\Http\Controllers\LabController::class, 'cetak_sertifikat_log_prd']);
     Route::post('/uji', [App\Http\Controllers\LabController::class, 'lab_store_uji']);
     Route::post('/ubah_jenis_pemilik', [App\Http\Controllers\LabController::class, 'ubah_jenis_pemilik']);
+    Route::post('/ubah_alamat_pemilik', [App\Http\Controllers\LabController::class, 'ubah_alamat_pemilik']);
     Route::get('/riwayat_uji', [App\Http\Controllers\LabController::class, 'riwayat_uji']);
     Route::post('/riwayat_uji_laporan', [App\Http\Controllers\LabController::class, 'riwayat_uji_laporan']);
 });

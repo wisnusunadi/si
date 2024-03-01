@@ -9,6 +9,10 @@ export default {
         return {
             headers: [
                 {
+                    text: 'No',
+                    value: 'no'
+                },
+                {
                     text: 'Nama Barang',
                     value: 'nama'
                 },
@@ -19,10 +23,6 @@ export default {
                 {
                     text: 'Jumlah',
                     value: 'jumlah'
-                },
-                {
-                    text: 'Hasil',
-                    value: 'hasil'
                 },
                 {
                     text: 'Aksi',
@@ -77,6 +77,11 @@ export default {
                             </div>
                         </div>
                         <data-table :headers="headers" :items="produk.produk" :search="search">
+                            <template #item.no="{item, index}">
+                                <div>
+                                    {{ index + 1 }}
+                                </div>
+                            </template>
                             <template #item.aksi="{ item }">
                                 <div>
                                     <button class="btn btn-outline-primary" @click="detailNoSeri(item.noseri)">

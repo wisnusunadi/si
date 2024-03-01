@@ -74,71 +74,23 @@ export default {
                     </div>
                     <div class="modal-body">
                         <div class="card">
-                            <div class="card-header">
-                                <div class="row row-cols-2">
-                                    <div class="col">
-                                        <label for="">
-                                            Nomor SO
-                                        </label>
-                                        <div class="card nomor-so">
-                                            <div class="card-body">
-                                                <span id="so">{{
-                                                    headerSO.so
-                                                }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col">
-                                        <label for="">
-                                            Nomor PO
-                                        </label>
-                                        <div class="card nomor-akn">
-                                            <div class="card-body">
-                                                <span id="akn">{{
-                                                    headerSO.no_po
-                                                }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col">
-                                        <label for="">Tanggal Transfer</label>
-                                        <div class="card nomor-po">
-                                            <div class="card-body">
-                                                <span id="po">{{
-                                                    formatDate(
-                                                        headerSO.tgl_transfer
-                                                    )
-                                                }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col">
-                                        <label for="">Customer</label>
-                                        <div class="card instansi">
-                                            <div class="card-body">
-                                                <span id="instansi">{{
-                                                    headerSO.customer
-                                                }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="card-body">
                                 <div class="d-flex flex-row-reverse bd-highlight">
                                     <div class="p-2 bd-highlight">
                                         <input type="text" class="form-control" v-model="search" placeholder="Cari..." />
                                     </div>
                                 </div>
-                                <data-table :headers="headers" :items="headerSO?.detail" :search="search">
+                                <data-table :headers="headers" :items="headerSO?.produk" :search="search">
+                                    <template #item.no="{ item, index }">
+                                        <div>
+                                            {{ index + 1 }}
+                                        </div>
+                                    </template>
                                     <template #item.aksi="{ item }">
                                         <div>
-                                            <button class="btn btn-primary btn-sm" @click="openModalSeri(item.noseri)">
-                                                <i class="fa fa-qrcode"></i>
-                                                Nomor Seri
+                                            <button class="btn btn-outline-primary" @click="openModalSeri(item.noseri)">
+                                                <i class="fa fa-eye"></i>
+                                                Detail
                                             </button>
                                         </div>
                                     </template>
