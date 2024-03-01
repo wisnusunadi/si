@@ -77,14 +77,19 @@ export default {
                             </div>
                         </div>
                         <data-table :headers="headers" :items="produk.produk" :search="search">
-                            <template #item.no="{item, index}">
+                            <template #item.no="{ item, index }">
                                 <div>
                                     {{ index + 1 }}
                                 </div>
                             </template>
+                            <template #item.jumlah="{ item }">
+                                <div>
+                                    {{ item.no_seri?.length ?? 0 }}
+                                </div>
+                            </template>
                             <template #item.aksi="{ item }">
                                 <div>
-                                    <button class="btn btn-outline-primary" @click="detailNoSeri(item.noseri)">
+                                    <button class="btn btn-outline-primary" @click="detailNoSeri(item.no_seri)">
                                         <i class="fa fa-eye"></i>
                                         Detail
                                     </button>
