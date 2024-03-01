@@ -29,29 +29,7 @@ export default {
                 }
             ],
             dalamProses: [],
-            selesaiProses: [
-                {
-                    order: 'LAB-001',
-                    nama: 'PT. ABC',
-                    jenis_pemilik: 'PT. ABC',
-                    customer: 'PT. ABC',
-                    produk: [
-                        {
-                            nama: 'BLOOD PRESSURE MONITOR',
-                            tipe: 'ABPM50',
-                            jumlah: 1,
-                            noseri: [
-                                {
-                                    no_seri: '1234567890',
-                                    hasil: 'ok',
-                                    penguji: 'Budi',
-                                    tanggal: '21 Februari 2024',
-                                }
-                            ]
-                        }
-                    ]
-                },
-            ],
+            selesaiProses: [],
             riwayat_kalibrasi: [],
             showTabs: 'dalamProses'
         }
@@ -61,21 +39,10 @@ export default {
             try {
                 this.$store.dispatch('setLoading', true)
                 const { data: dalamProses } = await axios.get('/api/labs/kalibrasi').then(res => res.data)
-                // const { data: selesaiProses } = await axios.get(`/api/labs/kalibrasi/riwayat?years=${this.$store.state.years}`)
+                const { data: selesaiProses } = await axios.get(`/api/labs/kalibrasi/riwayat?years=${this.$store.state.years}`)
                 const { data: riwayat_kalibrasi } = await axios.get(`/api/labs/riwayat_uji?years=${this.$store.state.years}`)
                 this.dalamProses = dalamProses
-                // this.selesaiProses = selesaiProses.map(item => {
-                //     return {
-                //         ...item,
-                //         tanggal: this.formatDate(item.tgl_kalibrasi),
-                //         produk: item.produk.map(produk => {
-                //             return {
-                //                 ...produk,
-                //                 hasil: item.hasil == 'ok' ? 'Lolos Kalibrasi' : 'Tidak Lolos Kalibrasi'
-                //             }
-                //         })
-                //     }
-                // })
+                this.selesaiProses = selesaiProses
                 this.riwayat_kalibrasi = riwayat_kalibrasi.map(item => {
                     return {
                         ...item,
@@ -109,8 +76,8 @@ export default {
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile" type="button"
-                @click="showTabs = 'selesaiProses'"
-                    role="tab" aria-controls="pills-profile" aria-selected="false">Selesai Proses</a>
+                    @click="showTabs = 'selesaiProses'" role="tab" aria-controls="pills-profile"
+                    aria-selected="false">Selesai Proses</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-contact" type="button"
@@ -124,7 +91,8 @@ export default {
 
             </div>
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                <selesaiProsesComponent :selesaiProses="selesaiProses" v-if="showTabs == 'selesaiProses'"  @changeYears="getData" />
+                <selesaiProsesComponent :selesaiProses="selesaiProses" v-if="showTabs == 'selesaiProses'"
+                    @changeYears="getData" />
             </div>
             <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                 <riwayat :produk="riwayat_kalibrasi" @changeYears="changeYears" v-if="showTabs == 'riwayat'" />

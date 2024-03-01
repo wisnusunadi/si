@@ -142,6 +142,11 @@ export default {
                         </div>
                     </div>
                     <data-table :headers="headers" :items="noseri">
+                        <template #item.tanggal="{ item }">
+                            <div>
+                                {{ formatDate(item.tgl_kalibrasi) }}
+                            </div>
+                        </template>
                         <template #item.hasil="{ item }">
                             <div>
                                 <hasil :hasil="item.hasil" />

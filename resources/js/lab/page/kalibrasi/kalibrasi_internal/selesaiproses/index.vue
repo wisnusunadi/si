@@ -15,15 +15,11 @@ export default {
                 },
                 {
                     text: 'Nama Pemilik',
-                    value: 'nama'
+                    value: 'pemilik'
                 },
                 {
                     text: 'Nama Pemilik Sertifikat',
                     value: 'jenis_pemilik'
-                },
-                {
-                    text: 'Customer',
-                    value: 'customer'
                 },
                 {
                     text: 'Aksi',
