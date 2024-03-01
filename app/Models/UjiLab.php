@@ -42,4 +42,12 @@ class UjiLab extends Model
         where uji_lab_detail.uji_lab_id = ? and uji_lab_detail.status != "belum"', [$id]);
         return  $produk[0]->jumlah;
     }
+    public function GetDetail()
+    {
+        $id = $this->id;
+        $detail = UjiLabDetail::with(['NoseriDetailPesanan.NoseriTGbj.NoseriBarangJadi','DetailPesananProduk.GudangBarangjadi.Produk','Karyawan'])
+       ->where('uji_lab_id',$id)
+        ->whereNotIN('status',['belum'])->get();
+        return  $detail;
+    }
 }

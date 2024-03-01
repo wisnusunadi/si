@@ -139,27 +139,78 @@ class LabController extends Controller
     }
     public function kalibrasi_riwayat(Request $request)
     {
-        $years = $request->years;
-        $data = SystemLog::where(['tipe' => 'Lab', 'subjek' => 'Kalibrasi Produk'])->whereYear('created_at', $years)->get();
+        // $years = $request->years;
+        // $data = SystemLog::where(['tipe' => 'Lab', 'subjek' => 'Kalibrasi Produk'])->whereYear('created_at', $years)->get();
 
-        $obj = [];
+        // $obj = [];
 
-        foreach ($data as $d) {
-            $x = json_decode($d->response);
-            $obj[] = array(
+        // foreach ($data as $d) {
+        //     $x = json_decode($d->response);
+        //     $obj[] = array(
+        //         'id' => $d->id,
+        //         'order' => $x->no_order,
+        //         'nama' => $x->nama,
+        //         'jenis_pemilik' => $x->jenis_pemilik->label,
+        //         'so' => $x->so,
+        //         'customer' => $x->customer,
+        //         'tgl_kalibrasi' => $x->tgl_kalibrasi,
+        //         'jenis_transaksi' => 'internal',
+        //         'hasil' => $x->hasil,
+        //         'produk' => $x->produk
+        //     );
+        // }
+        // return response()->json($obj);
+         $years = $request->years;
+        $uji = UjiLab::addSelect([
+            'uji' => function ($q) {
+                $q->selectRaw('coalesce(SUM(CASE WHEN status != "belum" THEN 1 ELSE 0 END),0)')
+                    ->from('uji_lab_detail')
+                    ->whereColumn('uji_lab_detail.uji_lab_id', 'uji_lab.id');
+            },
+        ])
+        ->havingRaw('uji > 0')
+        ->whereYear('created_at',$years);
+
+
+        // $seri = UjiLabDetail::with(['NoseriDetailPesanan.NoseriTGbj.NoseriBarangJadi','DetailPesananProduk.GudangBarangjadi.Produk'])
+        // ->whereNotIN('status',['belum']);
+
+        // foreach ($seri->get() as $d) {
+        //     $uji_seri[] = array(
+        //         'id' => $d->id,
+        //         'lab_id' => $d->uji_lab_id,
+        //         'gbj_id' => $d->DetailPesananProduk->GudangBarangjadi->id,
+        //         'nama' => $d->DetailPesananProduk->GudangBarangjadi->Produk->nama .' '. $d->DetailPesananProduk->GudangBarangjadi->nama,
+        //         'no_seri' => $d->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri,
+        //     );
+        // }
+
+
+
+
+        $uji_head = array();
+        foreach ($uji->get() as $key_d => $d) {
+            $uji_head[$key_d] = array(
                 'id' => $d->id,
-                'order' => $x->no_order,
-                'nama' => $x->nama,
-                'jenis_pemilik' => $x->jenis_pemilik->label,
-                'so' => $x->so,
-                'customer' => $x->customer,
-                'tgl_kalibrasi' => $x->tgl_kalibrasi,
-                'jenis_transaksi' => 'internal',
-                'hasil' => $x->hasil,
-                'produk' => $x->produk
+                'no_order' => 'LAB-' . sprintf("%04d",  $d->no_order),
+                'produk' => array()
             );
+            foreach($d->GetDetail() as $key_e => $e){
+                $uji_head[$key_d]['produk'][$key_e] = array(
+                    'id' => $e->id,
+                    'lab_id' => $e->uji_lab_id,
+                    'gbj_id' => $e->DetailPesananProduk->GudangBarangjadi->id,
+                    'nama' => $e->DetailPesananProduk->GudangBarangjadi->Produk->nama .' '. $e->DetailPesananProduk->GudangBarangjadi->nama,
+                    'no_seri' => $e->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri,
+                    'tgl_kalibrasi' => $e->tgl_kalibrasi,
+                    'hasil' => $e->status,
+                    'penguji' => $e->Karyawan->nama,
+                );
+            }
         }
-        return response()->json($obj);
+
+        return response()->json($uji_head);
+
     }
     public function riwayat_uji_laporan(Request $request)
     {
