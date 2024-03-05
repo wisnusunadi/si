@@ -699,6 +699,31 @@ class ProduksiController extends Controller
             $tanggalAkhir = Carbon::parse($request->tanggalAkhir)->endOfDay();
 
             $data = JadwalRakitNoseriNonStok::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])->get();
+        } else if (isset($request->search)) {
+            $search = $request->search;
+            $data = JadwalRakitNoseriNonStok::where('noseri', 'like', '%' . $search . '%')
+                ->orWhere('ket', 'like', '%' . $search . '%')
+                ->orWhere('user', 'like', '%' . $search . '%')
+                ->get();
+        } else if (isset($request->noseri)) {
+            $tidak_ada = array();
+            $ada = array();
+
+            foreach ($request->noseri as $n) {
+                $cek = JadwalRakitNoseriNonStok::where('noseri', $n)->first();
+                if ($cek) {
+                    $ada[] = $cek->id;
+                } else {
+                    $tidak_ada[] = $n;
+                }
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+                'ada' => $ada,
+                'tidak_ada' => $tidak_ada
+            ], 200);
         }
 
         $obj = array();

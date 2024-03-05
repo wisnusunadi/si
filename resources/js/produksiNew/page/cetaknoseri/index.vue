@@ -112,42 +112,19 @@ export default {
                 $('.modalChecked').modal('show');
             });
         },
-        submit(noseri) {
+        async submit(noseri) {
             let noseriarray = noseri.split(/[\n, \t]/)
-            let noseridouble = []
-            let noserinotfound = []
+            noseriarray = noseriarray.filter((n) => n !== '')
+            noseriarray = [... new Set(noseriarray)]
 
-            noseriarray = noseriarray.filter((data) => {
-                return data !== '' && data !== null
+            const { data } = await axios.post('/api/prd/fg/non_stok/show', {
+                noseri: noseriarray
             })
 
-            noseriarray.forEach((item, index) => {
-                if (noseriarray.indexOf(item) !== index) {
-                    noseridouble.push(item)
-                }
-            })
-
-            if (noseridouble.length > 0) {
-                this.$swal('Peringatan!', `No. Seri ${noseridouble.join(', ')} duplikat`, 'warning')
-            }
-
-            noseriarray = [...new Set(noseriarray)]
-
-            for (let i = 0; i < noseriarray.length; i++) {
-                let found = false
-                for (let j = 0; j < this.items.length; j++) {
-                    if (noseriarray[i] === this.items[j].noseri) {
-                        found = true
-                        this.selectNoSeri(this.items[j].id)
-                    }
-                }
-                if (!found) {
-                    noserinotfound.push(noseriarray[i])
-                }
-            }
-
-            if (noserinotfound.length > 0) {
-                this.$swal('Peringatan!', `No. Seri ${noserinotfound.join(', ')} tidak ditemukan`, 'warning')
+            const { ada, tidak_ada } = data
+            this.noSeriSelected = ada
+            if (tidak_ada.length > 0) {
+                swal.fire('No. Seri Tidak Ada', `No. Seri ${tidak_ada.join(', ')} tidak ada di database`, 'warning')
             }
         },
         cetakSeriSatu(id) {
@@ -177,6 +154,24 @@ export default {
                 this.$store.dispatch('setLoading', false)
             }
         },
+        async searchData() {
+            try {
+                this.$store.dispatch('setLoading', true)
+                const { data } = await axios.post('/api/prd/fg/non_stok/show', {
+                    search: this.search,
+                })
+                this.items = data.map((item) => {
+                    return {
+                        tanggal: this.dateTimeFormat(item.tgl_buat),
+                        ...item
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.dispatch('setLoading', false)
+            }
+        }
     },
     watch: {
         noSeriSelected() {
@@ -184,6 +179,13 @@ export default {
                 this.checkAll = true;
             } else {
                 this.checkAll = false;
+            }
+        },
+        search() {
+            if (this.search === '') {
+                this.getData()
+            } else {
+                this.searchData()
             }
         }
     },
@@ -247,14 +249,14 @@ export default {
                         </span>
                     </div>
                     <div class="p-2 bd-highlight">
-                        <input type="text" class="form-control" v-model="search" placeholder="Cari...">
+                        <input type="text" class="form-control" v-model="search" placeholder="Cari..." @change="searchData">
                     </div>
                 </div>
                 <div class="d-flex flex-row-reverse bd-highlight">
                     <div class="p-2 bd-highlight">
                     </div>
                 </div>
-                <data-table :headers="headers" :items="items" :search="search">
+                <data-table :headers="headers" :items="items">
                     <template #header.id>
                         <div>
                             <input type="checkbox" :checked="checkAll" @click="checkedAll">
