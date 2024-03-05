@@ -698,6 +698,31 @@ class ProduksiController extends Controller
             $tanggalAkhir = Carbon::parse($request->tanggalAkhir)->endOfDay();
 
             $data = JadwalRakitNoseriNonStok::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])->get();
+        } else if (isset($request->search)) {
+            $search = $request->search;
+            $data = JadwalRakitNoseriNonStok::where('noseri', 'like', '%' . $search . '%')
+                ->orWhere('ket', 'like', '%' . $search . '%')
+                ->orWhere('user', 'like', '%' . $search . '%')
+                ->get();
+        } else if (isset($request->noseri)) {
+            $tidak_ada = array();
+            $ada = array();
+
+            foreach ($request->noseri as $n) {
+                $cek = JadwalRakitNoseriNonStok::where('noseri', $n)->first();
+                if ($cek) {
+                    $ada[] = $cek->id;
+                } else {
+                    $tidak_ada[] = $n;
+                }
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+                'ada' => $ada,
+                'tidak_ada' => $tidak_ada
+            ], 200);
         }
 
         $obj = array();
@@ -1254,33 +1279,33 @@ class ProduksiController extends Controller
     {
         // dd($request->all());
         //COO
-        DB::beginTransaction();
-        $obj =  json_decode(json_encode($request->all()), FALSE);
-        try {
-            //code...
-            foreach ($obj->seri as $f) {
-                NoseriBarangJadi::create([
-                    'gdg_barang_jadi_id' => 477,
-                    'noseri' => $f,
-                    'dari' => 17,
-                    'jenis' => 'masuk',
-                    'is_ready' => 0,
-                    'is_aktif' => 1,
-                    'created_by' => 16,
-                    'is_change' => 1,
-                    'is_delete' => 0
-                ]);
-            }
-            DB::commit();
-        } catch (\Throwable $th) {
-            //throw $th;
-            DB::rollBack();
-            return response()->json([
-                'status' => 200,
-                'message' =>  'Gagal Ditambahkan',
-                'error' => $th->getMessage()
-            ], 500);
-        }
+        // DB::beginTransaction();
+        // $obj =  json_decode(json_encode($request->all()), FALSE);
+        // try {
+        //     //code...
+        //     foreach ($obj->seri as $f) {
+        //         NoseriBarangJadi::create([
+        //             'gdg_barang_jadi_id' => 477,
+        //             'noseri' => $f,
+        //             'dari' => 17,
+        //             'jenis' => 'masuk',
+        //             'is_ready' => 0,
+        //             'is_aktif' => 1,
+        //             'created_by' => 16,
+        //             'is_change' => 1,
+        //             'is_delete' => 0
+        //         ]);
+        //     }
+        //     DB::commit();
+        // } catch (\Throwable $th) {
+        //     //throw $th;
+        //     DB::rollBack();
+        //     return response()->json([
+        //         'status' => 200,
+        //         'message' =>  'Gagal Ditambahkan',
+        //         'error' => $th->getMessage()
+        //     ], 500);
+        // }
         // DB::beginTransaction();
         // $obj =  json_decode(json_encode($request->all()), FALSE);
         // try {
@@ -1313,34 +1338,34 @@ class ProduksiController extends Controller
         //     ], 500);
         // }
         //PRODUKSI
-        // DB::beginTransaction();
-        // $obj =  json_decode(json_encode($request->all()), FALSE);
-        // try {
-        //     //code...
-        //     foreach ($obj->seri as $f) {
-        //         JadwalRakitNoseri::create([
-        //             'jadwal_id' => 723,
-        //             'noseri' => $f,
-        //             //'no_bppb' => 'PRD/07-BPM002/X/23',
-        //             // 'unit' => 'ST01',
-        //             // 'bln' => 'C',
-        //             // 'kedatangan' => 'A',
-        //             // 'urutan' => $f,
-        //             'th' => 23,
-        //             'status' => 11,
-        //             'date_in' => Carbon::now()
-        //         ]);
-        //     }
-        //     DB::commit();
-        // } catch (\Throwable $th) {
-        //     //throw $th;
-        //     DB::rollBack();
-        //     return response()->json([
-        //         'status' => 200,
-        //         'message' =>  'Gagal Ditambahkan',
-        //         'error' => $th->getMessage()
-        //     ], 500);
-        // }
+        DB::beginTransaction();
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+        try {
+            //code...
+            foreach ($obj->seri as $f) {
+                JadwalRakitNoseri::create([
+                    'jadwal_id' => 751,
+                    'noseri' => $f,
+                    //'no_bppb' => 'PRD/07-BPM002/X/23',
+                    // 'unit' => 'ST01',
+                    // 'bln' => 'C',
+                    // 'kedatangan' => 'A',
+                    // 'urutan' => $f,
+                    'th' => 23,
+                    'status' => 11,
+                    'date_in' => Carbon::now()
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Gagal Ditambahkan',
+                'error' => $th->getMessage()
+            ], 500);
+        }
     }
     function generate_seri_peti(Request $request)
     {
