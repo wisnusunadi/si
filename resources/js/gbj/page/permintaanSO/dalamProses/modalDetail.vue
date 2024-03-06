@@ -144,11 +144,12 @@ export default {
     }
 }
 </script>
+
 <template>
     <div>
         <modalNoSeri :detailSelected="detailSelectedNoSeri" v-if="showModalNoseri" @closeModal="closeModalNoseri" />
-        <div class="modal fade modalDetail" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade modalDetail" id="staticBackdrop" data-backdrop="static" data-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -204,8 +205,8 @@ export default {
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th v-if="!detailSelected.detailOpen"><input type="checkbox" @click="checkedAll"
-                                                    :checked="checkAll"></th>
+                                            <th v-if="!detailSelected.detailOpen"><input type="checkbox"
+                                                    @click="checkedAll" :checked="checkAll"></th>
                                             <th>Produk</th>
                                             <th>Jumlah</th>
                                             <th>Status</th>
@@ -217,13 +218,14 @@ export default {
                                             <tr class="table-dark">
                                                 <td colspan="100%">
                                                     {{ paket.nama }} <br>
-                                                    <span class="badge badge-light">Belum Transfer: {{ paket.jumlah_sisa }}
+                                                    <span class="badge badge-light">Belum Transfer: {{ paket.jumlah_sisa
+                                                        }}
                                                         ({{ paket.
-                                                            persentase_belum }}%)</span>
+            persentase_belum }}%)</span>
                                                     <span class="badge badge-warning">
                                                         Sudah Transfer: {{ paket.jumlah_gudang }} ({{
-                                                            paket.persentase_sudah
-                                                        }}%)
+            paket.persentase_sudah
+        }}%)
                                                     </span>
                                                 </td>
                                             </tr>
