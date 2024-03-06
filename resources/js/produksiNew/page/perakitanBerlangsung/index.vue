@@ -132,7 +132,11 @@ export default {
         },
         updateSearch(search) {
             this.searchRiwayat = search
-            this.updateRiwayat()
+            if (search === '') {
+                this.getData()
+            } else {
+                this.updateRiwayat()
+            }
         },
     },
     mounted() {
@@ -140,14 +144,16 @@ export default {
     },
 }
 </script>
+
 <template>
     <div>
         <Header :breadcumbs="breadcumbs" :title="title" />
         <div v-if="!$store.state.loading">
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="pills-terjadwal-tab" data-toggle="pill" data-target="#pills-terjadwal"
-                        type="button" role="tab" aria-controls="pills-terjadwal" aria-selected="true">Perakitan
+                    <a class="nav-link active" id="pills-terjadwal-tab" data-toggle="pill"
+                        data-target="#pills-terjadwal" type="button" role="tab" aria-controls="pills-terjadwal"
+                        aria-selected="true">Perakitan
                         Terjadwal</a>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -156,8 +162,8 @@ export default {
                         Jadwal</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="pills-riwayat-tab" data-toggle="pill" data-target="#pills-riwayat" type="button"
-                        role="tab" aria-controls="pills-riwayat" aria-selected="false">Riwayat</a>
+                    <a class="nav-link" id="pills-riwayat-tab" data-toggle="pill" data-target="#pills-riwayat"
+                        type="button" role="tab" aria-controls="pills-riwayat" aria-selected="false">Riwayat</a>
                 </li>
             </ul>
             <div class="tab-content" id="pills-tabContent">
@@ -180,10 +186,7 @@ export default {
                     <div class="card">
                         <div class="card-body">
                             <riwayat :dataRiwayat="dataRiwayat" :tanggalAwal="tanggalAwal" :tanggalAkhir="tanggalAkhir"
-                                :loading="loadingRiwayat"
-                                @updateTanggal="updateTanggal"
-                                @updateSearch="updateSearch"
-                                />
+                                :loading="loadingRiwayat" @updateTanggal="updateTanggal" @updateSearch="updateSearch" />
                         </div>
                     </div>
                 </div>
