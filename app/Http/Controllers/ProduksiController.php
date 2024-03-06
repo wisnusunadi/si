@@ -2958,7 +2958,7 @@ class ProduksiController extends Controller
                             'jumlah' => $i->count_jumlah,
                             'jumlah_gudang' => $i->count_gudang,
                             'jumlah_sisa' => $i->count_jumlah - $i->count_gudang,
-                            'status' => $i->status_cek == NULL || $i->checked_by == NULL || $i->count_jumlah == $i->count_gudang ? false : true,
+                            'status' => $i->status_cek == NULL || $i->checked_by == NULL || $i->count_jumlah == $i->count_gudang ? true : false,
                         );
                     }
                 }
