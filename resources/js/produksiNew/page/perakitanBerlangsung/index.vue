@@ -117,6 +117,17 @@ export default {
                             tgl_buat: this.dateFormat(item.tgl_buat),
                         }
                     })
+                } else {
+                    const { data: riwayat } = await axios.post('/api/prd/fg/riwayat', {
+                        tanggalAwal: this.tanggalAwal,
+                        tanggalAkhir: this.tanggalAkhir,
+                    })
+                    this.dataRiwayat = riwayat.map(item => {
+                        return {
+                            ...item,
+                            tgl_buat: this.dateFormat(item.tgl_buat),
+                        }
+                    })
                 }
             } catch (error) {
                 console.log(error)
@@ -132,12 +143,8 @@ export default {
         },
         updateSearch(search) {
             this.searchRiwayat = search
-            if (search === '') {
-                this.getData()
-            } else {
-                this.updateRiwayat()
-            }
-        },
+            this.updateRiwayat()
+        }
     },
     mounted() {
         this.getData()
