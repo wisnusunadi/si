@@ -1978,6 +1978,7 @@ class PenjualanController extends Controller
             //     ->rawColumns(['log', 'nama_customer'])
             //     ->make(true);
         } else if ($parameter == 'no_sj') {
+            $val = str_replace("_",  "/",  $value);
             $erps = array();
             $merge = array();
             $si = array();
@@ -2000,7 +2001,7 @@ class PenjualanController extends Controller
                 ->leftjoin('admjual_on', 'admjual_on.nolkppadm_on', '=', 'gudang_on.nolkppgdg_on')
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'gudang_on.pabrikgdg_on')
                 ->leftjoin('ekspedisi2_on', 'ekspedisi2_on.nolkppeksfk_on', '=', 'gudang_on.nolkppgdg_on')
-                ->where('gudang_on.nosj_on', 'LIKE', '%' . $value . '%')
+                ->where('gudang_on.nosj_on', 'LIKE', '%' . $val . '%')
                 ->groupby('gudang_on.nosj_on')
                 ->get();
 
@@ -2016,7 +2017,7 @@ class PenjualanController extends Controller
                 ->leftjoin('admjual_on', 'admjual_on.nolkppadm_on', '=', 'gudang_on.nolkppgdg_on')
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'gudang_on.pabrikgdg_on')
                 ->leftjoin('ekspedisi2_on', 'ekspedisi2_on.nolkppeksfk_on', '=', 'gudang_on.nolkppgdg_on')
-                ->where('gudang_on.nosj_on', 'LIKE', '%' . $value . '%')
+                ->where('gudang_on.nosj_on', 'LIKE', '%' . $val . '%')
                 ->groupby('gudang_on.nosj_on')
                 ->get();
 
@@ -2033,7 +2034,7 @@ class PenjualanController extends Controller
                 ->leftjoin('admjual_off', 'admjual_off.idorderadm_off', '=', 'gudang_off.idordergdg_off')
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'gudang_off.pabrikgdg_off')
                 ->leftjoin('ekspedisi2_off', 'ekspedisi2_off.idordereks_fk', '=', 'gudang_off.idordergdg_off')
-                ->where('gudang_off.nosj_off', 'LIKE', '%' . $value . '%')
+                ->where('gudang_off.nosj_off', 'LIKE', '%' . $val . '%')
                 ->groupby('gudang_off.nosj_off')
                 ->get();
 
@@ -2049,7 +2050,7 @@ class PenjualanController extends Controller
                 ->leftjoin('admjual_off', 'admjual_off.idorderadm_off', '=', 'gudang_off.idordergdg_off')
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'gudang_off.pabrikgdg_off')
                 ->leftjoin('ekspedisi2_off', 'ekspedisi2_off.idordereks_fk', '=', 'gudang_off.idordergdg_off')
-                ->where('gudang_off.nosj_off', 'LIKE', '%' . $value . '%')
+                ->where('gudang_off.nosj_off', 'LIKE', '%' . $val . '%')
                 ->groupby('gudang_off.nosj_off')
                 ->get();
 
@@ -2067,7 +2068,7 @@ class PenjualanController extends Controller
                 ->leftjoin('admjual_spb', 'admjual_spb.noadm_spb', '=', 'gudang_spb.nogdg_spb')
                 ->leftjoin('spb', 'spb.nospb', '=', 'gudang_spb.nogdg_spb')
                 ->leftjoin('ekspedisi2_spb', 'ekspedisi2_spb.noeksfk_spb', '=', 'gudang_spb.nogdg_spb')
-                ->where('gudang_spb.nosjgdg_spb', 'LIKE', '%' . $value . '%')
+                ->where('gudang_spb.nosjgdg_spb', 'LIKE', '%' . $val . '%')
                 ->groupby('gudang_spb.nosjgdg_spb')
                 ->get();
 
@@ -2083,7 +2084,7 @@ class PenjualanController extends Controller
                 ->leftjoin('admjual_spb', 'admjual_spb.noadm_spb', '=', 'gudang_spb.nogdg_spb')
                 ->leftjoin('spb', 'spb.nospb', '=', 'gudang_spb.nogdg_spb')
                 ->leftjoin('ekspedisi2_spb', 'ekspedisi2_spb.noeksfk_spb', '=', 'gudang_spb.nogdg_spb')
-                ->where('gudang_spb.nosjgdg_spb', 'LIKE', '%' . $value . '%')
+                ->where('gudang_spb.nosjgdg_spb', 'LIKE', '%' . $val . '%')
                 ->groupby('gudang_spb.nosjgdg_spb')
                 ->get();
 
@@ -2130,7 +2131,7 @@ class PenjualanController extends Controller
                  ->leftJoin('customer as c_spb_prt',  'c_spb_prt.id',  '=',  'spb_prt.customer_id')
 
 
-                ->where('logistik.nosurat',  'LIKE', '%' . $value . '%')
+                ->where('logistik.nosurat',  'LIKE', '%' . $val . '%')
                 ->orderBy('logistik.id','DESC')
                 ->groupBy('logistik.id');
 
