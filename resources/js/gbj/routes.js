@@ -6,21 +6,29 @@ import penggantianRework from "./page/penggantianRework";
 const routes = [
     {
         path: "/gbj/rework/permintaan-rework",
-        component: PermintaanReworkGBJ
+        component: PermintaanReworkGBJ,
     },
     {
         path: "/gbj/rework/penerimaan-rework",
-        component: penerimaanRework
+        component: penerimaanRework,
     },
     {
         path: "/gbj/rework/penggantian-rework",
-        component: penggantianRework
-    }
-]
+        component: penggantianRework,
+    },
+    {
+        path: "/gbj/bso",
+        component: () => import("./page/transferProduk"),
+    },
+    {
+        path: "/gbj/so",
+        component: () => import("./page/permintaanSO"),
+    },
+];
 
 const router = new VueRouter({
     mode: "history",
-    routes
+    routes,
 });
 
 export default router;

@@ -10,7 +10,7 @@ class DetailPesanan extends Model
 {
     protected $connection = 'erp';
     protected $table = 'detail_pesanan';
-    protected $fillable = ['pesanan_id', 'penjualan_produk_id', 'detail_rencana_penjualan_id', 'jumlah', 'harga', 'ongkir','ppn'];
+    protected $fillable = ['pesanan_id', 'penjualan_produk_id', 'detail_rencana_penjualan_id', 'jumlah', 'harga', 'ongkir', 'ppn'];
 
     public function Pesanan()
     {
@@ -30,6 +30,37 @@ class DetailPesanan extends Model
         return $this->belongsTo(DetailRencanaPenjualan::class);
     }
 
+    public function DetailPesananProdukVariasi()
+    {
+        $id = $this->id;
+        $detail_pesanan_produk = DetailPesananProduk::where('detail_pesanan_id', $id)->addSelect([
+            'count_gudang' => function ($q) {
+                $q->selectRaw('count(t_gbj_noseri.id)')
+                    ->from('t_gbj_noseri')
+                    ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->whereColumn('t_gbj_detail.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
+                    ->limit(1);
+            },
+            'count_jumlah' => function ($q) {
+                $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_pesanan.penjualan_produk_id', '=', 'detail_penjualan_produk.penjualan_produk_id')
+                    ->join('gdg_barang_jadi', 'gdg_barang_jadi.produk_id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.id', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('gdg_barang_jadi.id', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                    ->limit(1);
+            },
+            'count_qc' => function ($q) {
+                $q->selectRaw('count(noseri_detail_pesanan.id)')
+                    ->from('noseri_detail_pesanan')
+                    ->whereColumn('noseri_detail_pesanan.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
+                    ->limit(1);
+            },
+        ])->with('GudangBarangJadi.Produk')->get();
+
+        return $detail_pesanan_produk;
+    }
+
 
     public function GetVariasi()
     {
@@ -38,43 +69,43 @@ class DetailPesanan extends Model
         left join detail_pesanan dp on dpp.detail_pesanan_id  = dp.id
         left join gdg_barang_jadi gbj on gbj.id = dpp.gudang_barang_jadi_id
         left join produk p on p.id = gbj.produk_id
-        where dpp.detail_pesanan_id = ? and p.coo = 1',[$id]);
-            return  $produk;
-
+        where dpp.detail_pesanan_id = ? and p.coo = 1', [$id]);
+        return  $produk;
     }
 
 
-    public function getJumlahProgress(){
+    public function getJumlahProgress()
+    {
         $id = $this->id;
-        $data = DetailPesanan::where('id', $id)->addSelect(['count_gudang' => function($q){
+        $data = DetailPesanan::where('id', $id)->addSelect(['count_gudang' => function ($q) {
             $q->selectRaw('count(t_gbj_noseri.id)')
                 ->from('t_gbj_noseri')
                 ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                 ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 't_gbj_detail.detail_pesanan_produk_id')
                 ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
                 ->limit(1);
-        }, 'count_qc' => function($q){
+        }, 'count_qc' => function ($q) {
             $q->selectRaw('count(noseri_detail_pesanan.id)')
                 ->from('noseri_detail_pesanan')
                 ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                 ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
                 // ->where('noseri_detail_pesanan.status', 'ok')
                 ->limit(1);
-        }, 'count_log' => function($q){
+        }, 'count_log' => function ($q) {
             $q->selectRaw('count(noseri_logistik.id)')
                 ->from('noseri_logistik')
                 ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
                 ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                 ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
                 ->limit(1);
-        }, 'count_jumlah' => function($q){
+        }, 'count_jumlah' => function ($q) {
             $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
-            ->from('detail_pesanan_produk')
-            ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
-            ->join('detail_penjualan_produk', 'detail_penjualan_produk.produk_id', '=', 'gdg_barang_jadi.produk_id')
-            ->whereColumn('detail_penjualan_produk.penjualan_produk_id', 'detail_pesanan.penjualan_produk_id')
-            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
-            ->limit(1);
+                ->from('detail_pesanan_produk')
+                ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                ->join('detail_penjualan_produk', 'detail_penjualan_produk.produk_id', '=', 'gdg_barang_jadi.produk_id')
+                ->whereColumn('detail_penjualan_produk.penjualan_produk_id', 'detail_pesanan.penjualan_produk_id')
+                ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                ->limit(1);
         }])->with('PenjualanProduk')->first();
 
         return $data;

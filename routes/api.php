@@ -57,7 +57,6 @@ Route::prefix('/ppic')->group(function () {
             Route::put('/', [App\Http\Controllers\PpicController::class, 'update_ppic_rework']);
             Route::post('/delete', [App\Http\Controllers\PpicController::class, 'delete_ppic_rework']);
         });
-
     });
     Route::post('/update_pwd', [App\Http\Controllers\Auth\ResetPasswordController::class, 'updatePwd'])->middleware('jwt.verify');
     Route::post('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data'])->middleware('jwt.verify');
@@ -117,7 +116,7 @@ Route::prefix('/produk')->group(function () {
     Route::prefix('/rw')->group(function () {
         Route::get('/select', [App\Http\Controllers\MasterController::class, 'select_parent_rw']);
         Route::get('/select/{id}', [App\Http\Controllers\MasterController::class, 'select_item_rw']);
-        });
+    });
 
     Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_produk']);
     Route::get('variasi', [App\Http\Controllers\MasterController::class, 'get_data_produk_variasi']);
@@ -184,7 +183,7 @@ Route::prefix('/penjualan')->group(function () {
 
 Route::prefix('/so')->group(function () {
     Route::post('data', [App\Http\Controllers\PenjualanController::class, 'get_data_so']);
-    Route::post('/cek', [App\Http\Controllers\GudangController::class, 'storeCekSO']);
+    Route::post('/cek', [App\Http\Controllers\GudangController::class, 'storeCekSO'])->middleware('jwt.verify');
 });
 Route::prefix('/laporan')->group(function () {
     Route::post('/create', [App\Http\Controllers\PenjualanController::class, 'laporan']);
@@ -309,7 +308,7 @@ Route::prefix('/tfp')->group(function () {
     Route::post('/create', [ProduksiController::class, 'CreateTFItem']);
     Route::post('/byso', [ProduksiController::class, 'TfbySO']);
     Route::post('/byso-batal/{id}', [GudangController::class, 'TfbySOBatal']);
-    Route::post('/byso-final', [GudangController::class, 'TfbySOFinal']);
+    Route::post('/byso-final', [GudangController::class, 'TfbySOFinal'])->middleware('jwt.verify');;
     Route::post('/create-noseri', [GudangController::class, 'storeNoseri']);
     Route::post('/create-final', [GudangController::class, 'finalDraftRakit']);
 
@@ -320,9 +319,10 @@ Route::prefix('/tfp')->group(function () {
     Route::get('data', [ProduksiController::class, 'getTFnon']);
     Route::post('noseri', [ProduksiController::class, 'getNoseri']);
     Route::get('data-so', [ProduksiController::class, 'getOutSO']);
-    Route::get('sudah-dicek', [ProduksiController::class, 'getSOCek'])->middleware('jwt.verify');
-    Route::get('belum-dicek', [ProduksiController::class, 'getSOCekBelum'])->middleware('jwt.verify');
-    Route::get('detail-so/{id}/{value}', [ProduksiController::class, 'getDetailSO']);
+    Route::get('sudah-dicek', [ProduksiController::class, 'getSOCek']);
+    Route::get('belum-dicek', [ProduksiController::class, 'getSOCekBelum']);
+    Route::get('detail-transfer-so/{id}', [ProduksiController::class, 'getDetailTransferSO']);
+    Route::get('detail-so/{id}', [ProduksiController::class, 'getDetailSO']);
     Route::get('edit-so/{id}/{value}', [ProduksiController::class, 'getEditSO']);
     Route::get('header-so/{id}/{value}', [ProduksiController::class, 'headerSo']);
     Route::get('rakit', [GudangController::class, 'getRakit']);
@@ -701,7 +701,8 @@ Route::prefix('/dc')->group(function () {
         Route::post('update', [App\Http\Controllers\DcController::class, 'update_coo']);
         Route::put('update_tgl_kirim_coo/{value}', [App\Http\Controllers\DcController::class, 'update_tgl_kirim_coo']);
         Route::post('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);
-        Route::post('selesai/{years}', [App\Http\Controllers\DcController::class, 'get_data_so_selesai']);        Route::post('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
+        Route::post('selesai/{years}', [App\Http\Controllers\DcController::class, 'get_data_so_selesai']);
+        Route::post('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
         Route::post('detail/seri/{id}/{jenis}', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_so']);
         Route::post('detail/seri_po/{id}/', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_po']);
         Route::post('detail/seri/select/{id}/{value}', [App\Http\Controllers\DcController::class, 'get_data_detail_select_seri_so']);

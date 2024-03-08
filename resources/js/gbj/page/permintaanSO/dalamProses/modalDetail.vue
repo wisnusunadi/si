@@ -1,0 +1,276 @@
+<script>
+import axios from 'axios'
+import modalNoSeri from './modalNoSeri.vue'
+export default {
+    props: ['detailSelected'],
+    components: {
+        modalNoSeri
+    },
+    data() {
+        return {
+            produk: [],
+            search: '',
+            showModalNoseri: false,
+            detailSelectedNoSeri: {},
+            selectedProduk: [],
+            checkAll: false
+        }
+    },
+    methods: {
+        closeModal() {
+            $('.modalDetail').modal('hide')
+            this.$nextTick(() => {
+                this.$emit('closeModal')
+            })
+        },
+        closeModalNoseri() {
+            this.showModalNoseri = false
+            this.$nextTick(() => {
+                $('.modalDetail').modal('show')
+            })
+        },
+        openModalNoseri(item) {
+            this.detailSelectedNoSeri = item
+            this.showModalNoseri = true
+            this.$nextTick(() => {
+                $('.modalDetail').modal('hide')
+                $('.modalNoseri').modal('show')
+            })
+        },
+        checkedAll() {
+            this.checkAll = !this.checkAll
+            if (this.checkAll) {
+                this.produk.forEach(paket => {
+                    paket.item.forEach(item => {
+                        if (!item.status) {
+                            this.selectedProduk.push(item)
+                        }
+                    })
+                })
+            } else {
+                this.selectedProduk = []
+            }
+        },
+        checkOne(item) {
+            if (this.selectedProduk.includes(item)) {
+                this.selectedProduk = this.selectedProduk.filter(i => i !== item)
+            } else {
+                this.selectedProduk.push(item)
+            }
+        },
+        async simpan() {
+            if (this.selectedProduk.length == 0) {
+                swal.fire('Peringatan', 'Pilih minimal 1 produk', 'warning')
+                return
+            }
+            try {
+                const { data } = await axios.post('/api/so/cek', {
+                    pesanan_id: this.detailSelected.id,
+                    produk: this.selectedProduk
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('lokal_token')}`
+                    }
+                })
+                swal.fire('Berhasil', 'Data berhasil disimpan', 'success')
+                this.$emit('refresh')
+                this.closeModal()
+            } catch (error) {
+                console.log(error)
+                swal.fire('Error', 'Terjadi kesalahan', 'error')
+            }
+
+        },
+        persentase(jmlPerItem, jmlTotal) {
+            let item = parseInt(jmlPerItem)
+            let total = parseInt(jmlTotal)
+            return Math.round((item / total) * 100)
+        },
+        async getData() {
+            try {
+                const { data } = await axios.get(`/api/tfp/detail-so/${this.detailSelected.id}`)
+                this.produk = data.map(paket => {
+                    return {
+                        ...paket,
+                        persentase_belum: this.persentase(paket.jumlah_sisa, paket.jumlah),
+                        persentase_sudah: this.persentase(paket.jumlah_gudang, paket.jumlah),
+                        item: paket.item.map(item => {
+                            return {
+                                ...item,
+                                persentase_belum: this.persentase(paket.jumlah_sisa, paket.jumlah),
+                                persentase_sudah: this.persentase(paket.jumlah_gudang, paket.jumlah),
+                            }
+                        })
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    },
+    computed: {
+        filterRecursive() {
+            const includeSearch = (obj, search) => {
+                if (obj && typeof obj === 'object') {
+                    return Object.keys(obj).some(key => {
+                        if (typeof obj[key] === 'object') {
+                            return includeSearch(obj[key], search)
+                        }
+                        return String(obj[key]).toLowerCase().includes(search.toLowerCase())
+                    })
+                }
+                return false
+            }
+
+            return this.produk.filter(obj => includeSearch(obj, this.search))
+        }
+    },
+    created() {
+        this.getData()
+    },
+    watch: {
+        selectedProduk() {
+            // hitung status false pada item paket
+            let statusFalse = this.produk.map(paket => {
+                return paket.item.filter(item => !item.status)
+            }).flat()
+
+            if (this.selectedProduk.length === statusFalse.length) {
+                this.checkAll = true
+            } else {
+                this.checkAll = false
+            }
+        }
+    }
+}
+</script>
+
+<template>
+    <div>
+        <modalNoSeri :detailSelected="detailSelectedNoSeri" v-if="showModalNoseri" @closeModal="closeModalNoseri" />
+        <div class="modal fade modalDetail" id="staticBackdrop" data-backdrop="static" data-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="close" @click="closeModal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row row-cols-2">
+
+                                    <div class="col"> <label for="">Nomor SO</label>
+                                        <div class="card nomor-so">
+                                            <div class="card-body">
+                                                <span id="so">{{ detailSelected.so }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col"> <label for="">Nomor AKN</label>
+                                        <div class="card nomor-akn">
+                                            <div class="card-body">
+                                                <span id="akn">{{ detailSelected.akn ?? '-' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col"> <label for="">Nomor PO</label>
+                                        <div class="card nomor-po">
+                                            <div class="card-body">
+                                                <span id="po">{{ detailSelected.no_po }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col"> <label for="">Instansi</label>
+                                        <div class="card instansi">
+                                            <div class="card-body">
+                                                <span id="instansi">{{ detailSelected.divisi }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex flex-row-reverse bd-highlight">
+                                    <div class="p-2 bd-highlight">
+                                        <input type="text" class="form-control" v-model="search" placeholder="Cari...">
+                                    </div>
+                                </div>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th v-if="!detailSelected.detailOpen"><input type="checkbox"
+                                                    @click="checkedAll" :checked="checkAll"></th>
+                                            <th>Produk</th>
+                                            <th>Jumlah</th>
+                                            <th>Status</th>
+                                            <th v-if="detailSelected.detailOpen">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody v-if="filterRecursive.length > 0">
+                                        <template v-for="paket in filterRecursive">
+                                            <tr class="table-dark">
+                                                <td colspan="100%">
+                                                    {{ paket.nama }} <br>
+                                                    <span class="badge badge-light">Belum Transfer: {{ paket.jumlah_sisa
+                                                        }}
+                                                        ({{ paket.
+            persentase_belum }}%)</span>
+                                                    <span class="badge badge-warning">
+                                                        Sudah Transfer: {{ paket.jumlah_gudang }} ({{
+            paket.persentase_sudah
+        }}%)
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr v-for="item in paket.item" :key="item.id">
+                                                <td v-if="!detailSelected.detailOpen">
+                                                    <input type="checkbox" v-if="!item.status" @click="checkOne(item)"
+                                                        :checked="selectedProduk.find(i => i.id === item.id)">
+
+                                                </td>
+                                                <td>
+                                                    <v-select :options="item.variasi" v-model="item.variasiSelected"
+                                                        v-if="!detailSelected.detailOpen"></v-select>
+                                                    <span v-else>{{ item.variasiSelected.label }}</span>
+                                                </td>
+                                                <td>{{ item.jumlah }}</td>
+                                                <td>
+                                                    <span v-if="item.status" class="badge badge-success">Sudah
+                                                        Diinput</span>
+                                                    <span v-else class="badge badge-danger">Belum Diinput</span>
+                                                </td>
+                                                <td v-if="detailSelected.detailOpen">
+                                                    <button class="btn btn-sm btn-outline-info" v-if="item.status"
+                                                        @click="openModalNoseri(item)">
+                                                        <i class="fa fa-info-circle"></i>
+                                                        Detail No. Seri Produk
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                    <tbody v-else>
+                                        <tr>
+                                            <td colspan="100%" class="text-center">Data tidak ditemukan</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" v-if="!detailSelected.detailOpen">
+                        <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
+                        <button type="button" class="btn btn-primary" @click="simpan">Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
