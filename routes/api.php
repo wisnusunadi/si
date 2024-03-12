@@ -352,6 +352,8 @@ Route::prefix('/prd')->group(function () {
             Route::get('/riwayat/{id}', [ProduksiController::class, 'get_noseri_fg_riwayat_nonstok']);
             Route::post('/show', [ProduksiController::class, 'show_fg_non_stok']);
         });
+        Route::post('/gen_bppb', [ProduksiController::class, 'generate_bppb']);
+        Route::post('/cek_bppb', [ProduksiController::class, 'cek_bppb']);
         Route::post('/gen', [ProduksiController::class, 'generate_fg']);
         Route::post('/non_gen', [ProduksiController::class, 'non_generate_fg']);
         Route::post('/riwayat', [ProduksiController::class, 'riwayat_fg']);

@@ -4134,6 +4134,53 @@ class ProduksiController extends Controller
         return response()->json($data);
     }
 
+    function generate_bppb(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            $jadwal = JadwalPerakitan::find($request->jadwal_id);
+            $jadwal->tgl_bppb = $request->tgl_bppb;
+            $jadwal->kode = $request->kode;
+            $jadwal->tahun = $request->tahun;
+            $jadwal->no_urut = $request->no_urut;
+            $jadwal->no_bppb = $request->no_bppb;
+            $jadwal->save();
+
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' =>  'Berhasil Ditambahkan',
+            ], 200);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' =>  'Gagal Ditambahkan',
+                'msg' => $th,
+            ],500);
+        }
+
+
+    }
+
+    function cek_bppb(Request $request)
+    {
+        try {
+            //code...
+            $max = JadwalPerakitan::where(['kode' => $request->kode ,'tahun' => $request->tahun])->latest('id')->value('no_urut') + 0;
+            return response()->json(['no_urut' => $max+1],200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'error' => true,
+                'msg' => $th,
+            ],500);
+        }
+
+    }
     function on_rakit()
     {
         try {
@@ -4164,7 +4211,8 @@ class ProduksiController extends Controller
                 'p.nama as produks',
                 'p.generate_seri',
                 'p.kode as kode_produk',
-                'gbj.id as gbj_id'
+                'gbj.id as gbj_id',
+                'gbj.kode as variasi_kode'
             )
                 ->selectRaw('count(jadwal_rakit_noseri.jadwal_id) as jml_rakit')
                 ->selectRaw('concat(p.nama," ",gbj.nama) as produkk')
@@ -4190,6 +4238,7 @@ class ProduksiController extends Controller
                 ->whereNotIn('jadwal_perakitan.status_tf', [14])
                 ->groupBy('jadwal_perakitan.id')
                 ->havingRaw('jumlah != jml_rakit')
+                ->orderByDesc('created_at')
                 ->get();
             // return ['jumlah'=>count($data),'data' => $data];
             $data = collect($data)->map(function ($item) {
@@ -4206,7 +4255,7 @@ class ProduksiController extends Controller
                     'kategori' => $item->nama,
                     'jumlah' => $item->jumlah,
                     'jumlah_rakit' => $item->jml_rakit,
-                    'kode_produk' => $item->kode_produk,
+                    'kode_produk' => $item->kode_produk . $item->variasi_kode,
                 ];
             });
             return response()->json($data);
