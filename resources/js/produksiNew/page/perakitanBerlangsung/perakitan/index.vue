@@ -5,7 +5,7 @@ import modalGenerateBPPB from './modalGenerateBPPB.vue';
 import inputNoSeri from './inputNoSeri.vue';
 import DataTable from '../../../components/DataTable.vue';
 export default {
-    props: ['dataTable'],
+    props: ['dataTable', 'openDataAfterGenerate'],
     components: {
         modalGenerate,
         modalPilihan,
@@ -88,8 +88,25 @@ export default {
             })
         },
         openModal() {
-            this.$emit('openModal')
+            this.$emit('refreshData')
+            this.$store.dispatch('setDetail', this.detailData)
+        },
+        generateBPPB(data) {
+            this.detailData = JSON.parse(JSON.stringify(data))
+            this.showModalBPPB = true
             this.$nextTick(() => {
+                $('.modalGenerateBPPB').modal('show')
+            })
+        },
+        refresh() {
+            this.$emit('refresh')
+        }
+    },
+    watch: {
+        openDataAfterGenerate(val) {
+            if (val) {
+                // get index data
+                this.detailData = this.dataTable.find(item => item.id == this.$store.state.openDetail.id)
                 if (this.detailData.generate_seri == 1) {
                     this.showModal = true
                     this.$nextTick(() => {
@@ -101,17 +118,7 @@ export default {
                         $('.inputNoSeri').modal('show')
                     })
                 }
-            })
-        },
-        generateBPPB(data) {
-            this.detailData = JSON.parse(JSON.stringify(data))
-            this.showModalBPPB = true
-            this.$nextTick(() => {
-                $('.modalGenerateBPPB').modal('show')
-            })
-        },
-        refresh() {
-            this.$emit('refresh')
+            }
         }
     },
     computed: {
