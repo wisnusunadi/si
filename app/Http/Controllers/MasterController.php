@@ -2088,6 +2088,7 @@ class MasterController extends Controller
             return response()->json([
                 'success' => true,
             ], 200);
+
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
@@ -2224,14 +2225,12 @@ class MasterController extends Controller
         }
     }
 
-
     public function changeGenerateProduk(Request $request)
     {
         try {
             $produk = Produk::find($request->id);
             $produk->generate_seri = $request->generate_seri;
             $produk->save();
-
             return response()->json([
                 'success' => true,
                 'data' => $produk

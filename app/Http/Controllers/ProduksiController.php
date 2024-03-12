@@ -800,7 +800,6 @@ class ProduksiController extends Controller
             $kurang = $jp->jumlah - $jp->noseri->count();
 
             if ($prd->kode != NULL || $prd->kode != '') {
-
                 $getTgl = Carbon::now();
                 // $tahun = 24;
                 $tahun = $getTgl->format('Y') % 100;
@@ -841,11 +840,6 @@ class ProduksiController extends Controller
                         );
                     }
                 }
-
-
-
-
-
                 if ($obj->jml_noseri <= $kurang && $prd->kode != NULL) {
                     $queryResultPrd = JadwalRakitNoseri::whereIN('noseri', $newSeri)->pluck('noseri')->toArray();
                     $queryResultGbj = NoseriBarangJadi::whereIN('noseri', $newSeri)->pluck('noseri')->toArray();
@@ -1345,7 +1339,7 @@ class ProduksiController extends Controller
             //code...
             foreach ($obj->seri as $f) {
                 JadwalRakitNoseri::create([
-                    'jadwal_id' => 751,
+                    'jadwal_id' => 770,
                     'noseri' => $f,
                     //'no_bppb' => 'PRD/07-BPM002/X/23',
                     // 'unit' => 'ST01',
@@ -4145,6 +4139,7 @@ class ProduksiController extends Controller
             $jadwal->tahun = $request->tahun;
             $jadwal->no_urut = $request->no_urut;
             $jadwal->no_bppb = $request->no_bppb;
+            $jadwal->bulan = $request->bulan;
             $jadwal->save();
 
             DB::commit();
