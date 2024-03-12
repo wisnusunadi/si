@@ -2833,20 +2833,20 @@ class ProduksiController extends Controller
             $paket = DetailPesanan::addSelect([
                 'count_gudang' => function ($q) {
                     $q->selectRaw('count(t_gbj_noseri.id)')
-                    ->from('t_gbj_noseri')
-                    ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 't_gbj_detail.detail_pesanan_produk_id')
-                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
-                    ->limit(1);
+                        ->from('t_gbj_noseri')
+                        ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 't_gbj_detail.detail_pesanan_produk_id')
+                        ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                        ->limit(1);
                 },
                 'count_jumlah' => function ($q) {
                     $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
-                    ->from('detail_pesanan_produk')
-                    ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
-                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.produk_id', '=', 'gdg_barang_jadi.produk_id')
-                    ->whereColumn('detail_penjualan_produk.penjualan_produk_id', 'detail_pesanan.penjualan_produk_id')
-                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
-                    ->limit(1);
+                        ->from('detail_pesanan_produk')
+                        ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                        ->join('detail_penjualan_produk', 'detail_penjualan_produk.produk_id', '=', 'gdg_barang_jadi.produk_id')
+                        ->whereColumn('detail_penjualan_produk.penjualan_produk_id', 'detail_pesanan.penjualan_produk_id')
+                        ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                        ->limit(1);
                 }
             ])
                 ->leftJoin('penjualan_produk', 'penjualan_produk.id', '=', 'detail_pesanan.penjualan_produk_id')
@@ -3448,8 +3448,8 @@ class ProduksiController extends Controller
             $data = NoseriBarangJadi::select('noseri_barang_jadi.is_change', 'noseri_barang_jadi.noseri', 'noseri_barang_jadi.id', 'seri_detail_rw.isi', 'seri_detail_rw.created_at', 'seri_detail_rw.packer')->addSelect([
                 'cek_rw' => function ($q) {
                     $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
-                    ->from('seri_detail_rw')
-                    ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
+                        ->from('seri_detail_rw')
+                        ->whereColumn('seri_detail_rw.noseri_id', 'noseri_barang_jadi.id');
                 }
             ])
                 ->leftjoin('seri_detail_rw', 'seri_detail_rw.noseri_id', '=', 'noseri_barang_jadi.id')
@@ -4163,6 +4163,7 @@ class ProduksiController extends Controller
                 'jadwal_perakitan.evaluasi',
                 'p.nama as produks',
                 'p.generate_seri',
+                'p.kode as kode_produk',
                 'gbj.id as gbj_id'
             )
                 ->selectRaw('count(jadwal_rakit_noseri.jadwal_id) as jml_rakit')
@@ -4205,6 +4206,7 @@ class ProduksiController extends Controller
                     'kategori' => $item->nama,
                     'jumlah' => $item->jumlah,
                     'jumlah_rakit' => $item->jml_rakit,
+                    'kode_produk' => $item->kode_produk,
                 ];
             });
             return response()->json($data);

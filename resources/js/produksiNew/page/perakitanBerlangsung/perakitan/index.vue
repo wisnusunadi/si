@@ -1,6 +1,7 @@
 <script>
 import modalGenerate from './modalGenerate.vue';
 import modalPilihan from '../riwayat/modalPilihan.vue';
+import modalGenerateBPPB from './modalGenerateBPPB.vue';
 import inputNoSeri from './inputNoSeri.vue';
 import DataTable from '../../../components/DataTable.vue';
 export default {
@@ -10,6 +11,7 @@ export default {
         modalPilihan,
         inputNoSeri,
         DataTable,
+        modalGenerateBPPB
     },
     data() {
         return {
@@ -56,6 +58,7 @@ export default {
             tanggalAkhirSelesai: '',
             filterProduk: [],
             showModalNoSeri: false,
+            showModalBPPB: false,
         }
     },
     methods: {
@@ -82,6 +85,29 @@ export default {
             this.showModalNoSeri = true
             this.$nextTick(() => {
                 $('.inputNoSeri').modal('show')
+            })
+        },
+        openModal() {
+            this.$emit('openModal')
+            this.$nextTick(() => {
+                if (this.detailData.generate_seri == 1) {
+                    this.showModal = true
+                    this.$nextTick(() => {
+                        $('.modalGenerate').modal('show')
+                    })
+                } else {
+                    this.showModalNoSeri = true
+                    this.$nextTick(() => {
+                        $('.inputNoSeri').modal('show')
+                    })
+                }
+            })
+        },
+        generateBPPB(data) {
+            this.detailData = JSON.parse(JSON.stringify(data))
+            this.showModalBPPB = true
+            this.$nextTick(() => {
+                $('.modalGenerateBPPB').modal('show')
             })
         },
         refresh() {
@@ -162,10 +188,14 @@ export default {
     }
 }
 </script>
+
 <template>
     <div v-if="!$store.state.loading">
         <modalGenerate v-if="showModal" :dataGenerate="detailData" @closeModal="showModal = false" @refresh="refresh" />
-        <inputNoSeri v-if="showModalNoSeri" :dataGenerate="detailData" @closeModal="showModalNoSeri = false" @refresh="refresh" />
+        <inputNoSeri v-if="showModalNoSeri" :dataGenerate="detailData" @closeModal="showModalNoSeri = false"
+            @refresh="refresh" />
+        <modalGenerateBPPB v-if="showModalBPPB" :dataGenerate="detailData" @closeModal="showModalBPPB = false"
+            @refresh="refresh" @openModalGenerate="openModal" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
@@ -243,7 +273,8 @@ export default {
                     <form id="filter_ekat">
                         <div class="dropdown-menu">
                             <div class="px-3 py-3 font-weight-normal">
-                                <v-select multiple :options="produkUnique" v-model="filterProduk" placeholder="Pilih Produk" />
+                                <v-select multiple :options="produkUnique" v-model="filterProduk"
+                                    placeholder="Pilih Produk" />
                             </div>
                         </div>
                     </form>
@@ -262,12 +293,19 @@ export default {
             </template>
 
             <template #item.aksi="{ item }">
-                <button class="btn btn-sm btn-outline-primary" @click="detail(item)" v-if="item.generate_seri == 1">
+                <button class="btn btn-sm btn-outline-success" @click="generateBPPB(item)" v-if="item.no_bppb == '-'">
+                    <i class="fa fa-barcode"></i>
+                    Generate BPPB
+                </button>
+
+                <button class="btn btn-sm btn-outline-primary" @click="detail(item)"
+                    v-if="item.generate_seri == 1 && item.no_bppb != '-'">
                     <i class="fa fa-barcode"></i>
                     Generate Nomor Seri
                 </button>
 
-                <button class="btn btn-sm btn-outline-primary" @click="detailInputNoSeri(item)" v-else>
+                <button class="btn btn-sm btn-outline-primary" @click="detailInputNoSeri(item)"
+                    v-if="item.generate_seri == 0 && item.no_bppb != '-'">
                     <!-- icon tambah nomor seri -->
                     <i class="fa fa-barcode"></i>
                     Tambah Nomor Seri

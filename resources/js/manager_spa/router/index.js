@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 
 import Home from "../../ppic_spa/views/Home.vue";
 import Perakitan from "../../ppic_spa/views/Perakitan";
-import SalesOrder from "../../ppic_spa/views/SalesOrder.vue";
+import SalesOrder from "../../ppic_spa/views/SalesOrder";
 import LaporanPesanan from "../../ppic_spa/views/LaporanPesanan.vue";
 import ProsesPesanan from "../../ppic_spa/views/ProsesPesanan.vue";
 import JadwalPerencanaan from "../../ppic_spa/views/JadwalPerencanaan.vue";
