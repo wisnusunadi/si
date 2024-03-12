@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 import moment from 'moment'
 export default {
     props: ['dataGenerate'],
@@ -6,11 +7,12 @@ export default {
         return {
             form: {
                 kode: 'PRD',
-                urutan: '02',
+                urutan: '',
                 kode_produk: this.dataGenerate.kode_produk,
                 bulan: '',
                 // dapatkan angka 2 digit ke belakang
                 tahun: new Date().getFullYear().toString().substr(-2),
+                urutanBE: ''
             },
             formHasilGenerate: {
                 hasilGen: '',
@@ -29,6 +31,21 @@ export default {
             this.$nextTick(() => {
                 this.$emit('closeModal')
             })
+        },
+        getData() {
+            try {
+                axios.post('/api/prd/fg/cek_bppb', {
+                    kode: this.dataGenerate.kode_produk,
+                    tahun: new Date().getFullYear()
+                }).then(response => {
+                    this.form.urutan = response.data.no_urut.toString().padStart(2, '0')
+                    this.form.urutanBE = response.data.no_urut
+                })
+            } catch (error) {
+                console.error(error)
+            } finally {
+                // this.loading = false
+            }
         },
         isFormFilled(obj) {
             for (const key in obj) {
@@ -51,50 +68,54 @@ export default {
         },
         simpanOut() {
             const cekForm = Object.keys(this.formHasilGenerate).every(key => this.formHasilGenerate[key] !== '')
-            if (cekForm) {
-                // Simpan data ke BE
-                // konfirmasi simpan data
-                swal.fire({
-                    title: 'Apakah anda yakin?',
-                    text: "Data yang sudah disimpan tidak dapat diubah lagi",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, simpan & keluar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        swal.fire('Berhasil', 'Data berhasil disimpan', 'success')
-                        this.closeModal()
-                        this.$emit('refresh')
-                    }
-                })
-            } else {
+            if (!cekForm) {
                 swal.fire('Peringatan', 'Pastikan semua form terisi', 'warning')
+                return
             }
+
+            const form = {
+                jadwal_id: this.dataGenerate.jadwal_id,
+                kode: this.form.kode_produk,
+                tgl_bppb: this.formHasilGenerate.tgl,
+                no_bppb: this.formHasilGenerate.hasilGen,
+                tahun: new Date().getFullYear().toString(),
+                no_urut: this.form.urutanBE,
+                bulan: this.form.bulan.numberMonth
+            }
+            axios.post('/api/prd/fg/gen_bppb', form).then(response => {
+                swal.fire('Berhasil', 'Data berhasil disimpan', 'success')
+                this.closeModal()
+                this.$emit('refresh')
+            }).catch(error => {
+                console.error(error)
+                swal.fire('Gagal', 'Data gagal disimpan', 'error')
+            })
         },
         simpanGenerate() {
             const cekForm = Object.keys(this.formHasilGenerate).every(key => this.formHasilGenerate[key] !== '')
-            if (cekForm) {
+            if (!cekForm) {
                 // Simpan data ke BE
-                swal.fire({
-                    title: 'Apakah anda yakin?',
-                    text: "Data yang sudah disimpan tidak dapat diubah lagi",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, simpan & keluar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        swal.fire('Berhasil', 'Data berhasil disimpan', 'success')
-                        this.closeModal()
-                        this.$emit('openModalGenerate')
-                    }
-                })
-            } else {
                 swal.fire('Peringatan', 'Pastikan semua form terisi', 'warning')
+                return
             }
+            const form = {
+                jadwal_id: this.dataGenerate.jadwal_id,
+                kode: this.form.kode_produk,
+                tgl_bppb: this.formHasilGenerate.tgl,
+                no_bppb: this.formHasilGenerate.hasilGen,
+                tahun: new Date().getFullYear().toString(),
+                no_urut: this.form.urutanBE,
+                bulan: this.form.bulan.numberMonth
+            }
+            axios.post('/api/prd/fg/gen_bppb', form).then(response => {
+                swal.fire('Berhasil', 'Data berhasil disimpan', 'success')
+                this.closeModal()
+                this.$emit('openModalGenerate')
+            }).catch(error => {
+                console.error(error)
+                swal.fire('Gagal', 'Data gagal disimpan', 'error')
+            })
+
         }
     },
     computed: {
@@ -110,6 +131,7 @@ export default {
                 month.push({
                     // change value to romawi
                     value: toRoman(i),
+                    numberMonth: i,
                     label: moment().month(i - 1).lang('id').format('MMMM')
                 })
             }
@@ -133,6 +155,9 @@ export default {
             },
             deep: true // Enable deep watching for nested properties
         }
+    },
+    created() {
+        this.getData()
     }
 }
 </script>

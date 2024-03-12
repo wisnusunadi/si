@@ -4147,7 +4147,6 @@ class ProduksiController extends Controller
                 'status' => 200,
                 'message' =>  'Berhasil Ditambahkan',
             ], 200);
-
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
@@ -4155,26 +4154,23 @@ class ProduksiController extends Controller
                 'error' => true,
                 'message' =>  'Gagal Ditambahkan',
                 'msg' => $th,
-            ],500);
+            ], 500);
         }
-
-
     }
 
     function cek_bppb(Request $request)
     {
         try {
             //code...
-            $max = JadwalPerakitan::where(['kode' => $request->kode ,'tahun' => $request->tahun])->latest('id')->value('no_urut') + 0;
-            return response()->json(['no_urut' => $max+1],200);
+            $max = JadwalPerakitan::where(['kode' => $request->kode, 'tahun' => $request->tahun])->latest('id')->value('no_urut') + 0;
+            return response()->json(['no_urut' => $max + 1], 200);
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json([
                 'error' => true,
                 'msg' => $th,
-            ],500);
+            ], 500);
         }
-
     }
     function on_rakit()
     {
