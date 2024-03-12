@@ -19,7 +19,7 @@ export default {
                     value: 'tipe'
                 },
                 {
-                    text: 'Tipe',
+                    text: 'Tipe Barang',
                     value: 'nama'
                 },
                 {
@@ -62,8 +62,8 @@ export default {
 <template>
     <div>
         <seri v-if="modalseri" @close="closeModalSeri" :noseri="noSeriSelected" />
-        <div class="modal fade modalRiwayatProduk" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade modalRiwayatProduk" id="modelId" data-backdrop="static" data-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -74,10 +74,31 @@ export default {
                     </div>
                     <div class="modal-body">
                         <div class="card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-sm"><label for="">Nomor Order</label>
+                                        <div class="card nomor-so">
+                                            <div class="card-body"><span id="so">{{ headerSO.no_order }}</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm"><label for="">Pemilik</label>
+                                        <div class="card nomor-akn">
+                                            <div class="card-body"><span id="po">{{ headerSO.jenis_pemilik }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm"><label for="">Customer</label>
+                                        <div class="card nomor-po">
+                                            <div class="card-body"><span id="po">{{ headerSO.customer }}</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="card-body">
                                 <div class="d-flex flex-row-reverse bd-highlight">
                                     <div class="p-2 bd-highlight">
-                                        <input type="text" class="form-control" v-model="search" placeholder="Cari..." />
+                                        <input type="text" class="form-control" v-model="search"
+                                            placeholder="Cari..." />
                                     </div>
                                 </div>
                                 <data-table :headers="headers" :items="headerSO?.produk" :search="search">
@@ -86,16 +107,16 @@ export default {
                                             {{ index + 1 }}
                                         </div>
                                     </template>
-                                    <template #item.jumlah="{item}">
+                                    <template #item.jumlah="{ item }">
                                         <div>
                                             {{ item.no_seri?.length ?? 0 }}
                                         </div>
                                     </template>
                                     <template #item.aksi="{ item }">
                                         <div>
-                                            <button class="btn btn-outline-primary" @click="openModalSeri(item.no_seri)">
-                                                <i class="fa fa-eye"></i>
-                                                Detail
+                                            <button class="btn btn-primary btn-sm" @click="openModalSeri(item.no_seri)">
+                                                <i class="fa fa-qrcode"></i>
+                                                Nomor Seri
                                             </button>
                                         </div>
                                     </template>

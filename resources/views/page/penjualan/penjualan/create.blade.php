@@ -129,13 +129,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                .row {
-                                                                                                                                                                                                                                                                                                    font-size: 12px;
-                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                    .row {
+                                                                                                                                                                                                                                                                                                        font-size: 12px;
+                                                                                                                                                                                                                                                                                                    }
 
-                                                                                                                                                                                                                                                                                                h4 {
-                                                                                                                                                                                                                                                                                                    font-size: 20px;
-                                                                                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                    h4 {
+                                                                                                                                                                                                                                                                                                        font-size: 20px;
+                                                                                                                                                                                                                                                                                                    } */
             body {
                 font-size: 12px;
             }
@@ -152,13 +152,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                                                                                                    .row {
-                                                                                                                                        font-size: 12px;
-                                                                                                                                    }
+                                                                                                                                        .row {
+                                                                                                                                            font-size: 12px;
+                                                                                                                                        }
 
-                                                                                                                                    h4 {
-                                                                                                                                        font-size: 20px;
-                                                                                                                                    } */
+                                                                                                                                        h4 {
+                                                                                                                                            font-size: 20px;
+                                                                                                                                        } */
             section {
                 font-size: 12px;
             }
@@ -251,7 +251,9 @@
                         if ($years != \Carbon\Carbon::now()->year) {
                             $isOpen = true;
                         }
-                        $maxDate = $isOpen ? \Carbon\Carbon::parse($years . '-12-31')->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d');
+                        $maxDate = $isOpen
+                            ? \Carbon\Carbon::parse($years . '-12-31')->format('Y-m-d')
+                            : \Carbon\Carbon::now()->format('Y-m-d');
                     @endphp
                     @if ($isOpen)
                         <div class="alert alert-danger" role="alert">
@@ -1177,11 +1179,11 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <th width="5%">No</th>
-                                                                        <th width="40%">Nama Paket</th>
-                                                                        <th width="10%">Jumlah</th>
+                                                                        <th width="45%">Nama Paket</th>
+                                                                        <th width="8%">Jumlah</th>
                                                                         <th width="15%">Harga</th>
-                                                                        <th width="10%">Ongkir</th>
-                                                                        <th width="10%">Subtotal</th>
+                                                                        <th width="8%">Ongkir</th>
+                                                                        <th width="8%">Subtotal</th>
                                                                         <th width="15%">Pajak</th>
                                                                         <th width="15%">Req. Kalibrasi</th>
                                                                         <th hidden>ID_Rencana</th>
