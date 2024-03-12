@@ -165,9 +165,11 @@ export default {
                                     <input type="number" class="form-control" v-model="item.kedatangan"
                                         @keyup="numberOnly($event)">
                                 </td>
-                                <td> <button class="btn btn-outline-danger" @click="transferProduk.splice(index, 1)">
+                                <td>
+                                    <button class="btn btn-outline-danger" @click="transferProduk.splice(index, 1)">
                                         <i class="fa fa-trash"></i>
-                                    </button></td>
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                         <tfoot>
