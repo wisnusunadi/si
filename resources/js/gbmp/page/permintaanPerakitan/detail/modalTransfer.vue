@@ -99,6 +99,20 @@ export default {
             },
             deep: true,
         },
+        alertJumlah: {
+            handler() {
+                if (this.alertJumlah) {
+                    this.transferProduk.forEach((item) => {
+                        item.isError = true;
+                    });
+                } else {
+                    this.transferProduk.forEach((item) => {
+                        delete item.isError;
+                    });
+                }
+            },
+            immediate: true,
+        }
     }
 }
 </script>
@@ -132,7 +146,8 @@ export default {
                         <thead>
                             <tr>
                                 <th>Jumlah</th>
-                                <th>Kedatangan</th>
+                                <th colspan="2">Kedatangan</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -150,8 +165,21 @@ export default {
                                     <input type="number" class="form-control" v-model="item.kedatangan"
                                         @keyup="numberOnly($event)">
                                 </td>
+                                <td> <button class="btn btn-outline-danger" @click="transferProduk.splice(index, 1)">
+                                        <i class="fa fa-trash"></i>
+                                    </button></td>
                             </tr>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="100%">
+                                    <small :class="alertJumlah ? 'text-danger' : ''">
+                                        Jumlah Total : {{ transferProduk.reduce((acc, item) => acc +
+                        parseInt(item.jumlah), 0) }}
+                                    </small> <br>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <div class="modal-footer">
