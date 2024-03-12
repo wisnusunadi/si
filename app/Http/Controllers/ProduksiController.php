@@ -4136,7 +4136,6 @@ class ProduksiController extends Controller
 
     function generate_bppb(Request $request)
     {
-        dd($request->all());
         DB::beginTransaction();
         try {
             //code...
