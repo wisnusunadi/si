@@ -32,12 +32,15 @@ export default {
             tanggalAkhir: moment().endOf('month').format('YYYY-MM-DD'),
             loadingRiwayat: false,
             searchRiwayat: '',
+            openModalAfterGenerate: false,
         }
     },
     methods: {
         async getData() {
             try {
-                this.$store.dispatch('setLoading', true)
+                if (!this.openModalAfterGenerate) {
+                    this.$store.dispatch('setLoading', true)
+                }
                 const { data: perakitan } = await axios.get('/api/prd/ongoing')
                 this.dataPerakitan = perakitan.map(item => {
                     return {
@@ -144,6 +147,14 @@ export default {
         updateSearch(search) {
             this.searchRiwayat = search
             this.updateRiwayat()
+        },
+        refreshData() {
+            this.openModalAfterGenerate = true
+            this.getData()
+        },
+        refresh() {
+            this.openModalAfterGenerate = false
+            this.getData()
         }
     },
     mounted() {
@@ -178,7 +189,8 @@ export default {
                     aria-labelledby="pills-terjadwal-tab">
                     <div class="card">
                         <div class="card-body">
-                            <perakitan :dataTable="dataPerakitan" @refresh="getData" />
+                            <perakitan :dataTable="dataPerakitan" @refresh="refresh" @refreshData="refreshData"
+                                :openModalAfterGenerate="openModalAfterGenerate" />
                         </div>
                     </div>
                 </div>
