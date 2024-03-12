@@ -7,16 +7,18 @@ import Vuex from "vuex";
 import vSelect from "vue-select";
 import storeData from "./store";
 import DataTable from "./components/DataTable.vue";
+import numberOnly from "./plugins/numberOnly";
 import persentase from "./components/persentase.vue";
 import "vue-select/dist/vue-select.css";
 
 window.Vue = Vue;
 Vue.use(VueRouter);
 Vue.use(VueSweetalert2);
+Vue.use(numberOnly);
 Vue.use(Vuex);
 Vue.component("v-select", vSelect);
-Vue.component('data-table', DataTable);
-Vue.component('persentase', persentase);
+Vue.component("data-table", DataTable);
+Vue.component("persentase", persentase);
 
 const store = new Vuex.Store(storeData);
 
@@ -25,6 +27,6 @@ const app = new Vue({
     router,
     store,
     components: {
-        index: Index
-    }
-})
+        index: Index,
+    },
+});

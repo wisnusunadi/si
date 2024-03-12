@@ -1,10 +1,14 @@
 <script>
 import Header from '../../../components/header.vue';
 import headerDetail from './header.vue';
+import pagination from '../../../components/pagination.vue';
+import modalTransfer from './modalTransfer.vue'
 export default {
     components: {
         Header,
-        headerDetail
+        headerDetail,
+        pagination,
+        modalTransfer
     },
     data() {
         return {
@@ -38,47 +42,57 @@ export default {
                     {
                         no: 1,
                         nama: 'Produk 1',
-                        jumlah: 10
+                        jumlah: 10,
+                        sudah_transfer: 5
                     },
                     {
                         no: 2,
                         nama: 'Produk 2',
-                        jumlah: 20
+                        jumlah: 20,
+                        sudah_transfer: 10
                     },
                     {
                         no: 3,
                         nama: 'Produk 3',
-                        jumlah: 30
+                        jumlah: 30,
+                        sudah_transfer: 15
                     }
                 ]
             },
-            headersProduk: [
-                {
-                    text: 'No',
-                    value: 'no'
-                },
-                {
-                    text: 'Nama Produk',
-                    value: 'nama'
-                },
-                {
-                    text: 'Jumlah',
-                    value: 'jumlah'
-                },
-                {
-                    text: 'Aksi',
-                    value: 'aksi'
-                }
-            ],
             search: '',
+            renderPaginate: [],
+            showModal: false,
+            detailTransfer: {}
         }
     },
+    methods: {
+        updateFilteredDalamProses(data) {
+            this.renderPaginate = data;
+        },
+        transfer(item) {
+            this.detailTransfer = item;
+            this.showModal = true;
+            this.$nextTick(() => {
+                $('#modelId').modal('show');
+            });
+        },
+    },
+    computed: {
+        filteredDalamProses() {
+            return this.produk.produk.filter((data) => {
+                return Object.keys(data).some((key) => {
+                    return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
+                });
+            });
+        },
+    }
 }
 </script>
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
         <headerDetail :header="produk.header" />
+        <modalTransfer v-if="showModal" @close="showModal = false" :detail="detailTransfer" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex bd-highlight">
@@ -87,15 +101,40 @@ export default {
                         <input type="text" class="form-control" placeholder="Cari..." v-model="search">
                     </div>
                 </div>
-                <data-table :headers="headersProduk" :items="produk.produk" :search="search">
-                    <template #item.aksi="{ item }">
-                        <div>
-                            <button class="btn btn-outline-primary btn-sm">
-                                Transfer
-                            </button>
-                        </div>
-                    </template>
-                </data-table>
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">Nama Produk</th>
+                            <th colspan="2">Jumlah</th>
+                            <th rowspan="2">Aksi</th>
+                        </tr>
+                        <tr>
+                            <th>Belum Transfer</th>
+                            <th>Sudah Transfer</th>
+                        </tr>
+                    </thead>
+                    <tbody v-if="renderPaginate.length > 0">
+                        <tr v-for="(item, index) in renderPaginate" :key="index">
+                            <td>{{ item.no }}</td>
+                            <td>{{ item.nama }}</td>
+                            <td>{{ item.jumlah }}</td>
+                            <td>{{ item.sudah_transfer }}</td>
+                            <td>
+                                <button class="btn btn-outline-primary btn-sm" @click="transfer(item)">
+                                    Transfer
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan="100%">Tidak ada data</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pagination :filteredDalamProses="filteredDalamProses"
+                    @updateFilteredDalamProses="updateFilteredDalamProses" />
             </div>
         </div>
     </div>
