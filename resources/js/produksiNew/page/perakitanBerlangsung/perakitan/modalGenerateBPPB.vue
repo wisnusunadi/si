@@ -5,7 +5,7 @@ export default {
     data() {
         return {
             form: {
-                kode: '',
+                kode: 'PRD',
                 urutan: '02',
                 kode_produk: this.dataGenerate.kode_produk,
                 bulan: '',
@@ -153,7 +153,7 @@ export default {
                         <div class="col">
                             <div class="form-group">
                                 <label for="">Kode</label>
-                                <select class="form-control" v-model="form.kode">
+                                <select class="form-control" v-model="form.kode" disabled>
                                     <option v-for="item in optionKode" :key="item">{{ item }}</option>
                                 </select>
                             </div>
@@ -188,6 +188,7 @@ export default {
                             <div class="form-group">
                                 <label for="">Tanggal BPPB</label>
                                 <input type="date" class="form-control" :value="formHasilGenerate.tgl"
+                                    :min="new Date().getFullYear() + '-01-01'"
                                     :max="new Date().toISOString().split('T')[0]">
                             </div>
                         </div>
