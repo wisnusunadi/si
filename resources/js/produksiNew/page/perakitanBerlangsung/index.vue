@@ -33,6 +33,7 @@ export default {
             loadingRiwayat: false,
             searchRiwayat: '',
             openModalAfterGenerate: false,
+            openDataAfterGenerate: false
         }
     },
     methods: {
@@ -40,6 +41,7 @@ export default {
             try {
                 if (!this.openModalAfterGenerate) {
                     this.$store.dispatch('setLoading', true)
+                    this.openDataAfterGenerate = false
                 }
                 const { data: perakitan } = await axios.get('/api/prd/ongoing')
                 this.dataPerakitan = perakitan.map(item => {
@@ -76,6 +78,9 @@ export default {
                 console.log(error)
             } finally {
                 this.$store.dispatch('setLoading', false)
+                if(this.openModalAfterGenerate) {
+                    this.openDataAfterGenerate = true
+                }
             }
         },
         periode(date) {
@@ -190,7 +195,8 @@ export default {
                     <div class="card">
                         <div class="card-body">
                             <perakitan :dataTable="dataPerakitan" @refresh="refresh" @refreshData="refreshData"
-                                :openModalAfterGenerate="openModalAfterGenerate" />
+                                :openDataAfterGenerate="openDataAfterGenerate"
+                                 />
                         </div>
                     </div>
                 </div>

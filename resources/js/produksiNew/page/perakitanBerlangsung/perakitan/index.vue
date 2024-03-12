@@ -5,7 +5,7 @@ import modalGenerateBPPB from './modalGenerateBPPB.vue';
 import inputNoSeri from './inputNoSeri.vue';
 import DataTable from '../../../components/DataTable.vue';
 export default {
-    props: ['dataTable', 'openModalAfterGenerate'],
+    props: ['dataTable', 'openDataAfterGenerate'],
     components: {
         modalGenerate,
         modalPilihan,
@@ -103,7 +103,7 @@ export default {
         }
     },
     watch: {
-        openModalAfterGenerate(val) {
+        openDataAfterGenerate(val) {
             if (val) {
                 // get index data
                 this.detailData = this.dataTable.find(item => item.id == this.$store.state.openDetail.id)
