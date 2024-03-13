@@ -51,6 +51,10 @@ export default {
                     value: 'customer'
                 },
                 {
+                    text: 'Status',
+                    value: 'status'
+                },
+                {
                     text: 'Aksi',
                     value: 'aksi',
                     sortable: false
@@ -128,8 +132,9 @@ export default {
         <Header :title="title" :breadcumbs="breadcumbs" />
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home" type="button"
-                    @click="showTabs = 'dalamProses'" role="tab" aria-controls="pills-home" aria-selected="true">Dalam
+                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
+                    type="button" @click="showTabs = 'dalamProses'" role="tab" aria-controls="pills-home"
+                    aria-selected="true">Dalam
                     Proses</a>
 
             </li>
@@ -140,7 +145,8 @@ export default {
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-contact" type="button"
-                    @click="showTabs = 'riwayat'" role="tab" aria-controls="pills-contact" aria-selected="false">Riwayat</a>
+                    @click="showTabs = 'riwayat'" role="tab" aria-controls="pills-contact"
+                    aria-selected="false">Riwayat</a>
             </li>
         </ul>
         <div class="tab-content" id="pills-tabContent">
@@ -158,6 +164,9 @@ export default {
                         </div>
 
                         <data-table :headers="headers" :items="dataTable" :search="search" v-if="!$store.state.loading">
+                            <template #item.status="{ item }">
+                                <loading :persentase="item.status" />
+                            </template>
                             <template #item.aksi="{ item }">
                                 <button class="btn btn-outline-primary btn-sm" @click="transfer(item)">
                                     Transfer

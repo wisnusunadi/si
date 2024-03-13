@@ -38,7 +38,7 @@ export default {
     },
     methods: {
         detail(id) {
-            this.$router.push({ name: 'detail-kalibrasi-internal', params: { id } })
+            this.$router.push({ name: 'detail-kalibrasi-internal', params: { id, jenis: 'dalamproses' } });
         }
     },
 }

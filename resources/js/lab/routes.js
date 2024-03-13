@@ -36,7 +36,7 @@ const routes = [
         name: "kalibrasi"
     },
     {
-        path: "/lab/kalibrasiInternal/:id",
+        path: "/lab/kalibrasiInternal/:id/:jenis",
         component: DetailKalibrasi,
         name: "detail-kalibrasi-internal"
     },

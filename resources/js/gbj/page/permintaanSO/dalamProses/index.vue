@@ -5,6 +5,7 @@ export default {
     components: {
         detail
     },
+    props: ["items"],
     data() {
         return {
             search: '',
@@ -34,7 +35,6 @@ export default {
                     value: 'aksi'
                 }
             ],
-            items: [],
             showModal: false,
             detailSelected: {}
         }
@@ -60,36 +60,18 @@ export default {
                 $('.modalDetail').modal('show')
             })
         },
-        async getData() {
-            try {
-                const { data } = await axios.get('/api/tfp/belum-dicek', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
-                    }
-                })
-                this.items = data.map((item, index) => {
-                    return {
-                        no: index + 1,
-                        ...item,
-                        batas_transfer: this.dateFormat(item.batas)
-                    }
-                })
-            } catch (error) {
-                console.log(error)
-            }
-        },
         cetakSPPB(id) {
             window.open(`/penjualan/penjualan/cetak_surat_perintah/${id}`, '_blank')
         },
+        refresh() {
+            this.$emit('refresh')
+        }
     },
-    created() {
-        this.getData()
-    }
 }
 </script>
 <template>
     <div class="card">
-        <detail v-if="showModal" :detailSelected="detailSelected" @closeModal="showModal = false" @refresh="getData" />
+        <detail v-if="showModal" :detailSelected="detailSelected" @closeModal="showModal = false" @refresh="refresh" />
         <div class="card-body">
             <div class="d-flex flex-row-reverse bd-highlight">
                 <div class="p-2 bd-highlight">

@@ -1,10 +1,10 @@
 <script>
-import axios from 'axios'
 import modalDetail from '../dalamProses/modalDetail.vue'
 export default {
     components: {
         modalDetail
     },
+    props: ["items"],
     data() {
         return {
             search: '',
@@ -50,31 +50,10 @@ export default {
                 $('.modalDetail').modal('show')
             })
         },
-        async getData() {
-            try {
-                const { data } = await axios.get(`/api/tfp/sudah-dicek`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
-                    }
-                })
-                this.items = data.map((item, index) => {
-                    return {
-                        no: index + 1,
-                        ...item,
-                        batas_transfer: this.dateFormat(item.batas)
-                    }
-                })
-            } catch (error) {
-                console.error(error)
-            }
-        },
         cetakSPPB(id) {
             window.open(`/penjualan/penjualan/cetak_surat_perintah/${id}`, '_blank')
         },
     },
-    created() {
-        this.getData()
-    }
 }
 </script>
 <template>

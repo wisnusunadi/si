@@ -1,5 +1,4 @@
 <script>
-import axios from 'axios';
 import pagination from '../../../components/pagination.vue';
 import detail from './detail.vue';
 export default {
@@ -7,6 +6,7 @@ export default {
         pagination,
         detail
     },
+    props: ['items'],
     data() {
         return {
             search: '',
@@ -27,22 +27,6 @@ export default {
                 $('.modalDetail').modal('show')
             });
         },
-        async getData() {
-            try {
-                const { data } = await axios.get('/api/v2/gbj/get_rekap_so_produk')
-                this.items = data.map((item, index) => {
-                    return {
-                        no: index + 1,
-                        ...item,
-                    }
-                })
-            } catch (error) {
-                console.log(error)
-            }
-        },
-    },
-    created() {
-        this.getData()
     },
     computed: {
         filteredDalamProses() {

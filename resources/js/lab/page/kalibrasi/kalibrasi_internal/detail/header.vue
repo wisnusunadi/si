@@ -47,16 +47,21 @@ export default {
                     <div class="p-2 flex-fill bd-highlight">
                         <p class="text-muted">Customer</p>
                         <b>{{ header.customer }}</b> <br />
-                        <span v-if="header.jenis_pemilik.label">{{ JSON.parse(JSON.stringify(header.jenis_pemilik?.label))
-                        }}</span>
+                        <span v-if="header.jenis_pemilik.label">{{
+            JSON.parse(JSON.stringify(header.jenis_pemilik?.label))
+        }}</span>
                         <button class="btn btn-outline-warning btn-sm" @click="editPemilik"
-                            v-if="header.jenis_pemilik.label">
-                            <i class="fas fa-pencil-alt"></i>
+                            v-if="header.jenis_pemilik.label && $route.params.jenis == 'dalamproses'">
+                            <i class=" fas fa-pencil-alt"></i>
                         </button>
                         <br v-if="header.jenis_pemilik.label">
                         <span>{{ header.nama }}</span> <br />
-                        <span class="d-inline-block text-truncate" style="max-width: 150px;">{{ header.alamat }}</span>
-                        <button class="btn btn-outline-warning btn-sm" @click="editAlamat" v-if="!header.edit_alamat">
+                        <span class="d-inline-block"
+                            :class="$route.params.jenis == 'dalamproses' ? 'text-truncate' : 'text-break'"
+                            :style="$route.params.jenis == 'dalamproses' ? 'max-width: 150px' : 'max-width: 450px'">
+                            {{ header.alamat }}</span>
+                        <button class="btn btn-outline-warning btn-sm" @click="editAlamat"
+                            v-if="!header.edit_alamat && $route.params.jenis == 'dalamproses'">
                             <i class="fas fa-pencil-alt"></i>
                         </button>
                         <br />

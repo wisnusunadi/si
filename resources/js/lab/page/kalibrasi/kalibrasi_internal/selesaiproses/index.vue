@@ -22,6 +22,10 @@ export default {
                     value: 'jenis_pemilik'
                 },
                 {
+                    text: 'Customer',
+                    value: 'customer'
+                },
+                {
                     text: 'Aksi',
                     value: 'aksi'
                 }
@@ -36,7 +40,7 @@ export default {
             this.$emit('changeYears');
         },
         detail(id) {
-            this.$router.push({ name: 'detail-kalibrasi-internal', params: { id } })
+            this.$router.push({ name: 'detail-kalibrasi-internal', params: { id, jenis: 'selesaiproses' } });
         },
     },
     computed: {
@@ -70,8 +74,8 @@ export default {
                                             <input class="form-check-input" type="radio" v-model="$store.state.years"
                                                 @change="changeYears(year)" :id="`exampleRadios${year}`" :value="year"
                                                 :checked="year ==
-                                                    new Date().getFullYear()
-                                                    " />
+                new Date().getFullYear()
+                " />
                                             <label class="form-check-label" :for="`exampleRadios${year}`">
                                                 {{ year }}
                                             </label>

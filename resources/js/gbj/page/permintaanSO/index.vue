@@ -3,6 +3,7 @@ import Header from '../../components/header.vue'
 import dalamProses from './dalamProses'
 import sudahProses from './sudahProses'
 import permintaanBarang from './permintaanBarang'
+import axios from 'axios'
 export default {
     components: {
         Header,
@@ -16,9 +17,57 @@ export default {
             breadcumbs: [
                 { name: 'Home', link: '/' },
                 { name: 'Daftar Sales Order', link: '/gbj/so' },
-            ]
+            ],
+            dataDalamProses: [],
+            dataSudahProses: [],
+            dataPermintaanBarang: []
         }
     },
+    methods: {
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true)
+                const { data: dataDalamProses } = await axios.get('/api/tfp/belum-dicek', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
+                    }
+                })
+                const { data: dataSudahProses } = await axios.get(`/api/tfp/sudah-dicek`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
+                    }
+                })
+                const { data: dataPermintaanBarang } = await axios.get('/api/v2/gbj/get_rekap_so_produk')
+                this.dataDalamProses = dataDalamProses.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item,
+                        batas_transfer: this.dateFormat(item.batas)
+                    }
+                })
+                this.dataSudahProses = dataSudahProses.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item,
+                        batas_transfer: this.dateFormat(item.batas)
+                    }
+                })
+                this.dataPermintaanBarang = dataPermintaanBarang.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item,
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.dispatch('setLoading', false)
+            }
+        }
+    },
+    created() {
+        this.getData()
+    }
 }
 </script>
 <template>
@@ -26,8 +75,8 @@ export default {
         <Header :title="title" :breadcumbs="breadcumbs" />
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home" type="button"
-                    role="tab" aria-controls="pills-home" aria-selected="true">Dalam Proses</a>
+                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
+                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">Dalam Proses</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile" type="button"
@@ -38,15 +87,20 @@ export default {
                     role="tab" aria-controls="pills-contact" aria-selected="false">Permintaan Barang</a>
             </li>
         </ul>
-        <div class="tab-content" id="pills-tabContent">
+        <div class="tab-content" id="pills-tabContent" v-if="!$store.state.loading">
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                <dalamProses />
+                <dalamProses @refresh="getData" :items="dataDalamProses" />
             </div>
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                <sudahProses />
+                <sudahProses :items="dataSudahProses" />
             </div>
             <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                <permintaanBarang />
+                <permintaanBarang :items="dataPermintaanBarang" />
+            </div>
+        </div>
+        <div class="d-flex justify-content-center" v-else>
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
             </div>
         </div>
     </div>

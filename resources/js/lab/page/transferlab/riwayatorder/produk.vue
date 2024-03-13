@@ -115,8 +115,8 @@ export default {
                                     <template #item.aksi="{ item }">
                                         <div>
                                             <button class="btn btn-primary btn-sm" @click="openModalSeri(item.no_seri)">
-                                                <i class="fa fa-qrcode"></i>
-                                                Nomor Seri
+                                                <i class="fa fa-eye"></i>
+                                                Detail
                                             </button>
                                         </div>
                                     </template>

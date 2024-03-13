@@ -2,7 +2,7 @@
 import produk from './produk.vue'
 export default {
     components: {
-        produk
+        produk,
     },
     data() {
         return {
@@ -18,6 +18,10 @@ export default {
                 {
                     text: 'Nama Pemilik Sertifikat',
                     value: 'jenis_pemilik'
+                },
+                {
+                    text: 'Customer',
+                    value: 'customer'
                 },
                 {
                     text: 'Aksi',
@@ -70,9 +74,10 @@ export default {
                                 <div class="form-group">
                                     <div class="form-group form-check" v-for="year in getYear" :key="year">
                                         <input class="form-check-input" type="radio" v-model="$store.state.years"
-                                            @change="changeYear(year)" :id="`exampleRadios${year}`" :value="year" :checked="year ==
-                                                new Date().getFullYear()
-                                                " />
+                                            @change="changeYear(year)" :id="`exampleRadios${year}`" :value="year"
+                                            :checked="year ==
+                                        new Date().getFullYear()
+                                        " />
                                         <label class="form-check-label" :for="`exampleRadios${year}`">
                                             {{ year }}
                                         </label>
@@ -89,6 +94,7 @@ export default {
         </div>
         <produk v-if="modal" @close="modal = false" :headerSO="selectedProduk" />
         <data-table :headers="headers" :items="dataRiwayat" :search="search" v-if="!$store.state.loading">
+
             <template #item.aksi="{ item }">
                 <div>
                     <button class="btn btn-outline-primary" @click="detailProduk(item)">

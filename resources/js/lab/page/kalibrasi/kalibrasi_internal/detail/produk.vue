@@ -388,8 +388,8 @@ export default {
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" :ref="status"
                                                         :value="status" id="status1" @click="
-                                                            clickFilterHasil(status)
-                                                            " />
+            clickFilterHasil(status)
+            " />
                                                     <label class="form-check-label text-uppercase" for="status1">
                                                         {{ statusText(status).text }}
                                                     </label>
@@ -401,7 +401,8 @@ export default {
                             </span>
                         </div>
                         <div class="p-2 bd-highlight">
-                            <button class="btn btn-primary" @click="showNoSeriText">
+                            <button class="btn btn-primary" @click="showNoSeriText"
+                                v-if="$route.params.jenis == 'dalamproses'">
                                 Pilih No Seri Via Text
                             </button>
                         </div>
@@ -413,7 +414,9 @@ export default {
                     </div>
                     <data-table :headers="headers" :items="filteredNoSeri" :search="searchNoSeri">
                         <template #header.id>
-                            <input type="checkbox" @click="checkAllNoSeri" :checked="checkedAllNoSeri">
+                            <input type="checkbox" @click="checkAllNoSeri" :checked="checkedAllNoSeri"
+                                v-if="$route.params.jenis == 'dalamproses'">
+                            <span v-else></span>
                         </template>
 
                         <template #item.id="{ item }">
