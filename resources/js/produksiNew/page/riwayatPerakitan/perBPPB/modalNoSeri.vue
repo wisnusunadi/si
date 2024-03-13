@@ -10,6 +10,10 @@ export default {
                 {
                     text: 'Tanggal Buat',
                     value: 'tglbuat'
+                },
+                {
+                    text: 'Tanggal Transfer',
+                    value: 'tgltransfer'
                 }
             ],
             items: []

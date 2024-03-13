@@ -123,8 +123,30 @@ export default {
                     "jumlah_unit": "140 Unit",
                     "jenis": "terjadwal",
                     "keterangan": "Lorem Ipsum",
-                    status: "closeBPPBDenganRakit",
-                }
+                    status: "closeBPPBDenganSisaRakit",
+                },
+                {
+                    "id": 6,
+                    "jadwal_id": 885,
+                    "produk_id": 17,
+                    "generate_seri": 1,
+                    "no_bppb": "-",
+                    "tanggal_mulai": "2024-03-12",
+                    "tanggal_selesai": "2024-03-20",
+                    "selisih": -15,
+                    "nama_produk": "BR-100  ",
+                    "kategori": "INFANT RESUSCITATOR",
+                    "jumlah": 22,
+                    "jumlah_rakit": 0,
+                    "kode_produk": "BR01",
+                    "periode": "Maret",
+                    "tgl_mulai": "08 Maret 2024",
+                    "tgl_selesai": "08 Maret 2024",
+                    "jumlah_unit": "22 Unit",
+                    "jenis": "terjadwal",
+                    "keterangan": "Lorem Ipsum",
+                    status: "closeBPPBTanpaRakit",
+                },
             ],
             tanggalAwalMulai: '',
             tanggalAkhirMulai: '',
@@ -256,8 +278,8 @@ export default {
                     return "<span class='badge badge-danger'>Close BPPB Tanpa Rakit</span>"
                 case "ok":
                     return "<span class='badge badge-success'>Selesai</span>"
-                case "closeBPPBDenganRakit":
-                    return "<span class='badge badge-warning'>Close BPPB Dengan Rakit</span>"
+                case "closeBPPBDenganSisaRakit":
+                    return "<span class='badge badge-warning'>Close BPPB Dengan Sisa Rakit</span>"
                 default:
                     return "<span class='badge badge-secondary'>-</span>"
             }
