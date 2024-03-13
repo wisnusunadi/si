@@ -163,12 +163,12 @@ class LabController extends Controller
         $years = $request->years;
         $uji = UjiLab::addSelect([
             'uji' => function ($q) {
-                $q->selectRaw('coalesce(SUM(CASE WHEN status != "belum" THEN 1 ELSE 0 END),0)')
+                $q->selectRaw('coalesce(SUM(CASE WHEN status = "belum" THEN 1 ELSE 0 END),0)')
                     ->from('uji_lab_detail')
                     ->whereColumn('uji_lab_detail.uji_lab_id', 'uji_lab.id');
             },
         ])
-            ->havingRaw('uji > 0')
+            ->havingRaw('uji = 0')
             ->whereYear('created_at', $years);
 
 
@@ -1722,8 +1722,6 @@ class LabController extends Controller
             ->havingRaw('belum != 0')
             ->with(['Pesanan.Spa.Customer', 'Pesanan.Spb.Customer', 'Pesanan.Ekatalog.Customer'])
             ->get();
-
-
         if ($ujilab->isEmpty()) {
             $data = array();
         } else {
@@ -1949,12 +1947,12 @@ class LabController extends Controller
         $years = $request->years;
         $uji = UjiLab::addSelect([
             'tf' => function ($q) {
-                $q->selectRaw('coalesce(SUM(CASE WHEN is_ready = "0" THEN 1 ELSE 0 END),0)')
+                $q->selectRaw('coalesce(SUM(CASE WHEN is_ready = "1" THEN 1 ELSE 0 END),0)')
                     ->from('uji_lab_detail')
                     ->whereColumn('uji_lab_detail.uji_lab_id', 'uji_lab.id');
             },
         ])
-        ->havingRaw('tf > 0')
+        ->havingRaw('tf = 0')
         ->whereYear('created_at',$years);
 
         $uji_head = array();
