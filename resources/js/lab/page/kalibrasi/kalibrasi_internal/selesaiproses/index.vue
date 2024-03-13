@@ -35,12 +35,8 @@ export default {
             this.$store.dispatch('setYears', year);
             this.$emit('changeYears');
         },
-        detail(item) {
-            this.detailSelected = item;
-            this.modal = true;
-            this.$nextTick(() => {
-                $('.modalProduk').modal('show');
-            })
+        detail(id) {
+            this.$router.push({ name: 'detail-kalibrasi-internal', params: { id } })
         },
     },
     computed: {
@@ -92,7 +88,7 @@ export default {
             </div>
             <data-table :headers="headers" :items="selesaiProses" :search="search" v-if="!$store.state.loading">
                 <template #item.aksi="{ item }">
-                    <button class="btn btn-outline-primary btn-sm" @click="detail(item)">
+                    <button class="btn btn-outline-primary btn-sm" @click="detail(item.id)">
                         <i class="fa fa-eye"></i>
                         Detail
                     </button>
