@@ -3,6 +3,7 @@ import axios from 'axios'
 import DataTable from '../../../components/DataTable.vue'
 import modalPilihan from '../perakitan/modalPilihan.vue'
 import Seriviatext from '../../../../gbj/page/PermintaanReworkGBJ/permintaan/formPermintaan/seriviatext.vue'
+import moment from 'moment'
 export default {
     components: {
         DataTable,
@@ -20,6 +21,19 @@ export default {
                 bagian: '',
                 tujuan: '',
             },
+            formBPPB: {
+                kode: '',
+                urutan: '',
+                kode_produk: this.form?.produk,
+                bulan: '',
+                tahun: new Date().getFullYear().toString().substr(-2),
+                urutanBE: '',
+            },
+            optionKode: [
+                'PRD',
+                'PBK',
+                'SPB',
+            ],
             produk: [],
             loading: false,
             headers: [
@@ -58,6 +72,13 @@ export default {
         keyUpperCase(e) {
             this.form.no_bppb = e.target.value.toUpperCase()
         },
+        checkVariasi(kode) {
+            if (kode == null || kode == '') {
+                return ''
+            } else {
+                return kode
+            }
+        },
         async getData() {
             try {
                 const { produk } = await axios.get('/api/produk').then(res => res.data);
@@ -74,6 +95,7 @@ export default {
                                 label: `${item.nama} ${nama}`,
                                 value: variasi.id,
                                 isGenerate: item.generate_seri == 1 ? true : false,
+                                kode: `${item.kode}${this.checkVariasi(variasi.kode)}`
                             })
                         })
                     }
@@ -358,7 +380,25 @@ export default {
         cekKedatangan() {
             let idValue = [319, 149]
             return idValue.includes(this.form.produk?.value)
-        }
+        },
+        monthCalc() {
+            let month = []
+            let monthNow = moment().month()
+            // Function to convert numeric value to Roman numeral
+            const toRoman = (num) => {
+                const romanNumerals = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+                return romanNumerals[num - 1] || num;
+            };
+            for (let i = monthNow; i <= monthNow + 1; i++) {
+                month.push({
+                    // change value to romawi
+                    value: toRoman(i),
+                    numberMonth: i,
+                    label: moment().month(i - 1).lang('id').format('MMMM')
+                })
+            }
+            return month
+        },
     },
     watch: {
         'form.kedatangan': function (val) {
@@ -413,50 +453,101 @@ export default {
                             <div class="card-body" v-if="!isError">
                                 <div class="row">
                                     <div class="col">
-                                        <div class="form-group">
+                                        <div class="row">
+                                            <div class="col">
+                                                <!-- <div class="form-group">
                                             <label for="">No BPPB</label>
                                             <input type="text" v-model="form.no_bppb" class="form-control"
                                                 @keyup="keyUpperCase" :disabled="hasilGenerate.length > 0">
-                                        </div>
+                                        </div> -->
 
-                                        <div class="form-group">
-                                            <label for="">Nama Produk</label>
-                                            <v-select :options="produk" v-model="form.produk" placeholder="Pilih Produk"
-                                                :disabled="hasilGenerate.length > 0"></v-select>
-                                        </div>
+                                                <div class="form-group">
+                                                    <label for="">Nama Produk</label>
+                                                    <v-select :options="produk" v-model="form.produk"
+                                                        placeholder="Pilih Produk"
+                                                        :disabled="hasilGenerate.length > 0"></v-select>
+                                                </div>
 
-                                        <div class="form-group" v-if="form.produk?.isGenerate && !cekKedatangan">
-                                            <label for="exampleInputEmail1">Kedatangan</label>
-                                            <input type="number" class="form-control" v-model.number="form.kedatangan"
-                                                :disabled="hasilGenerate.length > 0" @keypress="numberOnly($event)">
-                                        </div>
+                                                <div class="form-group"
+                                                    v-if="form.produk?.isGenerate && !cekKedatangan">
+                                                    <label for="exampleInputEmail1">Kedatangan</label>
+                                                    <input type="number" class="form-control"
+                                                        v-model.number="form.kedatangan"
+                                                        :disabled="hasilGenerate.length > 0"
+                                                        @keypress="numberOnly($event)">
+                                                </div>
 
-                                        <div class="form-group" v-if="form.produk?.isGenerate">
-                                            <label for="">Jumlah Rakit</label>
-                                            <input type="number" class="form-control" v-model="form.jml"
-                                                @keypress="numberOnly($event)" :disabled="hasilGenerate.length > 0">
-                                        </div>
+                                                <div class="form-group" v-if="form.produk?.isGenerate">
+                                                    <label for="">Jumlah Rakit</label>
+                                                    <input type="number" class="form-control" v-model="form.jml"
+                                                        @keypress="numberOnly($event)"
+                                                        :disabled="hasilGenerate.length > 0">
+                                                </div>
 
-                                        <div class="form-group">
-                                            <label for="">Bagian (Peminta No Seri)</label>
-                                            <v-select :options="bagian" v-model="form.bagian" placeholder="Bagian"
-                                                :disabled="hasilGenerate.length > 0"></v-select>
-                                        </div>
+                                                <div class="form-group">
+                                                    <label for="">Bagian (Peminta No Seri)</label>
+                                                    <v-select :options="bagian" v-model="form.bagian"
+                                                        placeholder="Bagian"
+                                                        :disabled="hasilGenerate.length > 0"></v-select>
+                                                </div>
 
-                                        <div class="form-group">
-                                            <label for="">Tujuan (Minta No Seri)</label>
-                                            <textarea class="form-control" v-model="form.tujuan" rows="3"
-                                                :disabled="hasilGenerate.length > 0"></textarea>
-                                        </div>
+                                                <div class="form-group">
+                                                    <label for="">Tujuan (Minta No Seri)</label>
+                                                    <textarea class="form-control" v-model="form.tujuan" rows="3"
+                                                        :disabled="hasilGenerate.length > 0"></textarea>
+                                                </div>
 
-                                        <div class="d-flex bd-highlight" v-if="form.produk?.isGenerate == false">
-                                            <div class="p-2 flex-grow-1 bd-highlight"><button class="btn btn-primary"
-                                                    :disabled="hasilGenerate.length > 0" @click="showSeriText">Input
-                                                    No Seri Via Text</button></div>
-                                            <div class="p-2 bd-highlight">
-                                                <button class="btn btn-info" @click="noseri.push({ noseri: '' })"
-                                                    :disabled="hasilGenerate.length > 0">
-                                                    Tambah No. Seri</button>
+                                                <div class="d-flex bd-highlight"
+                                                    v-if="form.produk?.isGenerate == false">
+                                                    <div class="p-2 flex-grow-1 bd-highlight"><button
+                                                            class="btn btn-primary" :disabled="hasilGenerate.length > 0"
+                                                            @click="showSeriText">Input
+                                                            No Seri Via Text</button></div>
+                                                    <div class="p-2 bd-highlight">
+                                                        <button class="btn btn-info"
+                                                            @click="noseri.push({ noseri: '' })"
+                                                            :disabled="hasilGenerate.length > 0">
+                                                            Tambah No. Seri</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <div class="card-title">FORM GENERATE BPPB</div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="form-group">
+                                                            <label for="">Kode</label>
+                                                            <select class="form-control" v-model="formBPPB.kode">
+                                                                <option v-for="(item, index) in optionKode"
+                                                                    :value="item" :key="index">
+                                                                    {{ item }}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="">No Urut</label>
+                                                            <input type="text" class="form-control"
+                                                                v-model="form.urutan" disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="">Kode Produk</label>
+                                                            <input type="text" class="form-control"
+                                                                v-model="form.kode_produk" disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="">Bulan</label>
+                                                            <v-select v-model="form.bulan"
+                                                                :options="monthCalc"></v-select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="">Tahun</label>
+                                                            <input type="text" class="form-control"
+                                                                :value="new Date().getFullYear().toString()" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="scrollable" v-if="form.produk?.isGenerate == false">
@@ -494,7 +585,8 @@ export default {
                                     </div>
                                     <div class="col" v-if="hasilGenerate.length > 0">
                                         <p class="text-bold">Hasil Generate No. Seri</p>
-                                        <DataTable :headers="headers" :items="hasilGenerate" :search="search"></DataTable>
+                                        <DataTable :headers="headers" :items="hasilGenerate" :search="search">
+                                        </DataTable>
                                     </div>
                                 </div>
                             </div>
@@ -503,7 +595,8 @@ export default {
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link active" id="pills-preview-tab" data-toggle="pill"
                                             data-target="#pills-preview" type="button" role="tab"
-                                            aria-controls="pills-preview" aria-selected="true">Preview Generate No Seri</a>
+                                            aria-controls="pills-preview" aria-selected="true">Preview Generate No
+                                            Seri</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link" id="pills-duplikasi-tab" data-toggle="pill"
@@ -545,8 +638,8 @@ export default {
                                         </div>
                                         <span v-if="loading">Loading...</span>
                                         <span v-else>{{
-                                            form.produk?.isGenerate ? 'Generate' : 'Simpan'
-                                        }}</span>
+            form.produk?.isGenerate ? 'Generate' : 'Simpan'
+        }}</span>
                                     </button>
                                     <button class="btn btn-success" v-if="seri.length > 0" @click="simpanSeri">
                                         <div class="spinner-border" role="status" v-if="loading">
