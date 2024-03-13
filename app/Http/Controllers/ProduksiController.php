@@ -4341,9 +4341,10 @@ class ProduksiController extends Controller
         left join jadwal_rakit_noseri jrn on jrn.jadwal_id = jp.id
         left join gdg_barang_jadi gbj on gbj.id = jp.produk_id
         left join produk p on p.id = gbj.produk_id
-        where jp.status not in (6) and jp.status_tf not in(14,11)
+        where jp.jenis = 'terjadwal' and jp.status not in (6) and jp.status_tf not in(14,11)
         group by jp.id
-        having jp.jumlah != cast(sum(case when jrn.status = 14 then 1 else 0 end) as SIGNED)");
+        having jp.jumlah != cast(sum(case when jrn.status = 14 then 1 else 0 end) as SIGNED)
+        order by jrn.created_at DESC");
 
             $data = collect($data)->map(function ($item) {
                 return [
