@@ -11,6 +11,11 @@ const routes = [
         component: () => import("./page/permintaanperakitan/detail"),
         name: "permintaan-perakitan-detail",
     },
+    {
+        path: "/gbmp/perakitan/transfer/:id",
+        component: () => import("./page/permintaanPerakitan/detail/permintaanTransfer"),
+        name: "permintaan-perakitan-transfer",
+    },
 ];
 
 const router = new VueRouter({

@@ -2,13 +2,11 @@
 import Header from '../../../components/header.vue';
 import headerDetail from './header.vue';
 import pagination from '../../../components/pagination.vue';
-import modalTransfer from './modalTransfer.vue'
 export default {
     components: {
         Header,
         headerDetail,
         pagination,
-        modalTransfer
     },
     data() {
         return {
@@ -92,11 +90,13 @@ export default {
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
         <headerDetail :header="produk.header" />
-        <modalTransfer v-if="showModal" @close="showModal = false" :detail="detailTransfer" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex bd-highlight">
-                    <div class="p-2 flex-grow-1 bd-highlight"></div>
+                    <div class="p-2 flex-grow-1 bd-highlight">
+                        <button class="btn btn-success"
+                            @click="$router.push({ name: 'permintaan-perakitan-transfer', params: { id: $route.params.id } })">Transfer</button>
+                    </div>
                     <div class="p-2 bd-highlight">
                         <input type="text" class="form-control" placeholder="Cari..." v-model="search">
                     </div>
@@ -122,7 +122,8 @@ export default {
                             <td>{{ item.sudah_transfer }}</td>
                             <td>
                                 <button class="btn btn-outline-primary btn-sm" @click="transfer(item)">
-                                    Transfer
+                                    <i class="fa fa-eye"></i>
+                                    Detail
                                 </button>
                             </td>
                         </tr>
