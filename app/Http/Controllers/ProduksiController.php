@@ -21,6 +21,7 @@ use App\Models\JadwalRakitNoseriRw;
 use App\Models\NoseriBarangJadi;
 use App\Models\NoseriCoo;
 use App\Models\NoseriTGbj;
+use App\Models\PackRw;
 use App\Models\Pesanan;
 use App\Models\PetiRw;
 use App\Models\Produk;
@@ -351,6 +352,40 @@ class ProduksiController extends Controller
         return response()->json($obj);
     }
 
+    function kamus_produk_detail($year,$prd)
+    {
+       if($prd == 452){
+        $jadwal = PackRw::
+        select('noseri_barang_jadi.id','noseri_barang_jadi.noseri','pack_rw.created_at as tgl_tf','noseri_barang_jadi.created_at as tgl_rakit')
+        ->selectRaw('"terjadwal" AS jenis')
+        ->selectRaw('"-" AS no_bppb')
+        ->leftJoin('noseri_barang_jadi','pack_rw.noseri_id','=','noseri_barang_jadi.id')
+        ->whereYear('pack_rw.created_at', $year)
+        ->get();
+       }else{
+        $jadwal = JadwalRakitNoseri::
+        select('jadwal_perakitan.id','jadwal_perakitan.jenis','jadwal_perakitan.no_bppb','jadwal_rakit_noseri.created_at as tgl_rakit','jadwal_rakit_noseri.noseri','jadwal_rakit_noseri.waktu_tf as tgl_tf')
+        ->leftJoin('jadwal_perakitan','jadwal_perakitan.id','=','jadwal_rakit_noseri.jadwal_id')
+        ->where('jadwal_perakitan.produk_id',$prd)
+        ->whereYear('jadwal_rakit_noseri.created_at', $year)
+        ->get();
+
+       }
+
+        $obj = array();
+
+        foreach($jadwal as $j){
+            $obj[] =  array(
+                'id' => $j->id,
+                'jenis_perakitan' => $j->jenis,
+                'no_bppb' => $j->no_bppb,
+                'noseri' => $j->noseri,
+                'tgl_rakit' => $j->tgl_rakit,
+                'tgl_tf' => $j->tgl_tf
+            );
+        }
+        return response()->json($obj);
+    }
     function kamus_produk($year)
     {
         $data = GudangBarangJadi::addSelect([
@@ -380,6 +415,7 @@ class ProduksiController extends Controller
         ])
             ->get();
 
+        $obj = array();
         foreach ($data as $d) {
             $obj[] = array(
                 'id' => $d->id,
@@ -1341,7 +1377,7 @@ class ProduksiController extends Controller
             //code...
             foreach ($obj->seri as $f) {
                 JadwalRakitNoseri::create([
-                    'jadwal_id' => 770,
+                    'jadwal_id' => 750,
                     'noseri' => $f,
                     //'no_bppb' => 'PRD/07-BPM002/X/23',
                     // 'unit' => 'ST01',

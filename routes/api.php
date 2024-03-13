@@ -382,6 +382,7 @@ Route::prefix('/prd')->group(function () {
         Route::get('/tf/riwayat', [ProduksiController::class, 'tf_riwayat_rw']);
     });
     Route::get('/kamus_prd/{year}', [ProduksiController::class, 'kamus_produk']);
+    Route::get('/kamus_prd/detail/{year}/{prd}', [ProduksiController::class, 'kamus_produk_detail']);
     Route::get('/dashboard', [ProduksiController::class, 'dashboard']);
     Route::get('/allproduk', [ProduksiController::class, 'getAllProduk']);
     Route::post('/grafikproduk', [ProduksiController::class, 'getGrafikProduk']);
