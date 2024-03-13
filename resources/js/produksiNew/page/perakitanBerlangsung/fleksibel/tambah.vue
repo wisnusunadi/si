@@ -22,9 +22,9 @@ export default {
                 tujuan: '',
             },
             formBPPB: {
-                kode: '',
+                kode: 'PRD',
                 urutan: '',
-                kode_produk: this.form?.produk,
+                kode_produk: '',
                 bulan: '',
                 tahun: new Date().getFullYear().toString().substr(-2),
                 urutanBE: '',
@@ -77,6 +77,22 @@ export default {
                 return ''
             } else {
                 return kode
+            }
+        },
+        getUrutan(kode) {
+            this.formBPPB.urutan = ''
+            this.formBPPB.urutanBE = ''
+            this.formBPPB.kode_produk = kode
+            try {
+                axios.post('/api/prd/fg/cek_bppb', {
+                    kode,
+                    tahun: new Date().getFullYear().toString()
+                }).then(res => {
+                    this.formBPPB.urutan = res.data.no_urut.toString().padStart(2, '0')
+                    this.formBPPB.urutanBE = res.data.no_urut
+                })
+            } catch (error) {
+                console.log(error);
             }
         },
         async getData() {
@@ -370,7 +386,25 @@ export default {
                 this.$refs.noseri[idx].blur();
                 this.simpan();
             }
+        },
+        isFormFilled(obj) {
+            for (const key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    let value = obj[key]
+                    if (typeof value === 'string') {
+                        value = value.trim()
+                    }
 
+                    if (typeof value === 'object') {
+                        if (!this.isFormFilled(value)) {
+                            return false
+                        }
+                    } else if (value === '') {
+                        return false
+                    }
+                }
+            }
+            return true
         }
     },
     created() {
@@ -399,6 +433,9 @@ export default {
             }
             return month
         },
+        cekFormFilled() {
+            return this.isFormFilled(this.form)
+        }
     },
     watch: {
         'form.kedatangan': function (val) {
@@ -429,6 +466,16 @@ export default {
                 })
             },
             deep: true,
+        },
+        formBPPB: {
+            handler(newForm) {
+                if (this.cekFormFilled) {
+                    this.form.no_bppb = `${newForm.kode}/${newForm.urutan}-${newForm.kode_produk}/${newForm.bulan.value}/${newForm.tahun}`
+                } else {
+                    this.form.no_bppb = ''
+                }
+            },
+            deep: true,
         }
     },
 }
@@ -442,7 +489,7 @@ export default {
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Form Perakitan Tanpa Jadwal
+                        <h5 class="modal-title">Form Perakitan Tanpa Jadwal {{ form.produk.kode }}
                         </h5>
                         <button type="button" class="close" @click="closeModal">
                             <span aria-hidden="true">&times;</span>
@@ -455,16 +502,16 @@ export default {
                                     <div class="col">
                                         <div class="row">
                                             <div class="col">
-                                                <!-- <div class="form-group">
-                                            <label for="">No BPPB</label>
-                                            <input type="text" v-model="form.no_bppb" class="form-control"
-                                                @keyup="keyUpperCase" :disabled="hasilGenerate.length > 0">
-                                        </div> -->
+                                                <div class="form-group" v-if="form.no_bppb != ''">
+                                                    <label for="">No BPPB</label>
+                                                    <input type="text" v-model="form.no_bppb" class="form-control"
+                                                        @keyup="keyUpperCase" disabled>
+                                                </div>
 
                                                 <div class="form-group">
                                                     <label for="">Nama Produk</label>
                                                     <v-select :options="produk" v-model="form.produk"
-                                                        placeholder="Pilih Produk"
+                                                        placeholder="Pilih Produk" @input="getUrutan(form.produk.kode)"
                                                         :disabled="hasilGenerate.length > 0"></v-select>
                                                 </div>
 
@@ -519,7 +566,8 @@ export default {
                                                     <div class="card-body">
                                                         <div class="form-group">
                                                             <label for="">Kode</label>
-                                                            <select class="form-control" v-model="formBPPB.kode">
+                                                            <select class="form-control" v-model="formBPPB.kode"
+                                                                disabled>
                                                                 <option v-for="(item, index) in optionKode"
                                                                     :value="item" :key="index">
                                                                     {{ item }}
@@ -529,16 +577,16 @@ export default {
                                                         <div class="form-group">
                                                             <label for="">No Urut</label>
                                                             <input type="text" class="form-control"
-                                                                v-model="form.urutan" disabled>
+                                                                v-model="formBPPB.urutan" disabled>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">Kode Produk</label>
                                                             <input type="text" class="form-control"
-                                                                v-model="form.kode_produk" disabled>
+                                                                v-model="formBPPB.kode_produk" disabled>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">Bulan</label>
-                                                            <v-select v-model="form.bulan"
+                                                            <v-select v-model="formBPPB.bulan"
                                                                 :options="monthCalc"></v-select>
                                                         </div>
                                                         <div class="form-group">
