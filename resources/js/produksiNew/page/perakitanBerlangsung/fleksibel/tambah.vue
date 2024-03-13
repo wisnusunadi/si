@@ -494,7 +494,8 @@ export default {
                                     </div>
                                     <div class="col" v-if="hasilGenerate.length > 0">
                                         <p class="text-bold">Hasil Generate No. Seri</p>
-                                        <DataTable :headers="headers" :items="hasilGenerate" :search="search"></DataTable>
+                                        <DataTable :headers="headers" :items="hasilGenerate" :search="search">
+                                        </DataTable>
                                     </div>
                                 </div>
                             </div>
@@ -503,7 +504,8 @@ export default {
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link active" id="pills-preview-tab" data-toggle="pill"
                                             data-target="#pills-preview" type="button" role="tab"
-                                            aria-controls="pills-preview" aria-selected="true">Preview Generate No Seri</a>
+                                            aria-controls="pills-preview" aria-selected="true">Preview Generate No
+                                            Seri</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link" id="pills-duplikasi-tab" data-toggle="pill"
@@ -545,8 +547,8 @@ export default {
                                         </div>
                                         <span v-if="loading">Loading...</span>
                                         <span v-else>{{
-                                            form.produk?.isGenerate ? 'Generate' : 'Simpan'
-                                        }}</span>
+            form.produk?.isGenerate ? 'Generate' : 'Simpan'
+        }}</span>
                                     </button>
                                     <button class="btn btn-success" v-if="seri.length > 0" @click="simpanSeri">
                                         <div class="spinner-border" role="status" v-if="loading">
