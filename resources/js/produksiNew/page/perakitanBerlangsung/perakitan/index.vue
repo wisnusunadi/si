@@ -300,7 +300,6 @@ export default {
                 </span>
             </template>
 
-
             <template #item.tgl_selesai="{ item }">
                 <span>{{ item.tgl_selesai }}</span> <br>
                 <span v-html="selisih(item.selisih, item.tanggal_selesai)"></span>

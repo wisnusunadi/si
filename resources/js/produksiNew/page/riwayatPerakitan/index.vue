@@ -4,11 +4,13 @@ import Header from '../../components/header.vue'
 import riwayat from './riwayat/index.vue'
 import transfer from './transfer'
 import moment from 'moment'
+import perBPPB from './perBPPB'
 export default {
     components: {
         Header,
         riwayat,
-        transfer
+        transfer,
+        perBPPB
     },
     data() {
         return {
@@ -24,7 +26,8 @@ export default {
                 }
             ],
             riwayatRakit: [],
-            transferSisa: []
+            transferSisa: [],
+            riwayatBPPB: []
         }
     },
     methods: {
@@ -68,7 +71,13 @@ export default {
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
-                            type="button" role="tab" aria-controls="pills-home" aria-selected="true">Riwayat Perakitan</a>
+                            type="button" role="tab" aria-controls="pills-home" aria-selected="true">Riwayat
+                            Perakitan</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-contact"
+                            type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Per
+                            BPPB</a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile"
@@ -77,11 +86,15 @@ export default {
                     </li>
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                        aria-labelledby="pills-home-tab">
                         <riwayat :riwayatRakit="riwayatRakit" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                         <transfer :transferSisa="transferSisa" />
+                    </div>
+                    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                        <perBPPB :items="riwayatBPPB" />
                     </div>
                 </div>
             </div>
