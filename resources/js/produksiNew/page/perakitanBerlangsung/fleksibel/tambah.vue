@@ -3,6 +3,7 @@ import axios from 'axios'
 import DataTable from '../../../components/DataTable.vue'
 import modalPilihan from '../perakitan/modalPilihan.vue'
 import Seriviatext from '../../../../gbj/page/PermintaanReworkGBJ/permintaan/formPermintaan/seriviatext.vue'
+import moment from 'moment'
 export default {
     components: {
         DataTable,
@@ -12,8 +13,11 @@ export default {
     props: ['detailRakit'],
     data() {
         return {
+            moment: moment,
             form: {
                 no_bppb: '',
+                bulan_bppb: '',
+                tahun_bppb: '',
                 produk: '',
                 jml: '',
                 kedatangan: 0,
@@ -31,7 +35,16 @@ export default {
             ],
             search: '',
             showModalCetak: false,
-            bagian: [],
+            bagian: [
+                {
+                    label: 'Quality Control',
+                    value: 23,
+                },
+                {
+                    label: 'Sarana Kesehatan',
+                    value: 20
+                }
+            ],
             hasilGenerate: [],
             idCetakHasilGenerate: [],
             seri: [],
@@ -61,11 +74,11 @@ export default {
         async getData() {
             try {
                 const { produk } = await axios.get('/api/produk').then(res => res.data);
-                const { data: bagian } = await axios.get('/api/gbj/sel-divisi', {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('lokal_token')
-                    }
-                })
+                // const { data: bagian } = await axios.get('/api/gbj/sel-divisi', {
+                //     headers: {
+                //         'Authorization': 'Bearer ' + localStorage.getItem('lokal_token')
+                //     }
+                // })
                 this.produk = produk.reduce((acc, item) => {
                     if (item.gudang_barang_jadi.length > 0) {
                         item.gudang_barang_jadi.forEach(variasi => {
@@ -80,12 +93,12 @@ export default {
                     return acc
                 }, [])
 
-                this.bagian = bagian.map(item => {
-                    return {
-                        label: item.nama,
-                        value: item.id
-                    }
-                })
+                // this.bagian = bagian.map(item => {
+                //     return {
+                //         label: item.nama,
+                //         value: item.id
+                //     }
+                // })
             } catch (error) {
                 console.log(error);
             }
@@ -358,6 +371,23 @@ export default {
         cekKedatangan() {
             let idValue = [319, 149]
             return idValue.includes(this.form.produk?.value)
+        },
+        monthYears() {
+            let month = []
+            for (let i = 1; i <= 12; i++) {
+                month.push({
+                    label: moment().month(i - 1).lang('id').format('MMMM'),
+                    value: i
+                })
+            }
+            return month
+        },
+        yearsNow() {
+            let years = []
+            for (let i = 0; i < 2; i++) {
+                years.push(moment().subtract(i, 'years').format('YYYY'))
+            }
+            return years
         }
     },
     watch: {
@@ -418,7 +448,17 @@ export default {
                                             <input type="text" v-model="form.no_bppb" class="form-control"
                                                 @keyup="keyUpperCase" :disabled="hasilGenerate.length > 0">
                                         </div>
-
+                                        <div class="form-group">
+                                            <label for="">Bulan BPPB</label>
+                                            <v-select v-model="form.bulan_bppb" :options="monthYears"></v-select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Tahun BPPB</label>
+                                            <select v-model="form.tahun_bppb" class="form-control">
+                                                <!-- make dynamic two years from subtract years now on tomorrow -->
+                                                <option v-for="i in yearsNow" :key="i" :value="i">{{ i }}</option>
+                                            </select>
+                                        </div>
                                         <div class="form-group">
                                             <label for="">Nama Produk</label>
                                             <v-select :options="produk" v-model="form.produk" placeholder="Pilih Produk"
