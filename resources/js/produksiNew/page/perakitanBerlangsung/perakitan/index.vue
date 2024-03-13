@@ -300,7 +300,6 @@ export default {
                 </span>
             </template>
 
-
             <template #item.tgl_selesai="{ item }">
                 <span>{{ item.tgl_selesai }}</span> <br>
                 <span v-html="selisih(item.selisih, item.tanggal_selesai)"></span>
@@ -329,7 +328,7 @@ export default {
                     <i class="fa fa-barcode"></i>
                     Tambah Nomor Seri
                 </button>
-                <button class="btn btn-sm btn-outline-danger" @click="openCloseBPPB(item)" v-if="item.no_bppb != '-'">
+                <button class="btn btn-sm btn-outline-danger" @click="openCloseBPPB(item)">
                     <i class="fas fa-ban"></i>
                     Close / Batal BPPB
                 </button>
