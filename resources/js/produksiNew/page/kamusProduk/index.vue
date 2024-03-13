@@ -22,24 +22,6 @@ export default {
             ],
             years: new Date().getFullYear(),
             search: '',
-            headers: [
-                {
-                    text: 'No',
-                    value: 'no',
-                },
-                {
-                    text: 'Kode Produk',
-                    value: 'kode_produk',
-                },
-                {
-                    text: 'Nama Produk',
-                    value: 'nama_produk',
-                },
-                {
-                    text: `Jumlah No. Seri Dirakit`,
-                    value: 'jumlah_no_seri_dirakit',
-                }
-            ],
             // data produk tampil semua meskipun jumlah masih kosong, tujuannya untuk melihat kode produk
             items: [],
         }

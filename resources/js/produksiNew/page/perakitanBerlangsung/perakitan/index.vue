@@ -4,6 +4,7 @@ import modalPilihan from '../riwayat/modalPilihan.vue';
 import modalGenerateBPPB from './modalGenerateBPPB.vue';
 import inputNoSeri from './inputNoSeri.vue';
 import DataTable from '../../../components/DataTable.vue';
+import closeBPPB from './closeBPPB.vue';
 export default {
     props: ['dataTable', 'openDataAfterGenerate'],
     components: {
@@ -11,7 +12,8 @@ export default {
         modalPilihan,
         inputNoSeri,
         DataTable,
-        modalGenerateBPPB
+        modalGenerateBPPB,
+        closeBPPB
     },
     data() {
         return {
@@ -59,6 +61,7 @@ export default {
             filterProduk: [],
             showModalNoSeri: false,
             showModalBPPB: false,
+            showModalCloseBPPB: false
         }
     },
     methods: {
@@ -100,6 +103,13 @@ export default {
         },
         refresh() {
             this.$emit('refresh')
+        },
+        openCloseBPPB(item) {
+            this.showModalCloseBPPB = true
+            this.detailData = item
+            this.$nextTick(() => {
+                $('.closeBPPB').modal('show')
+            })
         }
     },
     watch: {
@@ -203,6 +213,8 @@ export default {
             @refresh="refresh" />
         <modalGenerateBPPB v-if="showModalBPPB" :dataGenerate="detailData" @closeModal="showModalBPPB = false"
             @refresh="refresh" @openModalGenerate="openModal" />
+        <closeBPPB v-if="showModalCloseBPPB" :dataGenerate="detailData" @closeModal="showModalCloseBPPB = false"
+            @refresh="refresh" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
@@ -316,6 +328,10 @@ export default {
                     <!-- icon tambah nomor seri -->
                     <i class="fa fa-barcode"></i>
                     Tambah Nomor Seri
+                </button>
+                <button class="btn btn-sm btn-outline-danger" @click="openCloseBPPB(item)" v-if="item.no_bppb != '-'">
+                    <i class="fas fa-ban"></i>
+                    Close / Batal BPPB
                 </button>
             </template>
         </DataTable>
