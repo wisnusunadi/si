@@ -38,6 +38,7 @@ export default {
                         }).then(() => {
                             swal.fire('Berhasil', 'Alasan Close / Pembatalan BPPB Berhasil Disimpan', 'success')
                             this.closeModal()
+                            this.$emit('refresh')
                         }).catch(() => {
                             swal.fire('Gagal', 'Alasan Close / Pembatalan BPPB Gagal Disimpan', 'error')
                         })

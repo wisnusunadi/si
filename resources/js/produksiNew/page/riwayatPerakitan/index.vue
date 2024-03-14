@@ -38,13 +38,20 @@ export default {
                 this.riwayatRakit = riwayat.map(item => {
                     return {
                         ...item,
-                        tgl: moment(item.date_in).format('YYYY-MM-DD'),
                         tgl_rakit: this.dateFormat(item.date_in),
                         wkt_rakit: this.timeFormat(item.date_in),
                     }
                 })
                 const { data: transfer } = await axios.get('/api/prd/ajax_sisa')
                 this.transferSisa = transfer.map(item => {
+                    return {
+                        ...item,
+                        tgl_mulai: this.dateFormat(item.tanggal_mulai),
+                        tgl_selesai: this.dateFormat(item.tanggal_selesai),
+                    }
+                })
+                const { data: bppb } = await axios.get('/api/prd/fg/riwayat_bppb')
+                this.riwayatBPPB = bppb.map(item => {
                     return {
                         ...item,
                         tgl_mulai: this.dateFormat(item.tanggal_mulai),
