@@ -13,10 +13,34 @@ export default {
     data() {
         return {
             search: "",
-            renderPaginate: [],
             filterHasil: [],
             noseri: [],
             modalChecked: false,
+            headers: [
+                {
+                    text: "id",
+                    value: "id",
+                    sortable: false,
+                },
+                {
+                    text: "No Urut",
+                    value: "no_urut",
+                },
+                {
+                    text: "No. Seri",
+                    value: "no_seri"
+                },
+                {
+                    text: "Tanggal Masuk",
+                    value: "tanggal_masuk"
+                },
+                {
+                    text: "Hasil",
+                    value: "hasil",
+                }
+            ],
+            noseriSelected: [],
+            checkAll: false,
         };
     },
     methods: {
@@ -29,71 +53,31 @@ export default {
                 this.filterHasil.push(filter);
             }
         },
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
         closeModal() {
             $(".modalSeri").modal("hide");
             this.$emit("close");
         },
         selectNoSeri(noseri) {
-            if (this.produk.noseri) {
-                if (this.produk.noseri.find((data) => data.no_seri === noseri.no_seri)) {
-                    this.produk.noseri = this.produk.noseri.filter(
-                        (data) => data.no_seri !== noseri.no_seri
-                    );
-                    this.$refs.checkAll.checked = false;
-                } else {
-                    this.produk.noseri.push(noseri);
-                }
+            if (this.noseriSelected.find((data) => data.no_seri === noseri.no_seri)) {
+                this.noseriSelected = this.noseriSelected.filter(
+                    (data) => data.no_seri !== noseri.no_seri
+                );
             } else {
-                this.produk.noseri = [];
-                this.produk.noseri.push(noseri);
-            }
-
-            if (this.produk.noseri.length === this.noseri.length) {
-                this.$refs.checkAll.checked = true;
+                if (noseri.is_ready == 1) {
+                    this.noseriSelected.push(noseri);
+                }
             }
         },
-        checkAll() {
-            if (this.produk.noseri) {
-                if (this.produk.noseri.length === this.noseri.length) {
-                    this.produk.noseri = [];
-                    this.$refs.noseri.forEach((data) => {
-                        data.checked = false;
-                    });
-                } else {
-                    this.produk.noseri = [];
-                    this.noseri.forEach((data) => {
-                        this.produk.noseri.push(data);
-                    });
-                    this.$refs.noseri.find((data) => {
-                        data.checked = true;
-                    });
-                }
+        checkedAll() {
+            this.checkAll = !this.checkAll;
+            if (this.checkAll) {
+                this.noseriSelected = this.noseri.filter((data) => data.is_ready == 1);
             } else {
-                this.produk.noseri = [];
-                this.noseri.forEach((data) => {
-                    this.produk.noseri.push(data);
-                });
-                this.$refs.noseri.forEach((data) => {
-                    data.checked = true;
-                });
-            }
-        },
-        checkNoSeriCheckAll() {
-            if (this.produk.noseri) {
-                if (this.produk.noseri.length === this.noseri.length) {
-                    this.$refs.checkAll.checked = true;
-                } else {
-                    this.$refs.checkAll.checked = false;
-                }
-            } else {
-                this.$refs.checkAll.checked = false;
+                this.noseriSelected = [];
             }
         },
         simpan() {
-            if (!this.produk.noseri || this.produk.noseri.length === 0) {
+            if (this.noseriSelected.length === 0) {
                 this.$swal(
                     "Peringatan",
                     "Pilih nomor seri terlebih dahulu",
@@ -110,7 +94,8 @@ export default {
             //     );
             //     return;
             // }
-            this.$emit("simpan", this.produk);
+            let produk = { ...this.produk, noseri: this.noseriSelected };
+            this.$emit("simpan", produk);
         },
         statusText(text) {
             if (typeof text == "string") {
@@ -130,12 +115,18 @@ export default {
         },
         async getData() {
             try {
-                const { data } = await axios.get(`/api/labs/tf/seri/${this.produk.id}`);
-                this.noseri = data.data;
+                const { data } = await axios.get(`/api/labs/tf/seri/${this.produk.id}`).then((res) => res.data);
+                this.noseri = data.map((item, index) => {
+                    return {
+                        no_urut: index + 1,
+                        tanggal_masuk: this.formatDate(item.tgl_masuk),
+                        ...item,
+                    };
+                });
             } catch (error) {
                 console.log(error);
             } finally {
-                this.checkNoSeriCheckAll();
+                this.noseriSelected = JSON.parse(JSON.stringify(this.produk?.noseri));
             }
         },
         openModalChecked() {
@@ -196,13 +187,7 @@ export default {
                 filtered = this.noseri;
             }
 
-            return filtered.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key])
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase());
-                });
-            });
+            return filtered;
         },
         getAllStatusUnique() {
             return this.noseri
@@ -217,20 +202,25 @@ export default {
     created() {
         this.getData();
     },
+    watch: {
+        noseriSelected: {
+            handler: function (val) {
+                if (val.length === this.noseri.filter((data) => data.is_ready == 1).length) {
+                    this.checkAll = true;
+                } else {
+                    this.checkAll = false;
+                }
+            },
+            deep: true,
+        },
+    },
 };
 </script>
 <template>
     <div>
         <modalchecked v-if="modalChecked" @close="closeModalChecked" @submit="submit" />
-        <div
-            class="modal fade modalSeri"
-            id="modelId"
-            data-backdrop="static"
-            data-keyboard="false"
-            tabindex="-1"
-            aria-labelledby="staticBackdropLabel"
-            aria-hidden="true"
-        >
+        <div class="modal fade modalSeri" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -243,47 +233,24 @@ export default {
                         <div class="d-flex bd-highlight">
                             <div class="p-2 flex-grow-1 bd-highlight">
                                 <span class="float-left filter">
-                                    <button
-                                        class="btn btn-outline-info"
-                                        data-toggle="dropdown"
-                                        aria-haspopup="true"
-                                        aria-expanded="false"
-                                    >
+                                    <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
                                     <form id="filter_ekat">
                                         <div class="dropdown-menu">
                                             <div class="px-3 py-3">
                                                 <div class="form-group">
-                                                    <label for="jenis_penjualan"
-                                                        >Keterangan</label
-                                                    >
+                                                    <label for="jenis_penjualan">Keterangan</label>
                                                 </div>
-                                                <div
-                                                    class="form-group"
-                                                    v-for="status in getAllStatusUnique"
-                                                    :key="status"
-                                                >
+                                                <div class="form-group" v-for="status in getAllStatusUnique"
+                                                    :key="status">
                                                     <div class="form-check">
-                                                        <input
-                                                            class="form-check-input"
-                                                            type="checkbox"
-                                                            :ref="status"
-                                                            :value="status"
-                                                            id="status1"
-                                                            @click="
-                                                                clickFilterHasil(
-                                                                    status
-                                                                )
-                                                            "
-                                                        />
-                                                        <label
-                                                            class="form-check-label text-uppercase"
-                                                            for="status1"
-                                                        >
-                                                            {{
-                                                                statusText(status)
-                                                            }}
+                                                        <input class="form-check-input" type="checkbox" :ref="status"
+                                                            :value="status" id="status1"
+                                                            @click="clickFilterHasil(status)" />
+                                                        <label class="form-check-label text-uppercase" for="status1">
+                                                            {{ statusText(status) }}
                                                         </label>
                                                     </div>
                                                 </div>
@@ -292,89 +259,37 @@ export default {
                                     </form>
                                 </span>
                                 &nbsp;
-                                <button class="btn btn-primary" @click="openModalChecked">Pilih Nomor Seri Via Text</button>
+                                <button class="btn btn-primary" @click="openModalChecked">Pilih Nomor Seri Via
+                                    Text</button>
                             </div>
                             <div class="p-2 bd-highlight">
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    placeholder="Cari..."
-                                    v-model="search"
-                                />
+                                <input type="text" class="form-control" placeholder="Cari..." v-model="search" />
                             </div>
                         </div>
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <input
-                                            type="checkbox"
-                                            @click="checkAll"
-                                            ref="checkAll"
-                                        />
-                                    </th>
-                                    <th>No Urut</th>
-                                    <th>No. Seri</th>
-                                    <th>Tanggal Masuk</th>
-                                    <th>Hasil</th>
-                                </tr>
-                            </thead>
-                            <tbody v-if="renderPaginate.length > 0">
-                                <tr
-                                    v-for="(data, index) in renderPaginate"
-                                    :key="index"
-                                >
-                                    <td>
-                                        <input
-                                            type="checkbox"
-                                            ref="noseri"
-                                            :checked="
-                                                produk.noseri &&
-                                                produk.noseri.find(
-                                                    (item) =>
-                                                        item.no_seri == data.no_seri
-                                                )
-                                            "
-                                            @click="selectNoSeri(data)"
-                                        />
-                                    </td>
-                                    <td>{{ index + 1 }}</td>
-                                    <td>{{ data.no_seri }}</td>
-                                    <td>{{ formatDate(data.tgl_masuk) }}</td>
-                                    <td>
-                                        <hasil :hasil="data.status" />
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tbody v-else>
-                                <tr>
-                                    <td colspan="5" class="text-center">
-                                        Data tidak ditemukan
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <pagination
-                            :filteredDalamProses="filteredDalamProses"
-                            @updateFilteredDalamProses="
-                                updateFilteredDalamProses
-                            "
-                        />
+                        <data-table :headers="headers" :items="filteredDalamProses" :search="search">
+                            <template #header.id>
+                                <input type="checkbox" :checked="checkAll" @click="checkedAll" />
+                            </template>
+                            <template #item.id="{ item }">
+                                <div>
+                                    <input type="checkbox" v-if="item.is_ready == 1"
+                                        :checked="noseriSelected && noseriSelected.find((data) => data.no_seri === item.no_seri)"
+                                        @click="selectNoSeri(item)" />
+                                </div>
+                            </template>
+                            <template #item.hasil="{ item }">
+                                <div>
+                                    <hasil :hasil="item.status" />
+                                </div>
+                            </template>
+                        </data-table>
                     </div>
                     <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            @click="closeModal"
-                        >
+                        <button type="button" class="btn btn-secondary" @click="closeModal">
                             Keluar
                         </button>
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                            @click="simpan"
-                        >
+                        <button type="button" class="btn btn-primary" @click="simpan">
                             Simpan
                         </button>
                     </div>
