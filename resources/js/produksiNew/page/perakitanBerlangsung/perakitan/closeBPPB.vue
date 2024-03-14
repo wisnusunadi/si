@@ -1,4 +1,6 @@
 <script>
+import axios from 'axios';
+
 export default {
     props: ['dataGenerate'],
     data() {
@@ -30,8 +32,15 @@ export default {
                     cancelButtonText: 'Tidak, Batalkan!',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        swal.fire('Berhasil', 'Alasan Close / Pembatalan BPPB Berhasil Disimpan', 'success')
-                        this.closeModal()
+                        axios.post(`/api/prd/fg/close_bppb`, {
+                            jadwal_id: this.dataGenerate.jadwal_id,
+                            keterangan: this.keterangan
+                        }).then(() => {
+                            swal.fire('Berhasil', 'Alasan Close / Pembatalan BPPB Berhasil Disimpan', 'success')
+                            this.closeModal()
+                        }).catch(() => {
+                            swal.fire('Gagal', 'Alasan Close / Pembatalan BPPB Gagal Disimpan', 'error')
+                        })
                     }
                 })
             }

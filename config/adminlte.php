@@ -635,6 +635,12 @@ return [
             'auth' => [14]
         ],
         [
+            'text' => 'Sparepart',
+            'url'  => '/administrator/part',
+            'icon' => 'fas fa-table',
+            'auth' => [14]
+        ],
+        [
             'text' => 'Produk Rework',
             'url'  => '/administrator/produk_rework',
             'icon' => 'fas fa-table',
