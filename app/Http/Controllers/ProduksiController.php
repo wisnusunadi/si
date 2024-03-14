@@ -4308,7 +4308,6 @@ class ProduksiController extends Controller
                 $data[] = array(
                     'id' => $j->id,
                     'no_bppb' => $j->no_bppb,
-                    'periode' => Carbon::parse($j->tanggal_mulaii)->format('F'),
                     'tanggal_mulai' => $j->tanggal_mulai,
                     'tanggal_selesai' => $j->tanggal_selesai,
                     'jenis' => $j->jenis,
@@ -4316,7 +4315,7 @@ class ProduksiController extends Controller
                     'status' => $status,
                     'keterangan' => $j->evaluasi,
                     'jumlah' => $j->jumlah,
-                    'kurang' =>  $j->jumlah - $j->cselesai,
+                    'jumlah_rakit' => $j->cselesai,
                 );
             }
 

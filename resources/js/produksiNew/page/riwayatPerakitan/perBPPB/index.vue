@@ -33,7 +33,7 @@ export default {
                 },
                 {
                     text: 'Nama Produk',
-                    value: 'nama_produk',
+                    value: 'nama',
                     sortable: false
                 },
                 {
@@ -76,7 +76,7 @@ export default {
     },
     computed: {
         produkUnique() {
-            return [...new Set(this.items.map(item => item.nama_produk))]
+            return [...new Set(this.items.map(item => item.nama))]
         },
         filterData() {
             if (this.tanggalAwalMulai && this.tanggalAkhirMulai) {
@@ -145,7 +145,7 @@ export default {
 
             if (this.filterProduk.length > 0) {
                 return this.items.filter((data) => {
-                    return this.filterProduk.includes(data.nama_produk)
+                    return this.filterProduk.includes(data.nama)
                 })
             }
 
@@ -264,7 +264,7 @@ export default {
                 </span>
             </template>
 
-            <template #header.nama_produk>
+            <template #header.nama>
                 <span class="text-bold pr-2">Nama Produk</span>
                 <span class="filter">
                     <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
