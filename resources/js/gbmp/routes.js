@@ -13,8 +13,15 @@ const routes = [
     },
     {
         path: "/gbmp/perakitan/transfer/:id",
-        component: () => import("./page/permintaanPerakitan/detail/permintaanTransfer"),
+        component: () =>
+            import("./page/permintaanPerakitan/detail/permintaanTransfer"),
         name: "permintaan-perakitan-transfer",
+    },
+    {
+        path: "/gbmp/perakitan/transfer/:id/:route",
+        component: () =>
+            import("./page/permintaanPerakitan/detail/detailPengiriman"),
+        name: "detail-perakitan-transfer",
     },
 ];
 

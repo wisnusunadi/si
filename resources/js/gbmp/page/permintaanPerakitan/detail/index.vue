@@ -121,7 +121,8 @@ export default {
                             <td>{{ item.jumlah }}</td>
                             <td>{{ item.sudah_transfer }}</td>
                             <td>
-                                <button class="btn btn-outline-primary btn-sm" @click="transfer(item)">
+                                <button class="btn btn-outline-primary btn-sm"
+                                    @click="$router.push({ name: 'detail-perakitan-transfer', params: { id: item.no, route: $route.params.id } })">
                                     <i class="fa fa-eye"></i>
                                     Detail
                                 </button>

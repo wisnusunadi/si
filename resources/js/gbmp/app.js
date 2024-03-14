@@ -8,6 +8,7 @@ import vSelect from "vue-select";
 import storeData from "./store";
 import DataTable from "./components/DataTable.vue";
 import numberOnly from "./plugins/numberOnly";
+import dateFormat from "./plugins/dateFormat";
 import persentase from "./components/persentase.vue";
 import "vue-select/dist/vue-select.css";
 
@@ -15,6 +16,7 @@ window.Vue = Vue;
 Vue.use(VueRouter);
 Vue.use(VueSweetalert2);
 Vue.use(numberOnly);
+Vue.use(dateFormat);
 Vue.use(Vuex);
 Vue.component("v-select", vSelect);
 Vue.component("data-table", DataTable);
