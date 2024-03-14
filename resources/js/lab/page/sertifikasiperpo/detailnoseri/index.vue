@@ -11,18 +11,18 @@ export default {
     },
     data() {
         return {
-            title: "DETAIL SERTIFIKASI PER NOMOR ORDER - DETAIL PER BARANG",
+            title: "DETAIL SERTIFIKAT PER NOMOR ORDER - DETAIL PER BARANG",
             breadcumbs: [
                 {
                     name: "Home",
                     link: "/",
                 },
                 {
-                    name: "Sertifikasi",
+                    name: "Sertifikat",
                     link: this.$route.params.history,
                 },
                 {
-                    name: "Detail Sertifikasi Per Barang",
+                    name: "Detail Sertifikat Per Barang",
                     link: "/lab/sertifikasiperpo/detailnoseri",
                 },
             ],
@@ -148,11 +148,11 @@ export default {
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
                             <button class="dropdown-item" type="button" @click="cetakSertifikat(item.id, ttd = false)">
                                 <i class="fas fa-file"></i>
-                                Sertifikasi
+                                Sertifikat
                             </button>
                             <button class="dropdown-item" type="button" @click="cetakSertifikat(item.id, ttd = true)">
                                 <i class="fas fa-file"></i>
-                                Sertifikasi + TTD
+                                Sertifikat + TTD
                             </button>
                         </div>
                     </template>

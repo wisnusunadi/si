@@ -93,12 +93,12 @@ export default {
                                         <button class="dropdown-item" type="button"
                                             @click="cetakSertifikat(data, ttd = false)">
                                             <i class="fas fa-file"></i>
-                                            Sertifikasi
+                                            Sertifikat
                                         </button>
                                         <button class="dropdown-item" type="button"
                                             @click="cetakSertifikat(data, ttd = true)">
                                             <i class="fas fa-file"></i>
-                                            Sertifikasi + TTD
+                                            Sertifikat + TTD
                                         </button>
                                     </div>
                                 </td>

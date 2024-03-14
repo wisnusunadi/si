@@ -11,18 +11,18 @@ export default {
     },
     data() {
         return {
-            title: 'DETAIL SERTIFIKASI PER NOMOR ORDER',
+            title: 'DETAIL SERTIFIKAT PER NOMOR ORDER',
             breadcumbs: [
                 {
                     name: 'Home',
                     link: '/'
                 },
                 {
-                    name: 'Sertifikasi',
+                    name: 'Sertifikat',
                     link: this.$route.params.history,
                 },
                 {
-                    name: 'Detail Sertifikasi PerNoOrder',
+                    name: 'Detail Sertifikat PerNoOrder',
                     link: '/lab/sertifikasiperpo/detail'
                 }
             ],

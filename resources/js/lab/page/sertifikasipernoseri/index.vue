@@ -9,14 +9,14 @@ export default {
     },
     data() {
         return {
-            title: "SERTIFIKASI PER NOMOR KALIBRASI",
+            title: "Sertifikat PER NOMOR KALIBRASI",
             breadcumbs: [
                 {
                     name: "Home",
                     link: "/",
                 },
                 {
-                    name: "Sertifikasi Per No Kalibrasi",
+                    name: "Sertifikat Per No Kalibrasi",
                     link: "/sertifikasipernoseri",
                 },
             ],
@@ -202,11 +202,11 @@ export default {
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
                             <button class="dropdown-item" type="button" @click="cetakSertifikat(item.id, ttd = false)">
                                 <i class="fas fa-file"></i>
-                                Sertifikasi
+                                Sertifikat
                             </button>
                             <button class="dropdown-item" type="button" @click="cetakSertifikat(item.id, ttd = true)">
                                 <i class="fas fa-file"></i>
-                                Sertifikasi + TTD
+                                Sertifikat + TTD
                             </button>
                         </div>
                     </template>
