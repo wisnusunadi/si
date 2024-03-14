@@ -444,45 +444,62 @@ export default {
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-group">
-                                            <label for="">No BPPB</label>
-                                            <input type="text" v-model="form.no_bppb" class="form-control"
-                                                @keyup="keyUpperCase" :disabled="hasilGenerate.length > 0">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Bulan BPPB</label>
-                                            <v-select v-model="form.bulan_bppb" :options="monthYears"></v-select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Tahun BPPB</label>
-                                            <select v-model="form.tahun_bppb" class="form-control">
-                                                <!-- make dynamic two years from subtract years now on tomorrow -->
-                                                <option v-for="i in yearsNow" :key="i" :value="i">{{ i }}</option>
-                                            </select>
+                                            <label for="">Bagian (Peminta No Seri)</label>
+                                            <v-select :options="bagian" v-model="form.bagian" placeholder="Bagian"
+                                                :disabled="hasilGenerate.length > 0"></v-select>
                                         </div>
                                         <div class="form-group">
                                             <label for="">Nama Produk</label>
                                             <v-select :options="produk" v-model="form.produk" placeholder="Pilih Produk"
                                                 :disabled="hasilGenerate.length > 0"></v-select>
                                         </div>
-
-                                        <div class="form-group" v-if="form.produk?.isGenerate && !cekKedatangan">
-                                            <label for="exampleInputEmail1">Kedatangan</label>
-                                            <input type="number" class="form-control" v-model.number="form.kedatangan"
-                                                :disabled="hasilGenerate.length > 0" @keypress="numberOnly($event)">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="">No BPPB</label>
+                                                    <input type="text" v-model="form.no_bppb" class="form-control"
+                                                        @keyup="keyUpperCase" :disabled="hasilGenerate.length > 0">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="">Bulan BPPB</label>
+                                                    <v-select v-model="form.bulan_bppb"
+                                                        :options="monthYears"></v-select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="">Tahun BPPB</label>
+                                                    <select v-model="form.tahun_bppb" class="form-control">
+                                                        <!-- make dynamic two years from subtract years now on tomorrow -->
+                                                        <option v-for="i in yearsNow" :key="i" :value="i">{{ i }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group"
+                                                    v-if="form.produk?.isGenerate && !cekKedatangan">
+                                                    <label for="exampleInputEmail1">Kedatangan</label>
+                                                    <input type="number" class="form-control"
+                                                        v-model.number="form.kedatangan"
+                                                        :disabled="hasilGenerate.length > 0"
+                                                        @keypress="numberOnly($event)">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group" v-if="form.produk?.isGenerate">
+                                                    <label for="">Jumlah Rakit</label>
+                                                    <input type="number" class="form-control" v-model="form.jml"
+                                                        @keypress="numberOnly($event)"
+                                                        :disabled="hasilGenerate.length > 0">
+                                                </div>
 
-                                        <div class="form-group" v-if="form.produk?.isGenerate">
-                                            <label for="">Jumlah Rakit</label>
-                                            <input type="number" class="form-control" v-model="form.jml"
-                                                @keypress="numberOnly($event)" :disabled="hasilGenerate.length > 0">
+                                            </div>
                                         </div>
-
-                                        <div class="form-group">
-                                            <label for="">Bagian (Peminta No Seri)</label>
-                                            <v-select :options="bagian" v-model="form.bagian" placeholder="Bagian"
-                                                :disabled="hasilGenerate.length > 0"></v-select>
-                                        </div>
-
                                         <div class="form-group">
                                             <label for="">Tujuan (Minta No Seri)</label>
                                             <textarea class="form-control" v-model="form.tujuan" rows="3"
@@ -587,8 +604,8 @@ export default {
                                         </div>
                                         <span v-if="loading">Loading...</span>
                                         <span v-else>{{
-            form.produk?.isGenerate ? 'Generate' : 'Simpan'
-        }}</span>
+                                            form.produk?.isGenerate ? 'Generate' : 'Simpan'
+                                            }}</span>
                                     </button>
                                     <button class="btn btn-success" v-if="seri.length > 0" @click="simpanSeri">
                                         <div class="spinner-border" role="status" v-if="loading">
