@@ -4226,7 +4226,7 @@ class ProduksiController extends Controller
             return response()->json([
                 'error' => true,
                 'msg' => 'Berhasil Di tambahkan',
-            ], 500);
+            ], 200);
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
@@ -4384,7 +4384,7 @@ class ProduksiController extends Controller
                 ->leftJoin('m_produk as mp', 'mp.id', '=', 'p.produk_id')
                 ->where('jadwal_perakitan.jenis', 'terjadwal')
                 ->whereNotIn('jadwal_perakitan.status', [6])
-                ->whereNotIn('jadwal_perakitan.status_tf', [14])
+                ->whereNotIn('jadwal_perakitan.status_tf', [14,20])
                 ->groupBy('jadwal_perakitan.id')
                 ->havingRaw('jumlah != jml_rakit')
                 ->orderByDesc('created_at')
