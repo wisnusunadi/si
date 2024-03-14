@@ -195,6 +195,7 @@ class LabController extends Controller
                 'order' => 'LAB-' . sprintf("%04d",  $d->no_order),
                 'jenis_pemilik' => $d->JenisPemilik->nama,
                 'pemilik' =>  $d->nama,
+                'customer' =>  $d->nama,
                 'produk' => array()
             );
             foreach ($d->GetDetail() as $key_e => $e) {
