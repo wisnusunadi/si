@@ -4240,7 +4240,7 @@ class ProduksiController extends Controller
         foreach ($data as $d) {
             $obj[] = array(
                 'noseri' => $d->noseri,
-                'tgl_tf' => $d->tgl_tf,
+                'tgl_tf' => $d->waktu_tf,
                 'tgl_buat' => $d->created_at,
             );
         }
