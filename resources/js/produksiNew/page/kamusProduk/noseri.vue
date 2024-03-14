@@ -70,7 +70,7 @@ export default {
                         no: index + 1,
                         ...item,
                         tanggal_rakit: this.dateFormat(item.tgl_rakit),
-                        tanggal_transfer: this.dateFormat(item.tgl_transfer)
+                        tanggal_transfer: this.dateFormat(item.tgl_tf)
                     }
                 })
             } catch (error) {
@@ -129,7 +129,7 @@ export default {
                 endDate.setHours(23, 59, 59, 999)
 
                 return this.items.filter(item => {
-                    const date = new Date(item.tgl_transfer)
+                    const date = new Date(item.tgl_tf)
                     return date >= startDate && date <= endDate
                 })
             } else if (this.tanggaTransferAwal) {
@@ -137,7 +137,7 @@ export default {
                 startDate.setHours(0, 0, 0, 0)
 
                 return this.items.filter(item => {
-                    const date = new Date(item.tgl_transfer)
+                    const date = new Date(item.tgl_tf)
                     return date >= startDate
                 })
             } else if (this.tanggalTransferAkhir) {
@@ -145,7 +145,7 @@ export default {
                 endDate.setHours(23, 59, 59, 999)
 
                 return this.items.filter(item => {
-                    const date = new Date(item.tgl_transfer)
+                    const date = new Date(item.tgl_tf)
                     return date <= endDate
                 })
             }
@@ -234,7 +234,7 @@ export default {
                             </span>
                         </template>
                         <template #header.tanggal_transfer>
-                            <span class="text-bold pr-2">Tanggal Rakit</span>
+                            <span class="text-bold pr-2">Tanggal Transfer</span>
                             <span class="filter">
                                 <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-filter"></i>
