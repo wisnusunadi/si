@@ -6,7 +6,7 @@ export default {
         pagination,
         noseri  
     },
-    props: ['dataTable', 'search'],
+    props: ['dataTable', 'search', 'years'],
     data() {
         return {
             renderPaginate: [],
@@ -39,7 +39,7 @@ export default {
 </script>
 <template>
     <div>
-        <noseri v-if="showModal" :detailSelected="detailSelected" @close="showModal = false" />
+        <noseri v-if="showModal" :detailSelected="detailSelected" :years="years" @close="showModal = false" />
         <table class="table text-center">
             <thead>
                 <tr>

@@ -73,7 +73,12 @@ export default {
                             placeholder="Cari...">
                     </div>
                 </div>
-                <Table :dataTable="items" :search="search" />
+                <Table :dataTable="items" :search="search" :years="years" v-if="!$store.state.loading" />
+                <div v-else class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
