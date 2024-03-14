@@ -124,8 +124,6 @@ Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
     Route::view('/produk/{any?}', 'page.gbj.produk')->where('any', '.*');
     // Route::view('/so/{any?}', 'page.gbj.so')->where('any', '.*');
     Route::view('/changeunit/{any?}', 'page.lab.kalibrasi_new')->where('any', '.*');
-    Route::view('/transferproduk', 'page.gbj.transferproduk');
-    Route::view('/transferproduk', 'page.gbj.transferproduk');
     Route::view('/tso', 'page.gbj.tso');
     Route::get('/dp', [GudangController::class, 'terimaRakit']);
     // Route::view('/bso', 'page.gbj.bso');
@@ -320,6 +318,9 @@ Route::group(['prefix' => 'logistik', 'middleware' => ['divisi:log']], function 
 
     Route::group(['prefix' => '/so'], function () {
         // Route::group(['middleware' => ['divisi:log,dirut']], function () {
+        Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
+        Route::post('/data/{value}/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
+        Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\LogistikController::class, 'update_so'])->name('logistik.so.detail');
         Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
         Route::post('/data/{value}/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\LogistikController::class, 'update_so'])->name('logistik.so.detail');

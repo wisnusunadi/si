@@ -32,12 +32,17 @@ export default {
             tanggalAkhir: moment().endOf('month').format('YYYY-MM-DD'),
             loadingRiwayat: false,
             searchRiwayat: '',
+            openModalAfterGenerate: false,
+            openDataAfterGenerate: false
         }
     },
     methods: {
         async getData() {
             try {
-                this.$store.dispatch('setLoading', true)
+                if (!this.openModalAfterGenerate) {
+                    this.$store.dispatch('setLoading', true)
+                    this.openDataAfterGenerate = false
+                }
                 const { data: perakitan } = await axios.get('/api/prd/ongoing')
                 this.dataPerakitan = perakitan.map(item => {
                     return {
@@ -73,6 +78,9 @@ export default {
                 console.log(error)
             } finally {
                 this.$store.dispatch('setLoading', false)
+                if(this.openModalAfterGenerate) {
+                    this.openDataAfterGenerate = true
+                }
             }
         },
         periode(date) {
@@ -117,6 +125,17 @@ export default {
                             tgl_buat: this.dateFormat(item.tgl_buat),
                         }
                     })
+                } else {
+                    const { data: riwayat } = await axios.post('/api/prd/fg/riwayat', {
+                        tanggalAwal: this.tanggalAwal,
+                        tanggalAkhir: this.tanggalAkhir,
+                    })
+                    this.dataRiwayat = riwayat.map(item => {
+                        return {
+                            ...item,
+                            tgl_buat: this.dateFormat(item.tgl_buat),
+                        }
+                    })
                 }
             } catch (error) {
                 console.log(error)
@@ -134,20 +153,30 @@ export default {
             this.searchRiwayat = search
             this.updateRiwayat()
         },
+        refreshData() {
+            this.openModalAfterGenerate = true
+            this.getData()
+        },
+        refresh() {
+            this.openModalAfterGenerate = false
+            this.getData()
+        }
     },
     mounted() {
         this.getData()
     },
 }
 </script>
+
 <template>
     <div>
         <Header :breadcumbs="breadcumbs" :title="title" />
         <div v-if="!$store.state.loading">
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="pills-terjadwal-tab" data-toggle="pill" data-target="#pills-terjadwal"
-                        type="button" role="tab" aria-controls="pills-terjadwal" aria-selected="true">Perakitan
+                    <a class="nav-link active" id="pills-terjadwal-tab" data-toggle="pill"
+                        data-target="#pills-terjadwal" type="button" role="tab" aria-controls="pills-terjadwal"
+                        aria-selected="true">Perakitan
                         Terjadwal</a>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -156,8 +185,8 @@ export default {
                         Jadwal</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="pills-riwayat-tab" data-toggle="pill" data-target="#pills-riwayat" type="button"
-                        role="tab" aria-controls="pills-riwayat" aria-selected="false">Riwayat</a>
+                    <a class="nav-link" id="pills-riwayat-tab" data-toggle="pill" data-target="#pills-riwayat"
+                        type="button" role="tab" aria-controls="pills-riwayat" aria-selected="false">Riwayat</a>
                 </li>
             </ul>
             <div class="tab-content" id="pills-tabContent">
@@ -165,7 +194,9 @@ export default {
                     aria-labelledby="pills-terjadwal-tab">
                     <div class="card">
                         <div class="card-body">
-                            <perakitan :dataTable="dataPerakitan" @refresh="getData" />
+                            <perakitan :dataTable="dataPerakitan" @refresh="refresh" @refreshData="refreshData"
+                                :openDataAfterGenerate="openDataAfterGenerate"
+                                 />
                         </div>
                     </div>
                 </div>
@@ -180,10 +211,7 @@ export default {
                     <div class="card">
                         <div class="card-body">
                             <riwayat :dataRiwayat="dataRiwayat" :tanggalAwal="tanggalAwal" :tanggalAkhir="tanggalAkhir"
-                                :loading="loadingRiwayat"
-                                @updateTanggal="updateTanggal"
-                                @updateSearch="updateSearch"
-                                />
+                                :loading="loadingRiwayat" @updateTanggal="updateTanggal" @updateSearch="updateSearch" />
                         </div>
                     </div>
                 </div>

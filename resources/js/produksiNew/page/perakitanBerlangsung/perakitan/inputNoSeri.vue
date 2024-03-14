@@ -114,8 +114,9 @@ export default {
             }
         },
         async simpan() {
-
-            const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-' && this.dataGenerate.no_bppb !== '/'
+            // remove space
+            const bppb = this.dataGenerate.no_bppb.trim()
+            const cekbppb = bppb !== null && bppb !== '' && bppb !== '-' && bppb !== '/'
             const ceknoserinull = this.noseri.filter((item) => {
                 return item.noseri === null || item.noseri === ''
             })
@@ -317,6 +318,7 @@ export default {
     }
 }
 </script>
+
 <template>
     <div>
         <seriviatext v-if="showmodalviatext" @close="closeModalSeriviatext" @submit="submit" />
@@ -341,8 +343,8 @@ export default {
                                         <div class="card">
                                             <div class="card-body">
                                                 <input type="text" name="no_bppb" id="no_bppb" class="form-control"
-                                                    :disabled="isDisabled || isDisableBPPB" v-model="dataGenerate.no_bppb"
-                                                    @keyup="keyUpperCase($event)">
+                                                    :disabled="isDisabled || isDisableBPPB"
+                                                    v-model="dataGenerate.no_bppb" @keyup="keyUpperCase($event)">
                                             </div>
                                         </div>
                                     </div>
@@ -395,8 +397,9 @@ export default {
                                 <template #item.noseri="{ item }">
                                     <input type="text" ref="noseri" class="form-control" v-model="item.noseri">
                                 </template>
-                            </DataTable> -->
-                                <button class="btn btn-primary" @click="showSeriText" v-if="!idCetakHasilGenerate">Input No
+</DataTable> -->
+                                <button class="btn btn-primary" @click="showSeriText" v-if="!idCetakHasilGenerate">Input
+                                    No
                                     Seri Via Text</button>
                                 <div class="scrollable">
                                     <table class="table" v-if="!loadingNoSeri">
@@ -417,7 +420,7 @@ export default {
                                                         {{ item.message }}
                                                     </div>
                                                     <small class="text-success" v-if="!item.error">{{ item.message
-                                                    }}</small>
+                                                        }}</small>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -438,7 +441,8 @@ export default {
                                         </button>
                                         <button class="btn btn-success" @click="cetakSeri"
                                             v-if="idCetakHasilGenerate">Cetak</button>
-                                        <button class="btn btn-danger" @click="hapusSeriDuplikasi" v-if="isError">Hapus No
+                                        <button class="btn btn-danger" @click="hapusSeriDuplikasi" v-if="isError">Hapus
+                                            No
                                             Seri
                                             Duplikasi</button>
                                     </div>
@@ -454,6 +458,7 @@ export default {
         </div>
     </div>
 </template>
+
 <style>
 .scrollable {
     height: 300px;

@@ -1365,7 +1365,8 @@
                     $('#produk').addClass('hide');
                 } else if ($('.pilih_data').val() == "no_sj") {
                     var data = $('#data').val();
-                    sj(data);
+                    var xxx = data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '_');
+                    sj(xxx);
                     //$('#nosjtable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
                     $('#nosj').removeClass('hide');
                     $('#customer').addClass('hide');

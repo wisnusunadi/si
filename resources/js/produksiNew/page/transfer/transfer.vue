@@ -216,18 +216,18 @@ export default {
                     </td>
                     <td>
                         <span class="badge badge-success">Terkirim: {{ data.jml_kirim }} Unit {{ data.perc_kirim ??
-                            0.00 }}%</span>
+            0.00 }}%</span>
                         <br><span class="badge badge-dark">Rakit: {{ data.jml_rakit }} Unit {{ data.perc_rakit ??
-                            0.00 }}%</span>
+            0.00 }}%</span>
                     </td>
                     <td>
                         <div v-if="data.jml_rakit != 0">
                             <button class="btn btn-outline-success btn-sm" @click="openModalTransfer(data)"><i
                                     class="far fa-edit"></i>
                                 Transfer</button>
-                            <button class="btn btn-outline-danger btn-sm" @click="openModalSisaProduk(data)"><i
+                            <!-- <button class="btn btn-outline-danger btn-sm" @click="openModalSisaProduk(data)"><i
                                     class="far fa-edit"></i> Transfer
-                                Sisa Produk</button>
+                                Sisa Produk</button> -->
 
                         </div>
                     </td>

@@ -22,24 +22,6 @@ export default {
             ],
             years: new Date().getFullYear(),
             search: '',
-            headers: [
-                {
-                    text: 'No',
-                    value: 'no',
-                },
-                {
-                    text: 'Kode Produk',
-                    value: 'kode_produk',
-                },
-                {
-                    text: 'Nama Produk',
-                    value: 'nama_produk',
-                },
-                {
-                    text: `Jumlah No. Seri Dirakit`,
-                    value: 'jumlah_no_seri_dirakit',
-                }
-            ],
             // data produk tampil semua meskipun jumlah masih kosong, tujuannya untuk melihat kode produk
             items: [],
         }
@@ -91,7 +73,12 @@ export default {
                             placeholder="Cari...">
                     </div>
                 </div>
-                <Table :dataTable="items" :search="search" />
+                <Table :dataTable="items" :search="search" :years="years" v-if="!$store.state.loading" />
+                <div v-else class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

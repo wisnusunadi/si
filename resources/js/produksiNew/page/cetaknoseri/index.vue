@@ -194,6 +194,7 @@ export default {
     }
 }
 </script>
+
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
@@ -203,7 +204,7 @@ export default {
         <riwayat v-if="showModalRiwayat" :riwayat="selectRiwayat" @closeModal="showModalRiwayat = false" />
         <seriviatext v-if="showModalSeriViaText" @close="showModalSeriViaText = false" @submit="submit" />
         <div class="card">
-            <div class="card-body" v-if="!$store.state.loading">
+            <div class="card-body">
                 <div class="d-flex bd-highlight">
                     <div class="p-2 flex-grow-1 bd-highlight">
                         <button class="btn btn-outline-primary btn-sm" @click="openModalPilihan"
@@ -249,25 +250,28 @@ export default {
                         </span>
                     </div>
                     <div class="p-2 bd-highlight">
-                        <input type="text" class="form-control" v-model="search" placeholder="Cari..." @change="searchData">
+                        <input type="text" class="form-control" v-model="search" placeholder="Cari..."
+                            @change="searchData">
                     </div>
                 </div>
                 <div class="d-flex flex-row-reverse bd-highlight">
                     <div class="p-2 bd-highlight">
                     </div>
                 </div>
-                <data-table :headers="headers" :items="items">
+                <data-table :headers="headers" :items="items" v-if="!$store.state.loading">
                     <template #header.id>
                         <div>
                             <input type="checkbox" :checked="checkAll" @click="checkedAll">
                         </div>
                     </template>
+
                     <template #item.id="{ item }">
                         <div>
                             <input type="checkbox" @click="selectNoSeri(item.id)"
                                 :checked="noSeriSelected && noSeriSelected.find((noseri) => noseri === item.id)" />
                         </div>
                     </template>
+
                     <template #item.aksi="{ item }">
                         <div>
                             <button class="btn btn-outline-primary btn-sm" @click="cetakSeriSatu(item.id)">
@@ -281,13 +285,12 @@ export default {
                         </div>
                     </template>
                 </data-table>
-            </div>
-            <div class="card-body" v-else>
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center" v-else>
                     <div class="spinner-grow text-primary" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>
