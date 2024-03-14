@@ -1,5 +1,8 @@
 <script>
+import axios from 'axios';
+
 export default {
+    props: ['detail'],
     data() {
         return {
             headers: [
@@ -16,7 +19,8 @@ export default {
                     value: 'tgltransfer'
                 }
             ],
-            items: []
+            items: [],
+            loading: false,
         }
     },
     methods: {
@@ -25,8 +29,28 @@ export default {
             this.$nextTick(() => {
                 this.$emit('close');
             });
+        },
+        async getData() {
+            try {
+                this.loading = true
+                const { data } = await axios.get(`/api/prd/fg/seri_bppb/${this.detail.id}`)
+                this.items = data.map(item => {
+                    return {
+                        noseri: item.noseri,
+                        tglbuat: this.dateFormat(item.tgl_buat),
+                        tgltransfer: this.dateFormat(item.tgl_tf)
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.loading = false
+            }
         }
     },
+    created() {
+        this.getData()
+    }
 }
 </script>
 <template>
@@ -46,7 +70,12 @@ export default {
                             <input type="text" class="form-control" v-model="search" placeholder="Cari..." />
                         </div>
                     </div>
-                    <data-table :headers="headers" :items="items" :search="search" />
+                    <data-table :headers="headers" :items="items" :search="search" v-if="!loading" />
+                    <div v-else class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -352,29 +352,26 @@ class ProduksiController extends Controller
         return response()->json($obj);
     }
 
-    function kamus_produk_detail($year,$prd)
+    function kamus_produk_detail($year, $prd)
     {
-       if($prd == 452){
-        $jadwal = PackRw::
-        select('noseri_barang_jadi.id','noseri_barang_jadi.noseri','pack_rw.created_at as tgl_tf','noseri_barang_jadi.created_at as tgl_rakit')
-        ->selectRaw('"terjadwal" AS jenis')
-        ->selectRaw('"-" AS no_bppb')
-        ->leftJoin('noseri_barang_jadi','pack_rw.noseri_id','=','noseri_barang_jadi.id')
-        ->whereYear('pack_rw.created_at', $year)
-        ->get();
-       }else{
-        $jadwal = JadwalRakitNoseri::
-        select('jadwal_perakitan.id','jadwal_perakitan.jenis','jadwal_perakitan.no_bppb','jadwal_rakit_noseri.created_at as tgl_rakit','jadwal_rakit_noseri.noseri','jadwal_rakit_noseri.waktu_tf as tgl_tf')
-        ->leftJoin('jadwal_perakitan','jadwal_perakitan.id','=','jadwal_rakit_noseri.jadwal_id')
-        ->where('jadwal_perakitan.produk_id',$prd)
-        ->whereYear('jadwal_rakit_noseri.created_at', $year)
-        ->get();
-
-       }
+        if ($prd == 452) {
+            $jadwal = PackRw::select('noseri_barang_jadi.id', 'noseri_barang_jadi.noseri', 'pack_rw.created_at as tgl_tf', 'noseri_barang_jadi.created_at as tgl_rakit')
+                ->selectRaw('"terjadwal" AS jenis')
+                ->selectRaw('"-" AS no_bppb')
+                ->leftJoin('noseri_barang_jadi', 'pack_rw.noseri_id', '=', 'noseri_barang_jadi.id')
+                ->whereYear('pack_rw.created_at', $year)
+                ->get();
+        } else {
+            $jadwal = JadwalRakitNoseri::select('jadwal_perakitan.id', 'jadwal_perakitan.jenis', 'jadwal_perakitan.no_bppb', 'jadwal_rakit_noseri.created_at as tgl_rakit', 'jadwal_rakit_noseri.noseri', 'jadwal_rakit_noseri.waktu_tf as tgl_tf')
+                ->leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+                ->where('jadwal_perakitan.produk_id', $prd)
+                ->whereYear('jadwal_rakit_noseri.created_at', $year)
+                ->get();
+        }
 
         $obj = array();
 
-        foreach($jadwal as $j){
+        foreach ($jadwal as $j) {
             $obj[] =  array(
                 'id' => $j->id,
                 'jenis_perakitan' => $j->jenis,
@@ -466,7 +463,7 @@ class ProduksiController extends Controller
 
     function generate_fg_non_jadwal(Request $request)
     {
-          $obj =  json_decode(json_encode($request->all()), FALSE);
+        $obj =  json_decode(json_encode($request->all()), FALSE);
 
         DB::beginTransaction();
         try {
@@ -4185,7 +4182,6 @@ class ProduksiController extends Controller
                 'status' => 200,
                 'message' =>  'Berhasil Ditambahkan',
             ], 200);
-
         } catch (\Throwable $th) {
 
             //throw $th;
@@ -4240,8 +4236,8 @@ class ProduksiController extends Controller
     function riwayat_seri_bppb($id)
     {
         $obj = array();
-        $data = JadwalRakitNoseri::where('jadwal_id',$id)->get();
-        foreach($data as $d){
+        $data = JadwalRakitNoseri::where('jadwal_id', $id)->get();
+        foreach ($data as $d) {
             $obj[] = array(
                 'noseri' => $d->noseri,
                 'tgl_tf' => $d->tgl_tf,
@@ -4262,11 +4258,12 @@ class ProduksiController extends Controller
                         ->whereColumn('jadwal_rakit_noseri.jadwal_id', 'jadwal_perakitan.id');
                 },
             ])
-            ->selectRaw("'selesai' as status_bppb")
-            ->havingRaw('cselesai = jumlah')
-            ->with('Produk.Produk')
-            ->orderby('id','DESC')
-            ->get();
+                ->selectRaw("'selesai' as status_bppb")
+                ->selectRaw('datediff(now(), jadwal_perakitan.tanggal_selesai) as selisih')
+                ->havingRaw('cselesai = jumlah')
+                ->with('Produk.Produk')
+                ->orderby('id', 'DESC')
+                ->get();
 
             $close = JadwalPerakitan::addSelect([
                 'cselesai' => function ($q) {
@@ -4281,28 +4278,28 @@ class ProduksiController extends Controller
                         ->whereColumn('jp.id', 'jadwal_perakitan.id');
                 },
             ])
-            ->selectRaw("'close' as status_bppb")
-            ->havingRaw('cselesai != jumlah AND cclose > 0')
-            ->with('Produk.Produk')
-            ->orderby('id','DESC')
-            ->get();
+                ->selectRaw("'close' as status_bppb")
+                ->selectRaw('datediff(now(), jadwal_perakitan.tanggal_selesai) as selisih')
+                ->havingRaw('cselesai != jumlah AND cclose > 0')
+                ->with('Produk.Produk')
+                ->orderby('id', 'DESC')
+                ->get();
 
             $merge =  $selesai->concat($close)->sortByDesc('id');
 
 
             $data = array();
 
-            foreach($merge as $j){
+            foreach ($merge as $j) {
 
-                if($j->status_bppb == 'selesai'){
-                    $status = 'Selesai';
-                }else{
-                    if($j->cselesai == 0){
-                        $status = 'Close BPPB Tanpa Rakit';
-                    }else{
-                        $status = 'Close BPPB Dengan Sisa Rakit';
+                if ($j->status_bppb == 'selesai') {
+                    $status = 'ok';
+                } else {
+                    if ($j->cselesai == 0) {
+                        $status = 'closeBPPBTanpaRakit';
+                    } else {
+                        $status = 'closeBPPBDenganSisaRakit';
                     }
-
                 }
 
                 $data[] = array(
@@ -4311,11 +4308,12 @@ class ProduksiController extends Controller
                     'tanggal_mulai' => $j->tanggal_mulai,
                     'tanggal_selesai' => $j->tanggal_selesai,
                     'jenis' => $j->jenis,
-                    'nama' => $j->Produk->Produk->nama.' ' .$j->Produk->nama,
+                    'nama' => $j->Produk->Produk->nama . ' ' . $j->Produk->nama,
                     'status' => $status,
                     'keterangan' => $j->evaluasi,
                     'jumlah' => $j->jumlah,
                     'jumlah_rakit' => $j->cselesai,
+                    'selisih' => $j->selisih,
                 );
             }
 
@@ -4383,7 +4381,7 @@ class ProduksiController extends Controller
                 ->leftJoin('m_produk as mp', 'mp.id', '=', 'p.produk_id')
                 ->where('jadwal_perakitan.jenis', 'terjadwal')
                 ->whereNotIn('jadwal_perakitan.status', [6])
-                ->whereNotIn('jadwal_perakitan.status_tf', [14,20])
+                ->whereNotIn('jadwal_perakitan.status_tf', [14, 20])
                 ->groupBy('jadwal_perakitan.id')
                 ->havingRaw('jumlah != jml_rakit')
                 ->orderByDesc('created_at')
