@@ -26,10 +26,12 @@ export default {
                 {
                     text: 'Tanggal Rakit',
                     value: 'tanggal_rakit',
+                    sortable: false
                 },
                 {
                     text: 'Tanggal Transfer',
                     value: 'tanggal_transfer',
+                    sortable: false
                 }
             ],
             items: [],
@@ -150,7 +152,7 @@ export default {
 
             if (this.jenisPerakitanSelected.length > 0) {
                 return this.items.filter(item => {
-                    return this.jenisPerakitanSelected.includes(item.jenis)
+                    return this.jenisPerakitanSelected.includes(item.jenis_perakitan)
                 })
             }
 
@@ -262,7 +264,7 @@ export default {
                             </span>
                         </template>
                         <template #item.jenis="{ item }">
-                            <span>{{ item.jenis == 'terjadwal' ? 'Terjadwal' : 'Tidak Terjadwal' }}</span>
+                            <span>{{ item.jenis_perakitan == 'terjadwal' ? 'Terjadwal' : 'Tidak Terjadwal' }}</span>
                         </template>
                     </data-table>
                     <div v-else class="text-center">
