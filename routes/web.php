@@ -97,6 +97,7 @@ Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
 });
 
 Route::group(['prefix' => '/produksiReworks', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => '/produksiReworks', 'middleware' => 'auth'], function () {
     Route::get('/export_excel/{id}', [ProduksiController::class, 'export_rework_excel']);
     Route::get('/cetak_seri_finish_goods/{seri}', [ProduksiController::class, 'cetak_seri_finish_goods']);
     Route::get('/cetak_seri_fg_medium', [ProduksiController::class, 'cetak_seri_finish_goods_medium']);
@@ -140,9 +141,11 @@ Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
     Route::get('/export_spb/{id}', [GudangController::class, 'exportSpb'])->name('gbj.spb');
     Route::get('/export_noseri', [GudangController::class, 'export_noseri_gudang'])->name('gbj.noseri');
     Route::view('/{any?}', 'page.gbj.gbj_rework')->where('any', '.*');
+    Route::view('/{any?}', 'page.gbj.gbj_rework')->where('any', '.*');
     // Route::view('/manager/produk', 'manager.gbj.produksi');
 });
 
+Route::group(['prefix' => '/produksi', 'middleware' => ['divisi:prd']], function () {
 Route::group(['prefix' => '/produksi', 'middleware' => ['divisi:prd']], function () {
     Route::view('/dashboard', 'page.produksi.dashboard');
     Route::view('/so', 'page.produksi.so');
@@ -171,6 +174,7 @@ Route::group(['prefix' => 'master', 'middleware' => 'auth'], function () {
     });
 });
 // 'middleware' => 'auth'
+Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
 Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     Route::group(['middleware' => ['divisi:jual,asp']], function () {
         Route::get('/dashboard', [App\Http\Controllers\PenjualanController::class, 'dashboard'])->name('penjualan.dashboard');
@@ -312,6 +316,7 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
 
 
 Route::group(['prefix' => 'logistik', 'middleware' => ['divisi:log']], function () {
+Route::group(['prefix' => 'logistik', 'middleware' => ['divisi:log']], function () {
     Route::group(['middleware' => ['divisi:log']], function () {
         Route::get('/dashboard', [App\Http\Controllers\LogistikController::class, 'dashboard'])->name('logistik.dashboard');
     });
@@ -320,6 +325,9 @@ Route::group(['prefix' => 'logistik', 'middleware' => ['divisi:log']], function 
 
     Route::group(['prefix' => '/so'], function () {
         // Route::group(['middleware' => ['divisi:log,dirut']], function () {
+        Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
+        Route::post('/data/{value}/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
+        Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\LogistikController::class, 'update_so'])->name('logistik.so.detail');
         Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
         Route::post('/data/{value}/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\LogistikController::class, 'update_so'])->name('logistik.so.detail');

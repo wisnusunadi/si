@@ -84,7 +84,8 @@ export default {
                     </tr>
                 </tbody>
             </table>
-            <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses" />
+            <pagination :filteredDalamProses="filteredDalamProses"
+                @updateFilteredDalamProses="updateFilteredDalamProses" />
         </div>
     </div>
 </template>

@@ -49,7 +49,8 @@ export default {
         },
         async simpan() {
             const ceknotnull = Object.values(this.form).every(x => x !== null && x !== '' && x !== 0)
-            const cekbppb = this.dataGenerate.no_bppb !== null && this.dataGenerate.no_bppb !== '' && this.dataGenerate.no_bppb !== '-'
+            const bppb = this.dataGenerate.no_bppb.trim()
+            const cekbppb = bppb !== null && bppb !== '' && bppb !== '-' && bppb !== '/'
             if (ceknotnull && cekbppb && this.jumlahRakit) {
                 try {
                     this.loading = true
@@ -146,7 +147,7 @@ export default {
             if (cekbppb) {
                 this.isDisableBPPB = true
             }
-            if(this.cekKedatangan){
+            if (this.cekKedatangan) {
                 this.form.kedatangan = 1
             }
         }
@@ -176,6 +177,7 @@ export default {
     },
 }
 </script>
+
 <template>
     <div>
         <modalPilihan :data="idCetakHasilGenerate" v-if="showModalCetak" @closeModal="closeModalCetak"
@@ -256,7 +258,8 @@ export default {
                                         <form>
                                             <div class="form-group" v-if="!cekKedatangan">
                                                 <label for="exampleInputEmail1">Kedatangan</label>
-                                                <input type="number" class="form-control" v-model.number="form.kedatangan"
+                                                <input type="number" class="form-control"
+                                                    v-model.number="form.kedatangan"
                                                     :disabled="hasilGenerate.length > 0" @keypress="numberOnly($event)">
                                             </div>
                                             <div class="form-group">
@@ -282,7 +285,8 @@ export default {
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link active" id="pills-preview-tab" data-toggle="pill"
                                             data-target="#pills-preview" type="button" role="tab"
-                                            aria-controls="pills-preview" aria-selected="true">Preview Generate No Seri</a>
+                                            aria-controls="pills-preview" aria-selected="true">Preview Generate No
+                                            Seri</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link" id="pills-duplikasi-tab" data-toggle="pill"
@@ -327,8 +331,8 @@ export default {
                                         </div>
                                         {{ loading ? 'Loading...' : 'Generate' }}
                                     </button>
-                                    <button type="button" class="btn btn-success" v-if="seri.length > 0" :disabled="loading"
-                                        @click="simpanSeri">
+                                    <button type="button" class="btn btn-success" v-if="seri.length > 0"
+                                        :disabled="loading" @click="simpanSeri">
                                         <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
                                             <span class="sr-only">Loading...</span>
                                         </div>

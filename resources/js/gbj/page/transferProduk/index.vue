@@ -134,11 +134,12 @@ export default {
                 <data-table :headers="headers" :items="items" :search="search" v-if="!$store.state.loading">
                     <template #item.progress="{ item }">
                         <div>
-                            <span class="badge badge-info">Belum Transfer: {{ parseInt(item.jumlah) - item.jumlah_gdg }} ({{
-                                item.persentase_belum_transfer }}%)</span> <br>
+                            <span class="badge badge-info">Belum Transfer: {{ parseInt(item.jumlah) - item.jumlah_gdg }}
+                                ({{
+            item.persentase_belum_transfer }}%)</span> <br>
                             <span class="badge badge-warning">Sudah Transfer: {{ item.jumlah_gdg }} ({{
-                                item.persentase_gudang
-                            }}%)</span>
+            item.persentase_gudang
+        }}%)</span>
 
                         </div>
                     </template>

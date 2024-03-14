@@ -29,6 +29,6 @@ const app = new Vue({
     router,
     store,
     components: {
-        index: Index
-    }
+        index: Index,
+    },
 });
