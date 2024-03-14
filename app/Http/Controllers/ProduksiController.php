@@ -4212,6 +4212,119 @@ class ProduksiController extends Controller
             ], 500);
         }
     }
+    function close_bppb(Request $request)
+    {
+        try {
+            //code...
+            $jadwal = JadwalPerakitan::find($request->jadwal_id);
+            $jadwal->status_tf = 20;
+            $jadwal->save();
+
+            return response()->json([
+                'error' => true,
+                'msg' => 'Berhasil Di tambahkan',
+            ], 500);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'error' => true,
+                'msg' => $th,
+            ], 500);
+        }
+    }
+
+    function riwayat_seri_bppb($id)
+    {
+        $obj = array();
+        $data = JadwalRakitNoseri::where('jadwal_id',$id)->get();
+        foreach($data as $d){
+            $obj[] = array(
+                'noseri' => $d->noseri,
+                'tgl_tf' => $d->tgl_tf,
+                'tgl_buat' => $d->created_at,
+            );
+        }
+        return response()->json($obj);
+    }
+
+    function riwayat_selesai_bppb()
+    {
+        try {
+            //code...
+            $selesai = JadwalPerakitan::addSelect([
+                'cselesai' => function ($q) {
+                    $q->selectRaw('coalesce(count(jadwal_rakit_noseri.id),0)')
+                        ->from('jadwal_rakit_noseri')
+                        ->whereColumn('jadwal_rakit_noseri.jadwal_id', 'jadwal_perakitan.id');
+                },
+            ])
+            ->selectRaw("'selesai' as status_bppb")
+            ->havingRaw('cselesai = jumlah')
+            ->with('Produk.Produk')
+            ->orderby('id','DESC')
+            ->get();
+
+            $close = JadwalPerakitan::addSelect([
+                'cselesai' => function ($q) {
+                    $q->selectRaw('coalesce(count(jadwal_rakit_noseri.id),0)')
+                        ->from('jadwal_rakit_noseri')
+                        ->whereColumn('jadwal_rakit_noseri.jadwal_id', 'jadwal_perakitan.id');
+                },
+                'cclose' => function ($q) {
+                    $q->selectRaw('coalesce(count(jp.id),0)')
+                        ->from('jadwal_perakitan as jp')
+                        ->where('jp.status_tf', 20)
+                        ->whereColumn('jp.id', 'jadwal_perakitan.id');
+                },
+            ])
+            ->selectRaw("'close' as status_bppb")
+            ->havingRaw('cselesai != jumlah AND cclose > 0')
+            ->with('Produk.Produk')
+            ->orderby('id','DESC')
+            ->get();
+
+            $merge =  $selesai->concat($close)->sortByDesc('id');
+
+
+            $data = array();
+
+            foreach($merge as $j){
+
+                if($j->status_bppb == 'selesai'){
+                    $status = 'Selesai';
+                }else{
+                    if($j->cselesai == 0){
+                        $status = 'Close BPPB Tanpa Rakit';
+                    }else{
+                        $status = 'Close BPPB Dengan Sisa Rakit';
+                    }
+
+                }
+
+                $data[] = array(
+                    'id' => $j->id,
+                    'no_bppb' => $j->no_bppb,
+                    'periode' => Carbon::parse($j->tanggal_mulaii)->format('F'),
+                    'tanggal_mulai' => $j->tanggal_mulai,
+                    'tanggal_selesai' => $j->tanggal_selesai,
+                    'jenis' => $j->jenis,
+                    'nama' => $j->Produk->Produk->nama.' ' .$j->Produk->nama,
+                    'status' => $status,
+                    'jumlah' => $j->jumlah,
+                    'kurang' =>  $j->jumlah - $j->cselesai,
+                );
+            }
+
+            return response()->json($data);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'error' => true,
+                'msg' => $th,
+            ], 500);
+        }
+    }
+
     function on_rakit()
     {
         try {
