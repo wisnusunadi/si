@@ -4214,18 +4214,22 @@ class ProduksiController extends Controller
     }
     function close_bppb(Request $request)
     {
+        DB::beginTransaction();
         try {
             //code...
             $jadwal = JadwalPerakitan::find($request->jadwal_id);
             $jadwal->status_tf = 20;
+            $jadwal->evaluasi = $request->keterangan;
             $jadwal->save();
 
+            DB::commit();
             return response()->json([
                 'error' => true,
                 'msg' => 'Berhasil Di tambahkan',
             ], 500);
         } catch (\Throwable $th) {
             //throw $th;
+            DB::rollBack();
             return response()->json([
                 'error' => true,
                 'msg' => $th,
@@ -4310,6 +4314,7 @@ class ProduksiController extends Controller
                     'jenis' => $j->jenis,
                     'nama' => $j->Produk->Produk->nama.' ' .$j->Produk->nama,
                     'status' => $status,
+                    'keterangan' => $j->evaluasi,
                     'jumlah' => $j->jumlah,
                     'kurang' =>  $j->jumlah - $j->cselesai,
                 );
