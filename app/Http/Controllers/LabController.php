@@ -31,7 +31,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class LabController extends Controller
 {
-    public function riwayat_uji()
+    public function riwayat_uji(Request $request)
     {
         $data = UjiLabDetail::select(
             'jenis_pemilik.nama as jp',
@@ -62,8 +62,8 @@ class LabController extends Controller
             ->leftJoin('erp_kesehatan.karyawans', 'karyawans.id', '=', 'uji_lab_detail.pemeriksa_id')
             ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
             ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
-            ->where('uji_lab_detail.status', '!=', 'belum');
-        // ->whereYear('uji_lab_detail.created_at', $request->years );
+            ->where('uji_lab_detail.status', '!=', 'belum')
+            ->whereYear('uji_lab_detail.created_at', $request->years );
 
         $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
             ->selectRaw('"" AS no_paket')
