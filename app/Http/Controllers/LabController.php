@@ -1762,22 +1762,29 @@ class LabController extends Controller
 
         $detail = UjiLabDetail::with('NoseriDetailPesanan.NoseriTGbj.NoseriBarangJadi')
             ->addSelect([
-                'ok' => function ($q) {
+                // 'ok' => function ($q) {
+                //     $q->selectRaw('coalesce(count(uji.id),0)')
+                //         ->from('uji_lab_detail as uji')
+                //         ->where('uji.status', 'ok')
+                //         ->where('uji.is_ready', 1)
+                //         ->whereColumn('uji.id', 'uji_lab_detail.id');
+                // },
+                // 'nok' => function ($q) {
+                //     $q->selectRaw('coalesce(count(uji.id),0)')
+                //         ->from('uji_lab_detail as uji')
+                //         ->where('uji.status', 'nok')
+                //         ->where('uji.is_ready', 1)
+                //         ->whereColumn('uji.id', 'uji_lab_detail.id');
+                // },
+                'uji' => function ($q) {
                     $q->selectRaw('coalesce(count(uji.id),0)')
                         ->from('uji_lab_detail as uji')
-                        ->where('uji.status', 'ok')
-                        ->where('uji.is_ready', 1)
-                        ->whereColumn('uji.id', 'uji_lab_detail.id');
-                },
-                'nok' => function ($q) {
-                    $q->selectRaw('coalesce(count(uji.id),0)')
-                        ->from('uji_lab_detail as uji')
-                        ->where('uji.status', 'nok')
-                        ->where('uji.is_ready', 1)
+                        ->whereRaw("uji.status != 'belum'")
+                        // ->where('uji.is_ready', 1)
                         ->whereColumn('uji.id', 'uji_lab_detail.id');
                 },
             ])
-            ->havingRaw('ok > 0 OR nok > 0')
+            ->havingRaw('uji > 0 ')
             ->whereIN('detail_pesanan_produk_id', $get_dpp)
             ->get();
         if ($detail->isEmpty()) {
@@ -1789,6 +1796,7 @@ class LabController extends Controller
                     'no_seri' => $d->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri,
                     'tgl_masuk' => $d->tgl_masuk,
                     'status' => $d->status == 'ok' ? 'ok' : 'not_ok',
+                    'is_ready' => $d->is_ready,
                 );
             }
         }
@@ -1806,7 +1814,7 @@ class LabController extends Controller
             ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
             ->leftJoin('kode_lab', 'kode_lab.id', '=', 'produk.kode_lab_id')
             ->where('uji_lab_id', $id)
-            ->where('is_ready', 1)
+            // ->where('is_ready', 1)
             ->whereRaw("uji_lab_detail.status != 'belum'")
             ->get();
 
