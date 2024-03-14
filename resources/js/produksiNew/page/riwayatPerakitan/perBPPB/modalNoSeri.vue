@@ -54,8 +54,8 @@ export default {
 }
 </script>
 <template>
-    <div class="modal fade modalNoSeri" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-        aria-hidden="true">
+    <div class="modal fade modalNoSeri" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
