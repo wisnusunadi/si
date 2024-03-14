@@ -24,7 +24,8 @@ export default {
                     text: 'Operator',
                     value: 'operator',
                 }
-            ]
+            ],
+            search: '',
         }
     },
 }
@@ -35,7 +36,12 @@ export default {
             <p>{{ produk.transfer }}</p>
         </div>
         <div class="card-body">
-            <data-table :headers="header" :items="produk.detail" />
+            <div class="d-flex flex-row-reverse bd-highlight">
+                <div class="p-2 bd-highlight">
+                    <input type="text" class="form-control" v-model="search" placeholder="Cari...">
+                </div>
+            </div>
+            <data-table :headers="header" :items="produk.detail" :search="search" />
         </div>
     </div>
 </template>
