@@ -26,9 +26,9 @@ export default {
     methods: {
         close() {
             $(".modalKalibrasi").modal("hide");
-            // this.$nextTick(() => {
-            //     this.$emit("close");
-            // });
+            this.$nextTick(() => {
+                this.$emit("close");
+            });
         },
         async getKaryawan() {
             const { data: karyawan } = await axios.get('/api/karyawan_all')
@@ -101,7 +101,8 @@ export default {
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="">Tanggal Kalibrasi</label>
-                                        <input type="date" class="form-control" v-model="form.tgl_kalibrasi" :max="dateMax">
+                                        <input type="date" class="form-control" v-model="form.tgl_kalibrasi"
+                                            :max="dateMax">
                                     </div>
                                     <div class="form-group">
                                         <label for="">Nama Teknisi</label>
@@ -120,14 +121,16 @@ export default {
                                             <div class="custom-control custom-radio custom-control-inline">
                                                 <input type="radio" id="customRadioInline1" name="customRadioInline"
                                                     class="custom-control-input" value="ok" v-model="form.hasil" />
-                                                <label class="custom-control-label" for="customRadioInline1">ALAT BAIK DAN
+                                                <label class="custom-control-label" for="customRadioInline1">ALAT BAIK
+                                                    DAN
                                                     LAIK
                                                     DIGUNAKAN</label>
                                             </div>
                                             <div class="custom-control custom-radio custom-control-inline">
                                                 <input type="radio" id="customRadioInline2" name="customRadioInline"
                                                     class="custom-control-input" value="nok" v-model="form.hasil" />
-                                                <label class="custom-control-label" for="customRadioInline2">ALAT TIDAK LAIK
+                                                <label class="custom-control-label" for="customRadioInline2">ALAT TIDAK
+                                                    LAIK
                                                     PAKAI</label>
                                             </div>
                                         </div>

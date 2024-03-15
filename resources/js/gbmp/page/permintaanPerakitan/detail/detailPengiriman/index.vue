@@ -65,32 +65,24 @@ export default {
     computed: {
         produks() {
             let produk = []
-            this.detailProduk.produk.forEach(item => {
-                let existingEntryIndex = produk.findIndex(entry => entry.transfer === item.transfer)
-
-                if (existingEntryIndex === -1) {
-                    produk.push({
-                        detail: [{
-                            no: produk.length + 1,
-                            jumlah: item.jumlah,
-                            kedatangan: item.kedatangan,
-                            tgl_tf: item.tgl_tf,
-                            tanggal_transfer: this.dateFormat(item.tgl_tf),
-                            operator: item.operator,
-                        }],
-                        transfer: item.transfer,
-                    })
-                } else {
-                    produk[existingEntryIndex].detail.push({
-                        no: produk[existingEntryIndex].detail.length + 1,
-                        jumlah: item.jumlah,
-                        kedatangan: item.kedatangan,
-                        tgl_tf: item.tgl_tf,
-                        tanggal_transfer: this.dateFormat(item.tgl_tf),
-                        operator: item.operator,
-                    })
+            let groupedByTransfer = {}
+            this.detailProduk.produk.forEach((item) => {
+                if (!groupedByTransfer[item.transfer]) {
+                    groupedByTransfer[item.transfer] = []
                 }
+                // add index to array
+                item.no = groupedByTransfer[item.transfer].length + 1
+                groupedByTransfer[item.transfer].push(item)
             })
+
+            for (const [key, value] of Object.entries(groupedByTransfer)) {
+                produk.push({
+                    transfer: key,
+                    detail: value,
+                    tgl_tf: this.dateFormat(value[0].tgl_tf),
+                    operator: value[0].operator,
+                })
+            }
 
             return produk
         }

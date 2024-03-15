@@ -16,14 +16,6 @@ export default {
                     text: 'Kedatangan',
                     value: 'kedatangan',
                 },
-                {
-                    text: 'Tanggal Transfer',
-                    value: 'tanggal_transfer',
-                },
-                {
-                    text: 'Operator',
-                    value: 'operator',
-                }
             ],
             search: '',
         }
@@ -33,7 +25,31 @@ export default {
 <template>
     <div class="card">
         <div class="card-header">
-            <p>{{ produk.transfer }}</p>
+            <div class="row">
+                <div class="col-5">
+                    <p>{{ produk.transfer }}</p>
+                </div>
+                <div class="col-5">
+                    <div class="p-2">
+                        <div class="margin">
+                            <small class="text-muted">Tanggal Transfer</small>
+                        </div>
+                        <div class="margin">
+                            <b>{{ produk.tgl_tf }}</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="p-2">
+                        <div class="margin">
+                            <small class="text-muted">Operator</small>
+                        </div>
+                        <div class="margin">
+                            <b>{{ produk.operator }}</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="d-flex flex-row-reverse bd-highlight">

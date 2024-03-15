@@ -1,6 +1,6 @@
 <script>
 export default {
-    props: ['item', 'header'],
+    props: ['item'],
     data() {
         return {
             permintaan: [],
@@ -50,25 +50,11 @@ export default {
         <div class="card-body">
             <div class="row">
                 <div class="col-5">
-                    <div class="p-2">
-                        <div class="margin">
-                            <small class="text-muted">No Permintaan</small>
-                        </div>
-                        <div class="margin"><b>{{ header.no_permintaan }}</b></div>
-                        <div class="margin">
-                            <small class="text-muted">
-                                No BPPB
-                            </small>
-                        </div>
-                        <div class="margin">
-                            <b>{{ header.no_bppb }}</b>
-                        </div>
-                    </div>
+                    <div class="margin"><small class="text-muted">Nama Produk</small></div>
+                    <div class="margin"><b>{{ item.nama }}</b></div>
                 </div>
                 <div class="col">
                     <div class="p-2">
-                        <div class="margin"><small class="text-muted">Nama Produk</small></div>
-                        <div class="margin"><b>{{ item.nama }}</b></div>
                         <div class="margin"><small class="text-muted">
                                 Jumlah Belum Ditransfer
                             </small></div>

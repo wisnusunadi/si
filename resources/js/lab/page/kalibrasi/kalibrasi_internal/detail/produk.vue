@@ -339,7 +339,8 @@ export default {
                                 <td>{{ data.tipe }}</td>
                                 <td>{{ data.jumlah }}</td>
                                 <td>{{ data.jumlah_ok }}</td>
-                                <td>{{ data.jumlah_nok }}</td>
+                                <td>{{ data.jumlah_nok }}
+                                </td>
                                 <td>
                                     <button class="btn btn-outline-primary" @click="detail(index, data.id)"
                                         :disabled="loading">
