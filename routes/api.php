@@ -366,6 +366,9 @@ Route::prefix('/prd')->group(function () {
         });
         Route::post('/gen_bppb', [ProduksiController::class, 'generate_bppb']);
         Route::post('/cek_bppb', [ProduksiController::class, 'cek_bppb']);
+        Route::post('/close_bppb', [ProduksiController::class, 'close_bppb']);
+        Route::get('/seri_bppb/{id}', [ProduksiController::class, 'riwayat_seri_bppb']);
+        Route::get('/riwayat_bppb', [ProduksiController::class, 'riwayat_selesai_bppb']);
         Route::post('/gen', [ProduksiController::class, 'generate_fg']);
         Route::post('/non_gen', [ProduksiController::class, 'non_generate_fg']);
         Route::post('/riwayat', [ProduksiController::class, 'riwayat_fg']);

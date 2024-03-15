@@ -38,7 +38,6 @@ export default {
                 this.riwayatRakit = riwayat.map(item => {
                     return {
                         ...item,
-                        tgl: moment(item.date_in).format('YYYY-MM-DD'),
                         tgl_rakit: this.dateFormat(item.date_in),
                         wkt_rakit: this.timeFormat(item.date_in),
                     }
@@ -51,12 +50,30 @@ export default {
                         tgl_selesai: this.dateFormat(item.tanggal_selesai),
                     }
                 })
+                const { data: bppb } = await axios.get('/api/prd/fg/riwayat_bppb')
+                this.riwayatBPPB = bppb.map(item => {
+                    return {
+                        ...item,
+                        periode: this.periode(item.tanggal_mulai),
+                        tgl_mulai: this.dateFormat(item.tanggal_mulai),
+                        tgl_selesai: this.dateFormat(item.tanggal_selesai),
+                        kurang_rakit: `Kurang ${item.jumlah - item.jumlah_rakit}`,
+                        kurang: item.jumlah - item.jumlah_rakit,
+                        jumlah_unit: `${item.jumlah} Unit`,
+                        keterangan: item.keterangan ? item.keterangan : '-'
+                    }
+                })
             } catch (error) {
                 console.log(error)
             } finally {
                 this.$store.dispatch('setLoading', false)
             }
-        }
+        },
+        periode(date) {
+            // change to yyyy-mm-dd format
+            date = date.split(' ').reverse().join('-');
+            return moment(date).lang('id').format('MMMM');
+        },
     },
     created() {
         this.getData()

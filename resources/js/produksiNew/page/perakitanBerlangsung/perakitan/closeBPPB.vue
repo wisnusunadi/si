@@ -1,4 +1,6 @@
 <script>
+import axios from 'axios';
+
 export default {
     props: ['dataGenerate'],
     data() {
@@ -9,6 +11,7 @@ export default {
     methods: {
         closeModal() {
             $('.closeBPPB').modal('hide');
+            this.keterangan = ''
             this.$nextTick(() => {
                 this.$emit('close');
             });
@@ -30,8 +33,16 @@ export default {
                     cancelButtonText: 'Tidak, Batalkan!',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        swal.fire('Berhasil', 'Alasan Close / Pembatalan BPPB Berhasil Disimpan', 'success')
-                        this.closeModal()
+                        axios.post(`/api/prd/fg/close_bppb`, {
+                            jadwal_id: this.dataGenerate.jadwal_id,
+                            keterangan: this.keterangan
+                        }).then(() => {
+                            swal.fire('Berhasil', 'Alasan Close / Pembatalan BPPB Berhasil Disimpan', 'success')
+                            this.closeModal()
+                            this.$emit('refresh')
+                        }).catch(() => {
+                            swal.fire('Gagal', 'Alasan Close / Pembatalan BPPB Gagal Disimpan', 'error')
+                        })
                     }
                 })
             }
@@ -40,8 +51,8 @@ export default {
 }
 </script>
 <template>
-    <div class="modal fade closeBPPB" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-        aria-hidden="true">
+    <div class="modal fade closeBPPB" id="modelId" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">

@@ -128,7 +128,7 @@ export default {
             </div>
         </div>
         <table class="table">
-            <thead class="thead-dark">
+            <thead>
                 <tr>
                     <th rowspan="2">Periode</th>
                     <th colspan="2" class="text-center">Tanggal</th>

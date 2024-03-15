@@ -4,7 +4,7 @@ export default {
     components: {
         modalNoSeri
     },
-    // props: ['items'],
+    props: ['items'],
     data() {
         return {
             headers: [
@@ -33,7 +33,7 @@ export default {
                 },
                 {
                     text: 'Nama Produk',
-                    value: 'nama_produk',
+                    value: 'nama',
                     sortable: false
                 },
                 {
@@ -54,100 +54,6 @@ export default {
                 }
             ],
             search: '',
-            items: [
-                {
-                    "id": 457,
-                    "jadwal_id": 896,
-                    "produk_id": 336,
-                    "generate_seri": 0,
-                    "no_bppb": "PRD/01-FD09/II/24",
-                    "tanggal_mulai": "2024-03-08",
-                    "tanggal_selesai": "2024-03-08",
-                    "selisih": 5,
-                    "nama_produk": "SONOTRAX PRO TFT  ",
-                    "kategori": "DESKTOP FETAL DOPPLER / FETAL MONITOR",
-                    "jumlah": 2,
-                    "jumlah_rakit": 0,
-                    "kode_produk": "FD09",
-                    "periode": "Maret",
-                    "tgl_mulai": "08 Maret 2024",
-                    "tgl_selesai": "08 Maret 2024",
-                    "kurang_rakit": "Kurang 2",
-                    "kurang": 2,
-                    "jumlah_unit": "2 Unit",
-                    "jenis": "terjadwal",
-                    "keterangan": "Lorem Ipsum",
-                    status: "closeBPPBTanpaRakit",
-                },
-                {
-                    "id": 6,
-                    "jadwal_id": 885,
-                    "produk_id": 17,
-                    "generate_seri": 1,
-                    "no_bppb": "PRD/01-BR01/II/24",
-                    "tanggal_mulai": null,
-                    "tanggal_selesai": null,
-                    "selisih": -15,
-                    "nama_produk": "BR-100  ",
-                    "kategori": "INFANT RESUSCITATOR",
-                    "jumlah": 22,
-                    "jumlah_rakit": 0,
-                    "kode_produk": "BR01",
-                    "periode": "-",
-                    "tgl_mulai": "-",
-                    "tgl_selesai": "-",
-                    "jumlah_unit": "22 Unit",
-                    "jenis": "tidak_terjadwal",
-                    "keterangan": "-",
-                    status: "ok",
-                },
-                {
-                    "id": 173,
-                    "jadwal_id": 883,
-                    "produk_id": 112,
-                    "generate_seri": 1,
-                    "no_bppb": "PRD/01-RL03/III/24",
-                    "tanggal_mulai": "2024-03-12",
-                    "tanggal_selesai": "2024-03-20",
-                    "selisih": -7,
-                    "nama_produk": "ROLL PAPER ECG-100G  ",
-                    "kategori": "ROLL PAPER",
-                    "jumlah": 140,
-                    "jumlah_rakit": 0,
-                    "kode_produk": "RL03",
-                    "periode": "Maret",
-                    "tgl_mulai": "12 Maret 2024",
-                    "tgl_selesai": "20 Maret 2024",
-                    "kurang_rakit": "Kurang 140",
-                    "kurang": 140,
-                    "jumlah_unit": "140 Unit",
-                    "jenis": "terjadwal",
-                    "keterangan": "Lorem Ipsum",
-                    status: "closeBPPBDenganSisaRakit",
-                },
-                {
-                    "id": 6,
-                    "jadwal_id": 885,
-                    "produk_id": 17,
-                    "generate_seri": 1,
-                    "no_bppb": "-",
-                    "tanggal_mulai": "2024-03-12",
-                    "tanggal_selesai": "2024-03-20",
-                    "selisih": -15,
-                    "nama_produk": "BR-100  ",
-                    "kategori": "INFANT RESUSCITATOR",
-                    "jumlah": 22,
-                    "jumlah_rakit": 0,
-                    "kode_produk": "BR01",
-                    "periode": "Maret",
-                    "tgl_mulai": "08 Maret 2024",
-                    "tgl_selesai": "08 Maret 2024",
-                    "jumlah_unit": "22 Unit",
-                    "jenis": "terjadwal",
-                    "keterangan": "Lorem Ipsum",
-                    status: "closeBPPBTanpaRakit",
-                },
-            ],
             tanggalAwalMulai: '',
             tanggalAkhirMulai: '',
             tanggalAwalSelesai: '',
@@ -170,7 +76,7 @@ export default {
     },
     computed: {
         produkUnique() {
-            return [...new Set(this.items.map(item => item.nama_produk))]
+            return [...new Set(this.items.map(item => item.nama))]
         },
         filterData() {
             if (this.tanggalAwalMulai && this.tanggalAkhirMulai) {
@@ -239,7 +145,7 @@ export default {
 
             if (this.filterProduk.length > 0) {
                 return this.items.filter((data) => {
-                    return this.filterProduk.includes(data.nama_produk)
+                    return this.filterProduk.includes(data.nama)
                 })
             }
 
@@ -358,7 +264,7 @@ export default {
                 </span>
             </template>
 
-            <template #header.nama_produk>
+            <template #header.nama>
                 <span class="text-bold pr-2">Nama Produk</span>
                 <span class="filter">
                     <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
