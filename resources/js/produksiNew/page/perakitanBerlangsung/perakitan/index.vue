@@ -5,6 +5,7 @@ import modalGenerateBPPB from './modalGenerateBPPB.vue';
 import inputNoSeri from './inputNoSeri.vue';
 import DataTable from '../../../components/DataTable.vue';
 import closeBPPB from './closeBPPB.vue';
+import moment from 'moment';
 export default {
     props: ['dataTable', 'openDataAfterGenerate'],
     components: {
@@ -20,6 +21,7 @@ export default {
             showModal: false,
             detailData: {},
             search: '',
+            moment: moment,
             headers: [
                 {
                     text: 'Periode',
@@ -28,12 +30,10 @@ export default {
                 {
                     text: 'Tanggal Mulai',
                     value: 'tgl_mulai',
-                    sortable: false,
                 },
                 {
                     text: 'Tanggal Selesai',
                     value: 'tgl_selesai',
-                    sortable: false,
                 },
                 {
                     text: 'No BPPB',
@@ -42,7 +42,6 @@ export default {
                 {
                     text: 'Nama Produk',
                     value: 'nama_produk',
-                    sortable: false,
                 },
                 {
                     text: 'Jumlah Rakit',
@@ -61,7 +60,8 @@ export default {
             filterProduk: [],
             showModalNoSeri: false,
             showModalBPPB: false,
-            showModalCloseBPPB: false
+            showModalCloseBPPB: false,
+            periode: '',
         }
     },
     methods: {
@@ -197,10 +197,23 @@ export default {
                 })
             }
 
+            if (this.periode != '') {
+                return this.dataTable.filter((data) => {
+                    return this.periode.includes(data.periode)
+                })
+            }
+
             return this.dataTable
         },
         produkUnique() {
             return [...new Set(this.dataTable.map(item => item.nama_produk))]
+        },
+        monthOptions() {
+            let month = []
+            for (let i = 1; i <= 12; i++) {
+                month.push(moment().month(i - 1).lang('id').format('MMMM'))
+            }
+            return month
         }
     }
 }
@@ -215,63 +228,51 @@ export default {
             @refresh="refresh" @openModalGenerate="openModal" />
         <closeBPPB v-if="showModalCloseBPPB" :dataGenerate="detailData" @closeModal="showModalCloseBPPB = false"
             @refresh="refresh" />
-        <div class="d-flex flex-row-reverse bd-highlight">
-            <div class="p-2 bd-highlight">
+        <div class="row">
+            <div class="col-8">
+                <v-select :options="monthOptions" v-model="periode" placeholder="Periode"></v-select>
+                <v-select multiple :options="produkUnique" v-model="filterProduk" placeholder="Pilih Produk" />
                 <input type="text" v-model="search" class="form-control" placeholder="Cari...">
             </div>
-        </div>
-        <DataTable :headers="headers" :items="filterData" :search="search">
-            <template #header.tgl_mulai>
-                <span class="text-bold pr-2">Tanggal Mulai</span>
+            <div class="col-4">
                 <span class="filter">
-                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
                         <i class="fas fa-filter"></i>
-                    </a>
+                        Filter
+                    </button>
+
                     <form id="filter_ekat">
                         <div class="dropdown-menu">
                             <div class="px-3 py-3">
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-group">
-                                            <label for="jenis_penjualan">Tanggal Awal</label>
+                                            <label for="jenis_penjualan">Tanggal Awal Mulai</label>
                                             <input type="date" class="form-control" v-model="tanggalAwalMulai"
                                                 :max="tanggalAkhirMulai">
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-group">
-                                            <label for="jenis_penjualan">Tanggal Akhir</label>
+                                            <label for="jenis_penjualan">Tanggal Akhir Mulai</label>
                                             <input type="date" class="form-control" v-model="tanggalAkhirMulai"
                                                 :min="tanggalAwalMulai">
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </form>
-                </span>
-            </template>
 
-            <template #header.tgl_selesai>
-                <span class="text-bold pr-2">Tanggal Selesai</span>
-                <span class="filter">
-                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-filter"></i>
-                    </a>
-                    <form id="filter_ekat">
-                        <div class="dropdown-menu">
-                            <div class="px-3 py-3">
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-group">
-                                            <label for="jenis_penjualan">Tanggal Awal</label>
+                                            <label for="jenis_penjualan">Tanggal Awal Selesai</label>
                                             <input type="date" class="form-control" v-model="tanggalAwalSelesai"
                                                 :max="tanggalAkhirSelesai">
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-group">
-                                            <label for="jenis_penjualan">Tanggal Akhir</label>
+                                            <label for="jenis_penjualan">Tanggal Akhir Selesai</label>
                                             <input type="date" class="form-control" v-model="tanggalAkhirSelesai"
                                                 :min="tanggalAwalSelesai">
                                         </div>
@@ -281,25 +282,9 @@ export default {
                         </div>
                     </form>
                 </span>
-            </template>
-
-            <template #header.nama_produk>
-                <span class="text-bold pr-2">Nama Produk</span>
-                <span class="filter">
-                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-filter"></i>
-                    </a>
-                    <form id="filter_ekat">
-                        <div class="dropdown-menu">
-                            <div class="px-3 py-3 font-weight-normal">
-                                <v-select multiple :options="produkUnique" v-model="filterProduk"
-                                    placeholder="Pilih Produk" />
-                            </div>
-                        </div>
-                    </form>
-                </span>
-            </template>
-
+            </div>
+        </div>
+        <DataTable :headers="headers" :items="filterData" :search="search">
             <template #item.tgl_selesai="{ item }">
                 <span>{{ item.tgl_selesai }}</span> <br>
                 <span v-html="selisih(item.selisih, item.tanggal_selesai)"></span>
