@@ -2045,8 +2045,8 @@ class MasterController extends Controller
     public function indexProdukWithKodeLab()
     {
         try {
-            $produkLab = Produk::with('KodeLab')->where('kode_lab_id', '!=', null)->get();
-            $produkNonLab = Produk::where('kode_lab_id', null)->get();
+            $produkLab = Produk::with('KodeLab')->where('kode_lab_id', '!=', null)->orderBy('nama')->get();
+            $produkNonLab = Produk::where('kode_lab_id', null)->orderBy('nama')->get();
             return response()->json([
                 'success' => true,
                 'produk' => $produkLab,

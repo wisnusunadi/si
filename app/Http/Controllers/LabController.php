@@ -671,7 +671,7 @@ class LabController extends Controller
 
     public function kode_lab_data()
     {
-        $data = KodeLab::all();
+        $data = KodeLab::orderBy('nama')->get();
         return response()->json([
             'status' => 200,
             'message' => 'Berhasil',
@@ -739,7 +739,7 @@ class LabController extends Controller
 
     public function ruang_lab_data()
     {
-        $data = RuangKalibrasi::all();
+        $data = RuangKalibrasi::orderBy('nama')->get();
         return response()->json([
             'status' => 200,
             'message' => 'Berhasil',
@@ -898,7 +898,7 @@ class LabController extends Controller
     }
     public function dok_lab_data()
     {
-        $data = MetodeLab::all();
+        $data = MetodeLab::orderBy('metode')->get();
         return response()->json([
             'status' => 200,
             'message' => 'Berhasil',
