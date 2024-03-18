@@ -26,7 +26,7 @@ const routes = [
     },
     {
         path: "/administrator/part",
-        component: () => import("./page/part"),
+        component: () => import("./page/sparepart"),
         name: "sparepart",
     },
 ];
