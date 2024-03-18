@@ -31,7 +31,7 @@ export default {
             });
         },
         async getKaryawan() {
-            const { data: karyawan } = await axios.get('/api/karyawan_all')
+            const { data: karyawan } = await axios.get('/api/karyawan_lab')
             const { data: kepemilikan } = await axios.get("/api/labs/kode_milik").then(res => res.data)
             this.karyawan = karyawan
             this.pemilik = kepemilikan.map((data) => {

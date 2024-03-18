@@ -4,18 +4,19 @@ import pagination from "../../../components/pagination.vue";
 import modal from "./modal.vue";
 import axios from "axios";
 import Header from "../../../components/header.vue";
+import DataTable from '../../../../emiindo/components/DataTable.vue';
 export default {
     components: {
         Table,
         pagination,
         modal,
         Header,
+        DataTable,
     },
     data() {
         return {
             dokumen: [],
             search: "",
-            renderPaginate: [],
             modal: false,
             dataSelected: {
                 metode: "",
@@ -36,13 +37,26 @@ export default {
                     name: "Dokumen Laboratorium",
                     link: "/master/alat",
                 },
+            ],
+            headers: [
+                {
+                    text: 'Metode Kerja',
+                    value: 'metode',
+                    align: 'text-left'
+                },
+                {
+                    text: 'Dokumen',
+                    value: 'no_dokumen',
+                    align: 'text-left'
+                },
+                {
+                    text: 'Aksi',
+                    value: 'aksi'
+                }
             ]
         };
     },
     methods: {
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
         openModal() {
             this.dataSelected = {
                 metode: "",
@@ -88,17 +102,6 @@ export default {
             }
         },
     },
-    computed: {
-        filteredDalamProses() {
-            return this.dokumen.filter((item) => {
-                return Object.keys(item).some((key) => {
-                    return String(item[key])
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase());
-                });
-            });
-        },
-    },
     created() {
         this.getData();
     },
@@ -120,9 +123,15 @@ export default {
                         <input type="search" v-model="search" class="form-control" placeholder="Cari..." />
                     </div>
                 </div>
-                <Table :dataTable="renderPaginate" @edit="edit" />
-                <pagination :filteredDalamProses="filteredDalamProses"
-                    @updateFilteredDalamProses="updateFilteredDalamProses" />
+                <data-table :headers="headers" :items="dokumen" :search="search">
+                    <template #item.aksi="{ item }">
+                        <div>
+                            <button class="btn btn-outline-warning" @click="edit(item.id)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </template>
+                </data-table>
             </div>
         </div>
     </div>

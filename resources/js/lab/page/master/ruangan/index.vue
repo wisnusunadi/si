@@ -15,7 +15,6 @@ export default {
         return {
             ruang: [],
             search: "",
-            renderPaginate: [],
             modal: false,
             dataSelected: {
                 nama: "",
@@ -36,12 +35,23 @@ export default {
                     link: "/master/alat",
                 },
             ],
+            headers: [
+                {
+                    text: 'No',
+                    value: 'no'
+                },
+                {
+                    text: 'Ruangan',
+                    value: 'nama'
+                },
+                {
+                    text: 'Aksi',
+                    value: 'aksi'
+                }
+            ]
         };
     },
     methods: {
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
         openModal() {
             this.dataSelected = {
                 nama: "",
@@ -70,24 +80,18 @@ export default {
                 const { data } = await axios.get(
                     "/api/labs/ruang/"
                 );
-                this.ruang = data.data;
+                this.ruang = data.data.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item,
+                    };
+                });
             } catch (error) {
                 console.log(error);
             } finally {
                 this.$store.dispatch("setLoading", false);
             }
         }
-    },
-    computed: {
-        filteredDalamProses() {
-            return this.ruang.filter((item) => {
-                return Object.keys(item).some((key) => {
-                    return String(item[key])
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase());
-                });
-            });
-        },
     },
     created() {
         this.getData();
@@ -110,9 +114,15 @@ export default {
                         <input type="search" v-model="search" class="form-control" placeholder="Cari..." />
                     </div>
                 </div>
-                <Table :dataTable="renderPaginate" @edit="edit" />
-                <pagination :filteredDalamProses="filteredDalamProses"
-                    @updateFilteredDalamProses="updateFilteredDalamProses" />
+                <data-table :headers="headers" :items="ruang" :search="search">
+                    <template #item.aksi="{ item }">
+                        <div>
+                            <button class="btn btn-outline-warning" @click="edit(item.id)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </template>
+                </data-table>
             </div>
         </div>
     </div>

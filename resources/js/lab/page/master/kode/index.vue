@@ -15,7 +15,6 @@ export default {
         return {
             kepemilikan: [],
             search: "",
-            renderPaginate: [],
             modal: false,
             dataSelected: null,
             title: "Kode Kepemilikan Laboratorium",
@@ -28,13 +27,28 @@ export default {
                     name: "Kode Kepemilikan Laboratorium",
                     link: "/master/alat",
                 },
+            ],
+            headers: [
+                {
+                    text: 'No',
+                    value: 'no'
+                },
+                {
+                    text: 'Kode Kepemilikan',
+                    value: 'kode'
+                },
+                {
+                    text: 'Nama Kepemilikan',
+                    value: 'nama'
+                },
+                {
+                    text: 'Aksi',
+                    value: 'aksi',
+                }
             ]
         };
     },
     methods: {
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
         tambah() {
             this.modal = true;
             this.dataSelected = {
@@ -45,7 +59,8 @@ export default {
                 $(".modalFormAlat").modal("show");
             });
         },
-        edit(index) {
+        edit(item) {
+            const index = this.kepemilikan.findIndex((data) => data.id === item.id);
             this.modal = true;
             this.dataSelected = JSON.parse(JSON.stringify(this.kepemilikan[index]));
             this.$nextTick(() => {
@@ -56,24 +71,18 @@ export default {
             try {
                 this.$store.dispatch("setLoading", true);
                 const { data } = await axios.get("/api/labs/kode_milik")
-                this.kepemilikan = data.data;
+                this.kepemilikan = data.data.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item
+                    };
+                });
             } catch (error) {
                 console.log(error);
             } finally {
                 this.$store.dispatch("setLoading", false);
             }
         }
-    },
-    computed: {
-        filteredDalamProses() {
-            return this.kepemilikan.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key])
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase());
-                });
-            });
-        },
     },
     created() {
         this.getData();
@@ -98,9 +107,13 @@ export default {
                         <input type="text" class="form-control" placeholder="Cari..." v-model="search" />
                     </div>
                 </div>
-                <Table :dataTable="renderPaginate" @edit="edit" />
-                <pagination :filteredDalamProses="filteredDalamProses"
-                    @updateFilteredDalamProses="updateFilteredDalamProses" />
+                <data-table :items="kepemilikan" :search="search" :headers="headers">
+                    <template #item.aksi="{ item }">
+                        <button class="btn btn-outline-warning" @click="edit(item)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </template>
+                </data-table>
             </div>
         </div>
     </div>

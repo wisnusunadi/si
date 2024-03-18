@@ -66,25 +66,6 @@ export default {
                 console.log(error);
             }
         },
-        // getRuang(metode) {
-        //     if (metode) {
-        //         const findMetode = []
-        //         this.getMetodeAndRuang.forEach((item) => {
-        //             if (item.metode_id === metode.id) {
-        //                 findMetode.push(item)
-        //             }
-        //         })
-        //         return findMetode.map((item) => {
-        //             return {
-        //                 id: item.ruang_id,
-        //                 label: item.ruang_label,
-        //                 id_detail: item.id
-        //             };
-        //         });
-        //     } else {
-        //         return this.ruang;
-        //     }
-        // }
     },
     created() {
         this.getData();

@@ -15,7 +15,6 @@ export default {
         return {
             alat: [],
             search: "",
-            renderPaginate: [],
             modal: false,
             dataSelected: null,
             title: "Kode Alat",
@@ -28,13 +27,24 @@ export default {
                     name: "Kode Alat",
                     link: "/master/alat",
                 },
+            ],
+            headers: [
+                {
+                    text: "No", value: "no"
+                },
+                {
+                    text: "Kode Alat", value: "kode"
+                },
+                {
+                    text: "Nama Alat", value: "nama"
+                },
+                {
+                    text: "Aksi", value: "aksi", sortable: false
+                }
             ]
         };
     },
     methods: {
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
         tambah() {
             this.modal = true;
             this.dataSelected = {
@@ -68,23 +78,17 @@ export default {
             try {
                 this.$store.dispatch("setLoading", true);
                 const { data } = await axios.get("/api/labs/kode");
-                this.alat = data.data;
+                this.alat = data.data.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item,
+                    };
+                });
             } catch (error) {
                 console.log(error);
             } finally {
                 this.$store.dispatch("setLoading", false);
             }
-        },
-    },
-    computed: {
-        filteredDalamProses() {
-            return this.alat.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key])
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase());
-                });
-            });
         },
     },
     created() {
@@ -109,9 +113,15 @@ export default {
                         <input type="text" class="form-control" placeholder="Cari..." v-model="search" />
                     </div>
                 </div>
-                <Table :dataTable="renderPaginate" @edit="edit" />
-                <pagination :filteredDalamProses="filteredDalamProses"
-                    @updateFilteredDalamProses="updateFilteredDalamProses" />
+                <data-table :headers="headers" :items="alat" :search="search">
+                    <template #item.aksi="{ item }">
+                        <div>
+                            <button class="btn btn-outline-warning" @click="edit(item.id)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </template>
+                </data-table>
             </div>
         </div>
     </div>

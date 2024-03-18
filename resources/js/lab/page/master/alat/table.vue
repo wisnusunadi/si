@@ -1,6 +1,16 @@
 <script>
 export default {
     props: ["dataTable"],
+    data() {
+        return {
+            headers: [
+                { text: "No", value: "no" },
+                { text: "Kode Alat", value: "kode" },
+                { text: "Nama Alat", value: "nama" },
+                { text: "Aksi", value: "aksi", sortable: false },
+            ]
+        }
+    },
     methods: {
         edit(id) {
             this.$emit("edit", id);
