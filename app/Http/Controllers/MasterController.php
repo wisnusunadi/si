@@ -92,6 +92,70 @@ class MasterController extends Controller
         return response()->json(['jumlah' => $prd->min('ckirimprd')]);
         return response()->json(['jumlah' => $prd->min('ckirimprd')]);
     }
+
+    public function indexSparepart()
+    {
+        try {
+            $part = Sparepart::with('kategori')->get();
+
+            return response()->json($part);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+    public function createEditSparepart(Request $r)
+    {
+        try {
+            $part = collect($r->json())->map(function ($x) {
+                $part = Sparepart::updateOrCreate(
+                    [
+                        'id' => isset($x['id']) ? $x['id'] : null
+                    ],
+                    [
+                        'kelompok_produk_id' => $x['kelompok_produk_id'],
+                        'kode' => $x['kode'],
+                        'nama' => $x['nama'],
+                        'jenis' => 'part'
+                    ]
+                );
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data berhasil disimpan',
+                'data' => $part
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deleteSparepart(Request $request)
+    {
+        try {
+            $part = collect($request->json())->map(function ($x) {
+                $part = Sparepart::where('id', $x['id'])->delete();
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data berhasil dihapus',
+                'data' => $part
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
     public function get_all_past_no_seri(Request $r)
     {
         $si_ekat21 = DB::connection('si_21')->table('seri_on')
@@ -2140,7 +2204,6 @@ class MasterController extends Controller
             return response()->json([
                 'success' => true,
             ], 200);
-
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
