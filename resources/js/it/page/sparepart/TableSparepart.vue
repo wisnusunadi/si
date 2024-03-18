@@ -1,7 +1,6 @@
 <script>
 import axios from 'axios'
 import Modal from './modalCreateEdit.vue'
-import DataTable from '../../../emiindo/components/DataTable.vue'
 export default {
     components: { Modal, DataTable },
     props: ['part'],

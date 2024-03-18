@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios';
-import TableSparepart from './tablePart.vue'
+import TableSparepart from './TableSparepart.vue'
 export default {
     components: { TableSparepart },
     data() {
