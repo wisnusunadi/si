@@ -64,7 +64,7 @@ class LabController extends Controller
             ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
             ->where('uji_lab_detail.status', '!=', 'belum')
             ->whereYear('uji_lab_detail.tgl_masuk', $request->years )
-            ->orderBy('uji_lab_detail.no');
+            ->orderByDesc('uji_lab_detail.no');
 
         $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
             ->selectRaw('"" AS no_paket')
@@ -259,7 +259,7 @@ class LabController extends Controller
                 ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
                 ->where('uji_lab_detail.status', '!=', 'belum')
                 ->whereBetween('uji_lab_detail.tgl_masuk', [$tanggalAwal, $tanggalAkhir])
-                ->orderBy('no');
+                ->orderByDesc('no');
 
             // ->whereYear('uji_lab_detail.created_at', $request->years );
 
@@ -1210,7 +1210,7 @@ class LabController extends Controller
 
     public function sertifikat_data()
     {
-        $data = UjiLabDetail::whereNotNull('no_sertifikat')->get();
+        $data = UjiLabDetail::whereNotNull('no_sertifikat')->orderByDesc('no')->get();
         foreach ($data as $d) {
             $object[] = array(
                 'id' => $d->id,
@@ -1791,7 +1791,7 @@ class LabController extends Controller
                         ->whereColumn('uji.id', 'uji_lab_detail.id');
                 },
             ])
-            ->havingRaw('uji > 0 ')
+            // ->havingRaw('uji > 0 ')
             ->whereIN('detail_pesanan_produk_id', $get_dpp)
             ->get();
         if ($detail->isEmpty()) {
@@ -1802,8 +1802,8 @@ class LabController extends Controller
                     'id' => $d->id,
                     'no_seri' => $d->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri,
                     'tgl_masuk' => $d->tgl_masuk,
-                    'status' => $d->status == 'ok' ? 'ok' : 'not_ok',
-                    'is_ready' => $d->is_ready,
+                    'status' => $d->status,
+                    'is_ready' =>  $d->status == 'belum' ? 0 :  $d->is_ready,
                 );
             }
         }
@@ -1822,7 +1822,7 @@ class LabController extends Controller
             ->leftJoin('kode_lab', 'kode_lab.id', '=', 'produk.kode_lab_id')
             ->where('uji_lab_id', $id)
             // ->where('is_ready', 1)
-            ->whereRaw("uji_lab_detail.status != 'belum'")
+            //->whereRaw("uji_lab_detail.status != 'belum'")
             ->get();
 
         if ($ujilab->isEmpty()) {
@@ -2017,8 +2017,14 @@ class LabController extends Controller
             //         ->from('uji_lab_detail')
             //         ->whereColumn('uji_lab_detail.uji_lab_id', 'uji_lab.id');
             // },
+            // 'uji' => function ($q) {
+            //     $q->selectRaw('coalesce(SUM(CASE WHEN status != "belum" THEN 1 ELSE 0 END),0)')
+            //         ->from('uji_lab_detail')
+            //         ->where('uji_lab_detail.is_ready', 1)
+            //         ->whereColumn('uji_lab_detail.uji_lab_id', 'uji_lab.id');
+            // },
             'uji' => function ($q) {
-                $q->selectRaw('coalesce(SUM(CASE WHEN status != "belum" THEN 1 ELSE 0 END),0)')
+                $q->selectRaw('coalesce(count(uji_lab_detail.id),0)')
                     ->from('uji_lab_detail')
                     ->where('uji_lab_detail.is_ready', 1)
                     ->whereColumn('uji_lab_detail.uji_lab_id', 'uji_lab.id');
@@ -2047,7 +2053,7 @@ class LabController extends Controller
             },
         ])
             ->with(['Pesanan.Spa.Customer', 'Pesanan.Spb.Customer', 'Pesanan.Ekatalog.Customer'])
-            ->havingRaw('uji > 0')
+             ->havingRaw('uji > 0')
             // ->havingRaw('belum > 0 || belum > uji')
             ->get();
 
