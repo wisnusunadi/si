@@ -1,18 +1,24 @@
 <script>
 import axios from 'axios';
-import TableSparepart from './table.vue'
+import TableSparepart from './tablePart.vue'
 export default {
     components: { TableSparepart },
     data() {
         return {
-            sparepart: null,
+            sparepart: [],
         }
     },
     methods: {
         async getSparepart() {
             try {
                 this.$store.dispatch('setLoading', true)
-                const { sparepart } = await axios.get('/api/sparepart')
+                const { data } = await axios.get('/api/sparepart')
+                this.sparepart = data.map((item) => {
+                    return {
+                        ...item,
+                        kategori: item?.kategori?.nama ?? '-'
+                    }
+                })
             } catch (error) {
                 console.log(error);
             } finally {
@@ -30,7 +36,7 @@ export default {
         <v-main>
             <v-container>
                 <v-skeleton-loader v-if="$store.state.loading" class="mx-auto" type="table"></v-skeleton-loader>
-                <table-sparepart :part="sparepart" @refresh="getSparepart"></table-sparepart>
+                <table-sparepart :part="sparepart" @refresh="getSparepart" v-else></table-sparepart>
             </v-container>
         </v-main>
     </v-app>

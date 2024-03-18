@@ -17,3 +17,8 @@ Route::post('/changeStatusProduk', [App\Http\Controllers\MasterController::class
 // Pengajuan
 Route::post('/changeGenerateProduk', [App\Http\Controllers\MasterController::class, 'changeGenerateProduk']);
 Route::get('/permintaan_pengajuan_periode', [App\Http\Controllers\MasterController::class, 'get_permintaan_pengajuan']);
+
+// Sparepart
+Route::get('/sparepart', [App\Http\Controllers\MasterController::class, 'indexSparepart']);
+Route::post('/sparepart', [App\Http\Controllers\MasterController::class, 'createEditSparepart']);
+Route::delete('/sparepart', [App\Http\Controllers\MasterController::class, 'deleteSparepart']);

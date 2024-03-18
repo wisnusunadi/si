@@ -61,7 +61,7 @@ export default {
             showModalNoSeri: false,
             showModalBPPB: false,
             showModalCloseBPPB: false,
-            periode: '',
+            periode: null,
         }
     },
     methods: {
@@ -193,13 +193,13 @@ export default {
 
             if (this.filterProduk.length > 0) {
                 return this.dataTable.filter((data) => {
-                    return this.filterProduk.includes(data.nama_produk)
+                    return this.filterProduk.find(item => item == data.nama_produk)
                 })
             }
 
-            if (this.periode != '') {
+            if (this.periode != null) {
                 return this.dataTable.filter((data) => {
-                    return this.periode.includes(data.periode)
+                    return data.periode == this.periode
                 })
             }
 
@@ -230,16 +230,26 @@ export default {
             @refresh="refresh" />
         <div class="row">
             <div class="col-8">
-                <v-select :options="monthOptions" v-model="periode" placeholder="Periode"></v-select>
-                <v-select multiple :options="produkUnique" v-model="filterProduk" placeholder="Pilih Produk" />
-                <input type="text" v-model="search" class="form-control" placeholder="Cari...">
+                <div class="d-flex bd-highlight">
+                    <div class="p-2 flex-fill bd-highlight">
+                        <input type="text" v-model="search" class="form-control" placeholder="Cari...">
+                    </div>
+                    <div class="p-2 flex-fill bd-highlight">
+                        <v-select :options="monthOptions" v-model="periode" placeholder="Periode"></v-select>
+                    </div>
+                    <div class="p-2 flex-fill bd-highlight">
+                        <v-select multiple :options="produkUnique" v-model="filterProduk" placeholder="Pilih Produk" />
+                    </div>
+                </div>
+                <div class="d-flex p-2 bd-highlight">
+                </div>
             </div>
-            <div class="col-4">
+            <div class="col-4 text-right">
                 <span class="filter">
-                    <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true"
+                    <button class="btn btn-outline-info mt-2" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
                         <i class="fas fa-filter"></i>
-                        Filter
+                        Filter Tanggal
                     </button>
 
                     <form id="filter_ekat">
