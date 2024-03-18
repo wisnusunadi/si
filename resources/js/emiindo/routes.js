@@ -23,6 +23,11 @@ const routes = [
         path: '/penjualan/periode',
         name: 'periode',
         component: () => import('./Page/periode')
+    },
+    {
+        path: '/penjualan/transaksi',
+        name: 'transaksi',
+        component: () => import('./Page/transaksi')
     }
 ];
 

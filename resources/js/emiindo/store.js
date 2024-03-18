@@ -4,7 +4,8 @@ export default {
         POEkat: [],
         PONonEkat: [],
         DO: [],
-        loading: false
+        loading: false,
+        years: new Date().getFullYear(),
     },
     mutations: {
         setDataSO(state, data) {
@@ -21,11 +22,17 @@ export default {
         },
         setLoading(state, data) {
             state.loading = data;
+        },
+        setYears(state, data) {
+            state.years = data;
         }
     },
     actions: {
         setLoading(context, data) {
             context.commit('setLoading', data);
+        },
+        setYears(context, data) {
+            context.commit('setYears', data);
         },
     }
 }

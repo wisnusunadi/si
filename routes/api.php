@@ -181,6 +181,8 @@ Route::prefix('/penjualan')->group(function () {
         Route::post('real/data/{id}', [App\Http\Controllers\RencanaPenjualanController::class, 'get_data_real']);
         Route::post('realisasi/update/{id}', [App\Http\Controllers\RencanaPenjualanController::class, 'get_update_realisasi']);
     });
+
+    
 });
 
 Route::prefix('/so')->group(function () {
