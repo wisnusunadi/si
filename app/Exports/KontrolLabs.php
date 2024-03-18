@@ -52,11 +52,6 @@ class KontrolLabs implements WithTitle, FromView, ShouldAutoSize
                 ->whereBetween('uji_lab_detail.tgl_masuk', [$this->tanggal_awal, $this->tanggal_akhir])
                 ->pluck('p_id')->toArray();
             $filterCus =  array_values(array_intersect($getLab, $mergedCollection->toArray()));
-
-
-
-
-
             $data = UjiLabDetail::select(
                 'jenis_pemilik.nama as jp',
                 'pesanan.no_po',
@@ -94,7 +89,7 @@ class KontrolLabs implements WithTitle, FromView, ShouldAutoSize
                 ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
                 ->where('uji_lab_detail.status', '!=', 'belum')
                 ->whereIN('pesanan.id', $filterCus)
-                ->orderBy('no');
+                ->orderByDesc('no');
 
 
             // ->whereBetween('tgl_masuk',[$this->tanggal_awal, $this->tanggal_akhir]);
@@ -168,7 +163,7 @@ class KontrolLabs implements WithTitle, FromView, ShouldAutoSize
                 ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
                 ->where('uji_lab_detail.status', '!=', 'belum')
                 ->whereBetween('tgl_kalibrasi', [$this->tanggal_awal, $this->tanggal_akhir])
-                ->orderBy('no');
+                ->orderByDesc('no');
 
             $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
                 ->selectRaw('"" AS no_paket')
