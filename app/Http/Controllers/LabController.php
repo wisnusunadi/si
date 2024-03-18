@@ -886,6 +886,7 @@ class LabController extends Controller
             ];
         });
 
+
         return response()->json($detailMetodeLab);
 
         // {
@@ -1165,7 +1166,7 @@ class LabController extends Controller
 
     public function kode_milik_data()
     {
-        $data = JenisPemilik::all();
+        $data = JenisPemilik::orderBy('nama')->get();
         return response()->json([
             'status' => 200,
             'message' => 'Berhasil',

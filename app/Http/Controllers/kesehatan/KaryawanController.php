@@ -82,6 +82,11 @@ class KaryawanController extends Controller
         $data = Karyawan::where('nama', 'LIKE', '%' . $r->input('term', '') . '%')->get();
         return response()->json($data);
     }
+    public function get_karyawan_lab()
+    {
+        $data = Karyawan::where('is_kalibrasi',1)->orderBy('nama')->get();
+        return response()->json($data);
+    }
 
     public function karyawan_aksi_tambah(Request $request)
     {

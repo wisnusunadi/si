@@ -808,6 +808,7 @@ Route::prefix('/manager')->group(function () {
 Route::get('/get_stok_pesanan', [MasterController::class, 'get_stok_pesanan']);
 
 Route::get('karyawan_all', [App\Http\Controllers\kesehatan\KaryawanController::class, 'get_karyawan_all']);
+Route::get('karyawan_lab', [App\Http\Controllers\kesehatan\KaryawanController::class, 'get_karyawan_lab']);
 
 Route::prefix('/divisi')->group(function () {
     Route::get('karyawan/{id}', [MasterController::class, 'get_divisi_karyawan'])->middleware('jwt.verify');
