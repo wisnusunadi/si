@@ -108,7 +108,7 @@
             </div>
         </div>
         <!-- modal -->
-        
+
 
         <div class="modal" v-if="showModalSO" :class="{ 'is-active': showModalSO }">
             <div class="modal-background"></div>
@@ -139,6 +139,8 @@
                 </section>
             </div>
         </div>
+
+        <detailProdukSO v-if="showModal" :showModal="showModal" :detailSelected="detailSelected" @close="showModal = false" />
     </div>
 </template>
 
@@ -147,6 +149,7 @@ import $ from "jquery";
 import axios from "axios";
 import pagination from "../../components/pagination.vue";
 import detail from './detail.vue'
+import detailProdukSO from "./detailProdukSO.vue";
 
 /**
  * @vue-data {Array} [data=[]] - Array to store data sales order get from API (url = '/api/ppic/data/so')
@@ -162,7 +165,8 @@ export default {
     name: "SalesOrder",
     components: {
         pagination,
-        detail
+        detail,
+        detailProdukSO
     },
     data() {
         return {
