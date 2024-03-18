@@ -41,7 +41,18 @@ export default {
                 const { data: ruang_and_metode } = await axios.get(
                     "/api/labs/ruang_and_metode"
                 );
-                this.getMetodeAndRuang = ruang_and_metode.map((item) => {
+
+                // sorted by metode label ascending
+
+                this.getMetodeAndRuang = ruang_and_metode.slice().sort((a, b) => {
+                    if (a.metode_label < b.metode_label) {
+                        return -1;
+                    }
+                    if (a.metode_label > b.metode_label) {
+                        return 1;
+                    }
+                    return 0;
+                }).map((item) => {
                     return {
                         id: item.id,
                         metode_id: item.metode_id,
@@ -50,6 +61,7 @@ export default {
                         label: item.metode_label,
                     };
                 });
+
             } catch (error) {
                 console.log(error);
             }

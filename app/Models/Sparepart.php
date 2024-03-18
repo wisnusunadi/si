@@ -10,6 +10,12 @@ class Sparepart extends Model
     use HasFactory;
     protected $connection = 'erp';
     protected $table = 'm_sparepart';
+    protected $fillable = [
+        'nama',
+        'kelompok_produk_id',
+        'kode',
+        'jenis'
+    ];
 
     function kategori()
     {

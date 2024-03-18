@@ -38,6 +38,7 @@ export default {
                 this.riwayatRakit = riwayat.map(item => {
                     return {
                         ...item,
+                        tgl: moment(item.date_in).format('YYYY-MM-DD'),
                         tgl_rakit: this.dateFormat(item.date_in),
                         wkt_rakit: this.timeFormat(item.date_in),
                     }
