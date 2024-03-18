@@ -93,7 +93,9 @@ class KontrolLabs implements WithTitle, FromView, ShouldAutoSize
                 ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
                 ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
                 ->where('uji_lab_detail.status', '!=', 'belum')
-                ->whereIN('pesanan.id', $filterCus);
+                ->whereIN('pesanan.id', $filterCus)
+                ->orderBy('no');
+
 
             // ->whereBetween('tgl_masuk',[$this->tanggal_awal, $this->tanggal_akhir]);
 
@@ -165,7 +167,8 @@ class KontrolLabs implements WithTitle, FromView, ShouldAutoSize
                 ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
                 ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
                 ->where('uji_lab_detail.status', '!=', 'belum')
-                ->whereBetween('tgl_masuk', [$this->tanggal_awal, $this->tanggal_akhir]);
+                ->whereBetween('tgl_kalibrasi', [$this->tanggal_awal, $this->tanggal_akhir])
+                ->orderBy('no');
 
             $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
                 ->selectRaw('"" AS no_paket')

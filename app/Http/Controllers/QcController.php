@@ -5572,7 +5572,8 @@ class QcController extends Controller
     }
     public function kirim_kalibrasi(Request $request)
     {
-        // dd($request->all());
+        //  $max_no = UjiLabDetail::whereYear('created_at', now()->year)->max('no');
+        //  dd($max_no);
         // if ($request->pesanan_id != '' && count($request->produk) > 0) {
         //     $cek_lab = UjiLab::where('pesanan_id', $request->pesanan_id)->first();
         //     if(isset($cek_lab['id'])) {
@@ -5623,10 +5624,10 @@ class QcController extends Controller
                 $cek_lab = UjiLab::where('pesanan_id', $request->pesanan_id)->first();
                 if (isset($cek_lab['id'])) {
                     for ($i = 0; $i < count($request->noseri_id); $i++) {
-                        $max_no = UjiLabDetail::whereYear('created_at', now()->year)->latest('id')->value('no');
+                       # $max_no = UjiLabDetail::whereYear('created_at', now()->year)->latest('id')->value('no');
                         $get_dpp = NoseriTGbj::find($request->noseri_id[$i]['id']);
                         UjiLabDetail::create([
-                            'no' => $max_no + 1,
+                        #    'no' => $max_no + 1,
                             'uji_lab_id' => $cek_lab['id'],
                             'detail_pesanan_produk_id' => $get_dpp->NoseriDetailPesanan->detail_pesanan_produk_id,
                             'noseri_id' => $get_dpp->NoseriDetailPesanan->id,
@@ -5660,9 +5661,9 @@ class QcController extends Controller
                     ]);
                     for ($i = 0; $i < count($request->noseri_id); $i++) {
                         $get_dpp = NoseriTGbj::find($request->noseri_id[$i]['id']);
-                        $max_no = UjiLabDetail::whereYear('created_at', now()->year)->latest('id')->value('no');
+                       # $max_no = UjiLabDetail::whereYear('created_at', now()->year)->latest('id')->value('no');
                         UjiLabDetail::create([
-                            'no' => $max_no + 1,
+                            #'no' => $max_no + 1,
                             'uji_lab_id' => $ujilab->id,
                             'detail_pesanan_produk_id' => $get_dpp->NoseriDetailPesanan->detail_pesanan_produk_id,
                             'noseri_id' => $get_dpp->NoseriDetailPesanan->id,

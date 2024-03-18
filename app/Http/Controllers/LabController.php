@@ -63,7 +63,8 @@ class LabController extends Controller
             ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
             ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
             ->where('uji_lab_detail.status', '!=', 'belum')
-            ->whereYear('uji_lab_detail.created_at', $request->years );
+            ->whereYear('uji_lab_detail.tgl_masuk', $request->years )
+            ->orderBy('uji_lab_detail.no');
 
         $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
             ->selectRaw('"" AS no_paket')
@@ -257,7 +258,9 @@ class LabController extends Controller
                 ->leftJoin('pesanan', 'pesanan.id', '=', 'uji_lab.pesanan_id')
                 ->leftJoin('jenis_pemilik', 'jenis_pemilik.id', '=', 'uji_lab.jenis_pemilik_id')
                 ->where('uji_lab_detail.status', '!=', 'belum')
-                ->whereBetween('uji_lab_detail.tgl_masuk', [$tanggalAwal, $tanggalAkhir]);
+                ->whereBetween('uji_lab_detail.tgl_masuk', [$tanggalAwal, $tanggalAkhir])
+                ->orderBy('no');
+
             // ->whereYear('uji_lab_detail.created_at', $request->years );
 
             $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
@@ -1466,13 +1469,15 @@ class LabController extends Controller
                 join kode_lab kl on kl.id = p.kode_lab_id
                 where dpp.id = ?', [$dp->id]);
                 $metode_id = DetailMetodeLab::where(['metode_lab_id' => $dp->metode_id->id, 'ruang' => $dp->metode_id->ruang_id])->first();
+                $no_urut= UjiLabDetail::whereYear('created_at', now()->year)->max('no')+1;
                 // dd($metode_id->id);
                 for ($j = 0; $j < count($dp->noseri); $j++) {
                     $detail = UjiLabDetail::find($dp->noseri[$j]->id);
-                    $no = sprintf("%05d", $detail->no);
+                    #$no = sprintf("%05d", $detail->no);
                     UjiLabDetail::where('id', $dp->noseri[$j]->id)
                         ->update([
-                            'no_sertifikat' => $kode[0]->kode . '/' . $pemilik_id . '/' .  $month . '-' . $tahun . '/' . $no,
+                            'no_sertifikat' => $kode[0]->kode . '/' . $pemilik_id . '/' .  $month . '-' . $tahun . '/' .sprintf("%05d", $no_urut + $j),
+                            'no' => $no_urut + $j,
                             'tgl_kalibrasi' => $obj->tgl_kalibrasi,
                             'pemeriksa_id' => $obj->pemeriksa_id,
                             'metode_id' => $metode_id->id,
