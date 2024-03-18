@@ -25,7 +25,7 @@ const routes = [
         name: "periode",
     },
     {
-        path: "/administrator/part",
+        path: "/administrator/sparepart",
         component: () => import("./page/sparepart"),
         name: "sparepart",
     },

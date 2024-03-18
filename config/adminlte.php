@@ -636,7 +636,7 @@ return [
         ],
         [
             'text' => 'Sparepart',
-            'url'  => '/administrator/part',
+            'url'  => '/administrator/sparepart',
             'icon' => 'fas fa-table',
             'auth' => [14]
         ],
