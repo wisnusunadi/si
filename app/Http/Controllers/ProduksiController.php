@@ -91,8 +91,6 @@ class ProduksiController extends Controller
             $getUrut = SeriDetailRw::where('noseri_id', $firstIdSeri)->first()->urutan;
             $jadwal = JadwalPerakitanRw::where('urutan', $getUrut)->first();
             //     dd($jadwal);
-
-
             foreach ($obj as $o) {
                 NoseriBarangJadi::where('id', $o->id)
                     ->update([
@@ -1374,7 +1372,7 @@ class ProduksiController extends Controller
             //code...
             foreach ($obj->seri as $f) {
                 JadwalRakitNoseri::create([
-                    'jadwal_id' => 750,
+                    'jadwal_id' => 759,
                     'noseri' => $f,
                     //'no_bppb' => 'PRD/07-BPM002/X/23',
                     // 'unit' => 'ST01',
@@ -3048,6 +3046,7 @@ class ProduksiController extends Controller
         //                 $d->where('id', $data->id);
         //             })->first()->id;
         //             $x = DB::table(DB::raw('pesanan p'))
+        //
         //                 ->select('p.id as pesid', 'p.so', 'pp.id as paketid', 'pp.nama', 'dp.jumlah', 'dpp.id as dppid', DB::raw('count(tgn.noseri_id) as jumlah_kirim'))
         //                 ->leftJoin(DB::raw('detail_pesanan dp'), 'dp.pesanan_id', '=', 'p.id')
         //                 ->leftJoin(DB::raw('detail_pesanan_produk dpp'), 'dp.id', '=', 'dpp.detail_pesanan_id')
