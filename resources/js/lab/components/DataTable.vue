@@ -43,11 +43,19 @@ export default {
     },
     computed: {
         filteredDalamProses() {
-            return this.sortedDataTable.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
-                });
-            });
+            const includesSearch = (obj, search) => {
+                if (obj && typeof obj === 'object') {
+                    return Object.keys(obj).some(key => {
+                        if (typeof obj[key] === 'object') {
+                            return includesSearch(obj[key], search);
+                        }
+                        return String(obj[key]).toLowerCase().includes(search.toLowerCase());
+                    });
+                }
+                return false;
+            };
+
+            return this.sortedDataTable.filter(data => includesSearch(data, this.search));
         },
         sortedDataTable() {
             const sorted = this.items.sort((a, b) => {
@@ -67,8 +75,7 @@ export default {
             <thead>
                 <tr>
                     <th scope="col" v-for="header in headers" :key="header.text"
-                        :class="header.align ? header.align : 'text-left'" @click="sort(header)"
-                        :style="{width: header.width ? header.width : 'auto'}"
+                        :class="header.align ? header.align : 'text-center'" @click="sort(header)"
                         :sortable="header.sortable == false ? false : true">
                         <slot :name="`header.${header.value}`">
                             {{ header.text }}
@@ -84,8 +91,7 @@ export default {
                 <!-- sesuaikan dengan header -->
                 <tr v-for="(data, idx) in renderPaginate" :key="idx">
                     <td v-for="header in headers" :key="header.value"
-                    :style="{width: header.width ? header.width : 'auto'}"
-                    :class="header.align ? header.align : 'text-left'">
+                        :class="header.align ? header.align : 'text-center'">
                         <slot :name="`item.${header.value}`" :item="data" :index="idx">
                             {{ data[header.value] }}
                         </slot>

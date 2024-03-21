@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import axios from 'axios'
 import Index from './Index.vue'
 import router from './routes'
 import VueRouter from 'vue-router';
@@ -15,6 +14,7 @@ import dateFormat from './plugins/dateFormat'
 import dateTimeFormat from './plugins/dateTimeFormat'
 import timeFormat from './plugins/timeFormat'
 import DataTable from './components/DataTable.vue'
+import persentase from "./components/persentase.vue";
 
 window.Vue = require('vue').default;
 Vue.use(VueRouter);
@@ -25,6 +25,7 @@ Vue.use(numberOnly);
 Vue.use(dateFormat);
 Vue.use(dateTimeFormat);
 Vue.use(timeFormat);
+Vue.component("persentase", persentase);
 Vue.component('data-table', DataTable);
 
 const store = new Vuex.Store(Store);

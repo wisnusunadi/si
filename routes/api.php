@@ -578,7 +578,7 @@ Route::prefix('/produk')->group(function () {
 });
 
 Route::prefix('/ekatalog')->group(function () {
-    // Route::get('data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
+    Route::get('data/{value}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog'])->middleware('jwt.verify');
     Route::post('pengiriman/data', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog_pengiriman']);
     Route::get('all_satuan', [App\Http\Controllers\MasterController::class, 'get_ekatalog_satuan']);
     Route::get('all_deskripsi', [App\Http\Controllers\MasterController::class, 'get_ekatalog_deskripsi']);
@@ -591,7 +591,7 @@ Route::prefix('/ekatalog')->group(function () {
 });
 
 Route::prefix('/spa')->group(function () {
-    // Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
+    Route::get('data/{value}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa'])->middleware('jwt.verify');
     // Route::post('update/{id}', [App\Http\Controllers\PenjualanController::class, 'update_spa']);
     Route::get('detail/{$id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spa']);
     Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_spa']);
@@ -600,7 +600,7 @@ Route::prefix('/spa')->group(function () {
 });
 
 Route::prefix('/spb')->group(function () {
-    // Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
+    Route::get('data/{value}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'get_data_spb'])->middleware('jwt.verify');
 
     Route::get('detail/{$id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spb']);
     Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_spb']);

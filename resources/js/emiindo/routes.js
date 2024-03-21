@@ -28,7 +28,7 @@ const routes = [
         path: '/penjualan/transaksi',
         name: 'transaksi',
         component: () => import('./Page/transaksi')
-    }
+    } 
 ];
 
 const router = new VueRouter({

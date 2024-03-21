@@ -950,6 +950,7 @@
             </div>
         </div>
     </section>
+    @include('page.penjualan.penjualan.modalbatalretur')
 @stop
 @section('adminlte_js')
     <script>
@@ -2117,6 +2118,10 @@
                 });
                 $('.NoSeriDistri').text(noserDistri.join(', '));
                 $('.modalNoSeri').modal('show');
+            })
+
+            $(document).on('click', '.openModalBatalRetur', function() {
+                $('.modalBatalRetur').modal('show');
             })
         })
     </script>

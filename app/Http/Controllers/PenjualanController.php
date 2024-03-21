@@ -503,6 +503,10 @@ class PenjualanController extends Controller
                 $data = $Spb;
             }
         }
+
+        return response()->json($data);
+
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('jenis_ppic', function ($data) {
@@ -2755,8 +2759,6 @@ class PenjualanController extends Controller
     {
         $divisi_id = Auth::user()->divisi_id;
 
-        $x = explode(',', $value);
-        $data = "";
 
         if ($value == 'semua') {
             $data  = Ekatalog::with(['Pesanan.State',  'Customer', 'Provinsi'])->addSelect([
@@ -3131,6 +3133,8 @@ class PenjualanController extends Controller
                         $return .= '</div>';
                     }
 
+                    $return .= '<a href="#"><button class="dropdown-item openModalBatalRetur" type="button"><i class="fas fa-times"></i> Batal / Retur</button></a>';
+
                     return $return;
                 }
             })
@@ -3288,6 +3292,8 @@ class PenjualanController extends Controller
                 $q->whereIN('log_id', $x);
             })->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get();
         }
+
+        return response()->json($data);
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -3663,6 +3669,8 @@ class PenjualanController extends Controller
                 $q->whereIN('log_id', $x);
             })->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get();
         }
+
+        return response()->json($data);
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
