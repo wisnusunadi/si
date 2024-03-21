@@ -54,6 +54,12 @@ export default {
                 $('.modalDetail').modal('show')
             })
         },
+        cetakSPPB(id) {
+            window.open(`/penjualan/penjualan/cetak_surat_perintah/${id}`, '_blank')
+        },
+        tambah() {
+            window.location.href = '/penjualan/penjualan/create'
+        },
     },
 }
 </script>
@@ -66,7 +72,7 @@ export default {
         <div class="card-body">
             <div class="d-flex bd-highlight">
                 <div class="p-2 flex-grow-1 bd-highlight">
-                    <button class="btn btn-outline-info">
+                    <button class="btn btn-outline-info" @click="tambah">
                         <i class="fas fa-plus"></i> Tambah
                     </button>
                 </div>
@@ -93,7 +99,7 @@ export default {
                                 </button>
                             </a>
                             <a target="_blank" href="#">
-                                <button class="dropdown-item" type="button">
+                                <button class="dropdown-item" type="button" @click="cetakSPPB(item.pesanan_id)">
                                     <i class="fas fa-print"></i>
                                     SPPB
                                 </button>

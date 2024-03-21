@@ -25,14 +25,14 @@ export default {
         },
         setYears(state, data) {
             state.years = data;
-        }
+        },
     },
     actions: {
         setLoading(context, data) {
-            context.commit('setLoading', data);
+            context.commit("setLoading", data);
         },
         setYears(context, data) {
-            context.commit('setYears', data);
+            context.commit("setYears", data);
         },
-    }
-}
+    },
+};

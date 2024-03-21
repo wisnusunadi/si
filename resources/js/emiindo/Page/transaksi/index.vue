@@ -29,14 +29,17 @@ export default {
             ekatData: [],
             spaData: [],
             spbData: [],
-            penjualanData: []
+            penjualanData: [],
+            jenisEkatStatus: ['semua'],
+            jenisSpaStatus: ['semua'],
+            jenisSpbStatus: ['semua'],
         }
     },
     methods: {
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true)
-                const { data: ekat } = await axios.get(`/api/ekatalog/data/semua/${this.$store.state.years}`, {
+                const { data: ekat } = await axios.get(`/api/ekatalog/data/${this.jenisEkatStatus}/${this.$store.state.years}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
                     }
@@ -56,7 +59,7 @@ export default {
                     }
                 })
 
-                const { data: spa } = await axios.get(`/api/spa/data/semua/${this.$store.state.years}`, {
+                const { data: spa } = await axios.get(`/api/spa/data/${this.jenisSpaStatus}/${this.$store.state.years}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
                     }
@@ -75,7 +78,7 @@ export default {
                     }
                 })
 
-                const { data: spb } = await axios.get(`/api/spb/data/semua/${this.$store.state.years}`, {
+                const { data: spb } = await axios.get(`/api/spb/data/${this.jenisSpbStatus}/${this.$store.state.years}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
                     }
@@ -118,11 +121,29 @@ export default {
             } finally {
                 this.$store.dispatch('setLoading', false)
             }
-        }
+        },
+        filterDataStatusEkat(status) {
+            if (this.jenisEkatStatus.includes(status)) {
+                // If data exists in jenisEkatStatus, remove it
+                this.jenisEkatStatus = this.jenisEkatStatus.filter(item => item !== status);
+            } else {
+                // If data is not defined in jenisEkatStatus, remove 'semua' and push data
+                this.jenisEkatStatus = this.jenisEkatStatus.filter(item => item !== 'semua');
+                this.jenisEkatStatus.push(status);
+            }
+
+            if (this.jenisEkatStatus.length === 0) {
+                this.jenisEkatStatus.push('semua')
+            }
+            this.$nextTick(() => {
+                this.getData()
+            })
+
+        },
     },
     created() {
         this.getData()
-    }
+    },
 }
 </script>
 <template>
@@ -148,7 +169,7 @@ export default {
         </ul>
         <div class="tab-content font-medium" id="myTabContent">
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <ekat :ekat="ekatData" />
+                <ekat :ekat="ekatData" @filter="filterDataStatusEkat" />
             </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <spa :spa="spaData" />

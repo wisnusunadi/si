@@ -2759,7 +2759,6 @@ class PenjualanController extends Controller
     {
         $divisi_id = Auth::user()->divisi_id;
 
-
         if ($value == 'semua') {
             $data  = Ekatalog::with(['Pesanan.State',  'Customer', 'Provinsi'])->addSelect([
                 'tgl_kontrak_custom' => function ($q) {
@@ -2803,6 +2802,7 @@ class PenjualanController extends Controller
 
             ])->whereYear('tgl_buat',  $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
         } else {
+            $x = explode(',', $value);
             $data  = Ekatalog::with(['Pesanan.State',  'Customer'])->addSelect([
 
                 'tgl_kontrak_custom' => function ($q) {

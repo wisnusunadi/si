@@ -3,6 +3,12 @@ import moment from 'moment';
 export default {
     props: ['detail'],
     methods: {
+        closeModal() {
+            $('.modalDetail').modal('hide');
+            this.$nextTick(() => {
+                this.$emit('close');
+            })
+        },
         calculateDateFromNow(date) {
             // kalkulasi tanggal dari sekarang
             const tglSekarang = new Date();
@@ -36,7 +42,7 @@ export default {
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Detail</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
