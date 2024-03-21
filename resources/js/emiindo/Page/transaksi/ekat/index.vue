@@ -119,7 +119,11 @@ export default {
         },
         filter(year, status) {
             this.$store.dispatch('setYears', year)
-            this.$emit('filter', status)
+            if (status != '') {
+                this.$emit('filter', status)
+            } else {
+                this.$emit('refresh')
+            }
         }
     },
     computed: {
@@ -157,7 +161,7 @@ export default {
                                             <div class="form-check" v-for="(year, key) in yearsComputed" :key="key">
                                                 <input class="form-check-input form-years-select" type="radio"
                                                     :value="year" :id="`status${key}`"
-                                                    @click="filter(year, $store.state.transactions)" :checked="key == 0"
+                                                    @click="filter(year, '')" :checked="key == 0"
                                                     v-model="$store.state.years">
                                                 <label class="form-check-label" :for="`status${key}`">
                                                     {{ year }}

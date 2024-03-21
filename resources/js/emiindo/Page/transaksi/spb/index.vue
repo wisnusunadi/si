@@ -44,6 +44,28 @@ export default {
             search: '',
             showModal: false,
             detailSelected: {},
+            status: [
+                {
+                    text: 'Penjualan',
+                    value: 7
+                },
+                {
+                    text: 'PO',
+                    value: 9
+                },
+                {
+                    text: 'Gudang',
+                    value: 6
+                },
+                {
+                    text: 'QC',
+                    value: 8
+                },
+                {
+                    text: 'Kirim',
+                    value: 11
+                },
+            ]
         }
     },
     methods: {
@@ -60,7 +82,24 @@ export default {
         tambah() {
             window.location.href = '/penjualan/penjualan/create'
         },
+        filter(year, status) {
+            this.$store.dispatch('setYears', year)
+            if (status != '') {
+                this.$emit('filter', status)
+            } else {
+                this.$emit('refresh')
+            }
+        }
     },
+    computed: {
+        yearsComputed() {
+            let years = []
+            for (let i = 0; i < 5; i++) {
+                years.push(moment().subtract(i, 'years').format('YYYY'))
+            }
+            return years
+        }
+    }
 }
 </script>
 <template>
@@ -72,9 +111,43 @@ export default {
         <div class="card-body">
             <div class="d-flex bd-highlight">
                 <div class="p-2 flex-grow-1 bd-highlight">
-                    <button class="btn btn-outline-info" @click="tambah">
-                        <i class="fas fa-plus"></i> Tambah
-                    </button>
+                    <span class="filter">
+                        <button class="btn btn-outline-secondary btn-sm" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <i class="fas fa-filter"></i> Filter Tahun
+                        </button>
+                        <button class="btn btn-outline-info btn-sm" @click="tambah">
+                            <i class="fas fa-plus"></i> Tambah
+                        </button>
+                        <form id="filter_ekat">
+                            <div class="dropdown-menu" style="">
+                                <div class="px-3 py-3">
+                                    <div class="form-group">
+                                        <div class="form-check" v-for="(year, key) in yearsComputed" :key="key">
+                                            <input class="form-check-input form-years-select" type="radio" :value="year"
+                                                :id="`status${key}`" @click="filter(year, '')" :checked="key == 0"
+                                                v-model="$store.state.years">
+                                            <label class="form-check-label" :for="`status${key}`">
+                                                {{ year }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jenis_penjualan">Status</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check" v-for="(status, key) in status" :key="key">
+                                            <input class="form-check-input" type="checkbox" :value="status.value"
+                                                :id="`status${key}`" @click="filter($store.state.years, status.value)">
+                                            <label class="form-check-label" :for="`status${key}`">
+                                                {{ status.text.charAt(0).toUpperCase() + status.text.slice(1) }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </span>
                 </div>
                 <div class="p-2 bd-highlight"><input type="text" class="form-control" v-model="search"
                         placeholder="Cari..."></div>
