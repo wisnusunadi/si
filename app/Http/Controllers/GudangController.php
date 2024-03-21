@@ -5477,17 +5477,21 @@ class GudangController extends Controller
 
     function TfbySOFinal(Request $request)
     {
+
         $obj =  json_decode(json_encode($request->all()), FALSE);
+
         try {
             $a = TFProduksi::where('pesanan_id', $request->pesanan_id)->first();
 
             if ($a) {
+
                 foreach ($request->produk as $values) {
                     $c = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $values['gudang_id'])->where('detail_pesanan_produk_id', $values['id'])->first();
 
                     if ($c) {
+
                         // return 'aa';
-                        foreach ($values['noseri'] as $k => $v) {
+                        foreach ($values['noseri'] as $v) {
                             NoseriTGbj::create([
                                 't_gbj_detail_id' => $c->id,
                                 'noseri_id' => $v['id'],
@@ -5497,7 +5501,7 @@ class GudangController extends Controller
                                 'created_at' => Carbon::now(),
                                 'created_by' => auth()->user()->id
                             ]);
-                            NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
+                            NoseriBarangJadi::find($v['id'])->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
                         }
                         // $gdg = GudangBarangJadi::whereIn('id', [$values['gudang_id']])->get()->toArray();
                         // $i = 0;
@@ -5528,13 +5532,14 @@ class GudangController extends Controller
                         //     'tgl_keluar' => Carbon::now()
                         // ];
 
-                        SystemLog::create([
-                            'tipe' => 'GBJ',
-                            'subjek' => 'Sales Order Noseri By Sistem',
-                            'response' => json_encode($obj),
-                            'user_id' => auth()->user()->id
-                        ]);
+                        // SystemLog::create([
+                        //     'tipe' => 'GBJ',
+                        //     'subjek' => 'Sales Order Noseri By Sistem',
+                        //     'response' => json_encode($obj),
+                        //     'user_id' => auth()->user()->id
+                        // ]);
                     } else {
+
                         $dd = TFProduksiDetail::create([
                             't_gbj_id' => $a->id,
                             'detail_pesanan_produk_id' => $values['id'],
@@ -5549,7 +5554,7 @@ class GudangController extends Controller
 
                         $did = $dd->id;
                         $checked = $request->noseri_id;
-                        foreach ($values['noseri'] as $k => $v) {
+                        foreach ($values['noseri'] as $v) {
                             NoseriTGbj::create([
                                 't_gbj_detail_id' => $did,
                                 'noseri_id' => $v['id'],
@@ -5592,15 +5597,16 @@ class GudangController extends Controller
                         //     'tgl_keluar' => Carbon::now()
                         // ];
 
-                        SystemLog::create([
-                            'tipe' => 'GBJ',
-                            'subjek' => 'Sales Order Noseri By Sistem',
-                            'response' => json_encode($obj),
-                            'user_id' => auth()->user()->id
-                        ]);
+                        // SystemLog::create([
+                        //     'tipe' => 'GBJ',
+                        //     'subjek' => 'Sales Order Noseri By Sistem',
+                        //     'response' => json_encode($obj),
+                        //     'user_id' => auth()->user()->id
+                        // ]);
                     }
                 }
             } else {
+
                 // return 'b';
                 $d = TFProduksi::create([
                     'pesanan_id' => $request->pesanan_id,
@@ -5670,13 +5676,15 @@ class GudangController extends Controller
                 //     'tgl_keluar' => Carbon::now()
                 // ];
 
-                SystemLog::create([
-                    'tipe' => 'GBJ',
-                    'subjek' => 'Sales Order Noseri By Sistem',
-                    'response' => json_encode($obj),
-                    'user_id' => auth()->user()->id
-                ]);
+                // SystemLog::create([
+                //     'tipe' => 'GBJ',
+                //     'subjek' => 'Sales Order Noseri By Sistem',
+                //     'response' => json_encode($obj),
+                //     'user_id' => auth()->user()->id
+                // ]);
             }
+
+
 
             $po = Pesanan::find($request->pesanan_id);
 
