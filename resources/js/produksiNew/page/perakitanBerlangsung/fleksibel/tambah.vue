@@ -43,6 +43,10 @@ export default {
                 {
                     label: 'Sarana Kesehatan',
                     value: 20
+                },
+                {
+                    label: 'Engineering',
+                    value: 10
                 }
             ],
             hasilGenerate: [],
@@ -604,8 +608,8 @@ export default {
                                         </div>
                                         <span v-if="loading">Loading...</span>
                                         <span v-else>{{
-                                            form.produk?.isGenerate ? 'Generate' : 'Simpan'
-                                            }}</span>
+            form.produk?.isGenerate ? 'Generate' : 'Simpan'
+        }}</span>
                                     </button>
                                     <button class="btn btn-success" v-if="seri.length > 0" @click="simpanSeri">
                                         <div class="spinner-border" role="status" v-if="loading">
