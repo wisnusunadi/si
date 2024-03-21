@@ -153,7 +153,7 @@ export default {
                         placeholder="Cari..."></div>
             </div>
 
-            <data-table :headers="header" :items="spb" :search="search">
+            <data-table :headers="header" :items="spb" :search="search" v-if="!$store.state.loading">
                 <template #item.status="{ item }">
                     <div>
                         <persentase :persentase="item.persentase" />
@@ -192,6 +192,14 @@ export default {
                     </div>
                 </template>
             </data-table>
+            <div v-else>
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+                
         </div>
     </div>
 </template>
