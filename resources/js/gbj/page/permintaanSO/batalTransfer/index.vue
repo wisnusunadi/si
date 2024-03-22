@@ -46,7 +46,7 @@ export default {
             this.detailSelected = item
             this.showModal = true
             this.$nextTick(() => {
-                $('.modalDetail').modal('show')
+                $('.modalProduk').modal('show')
             })
         },
     },
@@ -54,6 +54,7 @@ export default {
 </script>
 <template>
     <div class="card">
+        <produkComponents :detail="detailSelected" v-if="showModal" @close="showModal = false" />
         <div class="card-body">
             <div class="d-flex flex-row-reverse bd-highlight">
                 <div class="p-2 bd-highlight">

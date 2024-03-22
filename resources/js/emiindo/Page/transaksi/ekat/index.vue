@@ -3,12 +3,14 @@ import batalComponents from '../batal/index.vue'
 import returComponents from '../retur.vue'
 import detailComponents from '../detail.vue'
 import statusComponents from '../../../components/status.vue'
+import pagination from '../../../components/pagination.vue'
 export default {
     components: {
         batalComponents,
         returComponents,
         detailComponents,
-        statusComponents
+        statusComponents,
+        pagination
     },
     props: ['ekat'],
     data() {
@@ -125,7 +127,10 @@ export default {
             } else {
                 this.$emit('refresh')
             }
-        }
+        },
+        updateFilteredDalamProses(data) {
+            this.renderPaginate = data;
+        },
     },
     computed: {
         yearsComputed() {
@@ -134,7 +139,22 @@ export default {
                 years.push(moment().subtract(i, 'years').format('YYYY'))
             }
             return years
-        }
+        },
+        filteredDalamProses() {
+            const includesSearch = (obj, search) => {
+                if (obj && typeof obj === 'object') {
+                    return Object.keys(obj).some(key => {
+                        if (typeof obj[key] === 'object') {
+                            return includesSearch(obj[key], search);
+                        }
+                        return String(obj[key]).toLowerCase().includes(search.toLowerCase());
+                    });
+                }
+                return false;
+            };
+
+            return this.ekat.filter(data => includesSearch(data, this.search));
+        },
     }
 }
 </script>
@@ -189,61 +209,97 @@ export default {
                     <div class="p-2 bd-highlight"><input type="text" class="form-control" v-model="search"
                             placeholder="Cari..."></div>
                 </div>
-                <data-table :headers="header" :items="ekat" :search="search" v-if="!$store.state.loading">
-                    <template #item.no_paket="{ item }">
-                        {{ item.no_paket }}
-                        <statusComponents :status="item.status" />
-                    </template>
-                    <template #item.tgl_kontrak="{ item }">
-                        <div v-if="item.tgl_kontrak_custom">
-                            <div :class="calculateDateFromNow(item.tgl_kontrak_custom).color">{{
+
+                <table class="table text-center" v-if="!$store.state.loading">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>No Urut</th>
+                            <th>Nomor SO</th>
+                            <th>Nomor AKN</th>
+                            <th>Nomor PO</th>
+                            <th>Tanggal Buat</th>
+                            <th>Tanggal Edit</th>
+                            <th>Tanggal Delivery</th>
+                            <th>Customer</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody v-if="renderPaginate.length > 0">
+                        <tr v-for="(item, index) in renderPaginate" :key="index"
+                            :class="item.status == 'batal' ? 'line-through text-danger font-weight-bold' : ''">
+                            <td>{{ index + 1 }}</td>
+                            <td>{{ item.urutan }}</td>
+                            <td>{{ item.so }}</td>
+                            <td>
+                                {{ item.no_paket }}
+                                <statusComponents :status="item.status" />
+                            </td>
+                            <td>{{ item.no_po }}</td>
+                            <td>{{ item.tgl_buat }}</td>
+                            <td>{{ item.tgl_edit }}</td>
+                            <td>
+                                <div v-if="item.tgl_kontrak_custom">
+                                    <div :class="calculateDateFromNow(item.tgl_kontrak_custom).color">{{
             dateFormat(item.tgl_kontrak_custom) }}</div>
-                            <small :class="calculateDateFromNow(item.tgl_kontrak_custom).color">
-                                <i :class="calculateDateFromNow(item.tgl_kontrak_custom).icon"></i>
-                                {{ calculateDateFromNow(item.tgl_kontrak_custom).text }}
-                            </small>
-                        </div>
-                        <div v-else>
-                        </div>
-                    </template>
-                    <template #item.status="{ item }">
-                        <persentase :persentase="item.persentase" />
-                    </template>
-                    <template #item.aksi="{ item }">
-                        <div>
-                            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i>
-                            </div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
-                                <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="#"
-                                    data-id="5092">
-                                    <button class="dropdown-item" type="button" @click="detail(item)">
-                                        <i class="fas fa-eye"></i>
-                                        Detail
-                                    </button>
-                                </a>
-                                <a target="_blank" href="#">
-                                    <button class="dropdown-item" type="button" @click="cetakSPPB(item.pesanan_id)">
-                                        <i class="fas fa-print"></i>
-                                        SPPB
-                                    </button>
-                                </a>
-                                <a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="5092">
-                                    <button class="dropdown-item" type="button">
-                                        <i class="fas fa-pencil-alt"></i>
-                                        Edit No Urut &amp; DO
-                                    </button>
-                                </a>
-                                <a href="#"><button class="dropdown-item openModalBatalRetur" @click="batal(item)"
-                                        type="button"><i class="fas fa-times"></i>
-                                        Batal</button></a>
-                                <a href="#"><button class="dropdown-item openModalBatalRetur" @click="retur(item)"
-                                        type="button"><i class="fa-solid fa-arrow-rotate-left"></i>
-                                        Retur</button></a>
-                            </div>
-                        </div>
-                    </template>
-                </data-table>
+                                    <small :class="calculateDateFromNow(item.tgl_kontrak_custom).color">
+                                        <i :class="calculateDateFromNow(item.tgl_kontrak_custom).icon"></i>
+                                        {{ calculateDateFromNow(item.tgl_kontrak_custom).text }}
+                                    </small>
+                                </div>
+                                <div v-else>
+                                </div>
+                            </td>
+                            <td>{{ item.nama_customer }}</td>
+                            <td>
+                                <persentase :persentase="item.persentase" />
+                            </td>
+                            <td>
+                                <div>
+                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
+                                        aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i>
+                                    </div>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                                        <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="#"
+                                            data-id="5092">
+                                            <button class="dropdown-item" type="button" @click="detail(item)">
+                                                <i class="fas fa-eye"></i>
+                                                Detail
+                                            </button>
+                                        </a>
+                                        <a target="_blank" href="#">
+                                            <button class="dropdown-item" type="button"
+                                                @click="cetakSPPB(item.pesanan_id)">
+                                                <i class="fas fa-print"></i>
+                                                SPPB
+                                            </button>
+                                        </a>
+                                        <a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="5092">
+                                            <button class="dropdown-item" type="button">
+                                                <i class="fas fa-pencil-alt"></i>
+                                                Edit No Urut &amp; DO
+                                            </button>
+                                        </a>
+                                        <a href="#"><button class="dropdown-item openModalBatalRetur"
+                                                @click="batal(item)" type="button"><i class="fas fa-times"></i>
+                                                Batal</button></a>
+                                        <a href="#"><button class="dropdown-item openModalBatalRetur"
+                                                @click="retur(item)" type="button"><i
+                                                    class="fa-solid fa-arrow-rotate-left"></i>
+                                                Retur</button></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan="100%" class="text-center">Data tidak ditemukan</td>
+                        </tr>
+                    </tbody>
+                </table>
+
                 <div v-else>
                     <div class="d-flex justify-content-center">
                         <div class="spinner-border" role="status">
@@ -251,7 +307,25 @@ export default {
                         </div>
                     </div>
                 </div>
+
+
+                <pagination :filteredDalamProses="filteredDalamProses" v-if="!$store.state.loading"
+                    @updateFilteredDalamProses="updateFilteredDalamProses" />
             </div>
         </div>
     </div>
 </template>
+<style>
+tr.line-through td:before {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    border-bottom: 1px solid red;
+    width: 100%;
+}
+
+tr.line-through td:after {
+    content: "";
+}
+</style>

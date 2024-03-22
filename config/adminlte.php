@@ -484,7 +484,7 @@ return [
             'text' => 'Penjualan',
             'icon' => 'fas fa-mail-bulk',
             'auth' => [26],
-            'url'  => '/penjualan/penjualan/show',
+            'url'  => '/penjualan/transaksi',
         ],
         [
             'text' => 'Request Emiindo',
