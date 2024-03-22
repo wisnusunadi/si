@@ -104,10 +104,10 @@ export default {
                 <div>
                     <span class="badge badge-info">Belum Transfer: {{ item.belum_transfer }}
                         ({{
-                        item.persentase_belum_transfer }}%)</span> <br>
+            item.persentase_belum_transfer }}%)</span> <br>
                     <span class="badge badge-warning">Sudah Transfer: {{ item.sudah_transfer }} ({{
-                        item.sudah_transfer
-                        }}%)</span>
+            item.sudah_transfer
+        }}%)</span>
 
                 </div>
             </template>
@@ -121,6 +121,7 @@ export default {
                 <i class="fa fa-paper-plane"></i>
                 Kirim
             </button>
+
         </data-table>
     </div>
 </template>
