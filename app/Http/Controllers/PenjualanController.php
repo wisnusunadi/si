@@ -9431,6 +9431,71 @@ class PenjualanController extends Controller
 
         return response()->json($pesanan);
     }
+    public function get_detail_paket_batal_po($id)
+    {
+
+        $data = Pesanan::find($id);
+        $item = array();
+
+        if($data->DetailPesanan){
+            foreach($data->DetailPesanan as $d){
+                $item[] = array(
+                    'id' => $d->id,
+                    'nama' => $d->PenjualanProduk->nama,
+                    'jumlah' => $d->jumlah
+                );
+            }
+
+        }
+
+        if($data->DetailPesananPart){
+            foreach($data->DetailPesananPart as $d){
+                $item[] = array(
+                    'id' => $d->id,
+                    'nama' => $d->Sparepart->nama,
+                    'jumlah' => $d->jumlah
+                );
+            }
+
+        }
+        return response()->json($item);
+
+    }
+    public function get_detail_prd_batal_po($id)
+    {
+
+        $dpp = DetailPesananProduk::where('detail_pesanan_id',$id);
+        $item = array();
+
+        $seri = NoseriTGbj::select('detail_pesanan_produk_id','t_gbj_detail.id','noseri')
+        ->join('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
+        ->join('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
+        ->whereIN('t_gbj_detail.detail_pesanan_produk_id',$dpp->pluck('id')->toArray())
+        ->get();
+
+        foreach($dpp->get()  as $key_p => $d){
+                $item [$key_p] = array(
+                    'id' => $d->id,
+                    'nama' => $d->GudangBarangJadi->Produk->nama,
+                    'variasi' => $d->GudangBarangJadi->nama,
+                    'seri' => array()
+                );
+
+                foreach ($seri as  $s) {
+                    if ($d->id == $s['detail_pesanan_produk_id']) {
+                        $item[$key_p]['seri'][] = $s;
+
+                    }
+                }
+            }
+
+
+
+
+
+        return response()->json($item);
+
+    }
     public function cetak_surat_perintah($id)
     {
         $pesanan = Pesanan::find($id);
