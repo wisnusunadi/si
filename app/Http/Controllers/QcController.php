@@ -2503,6 +2503,8 @@ class QcController extends Controller
                 ->get();
         }
 
+        return response()->json($data);
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('jumlah_ok', function ($data) {
@@ -3183,6 +3185,8 @@ class QcController extends Controller
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
         }
+
+        return response()->json($data);
 
         // $arrayid = array();
         // foreach ($data as $i) {

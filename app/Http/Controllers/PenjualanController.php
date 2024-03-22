@@ -58,6 +58,12 @@ class PenjualanController extends Controller
     {
         return empty(array_diff($needles, $haystack));
     }
+    public function getYearsPeriodePenjualan()
+    {
+        $data = AktifPeriode::first()->tahun;
+        return response()->json($data);
+    }
+
     //Get Data Table
     public function penjualan_data($jenis, $status, $tahun)
     {

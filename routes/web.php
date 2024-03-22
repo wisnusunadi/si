@@ -370,8 +370,6 @@ Route::group(['prefix' => 'logistik', 'middleware' => ['divisi:log']], function 
             Route::view('/show', 'page.logistik.pengiriman.riwayat.show')->name('logistik.riwayat.show');
         });
         // });
-
-        Route::view('/{any?}', 'page.logistik.logistik')->where('any', '.*');
     });
 
     Route::group(['prefix' => '/pengiriman_retur'], function () {
@@ -384,6 +382,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => ['divisi:log']], function 
         Route::view('/show', 'page.logistik.laporan.show')->name('logistik.laporan.show');
         Route::get('/export/{jenis}/{ekspedisi}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\LogistikController::class, 'export_laporan'])->name('logistik.laporan.export');
     });
+    Route::view('/{any?}', 'page.logistik.logistik')->where('any', '.*');
 });
 
 Route::middleware('auth')->prefix('/teknik')->group(function () {

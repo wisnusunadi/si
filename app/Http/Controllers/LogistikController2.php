@@ -1073,6 +1073,8 @@ class LogistikController extends Controller
         }
 
         $data = Pesanan::whereIn('id', $arr)->orderBy('id', 'desc')->get();
+
+        return response()->json($data);
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {

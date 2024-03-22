@@ -5,7 +5,7 @@ export default {
         PONonEkat: [],
         DO: [],
         loading: false,
-        years: new Date().getFullYear(),
+        years: null,
     },
     mutations: {
         setDataSO(state, data) {

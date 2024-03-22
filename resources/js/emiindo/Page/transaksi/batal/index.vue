@@ -98,8 +98,8 @@ export default {
 <template>
     <div>
         <alasanComponents v-if="showModalAlasan" @close="closeModalAlasan" @closeAllModal="closeAllModal" />
-        <div class="modal fade modalBatal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-            aria-hidden="true">
+        <div class="modal fade modalBatal" id="staticBackdrop" data-backdrop="static" data-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">

@@ -1,0 +1,110 @@
+<script>
+import Header from '../../components/header.vue'
+import dalamproses from './dalamproses'
+import selesaiproses from './selesaiproses'
+import batalpo from './batalpo'
+import axios from 'axios'
+export default {
+    components: {
+        Header,
+        dalamproses,
+        selesaiproses,
+        batalpo
+    },
+    data() {
+        return {
+            title: 'Sales Order',
+            breadcumbs: [
+                {
+                    name: 'Beranda',
+                    link: '/'
+                },
+                {
+                    name: 'Sales Order Qc',
+                    link: '/salesorder'
+                }
+            ],
+            dalamProsesData: [],
+            selesaiProsesData: [],
+            batalPoData: [],
+            jenisDalamProsesStatus: ['semua'],
+            jenisSelesaiProsesStatus: ['semua'],
+        }
+    },
+    methods: {
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true)
+                const { data: dalamproses } = await axios.post(`/api/qc/so/data/${this.jenisDalamProsesStatus}`, {}, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
+                    }
+                })
+                this.dalamProsesData = dalamproses.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item,
+                    }
+                })
+
+                const { data: selesaiproses } = await axios.post(`/api/qc/so/data/selesai/${this.jenisSelesaiProsesStatus}`, {}, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
+                    }
+                })
+                this.selesaiProsesData = selesaiproses.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item,
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.dispatch('setLoading', false)
+            }
+        }
+    },
+    created() {
+        this.getData()
+    }
+}
+</script>
+<template>
+    <div>
+        <Header :title="title" :breadcumbs="breadcumbs" />
+        <div class="card">
+            <div class="card-body">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
+                            type="button" role="tab" aria-controls="pills-home" aria-selected="true">Dalam
+                            Proses</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile"
+                            type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Selesai
+                            Proses</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-contact"
+                            type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Batal
+                            PO</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                        aria-labelledby="pills-home-tab">
+                        <dalamproses :dalam="dalamProsesData" />
+                    </div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        <selesaiproses :selesai="selesaiProsesData" />
+                    </div>
+                    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                        <batalpo :batal="batalPoData" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

@@ -145,6 +145,7 @@ Route::prefix('/penjualan_produk')->group(function () {
 
 Route::prefix('/penjualan')->group(function () {
     // Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_penjualan']);
+    Route::get('/getYearsPeriode', [App\Http\Controllers\PenjualanController::class, 'getYearsPeriodePenjualan']);
     Route::post('/penjualan/data/{jenis}/{status}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::get('/ekatalog_data/{akn}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog_emindo']);
     Route::get('/laporan', [App\Http\Controllers\PenjualanController::class, 'get_laporans']);
@@ -181,8 +182,6 @@ Route::prefix('/penjualan')->group(function () {
         Route::post('real/data/{id}', [App\Http\Controllers\RencanaPenjualanController::class, 'get_data_real']);
         Route::post('realisasi/update/{id}', [App\Http\Controllers\RencanaPenjualanController::class, 'get_update_realisasi']);
     });
-
-    
 });
 
 Route::prefix('/so')->group(function () {
@@ -688,6 +687,7 @@ Route::prefix('/logistik')->group(function () {
         //   Route::get('detail/select/{produk_id}/{part_id}/{pesanan_id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_select_produk']);
         Route::post('detail/select/{pesanan_id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_select_produk']);
         Route::get('data/selesai/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_selesai_so']);
+        Route::get('data/{value}/{tahun}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('data/sj_draft/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj_draft']);
         Route::get('data/sj_draft/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj_draft_detail']);
         Route::post('data/sj/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj']);
