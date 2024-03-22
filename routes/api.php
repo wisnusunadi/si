@@ -168,6 +168,12 @@ Route::prefix('/penjualan')->group(function () {
         Route::post('produk/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_paket_pesanan_ekat']);
         Route::post('produk/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_pesanan_detail']);
     });
+
+    Route::prefix('/batal_po')->group(function () {
+        Route::get('/detail_paket/{id}', [App\Http\Controllers\PenjualanController::class, 'get_detail_paket_batal_po']);
+        Route::get('/detail_prd/{id}', [App\Http\Controllers\PenjualanController::class, 'get_detail_prd_batal_po']);
+    });
+
     Route::prefix('/lacak')->group(function () {
         Route::post('/data/{parameter}/{value}', [App\Http\Controllers\PenjualanController::class, 'get_lacak_penjualan']);
     });
@@ -182,7 +188,6 @@ Route::prefix('/penjualan')->group(function () {
         Route::post('realisasi/update/{id}', [App\Http\Controllers\RencanaPenjualanController::class, 'get_update_realisasi']);
     });
 
-    
 });
 
 Route::prefix('/so')->group(function () {

@@ -260,7 +260,6 @@ class LabController extends Controller
                 ->where('uji_lab_detail.status', '!=', 'belum')
                 ->whereBetween('uji_lab_detail.tgl_masuk', [$tanggalAwal, $tanggalAkhir])
                 ->orderByDesc('no');
-
             // ->whereYear('uji_lab_detail.created_at', $request->years );
 
             $spb = Spb::select('spb.pesanan_id as id', 'customer.nama', 'spb.ket')
@@ -1794,6 +1793,7 @@ class LabController extends Controller
             // ->havingRaw('uji > 0 ')
             ->whereIN('detail_pesanan_produk_id', $get_dpp)
             ->get();
+
         if ($detail->isEmpty()) {
             $seri = array();
         } else {
@@ -1915,7 +1915,7 @@ class LabController extends Controller
     public function transfer_riwayat_seri(Request $request)
     {
         $years = $request->years;
-        $data = RiwayatTf::where('dari', 22)->whereYear('created_at', $years)->get();
+        $data = RiwayatTf::where('dari', 22)->whereYear('created_at', $years)->orderbyDesc('created_at')->get();
         $setData = array();
         foreach ($data as $d) {
             $e = json_decode($d->isi);
@@ -2213,11 +2213,11 @@ class LabController extends Controller
             ])
             ->havingRaw('belum = 0')
             ->whereIN('detail_pesanan_produk_id', $get_dpp)
+            ->orderByDesc('no')
             ->get();
         if ($detail->isEmpty()) {
             $object = array();
         } else {
-
             foreach ($detail as $d) {
                 $item[] = array(
                     'id' => $d->id,
