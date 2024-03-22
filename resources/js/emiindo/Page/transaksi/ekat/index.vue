@@ -62,7 +62,8 @@ export default {
             search: '',
             showModal: false,
             detailSelected: {},
-            status: ['sepakat', 'negosiasi', 'batal', 'draft']
+            status: ['sepakat', 'negosiasi', 'batal', 'draft'],
+            renderPaginate: [],
         }
     },
     methods: {
@@ -160,9 +161,8 @@ export default {
                                         <div class="form-group">
                                             <div class="form-check" v-for="(year, key) in yearsComputed" :key="key">
                                                 <input class="form-check-input form-years-select" type="radio"
-                                                    :value="year" :id="`status${key}`"
-                                                    @click="filter(year, '')" :checked="key == 0"
-                                                    v-model="$store.state.years">
+                                                    :value="year" :id="`status${key}`" @click="filter(year, '')"
+                                                    :checked="key == 0" v-model="$store.state.years">
                                                 <label class="form-check-label" :for="`status${key}`">
                                                     {{ year }}
                                                 </label>
@@ -212,7 +212,8 @@ export default {
                     <template #item.aksi="{ item }">
                         <div>
                             <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i>
+                            </div>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
                                 <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="#"
                                     data-id="5092">
@@ -234,7 +235,8 @@ export default {
                                     </button>
                                 </a>
                                 <a href="#"><button class="dropdown-item openModalBatalRetur" @click="batal(item)"
-                                        type="button"><i class="fas fa-times"></i> Batal</button></a>
+                                        type="button"><i class="fas fa-times"></i>
+                                        Batal</button></a>
                                 <a href="#"><button class="dropdown-item openModalBatalRetur" @click="retur(item)"
                                         type="button"><i class="fa-solid fa-arrow-rotate-left"></i>
                                         Retur</button></a>

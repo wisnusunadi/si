@@ -24,6 +24,10 @@ const routes = [
         path: "/gbj/so",
         component: () => import("./page/permintaanSO"),
     },
+    {
+        path: "/gbj/dp",
+        component: () => import("./page/penerimaanFinishGoods"),
+    },
 ];
 
 const router = new VueRouter({

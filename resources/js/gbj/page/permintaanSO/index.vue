@@ -3,13 +3,15 @@ import Header from '../../components/header.vue'
 import dalamProses from './dalamProses'
 import sudahProses from './sudahProses'
 import permintaanBarang from './permintaanBarang'
+import batalTransfer from './batalTransfer'
 import axios from 'axios'
 export default {
     components: {
         Header,
         dalamProses,
         sudahProses,
-        permintaanBarang
+        permintaanBarang,
+        batalTransfer
     },
     data() {
         return {
@@ -20,7 +22,8 @@ export default {
             ],
             dataDalamProses: [],
             dataSudahProses: [],
-            dataPermintaanBarang: []
+            dataPermintaanBarang: [],
+            dataBatal: [],
         }
     },
     methods: {
@@ -86,6 +89,10 @@ export default {
                 <a class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-contact" type="button"
                     role="tab" aria-controls="pills-contact" aria-selected="false">Permintaan Barang</a>
             </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pills-batal-tab" data-toggle="pill" data-target="#pills-batal" type="button"
+                    role="tab" aria-controls="pills-batal" aria-selected="false">Batal SO</a>
+            </li>
         </ul>
         <div class="tab-content" id="pills-tabContent" v-if="!$store.state.loading">
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
@@ -96,6 +103,9 @@ export default {
             </div>
             <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                 <permintaanBarang :items="dataPermintaanBarang" />
+            </div>
+            <div class="tab-pane fade" id="pills-batal" role="tabpanel" aria-labelledby="pills-batal-tab">
+                <batalTransfer :items="dataBatal" />
             </div>
         </div>
         <div class="d-flex justify-content-center" v-else>

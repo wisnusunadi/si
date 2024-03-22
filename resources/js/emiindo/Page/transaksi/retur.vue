@@ -26,6 +26,7 @@ export default {
             ],
             showModal: false,
             itemSelected: {},
+            noretur: '',
         }
     },
     methods: {
@@ -333,6 +334,11 @@ export default {
 
             paket = [...new Map(paket.map(item => [item['no'], item])).values()]
 
+            if (this.noretur === '') {
+                this.$swal('Error', 'No Retur tidak boleh kosong', 'error')
+                return
+            }
+
             if (paket.length > 0 && !error) {
                 this.$swal('Success', 'Berhasil menyimpan', 'success')
             } else {
@@ -340,7 +346,12 @@ export default {
                 return
             }
 
-            console.log(paket)
+            const form = [
+                this.noretur,
+                paket
+            ]
+
+            console.log(form)
         },
         showModalNoSeri(idx) {
             this.showModal = true
@@ -521,6 +532,16 @@ export default {
                                             <div class="col">
                                                 <div class="card">
                                                     <div class="card-body">
+                                                        <div class="d-flex flex-row-reverse bd-highlight">
+                                                            <div class="p-2 bd-highlight">
+                                                                <div class="form-group">
+                                                                    <label for="">No. Retur</label>
+                                                                    <input type="text" class="form-control"
+                                                                        v-model="noretur">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
                                                         <table class="table">
                                                             <thead>
                                                                 <tr>

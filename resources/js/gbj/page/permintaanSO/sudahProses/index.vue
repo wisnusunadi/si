@@ -34,7 +34,6 @@ export default {
                     value: 'aksi'
                 }
             ],
-            items: [],
             showModal: false,
             detailSelected: {}
         }

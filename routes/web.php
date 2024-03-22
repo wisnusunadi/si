@@ -125,7 +125,7 @@ Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
     // Route::view('/so/{any?}', 'page.gbj.so')->where('any', '.*');
     Route::view('/changeunit/{any?}', 'page.lab.kalibrasi_new')->where('any', '.*');
     Route::view('/tso', 'page.gbj.tso');
-    Route::get('/dp', [GudangController::class, 'terimaRakit']);
+    // Route::get('/dp', [GudangController::class, 'terimaRakit']);
     // Route::view('/bso', 'page.gbj.bso');
     Route::view('/lp', 'page.gbj.lp');
     Route::view('/dashboard', 'page.gbj.dashboard');

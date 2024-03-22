@@ -10,7 +10,6 @@ export default {
     data() {
         return {
             search: '',
-            items: [],
             renderPaginate: [],
             showModal: false,
             detailSelected: {}
