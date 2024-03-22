@@ -228,18 +228,18 @@ export default {
                     </thead>
                     <tbody v-if="renderPaginate.length > 0">
                         <tr v-for="(item, index) in renderPaginate" :key="index"
-                            :class="item.status == 'batal' ? 'line-through text-danger font-weight-bold' : ''">
-                            <td>{{ index + 1 }}</td>
-                            <td>{{ item.urutan }}</td>
-                            <td>{{ item.so }}</td>
-                            <td>
+                            :class="{ 'strike-through-row text-danger font-weight-bold': item.status == 'batal' }">
+                            <td :class="{ 'strike-through': item.status == 'batal' }">{{ index + 1 }}</td>
+                            <td :class="{ 'strike-through': item.status == 'batal' }">{{ item.urutan }}</td>
+                            <td :class="{ 'strike-through': item.status == 'batal' }">{{ item.so }}</td>
+                            <td :class="{ 'strike-through': item.status == 'batal' }">
                                 {{ item.no_paket }}
                                 <statusComponents :status="item.status" />
                             </td>
-                            <td>{{ item.no_po }}</td>
-                            <td>{{ item.tgl_buat }}</td>
-                            <td>{{ item.tgl_edit }}</td>
-                            <td>
+                            <td :class="{ 'strike-through': item.status == 'batal' }">{{ item.no_po }}</td>
+                            <td :class="{ 'strike-through': item.status == 'batal' }">{{ item.tgl_buat }}</td>
+                            <td :class="{ 'strike-through': item.status == 'batal' }">{{ item.tgl_edit }}</td>
+                            <td :class="{ 'strike-through': item.status == 'batal' }">
                                 <div v-if="item.tgl_kontrak_custom">
                                     <div :class="calculateDateFromNow(item.tgl_kontrak_custom).color">{{
             dateFormat(item.tgl_kontrak_custom) }}</div>
@@ -248,10 +248,9 @@ export default {
                                         {{ calculateDateFromNow(item.tgl_kontrak_custom).text }}
                                     </small>
                                 </div>
-                                <div v-else>
-                                </div>
+                                <div v-else></div>
                             </td>
-                            <td>{{ item.nama_customer }}</td>
+                            <td :class="{ 'strike-through': item.status == 'batal' }">{{ item.nama_customer }}</td>
                             <td>
                                 <persentase :persentase="item.persentase" />
                             </td>
@@ -292,6 +291,7 @@ export default {
                                 </div>
                             </td>
                         </tr>
+
                     </tbody>
                     <tbody v-else>
                         <tr>
@@ -316,16 +316,22 @@ export default {
     </div>
 </template>
 <style>
-tr.line-through td:before {
-    content: " ";
-    position: absolute;
-    top: 50%;
-    left: 0;
-    border-bottom: 1px solid red;
-    width: 100%;
+.strike-through-row .strike-through {
+    position: relative;
 }
 
-tr.line-through td:after {
-    content: "";
+.strike-through-row .strike-through::before {
+    content: '';
+    position: absolute;
+    top: 35%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: red;
+}
+
+.strike-through-row .strike-through td {
+    position: relative;
+    z-index: 2;
 }
 </style>
