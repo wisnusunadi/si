@@ -164,9 +164,21 @@ class DetailPesanan extends Model
     {
         $id = $this->id;
         $s = RiwayatBatalPoPrd::where(['detail_pesanan_id'=> $id,'status' => 1])->sum('jumlah');
+        $k = RiwayatReturPoPrd::havingRaw('seri > 0')
+        ->where(['detail_pesanan_id'=> $id])
+        ->groupBy('riwayat_retur_po_prd.detail_pesanan_id')
+        ->sum('jumlah');
 
-        return $s;
+        $q = RiwayatReturPoSeri::
+        join('riwayat_retur_po_prd','riwayat_retur_po_prd.id','=','riwayat_retur_po_seri.detail_riwayat_retur_prd_id')
+        ->where(['riwayat_retur_po_prd.detail_pesanan_id'=> $id,'riwayat_retur_po_seri.status' => 1])
+        ->groupBy('riwayat_retur_po_prd.detail_pesanan_id')
+        ->count();
+
+        return $k;
     }
+
+
 
     public function LaporanQcProduk($hasil, $tgl_awal, $tgl_akhir)
     {
