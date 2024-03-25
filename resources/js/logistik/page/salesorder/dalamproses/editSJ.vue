@@ -49,6 +49,7 @@ export default {
                 this.formEdit.jenis_sj_edit = split[0] + separator;
                 this.formEdit.no_invoice_sj_edit = split[1];
             }
+
         }
     },
     watch: {
