@@ -28,6 +28,14 @@ class DetailPesananPart extends Model
         return $this->hasMany(OutgoingPesananPart::class, 'detail_pesanan_part_id');
     }
 
+    public function getJumlahBatal()
+    {
+        $id = $this->id;
+        $s = RiwayatBatalPoPart::where(['detail_pesanan_part_id'=> $id,'status' => 1])->sum('jumlah');
+
+        return $s;
+    }
+
     public function getJumlahCekPart($status)
     {
         $id = $this->id;

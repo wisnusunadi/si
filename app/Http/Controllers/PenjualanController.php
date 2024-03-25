@@ -30,6 +30,9 @@ use App\Models\Produk;
 use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\Provinsi;
+use App\Models\RiwayatBatalPo;
+use App\Models\RiwayatBatalPoPart;
+use App\Models\RiwayatBatalPoPrd;
 use App\Models\SaveResponse;
 use App\Models\SystemLog;
 use App\Models\TFProduksi;
@@ -9436,10 +9439,10 @@ class PenjualanController extends Controller
                 $item[] = array(
                     'id' => $d->id,
                     'nama' => $d->PenjualanProduk->nama,
-                    'jumlah' => $d->jumlah
+                    'jumlah' => $d->jumlah - $d->getJumlahBatal(),
+                    'jenis' => 'produk'
                 );
             }
-
         }
 
         if($data->DetailPesananPart){
@@ -9447,7 +9450,8 @@ class PenjualanController extends Controller
                 $item[] = array(
                     'id' => $d->id,
                     'nama' => $d->Sparepart->nama,
-                    'jumlah' => $d->jumlah
+                    'jumlah' => $d->jumlah - $d->getJumlahBatal(),
+                    'jenis' => 'part'
                 );
             }
 
@@ -9455,13 +9459,48 @@ class PenjualanController extends Controller
         return response()->json($item);
 
     }
-    public function get_detail_prd_batal_po($id)
+
+    public function kirim_prd_batal_po(Request $request)
     {
 
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+
+        try {
+            //code...
+            foreach($obj->item as $o){
+                if($o->jenis == 'produk'){
+                    RiwayatBatalPoPrd::create([
+                        'detail_pesanan_id' => $o->id,
+                        'jumlah' => $o->jumlah,
+                    ]);
+                }else{
+                    RiwayatBatalPoPart::create([
+                        'detail_pesanan_part_id' => $o->id,
+                        'jumlah' => $o->jumlah,
+                    ]);
+                }
+            }
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'status' => 404,
+                'message' => 'Gagal Dikirim'.$th,
+            ], 200);
+        }
+
+
+    }
+
+    public function get_detail_prd_batal_po($id)
+    {
         $dpp = DetailPesananProduk::where('detail_pesanan_id',$id);
         $item = array();
 
-        $seri = NoseriTGbj::select('detail_pesanan_produk_id','t_gbj_detail.id','noseri')
+        $seri = NoseriTGbj::select('detail_pesanan_produk_id','t_gbj_detail.id','noseri_barang_jadi.id as noseri_id','noseri')
         ->join('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
         ->join('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
         ->whereIN('t_gbj_detail.detail_pesanan_produk_id',$dpp->pluck('id')->toArray())
@@ -9478,17 +9517,11 @@ class PenjualanController extends Controller
                 foreach ($seri as  $s) {
                     if ($d->id == $s['detail_pesanan_produk_id']) {
                         $item[$key_p]['seri'][] = $s;
-
                     }
                 }
             }
 
-
-
-
-
         return response()->json($item);
-
     }
     public function cetak_surat_perintah($id)
     {
@@ -9497,6 +9530,7 @@ class PenjualanController extends Controller
         $data = [];
 
         if ($pesanan->DetailPesanan->isNotEmpty()) {
+
             foreach ($pesanan->DetailPesanan as $key => $prd) {
                 $pesanan_prd[$key] = array(
                     'no' => $key + 1,

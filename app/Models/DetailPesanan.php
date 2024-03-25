@@ -160,6 +160,13 @@ class DetailPesanan extends Model
 
         return $s;
     }
+    public function getJumlahBatal()
+    {
+        $id = $this->id;
+        $s = RiwayatBatalPoPrd::where(['detail_pesanan_id'=> $id,'status' => 1])->sum('jumlah');
+
+        return $s;
+    }
 
     public function LaporanQcProduk($hasil, $tgl_awal, $tgl_akhir)
     {
