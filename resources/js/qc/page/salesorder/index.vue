@@ -47,12 +47,12 @@ export default {
                     }
                 })
 
-                const { data: selesaiproses } = await axios.post(`/api/qc/so/data/selesai/${this.jenisSelesaiProsesStatus}`, {}, {
+                const { data: selesai } = await axios.post(`/api/qc/so/data/selesai/${this.jenisSelesaiProsesStatus}`, {}, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
                     }
                 })
-                this.selesaiProsesData = selesaiproses.map((item, index) => {
+                this.selesaiProsesData = selesai.map((item, index) => {
                     return {
                         no: index + 1,
                         ...item,

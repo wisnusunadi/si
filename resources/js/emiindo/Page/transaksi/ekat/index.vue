@@ -131,6 +131,9 @@ export default {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
+        editEkat(item) {
+            window.location.href = `/penjualan/penjualan/edit_ekatalog/${item}/ekatalog`
+        },
     },
     computed: {
         yearsComputed() {
@@ -265,6 +268,12 @@ export default {
                                             <button class="dropdown-item" type="button" @click="detail(item)">
                                                 <i class="fas fa-eye"></i>
                                                 Detail
+                                            </button>
+                                        </a>
+                                        <a target="_blank" href="#">
+                                            <button class="dropdown-item" type="button" @click="editEkat(item.id)">
+                                                <i class="fas fa-pencil-alt"></i>
+                                                Edit
                                             </button>
                                         </a>
                                         <a target="_blank" href="#">
