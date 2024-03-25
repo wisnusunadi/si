@@ -1246,10 +1246,11 @@ class GudangController extends Controller
                 ->leftjoin('m_state as stt', 'stt.id', '=', 'p.log_id')
                 ->leftjoin('divisi as d', 'd.id', '=', 'h.dari')
                 ->leftjoin('divisi as dd', 'dd.id', '=', 'h.ke')
-                ->select('p.no_po as po', 't_gbj_noseri.created_at as tgl_keluar', 'h.pesanan_id as p_id', 'h.tgl_masuk', 'h.jenis', 't_gbj_detail.qty', 'dd.nama as ke', 'd.nama as dari', DB::raw('concat(prd.nama, " ", g.nama) as produkk'),   DB::raw('COUNT(t_gbj_noseri.id) as qty'), 't_gbj_detail.id', DB::raw('group_concat(t_gbj_noseri.id) as id_seri'), (DB::raw("DATE_FORMAT(t_gbj_noseri.created_at, '%Y-%m-%d') as tgl_keluar_seri")))
+                ->select('p.so as so', 't_gbj_noseri.created_at as tgl_keluar', 'h.pesanan_id as p_id', 'h.tgl_masuk', 'h.jenis', 't_gbj_detail.qty', 'dd.nama as ke', 'd.nama as dari', DB::raw('concat(prd.nama, " ", g.nama) as produkk'),   DB::raw('COUNT(t_gbj_noseri.id) as qty'), 't_gbj_detail.id', DB::raw('group_concat(t_gbj_noseri.id) as id_seri'), (DB::raw("DATE_FORMAT(t_gbj_noseri.created_at, '%Y-%m-%d') as tgl_keluar_seri")))
                 ->orderByDesc('t_gbj_noseri.created_at')
                 ->groupBy(DB::raw("DATE_FORMAT(t_gbj_noseri.created_at, '%d-%m-%Y')"), "t_gbj_noseri.t_gbj_detail_id")
                 ->get();
+
 
             $g = datatables()->of($data1)
                 ->addIndexColumn()
@@ -1288,8 +1289,8 @@ class GudangController extends Controller
                 //         return '-';
                 //     }
                 // })
-                ->addColumn('po', function ($d) {
-                    return $d->p_id != NULL ? $d->po : '-';
+                ->addColumn('so', function ($d) {
+                    return $d->p_id != NULL ? $d->so : '-';
                 })
                 ->addColumn('date_in', function ($d) {
                     if (isset($d->tgl_masuk)) {
@@ -1475,13 +1476,6 @@ class GudangController extends Controller
                 ->addColumn('so', function ($d) {
                     if (isset($d->header->pesanan_id)) {
                         return $d->header->pesanan->so;
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('po', function ($d) {
-                    if (isset($d->header->pesanan_id)) {
-                        return $d->header->pesanan->no_po;
                     } else {
                         return '-';
                     }

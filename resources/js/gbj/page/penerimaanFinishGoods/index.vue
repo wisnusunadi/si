@@ -34,6 +34,10 @@ export default {
                     value: 'tgl_masuk'
                 },
                 {
+                    text: 'Bagian',
+                    value: 'bagian'
+                },
+                {
                     text: 'Produk',
                     value: 'nama'
                 },
@@ -56,6 +60,7 @@ export default {
                     no_ref: 'NOMOR BPPB',
                     tgl_masuk: '23 September 2024',
                     nama: 'Produk 1',
+                    bagian: 'Produksi',
                     jumlah: 100,
                     status: 'perakitan'
                 },
@@ -64,6 +69,7 @@ export default {
                     no_ref: 'NOMOR SO',
                     tgl_masuk: '25 Januari 2024',
                     nama: 'Produk 1',
+                    bagian: 'Penjualan',
                     jumlah: 100,
                     status: 'retur'
                 },
@@ -72,6 +78,7 @@ export default {
                     no_ref: 'NOMOR SO',
                     tgl_masuk: '23 Februari 2024',
                     nama: 'Produk 1',
+                    bagian: 'Logistik',
                     jumlah: 100,
                     status: 'batal'
                 }
@@ -94,20 +101,20 @@ export default {
             switch (status) {
                 case 'perakitan':
                     return {
-                        text: 'Perakitan Dari Produksi',
+                        text: 'Perakitan',
                         color: 'badge-primary'
                     }
 
                 case 'retur':
                     return {
-                        text: 'Retur Dari Penjualan',
+                        text: 'Retur',
                         color: 'badge-warning'
                     }
 
                 case 'batal':
                     return {
                         // batal mengikuti data noseri dari departemen mana saja
-                        text: 'Batal Dari Logistik (logistik hanya contoh)',
+                        text: 'Batal',
                         color: 'badge-danger'
                     }
 

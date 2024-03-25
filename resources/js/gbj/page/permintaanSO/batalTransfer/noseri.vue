@@ -173,7 +173,7 @@ export default {
                 return
             }
 
-            if (this.noSeriSelected.length > this.detailSelected.jumlah_sisa) {
+            if (this.noSeriSelected.length > this.detailSelected.total) {
                 swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -209,7 +209,7 @@ export default {
                     <div class="modal-body">
                         <small>
                             <span class="text-danger">*</span>
-                            Nomor seri yang dipilih tidak boleh lebih dari {{ detailSelected.jumlah_sisa }}
+                            Nomor seri yang dipilih tidak boleh lebih dari {{ detailSelected.total }}
                         </small>
                         <div class="d-flex bd-highlight">
                             <div class="p-2 flex-grow-1 bd-highlight">
@@ -229,17 +229,21 @@ export default {
                         <data-table :items="noseri" :headers="headers" :search="search" v-if="!loading">
                             <template #header.id>
                                 <div>
-                                    <input type="checkbox" @click="checkAllData" :checked="checkAll">
+                                    <input type="checkbox" @click="checkAllData" :checked="checkAll"
+                                        v-if="detailSelected.sudah_transfer != detailSelected.total">
                                 </div>
                             </template>
                             <template #item.id="{ item }">
-                                <div v-if="!noseriterpakai(item)">
-                                    <input type="checkbox" @click="checkNoSeri(item)"
-                                        :checked="noSeriSelected && noSeriSelected.find(noseri => noseri.id === item.id)">
+                                <div v-if="detailSelected.sudah_transfer != detailSelected.total">
+                                    <div v-if="!noseriterpakai(item)">
+                                        <input type="checkbox" @click="checkNoSeri(item)"
+                                            :checked="noSeriSelected && noSeriSelected.find(noseri => noseri.id === item.id)">
+                                    </div>
+                                    <div v-else>
+                                        <span class="badge badge-info">No Seri Terpakai</span>
+                                    </div>
                                 </div>
-                                <div v-else>
-                                    <span class="badge badge-info">No Seri Terpakai</span>
-                                </div>
+                                <div></div>
                             </template>
                         </data-table>
                         <div v-else class="d-flex justify-content-center">
@@ -254,7 +258,8 @@ export default {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-info" @click="simpanSeri">Simpan</button>
+                        <button type="button" class="btn btn-info" @click="simpanSeri"
+                            v-if="detailSelected.sudah_transfer != detailSelected.total">Simpan</button>
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                     </div>
                 </div>

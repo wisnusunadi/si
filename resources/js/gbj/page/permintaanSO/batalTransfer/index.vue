@@ -39,20 +39,24 @@ export default {
                     so: 'SO-2021-0001',
                     po: 'PO-2021-0001',
                     customer: 'PT. ABC',
-                    belum_transfer: 10,
-                    persentase_belum_transfer: 10,
-                    sudah_transfer: 90,
-                    persentase_sudah_transfer: 90,
+                    sudah_transfer: 0,
+                    total: 100,
                 },
                 {
                     no: 2,
                     so: 'SO-2021-0001',
                     po: 'PO-2021-0001',
                     customer: 'PT. ABC',
-                    belum_transfer: 0,
-                    persentase_belum_transfer: 0,
+                    sudah_transfer: 20,
+                    total: 100,
+                },
+                {
+                    no: 2,
+                    so: 'SO-2021-0001',
+                    po: 'PO-2021-0001',
+                    customer: 'PT. ABC',
                     sudah_transfer: 100,
-                    persentase_sudah_transfer: 100,
+                    total: 100,
                 }
             ],
             detailSelected: {},
@@ -67,6 +71,24 @@ export default {
                 $('.modalTransfer').modal('show')
             })
         },
+        progressTransfer(item) {
+            if (item.sudah_transfer == item.total) {
+                return {
+                    text: 'Sudah Transfer',
+                    color: 'badge-success'
+                }
+            } else if (item.sudah_transfer == 0) {
+                return {
+                    text: 'Belum Transfer',
+                    color: 'badge-danger'
+                }
+            } else {
+                return {
+                    text: 'Sudah Transfer Sebagian',
+                    color: 'badge-warning'
+                }
+            }
+        }
     },
 }
 </script>
@@ -82,13 +104,7 @@ export default {
             <data-table :headers="headers" :items="items" :search="search">
                 <template #item.progress="{ item }">
                     <div>
-                        <span class="badge badge-info">Belum Transfer: {{ item.belum_transfer }}
-                            ({{
-                            item.persentase_belum_transfer }}%)</span> <br>
-                        <span class="badge badge-warning">Sudah Transfer: {{ item.sudah_transfer }} ({{
-                            item.sudah_transfer
-                            }}%)</span>
-
+                        <span :class="'badge ' + progressTransfer(item).color">{{ progressTransfer(item).text }}</span>
                     </div>
                 </template>
                 <template #item.aksi="{ item }">

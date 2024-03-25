@@ -10,26 +10,25 @@ export default {
             produk: [
                 {
                     "id": 194,
-                    "nama": "BT-100 (BIG TROLLEY)",
-                    "jumlah": "1",
-                    "jumlah_sisa": 0,
-                    "jumlah_gudang": 1,
+                    "nama": "BT-100 (BIG TROLLEY) + TROLLEY",
                     "item": [
                         {
                             "id": 241,
                             "gudang_id": 24,
                             "nama": "BT-100 (Big) ",
                             "merk": "ELITECH",
-                            "jumlah": "1",
-                            "jumlah_gudang": 0,
-                            "jumlah_sisa": 1,
-                            "status": true,
-                            "persentase_belum": 20,
-                            "persentase_sudah": 80
+                            sudah_transfer: 0,
+                            total: 5,
+                        },
+                        {
+                            "id": 242,
+                            "gudang_id": 24,
+                            "nama": "TROLLEY",
+                            "merk": "ELITECH",
+                            sudah_transfer: 5,
+                            total: 5,
                         }
                     ],
-                    "persentase_belum": 20,
-                    "persentase_sudah": 80
                 }
             ],
             search: '',
@@ -84,6 +83,24 @@ export default {
 
             if (produkNoSeri.length == 0) {
                 swal.fire('Error', 'Produk belum memiliki no seri', 'error');
+            }
+        },
+        progressTransfer(item) {
+            if (item.sudah_transfer == item.total) {
+                return {
+                    text: 'Sudah Transfer',
+                    color: 'badge-success'
+                }
+            } else if (item.sudah_transfer == 0) {
+                return {
+                    text: 'Belum Transfer',
+                    color: 'badge-danger'
+                }
+            } else {
+                return {
+                    text: 'Sudah Transfer Sebagian',
+                    color: 'badge-warning'
+                }
             }
         }
     },
@@ -156,7 +173,7 @@ export default {
                                         <tr>
                                             <th>Produk</th>
                                             <th>Jumlah</th>
-                                            <th>Jumlah No Seri Dipilih</th>
+                                            <th v-if="detail.sudah_transfer != detail.total">Jumlah No Seri Dipilih</th>
                                             <th>Merk</th>
                                             <th>Progress</th>
                                             <th>Aksi</th>
@@ -166,45 +183,25 @@ export default {
                                         <template v-for="paket in filterRecursive">
                                             <tr class="table-dark">
                                                 <td colspan="100%">
-                                                    {{ paket.nama }} <br>
-                                                    <span class="badge badge-light">Belum Transfer: {{ paket.jumlah_sisa
-                                                        }}
-                                                        ({{ paket.
-            persentase_belum }}%)</span>
-                                                    <span class="badge badge-warning">
-                                                        Sudah Transfer: {{ paket.jumlah_gudang }} ({{
-            paket.persentase_sudah
-        }}%)
-                                                    </span>
+                                                    {{ paket.nama }}
                                                 </td>
                                             </tr>
                                             <tr v-for="item in paket.item" :key="item.id">
                                                 <td>{{ item.nama }}</td>
-                                                <td>{{ item.jumlah_sisa }}</td>
-                                                <td>{{ item.noseri?.length ?? 0 }}</td>
+                                                <td>{{ item.total }}</td>
+                                                <td v-if="detail.sudah_transfer != detail.total">{{ item.noseri?.length
+            ?? 0 }}</td>
                                                 <td>{{ item.merk }}</td>
                                                 <td>
-                                                    <span class="badge badge-info">Belum Transfer: {{ item.jumlah_sisa
-                                                        }}
-                                                        ({{
-            item.persentase_belum }}%)</span> <br>
-                                                    <span class="badge badge-warning">Sudah Transfer: {{
-            item.jumlah_gudang
-        }}
-                                                        ({{
-                item.persentase_sudah
-                                                        }}%)</span>
+                                                    <span :class="'badge ' + progressTransfer(item).color">{{
+            progressTransfer(item).text }}</span>
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-primary"
-                                                        @click="showModalNoseri(item, paket)" v-if="item.status">
+                                                        @click="showModalNoseri(item, paket)">
                                                         <i class="fa fa-qrcode"></i>
                                                         Nomor Seri
                                                     </button>
-                                                    <span v-else>
-                                                        {{ item.persentase_sudah == 100 || item.jumlah_sisa == 0 ?
-                                                        'Produk Sudah Ditransfer' : 'Siapkan Produk Dahulu' }}
-                                                    </span>
                                                 </td>
                                             </tr>
                                         </template>
@@ -220,8 +217,8 @@ export default {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                        <button type="button" class="btn btn-primary" @click="transfer"
-                            v-if="detail.persentase_sudah_transfer != 100">Simpan</button>
+                        <button type="button" class="btn btn-success" @click="transfer"
+                            v-if="detail.sudah_transfer != detail.total">Transfer</button>
                     </div>
                 </div>
             </div>
