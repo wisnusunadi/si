@@ -1140,7 +1140,7 @@ return [
         [
             'text' => 'Sales Order',
             'icon' => 'fas fa-clipboard-check',
-            'url' => '/qc/so/show',
+            'url' => '/qc/so',
             'auth' => [23, 34],
         ],
         [
@@ -1460,7 +1460,7 @@ return [
         [
             'text' => 'Sales Order',
             'icon' => 'fas fa-dolly fa-fw',
-            'url' => '/logistik/so/show',
+            'url' => '/logistik/so',
             'auth' => [15],
         ],
         [

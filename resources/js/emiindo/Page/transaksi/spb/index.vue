@@ -89,7 +89,10 @@ export default {
             } else {
                 this.$emit('refresh')
             }
-        }
+        },
+        editSpb(item) {
+            window.location.href = `/penjualan/penjualan/edit_ekatalog/${item}/spb`
+        },
     },
     computed: {
         yearsComputed() {
@@ -172,6 +175,12 @@ export default {
                                 </button>
                             </a>
                             <a target="_blank" href="#">
+                                <button class="dropdown-item" type="button" @click="editSpb(item.id)">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    Edit
+                                </button>
+                            </a>
+                            <a target="_blank" href="#">
                                 <button class="dropdown-item" type="button" @click="cetakSPPB(item.pesanan_id)">
                                     <i class="fas fa-print"></i>
                                     SPPB
@@ -199,7 +208,7 @@ export default {
                     </div>
                 </div>
             </div>
-                
+
         </div>
     </div>
 </template>

@@ -29,6 +29,7 @@ use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\RiwayatGagalKalibrasi;
+use App\Models\RiwayatReturPoPrd;
 use App\Models\Satuan;
 use App\Models\SeriGanti;
 use App\Models\SeriDetailRw;
@@ -1246,10 +1247,11 @@ class GudangController extends Controller
                 ->leftjoin('m_state as stt', 'stt.id', '=', 'p.log_id')
                 ->leftjoin('divisi as d', 'd.id', '=', 'h.dari')
                 ->leftjoin('divisi as dd', 'dd.id', '=', 'h.ke')
-                ->select('p.no_po as po', 't_gbj_noseri.created_at as tgl_keluar', 'h.pesanan_id as p_id', 'h.tgl_masuk', 'h.jenis', 't_gbj_detail.qty', 'dd.nama as ke', 'd.nama as dari', DB::raw('concat(prd.nama, " ", g.nama) as produkk'),   DB::raw('COUNT(t_gbj_noseri.id) as qty'), 't_gbj_detail.id', DB::raw('group_concat(t_gbj_noseri.id) as id_seri'), (DB::raw("DATE_FORMAT(t_gbj_noseri.created_at, '%Y-%m-%d') as tgl_keluar_seri")))
+                ->select('p.so as so', 't_gbj_noseri.created_at as tgl_keluar', 'h.pesanan_id as p_id', 'h.tgl_masuk', 'h.jenis', 't_gbj_detail.qty', 'dd.nama as ke', 'd.nama as dari', DB::raw('concat(prd.nama, " ", g.nama) as produkk'),   DB::raw('COUNT(t_gbj_noseri.id) as qty'), 't_gbj_detail.id', DB::raw('group_concat(t_gbj_noseri.id) as id_seri'), (DB::raw("DATE_FORMAT(t_gbj_noseri.created_at, '%Y-%m-%d') as tgl_keluar_seri")))
                 ->orderByDesc('t_gbj_noseri.created_at')
                 ->groupBy(DB::raw("DATE_FORMAT(t_gbj_noseri.created_at, '%d-%m-%Y')"), "t_gbj_noseri.t_gbj_detail_id")
                 ->get();
+
 
             $g = datatables()->of($data1)
                 ->addIndexColumn()
@@ -1288,8 +1290,8 @@ class GudangController extends Controller
                 //         return '-';
                 //     }
                 // })
-                ->addColumn('po', function ($d) {
-                    return $d->p_id != NULL ? $d->po : '-';
+                ->addColumn('so', function ($d) {
+                    return $d->p_id != NULL ? $d->so : '-';
                 })
                 ->addColumn('date_in', function ($d) {
                     if (isset($d->tgl_masuk)) {
@@ -1475,13 +1477,6 @@ class GudangController extends Controller
                 ->addColumn('so', function ($d) {
                     if (isset($d->header->pesanan_id)) {
                         return $d->header->pesanan->so;
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('po', function ($d) {
-                    if (isset($d->header->pesanan_id)) {
-                        return $d->header->pesanan->no_po;
                     } else {
                         return '-';
                     }
@@ -2121,7 +2116,7 @@ class GudangController extends Controller
             //     });
             // })->where('status_id', null)->where('jenis', 'masuk')->get();
             $parameter = isset($request->tahun) ? $request->tahun : '2023';
-            $data = DB::select("select
+            $prd = DB::select("select
             tgd.id,
             (select jp.no_bppb  from jadwal_perakitan jp
             join jadwal_rakit_noseri jrn ON jrn.jadwal_id = jp.id
@@ -2130,11 +2125,11 @@ class GudangController extends Controller
              left join t_gbj_noseri tgn on tgn.noseri_id = nbj.id
              where tgn.t_gbj_detail_id  = tgd.id
              limit 1)
-            ) AS bppb,
+            ) AS no_ref,
             (SELECT COUNT(t_gbj_noseri.id) FROM t_gbj_noseri WHERE t_gbj_noseri.t_gbj_detail_id = tgd.id AND t_gbj_noseri.status_id is null and t_gbj_noseri.jenis = 'masuk') AS jumlah,
             gbj.id as gbj_id,
             tg.tgl_masuk,
-            concat(p.nama, ' ', gbj.nama) as product
+            concat(p.nama, ' ', gbj.nama) as nama
             from t_gbj_detail tgd
             left join t_gbj tg on tg.id = tgd.t_gbj_id
             left join gdg_barang_jadi gbj on gbj.id = tgd.gdg_brg_jadi_id
@@ -2144,10 +2139,51 @@ class GudangController extends Controller
             group by  tgd.id
             ", [$parameter]);
 
+            $retur = RiwayatReturPoPrd::select('riwayat_retur_po_prd.id','pesanan.no_po','produk.nama','gdg_barang_jadi.nama as variasi','riwayat_retur_po_paket.updated_at as tgl_masuk')
+            ->addSelect([
+                'cterjadwal' => function ($q){
+                    $q->selectRaw('coalesce(count(riwayat_retur_po_seri.id),0)')
+                        ->from('riwayat_retur_po_seri')
+                        ->where('status', 1)
+                        ->whereColumn('riwayat_retur_po_seri.detail_riwayat_retur_prd_id', 'riwayat_retur_po_prd.id');
+                },
+            ])
+            ->leftJoin('riwayat_retur_po_paket','riwayat_retur_po_paket.id','=','riwayat_retur_po_prd.detail_riwayat_retur_paket_id')
+            ->leftJoin('detail_pesanan','riwayat_retur_po_paket.detail_pesanan_id','=','detail_pesanan.id')
+            ->leftJoin('pesanan','pesanan.id','=','detail_pesanan.pesanan_id')
+            ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','riwayat_retur_po_prd.gudang_barang_jadi_id')
+            ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
+            ->havingRaw('cterjadwal > 0')
+            ->get();
+
+            foreach($retur as $r){
+                $obj[] = array(
+                    'id' => $r->id,
+                    'no_ref' => $r->no_po ,
+                    'nama' => $r->nama  . $r->variasi,
+                    'tgl_masuk' => $r->tgl_masuk,
+                    'jumlah' => $r->cterjadwal,
+                    'status' => 'retur'
+                );
+            }
+
+            foreach($prd as $r){
+                $obj[] = array(
+                    'id' => $r->id,
+                    'no_ref' => $r->no_ref,
+                    'nama' => $r->nama ,
+                    'tgl_masuk' => $r->tgl_masuk,
+                    'jumlah' => $r->jumlah,
+                    'status' => 'produksi'
+                );
+            }
+
+            return response()->json($obj);
+
+            //Query Lama
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('bppb', function ($d) {
-
                     return $d->bppb;
                 })
                 ->addColumn('tgl_masuk', function ($d) {

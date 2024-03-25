@@ -2759,6 +2759,9 @@ class LogistikController extends Controller
         }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderByDesc('created_at')->union($prd)->union($part)->get();
 
         $data = $partjasa;
+
+        return response()->json($data);
+        
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {

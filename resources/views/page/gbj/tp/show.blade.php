@@ -170,8 +170,7 @@
                             <table class="table tableProdukView">
                                 <thead>
                                     <tr>
-                                        <th style="width: 20%">Nomor SO</th>
-                                        <th style="width: 20%">Nomor PO</th>
+                                        <th style="width: 20%">Nomor Referensi</th>
                                         <th style="width: 20%">Tanggal Masuk</th>
                                         <th style="width: 20%">Tanggal Keluar</th>
                                         <th style="width: 20%">Dari/Ke</th>
@@ -338,9 +337,6 @@
                 columns: [{
                         data: 'so',
                         name: 'so'
-                    },
-                    {
-                        data: 'po'
                     },
                     {
                         data: 'date_in',

@@ -1,6 +1,10 @@
 <script>
+import cetakSJ from './cetakSJ.vue';
 export default {
     props: ['dalam'],
+    components: {
+        cetakSJ
+    },
     data() {
         return {
             headers: [
@@ -38,6 +42,8 @@ export default {
                 }
             ],
             search: '',
+            showModal: false,
+            detailSelected: {},
         }
     },
     methods: {
@@ -65,11 +71,19 @@ export default {
                 }
             }
         },
+        showDetailSelected(item) {
+            this.detailSelected = item;
+            this.showModal = true;
+            this.$nextTick(() => {
+                $('.modalCetak').modal('show');
+            });
+        }, 
     },
 }
 </script>
 <template>
     <div>
+        <cetakSJ v-if="showModal" @close="showModal = false" :detail="detailSelected" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" class="form-control" v-model="search" placeholder="Cari...">
@@ -79,7 +93,7 @@ export default {
             <template #item.tgl_kontrak="{ item }">
                 <div v-if="item.tgl_kontrak">
                     <div :class="calculateDateFromNow(item.tgl_kontrak).color">{{
-                    dateFormat(item.tgl_kontrak) }}</div>
+                        dateFormat(item.tgl_kontrak) }}</div>
                     <small :class="calculateDateFromNow(item.tgl_kontrak).color">
                         <i :class="calculateDateFromNow(item.tgl_kontrak).icon"></i>
                         {{ calculateDateFromNow(item.tgl_kontrak).text }}
@@ -88,8 +102,13 @@ export default {
                 <div v-else></div>
             </template>
             <template #item.aksi="{ item }">
-                <div>
-
+                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true"
+                    aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                    <button class="dropdown-item cetaksj" type="button" @click="showDetailSelected(item)">
+                        <i class="fas fa-print"></i>
+                        Cetak Surat Jalan
+                    </button>
                 </div>
             </template>
         </data-table>

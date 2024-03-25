@@ -9443,8 +9443,8 @@ class PenjualanController extends Controller
         $data = Pesanan::find($id);
         $item = array();
 
-        if($data->DetailPesanan){
-            foreach($data->DetailPesanan as $d){
+        if ($data->DetailPesanan) {
+            foreach ($data->DetailPesanan as $d) {
                 $item[] = array(
                     'id' => $d->id,
                     'nama' => $d->PenjualanProduk->nama,
@@ -9455,8 +9455,8 @@ class PenjualanController extends Controller
             }
         }
 
-        if($data->DetailPesananPart){
-            foreach($data->DetailPesananPart as $d){
+        if ($data->DetailPesananPart) {
+            foreach ($data->DetailPesananPart as $d) {
                 $item[] = array(
                     'id' => $d->id,
                     'nama' => $d->Sparepart->nama,
@@ -9464,10 +9464,8 @@ class PenjualanController extends Controller
                     'jenis' => 'part'
                 );
             }
-
         }
         return response()->json($item);
-
     }
 
     public function kirim_prd_retur_po(Request $request)
@@ -9596,6 +9594,7 @@ class PenjualanController extends Controller
                     }
                 }
             }
+
 
         return response()->json($item);
     }
