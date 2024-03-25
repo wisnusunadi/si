@@ -30,7 +30,29 @@ export default {
                     value: 'aksi'
                 }
             ],
-            search: ''
+            search: '',
+            status: [
+                {
+                    text: 'E-Catalogue',
+                    value: 'ekatalog'
+                },
+                {
+                    text: 'SPA',
+                    value: 'spa'
+                },
+                {
+                    text: 'SPB',
+                    value: 'spb'
+                }
+            ]
+        }
+    },
+    methods: {
+        cetak_sppb(id) {
+            window.open(`/penjualan/penjualan/cetak_surat_perintah/${id}`, '_blank');
+        },
+        filter(status) {
+            this.$emit('filter', status);
         }
     },
 }
@@ -48,29 +70,11 @@ export default {
                         <div class="dropdown-menu" style="">
                             <div class="px-3 py-3">
                                 <div class="form-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="ekatalog"
-                                            id="defaultCheck1" name="jenis_penj[]">
+                                    <div class="form-check" v-for="(status, key) in status" :key="key">
+                                        <input class="form-check-input" type="checkbox" :value="status.value"
+                                            :id="`status${key}`" @click="filter(status.value)">
                                         <label class="form-check-label" for="defaultCheck1">
-                                            E-Catalogue
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2"
-                                            name="jenis_penj[]">
-                                        <label class="form-check-label" for="defaultCheck2">
-                                            SPA
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="spb" id="defaultCheck3"
-                                            name="jenis_penj[]">
-                                        <label class="form-check-label" for="defaultCheck3">
-                                            SPB
+                                            {{ status.text }}
                                         </label>
                                     </div>
                                 </div>
@@ -83,19 +87,26 @@ export default {
                 <input type="text" class="form-control" v-model="search" placeholder="Cari...">
             </div>
         </div>
-        <data-table :headers="headers" :items="selesai" :search="search">
+        <data-table :headers="headers" :items="selesai" :search="search" v-if="!$store.state.loading">
             <template #item.aksi="{ item }">
                 <div>
                     <button class="btn btn-outline-primary btn-sm">
                         <i class="fas fa-eye"></i>
                         Detail
                     </button>
-                    <button class="btn btn-outline-primary btn-sm">
+                    <button class="btn btn-outline-primary btn-sm" @click="cetak_sppb(item.id)">
                         <i class="fas fa-print"></i>
                         SPPB
                     </button>
                 </div>
             </template>
         </data-table>
+        <div v-else>
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
     </div>
 </template>

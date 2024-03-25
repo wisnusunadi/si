@@ -1,9 +1,13 @@
 <script>
 import axios from 'axios';
 import seriviatext from './noseri.vue';
+import riwayat from './riwayat.vue';
+import editSJ from './editSJ.vue';
 export default {
     components: {
-        seriviatext
+        seriviatext,
+        riwayat,
+        editSJ
     },
     props: ['detail'],
     data() {
@@ -72,7 +76,8 @@ export default {
             checkAllPart: false,
             checkedPartSelected: [],
             showModalSeri: false,
-            detailSelected: {}
+            detailSelected: {},
+            riwayatCetak: [],
         }
     },
     methods: {
@@ -92,6 +97,13 @@ export default {
                     }
                 });
                 const { data: pesanan } = await axios.get(`/api/logistik/so/data/detail/item/${this.detail.id}`)
+                const { data: riwayatcetakData } = await axios.get(`/api/logistik/so/sj_draft/${this.detail.id}`).then(res => res.data)
+                this.riwayatCetak = riwayatcetakData.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item
+                    }
+                })
                 this.pesanan = pesanan;
             } catch (error) {
                 console.log(error)
@@ -201,6 +213,25 @@ export default {
                     return
                 }
             }
+        },
+        async editCetak(item) {
+            try {
+                const { data } = await axios.get(`/api/logistik/so/sj_draft/edit/${item.id}`)
+                this.detailSelected = data
+                this.showModalSeri = true
+                this.$nextTick(() => {
+                    $('.modalCetak').modal('hide');
+                    $('.modalEditSJ').modal('show');
+                });
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        closeEditSJ() {
+            this.showModalSeri = false
+            this.$nextTick(() => {
+                $('.modalCetak').modal('show');
+            });
         }
     },
     created() {
@@ -268,6 +299,7 @@ export default {
 <template>
     <div>
         <seriviatext v-if="showModalSeri" :noseriInput="detailSelected?.noseri" @close="closeNoSeri" @submit="submit" />
+        <editSJ v-if="showModalSeri" :form="detailSelected" @close="closeEditSJ" @refresh="getPesanan" />
         <div class="modal fade modalCetak" data-backdrop="static" data-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
@@ -537,7 +569,9 @@ export default {
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="pills-riwayat" role="tabpanel"
-                                aria-labelledby="pills-riwayat-tab">...</div>
+                                aria-labelledby="pills-riwayat-tab">
+                                <riwayat :items="riwayatCetak" @edit="editCetak" />
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

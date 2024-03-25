@@ -694,7 +694,9 @@ Route::prefix('/logistik')->group(function () {
         Route::post('detail/select/{pesanan_id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_select_produk']);
         Route::get('data/selesai/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_selesai_so']);
         Route::get('data/{value}/{tahun}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
-        Route::get('data/sj_draft/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj_draft']);
+        
+        Route::get('/sj_draft/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj_draft']);
+        Route::get('/sj_draft/edit/{id}', [App\Http\Controllers\LogistikController::class, 'edit_sj']);
         Route::get('data/sj_draft/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj_draft_detail']);
         Route::post('data/sj/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj']);
         Route::post('/data/sj_filter/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_filter_sj']);

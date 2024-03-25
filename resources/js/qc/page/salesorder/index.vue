@@ -63,6 +63,38 @@ export default {
             } finally {
                 this.$store.dispatch('setLoading', false)
             }
+        },
+        filterDataStatusDalamProses(status) {
+            if (this.jenisDalamProsesStatus.includes(status)) {
+                this.jenisDalamProsesStatus = this.jenisDalamProsesStatus.filter(item => item !== status)
+            } else {
+                this.jenisDalamProsesStatus = this.jenisDalamProsesStatus.filter(item => item !== 'semua')
+                this.jenisDalamProsesStatus.push(status)
+            }
+
+            if (this.jenisDalamProsesStatus.length === 0) {
+                this.jenisDalamProsesStatus.push('semua')
+            }
+
+            this.$nextTick(() => {
+                this.getData()
+            })
+        },
+        filterDataStatusSelesaiProses(status) {
+            if (this.jenisSelesaiProsesStatus.includes(status)) {
+                this.jenisSelesaiProsesStatus = this.jenisSelesaiProsesStatus.filter(item => item !== status)
+            } else {
+                this.jenisSelesaiProsesStatus = this.jenisSelesaiProsesStatus.filter(item => item !== 'semua')
+                this.jenisSelesaiProsesStatus.push(status)
+            }
+
+            if (this.jenisSelesaiProsesStatus.length === 0) {
+                this.jenisSelesaiProsesStatus.push('semua')
+            }
+
+            this.$nextTick(() => {
+                this.getData()
+            })
         }
     },
     created() {
@@ -95,10 +127,10 @@ export default {
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                         aria-labelledby="pills-home-tab">
-                        <dalamproses :dalam="dalamProsesData" />
+                        <dalamproses :dalam="dalamProsesData" @filter="filterDataStatusDalamProses" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <selesaiproses :selesai="selesaiProsesData" />
+                        <selesaiproses :selesai="selesaiProsesData" @filter="filterDataStatusSelesaiProses" />
                     </div>
                     <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                         <batalpo :batal="batalPoData" />

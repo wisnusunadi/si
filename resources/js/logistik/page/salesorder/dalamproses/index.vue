@@ -44,6 +44,16 @@ export default {
             search: '',
             showModal: false,
             detailSelected: {},
+            pengiriman: [
+                {
+                    text: 'Belum Dikirim',
+                    value: 'belum_kirim'
+                },
+                {
+                    text: 'Sebagian Dikirim',
+                    value: 'sebagian_kirim'
+                }
+            ]
         }
     },
     methods: {
@@ -77,14 +87,68 @@ export default {
             this.$nextTick(() => {
                 $('.modalCetak').modal('show');
             });
-        }, 
+        },
+        filterByYear(year) {
+            this.$store.dispatch('setYears', year);
+            this.$emit('refresh');
+        },
+        filter(status) {
+            this.$emit('filter', status);
+        }
     },
+    computed: {
+        years5BeforeNow() {
+            const years = [];
+            for (let i = 0; i < 5; i++) {
+                years.push(moment().subtract(i, 'years').format('YYYY'));
+            }
+            return years;
+        }
+    }
 }
 </script>
 <template>
     <div>
         <cetakSJ v-if="showModal" @close="showModal = false" :detail="detailSelected" />
-        <div class="d-flex flex-row-reverse bd-highlight">
+        <div class="d-flex bd-highlight">
+            <div class="p-2 flex-grow-1 bd-highlight">
+                <span class="filter">
+                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <i class="fas fa-filter"></i> Filter Tahun
+                    </button>
+                    <form id="filter">
+                        <div class="dropdown-menu" style="">
+                            <div class="px-3 py-3">
+                                <div class="form-group">
+
+                                    <div class="form-check" v-for="year in years5BeforeNow" :key="year">
+                                        <input class="form-check-input" type="radio" :value="year"
+                                            @click="filterByYear(year)" :checked="$store.state.years == year"
+                                            :id="'defaultCheck' + year" />
+                                        <label class="form-check-label" :for="'defaultCheck' + year">
+                                            {{ year }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="jenis_penjualan">Pengiriman</label>
+                                </div>
+                                <div class="form-group" v-for="(item, key) in pengiriman" :key="key">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" :value="item.value"
+                                        @click="filter(item.value)"
+                                            :id="`status${key}`">
+                                        <label class="form-check-label" :for="`status${key}`">
+                                            {{ item.text }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </span>
+            </div>
             <div class="p-2 bd-highlight">
                 <input type="text" class="form-control" v-model="search" placeholder="Cari...">
             </div>
@@ -93,7 +157,7 @@ export default {
             <template #item.tgl_kontrak="{ item }">
                 <div v-if="item.tgl_kontrak">
                     <div :class="calculateDateFromNow(item.tgl_kontrak).color">{{
-                        dateFormat(item.tgl_kontrak) }}</div>
+            dateFormat(item.tgl_kontrak) }}</div>
                     <small :class="calculateDateFromNow(item.tgl_kontrak).color">
                         <i :class="calculateDateFromNow(item.tgl_kontrak).icon"></i>
                         {{ calculateDateFromNow(item.tgl_kontrak).text }}
@@ -112,5 +176,10 @@ export default {
                 </div>
             </template>
         </data-table>
+        <div v-else class="text-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
     </div>
 </template>

@@ -369,7 +369,7 @@ class LogistikController extends Controller
     {
         $data = LogistikDraft::find($id);
 
-        return view('page.logistik.so.editsj', ['data' => $data]);
+        return response()->json($data);
     }
 
     public function get_data_select_produk(Request $r, $jenis)
@@ -2761,7 +2761,7 @@ class LogistikController extends Controller
         $data = $partjasa;
 
         return response()->json($data);
-        
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -5901,7 +5901,7 @@ class LogistikController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Gagal',
-            ], 200);
+            ], 404);
         } else {
             $data = LogistikDraft::find($request->id);
 

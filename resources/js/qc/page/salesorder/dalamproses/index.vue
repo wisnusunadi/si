@@ -10,6 +10,20 @@ export default {
         return {
             search: '',
             renderPaginate: [],
+            status: [
+                {
+                    text: 'E-Catalogue',
+                    value: 'ekatalog'
+                },
+                {
+                    text: 'SPA',
+                    value: 'spa'
+                },
+                {
+                    text: 'SPB',
+                    value: 'spb'
+                }
+            ]
         }
     },
     methods: {
@@ -40,6 +54,12 @@ export default {
                 }
             }
         },
+        cetak_sppb(id) {
+            window.open(`/penjualan/penjualan/cetak_surat_perintah/${id}`, '_blank');
+        },
+        filter(status) {
+            this.$emit('filter', status);
+        }
     },
     computed: {
         filteredDalamProses() {
@@ -73,29 +93,11 @@ export default {
                         <div class="dropdown-menu" style="">
                             <div class="px-3 py-3">
                                 <div class="form-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="ekatalog"
-                                            id="defaultCheck1" name="jenis_penj[]">
+                                    <div class="form-check" v-for="(status, key) in status" :key="key">
+                                        <input class="form-check-input" type="checkbox" :value="status.value"
+                                            :id="`status${key}`" @click="filter(status.value)">
                                         <label class="form-check-label" for="defaultCheck1">
-                                            E-Catalogue
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2"
-                                            name="jenis_penj[]">
-                                        <label class="form-check-label" for="defaultCheck2">
-                                            SPA
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="spb" id="defaultCheck3"
-                                            name="jenis_penj[]">
-                                        <label class="form-check-label" for="defaultCheck3">
-                                            SPB
+                                            {{ status.text }}
                                         </label>
                                     </div>
                                 </div>
@@ -108,64 +110,74 @@ export default {
                 <input type="text" class="form-control" v-model="search" placeholder="Cari...">
             </div>
         </div>
-        <table class="table text-center">
-            <thead>
-                <tr>
-                    <th rowspan="2">No</th>
-                    <th rowspan="2">No SO</th>
-                    <th rowspan="2">No PO</th>
-                    <th rowspan="2">Batas Pengujian</th>
-                    <th rowspan="2">Customer</th>
-                    <th rowspan="2">Keterangan</th>
-                    <th colspan="2">Hasil</th>
-                    <th rowspan="2">Status Transfer</th>
-                    <th rowspan="2">Aksi</th>
-                </tr>
-                <tr>
-                    <th><i class="fas fa-check text-success"></i></th>
-                    <th><i class="fas fa-times text-danger"></i></th>
-                </tr>
-            </thead>
-            <tbody v-if="renderPaginate.length > 0">
-                <tr v-for="(item, idx) in renderPaginate" :key="idx">
-                    <td>{{ item.no }}</td>
-                    <td>{{ item.so }}</td>
-                    <td>{{ item.no_po }}</td>
-                    <td>
-                        <div v-if="item.tgl_kontrak">
-                            <div :class="calculateDateFromNow(item.tgl_kontrak).color">{{
-                    dateFormat(item.tgl_kontrak) }}</div>
-                            <small :class="calculateDateFromNow(item.tgl_kontrak).color">
-                                <i :class="calculateDateFromNow(item.tgl_kontrak).icon"></i>
-                                {{ calculateDateFromNow(item.tgl_kontrak).text }}
-                            </small>
-                        </div>
-                        <div v-else></div>
-                    </td>
-                    <td>{{ item.customer }}</td>
-                    <td>{{ item.ket }}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-eye"></i>
-                            Detail
-                        </button>
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="fa fa-print"></i>
-                            SPPB
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-            <tbody v-else>
-                <tr>
-                    <td colspan="100%">Data tidak ditemukan</td>
-                </tr>
-            </tbody>
-        </table>
-        <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses" />
+        <div v-if="!$store.state.loading">
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th rowspan="2">No</th>
+                        <th rowspan="2">No SO</th>
+                        <th rowspan="2">No PO</th>
+                        <th rowspan="2">Batas Pengujian</th>
+                        <th rowspan="2">Customer</th>
+                        <th rowspan="2">Keterangan</th>
+                        <th colspan="2">Hasil</th>
+                        <th rowspan="2">Status Transfer</th>
+                        <th rowspan="2">Aksi</th>
+                    </tr>
+                    <tr>
+                        <th><i class="fas fa-check text-success"></i></th>
+                        <th><i class="fas fa-times text-danger"></i></th>
+                    </tr>
+                </thead>
+                <tbody v-if="renderPaginate.length > 0">
+                    <tr v-for="(item, idx) in renderPaginate" :key="idx">
+                        <td>{{ item.no }}</td>
+                        <td>{{ item.so }}</td>
+                        <td>{{ item.no_po }}</td>
+                        <td>
+                            <div v-if="item.tgl_kontrak">
+                                <div :class="calculateDateFromNow(item.tgl_kontrak).color">{{
+                                        dateFormat(item.tgl_kontrak) }}</div>
+                                <small :class="calculateDateFromNow(item.tgl_kontrak).color">
+                                    <i :class="calculateDateFromNow(item.tgl_kontrak).icon"></i>
+                                    {{ calculateDateFromNow(item.tgl_kontrak).text }}
+                                </small>
+                            </div>
+                            <div v-else></div>
+                        </td>
+                        <td>{{ item.customer }}</td>
+                        <td>{{ item.ket }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                                Detail
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary" @click="cetak_sppb(item.id)">
+                                <i class="fa fa-print"></i>
+                                SPPB
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody v-else>
+                    <tr>
+                        <td colspan="100%">Data tidak ditemukan</td>
+                    </tr>
+                </tbody>
+            </table>
+            <pagination :filteredDalamProses="filteredDalamProses"
+                @updateFilteredDalamProses="updateFilteredDalamProses" />
+        </div>
+        <div v-else>
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
 
     </div>
 </template>

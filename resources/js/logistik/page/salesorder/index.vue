@@ -25,6 +25,7 @@ export default {
                 }
             ],
             dalamProsesData: [],
+            jenisDalamProsesStatus: ["semua"],
             selesaiProsesData: [],
         }
     },
@@ -32,7 +33,7 @@ export default {
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true)
-                const { data: dalamProses } = await axios.get('/api/logistik/so/data/semua/2024')
+                const { data: dalamProses } = await axios.get(`/api/logistik/so/data/${this.jenisDalamProsesStatus}/${this.$store.state.years}`)
                 this.dalamProsesData = dalamProses.map((item, index) => {
                     return {
                         no: index + 1,
@@ -40,7 +41,7 @@ export default {
                     }
                 })
 
-                const { data: selesaiProses } = await axios.get('/api/logistik/so/data/selesai/2024')
+                const { data: selesaiProses } = await axios.get(`/api/logistik/so/data/selesai/${this.$store.state.years}`)
 
                 this.selesaiProsesData = selesaiProses.map((item, index) => {
                     return {
@@ -53,6 +54,22 @@ export default {
             } finally {
                 this.$store.dispatch('setLoading', false)
             }
+        },
+        filterDataStatusDalamProses(status) {
+            if (this.jenisDalamProsesStatus.includes(status)) {
+                this.jenisDalamProsesStatus = this.jenisDalamProsesStatus.filter(item => item !== status)
+            } else {
+                this.jenisDalamProsesStatus = this.jenisDalamProsesStatus.filter(item => item !== 'semua')
+                this.jenisDalamProsesStatus.push(status)
+            }
+
+            if (this.jenisDalamProsesStatus.length === 0) {
+                this.jenisDalamProsesStatus.push('semua')
+            }
+
+            this.$nextTick(() => {
+                this.getData()
+            })
         }
     },
     created() {
@@ -83,10 +100,11 @@ export default {
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                         aria-labelledby="pills-home-tab">
-                        <DalamProses :dalam="dalamProsesData" />
+                        <DalamProses :dalam="dalamProsesData" @refresh="getData"
+                            @filter="filterDataStatusDalamProses" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <SelesaiProses :selesai="selesaiProsesData" />
+                        <SelesaiProses :selesai="selesaiProsesData" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                         <BatalPo />
