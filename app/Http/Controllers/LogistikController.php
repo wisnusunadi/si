@@ -2473,6 +2473,8 @@ class LogistikController extends Controller
         //     'years' => $data
         // ]);
 
+        return response()->json($data);
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {

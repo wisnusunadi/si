@@ -32,7 +32,6 @@ export default {
                     value: 'aksi'
                 }
             ],
-            search: '',
             items: [
                 {
                     no: 1,
@@ -56,6 +55,7 @@ export default {
                 }
             ],
             detailSelected: {},
+            search: '',
             showModal: false,
         }
     },
@@ -67,37 +67,61 @@ export default {
                 $('.modalTransfer').modal('show')
             })
         },
+        kirim() {
+            this.$swal({
+                title: 'Apakah anda yakin?',
+                text: 'Data akan dikirim ke gudang',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, kirim!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$swal(
+                        'Berhasil!',
+                        'Data berhasil dikirim',
+                        'success'
+                    )
+                }
+
+            })
+        }
     },
 }
 </script>
 <template>
-    <div class="card">
+    <div>
         <produkComponents :detail="detailSelected" v-if="showModal" @close="showModal = false" />
-        <div class="card-body">
-            <div class="d-flex flex-row-reverse bd-highlight">
-                <div class="p-2 bd-highlight">
-                    <input type="text" class="form-control" v-model="search" placeholder="Cari...">
-                </div>
+        <div class="d-flex flex-row-reverse bd-highlight">
+            <div class="p-2 bd-highlight">
+                <input type="text" class="form-control" v-model="search">
             </div>
-            <data-table :headers="headers" :items="items" :search="search">
-                <template #item.progress="{ item }">
-                    <div>
-                        <span class="badge badge-info">Belum Transfer: {{ item.belum_transfer }}
-                            ({{
-                            item.persentase_belum_transfer }}%)</span> <br>
-                        <span class="badge badge-warning">Sudah Transfer: {{ item.sudah_transfer }} ({{
-                            item.sudah_transfer
-                            }}%)</span>
-
-                    </div>
-                </template>
-                <template #item.aksi="{ item }">
-                    <button class="btn btn-sm btn-outline-info" @click="showDetail(item)">
-                        <i class="fas fa-eye"></i>
-                        Detail
-                    </button>
-                </template>
-            </data-table>
         </div>
+        <data-table :headers="headers" :items="items" :search="search">
+            <template #item.progress="{ item }">
+                <div>
+                    <span class="badge badge-info">Belum Transfer: {{ item.belum_transfer }}
+                        ({{
+            item.persentase_belum_transfer }}%)</span> <br>
+                    <span class="badge badge-warning">Sudah Transfer: {{ item.sudah_transfer }} ({{
+            item.sudah_transfer
+        }}%)</span>
+
+                </div>
+            </template>
+            <template #item.aksi="{ item }">
+                <button class="btn btn-sm btn-outline-info" @click="showDetail(item)">
+                    <i class="fas fa-eye"></i>
+                    Detail
+                </button>
+            </template>
+            <button class="btn btn-sm btn-outline-primary" @click="kirim">
+                <i class="fa fa-paper-plane"></i>
+                Kirim
+            </button>
+
+        </data-table>
     </div>
 </template>

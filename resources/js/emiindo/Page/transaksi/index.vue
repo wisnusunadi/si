@@ -5,6 +5,7 @@ import ekat from './ekat'
 import spa from './spa'
 import spb from './spb'
 import penjualan from './penjualan'
+import moment from 'moment'
 export default {
     components: {
         Header,
@@ -15,6 +16,7 @@ export default {
     },
     data() {
         return {
+            moment: moment,
             title: 'Penjualan',
             breadcumbs: [
                 {
@@ -34,13 +36,24 @@ export default {
             jenisSpaStatus: ['semua'],
             jenisSpbStatus: ['semua'],
             jenisPenjualanTransaksiStatus: ['semua'],
-            jenisPenjualanStatus: ['semua']
+            jenisPenjualanStatus: ['semua'],
+            periodePenjualan: null,
         }
     },
     methods: {
+        async getYears() {
+            const { data: tahun } = await axios.get('/api/penjualan/getYearsPeriode')
+
+            this.periodePenjualan = tahun
+            this.$store.dispatch('setYears', tahun)
+            this.$nextTick(() => {
+                this.getData()
+            })
+        },
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true)
+
                 const { data: ekat } = await axios.get(`/api/ekatalog/data/${this.jenisEkatStatus}/${this.$store.state.years}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
@@ -203,13 +216,18 @@ export default {
         },
     },
     created() {
-        this.getData()
+        this.getYears()
     },
 }
 </script>
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
+        <div class="alert alert-danger" role="alert"
+            v-if="periodePenjualan != moment().format('YYYY') && !$store.state.loading">
+            <i class="fas fa-exclamation-triangle"></i>
+            Periode yang dibuka saat ini adalah periode {{ periodePenjualan }}
+        </div>
         <ul class="nav nav-tabs font-medium" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" href="#" id="home-tab" data-toggle="tab" data-target="#home" role="tab"

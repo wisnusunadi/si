@@ -16,7 +16,12 @@ const routes = [
         path: "/qc/riwayatUji",
         component: () => import("./page/riwayat"),
         name: "riwayatUji",
-    }
+    },
+    {
+        path: "/qc/so",
+        component: () => import("./page/salesorder"),
+        name: "salesOrder",
+    },
 ];
 
 const router = new VueRouter({

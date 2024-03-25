@@ -1,35 +1,40 @@
 import VueRouter from "vue-router";
-import setPemetian from './page/setPemetian'
-import detailPemetian from './page/setPemetian/proses/detail'
-import detailPengkardusan from './page/setPemetian/kardus/detail'
-import detailPembagian from './page/setPemetian/kardus/pembagian'    
+import setPemetian from "./page/setPemetian";
+import detailPemetian from "./page/setPemetian/proses/detail";
+import detailPengkardusan from "./page/setPemetian/kardus/detail";
+import detailPembagian from "./page/setPemetian/kardus/pembagian";
 
 const routes = [
     {
         path: "/logistik/pengiriman/pemetian",
         component: setPemetian,
-        name: "setPemetian"
+        name: "setPemetian",
     },
     {
         path: "/logistik/pengiriman/pemetian/:id",
         component: detailPemetian,
-        name: "detailPemetian"
+        name: "detailPemetian",
     },
     {
         path: "/logistik/pengiriman/pengkardusan/pembagian/:id",
         component: detailPembagian,
-        name: "detailPembagian"
+        name: "detailPembagian",
     },
     {
         path: "/logistik/pengiriman/pengkardusan/setKardus/:id",
         component: detailPengkardusan,
-        name: "detailPengkardusan"
-    }
-]
+        name: "detailPengkardusan",
+    },
+    {
+        path: "/logistik/so",
+        component: () => import("./page/salesorder"),
+        name: "salesorder",
+    },
+];
 
 const router = new VueRouter({
     mode: "history",
-    routes
+    routes,
 });
 
 export default router;
