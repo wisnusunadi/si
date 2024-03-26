@@ -2,6 +2,7 @@
 import batalComponents from '../batal/index.vue'
 import returComponents from '../retur.vue'
 import detailComponents from '../detail.vue'
+import doComponents from '../do.vue'
 import statusComponents from '../../../components/status.vue'
 import pagination from '../../../components/pagination.vue'
 export default {
@@ -10,6 +11,7 @@ export default {
         returComponents,
         detailComponents,
         statusComponents,
+        doComponents,
         pagination
     },
     props: ['ekat'],
@@ -84,6 +86,13 @@ export default {
             this.showModal = true
             this.$nextTick(() => {
                 $('.modalRetur').modal('show')
+            })
+        },
+        openDO(item) {
+            this.detailSelected = item
+            this.showModal = true
+            this.$nextTick(() => {
+                $('.modalDO').modal('show')
             })
         },
         detail(item) {
@@ -166,6 +175,7 @@ export default {
         <batalComponents v-if="showModal" @close="showModal = false" :batal="detailSelected" />
         <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected" />
         <detailComponents v-if="showModal" @close="showModal = false" :detail="detailSelected" />
+        <doComponents v-if="showModal" @close="showModal = false" :doData="detailSelected" @refresh="$emit('refresh')" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex bd-highlight">
@@ -284,7 +294,7 @@ export default {
                                             </button>
                                         </a>
                                         <a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="5092">
-                                            <button class="dropdown-item" type="button">
+                                            <button class="dropdown-item" type="button" @click="openDO(item)">
                                                 <i class="fas fa-pencil-alt"></i>
                                                 Edit No Urut &amp; DO
                                             </button>
