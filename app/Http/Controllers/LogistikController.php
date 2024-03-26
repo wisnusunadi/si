@@ -6107,7 +6107,7 @@ class LogistikController extends Controller
             "no_po" => $request->dataform['no_po'],
             "so" => $request->dataform['so'],
             "tgl_po" => $request->dataform['tgl_po'],
-            "ekspedisi" => $request->dataform['pengiriman_surat_jalan'] == 'ekspedisi' ? $request->dataform['ekspedisi']['nama'] : $request->dataform['nama_pengirim'],
+            "ekspedisi" => $request->dataform['pengiriman_surat_jalan'] == 'ekspedisi' ? $request->dataform['ekspedisi']['label'] : $request->dataform['nama_pengirim'],
             "keterangan_pengiriman" => $request->dataform['keterangan_pengiriman'],
             "up" => (isset($request->dataform['nama_pic']) ? $request->dataform['nama_pic'] : ""
             ) . (isset($request->dataform['telp_pic']) ? (isset($request->dataform['nama_pic']) ? " - telp. " : "telp. "

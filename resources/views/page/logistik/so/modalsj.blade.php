@@ -594,7 +594,7 @@
           dataform: dataform
         }
 
-        // post data
+        // post data 
         $.ajax({
           url: '/api/logistik/so/create_draft',
           type: 'POST',

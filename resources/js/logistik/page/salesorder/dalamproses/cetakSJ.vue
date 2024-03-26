@@ -193,7 +193,7 @@ export default {
             })
 
             // validasi jika noseri belum diinputkan
-            if (produk.length === 0) {
+            if (produk.length === 0 && this.produk.length > 0) {
                 this.$swal('Error', 'No Seri belum diinputkan', 'error')
                 return
             }
@@ -213,6 +213,39 @@ export default {
                     return
                 }
             }
+
+            const dataform = {
+                pesanan_id: this.pesanan.header.pesanan_id,
+                so: this.pesanan.header.so,
+                no_po: this.pesanan.header.no_po,
+                tgl_po: this.pesanan.header.tgl_po,
+                nama_customer: this.pesanan.header.customer.nama,
+                alamat_customer: this.pesanan.header.customer.alamat,
+                provinsi_id: this.pesanan.header.provinsi.id,
+                ...this.form,
+            }
+
+            let formData = {
+                dataform,
+            }
+
+            // jika produk dipilih maka push ke formData
+            if (this.checkedProductSelected.length > 0) {
+                formData.produk = this.checkedProductSelected
+            }
+
+            // jika part/jasa dipilih maka push ke formData
+            if (this.checkedPartSelected.length > 0) {
+                formData.part = this.checkedPartSelected
+            }
+
+            axios.post('/api/logistik/so/create_draft', formData).then(res => {
+                this.$swal('Success', 'Draft Surat Jalan berhasil dibuat', 'success')
+                window.open(`/logistik/pengiriman/prints/${res.data.id}`, '_blank')
+                this.getPesanan()
+            }).catch(err => {
+                this.$swal('Error', 'Draft Surat Jalan gagal dibuat', 'error')
+            })
         },
         async editCetak(item) {
             try {
@@ -250,6 +283,7 @@ export default {
                     }
                 } else {
                     this.form.pengiriman_surat_jalan = 'nonekspedisi';
+                    delete this.form.ekspedisi
                 }
                 this.produk = this.pesanan.item.produk
                 this.partJasa = this.pesanan.item.part

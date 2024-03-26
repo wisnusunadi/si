@@ -1,6 +1,7 @@
 <script>
 import alasanComponents from './alasanComponents.vue';
 export default {
+    props: ['batal'],
     components: {
         alasanComponents
     },
@@ -112,20 +113,21 @@ export default {
                         <div class="card removeshadow">
                             <div class="card-body border-0">
                                 <h5 class="card-title pl-2 py-2">
-                                    <b>PT XXYYZZ</b>
+                                    <b>{{ batal?.nama_customer }}</b>
                                 </h5>
                                 <ul class="fa-ul card-text">
                                     <li class="py-2">
                                         <span class="fa-li">
                                             <i class="fas fa-address-card fa-fw"></i>
                                         </span>
-                                        Alamat Perusahaan
+                                        {{ batal?.alamat }}
                                     </li>
                                     <li class="py-2">
                                         <span class="fa-li">
                                             <div class="fas fa-map-marker-alt fa-fw"></div>
                                         </span>
-                                        Nusa Tenggara Barat (NTB)
+                                        <em class="text-muted" v-if="!batal?.provinsi">Belum Tersedia</em>
+                                        {{ batal?.provinsi?.nama }}
                                     </li>
                                 </ul>
                             </div>
@@ -157,22 +159,13 @@ export default {
                                                         <small class="text-muted">No SO</small>
                                                     </div>
                                                     <div>
-                                                        <b>XXXYYYZZZ</b>
+                                                        <b> {{ batal?.so }}</b>
                                                     </div>
                                                 </div>
                                                 <div class="margin">
                                                     <div>
                                                         <small class="text-muted">Status</small>
-                                                    </div>
-                                                    <div>
-                                                        <div class="align-center">
-                                                            <div class="progress">
-                                                                <div class="progress-bar bg-light" role="progressbar"
-                                                                    aria-valuenow="0" style="width: 100%"
-                                                                    aria-valuemin="0" aria-valuemax="100">0%</div>
-                                                            </div>
-                                                            <small class="text-muted">Selesai</small>
-                                                        </div>
+                                                        <persentase :persentase="batal.persentase" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -180,14 +173,14 @@ export default {
                                                 <div class="margin">
                                                     <div><small class="text-muted">No PO</small></div>
                                                     <div><b>
-                                                            PO-xxyyzz
+                                                            {{ batal?.no_po }}
                                                         </b>
                                                     </div>
                                                 </div>
                                                 <div class="margin">
                                                     <div><small class="text-muted">Tanggal PO</small></div>
                                                     <div><b>
-                                                            18-03-2024
+                                                            {{ dateFormat(batal?.pesanan?.tgl_po) }}
                                                         </b>
                                                     </div>
                                                 </div>
@@ -195,16 +188,18 @@ export default {
                                             <div class="p-2">
                                                 <div class="margin">
                                                     <div><small class="text-muted">No DO</small></div>
-                                                    <div><b>
-                                                            <em class="text-muted">Belum Tersedia</em>
+                                                    <div><b v-if="batal?.no_do">
+                                                            {{ batal?.no_do }}
                                                         </b>
+                                                        <em v-else>Belum ada</em>
                                                     </div>
                                                 </div>
                                                 <div class="margin">
                                                     <div><small class="text-muted">Tanggal DO</small></div>
-                                                    <div><b>
-                                                            <em class="text-muted">Belum Tersedia</em>
+                                                    <div><b v-if="batal?.pesanan?.tgl_do">
+                                                            {{ dateFormat(batal?.pesanan?.tgl_do) }}
                                                         </b>
+                                                        <em v-else>Belum ada</em>
                                                     </div>
                                                 </div>
                                             </div>
