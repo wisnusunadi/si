@@ -175,7 +175,9 @@ class DetailPesanan extends Model
         $id = $this->id;
         $s = DetailLogistik::
         leftJoin('detail_pesanan_produk','detail_logistik.detail_pesanan_produk_id','=','detail_pesanan_produk.id')
+        ->leftJoin('logistik','logistik.id','=','detail_logistik.logistik_id')
         ->where('detail_pesanan_produk.detail_pesanan_id', $id)
+        ->where('logistik.status_id', 10)
         ->groupBy('detail_logistik.detail_pesanan_produk_id')
         ->pluck('detail_logistik.detail_pesanan_produk_id')
         ->count('detail_logistik.id');
