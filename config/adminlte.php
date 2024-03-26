@@ -1396,6 +1396,12 @@ return [
             'auth' => [13, 31],
         ],
         [
+            'text' => 'Selain Sales Order',
+            'url' => '/gbj/nso',
+            'icon' => 'fas fa-book-open',
+            'auth' => [13, 31],
+        ],
+        [
             'text' => 'Penggantian Unit',
             'url' => '/gbj/changeunit',
             'icon' => 'fas fa-retweet',

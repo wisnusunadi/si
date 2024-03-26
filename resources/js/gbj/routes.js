@@ -28,6 +28,10 @@ const routes = [
         path: "/gbj/dp",
         component: () => import("./page/penerimaanFinishGoods"),
     },
+    {
+        path: "/gbj/nso",
+        component: () => import("./page/permintaanNSO"),
+    },
 ];
 
 const router = new VueRouter({
