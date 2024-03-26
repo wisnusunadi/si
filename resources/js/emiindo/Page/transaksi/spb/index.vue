@@ -93,6 +93,20 @@ export default {
         editSpb(item) {
             window.location.href = `/penjualan/penjualan/edit_ekatalog/${item}/spb`
         },
+        batal(item) {
+            this.detailSelected = item
+            this.showModal = true
+            this.$nextTick(() => {
+                $('.modalBatal').modal('show')
+            })
+        },
+        retur(item) {
+            this.detailSelected = item
+            this.showModal = true
+            this.$nextTick(() => {
+                $('.modalRetur').modal('show')
+            })
+        },
     },
     computed: {
         yearsComputed() {
@@ -107,8 +121,8 @@ export default {
 </script>
 <template>
     <div class="card">
-        <batalComponents v-if="showModal" @close="showModal = false" />
-        <returComponents v-if="showModal" @close="showModal = false" />
+        <batalComponents v-if="showModal" @close="showModal = false" :batal="detailSelected" />
+        <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected" />
         <detailComponents v-if="showModal" @close="showModal = false" :detail="detailSelected" />
 
         <div class="card-body">
@@ -192,10 +206,11 @@ export default {
                                     Edit No Urut &amp; DO
                                 </button>
                             </a>
-                            <a href="#"><button class="dropdown-item openModalBatalRetur" type="button"><i
-                                        class="fas fa-times"></i> Batal</button></a>
-                            <a href="#"><button class="dropdown-item openModalBatalRetur" type="button"><i
-                                        class="fa-solid fa-arrow-rotate-left"></i>
+                            <a href="#"><button class="dropdown-item openModalBatalRetur" @click="batal(item)"
+                                    type="button"><i class="fas fa-times"></i>
+                                    Batal</button></a>
+                            <a href="#"><button class="dropdown-item openModalBatalRetur" @click="retur(item)"
+                                    type="button"><i class="fa-solid fa-arrow-rotate-left"></i>
                                     Retur</button></a>
                         </div>
                     </div>

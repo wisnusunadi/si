@@ -163,8 +163,8 @@ export default {
 </script>
 <template>
     <div>
-        <batalComponents v-if="showModal" @close="showModal = false" />
-        <returComponents v-if="showModal" @close="showModal = false" />
+        <batalComponents v-if="showModal" @close="showModal = false" :batal="detailSelected" />
+        <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected" />
         <detailComponents v-if="showModal" @close="showModal = false" :detail="detailSelected" />
         <div class="card">
             <div class="card-body">
