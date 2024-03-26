@@ -172,6 +172,8 @@ Route::prefix('/penjualan')->group(function () {
 
     Route::prefix('/retur_po')->group(function () {
         Route::post('/kirim/', [App\Http\Controllers\PenjualanController::class, 'kirim_prd_retur_po']);
+        Route::get('/detail_paket/{id}', [App\Http\Controllers\PenjualanController::class, 'get_detail_paket_retur_po']);
+        Route::get('/detail_prd/{id}', [App\Http\Controllers\PenjualanController::class, 'get_detail_prd_retur_po']);
     });
 
         Route::prefix('/batal_po')->group(function () {
@@ -351,7 +353,7 @@ Route::prefix('/tfp')->group(function () {
     Route::get('header-so/{id}/{value}', [ProduksiController::class, 'headerSo']);
     Route::get('rakit', [GudangController::class, 'getRakit']);
     Route::get('rakit-noseri/{id}/{value}', [GudangController::class, 'getRakitNoseri']);
-    Route::get('rakit-terima/{id}/{value}', [GudangController::class, 'getTerimaRakit']);
+    Route::get('rakit-terima/{id}/{value}/{jenis}', [GudangController::class, 'getTerimaRakit']);
     Route::post('/seri-so', [ProduksiController::class, 'getNoseriSO']);
     Route::post('/seri-edit-so', [ProduksiController::class, 'getNoseriSOEdit']);
     Route::post('/closeRakit', [ProduksiController::class, 'closeRakit']);
@@ -699,7 +701,7 @@ Route::prefix('/logistik')->group(function () {
         Route::post('detail/select/{pesanan_id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_select_produk']);
         Route::get('data/selesai/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_selesai_so']);
         Route::get('data/{value}/{tahun}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
-        
+
         Route::get('/sj_draft/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj_draft']);
         Route::get('/sj_draft/edit/{id}', [App\Http\Controllers\LogistikController::class, 'edit_sj']);
         Route::get('data/sj_draft/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj_draft_detail']);

@@ -160,14 +160,33 @@ class DetailPesanan extends Model
 
         return $s;
     }
+
+    public function getJumlahRetur()
+    {
+        $id = $this->id;
+        $k = RiwayatReturPoPaket::where(['detail_pesanan_id'=> $id])
+            ->sum('jumlah');
+
+        return $k;
+    }
+
+    public function getJumlahPrdLog()
+    {
+        $id = $this->id;
+        $s = DetailLogistik::
+        leftJoin('detail_pesanan_produk','detail_logistik.detail_pesanan_produk_id','=','detail_pesanan_produk.id')
+        ->where('detail_pesanan_produk.detail_pesanan_id', $id)
+        ->groupBy('detail_logistik.detail_pesanan_produk_id')
+        ->pluck('detail_logistik.detail_pesanan_produk_id')
+        ->count('detail_logistik.id');
+
+        return $s;
+    }
     public function getJumlahBatal()
     {
         $id = $this->id;
         $s = RiwayatBatalPoPrd::where(['detail_pesanan_id'=> $id,'status' => 1])->sum('jumlah');
-        $k = RiwayatReturPoPaket::where(['detail_pesanan_id'=> $id])
-        ->sum('jumlah');
-
-        return $s+$k;
+        return $s;
     }
 
 

@@ -30,6 +30,7 @@ use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\RiwayatGagalKalibrasi;
 use App\Models\RiwayatReturPoPrd;
+use App\Models\RiwayatReturPoSeri;
 use App\Models\Satuan;
 use App\Models\SeriGanti;
 use App\Models\SeriDetailRw;
@@ -2139,30 +2140,57 @@ class GudangController extends Controller
             group by  tgd.id
             ", [$parameter]);
 
-            $retur = RiwayatReturPoPrd::select('riwayat_retur_po_prd.id','pesanan.no_po','produk.nama','gdg_barang_jadi.nama as variasi','riwayat_retur_po_paket.updated_at as tgl_masuk')
-            ->addSelect([
-                'cterjadwal' => function ($q){
-                    $q->selectRaw('coalesce(count(riwayat_retur_po_seri.id),0)')
-                        ->from('riwayat_retur_po_seri')
-                        ->where('status', 1)
-                        ->whereColumn('riwayat_retur_po_seri.detail_riwayat_retur_prd_id', 'riwayat_retur_po_prd.id');
-                },
-            ])
-            ->leftJoin('riwayat_retur_po_paket','riwayat_retur_po_paket.id','=','riwayat_retur_po_prd.detail_riwayat_retur_paket_id')
-            ->leftJoin('detail_pesanan','riwayat_retur_po_paket.detail_pesanan_id','=','detail_pesanan.id')
-            ->leftJoin('pesanan','pesanan.id','=','detail_pesanan.pesanan_id')
-            ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','riwayat_retur_po_prd.gudang_barang_jadi_id')
-            ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
-            ->havingRaw('cterjadwal > 0')
-            ->get();
+            // $retur = RiwayatReturPoPrd::select('riwayat_retur_po_prd.id','pesanan.no_po','produk.nama','gdg_barang_jadi.nama as variasi','riwayat_retur_po_paket.updated_at as tgl_masuk')
+            // ->addSelect([
+            //     'cterjadwal' => function ($q){
+            //         $q->selectRaw('coalesce(count(riwayat_retur_po_seri.id),0)')
+            //             ->from('riwayat_retur_po_seri')
+            //             ->where('status', 1)
+            //             ->whereColumn('riwayat_retur_po_seri.detail_riwayat_retur_prd_id', 'riwayat_retur_po_prd.id');
+            //     },
+            // ])
+            // ->leftJoin('riwayat_retur_po_paket','riwayat_retur_po_paket.id','=','riwayat_retur_po_prd.detail_riwayat_retur_paket_id')
+            // ->leftJoin('detail_pesanan','riwayat_retur_po_paket.detail_pesanan_id','=','detail_pesanan.id')
+            // ->leftJoin('pesanan','pesanan.id','=','detail_pesanan.pesanan_id')
+            // ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','riwayat_retur_po_prd.gudang_barang_jadi_id')
+            // ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
+            // ->havingRaw('cterjadwal > 0')
+            // ->get();
+
+
+            $retur = DB::select("select
+            tgd.id,
+            (select jp.no_bppb  from jadwal_perakitan jp
+            join jadwal_rakit_noseri jrn ON jrn.jadwal_id = jp.id
+            where jrn.noseri = ( SELECT nbj.noseri
+             from noseri_barang_jadi nbj
+             left join t_gbj_noseri tgn on tgn.noseri_id = nbj.id
+             where tgn.t_gbj_detail_id  = tgd.id
+             limit 1)
+            ) AS no_ref,
+            (SELECT COUNT(t_gbj_noseri.id) FROM t_gbj_noseri WHERE t_gbj_noseri.t_gbj_detail_id = tgd.id AND t_gbj_noseri.status_id is null and t_gbj_noseri.jenis = 'masuk') AS jumlah,
+            gbj.id as gbj_id,
+            tg.tgl_masuk,
+            pesanan.no_po,
+            concat(p.nama, ' ', gbj.nama) as nama
+            from t_gbj_detail tgd
+            left join t_gbj tg on tg.id = tgd.t_gbj_id
+            left join pesanan  on pesanan.id = tg.retur_pesanan_id
+            left join gdg_barang_jadi gbj on gbj.id = tgd.gdg_brg_jadi_id
+            left join produk p on p.id = gbj.produk_id
+            left join t_gbj_noseri tgn on tgn.t_gbj_detail_id = tgd.id
+            where  tgn.status_id is null and tg.dari = 26 and tg.ke = 13 and year(tg.tgl_masuk) = ?
+            group by  tgd.id
+            ", [$parameter]);
 
             foreach($retur as $r){
                 $obj[] = array(
                     'id' => $r->id,
-                    'no_ref' => $r->no_po ,
-                    'nama' => $r->nama  . $r->variasi,
+                    'gbj_id' => $r->gbj_id,
+                    'no_ref' => $r->no_po,
+                    'nama' => $r->nama,
                     'tgl_masuk' => $r->tgl_masuk,
-                    'jumlah' => $r->cterjadwal,
+                    'jumlah' => $r->jumlah,
                     'status' => 'retur'
                 );
             }
@@ -2170,6 +2198,7 @@ class GudangController extends Controller
             foreach($prd as $r){
                 $obj[] = array(
                     'id' => $r->id,
+                    'gbj_id' => $r->gbj_id,
                     'no_ref' => $r->no_ref,
                     'nama' => $r->nama ,
                     'tgl_masuk' => $r->tgl_masuk,
@@ -2285,17 +2314,61 @@ class GudangController extends Controller
         }
     }
 
-    function getTerimaRakit($id, $value)
+    function getTerimaRakit($id, $value,$jenis)
     {
         try {
-            $data = NoseriTGbj::whereHas('detail', function ($q) use ($id, $value) {
-                $q->where('gdg_brg_jadi_id', $id);
-                $q->whereHas('header', function ($a) use ($value) {
-                    $a->where('tgl_masuk', $value)->where('dari', 17)->where('ke', 13);
-                });
-            })->where('status_id', null)->where('jenis', 'masuk')->get();
-            $layout = Layout::where('jenis_id', 1)->orderBy('ruang')->get();
-            $a = 0;
+            if($jenis == 'produksi'){
+                // $data = NoseriTGbj::whereHas('detail', function ($q) use ($id, $value) {
+                //     $q->where('id', $id);
+                //     $q->whereHas('header', function ($a) use ($value) {
+                //         $a->where('tgl_masuk', $value)->where('dari', 17)->where('ke', 13);
+                //     });
+                // })->where('status_id', null)->where('jenis', 'masuk')->get();
+                // $layout = Layout::where('jenis_id', 1)->orderBy('ruang')->get();
+                // $a = 0;
+
+                $data = NoseriTGbj::select()
+                ->leftJoin('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
+                ->leftJoin('t_gbj','t_gbj.id','=','t_gbj_detail.t_gbj_id')
+                ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
+                ->where('t_gbj_detail.gdg_brg_jadi_id',$value)
+                ->where('t_gbj_detail.id',$id)
+                ->where('t_gbj.dari', 17)
+                ->where('t_gbj.ke', 13)
+                ->whereNull('t_gbj_noseri.status_id')
+                ->where('t_gbj_noseri.jenis', 'masuk')
+                ->get();
+
+            }else{
+
+                $data = NoseriTGbj::select('t_gbj_noseri.id','t_gbj_noseri.noseri_id','noseri_barang_jadi.noseri')
+                ->leftJoin('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
+                ->leftJoin('t_gbj','t_gbj.id','=','t_gbj_detail.t_gbj_id')
+                ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
+                ->where('t_gbj_detail.gdg_brg_jadi_id',$value)
+                ->where('t_gbj_detail.id',$id)
+                ->where('t_gbj.dari', 26)
+                ->where('t_gbj.ke', 13)
+                ->whereNull('t_gbj_noseri.status_id')
+                ->where('t_gbj_noseri.jenis', 'masuk')
+                ->get();
+
+
+
+                // $data = NoseriTGbj::whereHas('detail', function ($q) use ($id, $value) {
+                //     $q->where('id', $id);
+                //     $q->whereHas('header', function ($a) use ($value) {
+                //         $a->where('tgl_masuk', $value)->where('dari', 26)->where('ke', 13);
+                //     });
+                // })->where('status_id', null)->where('jenis', 'masuk')->get();
+                // $layout = Layout::where('jenis_id', 1)->orderBy('ruang')->get();
+                // $a = 0;
+
+            }
+
+
+
+            return response()->json($data);
             return datatables()->of($data)
                 ->addColumn('layout', function ($d) use ($layout, $a) {
                     $opt = '';

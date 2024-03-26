@@ -10,5 +10,5 @@ class RiwayatReturPoSeri extends Model
     use HasFactory;
     protected $connection = 'erp';
     protected $table = "riwayat_retur_po_seri";
-    protected $fillable = ['detail_riwayat_retur_prd_id', 't_tfbj_noseri_id','noseri_id','status'];
+    protected $fillable = ['detail_riwayat_retur_prd_id', 't_tfbj_noseri_id','noseri_id','status','noseri_logistik_id'];
 }
