@@ -54,6 +54,11 @@ use function PHPUnit\Framework\assertIsNotArray;
 
 class PenjualanController extends Controller
 {
+    public function getYearsPeriodePenjualan()
+    {
+        $data = AktifPeriode::first()->tahun;
+        return response()->json($data);
+    }
     public function in_array_all($needles, $haystack)
     {
         return empty(array_diff($needles, $haystack));
