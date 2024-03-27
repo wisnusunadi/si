@@ -74,6 +74,44 @@ class PenjualanController extends Controller
         $data = AktifPeriode::first()->tahun;
         return response()->json($data);
     }
+    public function get_items_penjualan($id)
+    {
+        $data = Pesanan::find($id);
+        $item = array();
+
+        if ($data->DetailPesanan) {
+            foreach ($data->DetailPesanan as $key_d => $d) {
+                $item[$key_d] = array(
+                    'id' => $d->id,
+                    'nama' => $d->PenjualanProduk->nama,
+                    'jumlah' => $d->jumlah,
+                    'harga' => $d->harga,
+                    'produk' => array()
+                );
+                foreach($d->DetailPesananProduk as $key_e => $e){
+                    $item[$key_d]['produk'][$key_e] = array(
+                        'id' => $e->id,
+                        'nama' => $e->GudangBarangjadi->Produk->nama.' '.$e->GudangBarangjadi->nama,
+                        'gudang_barang_jadi_id' => $e->gudang_barang_jadi_id
+                    );
+                }
+
+            }
+        }
+
+        if ($data->DetailPesananPart) {
+            foreach ($data->DetailPesananPart as $d) {
+                $item[] = array(
+                    'id' => $d->id,
+                    'nama' => $d->Sparepart->nama,
+                    'jumlah' => $d->jumlah,
+                    'harga' => $d->harga,
+                    'jenis' => 'part'
+                );
+            }
+        }
+        return response()->json($item);
+    }
 
     //Get Data Table
     public function penjualan_data($jenis, $status, $tahun)
@@ -2876,6 +2914,17 @@ class PenjualanController extends Controller
 
         if ($value == 'semua') {
             $data  = Ekatalog::with(['Pesanan.State',  'Customer', 'Provinsi'])->addSelect([
+                'cterkirim' => function ($q) {
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                        ->from('noseri_logistik')
+                        ->leftjoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+                        ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->where('logistik.status_id', 10)
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
                 'tgl_kontrak_custom' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
                         ->from('ekatalog as e')
@@ -2919,7 +2968,17 @@ class PenjualanController extends Controller
         } else {
             $x = explode(',', $value);
             $data  = Ekatalog::with(['Pesanan.State',  'Customer'])->addSelect([
-
+                'cterkirim' => function ($q) {
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                        ->from('noseri_logistik')
+                        ->leftjoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+                        ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->where('logistik.status_id', 10)
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
                 'tgl_kontrak_custom' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
                         ->from('ekatalog as e')
@@ -2965,7 +3024,7 @@ class PenjualanController extends Controller
             } else {
                 if ($data->status == "batal") {
                     $datas .= 'Batal';
-                    
+
                 } else {
                     $hitung = floor((($data->cseri / ($data->cjumlah + $data->cjumlahdsb)) * 100));
                     if ($hitung > 0) {
@@ -3292,11 +3351,22 @@ class PenjualanController extends Controller
     }
     public function get_data_spa($value, $tahun)
     {
-        $divisi_id = Auth::user()->divisi_id;
+       // $divisi_id = Auth::user()->divisi_id;
         $x = explode(',', $value);
         $data = "";
         if ($value == 'semua') {
             $data  = Spa::with(['Pesanan.State',  'Customer'])->addSelect([
+                'cterkirim' => function ($q) {
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                        ->from('noseri_logistik')
+                        ->leftjoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+                        ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->where('logistik.status_id', 10)
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
                 'ckirimprd' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
                         ->from('noseri_logistik')
@@ -3365,6 +3435,17 @@ class PenjualanController extends Controller
             ])->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get();
         } else {
             $data  = Spa::with(['Pesanan.State',  'Customer'])->addSelect([
+                'cterkirim' => function ($q) {
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                        ->from('noseri_logistik')
+                        ->leftjoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+                        ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->where('logistik.status_id', 10)
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
                 'ckirimprd' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
                         ->from('noseri_logistik')
@@ -3700,6 +3781,17 @@ class PenjualanController extends Controller
         $data = "";
         if ($value == 'semua') {
             $data  = Spb::with(['Pesanan.State',  'Customer'])->addSelect([
+                'cterkirim' => function ($q) {
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                        ->from('noseri_logistik')
+                        ->leftjoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+                        ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->where('logistik.status_id', 10)
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
                 'ckirimprd' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
                         ->from('noseri_logistik')
@@ -3767,6 +3859,17 @@ class PenjualanController extends Controller
             ])->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get();
         } else {
             $data  = Spb::with(['Pesanan.State',  'Customer'])->addSelect([
+                'cterkirim' => function ($q) {
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                        ->from('noseri_logistik')
+                        ->leftjoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+                        ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->where('logistik.status_id', 10)
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
                 'ckirimprd' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
                         ->from('noseri_logistik')
