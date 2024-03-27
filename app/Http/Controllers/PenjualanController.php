@@ -2445,7 +2445,33 @@ class PenjualanController extends Controller
                 $tgl_kontrak = Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
             }
         }
-        return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data, 'status' => $status, 'tgl_kontrak' => $tgl_kontrak]);
+
+        $produk = array();
+
+
+        if ($data->Pesanan->detailpesanandsb) {
+            $produk = $data->Pesanan->detailpesanandsb->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'nama_produk' => $item->PenjualanProduk->nama,
+                    'is_stok_distributor' => $item->is_stok_distributor,
+                    'jumlah' => $item->jumlah,
+                    'harga' => $item->harga,
+                    'ongkir' => $item->ongkir,
+                    'jenis' => 'paket',
+                    'detail_produk' => $item->detailproduk->map(function ($detail) {
+                        return [
+                            'id' => $detail->id,
+                            'nama_produk' => $detail->GudangBarangJadi->nama,
+                            'jenis' => 'variasi',
+                            'jumlah' => $detail->getJumlahPesanan(),
+                        ];
+                    })
+                ];
+            });
+        } else {
+            $produk = '-';
+        }
     }
 
     public function get_data_detail_ekatalog_ppic($id)
