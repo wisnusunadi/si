@@ -134,7 +134,7 @@ export default {
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
-        <detail v-if="showModal" @close="showModal = false" :detail="detailSelected" />
+        <detail v-if="showModal" @close="showModal = false" :detail="detailSelected" @refresh="getData" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex bd-highlight">
