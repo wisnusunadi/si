@@ -13,7 +13,7 @@
                 <ol class="breadcrumb float-sm-right">
                     @if (Auth::user()->divisi_id == '26')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('penjualan.penjualan.show') }}">Penjualan</a></li>
+                        <li class="breadcrumb-item"><a href="/penjualan/transaksi">Penjualan</a></li>
                         <li class="breadcrumb-item active">Tambah Penjualan</li>
                     @endif
                 </ol>
@@ -129,13 +129,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                                                                                                                                                                                                                                                                    .row {
-                                                                                                                                                                                                                                                                                                        font-size: 12px;
-                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                        .row {
+                                                                                                                                                                                                                                                                                                            font-size: 12px;
+                                                                                                                                                                                                                                                                                                        }
 
-                                                                                                                                                                                                                                                                                                    h4 {
-                                                                                                                                                                                                                                                                                                        font-size: 20px;
-                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                        h4 {
+                                                                                                                                                                                                                                                                                                            font-size: 20px;
+                                                                                                                                                                                                                                                                                                        } */
             body {
                 font-size: 12px;
             }
@@ -152,13 +152,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                                                                                                        .row {
-                                                                                                                                            font-size: 12px;
-                                                                                                                                        }
+                                                                                                                                            .row {
+                                                                                                                                                font-size: 12px;
+                                                                                                                                            }
 
-                                                                                                                                        h4 {
-                                                                                                                                            font-size: 20px;
-                                                                                                                                        } */
+                                                                                                                                            h4 {
+                                                                                                                                                font-size: 20px;
+                                                                                                                                            } */
             section {
                 font-size: 12px;
             }
@@ -1535,7 +1535,7 @@
                                 <div class="row d-flex justify-content-center">
                                     <div class="col-11">
                                         <span>
-                                            <a href="{{ route('penjualan.penjualan.show') }}" type="button"
+                                            <a href="/penjualan/transaksi" type="button"
                                                 class="btn btn-danger">
                                                 Batal
                                             </a>

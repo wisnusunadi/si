@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import seriviatext from '../../../gbj/page/penerimaanRework/transfer/modalTransfer/seriviatext.vue';
 export default {
     props: ['retur'],
@@ -7,251 +8,75 @@ export default {
     },
     data() {
         return {
-            items: [
-                {
-                    no: 1,
-                    nama: 'MOL-01 + UPS',
-                    expanded: false,
-                    qty: 1,
-                    jml_retur: 0,
-                    noSeriSelected: [],
-                },
-                {
-                    no: 2,
-                    nama: 'DIGIT ONE BABY',
-                    expanded: false,
-                    qty: 1,
-                    jml_retur: 0,
-                    noSeriSelected: [],
-                },
-            ],
+            items: [],
             showModal: false,
             itemSelected: {},
             noretur: '',
+            loadingPaket: false,
         }
     },
     methods: {
+        async getPaket() {
+            try {
+                this.loadingPaket = true
+                const { data } = await axios.get(`/api/penjualan/retur_po/detail_paket/${this.retur.pesanan_id}`)
+                this.items = data.map((item, idx) => {
+                    return {
+                        ...item,
+                        no: idx + 1,
+                        expanded: false,
+                        qty: item.jumlah_kirim,
+                        jml_retur: 0,
+                        noSeriSelected: [],
+                    }
+                })
+            } catch (error) {
+                console.error(error)
+            } finally {
+                this.loadingPaket = false
+            }
+        },
         closeModal() {
             $('.modalRetur').modal('hide');
             this.$nextTick(() => {
                 this.$emit('close')
             })
         },
-        toggleItem(idx) {
+        async toggleItem(idx) {
             // if jml_retur not 0 or null or undefined, then expanded = true
             if (this.items[idx].jml_retur !== 0 && this.items[idx].jml_retur !== null && this.items[idx].jml_retur !== '') {
-                this.items[idx].expanded = true
-
-                this.items[idx].produk = [
-                    {
-                        no: 1,
-                        nama: 'MOL-01',
-                        max: this.items[idx].jml_retur,
-                        noSeriSelected: [],
-                        noseri: [
-                            {
-                                id: 1,
-                                noseri: '1',
-                            },
-                            {
-                                id: 2,
-                                noseri: '2',
-                            },
-                            {
-                                id: 3,
-                                noseri: '3',
-                            },
-                            {
-                                id: 4,
-                                noseri: '4',
-                            },
-                            {
-                                id: 5,
-                                noseri: '5',
-                            },
-                            {
-                                id: 6,
-                                noseri: '6',
-                            },
-                            {
-                                id: 7,
-                                noseri: '7',
-                            },
-                            {
-                                id: 8,
-                                noseri: '8',
-                            },
-                            {
-                                id: 9,
-                                noseri: '9',
-                            },
-                            {
-                                id: 10,
-                                noseri: '10',
-                            },
-                            {
-                                id: 11,
-                                noseri: '11',
-                            },
-                            {
-                                id: 12,
-                                noseri: '12',
-                            },
-                            {
-                                id: 13,
-                                noseri: '13',
-                            },
-                            {
-                                id: 14,
-                                noseri: '14',
-                            },
-                            {
-                                id: 15,
-                                noseri: '15',
-                            },
-                            {
-                                id: 16,
-                                noseri: '16',
-                            },
-                            {
-                                id: 17,
-                                noseri: '17',
-                            },
-                            {
-                                id: 18,
-                                noseri: '18',
-                            },
-                            {
-                                id: 19,
-                                noseri: '19',
-                            },
-                            {
-                                id: 20,
-                                noseri: '20',
-                            },
-                            {
-                                id: 21,
-                                noseri: '21',
-                            },
-                            {
-                                id: 22,
-                                noseri: '22',
-                            },
-                            {
-                                id: 23,
-                                noseri: '23',
-                            },
-                            {
-                                id: 24,
-                                noseri: '24',
-                            },
-                        ],
-                    },
-                    {
-                        no: 2,
-                        nama: 'UPS',
-                        max: this.items[idx].jml_retur,
-                        noSeriSelected: [],
-                        noseri: [
-                            {
-                                id: 25,
-                                noseri: '25',
-                            },
-                            {
-                                id: 26,
-                                noseri: '26',
-                            },
-                            {
-                                id: 27,
-                                noseri: '27',
-                            },
-                            {
-                                id: 28,
-                                noseri: '28',
-                            },
-                            {
-                                id: 29,
-                                noseri: '29',
-                            },
-                            {
-                                id: 30,
-                                noseri: '30',
-                            },
-                            {
-                                id: 31,
-                                noseri: '31',
-                            },
-                            {
-                                id: 32,
-                                noseri: '32',
-                            },
-                            {
-                                id: 33,
-                                noseri: '33',
-                            },
-                            {
-                                id: 34,
-                                noseri: '34',
-                            },
-                            {
-                                id: 35,
-                                noseri: '35',
-                            },
-                            {
-                                id: 36,
-                                noseri: '36',
-                            },
-                            {
-                                id: 37,
-                                noseri: '37',
-                            },
-                            {
-                                id: 38,
-                                noseri: '38',
-                            },
-                            {
-                                id: 39,
-                                noseri: '39',
-                            },
-                            {
-                                id: 40,
-                                noseri: '40',
-                            },
-                            {
-                                id: 41,
-                                noseri: '41',
-                            },
-                            {
-                                id: 42,
-                                noseri: '42',
-                            },
-                            {
-                                id: 43,
-                                noseri: '43',
-                            },
-                            {
-                                id: 44,
-                                noseri: '44',
-                            },
-                            {
-                                id: 45,
-                                noseri: '45',
-                            },
-                            {
-                                id: 46,
-                                noseri: '46',
-                            },
-                            {
-                                id: 47,
-                                noseri: '47',
-                            },
-                            {
-                                id: 48,
-                                noseri: '48',
-                            },
-                        ],
-                    }
-                ]
+                try {
+                    this.items[idx].loadingProduk = true
+                    const { data } = await axios.get(`/api/penjualan/retur_po/detail_prd/${this.items[idx].id}`)
+                    this.items = this.items.map((item, i) => {
+                        if (i === idx) {
+                            return {
+                                ...item,
+                                noSeriSelected: [],
+                                loadingProduk: false,
+                                produk: data.map((prd, idx) => {
+                                    return {
+                                        ...prd,
+                                        no: idx + 1,
+                                        nama: prd.nama,
+                                        max: item.jml_retur,
+                                        noSeriSelected: [],
+                                        noseri: prd.seri.map((n, idx) => {
+                                            return {
+                                                ...n,
+                                            }
+                                        }),
+                                    }
+                                }),
+                                expanded: true,
+                                jumlah_max_parents: data.length * item.jml_retur,
+                            }
+                        }
+                        return item
+                    })
+                } catch (error) {
+                    console.error(error)
+                }
             } else {
                 this.items[idx].expanded = false
             }
@@ -284,33 +109,56 @@ export default {
             return found
         },
         toggleNoSeri(item, idxProduk, noseri) {
-            // if noseri not in noSeriSelected, then push, else remove
-            const idx = this.items.findIndex((i) => i.no === item.no)
-            if (!item.noSeriSelected.find((n) => n.id === noseri.id)) {
-                if (!this.noseriterpakai(noseri, idx)) {
-                    item.noSeriSelected.push(noseri)
+            // mapping data and cek if noseri already selected, then remove, else add
+            this.items = this.items.map((i) => {
+                if (i.no === item.no) {
+                    return {
+                        ...i,
+                        noSeriSelected: i.noSeriSelected.find((n) => n.id === noseri.id) ?
+                            i.noSeriSelected.filter((n) => n.id !== noseri.id) :
+                            [...i.noSeriSelected, noseri],
+                        produk: i.produk.map((p) => {
+                            if (p.no === item.produk[idxProduk].no) {
+                                return {
+                                    ...p,
+                                    noSeriSelected: p.noSeriSelected.find((n) => n.id === noseri.id) ?
+                                        p.noSeriSelected.filter((n) => n.id !== noseri.id) :
+                                        [...p.noSeriSelected, noseri]
+                                }
+                            }
+                            return p
+                        })
+                    }
                 }
-            } else {
-                item.noSeriSelected = item.noSeriSelected.filter((n) => n.id !== noseri.id)
-            }
+                return i
+            })
 
-            // // push to noseriselected
-            if (!item.produk[idxProduk].noSeriSelected.find((n) => n.id === noseri.id)) {
-                if (!this.noseriterpakai(noseri, idx)) {
-                    item.produk[idxProduk].noSeriSelected.push(noseri)
+            // check if noSeriSelected more than max, then remove last and show alert
+            this.items = this.items.map((i) => {
+                if (i.no === item.no) {
+                    return {
+                        ...i,
+                        noSeriSelected: i.noSeriSelected.length > i.jumlah_max_parents ?
+                            i.noSeriSelected.slice(0, -1) :
+                            i.noSeriSelected,
+                        produk: i.produk.map((p) => {
+                            if (p.no === item.produk[idxProduk].no) {
+                                if (p.noSeriSelected.length > p.max) {
+                                    this.$swal('Error', 'Nomor Seri melebihi jumlah retur', 'error')
+                                    this.$refs[`noseri-${noseri.id}`][0].checked = false
+                                    return {
+                                        ...p,
+                                        noSeriSelected: p.noSeriSelected.slice(0, -1)
+                                    }
+                                }
+                            }
+                            return p
+                        })
+                    }
                 }
-            } else {
-                item.produk[idxProduk].noSeriSelected = item.produk[idxProduk].noSeriSelected.filter((n) => n.id !== noseri.id)
-            }
+                return i
+            })
 
-
-            if (item.produk[idxProduk].noSeriSelected.length > item.produk[idxProduk].max) {
-                this.$swal('Error', 'Jumlah retur melebihi jumlah qty', 'error')
-                item.produk[idxProduk].noSeriSelected.pop()
-                item.noSeriSelected.pop()
-                this.$refs[`noseri-${noseri.id}-${idx}-${idxProduk}`][0].checked = false
-                return
-            }
         },
         simpan() {
             let paket = []
@@ -347,12 +195,35 @@ export default {
                 return
             }
 
-            const form = [
-                this.noretur,
-                paket
-            ]
+            const form = {
+                no_retur: this.noretur,
+                item: paket
+            }
 
-            console.log(form)
+            // ya atau tidak
+            this.$swal({
+                title: "Konfirmasi",
+                text: "Apakah anda yakin ingin menyimpan data ini?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya",
+                cancelButtonText: "Tidak",
+            }).then((result) => {
+                if (result.value) {
+                    axios.post('/api/penjualan/retur_po/kirim', form)
+                        .then((res) => {
+                            this.$swal('Success', 'Berhasil menyimpan', 'success')
+                            this.closeModal()
+                            this.$emit('refresh')
+                        })
+                        .catch((err) => {
+                            console.error(err)
+                            this.$swal('Error', 'Gagal menyimpan', 'error')
+                        })
+                }
+            })
         },
         showModalNoSeri(idx) {
             this.showModal = true
@@ -394,6 +265,16 @@ export default {
                 this.$swal('Error', `Nomor Seri ${noserinotfound.join(', ')} tidak ditemukan`, 'error')
             }
         },
+        cekIsString(value) {
+            if (typeof value === 'string') {
+                return true
+            } else {
+                return false
+            }
+        },
+    },
+    created() {
+        this.getPaket()
     },
     watch: {
         // check jml_retur not more than qty
@@ -479,10 +360,10 @@ export default {
                                                     </div>
                                                 </div>
                                                 <div class="margin">
-                                                    <div>
-                                                        <small class="text-muted">Status</small>
-                                                        <persentase :persentase="retur.persentase" />
-                                                    </div>
+                                                    <div><small class="text-muted">Status</small></div>
+                                                    <persentase :persentase="retur.persentase"
+                                                        v-if="!cekIsString(retur.persentase)" />
+                                                    <span class="red-text badge" v-else>{{ retur.persentase }}</span>
                                                 </div>
                                             </div>
                                             <div class="p-2">
@@ -537,7 +418,7 @@ export default {
                                                             </div>
                                                         </div>
 
-                                                        <table class="table">
+                                                        <table class="table" v-if="!loadingPaket">
                                                             <thead>
                                                                 <tr>
                                                                     <th>No</th>
@@ -557,6 +438,18 @@ export default {
                                                                                 @input="toggleItem(idx)"
                                                                                 v-model.number="item.jml_retur"
                                                                                 @keypress="numberOnly">
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr v-if="item?.loadingProduk">
+                                                                        <td colspan="100%">
+                                                                            <div class="text-center">
+                                                                                <div class="spinner-border spinner-border-sm"
+                                                                                    role="status">
+                                                                                    <span
+                                                                                        class="sr-only">Loading...</span>
+                                                                                </div>
+                                                                            </div>
                                                                         </td>
                                                                     </tr>
                                                                     <tr
@@ -575,7 +468,8 @@ export default {
                                                                                     <tr>
                                                                                         <th>No</th>
                                                                                         <th>Nama Produk</th>
-                                                                                        <th>Nomor Seri</th>
+                                                                                        <th>Nomor Seri
+                                                                                        </th>
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
@@ -595,7 +489,7 @@ export default {
                                                                                                             <input
                                                                                                                 @click="toggleNoSeri(item, idx2, noseri)"
                                                                                                                 :checked="produk.noSeriSelected && produk.noSeriSelected.find((n) => n.id === noseri.id)"
-                                                                                                                :ref="`noseri-${noseri.id}-${idx}-${idx2}`"
+                                                                                                                :ref="`noseri-${noseri.id}`"
                                                                                                                 type="checkbox">
                                                                                                             {{
                                                                                                             noseri.noseri
@@ -619,6 +513,13 @@ export default {
                                                                 </template>
                                                             </tbody>
                                                         </table>
+                                                        <div v-else>
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="spinner-border" role="status">
+                                                                    <span class="sr-only">Loading...</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

@@ -77,7 +77,14 @@ export default {
         closeAllModal() {
             this.closeModal()
             this.$emit('refresh')
-        }
+        },
+        cekIsString(value) {
+            if (typeof value === 'string') {
+                return true
+            } else {
+                return false
+            }
+        },
     },
     watch: {
         // jika jumlah batal di isi melebihi qty maka akan di reset menjadi qty
@@ -163,10 +170,10 @@ export default {
                                                     </div>
                                                 </div>
                                                 <div class="margin">
-                                                    <div>
-                                                        <small class="text-muted">Status</small>
-                                                        <persentase :persentase="batal.persentase" />
-                                                    </div>
+                                                    <div><small class="text-muted">Status</small></div>
+                                                    <persentase :persentase="batal.persentase"
+                                                        v-if="!cekIsString(batal.persentase)" />
+                                                    <span class="red-text badge" v-else>{{ batal.persentase }}</span>
                                                 </div>
                                             </div>
                                             <div class="p-2">

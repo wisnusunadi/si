@@ -159,3 +159,11 @@ export default {
         </div>
     </div>
 </template>
+<style>
+.margin {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+</style>

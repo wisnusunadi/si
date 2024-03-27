@@ -14,7 +14,7 @@
                 @elseif(Auth::user()->divisi_id == '2')
                     <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                 @endif
-                <li class="breadcrumb-item"><a href="{{ route('qc.so.show') }}">Sales Order QC</a></li>
+                <li class="breadcrumb-item"><a href="/qc/so">Sales Order QC</a></li>
                 <li class="breadcrumb-item active">Detail</li>
             </ol>
         </div>

@@ -284,7 +284,6 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
     });
     Route::group(['prefix' => '/so'], function () {
         Route::group(['middleware' => ['divisi:qc,dirut']], function () {
-            Route::view('/show', 'page.qc.so.show')->name('qc.so.show');
             Route::get('/detail/{id}/{value}', [App\Http\Controllers\QcController::class, 'detail_so'])->name('qc.so.detail');
             Route::view('/detail_ekatalog/{id}', 'page.qc.so.detail_ekatalog')->name('qc.so.detail_ekatalog');
             Route::view('/detail_spa/{id}', 'page.qc.so.detail_spa')->name('qc.so.detail_spa');
@@ -318,7 +317,6 @@ Route::group(['prefix' => 'logistik', 'middleware' => ['divisi:log']], function 
 
     Route::group(['prefix' => '/so'], function () {
         // Route::group(['middleware' => ['divisi:log,dirut']], function () {
-        Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
         Route::post('/data/{value}/{years}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\LogistikController::class, 'update_so'])->name('logistik.so.detail');
         Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');

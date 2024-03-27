@@ -2473,6 +2473,70 @@ class LogistikController extends Controller
         //     'years' => $data
         // ]);
 
+        function get_jenis($so)
+        {
+            $jenis = explode('/', $so);
+            // return small text
+            return $jenis[1];
+        }
+
+        function get_jenis_id($so, $jenis)
+        {
+            switch ($jenis) {
+                case 'EKAT':
+                    return $so->Ekatalog->id;
+                    break;
+                case 'SPA':
+                    return $so->Spa->id;
+                    break;
+                case 'SPB':
+                    return $so->Spb->id;
+                    break;
+                default:
+                    return null;
+                    break;
+            }
+        }
+
+        function getCustomer($data)
+        {
+            if ($data->Ekatalog) {
+                return $data->Ekatalog->satuan;
+            } elseif ($data->Spa) {
+                return $data->Spa->Customer->nama;
+            } else {
+                return $data->Spb->Customer->nama;
+            }
+        }
+
+        function getPersentase($data)
+        {
+            $datas = "";
+            $res = $data->cqcprd + $data->cqcpart + $data->ctfjasa;
+            $tes = $data->clogprd + $data->clogpart + $data->clogjasa;
+            if ($res > 0) {
+                $hitung = floor(((($data->clogprd + $data->clogpart + $data->clogjasa) / ($data->cpoprd + $data->cqcpart + $data->ctfjasa)) * 100));
+                if ($hitung > 0) {
+                    $datas = $hitung;
+                } else {
+                    $datas = $hitung;
+                }
+            } else {
+                $datas = 0;
+            }
+            return $datas;
+        }
+
+        $data = $data->map(function ($item) {
+            $jenis = get_jenis($item->so);
+            $item->jenis = $jenis;
+            $item->jenis_id = get_jenis_id($item, get_jenis($item->so));
+            $item->customer = getCustomer($item);
+            $item->persentase = getPersentase($item);
+            $item->showDetail = $item->cqcprd + $item->cqcpart + $item->ctfjasa;
+            return $item;
+        });
+
         return response()->json($data);
 
         return datatables()->of($data)
@@ -2759,6 +2823,37 @@ class LogistikController extends Controller
         }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderByDesc('created_at')->union($prd)->union($part)->get();
 
         $data = $partjasa;
+
+        function get_jenis($so)
+        {
+            $jenis = explode('/', $so);
+            // return small text
+            return $jenis[1];
+        }
+
+        function get_jenis_id($so, $jenis)
+        {
+            switch ($jenis) {
+                case 'EKAT':
+                    return $so->Ekatalog->id;
+                    break;
+                case 'SPA':
+                    return $so->Spa->id;
+                    break;
+                case 'SPB':
+                    return $so->Spb->id;
+                    break;
+                default:
+                    return null;
+                    break;
+            }
+        }
+
+        $data = $data->map(function ($item) {
+            $item->jenis = get_jenis($item->so);
+            $item->jenis_id = get_jenis_id($item, get_jenis($item->so));
+            return $item;
+        });
 
         return response()->json($data);
 

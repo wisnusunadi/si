@@ -22,6 +22,9 @@ export default {
             this.$store.dispatch('setYears', year);
             this.$emit('refresh');
         },
+        detail(item) {
+            window.location.href = `/logistik/so/detail/selesai/${item.jenis_id}/${item.jenis}`;
+        }
     },
     computed: {
         filteredDalamProses() {
@@ -112,7 +115,7 @@ export default {
                         <td>{{ item.tujuan_kirim }}</td>
                         <td>{{ item.ket }}</td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary">
+                            <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
                                 <i class="fas fa-eye"></i>
                                 Detail
                             </button>

@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 import seriviatext from '../penerimaanRework/transfer/modalTransfer/seriviatext.vue'
 import modalLayout from './modalLayout.vue'
 export default {
@@ -27,24 +28,7 @@ export default {
                     value: 'layout'
                 }
             ],
-            items: [
-                {
-                    id: 1,
-                    noseri: 'TD123',
-                    layout: {
-                        id: 7,
-                        label: 'Blok B'
-                    }
-                },
-                {
-                    id: 2,
-                    noseri: 'TD456',
-                    layout: {
-                        id: 7,
-                        label: 'Blok B'
-                    }
-                }
-            ],
+            items: [],
             layout: [
                 {
                     id: 7,
@@ -160,10 +144,46 @@ export default {
                 this.$swal('Peringatan', 'Pilih nomor seri terlebih dahulu', 'warning')
                 return
             }
-            this.$swal('Berhasil', 'Data berhasil disimpan', 'success')
-            this.closeModal()
-            this.$emit('refresh')
+            this.$swal({
+                title: 'Apakah anda yakin?',
+                text: 'Produk yang anda terima akan diubah layoutnya',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya",
+                cancelButtonText: "Tidak",
+            }).then((result) => {
+                if (result.value) {
+                    axios.post('/api/prd/terimaseri', this.noSeriSelected).then(() => {
+                        this.$swal('Berhasil', 'Data berhasil disimpan', 'success')
+                        this.closeModal()
+                        this.$emit('refresh')
+                    }).catch(() => {
+                        this.$swal('Gagal', 'Data gagal disimpan', 'error')
+                    })
+                }
+            })
+        },
+        async getData() {
+            try {
+                const { data } = await axios.get(`/api/tfp/rakit-terima/${this.detail.id}/${this.detail.gbj_id}/${this.detail.status}`)
+                this.items = data.map((item, index) => {
+                    return {
+                        ...item,
+                        layout: {
+                            id: 7,
+                            label: 'Blok B'
+                        }
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
         }
+    },
+    created() {
+        this.getData()
     },
     watch: {
         noSeriSelected() {

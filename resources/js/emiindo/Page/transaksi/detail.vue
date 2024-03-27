@@ -33,6 +33,13 @@ export default {
                 }
             }
         },
+        cekIsString(value) {
+            if (typeof value === 'string') {
+                return true
+            } else {
+                return false
+            }
+        },
     },
 }
 </script>
@@ -184,7 +191,9 @@ export default {
                                             </div>
                                             <div class="margin">
                                                 <div><small class="text-muted">Status</small></div>
-                                                <persentase :persentase="detail.persentase" />
+                                                <persentase :persentase="detail.persentase"
+                                                    v-if="!cekIsString(detail.persentase)" />
+                                                <span class="red-text badge" v-else>{{ detail.persentase }}</span>
                                             </div>
                                         </div>
                                     </div>

@@ -143,6 +143,13 @@ export default {
         editEkat(item) {
             window.location.href = `/penjualan/penjualan/edit_ekatalog/${item}/ekatalog`
         },
+        cekIsString(value) {
+            if (typeof value === 'string') {
+                return true
+            } else {
+                return false
+            }
+        },
     },
     computed: {
         yearsComputed() {
@@ -173,9 +180,11 @@ export default {
 <template>
     <div>
         <batalComponents v-if="showModal" @close="showModal = false" :batal="detailSelected" />
-        <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected" />
+        <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected"
+            @refresh="$emit('refresh')" />
         <detailComponents v-if="showModal" @close="showModal = false" :detail="detailSelected" />
-        <doComponents v-if="showModal" @close="showModal = false" :doData="detailSelected" @refresh="$emit('refresh')" />
+        <doComponents v-if="showModal" @close="showModal = false" :doData="detailSelected"
+            @refresh="$emit('refresh')" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex bd-highlight">
@@ -265,10 +274,11 @@ export default {
                             </td>
                             <td :class="{ 'strike-through': item.status == 'batal' }">{{ item.nama_customer }}</td>
                             <td>
-                                <persentase :persentase="item.persentase" />
+                                <persentase :persentase="item.persentase" v-if="!cekIsString(item.persentase)" />
+                                <span class="red-text badge" v-else>{{ item.persentase }}</span>
                             </td>
                             <td>
-                                <div>
+                            <div>
                                     <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
                                         aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i>
                                     </div>

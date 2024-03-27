@@ -2201,7 +2201,8 @@ class GudangController extends Controller
             //         $a->where('tgl_masuk', $value)->where('dari', 17)->where('ke', 13);
             //     });
             // })->where('status_id', null)->where('jenis', 'masuk')->get();
-            $parameter = isset($request->tahun) ? $request->tahun : '2023';
+            // jika tahun null atau kosong maka tahun sekarang
+            $parameter = $request->tahun == "null" ? Carbon::now()->year : $request->tahun;
             $prd = DB::select("select
             tgd.id,
             (select jp.no_bppb  from jadwal_perakitan jp
@@ -2215,6 +2216,7 @@ class GudangController extends Controller
             (SELECT COUNT(t_gbj_noseri.id) FROM t_gbj_noseri WHERE t_gbj_noseri.t_gbj_detail_id = tgd.id AND t_gbj_noseri.status_id is null and t_gbj_noseri.jenis = 'masuk') AS jumlah,
             gbj.id as gbj_id,
             tg.tgl_masuk,
+            tg.created_at,
             concat(p.nama, ' ', gbj.nama) as nama
             from t_gbj_detail tgd
             left join t_gbj tg on tg.id = tgd.t_gbj_id
@@ -2256,7 +2258,8 @@ class GudangController extends Controller
             (SELECT COUNT(t_gbj_noseri.id) FROM t_gbj_noseri WHERE t_gbj_noseri.t_gbj_detail_id = tgd.id AND t_gbj_noseri.status_id is null and t_gbj_noseri.jenis = 'masuk') AS jumlah,
             gbj.id as gbj_id,
             tg.tgl_masuk,
-            pesanan.no_po,
+            tg.created_at,
+            pesanan.so,
             concat(p.nama, ' ', gbj.nama) as nama
             from t_gbj_detail tgd
             left join t_gbj tg on tg.id = tgd.t_gbj_id
@@ -2267,28 +2270,33 @@ class GudangController extends Controller
             where  tgn.status_id is null and tg.dari = 26 and tg.ke = 13 and year(tg.tgl_masuk) = ?
             group by  tgd.id
             ", [$parameter]);
+            $obj = [];
 
-            foreach($retur as $r){
+            foreach ($retur as $r) {
                 $obj[] = array(
                     'id' => $r->id,
                     'gbj_id' => $r->gbj_id,
-                    'no_ref' => $r->no_po,
+                    'no_ref' => $r->so,
                     'nama' => $r->nama,
                     'tgl_masuk' => $r->tgl_masuk,
+                    'timestamp' => $r->created_at,
                     'jumlah' => $r->jumlah,
-                    'status' => 'retur'
+                    'status' => 'retur',
+                    'bagian' => 'Penjualan'
                 );
             }
 
-            foreach($prd as $r){
+            foreach ($prd as $r) {
                 $obj[] = array(
                     'id' => $r->id,
                     'gbj_id' => $r->gbj_id,
                     'no_ref' => $r->no_ref,
-                    'nama' => $r->nama ,
+                    'nama' => $r->nama,
                     'tgl_masuk' => $r->tgl_masuk,
+                    'timestamp' => $r->created_at,
                     'jumlah' => $r->jumlah,
-                    'status' => 'produksi'
+                    'status' => 'produksi',
+                    'bagian' => 'Produksi'
                 );
             }
 
@@ -2399,10 +2407,10 @@ class GudangController extends Controller
         }
     }
 
-    function getTerimaRakit($id, $value,$jenis)
+    function getTerimaRakit($id, $value, $jenis)
     {
         try {
-            if($jenis == 'produksi'){
+            if ($jenis == 'produksi') {
                 // $data = NoseriTGbj::whereHas('detail', function ($q) use ($id, $value) {
                 //     $q->where('id', $id);
                 //     $q->whereHas('header', function ($a) use ($value) {
@@ -2413,30 +2421,29 @@ class GudangController extends Controller
                 // $a = 0;
 
                 $data = NoseriTGbj::select()
-                ->leftJoin('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
-                ->leftJoin('t_gbj','t_gbj.id','=','t_gbj_detail.t_gbj_id')
-                ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
-                ->where('t_gbj_detail.gdg_brg_jadi_id',$value)
-                ->where('t_gbj_detail.id',$id)
-                ->where('t_gbj.dari', 17)
-                ->where('t_gbj.ke', 13)
-                ->whereNull('t_gbj_noseri.status_id')
-                ->where('t_gbj_noseri.jenis', 'masuk')
-                ->get();
+                    ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+                    ->where('t_gbj_detail.gdg_brg_jadi_id', $value)
+                    ->where('t_gbj_detail.id', $id)
+                    ->where('t_gbj.dari', 17)
+                    ->where('t_gbj.ke', 13)
+                    ->whereNull('t_gbj_noseri.status_id')
+                    ->where('t_gbj_noseri.jenis', 'masuk')
+                    ->get();
+            } else {
 
-            }else{
-
-                $data = NoseriTGbj::select('t_gbj_noseri.id','t_gbj_noseri.noseri_id','noseri_barang_jadi.noseri')
-                ->leftJoin('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
-                ->leftJoin('t_gbj','t_gbj.id','=','t_gbj_detail.t_gbj_id')
-                ->leftJoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
-                ->where('t_gbj_detail.gdg_brg_jadi_id',$value)
-                ->where('t_gbj_detail.id',$id)
-                ->where('t_gbj.dari', 26)
-                ->where('t_gbj.ke', 13)
-                ->whereNull('t_gbj_noseri.status_id')
-                ->where('t_gbj_noseri.jenis', 'masuk')
-                ->get();
+                $data = NoseriTGbj::select('t_gbj_noseri.id', 't_gbj_noseri.noseri_id', 'noseri_barang_jadi.noseri')
+                    ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+                    ->where('t_gbj_detail.gdg_brg_jadi_id', $value)
+                    ->where('t_gbj_detail.id', $id)
+                    ->where('t_gbj.dari', 26)
+                    ->where('t_gbj.ke', 13)
+                    ->whereNull('t_gbj_noseri.status_id')
+                    ->where('t_gbj_noseri.jenis', 'masuk')
+                    ->get();
 
 
 
