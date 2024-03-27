@@ -23,7 +23,7 @@ export default {
                 },
                 {
                     text: 'Keterangan',
-                    value: 'ket'
+                    value: 'keterangan'
                 },
                 {
                     text: 'Aksi',
@@ -53,6 +53,9 @@ export default {
         },
         filter(status) {
             this.$emit('filter', status);
+        },
+        detail(item) {
+            window.location.href = `/qc/so/detail/${item.id}/${item.jenis}`;
         }
     },
 }
@@ -90,11 +93,12 @@ export default {
         <data-table :headers="headers" :items="selesai" :search="search" v-if="!$store.state.loading">
             <template #item.aksi="{ item }">
                 <div>
-                    <button class="btn btn-outline-primary btn-sm">
+                    <button class="btn btn-outline-primary btn-sm" @click="detail(item)">
                         <i class="fas fa-eye"></i>
                         Detail
                     </button>
-                    <button class="btn btn-outline-primary btn-sm" @click="cetak_sppb(item.id)">
+                    <button class="btn btn-outline-primary btn-sm" @click="cetak_sppb(item.id)"
+                        v-if="item.no_po != null && item.tgl_po != null">
                         <i class="fas fa-print"></i>
                         SPPB
                     </button>

@@ -1,9 +1,11 @@
 <script>
 import pagination from '../../../components/pagination'
+import persentase from '../../../components/persentase'
 import moment from 'moment'
 export default {
     components: {
-        pagination
+        pagination,
+        persentase
     },
     props: ['dalam'],
     data() {
@@ -150,15 +152,18 @@ export default {
                         </td>
                         <td>{{ item.customer }}</td>
                         <td>{{ item.ket }}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{ item.jumlah_ok }}</td>
+                        <td>{{ item.jumlah_nok }}</td>
+                        <td>
+                            <persentase :persentase="item.persentase" />
+                        </td>
                         <td>
                             <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
                                 <i class="fas fa-eye"></i>
                                 Detail
                             </button>
-                            <button class="btn btn-sm btn-outline-primary" @click="cetak_sppb(item.id)">
+                            <button class="btn btn-sm btn-outline-primary" @click="cetak_sppb(item.id)"
+                                v-if="item.no_po != null && item.tgl_po != null">
                                 <i class="fa fa-print"></i>
                                 SPPB
                             </button>

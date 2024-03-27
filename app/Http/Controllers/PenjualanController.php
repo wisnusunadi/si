@@ -520,6 +520,78 @@ class PenjualanController extends Controller
             }
         }
 
+        function persentase_and_status($data)
+        {
+            $name = $data->getTable();
+            $progress = "";
+            $tes = $data->cjumlahprd + $data->cjumlahpart;
+            if ($tes > 0) {
+                $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                if ($hitung > 0) {
+                    $progress = $hitung;
+                } else {
+                    $progress = $hitung;
+                }
+            }
+
+            if ($name == "ekatalog") {
+                if ($data->status == "batal" && ($data->Pesanan->log_id != "7")) {
+                    // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="EKAT" data-provinsi="">
+                    //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                    //         <i class="fas fa-times"></i>
+                    //         Batal
+                    //     </button>
+                    // </a>';
+                    return 'Batal';
+                } else {
+                    if ($data->Pesanan->log_id == "7") {
+                        return $data->Pesanan->State->nama;
+                    } else {
+                        return $progress;
+                    }
+                }
+            } else if ($name == "spa") {
+                if ($data->log == "batal") {
+                    // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
+                    //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                    //         <i class="fas fa-times"></i>
+                    //         Batal
+                    //     </button>
+                    // </a>';
+                    return 'Batal';
+                } else {
+                    if ($data->Pesanan->log_id == "7") {
+                        return $data->Pesanan->State->nama;
+                    } else {
+                        return $progress;
+                    }
+                }
+            } else if ($name == "spb") {
+                if ($data->log == "batal") {
+                    // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
+                    //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                    //         <i class="fas fa-times"></i>
+                    //         Batal
+                    //     </button>
+                    // </a>';
+                    return 'Batal';
+
+                } else {
+                    if ($data->Pesanan->log_id == "7") {
+                        return $data->Pesanan->State->nama;
+                    } else {
+                        return $progress;
+                    }
+                }
+            }
+        }
+
+        $data = $data->map(function ($data) {
+            $data->persentase = persentase_and_status($data);
+            $data->jenis = strtolower($data->getTable());
+            return $data;
+        });
+
         return response()->json($data);
 
 
@@ -2858,6 +2930,33 @@ class PenjualanController extends Controller
             // ])->orderBy('created_at', 'DESC')->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
         }
 
+        function persentase_and_status($data)
+        {
+            $datas = "";
+            if ($data->Pesanan->log_id == '7') {
+                $datas .= 'Penjualan';
+            } else {
+                if ($data->status == "batal") {
+                    $datas .= 'Batal';
+                    
+                } else {
+                    $hitung = floor((($data->cseri / ($data->cjumlah + $data->cjumlahdsb)) * 100));
+                    if ($hitung > 0) {
+                        $datas = $hitung;
+                    } else {
+                        $datas = $hitung;
+                    }
+                }
+            }
+            return $datas;
+        }
+
+        $data = $data->map(function ($item) {
+            $item->persentase = persentase_and_status($item);
+            return $item;
+        });
+
+
         return response()->json($data);
 
         return datatables()->of($data)
@@ -3309,6 +3408,30 @@ class PenjualanController extends Controller
             })->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get();
         }
 
+        function persentase_and_status($data)
+        {
+            $datas = "";
+            $tes = $data->cjumlahprd + $data->cjumlahpart;
+            if ($tes > 0) {
+                $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                if ($data->log == "batal") {
+                    $datas = 'Batal';
+                } else {
+                    if ($hitung > 0) {
+                        $datas = $hitung;
+                    } else {
+                        $datas = $hitung;
+                    }
+                }
+            }
+            return $datas;
+        }
+
+        $data = $data->map(function ($item) {
+            $item->persentase = persentase_and_status($item);
+            return $item;
+        });
+
         return response()->json($data);
 
         return datatables()->of($data)
@@ -3685,6 +3808,30 @@ class PenjualanController extends Controller
                 $q->whereIN('log_id', $x);
             })->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get();
         }
+
+        function persentase_and_status($data)
+        {
+            $datas = "";
+            $tes = $data->cjumlahprd + $data->cjumlahpart;
+            if ($tes > 0) {
+                $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                if ($data->log == "batal") {
+                    $datas = 'Batal';
+                } else {
+                    if ($hitung > 0) {
+                        $datas = $hitung;
+                    } else {
+                        $datas = $hitung;
+                    }
+                }
+            }
+            return $datas;
+        }
+
+        $data = $data->map(function ($item) {
+            $item->persentase = persentase_and_status($item);
+            return $item;
+        });
 
         return response()->json($data);
         return datatables()->of($data)

@@ -8,24 +8,7 @@ export default {
     },
     data() {
         return {
-            items: [
-                // {
-                //     no: 1,
-                //     nama: 'MOL-01 + UPS',
-                //     expanded: false,
-                //     qty: 1,
-                //     jml_retur: 0,
-                //     noSeriSelected: [],
-                // },
-                // {
-                //     no: 2,
-                //     nama: 'DIGIT ONE BABY',
-                //     expanded: false,
-                //     qty: 1,
-                //     jml_retur: 0,
-                //     noSeriSelected: [],
-                // },
-            ],
+            items: [],
             showModal: false,
             itemSelected: {},
             noretur: '',
@@ -282,6 +265,13 @@ export default {
                 this.$swal('Error', `Nomor Seri ${noserinotfound.join(', ')} tidak ditemukan`, 'error')
             }
         },
+        cekIsString(value) {
+            if (typeof value === 'string') {
+                return true
+            } else {
+                return false
+            }
+        },
     },
     created() {
         this.getPaket()
@@ -370,10 +360,10 @@ export default {
                                                     </div>
                                                 </div>
                                                 <div class="margin">
-                                                    <div>
-                                                        <small class="text-muted">Status</small>
-                                                        <persentase :persentase="retur.persentase" />
-                                                    </div>
+                                                    <div><small class="text-muted">Status</small></div>
+                                                    <persentase :persentase="retur.persentase"
+                                                        v-if="!cekIsString(retur.persentase)" />
+                                                    <span class="red-text badge" v-else>{{ retur.persentase }}</span>
                                                 </div>
                                             </div>
                                             <div class="p-2">
@@ -502,8 +492,8 @@ export default {
                                                                                                                 :ref="`noseri-${noseri.id}`"
                                                                                                                 type="checkbox">
                                                                                                             {{
-            noseri.noseri
-        }}
+                                                                                                            noseri.noseri
+                                                                                                            }}
                                                                                                         </div>
                                                                                                         <div v-else>
                                                                                                             <span

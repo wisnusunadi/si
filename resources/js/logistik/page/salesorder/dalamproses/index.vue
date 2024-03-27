@@ -1,9 +1,11 @@
 <script>
 import cetakSJ from './cetakSJ.vue';
+import persentase from '../../../components/persentase.vue';
 export default {
     props: ['dalam'],
     components: {
-        cetakSJ
+        cetakSJ,
+        persentase
     },
     data() {
         return {
@@ -159,13 +161,16 @@ export default {
             <template #item.tgl_kontrak="{ item }">
                 <div v-if="item.tgl_kontrak">
                     <div :class="calculateDateFromNow(item.tgl_kontrak).color">{{
-            dateFormat(item.tgl_kontrak) }}</div>
+                        dateFormat(item.tgl_kontrak) }}</div>
                     <small :class="calculateDateFromNow(item.tgl_kontrak).color">
                         <i :class="calculateDateFromNow(item.tgl_kontrak).icon"></i>
                         {{ calculateDateFromNow(item.tgl_kontrak).text }}
                     </small>
                 </div>
                 <div v-else></div>
+            </template>
+            <template #item.status="{ item }">
+                <persentase :persentase="item.persentase" />
             </template>
             <template #item.aksi="{ item }">
                 <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true"
@@ -175,7 +180,8 @@ export default {
                         <i class="fas fa-print"></i>
                         Cetak Surat Jalan
                     </button>
-                    <button class="dropdown-item cetaksj" type="button" @click="openDetail(item)">
+                    <button class="dropdown-item cetaksj" type="button" @click="openDetail(item)"
+                        v-if="item.showDetail > 0">
                         <i class="fas fa-eye"></i>
                         Detail
                     </button>

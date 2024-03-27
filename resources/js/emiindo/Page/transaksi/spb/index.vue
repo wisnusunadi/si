@@ -107,6 +107,13 @@ export default {
                 $('.modalRetur').modal('show')
             })
         },
+        cekIsString(value) {
+            if (typeof value === 'string') {
+                return true
+            } else {
+                return false
+            }
+        },
     },
     computed: {
         yearsComputed() {
@@ -173,7 +180,8 @@ export default {
             <data-table :headers="header" :items="spb" :search="search" v-if="!$store.state.loading">
                 <template #item.status="{ item }">
                     <div>
-                        <persentase :persentase="item.persentase" />
+                        <persentase :persentase="item.persentase" v-if="!cekIsString(item.persentase)" />
+                        <span class="red-text badge" v-else>{{ item.persentase }}</span>
                     </div>
                 </template>
                 <template #item.aksi="{ item }">

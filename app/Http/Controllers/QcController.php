@@ -2511,8 +2511,58 @@ class QcController extends Controller
                 ->get();
         }
 
+        function get_keterangan($data)
+        {
+            if (!empty($data->so)) {
+                $name = explode('/', $data->so);
+                if ($name[1] == 'EKAT') {
+                    return $data->Ekatalog->ket;
+                } else if ($name[1] == 'SPA') {
+                    return $data->Spa->ket;
+                } else if ($name[1] == 'SPB') {
+                    return $data->Spb->ket;
+                }
+            }
+        }
+
+        function get_status($data)
+        {
+            $datas = "";
+            $res = $data->ctfprd + $data->ctfpart;
+            if ($res > 0) {
+                $hitung = floor(((($data->cqcprd + $data->cqcpart) / ($data->ctfprd + $data->ctfpart)) * 100));
+                if ($hitung > 0) {
+                    $datas = $hitung;
+                } else {
+                    $datas = $hitung;
+                }
+            } else {
+                $datas = $res;
+            }
+            return $datas;
+        }
+
+        function getCustomer($data)
+        {
+            if (!empty($data->so)) {
+                $name = explode('/', $data->so);
+                if ($name[1] == 'EKAT') {
+                    return $data->Ekatalog->satuan;
+                } elseif ($name[1] == 'SPA') {
+                    return $data->Spa->Customer->nama;
+                } else {
+                    return $data->Spb->Customer->nama;
+                }
+            }
+        }
+
         $data = $data->map(function ($item) {
             $item->jenis = get_jenis($item->so);
+            $item->ket = get_keterangan($item);
+            $item->jumlah_ok = $item->cqcok + $item->cqcpartok;
+            $item->jumlah_nok = $item->cqnok + $item->cqcpartnok;
+            $item->persentase = get_status($item);
+            $item->customer = getCustomer($item);
             return $item;
         });
 
@@ -3198,6 +3248,46 @@ class QcController extends Controller
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
         }
+
+        function get_keterangan($data)
+        {
+            if ($data->Ekatalog) {
+                return $data->Ekatalog->ket;
+            } else if ($data->Spa) {
+                return $data->Spa->ket;
+            } else if ($data->Spb) {
+                return $data->Spb->ket;
+            }
+        }
+
+        function getJenisPesanan($data)
+        {
+            if ($data->Ekatalog) {
+                return 'ekatalog';
+            } elseif ($data->Spa) {
+                return 'spa';
+            } else {
+                return 'spb';
+            }
+        }
+
+        function getCustomer($data)
+        {
+            if ($data->Ekatalog) {
+                return $data->Ekatalog->satuan;
+            } elseif ($data->Spa) {
+                return $data->Spa->Customer->nama;
+            } else {
+                return $data->Spb->Customer->nama;
+            }
+        }
+
+        $data = $data->map(function ($item) {
+            $item->customer = getCustomer($item);
+            $item->keterangan = get_keterangan($item);
+            $item->jenis = getJenisPesanan($item);
+            return $item;
+        });
 
         return response()->json($data);
 

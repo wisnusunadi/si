@@ -143,6 +143,13 @@ export default {
         editEkat(item) {
             window.location.href = `/penjualan/penjualan/edit_ekatalog/${item}/ekatalog`
         },
+        cekIsString(value) {
+            if (typeof value === 'string') {
+                return true
+            } else {
+                return false
+            }
+        },
     },
     computed: {
         yearsComputed() {
@@ -257,7 +264,7 @@ export default {
                             <td :class="{ 'strike-through': item.status == 'batal' }">
                                 <div v-if="item.tgl_kontrak_custom">
                                     <div :class="calculateDateFromNow(item.tgl_kontrak_custom).color">{{
-                                        dateFormat(item.tgl_kontrak_custom) }}</div>
+            dateFormat(item.tgl_kontrak_custom) }}</div>
                                     <small :class="calculateDateFromNow(item.tgl_kontrak_custom).color">
                                         <i :class="calculateDateFromNow(item.tgl_kontrak_custom).icon"></i>
                                         {{ calculateDateFromNow(item.tgl_kontrak_custom).text }}
@@ -267,10 +274,11 @@ export default {
                             </td>
                             <td :class="{ 'strike-through': item.status == 'batal' }">{{ item.nama_customer }}</td>
                             <td>
-                                <persentase :persentase="item.persentase" />
+                                <persentase :persentase="item.persentase" v-if="!cekIsString(item.persentase)" />
+                                <span class="red-text badge" v-else>{{ item.persentase }}</span>
                             </td>
                             <td>
-                                <div>
+                            <div>
                                     <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
                                         aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i>
                                     </div>

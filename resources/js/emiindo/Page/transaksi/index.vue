@@ -69,7 +69,6 @@ export default {
                         tgl_buat: this.dateFormat(item.tgl_buat),
                         tgl_edit: this.dateFormat(item.tgl_edit),
                         nama_customer: item.customer.nama,
-                        persentase: 0,
                         jenis: 'ekatalog',
                     }
                 })
@@ -88,7 +87,6 @@ export default {
                         no_po: item.pesanan.no_po ?? '-',
                         tgl_order: this.dateFormat(item.pesanan.tgl_po),
                         nama_customer: item.customer.nama,
-                        persentase: 0,
                         jenis: 'spa'
                     }
                 })
@@ -107,7 +105,6 @@ export default {
                         no_po: item.pesanan.no_po ?? '-',
                         tgl_order: this.dateFormat(item.pesanan.tgl_po),
                         nama_customer: item.customer.nama,
-                        persentase: 0,
                         jenis: 'spb'
                     }
                 })
@@ -127,7 +124,6 @@ export default {
                         no_po: item.pesanan.no_po ?? '-',
                         tgl_po: this.dateFormat(item.pesanan.tgl_po),
                         nama_customer: item.customer.nama,
-                        persentase: 0,
                     }
                 })
 

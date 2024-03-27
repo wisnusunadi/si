@@ -1,54 +1,16 @@
 <script>
-import batalComponents from '../batal/index.vue'
-import returComponents from '../retur.vue'
 import detailComponents from '../detail.vue'
+import pagination from '../../../components/pagination.vue'
+import statusComponents from '../../../components/status.vue'
 export default {
     components: {
-        batalComponents,
-        returComponents,
-        detailComponents
+        detailComponents,
+        pagination,
+        statusComponents
     },
     props: ['penjualan'],
     data() {
         return {
-            header: [
-                {
-                    text: 'No',
-                    value: 'no'
-                },
-                {
-                    text: 'Nomor SO',
-                    value: 'so'
-                },
-                {
-                    text: 'Nomor AKN',
-                    value: 'no_paket'
-                },
-                {
-                    text: 'Nomor PO',
-                    value: 'no_po',
-                },
-                {
-                    text: 'Tanggal PO',
-                    value: 'tgl_po'
-                },
-                {
-                    text: 'Tanggal Delivery',
-                    value: 'tgl_kontrak'
-                },
-                {
-                    text: 'Customer',
-                    value: 'nama_customer'
-                },
-                {
-                    text: 'Status',
-                    value: 'status'
-                },
-                {
-                    text: 'Aksi',
-                    value: 'aksi',
-                }
-            ],
             search: '',
             showModal: false,
             detailSelected: {},
@@ -87,7 +49,8 @@ export default {
                     value: 'spb',
                     text: 'SPB'
                 }
-            ]
+            ],
+            renderPaginate: []
         }
     },
     methods: {
@@ -125,7 +88,24 @@ export default {
             } else {
                 this.$emit('refresh')
             }
-        }
+        },
+        updateFilteredDalamProses(data) {
+            this.renderPaginate = data;
+        },
+        cekIsString(value) {
+            if (typeof value === 'string') {
+                return true
+            } else {
+                return false
+            }
+        },
+        detail(item) {
+            this.detailSelected = item
+            this.showModal = true
+            this.$nextTick(() => {
+                $('.modalDetail').modal('show')
+            })
+        },
     },
     computed: {
         yearsComputed() {
@@ -134,12 +114,28 @@ export default {
                 years.push(moment().subtract(i, 'years').format('YYYY'))
             }
             return years
-        }
+        },
+        filteredDalamProses() {
+            const includesSearch = (obj, search) => {
+                if (obj && typeof obj === 'object') {
+                    return Object.keys(obj).some(key => {
+                        if (typeof obj[key] === 'object') {
+                            return includesSearch(obj[key], search);
+                        }
+                        return String(obj[key]).toLowerCase().includes(search.toLowerCase());
+                    });
+                }
+                return false;
+            };
+
+            return this.penjualan.filter(data => includesSearch(data, this.search));
+        },
     }
 }
 </script>
 <template>
     <div class="card">
+        <detailComponents v-if="showModal" @close="showModal = false" :detail="detailSelected" />
         <div class="card-body">
             <div class="d-flex bd-highlight">
                 <div class="p-2 flex-grow-1 bd-highlight">
@@ -196,57 +192,57 @@ export default {
                 <div class="p-2 bd-highlight"><input type="text" class="form-control" v-model="search"
                         placeholder="Cari..."></div>
             </div>
-            <data-table :headers="header" :items="penjualan" :search="search" v-if="!$store.state.loading">
-                <template #item.status="{ item }">
-                    <div>
-                        <persentase :persentase="item.persentase" />
-                    </div>
-                </template>
-                <template #item.tgl_kontrak="{ item }">
-                    <div v-if="item.tgl_kontrak_custom">
-                        <div :class="calculateDateFromNow(item.tgl_kontrak_custom).color">{{
-                            dateFormat(item.tgl_kontrak_custom) }}</div>
-                        <small :class="calculateDateFromNow(item.tgl_kontrak_custom).color">
-                            <i :class="calculateDateFromNow(item.tgl_kontrak_custom).icon"></i>
-                            {{ calculateDateFromNow(item.tgl_kontrak_custom).text }}
-                        </small>
-                    </div>
-                    <div v-else>
-                    </div>
-                </template>
-                <template #item.aksi="{ item }">
-                    <div>
-                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true"
-                            aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
-                            <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="#"
-                                data-id="5092">
-                                <button class="dropdown-item" type="button">
-                                    <i class="fas fa-eye"></i>
-                                    Detail
-                                </button>
-                            </a>
-                            <a target="_blank" href="#">
-                                <button class="dropdown-item" type="button" @click="cetakSPPB(item.pesanan_id)">
-                                    <i class="fas fa-print"></i>
-                                    SPPB
-                                </button>
-                            </a>
-                            <a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="5092">
-                                <button class="dropdown-item" type="button">
-                                    <i class="fas fa-pencil-alt"></i>
-                                    Edit No Urut &amp; DO
-                                </button>
-                            </a>
-                            <a href="#"><button class="dropdown-item openModalBatalRetur" type="button"><i
-                                        class="fas fa-times"></i> Batal</button></a>
-                            <a href="#"><button class="dropdown-item openModalBatalRetur" type="button"><i
-                                        class="fa-solid fa-arrow-rotate-left"></i>
-                                    Retur</button></a>
-                        </div>
-                    </div>
-                </template>
-            </data-table>
+
+            <table class="table text-center" v-if="!$store.state.loading">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nomor SO</th>
+                        <th>Nomor AKN</th>
+                        <th>Nomor PO</th>
+                        <th>Tanggal PO</th>
+                        <th>Tanggal Delivery</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody v-if="renderPaginate.length > 0">
+                    <tr v-for="(item, index) in renderPaginate" :key="index"
+                        :class="{ 'strike-through-row text-danger font-weight-bold': item.status == 'batal' }">
+                        <td :class="{ 'strike-through': item.status == 'batal' }">{{ index + 1 }}</td>
+                        <td :class="{ 'strike-through': item.status == 'batal' }">{{ item.so }}</td>
+                        <td :class="{ 'strike-through': item.status == 'batal' }">
+                            {{ item.no_paket }}
+                            <statusComponents :status="item.status" v-if="item?.status" />
+                        </td>
+                        <td :class="{ 'strike-through': item.status == 'batal' }">{{ item.no_po }}</td>
+                        <td :class="{ 'strike-through': item.status == 'batal' }">{{ item.tgl_po }}</td>
+                        <td :class="{ 'strike-through': item.status == 'batal' }">
+                            <div v-if="item.tgl_kontrak_custom">
+                                <div :class="calculateDateFromNow(item.tgl_kontrak_custom).color">{{
+            dateFormat(item.tgl_kontrak_custom) }}</div>
+                                <small :class="calculateDateFromNow(item.tgl_kontrak_custom).color">
+                                    <i :class="calculateDateFromNow(item.tgl_kontrak_custom).icon"></i>
+                                    {{ calculateDateFromNow(item.tgl_kontrak_custom).text }}
+                                </small>
+                            </div>
+                            <div v-else></div>
+                        </td>
+                        <td :class="{ 'strike-through': item.status == 'batal' }">{{ item.nama_customer }}</td>
+                        <td>
+                            <persentase :persentase="item.persentase" v-if="!cekIsString(item.persentase)" />
+                            <span class="red-text badge" v-else>{{ item.persentase }}</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-primary btn-sm" @click="detail(item)">
+                                <i class="fas fa-eye"></i>
+                                Detail
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
             <div v-else>
                 <div class="d-flex justify-content-center">
                     <div class="spinner-border" role="status">
@@ -254,6 +250,9 @@ export default {
                     </div>
                 </div>
             </div>
+
+            <pagination :filteredDalamProses="filteredDalamProses" v-if="!$store.state.loading"
+                @updateFilteredDalamProses="updateFilteredDalamProses" />
         </div>
     </div>
 </template>
