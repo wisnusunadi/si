@@ -28,6 +28,9 @@ use App\Models\NoseriDetailPesanan;
 use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
 use App\Models\Produk;
+use App\Models\RiwayatBatalPo;
+use App\Models\RiwayatBatalPoPaket;
+use App\Models\RiwayatBatalPoPrd;
 use App\Models\RiwayatGagalKalibrasi;
 use App\Models\RiwayatReturPoPrd;
 use App\Models\RiwayatReturPoSeri;
@@ -72,6 +75,88 @@ use stdClass;
 
 class GudangController extends Controller
 {
+    function get_detail_seri_batal_po($id)
+    {
+        $data = NoseriTGbj::
+        select('t_gbj_noseri.id','noseri_barang_jadi.id as noseri_id','noseri_barang_jadi.noseri')
+        ->leftjoin('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
+        ->leftjoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
+        ->where('t_gbj_detail.detail_pesanan_produk_id',$id)
+        ->get();
+
+
+        return response()->json($data);
+    }
+
+    function get_detail_batal_po($id)
+    {
+        $data = RiwayatBatalPoPaket::select('riwayat_batal_po_paket.id','penjualan_produk.nama')
+        ->leftJoin('detail_pesanan','detail_pesanan.id','=','riwayat_batal_po_paket.detail_pesanan_id')
+        ->leftJoin('penjualan_produk','penjualan_produk.id','=','detail_pesanan.penjualan_produk_id')
+        ->where('riwayat_batal_po_id',$id);
+
+        $item = RiwayatBatalPoPrd::select('riwayat_batal_po_prd.detail_riwayat_batal_paket_id','riwayat_batal_po_prd.detail_pesanan_produk_id as id','produk.nama','gdg_barang_jadi.nama as variasi')
+        ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','riwayat_batal_po_prd.detail_pesanan_produk_id')
+        ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','detail_pesanan_produk.gudang_barang_jadi_id')
+        ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
+        ->whereIN('detail_riwayat_batal_paket_id',$data->pluck('id')->toArray())->get();
+
+        $obj = array();
+        foreach($data->get() as $key_p => $d){
+            $obj[$key_p] = array(
+                'id' => $d->id,
+                'nama' => $d->nama,
+                'produk'=> array()
+            );
+            foreach ($item as  $s) {
+                if ($d->id == $s['detail_riwayat_batal_paket_id']) {
+                    $obj[$key_p]['produk'][] = $s;
+                }
+            }
+        }
+
+        return response()->json($obj);
+    }
+
+    function get_batal_po()
+    {
+        $data = RiwayatBatalPo::
+        select('riwayat_batal_po.id','pesanan.so','pesanan.no_po','c_ekat.nama as c_ekat','c_spa.nama as c_spa','c_spb.nama as c_spb')
+        ->leftJoin('pesanan','pesanan.id','=','riwayat_batal_po.pesanan_id')
+        ->leftJoin('ekatalog','ekatalog.pesanan_id','=','pesanan.id')
+        ->leftJoin('spa','spa.pesanan_id','=','pesanan.id')
+        ->leftJoin('spb','spb.pesanan_id','=','pesanan.id')
+        ->leftJoin('customer as c_ekat','c_ekat.id','=','ekatalog.customer_id')
+        ->leftJoin('customer as c_spa','c_spa.id','=','spa.customer_id')
+        ->leftJoin('customer as c_spb','c_spb.id','=','spa.customer_id')
+        ->get();
+
+        $obj = array();
+        foreach ($data as $d) {
+            # code...
+            $customer = '';
+            if($d->c_ekat != null){
+                $customer = $d->c_ekat;
+            }
+            if($d->c_spb != null){
+                $customer = $d->c_spb;
+            }
+            if($d->c_spa != null){
+                $customer = $d->c_spa;
+            }
+
+            $obj[] = array(
+                'id' => $d->id,
+                'so' => $d->so,
+                'no_po' => $d->no_po,
+                'customer' => $customer,
+                'status' => ''
+            );
+        }
+
+        return response()->json($obj);
+    }
+
     function kirim_permintaan(Request $request)
     {
         DB::beginTransaction();

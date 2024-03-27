@@ -32,6 +32,7 @@ use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\Provinsi;
 use App\Models\RiwayatBatalPo;
+use App\Models\RiwayatBatalPoPaket;
 use App\Models\RiwayatBatalPoPart;
 use App\Models\RiwayatBatalPoPrd;
 use App\Models\RiwayatReturPoPaket;
@@ -5452,8 +5453,6 @@ class PenjualanController extends Controller
         //       $randomDate =  Carbon::now()->toDateTimeString();
         //   }
 
-
-
         if ($request->status_akn == 'sepakat' && ($request->namadistributor == 'belum' || $request->provinsi == "NULL")) {
             return response()->json([
                 'message' => 'Cek Form Kembali',
@@ -5486,7 +5485,6 @@ class PenjualanController extends Controller
         } else {
             $akn = $request->jenis_paket . $request->no_paket;
         }
-
 
         $poid = $ekatalog->pesanan_id;
         $ekatalog->customer_id = $c_id;
@@ -5568,7 +5566,6 @@ class PenjualanController extends Controller
                     $bool = false;
                 }
             }
-
 
             if ($bool == true) {
                 if (($request->status_akn == "sepakat") || ($request->status_akn == "negosiasi")) {
@@ -9627,7 +9624,7 @@ class PenjualanController extends Controller
                 $q->selectRaw('coalesce(count(riwayat_retur_po_seri.id),0)')
                     ->from('riwayat_retur_po_seri')
                     ->whereColumn('riwayat_retur_po_seri.noseri_logistik_id', 'noseri_logistik.id');
-            },
+            }
         ])
         ->leftjoin('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
         ->leftjoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
@@ -9659,13 +9656,11 @@ class PenjualanController extends Controller
                 }
             }
 
-
         return response()->json($item);
     }
 
     public function get_detail_paket_retur_po($id)
     {
-
         $data = DetailPesanan::addSelect([
             'item' => function ($q) {
                 $q->selectRaw('coalesce(count(detail_pesanan_produk.id),0)')
@@ -9710,14 +9705,21 @@ class PenjualanController extends Controller
         $item = array();
 
         if ($data->DetailPesanan) {
-            foreach ($data->DetailPesanan as $d) {
-                $item[] = array(
+            foreach ($data->DetailPesanan as $key_d => $d) {
+                $item[$key_d] = array(
                     'id' => $d->id,
                     'nama' => $d->PenjualanProduk->nama,
                     'jumlah' => $d->jumlah - $d->getJumlahBatal(),
-                    'jumlahs' => $d->getJumlahBatal(),
+                    'produk' => array(),
                     'jenis' => 'produk'
                 );
+                foreach($d->DetailPesananProduk as $key_e => $e){
+                    $item[$key_d]['produk'][$key_e] = array(
+                        'id' => $e->id,
+                        'gudang_barang_jadi_id' => $e->gudang_barang_jadi_id
+                    );
+                }
+
             }
         }
 
@@ -9785,9 +9787,6 @@ class PenjualanController extends Controller
                            ]);
                          }
 
-
-
-
                     }
                 }else{
             $p =  RiwayatReturPoPaket::create([
@@ -9849,40 +9848,99 @@ class PenjualanController extends Controller
                 'message' => 'Gagal Dikirim'.$th,
             ], 200);
         }
-
     }
+
     public function kirim_prd_batal_po(Request $request)
     {
-
         $obj =  json_decode(json_encode($request->all()), FALSE);
-
+        DB::beginTransaction();
         try {
             //code...
-            foreach($obj->item as $o){
-                if($o->jenis == 'produk'){
-                    RiwayatBatalPoPrd::create([
-                        'detail_pesanan_id' => $o->id,
-                        'jumlah' => $o->jumlah,
-                    ]);
-                }else{
-                    RiwayatBatalPoPart::create([
-                        'detail_pesanan_part_id' => $o->id,
-                        'jumlah' => $o->jumlah,
-                    ]);
+            $po = RiwayatBatalPo::where('pesanan_id',$obj->pesanan_id);
+
+            if($po->count() > 0 ){
+                foreach($obj->item as $item){
+                    if($item->jenis == 'produk'){
+                        $riwayatPrd = RiwayatBatalPoPaket::where('detail_pesanan_id',$item->id);
+                        if($riwayatPrd->count() > 0 ){
+                            $riwayats = $riwayatPrd->first();
+                            $riwayats->jumlah = $riwayats->jumlah + $item->jumlah;
+                            $riwayats->save();
+
+                        }else{
+                        $rb =   RiwayatBatalPoPaket::create([
+                                'riwayat_batal_po_id' => $po->first()->id,
+                                'detail_pesanan_id' => $item->id,
+                                'jumlah' => $item->jumlah,
+                            ]);
+
+                            foreach($item->produk as $produk){
+                                RiwayatBatalPoPrd::create([
+                                    'detail_riwayat_batal_paket_id' => $rb->id,
+                                    'gudang_barang_jadi_id' => $produk->gudang_barang_jadi_id,
+                                    'detail_pesanan_produk_id' => $produk->id
+                                ]);
+                            }
+                        }
+                    }else{
+                        $riwayatPart = RiwayatBatalPoPart::where('detail_pesanan_part_id',$item->id);
+                        if($riwayatPart->count() > 0 ){
+                            $riwayats = $riwayatPart->first();
+                            $riwayats->jumlah = $riwayats->jumlah + $item->jumlah;
+                            $riwayats->save();
+                        }else{
+                            RiwayatBatalPoPart::create([
+                                'riwayat_batal_po_id' => $po->first()->id,
+                                'detail_pesanan_part_id' => $item->id,
+                                'jumlah' => $item->jumlah,
+                            ]);
+                        }
+                    }
                 }
+            }else{
+                $po =  RiwayatBatalPo::create([
+                    'pesanan_id' => $obj->pesanan_id,
+                    'ket' => $obj->ket,
+                ]);
+                foreach($obj->item as $item){
+                    if($item->jenis == 'produk'){
+                        $rb =     RiwayatBatalPoPaket::create([
+                            'riwayat_batal_po_id' => $po->id,
+                            'detail_pesanan_id' => $item->id,
+                            'jumlah' => $item->jumlah,
+                        ]);
+
+                        foreach($item->produk as $produk){
+                            RiwayatBatalPoPrd::create([
+                                'detail_riwayat_batal_paket_id' => $rb->id,
+                                'gudang_barang_jadi_id' => $produk->gudang_barang_jadi_id,
+                                'detail_pesanan_produk_id' => $produk->id
+                            ]);
+                        }
+
+                    }else{
+                        RiwayatBatalPoPart::create([
+                            'riwayat_batal_po_id' => $po->id,
+                            'detail_pesanan_part_id' => $item->id,
+                            'jumlah' => $item->jumlah,
+                        ]);
+                    }
+                }
+
             }
+            DB::commit();
             return response()->json([
                 'status' => 200,
                 'message' => 'Berhasil',
             ], 200);
         } catch (\Throwable $th) {
             //throw $th;
+            DB::rollback();
             return response()->json([
                 'status' => 404,
                 'message' => 'Gagal Dikirim',
             ], 200);
         }
-
 
     }
 

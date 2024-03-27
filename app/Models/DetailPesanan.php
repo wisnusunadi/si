@@ -187,7 +187,7 @@ class DetailPesanan extends Model
     public function getJumlahBatal()
     {
         $id = $this->id;
-        $s = RiwayatBatalPoPrd::where(['detail_pesanan_id'=> $id,'status' => 1])->sum('jumlah');
+        $s = RiwayatBatalPoPaket::where(['detail_pesanan_id'=> $id])->sum('jumlah');
         return $s;
     }
 

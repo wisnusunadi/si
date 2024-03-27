@@ -83,5 +83,5 @@ class LaporanPenjualan implements WithMultipleSheets
         // }
         // $sheets[] = new SheetSudahPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->tampilan);
         return $sheets;
-     }
+    }
 }
