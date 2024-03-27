@@ -71,7 +71,7 @@ export default {
         }
     },
     methods: {
-        tambah() {
+        tambah() { 
             window.location.href = '/penjualan/penjualan/create'
         },
         batal(item) {
