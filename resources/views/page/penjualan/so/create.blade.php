@@ -12,7 +12,7 @@
                 <ol class="breadcrumb float-sm-right">
                     @if (Auth::user()->divisi_id == '26')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('penjualan.penjualan.show') }}">Penjualan</a></li>
+                        <li class="breadcrumb-item"><a href="/penjualan/transaksi">Penjualan</a></li>
                         <li class="breadcrumb-item active">Tambah PO</li>
                     @endif
                 </ol>
@@ -290,7 +290,7 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-6">
-                                                            <a href="{{ route('penjualan.penjualan.show') }}"
+                                                            <a href="/penjualan/transaksi"
                                                                 type="button" class="btn btn-danger">
                                                                 Batal
                                                             </a>

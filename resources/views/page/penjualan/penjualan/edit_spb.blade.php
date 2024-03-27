@@ -12,7 +12,7 @@
                 <ol class="breadcrumb float-sm-right">
                     @if (Auth::user()->divisi_id == '26')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('penjualan.penjualan.show') }}">Penjualan</a></li>
+                        <li class="breadcrumb-item"><a href="/penjualan/transaksi">Penjualan</a></li>
                         <li class="breadcrumb-item active">Edit SPB</li>
                     @elseif(Auth::user()->divisi_id == '8')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
@@ -1273,7 +1273,7 @@
                                     <div class="row d-flex justify-content-center">
                                         <div class="col-lg-10 col-md-12">
                                             <span>
-                                                <a href="{{ route('penjualan.penjualan.show') }}" type="button"
+                                                <a href="/penjualan/transaksi" type="button"
                                                     class="btn btn-danger">
                                                     Batal
                                                 </a>

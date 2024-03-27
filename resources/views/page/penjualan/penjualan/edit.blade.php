@@ -435,7 +435,7 @@
                         <div class="row d-flex justify-content-center">
                             <div class="col-10">
                                 <span>
-                                    <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
+                                    <a href="/penjualan/transaksi" type="button" class="btn btn-danger">
                                         Batal
                                     </a>
                                 </span>

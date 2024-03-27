@@ -220,7 +220,7 @@ export default {
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="alert alert-danger" role="alert"
-            v-if="periodePenjualan != moment().format('YYYY') && !$store.state.loading">
+            v-if="periodePenjualan != moment().format('YYYY') && periodePenjualan != null">
             <i class="fas fa-exclamation-triangle"></i>
             Periode yang dibuka saat ini adalah periode {{ periodePenjualan }}
         </div>
