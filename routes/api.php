@@ -608,7 +608,8 @@ Route::prefix('/ekatalog')->group(function () {
 });
 
 Route::prefix('/spa')->group(function () {
-    Route::get('data/{value}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa'])->middleware('jwt.verify');
+    Route::get('data/{value}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
+    //Route::get('data/{value}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa'])->middleware('jwt.verify');
     // Route::post('update/{id}', [App\Http\Controllers\PenjualanController::class, 'update_spa']);
     Route::get('detail/{$id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spa']);
     Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_spa']);
