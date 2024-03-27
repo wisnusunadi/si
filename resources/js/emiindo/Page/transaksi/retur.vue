@@ -29,11 +29,13 @@ export default {
             showModal: false,
             itemSelected: {},
             noretur: '',
+            loadingPaket: false,
         }
     },
     methods: {
         async getPaket() {
             try {
+                this.loadingPaket = true
                 const { data } = await axios.get(`/api/penjualan/retur_po/detail_paket/${this.retur.pesanan_id}`)
                 this.items = data.map((item, idx) => {
                     return {
@@ -47,6 +49,8 @@ export default {
                 })
             } catch (error) {
                 console.error(error)
+            } finally {
+                this.loadingPaket = false
             }
         },
         closeModal() {
@@ -59,12 +63,14 @@ export default {
             // if jml_retur not 0 or null or undefined, then expanded = true
             if (this.items[idx].jml_retur !== 0 && this.items[idx].jml_retur !== null && this.items[idx].jml_retur !== '') {
                 try {
+                    this.items[idx].loadingProduk = true
                     const { data } = await axios.get(`/api/penjualan/retur_po/detail_prd/${this.items[idx].id}`)
                     this.items = this.items.map((item, i) => {
                         if (i === idx) {
                             return {
                                 ...item,
                                 noSeriSelected: [],
+                                loadingProduk: false,
                                 produk: data.map((prd, idx) => {
                                     return {
                                         ...prd,
@@ -79,11 +85,12 @@ export default {
                                         }),
                                     }
                                 }),
+                                expanded: true,
+                                jumlah_max_parents: data.length * item.jml_retur,
                             }
                         }
                         return item
                     })
-                    this.items[idx].expanded = true
                 } catch (error) {
                     console.error(error)
                 }
@@ -119,35 +126,56 @@ export default {
             return found
         },
         toggleNoSeri(item, idxProduk, noseri) {
-            // if noseri not in noSeriSelected, then push, else remove
-            const idx = this.items.findIndex((i) => i.no === item.no)
-            if (!item.noSeriSelected.find((n) => n.id === noseri.id)) {
-                if (!this.noseriterpakai(noseri, idx)) {
-                    item.noSeriSelected.push(noseri)
+            // mapping data and cek if noseri already selected, then remove, else add
+            this.items = this.items.map((i) => {
+                if (i.no === item.no) {
+                    return {
+                        ...i,
+                        noSeriSelected: i.noSeriSelected.find((n) => n.id === noseri.id) ?
+                            i.noSeriSelected.filter((n) => n.id !== noseri.id) :
+                            [...i.noSeriSelected, noseri],
+                        produk: i.produk.map((p) => {
+                            if (p.no === item.produk[idxProduk].no) {
+                                return {
+                                    ...p,
+                                    noSeriSelected: p.noSeriSelected.find((n) => n.id === noseri.id) ?
+                                        p.noSeriSelected.filter((n) => n.id !== noseri.id) :
+                                        [...p.noSeriSelected, noseri]
+                                }
+                            }
+                            return p
+                        })
+                    }
                 }
-            } else {
-                item.noSeriSelected = item.noSeriSelected.filter((n) => n.id !== noseri.id)
-            }
+                return i
+            })
 
-            // // push to noseriselected
-            if (!item.produk[idxProduk].noSeriSelected.find((n) => n.id === noseri.id)) {
-                if (!this.noseriterpakai(noseri, idx)) {
-                    item.produk[idxProduk].noSeriSelected.push(noseri)
+            // check if noSeriSelected more than max, then remove last and show alert
+            this.items = this.items.map((i) => {
+                if (i.no === item.no) {
+                    return {
+                        ...i,
+                        noSeriSelected: i.noSeriSelected.length > i.jumlah_max_parents ?
+                            i.noSeriSelected.slice(0, -1) :
+                            i.noSeriSelected,
+                        produk: i.produk.map((p) => {
+                            if (p.no === item.produk[idxProduk].no) {
+                                if (p.noSeriSelected.length > p.max) {
+                                    this.$swal('Error', 'Nomor Seri melebihi jumlah retur', 'error')
+                                    this.$refs[`noseri-${noseri.id}`][0].checked = false
+                                    return {
+                                        ...p,
+                                        noSeriSelected: p.noSeriSelected.slice(0, -1)
+                                    }
+                                }
+                            }
+                            return p
+                        })
+                    }
                 }
-            } else {
-                item.produk[idxProduk].noSeriSelected = item.produk[idxProduk].noSeriSelected.filter((n) => n.id !== noseri.id)
-            }
+                return i
+            })
 
-            console.log(item.produk[idxProduk].max)
-
-
-            if (item.produk[idxProduk].noSeriSelected.length > item.produk[idxProduk].max) {
-                this.$swal('Error', 'Jumlah retur melebihi jumlah qty', 'error')
-                item.produk[idxProduk].noSeriSelected.pop()
-                item.noSeriSelected.pop()
-                this.$refs[`noseri-${noseri.id}-${idx}-${idxProduk}`][0].checked = false
-                return
-            }
         },
         simpan() {
             let paket = []
@@ -400,7 +428,7 @@ export default {
                                                             </div>
                                                         </div>
 
-                                                        <table class="table">
+                                                        <table class="table" v-if="!loadingPaket">
                                                             <thead>
                                                                 <tr>
                                                                     <th>No</th>
@@ -420,6 +448,18 @@ export default {
                                                                                 @input="toggleItem(idx)"
                                                                                 v-model.number="item.jml_retur"
                                                                                 @keypress="numberOnly">
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr v-if="item?.loadingProduk">
+                                                                        <td colspan="100%">
+                                                                            <div class="text-center">
+                                                                                <div class="spinner-border spinner-border-sm"
+                                                                                    role="status">
+                                                                                    <span
+                                                                                        class="sr-only">Loading...</span>
+                                                                                </div>
+                                                                            </div>
                                                                         </td>
                                                                     </tr>
                                                                     <tr
@@ -459,11 +499,11 @@ export default {
                                                                                                             <input
                                                                                                                 @click="toggleNoSeri(item, idx2, noseri)"
                                                                                                                 :checked="produk.noSeriSelected && produk.noSeriSelected.find((n) => n.id === noseri.id)"
-                                                                                                                :ref="`noseri-${noseri.id}-${idx}-${idx2}`"
+                                                                                                                :ref="`noseri-${noseri.id}`"
                                                                                                                 type="checkbox">
                                                                                                             {{
             noseri.noseri
-                                                                                                            }}
+        }}
                                                                                                         </div>
                                                                                                         <div v-else>
                                                                                                             <span
@@ -483,6 +523,13 @@ export default {
                                                                 </template>
                                                             </tbody>
                                                         </table>
+                                                        <div v-else>
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="spinner-border" role="status">
+                                                                    <span class="sr-only">Loading...</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

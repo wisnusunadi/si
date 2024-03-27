@@ -2131,6 +2131,7 @@ class GudangController extends Controller
             (SELECT COUNT(t_gbj_noseri.id) FROM t_gbj_noseri WHERE t_gbj_noseri.t_gbj_detail_id = tgd.id AND t_gbj_noseri.status_id is null and t_gbj_noseri.jenis = 'masuk') AS jumlah,
             gbj.id as gbj_id,
             tg.tgl_masuk,
+            tg.created_at,
             concat(p.nama, ' ', gbj.nama) as nama
             from t_gbj_detail tgd
             left join t_gbj tg on tg.id = tgd.t_gbj_id
@@ -2172,7 +2173,8 @@ class GudangController extends Controller
             (SELECT COUNT(t_gbj_noseri.id) FROM t_gbj_noseri WHERE t_gbj_noseri.t_gbj_detail_id = tgd.id AND t_gbj_noseri.status_id is null and t_gbj_noseri.jenis = 'masuk') AS jumlah,
             gbj.id as gbj_id,
             tg.tgl_masuk,
-            pesanan.no_po,
+            tg.created_at,
+            pesanan.so,
             concat(p.nama, ' ', gbj.nama) as nama
             from t_gbj_detail tgd
             left join t_gbj tg on tg.id = tgd.t_gbj_id
@@ -2189,9 +2191,10 @@ class GudangController extends Controller
                 $obj[] = array(
                     'id' => $r->id,
                     'gbj_id' => $r->gbj_id,
-                    'no_ref' => $r->no_po,
+                    'no_ref' => $r->so,
                     'nama' => $r->nama,
                     'tgl_masuk' => $r->tgl_masuk,
+                    'timestamp' => $r->created_at,
                     'jumlah' => $r->jumlah,
                     'status' => 'retur',
                     'bagian' => 'Penjualan'
@@ -2205,6 +2208,7 @@ class GudangController extends Controller
                     'no_ref' => $r->no_ref,
                     'nama' => $r->nama,
                     'tgl_masuk' => $r->tgl_masuk,
+                    'timestamp' => $r->created_at,
                     'jumlah' => $r->jumlah,
                     'status' => 'produksi',
                     'bagian' => 'Produksi'

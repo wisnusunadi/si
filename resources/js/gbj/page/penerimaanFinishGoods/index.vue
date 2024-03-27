@@ -32,7 +32,7 @@ export default {
                 },
                 {
                     text: 'Tanggal Masuk',
-                    value: 'tgl_masuk'
+                    value: 'datetime'
                 },
                 {
                     text: 'Bagian',
@@ -70,6 +70,7 @@ export default {
                 this.items = data.map((item, index) => {
                     return {
                         no: index + 1,
+                        datetime: this.dateTimeFormat(item.timestamp),
                         ...item
                     }
                 })
