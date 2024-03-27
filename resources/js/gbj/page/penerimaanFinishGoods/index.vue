@@ -2,6 +2,7 @@
 import Header from '../../components/header.vue'
 import moment from 'moment'
 import detail from './detail.vue'
+import axios from 'axios'
 export default {
     components: {
         Header,
@@ -54,35 +55,7 @@ export default {
                     value: 'aksi'
                 }
             ],
-            items: [
-                {
-                    no: 1,
-                    no_ref: 'NOMOR BPPB',
-                    tgl_masuk: '23 September 2024',
-                    nama: 'Produk 1',
-                    bagian: 'Produksi',
-                    jumlah: 100,
-                    status: 'perakitan'
-                },
-                {
-                    no: 2,
-                    no_ref: 'NOMOR SO',
-                    tgl_masuk: '25 Januari 2024',
-                    nama: 'Produk 1',
-                    bagian: 'Penjualan',
-                    jumlah: 100,
-                    status: 'retur'
-                },
-                {
-                    no: 3,
-                    no_ref: 'NOMOR SO',
-                    tgl_masuk: '23 Februari 2024',
-                    nama: 'Produk 1',
-                    bagian: 'Logistik',
-                    jumlah: 100,
-                    status: 'batal'
-                }
-            ],
+            items: [],
             search: '',
             years: new Date().getFullYear(),
             showModal: false,
@@ -90,6 +63,22 @@ export default {
         }
     },
     methods: {
+        async getData() {
+            try {
+                this.$store.dispatch('setLoading', true)
+                const { data } = await axios.get(`/api/tfp/rakit?tahun=${this.years}`)
+                this.items = data.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.$store.dispatch('setLoading', false)
+            }
+        },
         showDetailModal(item) {
             this.detailSelected = item
             this.showModal = true
@@ -99,7 +88,7 @@ export default {
         },
         statusBadge(status) {
             switch (status) {
-                case 'perakitan':
+                case 'produksi':
                     return {
                         text: 'Perakitan',
                         color: 'badge-primary'
@@ -126,6 +115,9 @@ export default {
             }
         }
     },
+    created() {
+        this.getData()
+    },
     computed: {
         yearsComputed() {
             let years = []
@@ -149,7 +141,7 @@ export default {
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-1 col-form-label">Tahun</label>
                             <div class="col-2">
-                                <v-select :options="yearsComputed" v-model="years"></v-select>
+                                <v-select :options="yearsComputed" v-model="years" @input="getData"></v-select>
                             </div>
                         </div>
                     </div>
@@ -157,7 +149,7 @@ export default {
                         <input type="text" class="form-control" v-model="search" placeholder="Cari..." />
                     </div>
                 </div>
-                <data-table :headers="headers" :items="items" :search="search">
+                <data-table :headers="headers" :items="items" :search="search" v-if="!$store.state.loading">
                     <template #item.status="{ item }">
                         <span :class="'badge ' + statusBadge(item.status).color">{{ statusBadge(item.status).text
                             }}</span>
@@ -169,6 +161,11 @@ export default {
                         </button>
                     </template>
                 </data-table>
+                <div v-else class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

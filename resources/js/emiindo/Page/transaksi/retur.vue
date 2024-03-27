@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import seriviatext from '../../../gbj/page/penerimaanRework/transfer/modalTransfer/seriviatext.vue';
 export default {
     props: ['retur'],
@@ -8,22 +9,22 @@ export default {
     data() {
         return {
             items: [
-                {
-                    no: 1,
-                    nama: 'MOL-01 + UPS',
-                    expanded: false,
-                    qty: 1,
-                    jml_retur: 0,
-                    noSeriSelected: [],
-                },
-                {
-                    no: 2,
-                    nama: 'DIGIT ONE BABY',
-                    expanded: false,
-                    qty: 1,
-                    jml_retur: 0,
-                    noSeriSelected: [],
-                },
+                // {
+                //     no: 1,
+                //     nama: 'MOL-01 + UPS',
+                //     expanded: false,
+                //     qty: 1,
+                //     jml_retur: 0,
+                //     noSeriSelected: [],
+                // },
+                // {
+                //     no: 2,
+                //     nama: 'DIGIT ONE BABY',
+                //     expanded: false,
+                //     qty: 1,
+                //     jml_retur: 0,
+                //     noSeriSelected: [],
+                // },
             ],
             showModal: false,
             itemSelected: {},
@@ -31,227 +32,61 @@ export default {
         }
     },
     methods: {
+        async getPaket() {
+            try {
+                const { data } = await axios.get(`/api/penjualan/retur_po/detail_paket/${this.retur.pesanan_id}`)
+                this.items = data.map((item, idx) => {
+                    return {
+                        ...item,
+                        no: idx + 1,
+                        expanded: false,
+                        qty: item.jumlah_kirim,
+                        jml_retur: 0,
+                        noSeriSelected: [],
+                    }
+                })
+            } catch (error) {
+                console.error(error)
+            }
+        },
         closeModal() {
             $('.modalRetur').modal('hide');
             this.$nextTick(() => {
                 this.$emit('close')
             })
         },
-        toggleItem(idx) {
+        async toggleItem(idx) {
             // if jml_retur not 0 or null or undefined, then expanded = true
             if (this.items[idx].jml_retur !== 0 && this.items[idx].jml_retur !== null && this.items[idx].jml_retur !== '') {
-                this.items[idx].expanded = true
-
-                this.items[idx].produk = [
-                    {
-                        no: 1,
-                        nama: 'MOL-01',
-                        max: this.items[idx].jml_retur,
-                        noSeriSelected: [],
-                        noseri: [
-                            {
-                                id: 1,
-                                noseri: '1',
-                            },
-                            {
-                                id: 2,
-                                noseri: '2',
-                            },
-                            {
-                                id: 3,
-                                noseri: '3',
-                            },
-                            {
-                                id: 4,
-                                noseri: '4',
-                            },
-                            {
-                                id: 5,
-                                noseri: '5',
-                            },
-                            {
-                                id: 6,
-                                noseri: '6',
-                            },
-                            {
-                                id: 7,
-                                noseri: '7',
-                            },
-                            {
-                                id: 8,
-                                noseri: '8',
-                            },
-                            {
-                                id: 9,
-                                noseri: '9',
-                            },
-                            {
-                                id: 10,
-                                noseri: '10',
-                            },
-                            {
-                                id: 11,
-                                noseri: '11',
-                            },
-                            {
-                                id: 12,
-                                noseri: '12',
-                            },
-                            {
-                                id: 13,
-                                noseri: '13',
-                            },
-                            {
-                                id: 14,
-                                noseri: '14',
-                            },
-                            {
-                                id: 15,
-                                noseri: '15',
-                            },
-                            {
-                                id: 16,
-                                noseri: '16',
-                            },
-                            {
-                                id: 17,
-                                noseri: '17',
-                            },
-                            {
-                                id: 18,
-                                noseri: '18',
-                            },
-                            {
-                                id: 19,
-                                noseri: '19',
-                            },
-                            {
-                                id: 20,
-                                noseri: '20',
-                            },
-                            {
-                                id: 21,
-                                noseri: '21',
-                            },
-                            {
-                                id: 22,
-                                noseri: '22',
-                            },
-                            {
-                                id: 23,
-                                noseri: '23',
-                            },
-                            {
-                                id: 24,
-                                noseri: '24',
-                            },
-                        ],
-                    },
-                    {
-                        no: 2,
-                        nama: 'UPS',
-                        max: this.items[idx].jml_retur,
-                        noSeriSelected: [],
-                        noseri: [
-                            {
-                                id: 25,
-                                noseri: '25',
-                            },
-                            {
-                                id: 26,
-                                noseri: '26',
-                            },
-                            {
-                                id: 27,
-                                noseri: '27',
-                            },
-                            {
-                                id: 28,
-                                noseri: '28',
-                            },
-                            {
-                                id: 29,
-                                noseri: '29',
-                            },
-                            {
-                                id: 30,
-                                noseri: '30',
-                            },
-                            {
-                                id: 31,
-                                noseri: '31',
-                            },
-                            {
-                                id: 32,
-                                noseri: '32',
-                            },
-                            {
-                                id: 33,
-                                noseri: '33',
-                            },
-                            {
-                                id: 34,
-                                noseri: '34',
-                            },
-                            {
-                                id: 35,
-                                noseri: '35',
-                            },
-                            {
-                                id: 36,
-                                noseri: '36',
-                            },
-                            {
-                                id: 37,
-                                noseri: '37',
-                            },
-                            {
-                                id: 38,
-                                noseri: '38',
-                            },
-                            {
-                                id: 39,
-                                noseri: '39',
-                            },
-                            {
-                                id: 40,
-                                noseri: '40',
-                            },
-                            {
-                                id: 41,
-                                noseri: '41',
-                            },
-                            {
-                                id: 42,
-                                noseri: '42',
-                            },
-                            {
-                                id: 43,
-                                noseri: '43',
-                            },
-                            {
-                                id: 44,
-                                noseri: '44',
-                            },
-                            {
-                                id: 45,
-                                noseri: '45',
-                            },
-                            {
-                                id: 46,
-                                noseri: '46',
-                            },
-                            {
-                                id: 47,
-                                noseri: '47',
-                            },
-                            {
-                                id: 48,
-                                noseri: '48',
-                            },
-                        ],
-                    }
-                ]
+                try {
+                    const { data } = await axios.get(`/api/penjualan/retur_po/detail_prd/${this.items[idx].id}`)
+                    this.items = this.items.map((item, i) => {
+                        if (i === idx) {
+                            return {
+                                ...item,
+                                noSeriSelected: [],
+                                produk: data.map((prd, idx) => {
+                                    return {
+                                        ...prd,
+                                        no: idx + 1,
+                                        nama: prd.nama,
+                                        max: item.jml_retur,
+                                        noSeriSelected: [],
+                                        noseri: prd.seri.map((n, idx) => {
+                                            return {
+                                                ...n,
+                                            }
+                                        }),
+                                    }
+                                }),
+                            }
+                        }
+                        return item
+                    })
+                    this.items[idx].expanded = true
+                } catch (error) {
+                    console.error(error)
+                }
             } else {
                 this.items[idx].expanded = false
             }
@@ -303,6 +138,8 @@ export default {
                 item.produk[idxProduk].noSeriSelected = item.produk[idxProduk].noSeriSelected.filter((n) => n.id !== noseri.id)
             }
 
+            console.log(item.produk[idxProduk].max)
+
 
             if (item.produk[idxProduk].noSeriSelected.length > item.produk[idxProduk].max) {
                 this.$swal('Error', 'Jumlah retur melebihi jumlah qty', 'error')
@@ -347,12 +184,35 @@ export default {
                 return
             }
 
-            const form = [
-                this.noretur,
-                paket
-            ]
+            const form = {
+                no_retur: this.noretur,
+                item: paket
+            }
 
-            console.log(form)
+            // ya atau tidak
+            this.$swal({
+                title: "Konfirmasi",
+                text: "Apakah anda yakin ingin menyimpan data ini?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya",
+                cancelButtonText: "Tidak",
+            }).then((result) => {
+                if (result.value) {
+                    axios.post('/api/penjualan/retur_po/kirim', form)
+                        .then((res) => {
+                            this.$swal('Success', 'Berhasil menyimpan', 'success')
+                            this.closeModal()
+                            this.$emit('refresh')
+                        })
+                        .catch((err) => {
+                            console.error(err)
+                            this.$swal('Error', 'Gagal menyimpan', 'error')
+                        })
+                }
+            })
         },
         showModalNoSeri(idx) {
             this.showModal = true
@@ -394,6 +254,9 @@ export default {
                 this.$swal('Error', `Nomor Seri ${noserinotfound.join(', ')} tidak ditemukan`, 'error')
             }
         },
+    },
+    created() {
+        this.getPaket()
     },
     watch: {
         // check jml_retur not more than qty
@@ -575,7 +438,8 @@ export default {
                                                                                     <tr>
                                                                                         <th>No</th>
                                                                                         <th>Nama Produk</th>
-                                                                                        <th>Nomor Seri</th>
+                                                                                        <th>Nomor Seri
+                                                                                        </th>
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
@@ -598,7 +462,7 @@ export default {
                                                                                                                 :ref="`noseri-${noseri.id}-${idx}-${idx2}`"
                                                                                                                 type="checkbox">
                                                                                                             {{
-                                                                                                            noseri.noseri
+            noseri.noseri
                                                                                                             }}
                                                                                                         </div>
                                                                                                         <div v-else>

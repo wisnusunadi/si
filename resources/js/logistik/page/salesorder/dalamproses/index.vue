@@ -94,6 +94,9 @@ export default {
         },
         filter(status) {
             this.$emit('filter', status);
+        },
+        openDetail(item) {
+            window.location.href = `/logistik/so/detail/proses/${item.jenis_id}/${item.jenis}`;
         }
     },
     computed: {
@@ -137,8 +140,7 @@ export default {
                                 <div class="form-group" v-for="(item, key) in pengiriman" :key="key">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" :value="item.value"
-                                        @click="filter(item.value)"
-                                            :id="`status${key}`">
+                                            @click="filter(item.value)" :id="`status${key}`">
                                         <label class="form-check-label" :for="`status${key}`">
                                             {{ item.text }}
                                         </label>
@@ -172,6 +174,10 @@ export default {
                     <button class="dropdown-item cetaksj" type="button" @click="showDetailSelected(item)">
                         <i class="fas fa-print"></i>
                         Cetak Surat Jalan
+                    </button>
+                    <button class="dropdown-item cetaksj" type="button" @click="openDetail(item)">
+                        <i class="fas fa-eye"></i>
+                        Detail
                     </button>
                 </div>
             </template>

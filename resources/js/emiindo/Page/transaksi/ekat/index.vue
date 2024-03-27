@@ -173,9 +173,11 @@ export default {
 <template>
     <div>
         <batalComponents v-if="showModal" @close="showModal = false" :batal="detailSelected" />
-        <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected" />
+        <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected"
+            @refresh="$emit('refresh')" />
         <detailComponents v-if="showModal" @close="showModal = false" :detail="detailSelected" />
-        <doComponents v-if="showModal" @close="showModal = false" :doData="detailSelected" @refresh="$emit('refresh')" />
+        <doComponents v-if="showModal" @close="showModal = false" :doData="detailSelected"
+            @refresh="$emit('refresh')" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex bd-highlight">
@@ -255,7 +257,7 @@ export default {
                             <td :class="{ 'strike-through': item.status == 'batal' }">
                                 <div v-if="item.tgl_kontrak_custom">
                                     <div :class="calculateDateFromNow(item.tgl_kontrak_custom).color">{{
-            dateFormat(item.tgl_kontrak_custom) }}</div>
+                                        dateFormat(item.tgl_kontrak_custom) }}</div>
                                     <small :class="calculateDateFromNow(item.tgl_kontrak_custom).color">
                                         <i :class="calculateDateFromNow(item.tgl_kontrak_custom).icon"></i>
                                         {{ calculateDateFromNow(item.tgl_kontrak_custom).text }}

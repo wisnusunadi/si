@@ -1721,6 +1721,14 @@ class QcController extends Controller
 
     public function get_data_so($value)
     {
+
+        function get_jenis($so)
+        {
+            $jenis = explode('/', $so);
+            // return small text
+            return strtolower($jenis[1]) == 'ekat' ? 'ekatalog' : strtolower($jenis[1]);
+        }
+
         $data = "";
         $arrayid = array();
         $x = explode(',', $value);
@@ -1814,7 +1822,7 @@ class QcController extends Controller
                         ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                         ->limit(1);
-                }
+                },
             ])
                 ->with(['Ekatalog.Customer.provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->havingRaw('(cqcprd < ctfprd AND ctfprd > 0) OR (cqcpart < ctfpart AND ctfpart > 0)')
@@ -2502,6 +2510,11 @@ class QcController extends Controller
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
         }
+
+        $data = $data->map(function ($item) {
+            $item->jenis = get_jenis($item->so);
+            return $item;
+        });
 
         return response()->json($data);
 
@@ -3942,7 +3955,7 @@ class QcController extends Controller
     //Tambah
     public function create_data_qc( /*$seri_id, $tfgbj_id, */$jenis, $pesanan_id, $produk_id, Request $request)
     {
-       // dd($request->all());
+        // dd($request->all());
         // $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($pesanan_id) {
         //     $q->where('Pesanan_id', $pesanan_id);
         // })->where('gudang_barang_jadi_id', $produk_id)->first();
@@ -5628,10 +5641,10 @@ class QcController extends Controller
                 $cek_lab = UjiLab::where('pesanan_id', $request->pesanan_id)->first();
                 if (isset($cek_lab['id'])) {
                     for ($i = 0; $i < count($request->noseri_id); $i++) {
-                       # $max_no = UjiLabDetail::whereYear('created_at', now()->year)->latest('id')->value('no');
+                        # $max_no = UjiLabDetail::whereYear('created_at', now()->year)->latest('id')->value('no');
                         $get_dpp = NoseriTGbj::find($request->noseri_id[$i]['id']);
                         UjiLabDetail::create([
-                        #    'no' => $max_no + 1,
+                            #    'no' => $max_no + 1,
                             'uji_lab_id' => $cek_lab['id'],
                             'detail_pesanan_produk_id' => $get_dpp->NoseriDetailPesanan->detail_pesanan_produk_id,
                             'noseri_id' => $get_dpp->NoseriDetailPesanan->id,
@@ -5665,7 +5678,7 @@ class QcController extends Controller
                     ]);
                     for ($i = 0; $i < count($request->noseri_id); $i++) {
                         $get_dpp = NoseriTGbj::find($request->noseri_id[$i]['id']);
-                       # $max_no = UjiLabDetail::whereYear('created_at', now()->year)->latest('id')->value('no');
+                        # $max_no = UjiLabDetail::whereYear('created_at', now()->year)->latest('id')->value('no');
                         UjiLabDetail::create([
                             #'no' => $max_no + 1,
                             'uji_lab_id' => $ujilab->id,

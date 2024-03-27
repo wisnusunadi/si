@@ -57,6 +57,9 @@ export default {
         cetak_sppb(id) {
             window.open(`/penjualan/penjualan/cetak_surat_perintah/${id}`, '_blank');
         },
+        detail(item) {
+            window.location.href = `/qc/so/detail/${item.id}/${item.jenis}`;
+        },
         filter(status) {
             this.$emit('filter', status);
         }
@@ -151,7 +154,7 @@ export default {
                         <td></td>
                         <td></td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary">
+                            <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
                                 <i class="fas fa-eye"></i>
                                 Detail
                             </button>

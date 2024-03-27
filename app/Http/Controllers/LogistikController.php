@@ -2473,6 +2473,38 @@ class LogistikController extends Controller
         //     'years' => $data
         // ]);
 
+        function get_jenis($so)
+        {
+            $jenis = explode('/', $so);
+            // return small text
+            return $jenis[1];
+        }
+
+        function get_jenis_id($so, $jenis)
+        {
+            switch ($jenis) {
+                case 'EKAT':
+                    return $so->Ekatalog->id;
+                    break;
+                case 'SPA':
+                    return $so->Spa->id;
+                    break;
+                case 'SPB':
+                    return $so->Spb->id;
+                    break;
+                default:
+                    return null;
+                    break;
+            }
+        }
+
+        $data = $data->map(function ($item) {
+            $jenis = get_jenis($item->so);
+            $item->jenis = $jenis;
+            $item->jenis_id = get_jenis_id($item, get_jenis($item->so));
+            return $item;
+        });
+
         return response()->json($data);
 
         return datatables()->of($data)
