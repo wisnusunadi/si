@@ -2,11 +2,13 @@
 import batalComponents from '../batal/index.vue'
 import returComponents from '../retur.vue'
 import detailComponents from '../detail.vue'
+import doComponents from '../do.vue'
 export default {
     components: {
         batalComponents,
         returComponents,
-        detailComponents
+        detailComponents,
+        doComponents,
     },
     props: ['spb'],
     data() {
@@ -114,6 +116,34 @@ export default {
                 return false
             }
         },
+        hapus(item) {
+            this.$swal({
+                title: 'Apakah Anda Yakin?',
+                text: 'Data yang dihapus tidak dapat dikembalikan!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/api/spb/delete/${item.id}`).then(() => {
+                        this.$emit('refresh')
+                        this.$swal('Berhasil!', 'Data berhasil dihapus.', 'success')
+                    }).catch(() => {
+                        this.$swal('Gagal!', 'Data gagal dihapus.', 'error')
+                    })
+                }
+            })
+        },
+        openDO(item) {
+            this.detailSelected = item
+            this.showModal = true
+            this.$nextTick(() => {
+                $('.modalDO').modal('show')
+            })
+        },
     },
     computed: {
         yearsComputed() {
@@ -131,6 +161,7 @@ export default {
         <batalComponents v-if="showModal" @close="showModal = false" :batal="detailSelected" />
         <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected" />
         <detailComponents v-if="showModal" @close="showModal = false" :detail="detailSelected" />
+        <doComponents v-if="showModal" @close="showModal = false" :doData="detailSelected" />
 
         <div class="card-body">
             <div class="d-flex bd-highlight">
@@ -202,18 +233,21 @@ export default {
                                     Edit
                                 </button>
                             </a>
-                            <a target="_blank" href="#">
+                            <a target="_blank" href="#" v-if="item.no_po != null && item.tgl_po != null">
                                 <button class="dropdown-item" type="button" @click="cetakSPPB(item.pesanan_id)">
                                     <i class="fas fa-print"></i>
                                     SPPB
                                 </button>
                             </a>
                             <a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="5092">
-                                <button class="dropdown-item" type="button">
+                                <button class="dropdown-item" type="button" @click="openDO(item)">
                                     <i class="fas fa-pencil-alt"></i>
-                                    Edit No Urut &amp; DO
+                                    Edit DO
                                 </button>
                             </a>
+                            <a href="#"><button class="dropdown-item openModalBatalRetur" @click="hapus(item)"
+                                    type="button"><i class="fas fa-trash"></i>
+                                    Hapus</button></a>
                             <a href="#"><button class="dropdown-item openModalBatalRetur" @click="batal(item)"
                                     type="button"><i class="fas fa-times"></i>
                                     Batal</button></a>

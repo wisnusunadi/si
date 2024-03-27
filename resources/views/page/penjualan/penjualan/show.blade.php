@@ -16,7 +16,7 @@
                     @elseif(Auth::user()->divisi_id == '2')
                         <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item active">Penjualan</li>
-                    @endif
+                    @endifhapus
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->

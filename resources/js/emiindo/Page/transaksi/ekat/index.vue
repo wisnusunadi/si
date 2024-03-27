@@ -5,6 +5,7 @@ import detailComponents from '../detail.vue'
 import doComponents from '../do.vue'
 import statusComponents from '../../../components/status.vue'
 import pagination from '../../../components/pagination.vue'
+import axios from 'axios'
 export default {
     components: {
         batalComponents,
@@ -71,7 +72,7 @@ export default {
         }
     },
     methods: {
-        tambah() { 
+        tambah() {
             window.location.href = '/penjualan/penjualan/create'
         },
         batal(item) {
@@ -150,6 +151,27 @@ export default {
                 return false
             }
         },
+        hapus(item) {
+            this.$swal({
+                title: 'Apakah Anda Yakin?',
+                text: 'Data yang dihapus tidak dapat dikembalikan!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/api/ekatalog/delete/${item.id}`).then(() => {
+                        this.$emit('refresh')
+                        this.$swal('Berhasil!', 'Data berhasil dihapus.', 'success')
+                    }).catch(() => {
+                        this.$swal('Gagal!', 'Data gagal dihapus.', 'error')
+                    })
+                }
+            })
+        }
     },
     computed: {
         yearsComputed() {
@@ -278,7 +300,7 @@ export default {
                                 <span class="red-text badge" v-else>{{ item.persentase }}</span>
                             </td>
                             <td>
-                            <div>
+                                <div>
                                     <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
                                         aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i>
                                     </div>
@@ -296,7 +318,7 @@ export default {
                                                 Edit
                                             </button>
                                         </a>
-                                        <a target="_blank" href="#">
+                                        <a target="_blank" href="#" v-if="item.no_po != null && item.tgl_po != null">
                                             <button class="dropdown-item" type="button"
                                                 @click="cetakSPPB(item.pesanan_id)">
                                                 <i class="fas fa-print"></i>
@@ -309,6 +331,9 @@ export default {
                                                 Edit No Urut &amp; DO
                                             </button>
                                         </a>
+                                        <a href="#"><button class="dropdown-item openModalBatalRetur"
+                                                @click="hapus(item)" type="button"><i class="fas fa-trash"></i>
+                                                Hapus</button></a>
                                         <a href="#"><button class="dropdown-item openModalBatalRetur"
                                                 @click="batal(item)" type="button"><i class="fas fa-times"></i>
                                                 Batal</button></a>
