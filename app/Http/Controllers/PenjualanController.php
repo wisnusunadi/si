@@ -2923,7 +2923,7 @@ class PenjualanController extends Controller
                         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('logistik.status_id', 10)
-                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                        ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 },
                 'tgl_kontrak_custom' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
@@ -2977,7 +2977,7 @@ class PenjualanController extends Controller
                         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('logistik.status_id', 10)
-                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                        ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 },
                 'tgl_kontrak_custom' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
@@ -3790,7 +3790,7 @@ class PenjualanController extends Controller
                         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('logistik.status_id', 10)
-                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
                 },
                 'ckirimprd' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
@@ -3868,7 +3868,7 @@ class PenjualanController extends Controller
                         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('logistik.status_id', 10)
-                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
                 },
                 'ckirimprd' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
@@ -9822,7 +9822,6 @@ class PenjualanController extends Controller
                         'gudang_barang_jadi_id' => $e->gudang_barang_jadi_id
                     );
                 }
-
             }
         }
 

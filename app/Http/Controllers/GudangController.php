@@ -2420,7 +2420,7 @@ class GudangController extends Controller
                 // $layout = Layout::where('jenis_id', 1)->orderBy('ruang')->get();
                 // $a = 0;
 
-                $data = NoseriTGbj::select()
+                $data = NoseriTGbj::select('t_gbj_noseri.id', 't_gbj_noseri.noseri_id', 'noseri_barang_jadi.noseri')
                     ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                     ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
                     ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
