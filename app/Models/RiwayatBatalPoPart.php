@@ -11,5 +11,5 @@ class RiwayatBatalPoPart extends Model
     use HasFactory;
     protected $connection = 'erp';
     protected $table = "riwayat_batal_po_part";
-    protected $fillable = ['detail_pesanan_part_id', 'jumlah','status'];
+    protected $fillable = ['detail_pesanan_part_id', 'jumlah','status','riwayat_batal_po_id'];
 }
