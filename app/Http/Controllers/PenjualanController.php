@@ -9503,7 +9503,9 @@ class PenjualanController extends Controller
                 $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
                     ->from('noseri_logistik')
                     ->leftJoin('detail_logistik','detail_logistik.id','=','noseri_logistik.detail_logistik_id')
+                    ->leftJoin('logistik','logistik.id','=','detail_logistik.logistik_id')
                     ->leftJoin('detail_pesanan_produk','detail_logistik.detail_pesanan_produk_id','=','detail_pesanan_produk.id')
+                    ->where('logistik.status_id', 10)
                     ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id');
             },
         ])->where('pesanan_id',$id)->get();
@@ -9516,11 +9518,12 @@ class PenjualanController extends Controller
                 $jumlah = 0;
            }else{
             $jumlah = $d->seri_log / $d->item;
+            $jumlah =  $jumlah - $d->getJumlahRetur();
            }
             $obj[] = array(
                 'id' => $d->id,
                 'nama' => $d->PenjualanProduk->nama,
-                'jumlah_kirim' => $jumlah - $d->getJumlahRetur(),
+                'jumlah_kirim' => $jumlah,
                 'jumlah_po' => $d->jumlah,
             );
         }
