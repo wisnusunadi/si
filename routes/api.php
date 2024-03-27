@@ -214,6 +214,11 @@ Route::prefix('/laporan')->group(function () {
 Route::prefix('/gbj')->group(function () {
     Route::get('/riwayat_ganti_unit', [App\Http\Controllers\GudangController::class, 'riwayat_ganti_unit']);
     Route::get('/riwayat_ganti_unit/{id}', [App\Http\Controllers\GudangController::class, 'riwayat_ganti_unit_produk']);
+    Route::prefix('/batal_so')->group(function () {
+        Route::get('/show', [App\Http\Controllers\GudangController::class, 'get_batal_po']);
+        Route::get('/detail/{id}', [App\Http\Controllers\GudangController::class, 'get_detail_batal_po']);
+        Route::get('/seri/{id}', [App\Http\Controllers\GudangController::class, 'get_detail_seri_batal_po']);
+    });
     Route::prefix('/ganti_unit')->group(function () {
         Route::post('/', [App\Http\Controllers\GudangController::class, 'tf_ganti_unit_data']);
         Route::get('/', [App\Http\Controllers\GudangController::class, 'ganti_unit_data']);

@@ -9532,13 +9532,21 @@ class PenjualanController extends Controller
         $item = array();
 
         if ($data->DetailPesanan) {
-            foreach ($data->DetailPesanan as $d) {
-                $item[] = array(
+            foreach ($data->DetailPesanan as $key_d => $d) {
+                $item[$key_d] = array(
                     'id' => $d->id,
                     'nama' => $d->PenjualanProduk->nama,
                     'jumlah' => $d->jumlah - $d->getJumlahBatal(),
+                    'produk' => array(),
                     'jenis' => 'produk'
                 );
+                foreach($d->DetailPesananProduk as $key_e => $e){
+                    $item[$key_d]['produk'][$key_e] = array(
+                        'id' => $e->id,
+                        'gudang_barang_jadi_id' => $e->gudang_barang_jadi_id
+                    );
+                }
+
             }
         }
 
@@ -9672,6 +9680,7 @@ class PenjualanController extends Controller
     public function kirim_prd_batal_po(Request $request)
     {
         $obj =  json_decode(json_encode($request->all()), FALSE);
+        DB::beginTransaction();
         try {
             //code...
             $po = RiwayatBatalPo::where('pesanan_id',$obj->pesanan_id);
@@ -9686,11 +9695,19 @@ class PenjualanController extends Controller
                             $riwayats->save();
 
                         }else{
-                            RiwayatBatalPoPaket::create([
+                        $rb =   RiwayatBatalPoPaket::create([
                                 'riwayat_batal_po_id' => $po->first()->id,
                                 'detail_pesanan_id' => $item->id,
                                 'jumlah' => $item->jumlah,
                             ]);
+
+                            foreach($item->produk as $produk){
+                                RiwayatBatalPoPrd::create([
+                                    'detail_riwayat_batal_paket_id' => $rb->id,
+                                    'gudang_barang_jadi_id' => $produk->gudang_barang_jadi_id,
+                                    'detail_pesanan_produk_id' => $produk->id
+                                ]);
+                            }
                         }
                     }else{
                         $riwayatPart = RiwayatBatalPoPart::where('detail_pesanan_part_id',$item->id);
@@ -9712,33 +9729,43 @@ class PenjualanController extends Controller
                     'pesanan_id' => $obj->pesanan_id,
                     'ket' => $obj->ket,
                 ]);
-                foreach($obj->item as $o){
-                    if($o->jenis == 'produk'){
-                        RiwayatBatalPoPaket::create([
+                foreach($obj->item as $item){
+                    if($item->jenis == 'produk'){
+                        $rb =     RiwayatBatalPoPaket::create([
                             'riwayat_batal_po_id' => $po->id,
-                            'detail_pesanan_id' => $o->id,
-                            'jumlah' => $o->jumlah,
+                            'detail_pesanan_id' => $item->id,
+                            'jumlah' => $item->jumlah,
                         ]);
+
+                        foreach($item->produk as $produk){
+                            RiwayatBatalPoPrd::create([
+                                'detail_riwayat_batal_paket_id' => $rb->id,
+                                'gudang_barang_jadi_id' => $produk->gudang_barang_jadi_id,
+                                'detail_pesanan_produk_id' => $produk->id
+                            ]);
+                        }
+
                     }else{
                         RiwayatBatalPoPart::create([
                             'riwayat_batal_po_id' => $po->id,
-                            'detail_pesanan_part_id' => $o->id,
-                            'jumlah' => $o->jumlah,
+                            'detail_pesanan_part_id' => $item->id,
+                            'jumlah' => $item->jumlah,
                         ]);
                     }
                 }
 
             }
-
+            DB::commit();
             return response()->json([
                 'status' => 200,
                 'message' => 'Berhasil',
             ], 200);
         } catch (\Throwable $th) {
             //throw $th;
+            DB::rollback();
             return response()->json([
                 'status' => 404,
-                'message' => 'Gagal Dikirim'.$th->getMessage(),
+                'message' => 'Gagal Dikirim',
             ], 200);
         }
 
