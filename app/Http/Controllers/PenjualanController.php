@@ -74,6 +74,44 @@ class PenjualanController extends Controller
         $data = AktifPeriode::first()->tahun;
         return response()->json($data);
     }
+    public function get_items_penjualan($id)
+    {
+        $data = Pesanan::find($id);
+        $item = array();
+
+        if ($data->DetailPesanan) {
+            foreach ($data->DetailPesanan as $key_d => $d) {
+                $item[$key_d] = array(
+                    'id' => $d->id,
+                    'nama' => $d->PenjualanProduk->nama,
+                    'jumlah' => $d->jumlah,
+                    'harga' => $d->harga,
+                    'produk' => array()
+                );
+                foreach($d->DetailPesananProduk as $key_e => $e){
+                    $item[$key_d]['produk'][$key_e] = array(
+                        'id' => $e->id,
+                        'nama' => $e->GudangBarangjadi->Produk->nama.' '.$e->GudangBarangjadi->nama,
+                        'gudang_barang_jadi_id' => $e->gudang_barang_jadi_id
+                    );
+                }
+
+            }
+        }
+
+        if ($data->DetailPesananPart) {
+            foreach ($data->DetailPesananPart as $d) {
+                $item[] = array(
+                    'id' => $d->id,
+                    'nama' => $d->Sparepart->nama,
+                    'jumlah' => $d->jumlah,
+                    'harga' => $d->harga,
+                    'jenis' => 'part'
+                );
+            }
+        }
+        return response()->json($item);
+    }
 
     //Get Data Table
     public function penjualan_data($jenis, $status, $tahun)
