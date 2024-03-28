@@ -2309,7 +2309,7 @@ class GudangController extends Controller
             gbj.id as gbj_id,
             tg.tgl_masuk,
             tg.created_at,
-            pesanan.so,
+            tg.deskripsi as so,
             concat(p.nama, ' ', gbj.nama) as nama
             from t_gbj_detail tgd
             left join t_gbj tg on tg.id = tgd.t_gbj_id

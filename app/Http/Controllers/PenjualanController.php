@@ -9810,7 +9810,7 @@ class PenjualanController extends Controller
                 'id' => $d->id,
                 'nama' => $d->PenjualanProduk->nama,
                 'jumlah_kirim' => $jumlah,
-                'jumlah_po' => $d->jumlah,
+                'jumlah_po' => $d->jumlah
             );
         }
         return response()->json($obj);
@@ -9981,7 +9981,7 @@ class PenjualanController extends Controller
 
                 $rpo =  RiwayatReturPo::create([
                             'pesanan_id' =>$obj->pesanan_id,
-                            'no_retur' => $obj->no->retur,
+                            'no_retur' => $obj->no_retur,
                         ]);
 
                 $p =  RiwayatReturPoPaket::create([
@@ -9990,14 +9990,14 @@ class PenjualanController extends Controller
                             'jumlah' => $item->jml_retur,
                         ]);
 
-                        // $tf = TFProduksi::create([
-                        //     'retur_pesanan_id' => $dpid->pesanan_id,
-                        //     'dari' => 26,
-                        //     'ke' => 13,
-                        //     'deskripsi' => 'Retur Penjualan',
-                        //     'tgl_masuk' => Carbon::now(),
-                        //     'jenis' => 'masuk'
-                        // ]);
+                        $tf = TFProduksi::create([
+                            'retur_pesanan_id' => $rpo->id,
+                            'dari' => 26,
+                            'ke' => 13,
+                            'deskripsi' => $obj->no_retur,
+                            'tgl_masuk' => Carbon::now(),
+                            'jenis' => 'masuk'
+                        ]);
 
                         foreach ($item->produk as $produk) {
                             $r =  RiwayatReturPoPrd::create([
@@ -10006,12 +10006,12 @@ class PenjualanController extends Controller
                                 'gudang_barang_jadi_id' => $produk->gbj_id,
                             ]);
 
-                            // $tfd = TFProduksiDetail::create([
-                            //     't_gbj_id' => $tf->id,
-                            //     'gdg_brg_jadi_id' => $produk->gbj_id,
-                            //     'qty' => count($produk->noSeriSelected),
-                            //     'jenis' => 'masuk'
-                            // ]);
+                            $tfd = TFProduksiDetail::create([
+                                't_gbj_id' => $tf->id,
+                                'gdg_brg_jadi_id' => $produk->gbj_id,
+                                'qty' => count($produk->noSeriSelected),
+                                'jenis' => 'masuk'
+                            ]);
 
                             foreach ($produk->noSeriSelected as $seri) {
                                 RiwayatReturPoSeri::create([
@@ -10021,43 +10021,13 @@ class PenjualanController extends Controller
                                     'noseri_logistik_id' => $seri->noseri_logistik_id,
                                 ]);
 
-                                // $tfd = NoseriTGbj::create([
-                                //     't_gbj_detail_id' => $tfd->id,
-                                //     'noseri_id' =>  $seri->noseri_id,
-                                //     'jenis' => 'masuk'
-                                // ]);
+                                NoseriTGbj::create([
+                                    't_gbj_detail_id' => $tfd->id,
+                                    'noseri_id' =>  $seri->noseri_id,
+                                    'jenis' => 'masuk'
+                                ]);
                             }
                         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 // $riwayat = RiwayatReturPoPaket::where('detail_pesanan_id', $item->id);
                 // $dpid = DetailPesanan::find($item->id);
                 // if ($riwayat->count() > 0) {
