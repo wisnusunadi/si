@@ -9730,6 +9730,23 @@ class PenjualanController extends Controller
         return response()->json($pesanan);
     }
 
+    public function cek_noretur(Request $request)
+    {
+        $data = RiwayatReturPo::where('no_retur',$request->no)->count();
+
+        if($data > 0){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Duplikasi',
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Berhasil',
+        ], 200);
+
+    }
     public function get_detail_prd_retur_po($id)
     {
 

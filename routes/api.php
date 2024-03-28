@@ -175,6 +175,7 @@ Route::prefix('/penjualan')->group(function () {
         Route::post('/kirim/', [App\Http\Controllers\PenjualanController::class, 'kirim_prd_retur_po']);
         Route::get('/detail_paket/{id}', [App\Http\Controllers\PenjualanController::class, 'get_detail_paket_retur_po']);
         Route::get('/detail_prd/{id}', [App\Http\Controllers\PenjualanController::class, 'get_detail_prd_retur_po']);
+        Route::post('/cek_noretur/', [App\Http\Controllers\PenjualanController::class, 'cek_noretur']);
     });
 
     Route::prefix('/batal_po/{divisi}/')->group(function () {
