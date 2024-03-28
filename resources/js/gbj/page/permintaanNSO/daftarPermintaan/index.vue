@@ -1,8 +1,10 @@
 <script>
 import detailComponents from './detail.vue'
+import status from '../../../components/status.vue'
 export default {
     components: {
-        detailComponents
+        detailComponents,
+        status
     },
     data() {
         return {
@@ -36,10 +38,6 @@ export default {
                     value: 'durasi'
                 },
                 {
-                    text: 'Jenis',
-                    value: 'jenis'
-                },
-                {
                     text: 'Aksi',
                     value: 'aksi',
                 }
@@ -54,7 +52,7 @@ export default {
                     nama_bagian: 'Bagus-Produksi',
                     tujuan_permintaan: 'Lorem',
                     durasi: '1 Hari',
-                    jenis: 'Peminjaman',
+                    jenis: 'peminjaman',
                 },
                 {
                     no_permintaan: 'NSO-2021080002',
@@ -64,7 +62,7 @@ export default {
                     nama_bagian: 'Rudi-Produksi',
                     tujuan_permintaan: 'Ipsum',
                     durasi: '2 Hari',
-                    jenis: 'Peminjaman',
+                    jenis: 'peminjaman',
                 },
                 {
                     no_permintaan: 'NSO-2021080003',
@@ -74,7 +72,7 @@ export default {
                     nama_bagian: 'Yudi-Produksi',
                     tujuan_permintaan: 'Dolor',
                     durasi: '3 Hari',
-                    jenis: 'Peminjaman',
+                    jenis: 'peminjaman',
                 },
                 {
                     no_permintaan: 'NSO-2021080004',
@@ -84,7 +82,7 @@ export default {
                     nama_bagian: 'Kiki-Produksi',
                     tujuan_permintaan: 'Sit Amet',
                     durasi: null,
-                    jenis: 'Permintaan',
+                    jenis: 'permintaan',
                 },
             ],
             detailSelected: {},
@@ -161,6 +159,12 @@ export default {
                 </div>
             </div>
             <data-table :headers="headers" :items="items" :search="search">
+                <template #item.tgl_permintaan="{ item }">
+                    <div>
+                        {{ item.tgl_permintaan }}
+                        <status :status="item.jenis" />
+                    </div>
+                </template>
                 <template #item.aksi="{ item }">
                     <div>
                         <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
