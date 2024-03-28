@@ -1855,7 +1855,7 @@ class MasterController extends Controller
 
 
 
-            echo json_encode($data);
+            return response()->json($data);
         } else if ($r->jenis == "variasi") {
 
             $detail_pesanan_produk = DetailPesananProduk::where('id', $r->id)->addSelect([
@@ -1927,7 +1927,7 @@ class MasterController extends Controller
             $data['qc'] =  $detail_pesanan_produk->count_gudang - $detail_pesanan_produk->count_qc_ok;
             $data['log'] =  $detail_pesanan_produk->count_qc_ok -  $detail_pesanan_produk->count_log + $detail_pesanan_produk->count_belum_kirim;
             $data['kir'] =  $detail_pesanan_produk->count_kirim;
-            echo json_encode($data);
+            return response()->json($data);
         } else if ($r->jenis == "part") {
             $detail_pesanan_part = DetailPesananPart::where('id', $r->id)->addSelect([
                 'count_qc_ok' => function ($q) {
@@ -1974,7 +1974,7 @@ class MasterController extends Controller
             $data['qc'] =   intval($detail_pesanan_part->jumlah - $detail_pesanan_part->count_qc_ok);
             $data['log'] = intval($detail_pesanan_part->count_qc_ok - $detail_pesanan_part->count_log + $detail_pesanan_part->count_belum_kirim);
             $data['kir'] =   intval($detail_pesanan_part->count_kirim);
-            echo json_encode($data);
+            return response()->json($data);
         }
     }
 

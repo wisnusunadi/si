@@ -13,6 +13,7 @@ import numberOnly from './plugins/numberOnly'
 import dateFormat from './plugins/dateFormat'
 import dateTimeFormat from './plugins/dateTimeFormat'
 import timeFormat from './plugins/timeFormat'
+import rupiahFormat from './plugins/rupiahFormat';
 import DataTable from './components/DataTable.vue'
 import persentase from "./components/persentase.vue";
 
@@ -25,6 +26,7 @@ Vue.use(numberOnly);
 Vue.use(dateFormat);
 Vue.use(dateTimeFormat);
 Vue.use(timeFormat);
+Vue.use(rupiahFormat);
 Vue.component("persentase", persentase);
 Vue.component('data-table', DataTable);
 

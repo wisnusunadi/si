@@ -1,7 +1,7 @@
 <script>
 import batalComponents from '../batal/index.vue'
 import returComponents from '../retur.vue'
-import detailComponents from '../detail.vue'
+import detailComponents from '../detail/index.vue'
 import doComponents from '../do.vue'
 import statusComponents from '../../../components/status.vue'
 import pagination from '../../../components/pagination.vue'
@@ -332,13 +332,14 @@ export default {
                                             </button>
                                         </a>
                                         <a href="#"><button class="dropdown-item openModalBatalRetur"
-                                                @click="hapus(item)" type="button"><i class="fas fa-trash"></i>
+                                                v-if="item.pesanan.so == null" @click="hapus(item)" type="button"><i
+                                                    class="fas fa-trash"></i>
                                                 Hapus</button></a>
                                         <a href="#"><button class="dropdown-item openModalBatalRetur"
                                                 @click="batal(item)" type="button"><i class="fas fa-times"></i>
                                                 Batal</button></a>
                                         <a href="#"><button class="dropdown-item openModalBatalRetur"
-                                                @click="retur(item)" type="button"><i
+                                                v-if="item.cterkirim > 0" @click="retur(item)" type="button"><i
                                                     class="fa-solid fa-arrow-rotate-left"></i>
                                                 Retur</button></a>
                                     </div>

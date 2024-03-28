@@ -1,7 +1,7 @@
 <script>
 import batalComponents from '../batal/index.vue'
 import returComponents from '../retur.vue'
-import detailComponents from '../detail.vue'
+import detailComponents from '../detail/index.vue'
 import doComponents from '../do.vue'
 export default {
     components: {

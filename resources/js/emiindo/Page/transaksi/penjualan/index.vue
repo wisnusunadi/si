@@ -1,5 +1,5 @@
 <script>
-import detailComponents from '../detail.vue'
+import detailComponents from '../detail/index.vue'
 import pagination from '../../../components/pagination.vue'
 import statusComponents from '../../../components/status.vue'
 export default {
