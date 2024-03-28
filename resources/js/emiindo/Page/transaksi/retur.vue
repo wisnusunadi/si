@@ -13,6 +13,7 @@ export default {
             itemSelected: {},
             noretur: '',
             loadingPaket: false,
+            errorMessage: '',
         }
     },
     methods: {
@@ -179,6 +180,14 @@ export default {
                 }
             })
 
+            paket.forEach((item) => {
+                item.produk.forEach((produk) => {
+                    if (produk.noSeriSelected.length !== produk.max) {
+                        error = true
+                    }
+                })
+            })
+
             // remove array yang sama dari paket berdasarkan no
 
             paket = [...new Map(paket.map(item => [item['no'], item])).values()]
@@ -191,11 +200,12 @@ export default {
             if (paket.length > 0 && !error) {
                 this.$swal('Success', 'Berhasil menyimpan', 'success')
             } else {
-                this.$swal('Error', 'Silahkan lengkapi data', 'error')
+                this.$swal('Error', 'Silahkan cek kembali data yang anda masukkan', 'error')
                 return
             }
 
             const form = {
+                pesanan_id: this.retur.pesanan_id,
                 no_retur: this.noretur,
                 item: paket
             }
@@ -271,6 +281,15 @@ export default {
             } else {
                 return false
             }
+        },
+        cekErrorRetur() {
+            axios.post('/api/penjualan/retur_po/cek_noretur', this.no_retur)
+                .then((res) => {
+                    this.errorMessage = ''
+                })
+                .catch((err) => {
+                    this.errorMessage = err.response.data.message
+                })
         },
     },
     created() {
@@ -413,7 +432,12 @@ export default {
                                                                 <div class="form-group">
                                                                     <label for="">No. Retur</label>
                                                                     <input type="text" class="form-control"
+                                                                        @input="cekErrorRetur"
+                                                                        :class="{ 'is-invalid': errorMessage !== '' }"
                                                                         v-model="noretur">
+                                                                    <div class="invalid-feedback">
+                                                                        {{ errorMessage }}
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -492,7 +516,7 @@ export default {
                                                                                                                 :ref="`noseri-${noseri.id}`"
                                                                                                                 type="checkbox">
                                                                                                             {{
-                                                                                                            noseri.noseri
+            noseri.noseri
                                                                                                             }}
                                                                                                         </div>
                                                                                                         <div v-else>
