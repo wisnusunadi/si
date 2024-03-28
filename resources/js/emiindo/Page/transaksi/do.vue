@@ -42,10 +42,17 @@ export default {
     watch: {
         doData: {
             handler: function (val) {
-                this.form.no_urut = val.no_urut
-                this.form.no_do = val?.pesanan?.no_do
-                this.form.tgl_do = val?.pesanan?.tgl_do
-                this.form.keterangan = val?.pesanan?.ket
+                if (val.jenis == 'ekatalog') {
+                    this.form.no_urut = val.no_urut
+                    this.form.no_do = val?.pesanan?.no_do
+                    this.form.tgl_do = val?.pesanan?.tgl_do
+                    this.form.keterangan = val?.pesanan?.ket
+                } else {
+                    this.form.no_do = val?.pesanan?.no_do
+                    this.form.tgl_do = val?.pesanan?.tgl_do
+                    this.form.keterangan = val?.pesanan?.ket
+                    delete this.form.no_urut
+                }
             },
             immediate: true
         }
@@ -90,7 +97,8 @@ export default {
                                         <div class="margin">
                                             <a class="text-muted">Status</a>
                                             <b class="float-right" id="status">
-                                                <statusComponents :status="doData.status" />
+                                                <statusComponents
+                                                    :status="doData.jenis == 'ekatalog' ? doData.status : doData.pesanan.state.nama" />
                                             </b>
                                         </div>
 
@@ -103,7 +111,7 @@ export default {
                                         <div class="card-header"><i class="fas fa-edit"></i> Ubah No Urut</div>
                                         <div class="card-body">
                                             <div class="form-horizontal">
-                                                <div class="form-group row">
+                                                <div class="form-group row" v-if="doData.jenis == 'ekatalog'">
                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No
                                                         Urut</label>
                                                     <div class="col-lg-3 col-md-12">

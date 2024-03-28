@@ -21,6 +21,36 @@ export default {
                         text: status,
                         color: 'badge-danger'
                     }
+                case 'Penjualan':
+                    return {
+                        text: status,
+                        color: 'red-text'
+                    }
+                case 'PO':
+                    return {
+                        text: status,
+                        color: 'purple-text'
+                    }
+                case 'Gudang':
+                    return {
+                        text: status,
+                        color: 'orange-text'
+                    }
+                case 'QC':
+                    return {
+                        text: status,
+                        color: 'yellow-text'
+                    }
+                case 'Terkirim Sebagian':
+                    return {
+                        text: status,
+                        color: 'blue-text'
+                    }
+                case 'Kirim':
+                    return {
+                        text: status,
+                        color: 'green-text'
+                    }
                 default:
                     return {
                         text: status,
