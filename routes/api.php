@@ -177,6 +177,11 @@ Route::prefix('/penjualan')->group(function () {
         Route::get('/detail_prd/{id}', [App\Http\Controllers\PenjualanController::class, 'get_detail_prd_retur_po']);
     });
 
+    Route::prefix('/batal_po/{divisi}/')->group(function () {
+        Route::get('/show', [App\Http\Controllers\PenjualanController::class, 'batal_po_show_divisi']);
+        Route::get('/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'detail_batal_po_divisi']);
+        Route::get('/seri/{id}', [App\Http\Controllers\PenjualanController::class, 'seri_batal_po_divisi']);
+    });
         Route::prefix('/batal_po')->group(function () {
         Route::get('/detail_paket/{id}', [App\Http\Controllers\PenjualanController::class, 'get_detail_paket_batal_po']);
         Route::get('/detail_prd/{id}', [App\Http\Controllers\PenjualanController::class, 'get_detail_prd_batal_po']);
