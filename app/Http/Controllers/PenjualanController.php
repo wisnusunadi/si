@@ -35,6 +35,8 @@ use App\Models\RiwayatBatalPo;
 use App\Models\RiwayatBatalPoPaket;
 use App\Models\RiwayatBatalPoPart;
 use App\Models\RiwayatBatalPoPrd;
+use App\Models\RiwayatBatalPoSeri;
+use App\Models\RiwayatReturPo;
 use App\Models\RiwayatReturPoPaket;
 use App\Models\RiwayatReturPoPrd;
 use App\Models\RiwayatReturPoSeri;
@@ -9728,6 +9730,23 @@ class PenjualanController extends Controller
         return response()->json($pesanan);
     }
 
+    public function cek_noretur(Request $request)
+    {
+        $data = RiwayatReturPo::where('no_retur',$request->no)->count();
+
+        if($data > 0){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Duplikasi',
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Berhasil',
+        ], 200);
+
+    }
     public function get_detail_prd_retur_po($id)
     {
 
@@ -9808,12 +9827,129 @@ class PenjualanController extends Controller
                 'id' => $d->id,
                 'nama' => $d->PenjualanProduk->nama,
                 'jumlah_kirim' => $jumlah,
-                'jumlah_po' => $d->jumlah,
+                'jumlah_po' => $d->jumlah
             );
         }
         return response()->json($obj);
     }
 
+    function seri_batal_po_divisi($divisi,$id)
+    {
+        $data = RiwayatBatalPoSeri::
+        select('riwayat_batal_po_seri.id','noseri_barang_jadi.id as noseri_id','noseri_barang_jadi.noseri')
+        ->leftjoin('noseri_barang_jadi','noseri_barang_jadi.id','=','riwayat_batal_po_seri.noseri_id')
+        ->where('riwayat_batal_po_seri.detail_riwayat_batal_prd_id',$id)
+        ->where('riwayat_batal_po_seri.posisi',$divisi)
+        ->where('riwayat_batal_po_seri.status',1)
+        ->get();
+        return response()->json($data);
+    }
+
+    function detail_batal_po_divisi($divisi,$id)
+    {
+        $data = RiwayatBatalPoPaket::select('riwayat_batal_po_paket.id','penjualan_produk.nama')
+        ->addSelect([
+            'c_batal' => function ($q) use ($divisi) {
+                $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                    ->from('riwayat_batal_po_seri')
+                    ->leftJoin('riwayat_batal_po_prd','riwayat_batal_po_prd.id', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
+                    ->where('riwayat_batal_po_seri.posisi', $divisi)
+                    ->where('riwayat_batal_po_seri.status', 1)
+                    ->whereColumn('riwayat_batal_po_prd.detail_riwayat_batal_paket_id', 'riwayat_batal_po_paket.id')
+                    ->limit(1);
+            }
+        ])
+        ->leftJoin('detail_pesanan','detail_pesanan.id','=','riwayat_batal_po_paket.detail_pesanan_id')
+        ->leftJoin('penjualan_produk','penjualan_produk.id','=','detail_pesanan.penjualan_produk_id')
+        ->havingRaw('c_batal > 0')
+        ->where('riwayat_batal_po_id',$id);
+
+        $item = RiwayatBatalPoPrd::select('riwayat_batal_po_prd.id','riwayat_batal_po_prd.detail_riwayat_batal_paket_id','produk.nama','gdg_barang_jadi.nama as variasi')
+        ->addSelect([
+            'c_batal' => function ($q) use ($divisi) {
+                $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                    ->from('riwayat_batal_po_seri')
+                    ->where('riwayat_batal_po_seri.posisi', $divisi)
+                    ->where('riwayat_batal_po_seri.status', 1)
+                    ->whereColumn('riwayat_batal_po_seri.detail_riwayat_batal_prd_id', 'riwayat_batal_po_prd.id')
+                    ->limit(1);
+            }
+        ])
+        ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','riwayat_batal_po_prd.detail_pesanan_produk_id')
+        ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','detail_pesanan_produk.gudang_barang_jadi_id')
+        ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
+        ->havingRaw('c_batal > 0')
+        ->whereIN('detail_riwayat_batal_paket_id',$data->pluck('id')->toArray())->get();
+
+        $obj = array();
+        foreach($data->get() as $key_p => $d){
+            $obj[$key_p] = array(
+                'id' => $d->id,
+                'nama' => $d->nama,
+                'produk'=> array()
+            );
+            foreach ($item as  $s) {
+                if ($d->id == $s['detail_riwayat_batal_paket_id']) {
+                    $obj[$key_p]['produk'][] = $s;
+                }
+            }
+        }
+
+        return response()->json($obj);
+    }
+    public function batal_po_show_divisi($divisi)
+    {
+
+            $data = RiwayatBatalPo::
+            select('riwayat_batal_po.id','pesanan.so','pesanan.no_po','c_ekat.nama as c_ekat','c_spa.nama as c_spa','c_spb.nama as c_spb')
+            ->addSelect([
+                'c_batal' => function ($q) use ($divisi) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                        ->from('riwayat_batal_po_seri')
+                        ->leftJoin('riwayat_batal_po_prd','riwayat_batal_po_prd.id', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
+                        ->leftJoin('riwayat_batal_po_paket','riwayat_batal_po_paket.id', 'riwayat_batal_po_prd.detail_riwayat_batal_paket_id')
+                        ->where('riwayat_batal_po_seri.posisi', $divisi)
+                        ->where('riwayat_batal_po_seri.status', 1)
+                        ->whereColumn('riwayat_batal_po_paket.riwayat_batal_po_id', 'riwayat_batal_po.id')
+                        ->limit(1);
+                }
+            ])
+            ->leftJoin('pesanan','pesanan.id','=','riwayat_batal_po.pesanan_id')
+            ->leftJoin('ekatalog','ekatalog.pesanan_id','=','pesanan.id')
+            ->leftJoin('spa','spa.pesanan_id','=','pesanan.id')
+            ->leftJoin('spb','spb.pesanan_id','=','pesanan.id')
+            ->leftJoin('customer as c_ekat','c_ekat.id','=','ekatalog.customer_id')
+            ->leftJoin('customer as c_spa','c_spa.id','=','spa.customer_id')
+            ->leftJoin('customer as c_spb','c_spb.id','=','spa.customer_id')
+            ->havingRaw('c_batal > 0')
+            ->get();
+
+            $obj = array();
+            foreach ($data as $d) {
+                # code...
+                $customer = '';
+                if($d->c_ekat != null){
+                    $customer = $d->c_ekat;
+                }
+                if($d->c_spb != null){
+                    $customer = $d->c_spb;
+                }
+                if($d->c_spa != null){
+                    $customer = $d->c_spa;
+                }
+
+                $obj[] = array(
+                    'id' => $d->id,
+                    'so' => $d->so,
+                    'no_po' => $d->no_po,
+                    'customer' => $customer,
+                    'status' => ''
+                );
+            }
+
+            return response()->json($obj);
+
+    }
     public function get_detail_paket_batal_po($id)
     {
 
@@ -9859,94 +9995,144 @@ class PenjualanController extends Controller
         try {
             //code...
             foreach ($obj->item as $item) {
-                $riwayat = RiwayatReturPoPaket::where('detail_pesanan_id', $item->id);
-                $dpid = DetailPesanan::find($item->id);
-                if ($riwayat->count() > 0) {
 
-                    $riwayats = $riwayat->first();
-                    $riwayats->jumlah = $riwayats->jumlah + $item->jml_retur;
-                    $riwayats->save();
+                $rpo =  RiwayatReturPo::create([
+                            'pesanan_id' =>$obj->pesanan_id,
+                            'no_retur' => $obj->no_retur,
+                        ]);
 
-                    $tf = TFProduksi::create([
-                        'retur_pesanan_id' => $dpid->pesanan_id,
-                        'dari' => 26,
-                        'ke' => 13,
-                        'deskripsi' => 'Retur Penjualan',
-                        'tgl_masuk' => Carbon::now(),
-                        'jenis' => 'masuk'
-                    ]);
+                $p =  RiwayatReturPoPaket::create([
+                            'detail_pesanan_id' => $item->id,
+                            'riwayat_retur_po_id' => $rpo->id,
+                            'jumlah' => $item->jml_retur,
+                        ]);
 
-                    foreach ($item->produk as $produk) {
-                        $riwayat_prd = RiwayatReturPoPrd::where(['detail_pesanan_produk_id' => $produk->id, 'detail_riwayat_retur_paket_id' => $riwayats->id, 'gudang_barang_jadi_id' => $produk->gbj_id]);
-
-                        $tfd = TFProduksiDetail::create([
-                            't_gbj_id' => $tf->id,
-                            'gdg_brg_jadi_id' => $produk->gbj_id,
-                            'qty' => count($produk->noSeriSelected),
+                        $tf = TFProduksi::create([
+                            'retur_pesanan_id' => $rpo->id,
+                            'dari' => 26,
+                            'ke' => 13,
+                            'deskripsi' => $obj->no_retur,
+                            'tgl_masuk' => Carbon::now(),
                             'jenis' => 'masuk'
                         ]);
 
-                        foreach ($produk->noSeriSelected as $seri) {
-                            RiwayatReturPoSeri::create([
-                                'detail_riwayat_retur_prd_id' => $riwayat_prd->first()->id,
-                                'detail_pesanan_produk_id' => $riwayat_prd->first()->detail_pesanan_produk_id,
-                                't_tfbj_noseri_id' => $seri->id,
-                                'noseri_id' => $seri->noseri_id,
-                                'noseri_logistik_id' => $seri->noseri_logistik_id,
+                        foreach ($item->produk as $produk) {
+                            $r =  RiwayatReturPoPrd::create([
+                                'detail_riwayat_retur_paket_id' => $p->id,
+                                'detail_pesanan_produk_id' => $produk->id,
+                                'gudang_barang_jadi_id' => $produk->gbj_id,
                             ]);
 
-                            $tfd = NoseriTGbj::create([
-                                't_gbj_detail_id' => $tfd->id,
-                                'noseri_id' =>  $seri->noseri_id,
+                            $tfd = TFProduksiDetail::create([
+                                't_gbj_id' => $tf->id,
+                                'gdg_brg_jadi_id' => $produk->gbj_id,
+                                'qty' => count($produk->noSeriSelected),
                                 'jenis' => 'masuk'
                             ]);
+
+                            foreach ($produk->noSeriSelected as $seri) {
+                                RiwayatReturPoSeri::create([
+                                    'detail_riwayat_retur_prd_id' => $r->id,
+                                    't_tfbj_noseri_id' => $seri->id,
+                                    'noseri_id' => $seri->noseri_id,
+                                    'noseri_logistik_id' => $seri->noseri_logistik_id,
+                                ]);
+
+                                NoseriTGbj::create([
+                                    't_gbj_detail_id' => $tfd->id,
+                                    'noseri_id' =>  $seri->noseri_id,
+                                    'jenis' => 'masuk'
+                                ]);
+                            }
                         }
-                    }
-                } else {
-                    $p =  RiwayatReturPoPaket::create([
-                        'detail_pesanan_id' => $item->id,
-                        'jumlah' => $item->jml_retur,
-                    ]);
+                // $riwayat = RiwayatReturPoPaket::where('detail_pesanan_id', $item->id);
+                // $dpid = DetailPesanan::find($item->id);
+                // if ($riwayat->count() > 0) {
 
-                    $tf = TFProduksi::create([
-                        'retur_pesanan_id' => $dpid->pesanan_id,
-                        'dari' => 26,
-                        'ke' => 13,
-                        'deskripsi' => 'Retur Penjualan',
-                        'tgl_masuk' => Carbon::now(),
-                        'jenis' => 'masuk'
-                    ]);
+                //     $riwayats = $riwayat->first();
+                //     $riwayats->jumlah = $riwayats->jumlah + $item->jml_retur;
+                //     $riwayats->save();
 
-                    foreach ($item->produk as $produk) {
-                        $r =  RiwayatReturPoPrd::create([
-                            'detail_riwayat_retur_paket_id' => $p->id,
-                            'detail_pesanan_produk_id' => $produk->id,
-                            'gudang_barang_jadi_id' => $produk->gbj_id,
-                        ]);
+                //     $tf = TFProduksi::create([
+                //         'retur_pesanan_id' => $dpid->pesanan_id,
+                //         'dari' => 26,
+                //         'ke' => 13,
+                //         'deskripsi' => 'Retur Penjualan',
+                //         'tgl_masuk' => Carbon::now(),
+                //         'jenis' => 'masuk'
+                //     ]);
 
-                        $tfd = TFProduksiDetail::create([
-                            't_gbj_id' => $tf->id,
-                            'gdg_brg_jadi_id' => $produk->gbj_id,
-                            'qty' => count($produk->noSeriSelected),
-                            'jenis' => 'masuk'
-                        ]);
+                //     foreach ($item->produk as $produk) {
+                //         $riwayat_prd = RiwayatReturPoPrd::where(['detail_pesanan_produk_id' => $produk->id, 'detail_riwayat_retur_paket_id' => $riwayats->id, 'gudang_barang_jadi_id' => $produk->gbj_id]);
 
-                        foreach ($produk->noSeriSelected as $seri) {
-                            RiwayatReturPoSeri::create([
-                                'detail_riwayat_retur_prd_id' => $r->id,
-                                't_tfbj_noseri_id' => $seri->id,
-                                'noseri_id' => $seri->noseri_id,
-                                'noseri_logistik_id' => $seri->noseri_logistik_id,
-                            ]);
+                //         $tfd = TFProduksiDetail::create([
+                //             't_gbj_id' => $tf->id,
+                //             'gdg_brg_jadi_id' => $produk->gbj_id,
+                //             'qty' => count($produk->noSeriSelected),
+                //             'jenis' => 'masuk'
+                //         ]);
 
-                            $tfd = NoseriTGbj::create([
-                                't_gbj_detail_id' => $tfd->id,
-                                'noseri_id' =>  $seri->noseri_id,
-                                'jenis' => 'masuk'
-                            ]);
-                        }
-                    }
-                }
+                //         foreach ($produk->noSeriSelected as $seri) {
+                //             RiwayatReturPoSeri::create([
+                //                 'detail_riwayat_retur_prd_id' => $riwayat_prd->first()->id,
+                //                 'detail_pesanan_produk_id' => $riwayat_prd->first()->detail_pesanan_produk_id,
+                //                 't_tfbj_noseri_id' => $seri->id,
+                //                 'noseri_id' => $seri->noseri_id,
+                //                 'noseri_logistik_id' => $seri->noseri_logistik_id,
+                //             ]);
+
+                //             $tfd = NoseriTGbj::create([
+                //                 't_gbj_detail_id' => $tfd->id,
+                //                 'noseri_id' =>  $seri->noseri_id,
+                //                 'jenis' => 'masuk'
+                //             ]);
+                //         }
+                //     }
+                // } else {
+                //     $p =  RiwayatReturPoPaket::create([
+                //         'detail_pesanan_id' => $item->id,
+                //         'jumlah' => $item->jml_retur,
+                //     ]);
+
+                //     $tf = TFProduksi::create([
+                //         'retur_pesanan_id' => $dpid->pesanan_id,
+                //         'dari' => 26,
+                //         'ke' => 13,
+                //         'deskripsi' => 'Retur Penjualan',
+                //         'tgl_masuk' => Carbon::now(),
+                //         'jenis' => 'masuk'
+                //     ]);
+
+                //     foreach ($item->produk as $produk) {
+                //         $r =  RiwayatReturPoPrd::create([
+                //             'detail_riwayat_retur_paket_id' => $p->id,
+                //             'detail_pesanan_produk_id' => $produk->id,
+                //             'gudang_barang_jadi_id' => $produk->gbj_id,
+                //         ]);
+
+                //         $tfd = TFProduksiDetail::create([
+                //             't_gbj_id' => $tf->id,
+                //             'gdg_brg_jadi_id' => $produk->gbj_id,
+                //             'qty' => count($produk->noSeriSelected),
+                //             'jenis' => 'masuk'
+                //         ]);
+
+                //         foreach ($produk->noSeriSelected as $seri) {
+                //             RiwayatReturPoSeri::create([
+                //                 'detail_riwayat_retur_prd_id' => $r->id,
+                //                 't_tfbj_noseri_id' => $seri->id,
+                //                 'noseri_id' => $seri->noseri_id,
+                //                 'noseri_logistik_id' => $seri->noseri_logistik_id,
+                //             ]);
+
+                //             $tfd = NoseriTGbj::create([
+                //                 't_gbj_detail_id' => $tfd->id,
+                //                 'noseri_id' =>  $seri->noseri_id,
+                //                 'jenis' => 'masuk'
+                //             ]);
+                //         }
+                //     }
+                // }
             }
             DB::commit();
             return response()->json([

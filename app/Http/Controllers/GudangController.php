@@ -31,6 +31,7 @@ use App\Models\Produk;
 use App\Models\RiwayatBatalPo;
 use App\Models\RiwayatBatalPoPaket;
 use App\Models\RiwayatBatalPoPrd;
+use App\Models\RiwayatBatalPoSeri;
 use App\Models\RiwayatGagalKalibrasi;
 use App\Models\RiwayatReturPoPrd;
 use App\Models\RiwayatReturPoSeri;
@@ -75,17 +76,66 @@ use stdClass;
 
 class GudangController extends Controller
 {
+    function kirim_seri_batal_po(Request $request)
+    {
+        $obj = json_decode(json_encode($request->all()), FALSE);
+
+        foreach ($obj->item as $item) {
+            foreach($item->noseri as $noseri){
+                RiwayatBatalPoSeri::create([
+                    'detail_riwayat_batal_prd_id' => $item->riwayat_batal_po_prd_id,
+                    't_tfbj_noseri_id' => $noseri->id,
+                    'noseri_id' => $noseri->noseri_id,
+                    'status' => 1,
+                    'posisi' => $noseri->posisi
+                ]);
+            }
+        }
+
+    }
+
     function get_detail_seri_batal_po($id)
     {
         $data = NoseriTGbj::
         select('t_gbj_noseri.id','noseri_barang_jadi.id as noseri_id','noseri_barang_jadi.noseri')
+        ->addSelect([
+            'c_qc' => function ($q) {
+                $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
+                    ->from('noseri_detail_pesanan')
+                    ->where('noseri_detail_pesanan.is_ready','0')
+                    ->whereColumn('noseri_detail_pesanan.t_tfbj_noseri_id','t_gbj_noseri.id');
+            },
+            'c_log' => function ($q) {
+                $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->whereColumn('noseri_detail_pesanan.t_tfbj_noseri_id', 't_gbj_noseri.id')
+                    ->limit(1);
+            },
+            'c_batal' => function ($q) {
+                $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                    ->from('riwayat_batal_po_seri')
+                    ->whereColumn('riwayat_batal_po_seri.t_tfbj_noseri_id', 't_gbj_noseri.id')
+                    ->limit(1);
+            }
+        ])
         ->leftjoin('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
         ->leftjoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
+
         ->where('t_gbj_detail.detail_pesanan_produk_id',$id)
         ->get();
 
-
-        return response()->json($data);
+        $posisi = ['qc','log'];
+        foreach($data as $d){
+            $obj[] = array(
+                'id' => $d->id,
+                'noseri_id' => $d->noseri_id,
+                'noseri' => $d->noseri,
+                'posisi' => $posisi[$d->c_qc + $d->c_log],
+                'status' => $d->c_batal  > 0 ? false : true
+            );
+        }
+        return response()->json($obj);
     }
 
     function get_detail_batal_po($id)
@@ -95,7 +145,7 @@ class GudangController extends Controller
         ->leftJoin('penjualan_produk','penjualan_produk.id','=','detail_pesanan.penjualan_produk_id')
         ->where('riwayat_batal_po_id',$id);
 
-        $item = RiwayatBatalPoPrd::select('riwayat_batal_po_prd.detail_riwayat_batal_paket_id','riwayat_batal_po_prd.detail_pesanan_produk_id as id','produk.nama','gdg_barang_jadi.nama as variasi')
+        $item = RiwayatBatalPoPrd::select('riwayat_batal_po_prd.detail_riwayat_batal_paket_id','riwayat_batal_po_prd.id as riwayat_batal_po_prd_id','riwayat_batal_po_prd.detail_pesanan_produk_id as id','produk.nama','gdg_barang_jadi.nama as variasi')
         ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','riwayat_batal_po_prd.detail_pesanan_produk_id')
         ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','detail_pesanan_produk.gudang_barang_jadi_id')
         ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
@@ -2259,7 +2309,7 @@ class GudangController extends Controller
             gbj.id as gbj_id,
             tg.tgl_masuk,
             tg.created_at,
-            pesanan.so,
+            tg.deskripsi as so,
             concat(p.nama, ' ', gbj.nama) as nama
             from t_gbj_detail tgd
             left join t_gbj tg on tg.id = tgd.t_gbj_id
@@ -2444,6 +2494,7 @@ class GudangController extends Controller
                     ->whereNull('t_gbj_noseri.status_id')
                     ->where('t_gbj_noseri.jenis', 'masuk')
                     ->get();
+
 
 
 

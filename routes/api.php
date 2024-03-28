@@ -175,8 +175,14 @@ Route::prefix('/penjualan')->group(function () {
         Route::post('/kirim/', [App\Http\Controllers\PenjualanController::class, 'kirim_prd_retur_po']);
         Route::get('/detail_paket/{id}', [App\Http\Controllers\PenjualanController::class, 'get_detail_paket_retur_po']);
         Route::get('/detail_prd/{id}', [App\Http\Controllers\PenjualanController::class, 'get_detail_prd_retur_po']);
+        Route::post('/cek_noretur/', [App\Http\Controllers\PenjualanController::class, 'cek_noretur']);
     });
 
+    Route::prefix('/batal_po/{divisi}/')->group(function () {
+        Route::get('/show', [App\Http\Controllers\PenjualanController::class, 'batal_po_show_divisi']);
+        Route::get('/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'detail_batal_po_divisi']);
+        Route::get('/seri/{id}', [App\Http\Controllers\PenjualanController::class, 'seri_batal_po_divisi']);
+    });
         Route::prefix('/batal_po')->group(function () {
         Route::get('/detail_paket/{id}', [App\Http\Controllers\PenjualanController::class, 'get_detail_paket_batal_po']);
         Route::get('/detail_prd/{id}', [App\Http\Controllers\PenjualanController::class, 'get_detail_prd_batal_po']);
@@ -215,10 +221,11 @@ Route::prefix('/laporan')->group(function () {
 Route::prefix('/gbj')->group(function () {
     Route::get('/riwayat_ganti_unit', [App\Http\Controllers\GudangController::class, 'riwayat_ganti_unit']);
     Route::get('/riwayat_ganti_unit/{id}', [App\Http\Controllers\GudangController::class, 'riwayat_ganti_unit_produk']);
-    Route::prefix('/batal_so')->group(function () {
+    Route::prefix('/batal_po')->group(function () {
         Route::get('/show', [App\Http\Controllers\GudangController::class, 'get_batal_po']);
         Route::get('/detail/{id}', [App\Http\Controllers\GudangController::class, 'get_detail_batal_po']);
         Route::get('/seri/{id}', [App\Http\Controllers\GudangController::class, 'get_detail_seri_batal_po']);
+        Route::post('/kirim/', [App\Http\Controllers\GudangController::class, 'kirim_seri_batal_po']);
     });
     Route::prefix('/ganti_unit')->group(function () {
         Route::post('/', [App\Http\Controllers\GudangController::class, 'tf_ganti_unit_data']);

@@ -5325,14 +5325,16 @@ class ProduksiController extends Controller
     // gbj
     function terimaseri(Request $request)
     {
+        DB::beginTransaction();
         try {
             foreach ($request->all() as $value) {
                 NoseriBarangJadi::where('id', $value['noseri_id'])->update(['is_aktif' => 1, 'is_ready' => 0, 'used_by' => NULL]);
                 NoseriTGbj::where('id', $value['id'])->update(['status_id' => 3, 'state_id' => 16, 'layout_id' => $value['layout']['id']]);
             }
-
+            DB::commit();
             return response()->json(['msg' => 'Successfully'], 200);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'error' => true,
                 'msg' => $e->getMessage(),
