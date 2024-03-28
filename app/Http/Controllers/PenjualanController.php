@@ -86,17 +86,19 @@ class PenjualanController extends Controller
                     'id' => $d->id,
                     'nama' => $d->PenjualanProduk->nama,
                     'jumlah' => $d->jumlah,
+                    'ongkir' => $d->ongkir,
                     'harga' => $d->harga,
+                    'jenis' => 'paket',
                     'produk' => array()
                 );
-                foreach($d->DetailPesananProduk as $key_e => $e){
+                foreach ($d->DetailPesananProduk as $key_e => $e) {
                     $item[$key_d]['produk'][$key_e] = array(
                         'id' => $e->id,
-                        'nama' => $e->GudangBarangjadi->Produk->nama.' '.$e->GudangBarangjadi->nama,
+                        'nama' => $e->GudangBarangjadi->Produk->nama . ' ' . $e->GudangBarangjadi->nama,
+                        'jenis' => 'variasi',
                         'gudang_barang_jadi_id' => $e->gudang_barang_jadi_id
                     );
                 }
-
             }
         }
 
@@ -106,6 +108,7 @@ class PenjualanController extends Controller
                     'id' => $d->id,
                     'nama' => $d->Sparepart->nama,
                     'jumlah' => $d->jumlah,
+                    'ongkir' => $d->ongkir,
                     'harga' => $d->harga,
                     'jenis' => 'part'
                 );
@@ -615,7 +618,6 @@ class PenjualanController extends Controller
                     //     </button>
                     // </a>';
                     return 'Batal';
-
                 } else {
                     if ($data->Pesanan->log_id == "7") {
                         return $data->Pesanan->State->nama;
@@ -3025,7 +3027,6 @@ class PenjualanController extends Controller
             } else {
                 if ($data->status == "batal") {
                     $datas .= 'Batal';
-
                 } else {
                     $hitung = floor((($data->cseri / ($data->cjumlah + $data->cjumlahdsb)) * 100));
                     if ($hitung > 0) {
@@ -3352,7 +3353,7 @@ class PenjualanController extends Controller
     }
     public function get_data_spa($value, $tahun)
     {
-       // $divisi_id = Auth::user()->divisi_id;
+        // $divisi_id = Auth::user()->divisi_id;
         $x = explode(',', $value);
         $data = "";
         if ($value == 'semua') {
@@ -3536,8 +3537,14 @@ class PenjualanController extends Controller
             return $datas;
         }
 
+        function getProvinsi($item)
+        {
+            return $item->Customer->Provinsi->nama;
+        }
+
         $data = $data->map(function ($item) {
             $item->persentase = persentase_and_status($item);
+            $item->provinsi = getProvinsi($item);
             return $item;
         });
 
@@ -3959,8 +3966,14 @@ class PenjualanController extends Controller
             return $datas;
         }
 
+        function getProvinsi($item)
+        {
+            return $item->Customer->Provinsi->nama;
+        }
+
         $data = $data->map(function ($item) {
             $item->persentase = persentase_and_status($item);
+            $item->provinsi = getProvinsi($item);
             return $item;
         });
 
@@ -9719,24 +9732,24 @@ class PenjualanController extends Controller
     public function get_detail_prd_retur_po($id)
     {
 
-        $dpp = DetailPesananProduk::where('detail_pesanan_id',$id);
+        $dpp = DetailPesananProduk::where('detail_pesanan_id', $id);
         $item = array();
 
-        $seri = NoseriDetailLogistik::select('t_gbj_detail.detail_pesanan_produk_id','t_gbj_noseri.id','noseri_barang_jadi.id as noseri_id','noseri_barang_jadi.noseri','noseri_logistik.id as noseri_logistik_id')
-        ->addSelect([
-            'item' => function ($q) {
-                $q->selectRaw('coalesce(count(riwayat_retur_po_seri.id),0)')
-                    ->from('riwayat_retur_po_seri')
-                    ->whereColumn('riwayat_retur_po_seri.noseri_logistik_id', 'noseri_logistik.id');
-            }
-        ])
-        ->leftjoin('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
-        ->leftjoin('t_gbj_noseri','t_gbj_noseri.id','=','noseri_detail_pesanan.t_tfbj_noseri_id')
-        ->leftjoin('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
-        ->leftjoin('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
-        ->havingRaw('item = 0')
-        ->whereIN('t_gbj_detail.detail_pesanan_produk_id',$dpp->pluck('id')->toArray())
-        ->get();
+        $seri = NoseriDetailLogistik::select('t_gbj_detail.detail_pesanan_produk_id', 't_gbj_noseri.id', 'noseri_barang_jadi.id as noseri_id', 'noseri_barang_jadi.noseri', 'noseri_logistik.id as noseri_logistik_id')
+            ->addSelect([
+                'item' => function ($q) {
+                    $q->selectRaw('coalesce(count(riwayat_retur_po_seri.id),0)')
+                        ->from('riwayat_retur_po_seri')
+                        ->whereColumn('riwayat_retur_po_seri.noseri_logistik_id', 'noseri_logistik.id');
+                }
+            ])
+            ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+            ->leftjoin('t_gbj_noseri', 't_gbj_noseri.id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+            ->leftjoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+            ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+            ->havingRaw('item = 0')
+            ->whereIN('t_gbj_detail.detail_pesanan_produk_id', $dpp->pluck('id')->toArray())
+            ->get();
 
         // $seri = NoseriTGbj::select('detail_pesanan_produk_id','t_gbj_noseri.id','noseri_barang_jadi.id as noseri_id','noseri')
         // ->join('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
@@ -9744,21 +9757,21 @@ class PenjualanController extends Controller
         // ->whereIN('t_gbj_detail.detail_pesanan_produk_id',$dpp->pluck('id')->toArray())
         // ->get();
 
-        foreach($dpp->get()  as $key_p => $d){
-                $item [$key_p] = array(
-                    'id' => $d->id,
-                    'gbj_id' => $d->gudang_barang_jadi_id,
-                    'nama' => $d->GudangBarangJadi->Produk->nama,
-                    'variasi' => $d->GudangBarangJadi->nama,
-                    'seri' => array()
-                );
+        foreach ($dpp->get()  as $key_p => $d) {
+            $item[$key_p] = array(
+                'id' => $d->id,
+                'gbj_id' => $d->gudang_barang_jadi_id,
+                'nama' => $d->GudangBarangJadi->Produk->nama,
+                'variasi' => $d->GudangBarangJadi->nama,
+                'seri' => array()
+            );
 
-                foreach ($seri as  $s) {
-                    if ($d->id == $s['detail_pesanan_produk_id']) {
-                        $item[$key_p]['seri'][] = $s;
-                    }
+            foreach ($seri as  $s) {
+                if ($d->id == $s['detail_pesanan_produk_id']) {
+                    $item[$key_p]['seri'][] = $s;
                 }
             }
+        }
 
         return response()->json($item);
     }
@@ -9774,24 +9787,24 @@ class PenjualanController extends Controller
             'seri_log' => function ($q) {
                 $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
                     ->from('noseri_logistik')
-                    ->leftJoin('detail_logistik','detail_logistik.id','=','noseri_logistik.detail_logistik_id')
-                    ->leftJoin('logistik','logistik.id','=','detail_logistik.logistik_id')
-                    ->leftJoin('detail_pesanan_produk','detail_logistik.detail_pesanan_produk_id','=','detail_pesanan_produk.id')
+                    ->leftJoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+                    ->leftJoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+                    ->leftJoin('detail_pesanan_produk', 'detail_logistik.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
                     ->where('logistik.status_id', 10)
                     ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id');
             },
-        ])->where('pesanan_id',$id)->get();
+        ])->where('pesanan_id', $id)->get();
 
         $obj = array();
 
         foreach ($data as $d) {
             $jumlah = 0;
-           if($d->getJumlahPrdLog() != $d->item){
+            if ($d->getJumlahPrdLog() != $d->item) {
                 $jumlah = 0;
-           }else{
-            $jumlah = $d->seri_log / $d->item;
-            $jumlah =  $jumlah - $d->getJumlahRetur();
-           }
+            } else {
+                $jumlah = $d->seri_log / $d->item;
+                $jumlah =  $jumlah - $d->getJumlahRetur();
+            }
             $obj[] = array(
                 'id' => $d->id,
                 'nama' => $d->PenjualanProduk->nama,
@@ -9934,7 +9947,7 @@ class PenjualanController extends Controller
                     'produk' => array(),
                     'jenis' => 'produk'
                 );
-                foreach($d->DetailPesananProduk as $key_e => $e){
+                foreach ($d->DetailPesananProduk as $key_e => $e) {
                     $item[$key_d]['produk'][$key_e] = array(
                         'id' => $e->id,
                         'gudang_barang_jadi_id' => $e->gudang_barang_jadi_id
@@ -9963,10 +9976,10 @@ class PenjualanController extends Controller
         DB::beginTransaction();
         try {
             //code...
-            foreach($obj->item as $item){
-                $riwayat = RiwayatReturPoPaket::where('detail_pesanan_id',$item->id);
+            foreach ($obj->item as $item) {
+                $riwayat = RiwayatReturPoPaket::where('detail_pesanan_id', $item->id);
                 $dpid = DetailPesanan::find($item->id);
-                if($riwayat->count() > 0 ){
+                if ($riwayat->count() > 0) {
 
                     $riwayats = $riwayat->first();
                     $riwayats->jumlah = $riwayats->jumlah + $item->jml_retur;
@@ -9979,17 +9992,17 @@ class PenjualanController extends Controller
                         'deskripsi' => 'Retur Penjualan',
                         'tgl_masuk' => Carbon::now(),
                         'jenis' => 'masuk'
-                   ]);
+                    ]);
 
-                    foreach($item->produk as $produk){
-                        $riwayat_prd = RiwayatReturPoPrd::where(['detail_pesanan_produk_id' => $produk->id,'detail_riwayat_retur_paket_id'=> $riwayats->id,'gudang_barang_jadi_id' => $produk->gbj_id]);
+                    foreach ($item->produk as $produk) {
+                        $riwayat_prd = RiwayatReturPoPrd::where(['detail_pesanan_produk_id' => $produk->id, 'detail_riwayat_retur_paket_id' => $riwayats->id, 'gudang_barang_jadi_id' => $produk->gbj_id]);
 
                         $tfd = TFProduksiDetail::create([
                             't_gbj_id' => $tf->id,
                             'gdg_brg_jadi_id' => $produk->gbj_id,
                             'qty' => count($produk->noSeriSelected),
                             'jenis' => 'masuk'
-                       ]);
+                        ]);
 
                         foreach ($produk->noSeriSelected as $seri) {
                             RiwayatReturPoSeri::create([
@@ -10004,56 +10017,54 @@ class PenjualanController extends Controller
                                 't_gbj_detail_id' => $tfd->id,
                                 'noseri_id' =>  $seri->noseri_id,
                                 'jenis' => 'masuk'
-                           ]);
-                         }
-
+                            ]);
+                        }
                     }
-                }else{
-            $p =  RiwayatReturPoPaket::create([
-                'detail_pesanan_id' => $item->id,
-                'jumlah' => $item->jml_retur,
-            ]);
+                } else {
+                    $p =  RiwayatReturPoPaket::create([
+                        'detail_pesanan_id' => $item->id,
+                        'jumlah' => $item->jml_retur,
+                    ]);
 
-            $tf = TFProduksi::create([
-                 'retur_pesanan_id' => $dpid->pesanan_id,
-                 'dari' => 26,
-                 'ke' => 13,
-                 'deskripsi' => 'Retur Penjualan',
-                 'tgl_masuk' => Carbon::now(),
-                 'jenis' => 'masuk'
-            ]);
+                    $tf = TFProduksi::create([
+                        'retur_pesanan_id' => $dpid->pesanan_id,
+                        'dari' => 26,
+                        'ke' => 13,
+                        'deskripsi' => 'Retur Penjualan',
+                        'tgl_masuk' => Carbon::now(),
+                        'jenis' => 'masuk'
+                    ]);
 
-             foreach($item->produk as $produk){
-                $r =  RiwayatReturPoPrd::create([
-                    'detail_riwayat_retur_paket_id' => $p->id,
-                    'detail_pesanan_produk_id' => $produk->id,
-                    'gudang_barang_jadi_id' => $produk->gbj_id,
-                ]);
+                    foreach ($item->produk as $produk) {
+                        $r =  RiwayatReturPoPrd::create([
+                            'detail_riwayat_retur_paket_id' => $p->id,
+                            'detail_pesanan_produk_id' => $produk->id,
+                            'gudang_barang_jadi_id' => $produk->gbj_id,
+                        ]);
 
-                $tfd = TFProduksiDetail::create([
-                    't_gbj_id' => $tf->id,
-                    'gdg_brg_jadi_id' => $produk->gbj_id,
-                    'qty' => count($produk->noSeriSelected),
-                    'jenis' => 'masuk'
-               ]);
+                        $tfd = TFProduksiDetail::create([
+                            't_gbj_id' => $tf->id,
+                            'gdg_brg_jadi_id' => $produk->gbj_id,
+                            'qty' => count($produk->noSeriSelected),
+                            'jenis' => 'masuk'
+                        ]);
 
-            foreach ($produk->noSeriSelected as $seri) {
-                RiwayatReturPoSeri::create([
-                    'detail_riwayat_retur_prd_id' => $r->id,
-                    't_tfbj_noseri_id' => $seri->id,
-                    'noseri_id' => $seri->noseri_id,
-                    'noseri_logistik_id' => $seri->noseri_logistik_id,
-                ]);
+                        foreach ($produk->noSeriSelected as $seri) {
+                            RiwayatReturPoSeri::create([
+                                'detail_riwayat_retur_prd_id' => $r->id,
+                                't_tfbj_noseri_id' => $seri->id,
+                                'noseri_id' => $seri->noseri_id,
+                                'noseri_logistik_id' => $seri->noseri_logistik_id,
+                            ]);
 
-                $tfd = NoseriTGbj::create([
-                    't_gbj_detail_id' => $tfd->id,
-                    'noseri_id' =>  $seri->noseri_id,
-                    'jenis' => 'masuk'
-               ]);
-            }
-        }
-
-        }
+                            $tfd = NoseriTGbj::create([
+                                't_gbj_detail_id' => $tfd->id,
+                                'noseri_id' =>  $seri->noseri_id,
+                                'jenis' => 'masuk'
+                            ]);
+                        }
+                    }
+                }
             }
             DB::commit();
             return response()->json([
@@ -10065,7 +10076,7 @@ class PenjualanController extends Controller
             DB::rollback();
             return response()->json([
                 'status' => 404,
-                'message' => 'Gagal Dikirim'.$th,
+                'message' => 'Gagal Dikirim' . $th,
             ], 200);
         }
     }
@@ -10076,25 +10087,24 @@ class PenjualanController extends Controller
         DB::beginTransaction();
         try {
             //code...
-            $po = RiwayatBatalPo::where('pesanan_id',$obj->pesanan_id);
+            $po = RiwayatBatalPo::where('pesanan_id', $obj->pesanan_id);
 
-            if($po->count() > 0 ){
-                foreach($obj->item as $item){
-                    if($item->jenis == 'produk'){
-                        $riwayatPrd = RiwayatBatalPoPaket::where('detail_pesanan_id',$item->id);
-                        if($riwayatPrd->count() > 0 ){
+            if ($po->count() > 0) {
+                foreach ($obj->item as $item) {
+                    if ($item->jenis == 'produk') {
+                        $riwayatPrd = RiwayatBatalPoPaket::where('detail_pesanan_id', $item->id);
+                        if ($riwayatPrd->count() > 0) {
                             $riwayats = $riwayatPrd->first();
                             $riwayats->jumlah = $riwayats->jumlah + $item->jumlah;
                             $riwayats->save();
-
-                        }else{
-                        $rb =   RiwayatBatalPoPaket::create([
+                        } else {
+                            $rb =   RiwayatBatalPoPaket::create([
                                 'riwayat_batal_po_id' => $po->first()->id,
                                 'detail_pesanan_id' => $item->id,
                                 'jumlah' => $item->jumlah,
                             ]);
 
-                            foreach($item->produk as $produk){
+                            foreach ($item->produk as $produk) {
                                 RiwayatBatalPoPrd::create([
                                     'detail_riwayat_batal_paket_id' => $rb->id,
                                     'gudang_barang_jadi_id' => $produk->gudang_barang_jadi_id,
@@ -10102,13 +10112,13 @@ class PenjualanController extends Controller
                                 ]);
                             }
                         }
-                    }else{
-                        $riwayatPart = RiwayatBatalPoPart::where('detail_pesanan_part_id',$item->id);
-                        if($riwayatPart->count() > 0 ){
+                    } else {
+                        $riwayatPart = RiwayatBatalPoPart::where('detail_pesanan_part_id', $item->id);
+                        if ($riwayatPart->count() > 0) {
                             $riwayats = $riwayatPart->first();
                             $riwayats->jumlah = $riwayats->jumlah + $item->jumlah;
                             $riwayats->save();
-                        }else{
+                        } else {
                             RiwayatBatalPoPart::create([
                                 'riwayat_batal_po_id' => $po->first()->id,
                                 'detail_pesanan_part_id' => $item->id,
@@ -10117,28 +10127,27 @@ class PenjualanController extends Controller
                         }
                     }
                 }
-            }else{
+            } else {
                 $po =  RiwayatBatalPo::create([
                     'pesanan_id' => $obj->pesanan_id,
                     'ket' => $obj->ket,
                 ]);
-                foreach($obj->item as $item){
-                    if($item->jenis == 'produk'){
+                foreach ($obj->item as $item) {
+                    if ($item->jenis == 'produk') {
                         $rb =     RiwayatBatalPoPaket::create([
                             'riwayat_batal_po_id' => $po->id,
                             'detail_pesanan_id' => $item->id,
                             'jumlah' => $item->jumlah,
                         ]);
 
-                        foreach($item->produk as $produk){
+                        foreach ($item->produk as $produk) {
                             RiwayatBatalPoPrd::create([
                                 'detail_riwayat_batal_paket_id' => $rb->id,
                                 'gudang_barang_jadi_id' => $produk->gudang_barang_jadi_id,
                                 'detail_pesanan_produk_id' => $produk->id
                             ]);
                         }
-
-                    }else{
+                    } else {
                         RiwayatBatalPoPart::create([
                             'riwayat_batal_po_id' => $po->id,
                             'detail_pesanan_part_id' => $item->id,
@@ -10146,7 +10155,6 @@ class PenjualanController extends Controller
                         ]);
                     }
                 }
-
             }
             DB::commit();
             return response()->json([
@@ -10161,35 +10169,34 @@ class PenjualanController extends Controller
                 'message' => 'Gagal Dikirim',
             ], 200);
         }
-
     }
 
     public function get_detail_prd_batal_po($id)
     {
-        $dpp = DetailPesananProduk::where('detail_pesanan_id',$id);
+        $dpp = DetailPesananProduk::where('detail_pesanan_id', $id);
         $item = array();
 
-        $seri = NoseriTGbj::select('detail_pesanan_produk_id','t_gbj_noseri.id','noseri_barang_jadi.id as noseri_id','noseri')
-        ->join('t_gbj_detail','t_gbj_detail.id','=','t_gbj_noseri.t_gbj_detail_id')
-        ->join('noseri_barang_jadi','noseri_barang_jadi.id','=','t_gbj_noseri.noseri_id')
-        ->whereIN('t_gbj_detail.detail_pesanan_produk_id',$dpp->pluck('id')->toArray())
-        ->get();
+        $seri = NoseriTGbj::select('detail_pesanan_produk_id', 't_gbj_noseri.id', 'noseri_barang_jadi.id as noseri_id', 'noseri')
+            ->join('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+            ->join('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
+            ->whereIN('t_gbj_detail.detail_pesanan_produk_id', $dpp->pluck('id')->toArray())
+            ->get();
 
-        foreach($dpp->get()  as $key_p => $d){
-                $item [$key_p] = array(
-                    'id' => $d->id,
-                    'gbj_id' => $d->gudang_barang_jadi_id,
-                    'nama' => $d->GudangBarangJadi->Produk->nama,
-                    'variasi' => $d->GudangBarangJadi->nama,
-                    'seri' => array()
-                );
+        foreach ($dpp->get()  as $key_p => $d) {
+            $item[$key_p] = array(
+                'id' => $d->id,
+                'gbj_id' => $d->gudang_barang_jadi_id,
+                'nama' => $d->GudangBarangJadi->Produk->nama,
+                'variasi' => $d->GudangBarangJadi->nama,
+                'seri' => array()
+            );
 
-                foreach ($seri as  $s) {
-                    if ($d->id == $s['detail_pesanan_produk_id']) {
-                        $item[$key_p]['seri'][] = $s;
-                    }
+            foreach ($seri as  $s) {
+                if ($d->id == $s['detail_pesanan_produk_id']) {
+                    $item[$key_p]['seri'][] = $s;
                 }
             }
+        }
 
 
         return response()->json($item);

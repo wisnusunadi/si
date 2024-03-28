@@ -1,7 +1,24 @@
 <script>
 import moment from 'moment';
+import Header from './header.vue'
+import axios from 'axios';
+import { Pie } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from 'chart.js'
+
+ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale)
 export default {
+    components: {
+        Pie,
+        Header
+    },
     props: ['detail'],
+    data() {
+        return {
+            paket: [],
+            chartData: {},
+            pengiriman: null
+        }
+    },
     methods: {
         closeModal() {
             $('.modalDetail').modal('hide');
@@ -40,6 +57,73 @@ export default {
                 return false
             }
         },
+        async getDataProduct() {
+            try {
+                const { data } = await axios.get(`/api/penjualan/items/${this.detail.pesanan_id}`);
+                this.paket = data;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        subtotal(harga, ongkir, jumlah) {
+            return (harga * jumlah) + ongkir;
+        },
+        totalHarga() {
+            return this.paket.reduce((acc, item) => {
+                return acc + this.subtotal(item.harga, item.ongkir, item.jumlah);
+            }, 0);
+        },
+        async getChartPengiriman(id, jenis) {
+            try {
+                const { data } = await axios.get(`/api/get_stok_pesanan?id=${id}&jenis=${jenis}`)
+                this.pengiriman = data;
+
+                if (jenis == 'part') {
+                    this.chartData = {
+                        labels: ['QC',
+                            'Logistik',
+                            'Kirim'],
+                        datasets: [
+                            {
+                                backgroundColor: ['rgb(255, 221, 0)',
+                                    'rgb(11, 171, 100)',
+                                    'rgb(8, 126, 225)'],
+                                data: [data.qc, data.log, data.kir]
+                            }
+                        ]
+                    }
+                } else {
+                    this.chartData = {
+                        labels: [
+                            'Gudang',
+                            'QC',
+                            'Logistik',
+                            'Kirim',
+                            'Retur',
+                            'Batal'
+                        ],
+                        datasets: [
+                            {
+                                backgroundColor: [
+                                    'rgb(236, 159, 5)',
+                                    'rgb(255, 221, 0)',
+                                    'rgb(11, 171, 100)',
+                                    'rgb(8, 126, 225)',
+                                    'rgb(4, 200, 200)',
+                                    'rgb(241, 65, 108)',
+                                ],
+                                data: [data.gudang, data.qc, data.log, data.kir, 0, 0]
+                            }
+                        ]
+                    }
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    },
+    created() {
+        this.getDataProduct();
     },
 }
 </script>
@@ -55,59 +139,8 @@ export default {
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="card border-light cardremoveshadow">
-                        <div class="card-body">
-                            <h5 class="pl-2 py-2">
-                                <b>{{ detail?.nama_customer }}</b>
-                            </h5>
-                            <ul class="fa-ul card-text" v-if="detail.jenis == 'ekatalog'">
-                                <li class="py-2">
-                                    <span class="fa-li"><span class="far fa-building fa-fw"></span></span>
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-2">Instansi</div>
-                                        <div class="col-lg-11 col-md-10">
-                                            {{ detail?.instansi }}
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="py-2"><span class="fa-li"><i class="fas fa-user-alt fa-fw"></i></span>
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-2">Satuan</div>
-                                        <div class="col-lg-11 col-md-10">
-                                            {{ detail?.satuan }}
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="py-2"><span class="fa-li"><i class="fas fa-address-card fa-fw"></i></span>
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-2">Alamat</div>
-                                        <div class="col-lg-11 col-md-10">
-                                            {{ detail?.alamat }}
-                                        </div>
-                                    </div>
 
-                                </li>
-                                <li class="py-2"><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span>
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-2">Provinsi</div>
-                                        <div class="col-lg-11 col-md-10">
-                                            <em class="text-muted" v-if="!detail?.provinsi">Belum Tersedia</em>
-                                            {{ detail?.provinsi?.nama }}
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                            <ul class="fa-ul card-text" v-else>
-                                <li class="py-2"><span class="fa-li"><i class="fas fa-address-card fa-fw"></i></span>
-                                    {{ detail?.customer?.alamat }}
-                                </li>
-                                <li class="py-2"><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span>
-                                    {{ detail?.provinsi?.nama }}
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
+                    <Header :detail="detail" />
                     <div class="card card-purple card-outline card-tabs">
                         <div class="card-header p-0 pt-1 border-bottom-0">
                             <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
@@ -253,46 +286,56 @@ export default {
                                     aria-labelledby="tabs-produk-tab">
 
                                     <div class="row">
-                                        <div class="card col-lg-4 col-md-12 col-sm-12 removeshadow">
+                                        <div class="card col-lg-4 col-md-12 col-sm-12" v-if="pengiriman">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-lg-12 col-md-12 col-sm-12">
-                                                        <canvas id="myChart" width="400" height="400"
-                                                            class="mb-5"></canvas>
+                                                        <Pie :chart-data="chartData" />
                                                         <div class="card card-secondary card-outline mt-3">
                                                             <div class="card-body">
                                                                 <h3 class="profile-username text-center"><span
-                                                                        id="nama_prd">-</span></h3>
+                                                                        id="nama_prd">{{
+                        pengiriman.detail.penjualan_produk.nama
+                    }}</span></h3>
                                                                 <ul class="list-group list-group-unbordered mb-3">
-                                                                    <li class="list-group-item">
+                                                                    <li class="list-group-item"
+                                                                        v-if="pengiriman.detail.jenis != 'part'">
                                                                         <span class="align-self-center"><span
                                                                                 class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span>
                                                                         <a class="float-right mr-2"><b><span
-                                                                                    id="c_gudang"
-                                                                                    class="text-danger">0</span></b><sub
-                                                                                id="tot_gudang"> dari 0</sub></a>
+                                                                                    id="c_gudang" class="text-danger">{{
+                        pengiriman.gudang }}</span></b><sub
+                                                                                id="tot_gudang"> dari {{
+                        pengiriman.detail.count_jumlah
+                    }}</sub></a>
                                                                     </li>
                                                                     <li class="list-group-item">
                                                                         <span class="align-self-center"><span
                                                                                 class="foo bg-chart-yellow mr-2"></span><span>QC</span></span>
                                                                         <a class="float-right mr-2"><b><span id="c_qc"
-                                                                                    class="text-danger">0</span></b><sub
-                                                                                id="tot_qc"> dari 0</sub></a>
+                                                                                    class="text-danger">{{ pengiriman.qc
+                                                                                    }}</span></b><sub id="tot_qc">
+                                                                                dari
+                                                                                {{ pengiriman.detail.count_gudang
+                                                                                }}</sub></a>
                                                                     </li>
                                                                     <li class="list-group-item">
                                                                         <span class="align-self-center"><span
                                                                                 class="foo bg-chart-green mr-2"></span><span>Logistik</span></span>
                                                                         <a class="float-right mr-2"><b><span id="c_log"
-                                                                                    class="text-danger">0</span></b><sub
-                                                                                id="tot_log"> dari 0</sub></a>
+                                                                                    class="text-danger">{{
+                        pengiriman.log }}</span></b><sub
+                                                                                id="tot_log"> dari {{
+                        pengiriman.detail.count_qc_ok
+                    }}</sub></a>
                                                                     </li>
                                                                     <li
                                                                         class="list-group-item bg-chart-blue text-white">
                                                                         <span class="align-self-center"><span
                                                                                 class="foo mr-2"></span><b>Kirim</b></span>
                                                                         <b class="float-right mr-2"><span
-                                                                                id="c_kirim">0</span> <sub>unit</sub>
-                                                                        </b>
+                                                                                id="c_kirim">{{ pengiriman.kir }}</span>
+                                                                            <sub>unit</sub> </b>
                                                                     </li>
                                                                 </ul>
                                                                 <div class="alert alert-info show" role="alert">
@@ -326,7 +369,8 @@ export default {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card col-lg-8 col-md-12">
+                                        <div class="card"
+                                            :class="pengiriman ? 'col-lg-8 col-md-12 col-sm-12' : 'col-lg-12 col-md-12 col-sm-12'">
                                             <div class="card-body">
                                                 <h6><b>Detail Produk</b></h6>
                                                 <div class="table-responsive overflowcard">
@@ -344,48 +388,54 @@ export default {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            <template v-for="(item, idx) in paket">
+                                                                <tr>
+                                                                    <td :rowspan="item.jenis != 'part' ? item.produk.length + 1 : ''"
+                                                                        class="nowraptxt">{{ idx + 1 }}
+                                                                    </td>
+                                                                    <td><b class="wb">{{ item.nama }}</b></td>
+                                                                    <td class="nowraptxt">
+                                                                        <button class="btn btn-sm btn-outline-primary"
+                                                                            @click="getChartPengiriman(item.id, item.jenis)"><i
+                                                                                class="fas fa-eye"></i></button>
+                                                                    </td>
+                                                                    <td class="nowraptxt">{{ item.jumlah }}
+                                                                    </td>
+                                                                    <td :rowspan="item.jenis != 'part' ? item.produk.length + 1 : ''"
+                                                                        class="nowraptxt tabnum">{{
+                        rupiahFormat(item.harga) }}</td>
+                                                                    <td :rowspan="item.jenis != 'part' ? item.produk.length + 1 : ''"
+                                                                        class="nowraptxt tabnum">
+                                                                        {{ rupiahFormat(item.ongkir) }}</td>
+                                                                    <td :rowspan="item.jenis != 'part' ? item.produk.length + 1 : ''"
+                                                                        class="nowraptxt tabnum">{{
+                                                                        rupiahFormat(subtotal(item.harga, item.ongkir,
+                                                                        item.jumlah)) }}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr v-for="(produk, idx2) in item.produk">
+                                                                    <td><span class="text-muted">
+                                                                            {{ produk.nama }}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td class="nowraptxt">
+                                                                        <button class="btn btn-sm btn-outline-primary"
+                                                                            @click="getChartPengiriman(produk.id, produk.jenis)"><i
+                                                                                class="fas fa-eye"></i></button>
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ item.jumlah }}
+                                                                    </td>
+                                                                </tr>
+                                                            </template>
 
-
-
-
-                                                            <tr>
-                                                                <td rowspan="2" class="nowraptxt">1</td>
-                                                                <td><b class="wb">SONOTRAX-B</b>
-                                                                </td>
-                                                                <td class="nowraptxt">
-                                                                    <button class="btn btn-sm btn-outline-primary"
-                                                                        id="lihatstok" data-id="19417"
-                                                                        data-produk="paket"><i
-                                                                            class="fas fa-eye"></i></button>
-                                                                </td>
-                                                                <td class="nowraptxt">1
-                                                                </td>
-                                                                <td rowspan="2" class="nowraptxt tabnum">Rp. 2.475.000
-                                                                </td>
-                                                                <td rowspan="2" class="nowraptxt tabnum">Rp. 0</td>
-                                                                <td rowspan="2" class="nowraptxt tabnum">Rp. 2.475.000
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><span class="text-muted">
-                                                                        SONOTRAX-B
-                                                                    </span>
-                                                                </td>
-                                                                <td class="nowraptxt">
-                                                                    <button class="btn btn-sm btn-outline-primary"
-                                                                        id="lihatstok" data-id="29251"
-                                                                        data-produk="variasi"><i
-                                                                            class="fas fa-eye"></i></button>
-                                                                </td>
-                                                                <td>
-                                                                    1
-                                                                </td>
-                                                            </tr>
                                                         </tbody>
                                                         <tfoot class="bg-chart-light align-center">
                                                             <tr>
                                                                 <th colspan="6">Total Harga</th>
-                                                                <th class="nowraptxt tabnum">Rp. 2.475.000</th>
+                                                                <th class="nowraptxt tabnum">
+                                                                    {{ rupiahFormat(totalHarga()) }}
+                                                                </th>
                                                             </tr>
                                                         </tfoot>
                                                     </table>
@@ -406,5 +456,9 @@ export default {
 <style>
 .cardremoveshadow {
     box-shadow: none;
+}
+
+.bg-chart-blue {
+    background: rgb(8, 126, 225);
 }
 </style>
