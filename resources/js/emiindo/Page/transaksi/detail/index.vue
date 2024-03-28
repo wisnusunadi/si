@@ -98,14 +98,21 @@ export default {
                             'Gudang',
                             'QC',
                             'Logistik',
-                            'Kirim'],
+                            'Kirim',
+                            'Retur',
+                            'Batal'
+                        ],
                         datasets: [
                             {
-                                backgroundColor: ['rgb(236, 159, 5)',
+                                backgroundColor: [
+                                    'rgb(236, 159, 5)',
                                     'rgb(255, 221, 0)',
                                     'rgb(11, 171, 100)',
-                                    'rgb(8, 126, 225)'],
-                                data: [data.gudang, data.qc, data.log, data.kir]
+                                    'rgb(8, 126, 225)',
+                                    'rgb(4, 200, 200)',
+                                    'rgb(241, 65, 108)',
+                                ],
+                                data: [data.gudang, data.qc, data.log, data.kir, 0, 0]
                             }
                         ]
                     }
