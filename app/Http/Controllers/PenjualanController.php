@@ -9834,6 +9834,8 @@ class PenjualanController extends Controller
     {
         $obj =  json_decode(json_encode($request->all()), FALSE);
         try {
+            $seri_id = array();
+            $seri_batal = array();
             //code...
             // $tf = TFProduksi::create([
             //     'batal_pesanan_id' => $request->id,
@@ -9861,17 +9863,34 @@ class PenjualanController extends Controller
                 //         'noseri_id' =>  $seri->noseri_id,
                 //         'jenis' => 'masuk'
                 //     ]);
+                        $seri_id[] =  $seri->t_tfbj_noseri_id;
+                        $seri_batal[] =  $seri->id;
+                }
+            }
 
+            if($divisi == 'qc'){
+                $ndp = NoseriDetailPesanan::whereIN('t_tfbj_noseri_id',$seri_id);
+                if($ndp->count() > 0){
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Gagal',
+                    ], 500);
+                }else{
+                    RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
+                        'status' => 0
+                    ]);
+                    NoseriTGbj::whereIN('id', $seri_id)->delete();
                 }
             }
         } catch (\Throwable $th) {
             //throw $th;
+
         }
     }
 
     function seri_batal_po_divisi($divisi, $id)
     {
-        $data = RiwayatBatalPoSeri::select('riwayat_batal_po_seri.id', 'noseri_barang_jadi.id as noseri_id', 'noseri_barang_jadi.noseri')
+        $data = RiwayatBatalPoSeri::select('riwayat_batal_po_seri.id','riwayat_batal_po_seri.t_tfbj_noseri_id' ,'noseri_barang_jadi.id as noseri_id', 'noseri_barang_jadi.noseri')
             ->leftjoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'riwayat_batal_po_seri.noseri_id')
             ->where('riwayat_batal_po_seri.detail_riwayat_batal_prd_id', $id)
             ->where('riwayat_batal_po_seri.posisi', $divisi)
@@ -10019,7 +10038,6 @@ class PenjualanController extends Controller
     }
     public function get_detail_paket_batal_po($id)
     {
-
         $data = Pesanan::find($id);
         $item = array();
 

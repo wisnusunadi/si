@@ -2536,6 +2536,11 @@ class ProduksiController extends Controller
                         ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
+                'cbatal_po' => function ($q) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po.id),0)')
+                        ->from('riwayat_batal_po')
+                        ->whereColumn('riwayat_batal_po.pesanan_id', 'pesanan.id');
+                },
                 // 'cjumlahpart' => function ($q) {
                 //     $q->selectRaw('sum(detail_pesanan_part.jumlah)')
                 //         ->from('detail_pesanan_part')
@@ -2571,7 +2576,8 @@ class ProduksiController extends Controller
                     'tgl_kontrak' => $batas,
                     'jumlah_gdg' => $d->cgudang,
                     'jumlah_siap' => $d->csiap,
-                    'jumlah' => $d->cjumlahprd
+                    'jumlah' => $d->cjumlahprd,
+                    'is_batal' => $d->cbatal_po > 0 ? true : false
                 );
             }
 

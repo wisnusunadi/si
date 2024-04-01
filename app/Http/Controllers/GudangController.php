@@ -1254,7 +1254,7 @@ class GudangController extends Controller
                         return 'Perakitan Rework ' . $d->reworks_id;
                     } else {
                         if (isset($d->Pesanan->so)) {
-                            return $d->Pesanan->no_po;
+                            return $d->Pesanan->so;
                         } else {
                             return '-';
                         }
