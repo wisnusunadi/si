@@ -55,6 +55,11 @@ export default {
                         class: 'badge-primary',
                         text: 'Permintaan'
                     }
+                case 'batal':
+                    return {
+                        class: 'badge-danger',
+                        text: 'Batal'
+                    }
 
                 default:
                     return {

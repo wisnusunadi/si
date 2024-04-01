@@ -434,7 +434,7 @@ export default {
                                                                     <input type="text" class="form-control"
                                                                         @input="cekErrorRetur"
                                                                         :class="{ 'is-invalid': errorMessage !== '' }"
-                                                                        v-model="noretur">
+                                                                        v-model="no_retur">
                                                                     <div class="invalid-feedback">
                                                                         {{ errorMessage }}
                                                                     </div>
@@ -516,7 +516,7 @@ export default {
                                                                                                                 :ref="`noseri-${noseri.id}`"
                                                                                                                 type="checkbox">
                                                                                                             {{
-            noseri.noseri
+                                                                                                            noseri.noseri
                                                                                                             }}
                                                                                                         </div>
                                                                                                         <div v-else>
