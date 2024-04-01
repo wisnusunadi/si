@@ -47,14 +47,22 @@ export default {
                 }
             ],
             search: '',
-            showModal: false
+            showModal: false,
+            detailSelected: {}
         }
     },
     methods: {
         closeModal() {
-            $('.modalPermintaan').modal('hide');
+            $('.modalDetailDisiapkan').modal('hide');
             this.$nextTick(() => {
                 this.$emit('close');
+            });
+        },
+        openNoSeri(item) {
+            this.detailSelected = item;
+            this.showModal = true;
+            this.$nextTick(() => {
+                $('.modalNoSeri').modal('show');
             });
         }
     },
@@ -63,7 +71,7 @@ export default {
 <template>
     <div>
         <noseri v-if="showModal" @close="showModal = false" />
-        <div class="modal fade modalPermintaan" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        <div class="modal fade modalDetailDisiapkan" data-backdrop="static" data-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">

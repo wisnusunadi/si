@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios'
-import seriviatext from '../../../../gbj/page/penerimaanRework/transfer/modalTransfer/seriviatext.vue'
+import seriviatext from '../../../penerimaanRework/transfer/modalTransfer/seriviatext.vue'
 export default {
     props: ['detailSelected', 'paket', 'allPaket'],
     components: {

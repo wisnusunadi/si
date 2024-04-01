@@ -1,7 +1,7 @@
 <script>
 import persentase from '../../../../emiindo/components/persentase.vue'
 import status from '../../../components/status.vue';
-import detailPermintaan from './detailPermintaan.vue';
+import detailPermintaan from './detailDisiapkan/index.vue';
 export default {
     components: {
         persentase,
@@ -166,7 +166,7 @@ export default {
             this.detailSelected = item;
             this.showModal = true;
             this.$nextTick(() => {
-                $('.modalPermintaan').modal('show');
+                $('.modalDetailDisiapkan').modal('show');
             });
         }
     },
