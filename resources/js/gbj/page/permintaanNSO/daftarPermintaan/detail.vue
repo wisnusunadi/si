@@ -74,7 +74,7 @@ export default {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" :class="detail.jenis == 'Peminjaman' ? 'row-cols-3' : 'row-cols-2'">
+                                <div class="row" :class="detail.jenis == 'peminjaman' ? 'row-cols-3' : 'row-cols-2'">
                                     <div class="col">
                                         <label for="">Tanggal Kebutuhan</label>
                                         <div class="card nomor-po">
@@ -83,11 +83,12 @@ export default {
                                     </div>
                                     <div class="col"><label for="">Jenis</label>
                                         <div class="card instansi">
-                                            <div class="card-body"><span id="instansi">{{ detail.jenis }}</span>
+                                            <div class="card-body"><span id="instansi" class="text-capitalize">{{
+                        detail.jenis }}</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col" v-if="detail.jenis == 'Peminjaman'"><label for="">Durasi</label>
+                                    <div class="col" v-if="detail.jenis == 'peminjaman'"><label for="">Durasi</label>
                                         <div class="card text-white" style="background-color: #AA7762;">
                                             <div class=" card-body"><span id="instansi">{{ detail.durasi }}</span>
                                             </div>
