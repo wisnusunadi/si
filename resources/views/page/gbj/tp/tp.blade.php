@@ -42,12 +42,12 @@
         }
 
         /* th.prev.available {
-                                                                                                                                                                                                                                                                                                                                                        visibility: hidden;
-                                                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                                                                visibility: hidden;
+                                                                                                                                                                                                                                                                                                                                                            }
 
-                                                                                                                                                                                                                                                                                                                                                    th.next.available {
-                                                                                                                                                                                                                                                                                                                                                        visibility: hidden;
-                                                                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                                                                            th.next.available {
+                                                                                                                                                                                                                                                                                                                                                                visibility: hidden;
+                                                                                                                                                                                                                                                                                                                                                            } */
     </style>
     <div class="content-header">
         <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id }}">
@@ -109,7 +109,7 @@
                                 </div>
                                 <div class="col-2 my-2 my-md-0">
                                     <div class="d-flex align-items-center">
-                                        <label class="mr-3 mb-0 d-none d-md-block" for="">Tujuan</label>
+                                        <label class="mr-3 mb-0 d-none d-md-block" for="">Ke</label>
                                         <select name="" id="divisitujuan" class="form-control">
                                             <option value="">All</option>
                                         </select>
@@ -130,7 +130,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mt-5">
                                 <div class="col-lg-12">
                                     <div class="table-responsive">
                                         <table class="table table-hover pertanggal" width="100%" id="history">
@@ -139,7 +139,7 @@
                                                     <th>Tanggal Masuk</th>
                                                     <th>Tanggal Keluar</th>
                                                     <th>Dari</th>
-                                                    <th>Tujuan</th>
+                                                    <th>Ke</th>
                                                     <th>Nomor Referensi</th>
                                                     {{-- <th>Nomor PO</th> --}}
                                                     <th>Produk</th>
@@ -576,8 +576,8 @@
             "language": {
                 // "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                 processing: "<span class='fa-stack fa-md'>\n\
-                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                </span>&emsp;Mohon Tunggu ...",
+                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                        </span>&emsp;Mohon Tunggu ...",
             },
             order: [
                 [0, 'desc']
@@ -682,8 +682,8 @@
                 "language": {
                     // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                     processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </span>&emsp;Mohon Tunggu ...",
                 },
             });
             $(document).on("click", "#semua-produk-tab", function() {
@@ -789,8 +789,8 @@
             ],
             language: {
                 processing: "<span class='fa-stack fa-md'>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </span>&emsp;Mohon Tunggu ...",
             }
         });
         // Sales Order Cetak
@@ -969,8 +969,8 @@
                 },
                 language: {
                     processing: "<span class='fa-stack fa-md'>\n\
-                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                            </span>&emsp;Mohon Tunggu ...",
+                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                    </span>&emsp;Mohon Tunggu ...",
                 },
 
                 columns: [{

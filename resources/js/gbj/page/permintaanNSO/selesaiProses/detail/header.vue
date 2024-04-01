@@ -1,30 +1,87 @@
 <script>
 export default {
-
+    props: ['header'],
 }
 </script>
 <template>
     <div class="card">
         <div class="card-body">
-            <div class="card-text">
-                <div class="d-flex bd-highlight">
-                    <div class="p-2 flex-fill bd-highlight">
-                        <p class="text-muted">Nomor Permintaan</p>
-                        <b>AMDK NUSAQU</b> <br>
-                        <span>AMDK
-                            NUSAQU</span> <br> <span class="d-inline-block text-truncate" style="max-width: 150px;">
-                            DESA TLAGAH KEC.PEGANTERAN KAB.PAMEKASAN</span> <br>
+            <div class="d-flex justify-content-between">
+                <div class="p-2">
+                    <div class="margin">
+                        <small class="text-muted">No Permintaan</small>
                     </div>
-                    <div class="p-2 flex-fill bd-highlight">
-                        <p><span class="text-muted">No SO</span> <br> <b>SO/SPA/IV/2024/137</b></p>
+                    <div class="margin">
+                        <b>{{ header.no_permintaan }}</b>
+                    </div>
+                    <div class="margin">
+                        <small class="text-muted">
+                            No Referensi
+                        </small>
+                    </div>
+                    <div class="margin">
+                        <b>{{ header.no_referensi }}</b>
                     </div>
                 </div>
-                <div class="d-flex bd-highlight">
-                    <div class="p-2 flex-fill bd-highlight">
-                        <p class="text-muted"></p>
+                <div class="p-2">
+                    <div class="margin">
+                        <small class="text-muted">
+                            Tanggal Permintaan
+                        </small>
                     </div>
-                    <div class="p-2 flex-fill bd-highlight">Flex item</div>
-                    <div class="p-2 flex-fill bd-highlight">Flex item</div>
+                    <div class="margin">
+                        <b>{{ header.tgl_permintaan }}</b>
+                    </div>
+                    <div class="margin"><small class="text-muted">
+                            Tanggal Pengambilan
+                        </small></div>
+                    <div class="margin">
+                        <b>{{ dateFormat(header.tgl_ambil) }}</b>
+                    </div>
+                </div>
+                <div class="p-2">
+                    <div class="margin">
+                        <small class="text-muted">
+                            Durasi
+                        </small>
+                    </div>
+                    <div class="margin">
+                        <b>{{ header.durasi }}</b>
+                    </div>
+                    <div class="margin">
+                        <small class="text-muted">
+                            Tanggal Selesai Proses
+                        </small>
+                    </div>
+                    <div class="margin">
+                        <b>{{ dateFormat(header.tgl_close) }}</b>
+                    </div>
+                </div>
+                <div class="p-2">
+                    <div class="margin">
+                        <small class="text-muted">
+                            Nama Bagian
+                        </small>
+                    </div>
+                    <div class="margin">
+                        <b>{{ header.nama_bagian }}</b>
+                    </div>
+                    <div class="margin"><small class="text-muted">
+                            Tujuan Permintaan
+                        </small></div>
+                    <div class="margin">
+                        <b>{{ header.tujuan_permintaan }}</b>
+                    </div>
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="margin">
+                    <small class="text-muted">
+                        Keterangan
+                    </small>
+                </div>
+                <div class="margin">
+                    <b>{{ header.ket }}</b>
                 </div>
             </div>
         </div>
