@@ -11,7 +11,7 @@ export default {
             items: [],
             showModal: false,
             itemSelected: {},
-            noretur: '',
+            no_retur: '',
             loadingPaket: false,
             errorMessage: '',
         }
@@ -283,7 +283,9 @@ export default {
             }
         },
         cekErrorRetur() {
-            axios.post('/api/penjualan/retur_po/cek_noretur', this.no_retur)
+            axios.post('/api/penjualan/retur_po/cek_noretur', {
+                no_retur: this.no_retur
+            })
                 .then((res) => {
                     this.errorMessage = ''
                 })
@@ -516,8 +518,8 @@ export default {
                                                                                                                 :ref="`noseri-${noseri.id}`"
                                                                                                                 type="checkbox">
                                                                                                             {{
-                                                                                                            noseri.noseri
-                                                                                                            }}
+            noseri.noseri
+        }}
                                                                                                         </div>
                                                                                                         <div v-else>
                                                                                                             <span

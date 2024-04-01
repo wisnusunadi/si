@@ -9732,6 +9732,7 @@ class PenjualanController extends Controller
 
     public function cek_noretur(Request $request)
     {
+        dd($request->no_retur);
         $data = RiwayatReturPo::where('no_retur', $request->no_retur)->count();
 
         if ($data > 0) {
