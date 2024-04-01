@@ -420,6 +420,8 @@ export default {
                                                                         </span> <br>
                                                                         <h6><span class="badge badge-info">Retur:
                                                                                 1</span></h6>
+                                                                        <h6><span class="badge badge-orange">Batal:
+                                                                                1</span></h6>
                                                                     </td>
                                                                     <td class="nowraptxt">
                                                                         <button class="btn btn-sm btn-outline-primary"
@@ -463,5 +465,9 @@ export default {
 
 .bg-chart-blue {
     background: rgb(8, 126, 225);
+}
+.badge-orange {
+    background: #f39c12;
+    color: white;
 }
 </style>

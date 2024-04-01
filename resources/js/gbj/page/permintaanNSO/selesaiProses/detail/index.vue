@@ -4,7 +4,7 @@ import headerDetail from './header.vue'
 export default {
     components: {
         Header,
-        headerDetail
+        headerDetail,
     },
     data() {
         return {
@@ -65,7 +65,6 @@ export default {
                     {
                         no: 1,
                         nama: 'Produk 1',
-                        ket: 'Perubahan Durasi 3 Hari',
                         waktu_ambil: '2024-08-24 13:00:00',
                         jumlah: 2,
                     },
@@ -73,6 +72,20 @@ export default {
                         no: 2,
                         nama: 'Produk 2',
                         waktu_ambil: '2024-08-24 13:00:00',
+                        jumlah: 3,
+                    }
+                ],
+                pengembalian: [
+                    {
+                        no: 1,
+                        nama: 'Produk 1',
+                        waktu_kembali: '2024-08-24 13:00:00',
+                        jumlah: 2,
+                    },
+                    {
+                        no: 2,
+                        nama: 'Produk 2',
+                        waktu_kembali: '2024-08-24 13:00:00',
                         jumlah: 3,
                     }
                 ]
@@ -84,19 +97,33 @@ export default {
                 },
                 {
                     text: 'No Seri',
-                    value: 'no_seri'
+                    value: 'noseri'
                 },
                 {
-                    text: 'Status',
-                    value: 'status'
+                    text: 'Waktu Ambil',
+                    value: 'waktu_ambil'
                 },
-                {
-                    text: 'Aksi',
-                    value: 'aksi'
-                }
             ],
-            noseri: [],
+            noseriPeminjaman: [],
+            searchNoSeri: '',
+            noseriPengembalian: [],
         }
+    },
+    methods: {
+        detailProduk(item) {
+            this.noseriPeminjaman = [
+                {
+                    no: 1,
+                    noseri: 'NS-2021080001',
+                    waktu_ambil: '2024-08-24 13:00:00',
+                },
+                {
+                    no: 2,
+                    noseri: 'NS-2021080002',
+                    waktu_ambil: '2024-08-24 13:00:00',
+                }
+            ]
+        },
     },
 }
 </script>
@@ -117,7 +144,7 @@ export default {
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                 <div class="row">
-                    <div class="col-8">
+                    <div :class="noseriPeminjaman.length > 0 ? 'col-8' : 'col-12'">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex flex-row-reverse bd-highlight">
@@ -127,15 +154,11 @@ export default {
                                     </div>
                                 </div>
                                 <data-table :headers="headersProduk" :items="produk.produk" :search="searchProduk">
-                                    <template #item.nama="{ item }">
-                                        {{ item.nama }} <br>
-                                        <span class="badge badge-warning">{{ item.ket }}</span>
-                                    </template>
                                     <template #item.waktu_ambil="{ item }">
                                         {{ dateTimeFormat(item.waktu_ambil) }}
                                     </template>
                                     <template #item.aksi="{ item }">
-                                        <button class="btn btn-sm btn-outline-primary">
+                                        <button class="btn btn-sm btn-outline-primary" @click="detailProduk(item)">
                                             <i class="fas fa-eye"></i>
                                             Detail
                                         </button>
@@ -144,7 +167,7 @@ export default {
                             </div>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-4" v-if="noseriPeminjaman.length > 0">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex flex-row-reverse bd-highlight">
@@ -153,12 +176,22 @@ export default {
                                             placeholder="Cari...">
                                     </div>
                                 </div>
+                                <data-table :headers="headersNoSeri" :items="noseriPeminjaman" :search="searchNoSeri">
+                                    <template #item.waktu_ambil="{ item }">
+                                        {{ dateTimeFormat(item.waktu_ambil) }}
+                                    </template>
+                                </data-table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">...</div>
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                <div class="row">
+                    <div class="col-8"></div>
+                    <div class="col-4"></div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
