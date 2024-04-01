@@ -1,5 +1,10 @@
 <script>
 export default {
+    data() {
+        return {
+            alasan: ''
+        }
+    },
     methods: {
         closeModal() {
             $('.modalTolak').modal('hide');
@@ -20,7 +25,7 @@ export default {
                 <div class="modal-body">
                     <div class="form-group">
                       <label for="">Keterangan</label>
-                    <textarea class="form-control" name="" id="" rows="3"></textarea>
+                    <textarea class="form-control" v-model="alasan" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -192,7 +192,7 @@ export default {
 
             paket = [...new Map(paket.map(item => [item['no'], item])).values()]
 
-            if (this.noretur === '') {
+            if (this.no_retur === '') {
                 this.$swal('Error', 'No Retur tidak boleh kosong', 'error')
                 return
             }
@@ -211,7 +211,7 @@ export default {
 
             const form = {
                 pesanan_id: this.retur.pesanan_id,
-                no_retur: this.noretur,
+                no_retur: this.no_retur,
                 item: paket
             }
 
