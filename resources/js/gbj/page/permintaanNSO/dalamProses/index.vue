@@ -2,11 +2,13 @@
 import persentase from '../../../../emiindo/components/persentase.vue'
 import status from '../../../components/status.vue';
 import detailPermintaan from './detailDisiapkan/index.vue';
+import detailDiambil from './detailDiambil/index.vue';
 export default {
     components: {
         persentase,
         status,
-        detailPermintaan
+        detailPermintaan,
+        detailDiambil
     },
     data() {
         return {
@@ -165,9 +167,15 @@ export default {
         aksi(item) {
             this.detailSelected = item;
             this.showModal = true;
-            this.$nextTick(() => {
-                $('.modalDetailDisiapkan').modal('show');
-            });
+            if (item.status == 'barangdisiapkan') {
+                this.$nextTick(() => {
+                    $('.modalDetailDisiapkan').modal('show');
+                });
+            } else if(item.status == 'barangsiapdiambil') {
+                this.$nextTick(() => {
+                    $('.modalDetailDiambil').modal('show');
+                });
+            }
         }
     },
 }
@@ -175,7 +183,8 @@ export default {
 <template>
     <div class="card">
         <detailPermintaan :detail="detailSelected" v-if="showModal" @close="showModal = false" />
-        <div class="card-body">
+        <detailDiambil :detail="detailSelected" v-if="showModal" @close="showModal = false" />
+         <div class="card-body">
             <div class="d-flex flex-row-reverse bd-highlight">
                 <div class="p-2 bd-highlight">
                     <input type="text" class="form-control" v-model="search" placeholder="Cari...">
@@ -195,7 +204,7 @@ export default {
                 <template #item.tgl_ambil="{ item }">
                     <div v-if="item.durasi_tanggal">
                         <div :class="calculateDateFromNow(item.durasi_tanggal).color">{{
-            dateFormat(item.tgl_ambil) }}</div>
+                            dateFormat(item.tgl_ambil) }}</div>
                         <small :class="calculateDateFromNow(item.durasi_tanggal).color">
                             <i :class="calculateDateFromNow(item.durasi_tanggal).icon"></i>
                             {{ calculateDateFromNow(item.durasi_tanggal).text }}
@@ -212,6 +221,6 @@ export default {
                     </button>
                 </template>
             </data-table>
-        </div>
+    </div>
     </div>
 </template>

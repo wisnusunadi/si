@@ -99,8 +99,6 @@ export default {
                             'QC',
                             'Logistik',
                             'Kirim',
-                            'Retur',
-                            'Batal'
                         ],
                         datasets: [
                             {
@@ -109,10 +107,10 @@ export default {
                                     'rgb(255, 221, 0)',
                                     'rgb(11, 171, 100)',
                                     'rgb(8, 126, 225)',
-                                    'rgb(4, 200, 200)',
-                                    'rgb(241, 65, 108)',
+                                    // 'rgb(4, 200, 200)',
+                                    // 'rgb(241, 65, 108)',
                                 ],
-                                data: [data.gudang, data.qc, data.log, data.kir, 0, 0]
+                                data: [data.gudang, data.qc, data.log, data.kir]
                             }
                         ]
                     }
@@ -393,17 +391,19 @@ export default {
                                                                     <td :rowspan="item.jenis != 'part' ? item.produk.length + 1 : ''"
                                                                         class="nowraptxt">{{ idx + 1 }}
                                                                     </td>
-                                                                    <td><b class="wb">{{ item.nama }}</b></td>
+                                                                    <td class="text-center"><b class="wb">{{ item.nama
+                                                                            }}</b></td>
                                                                     <td class="nowraptxt">
                                                                         <button class="btn btn-sm btn-outline-primary"
                                                                             @click="getChartPengiriman(item.id, item.jenis)"><i
                                                                                 class="fas fa-eye"></i></button>
                                                                     </td>
-                                                                    <td class="nowraptxt">{{ item.jumlah }}
+                                                                    <td class="nowraptxt">
+                                                                        {{ item.jumlah }}
                                                                     </td>
                                                                     <td :rowspan="item.jenis != 'part' ? item.produk.length + 1 : ''"
                                                                         class="nowraptxt tabnum">{{
-                        rupiahFormat(item.harga) }}</td>
+                                                                        rupiahFormat(item.harga) }}</td>
                                                                     <td :rowspan="item.jenis != 'part' ? item.produk.length + 1 : ''"
                                                                         class="nowraptxt tabnum">
                                                                         {{ rupiahFormat(item.ongkir) }}</td>
@@ -414,9 +414,12 @@ export default {
                                                                     </td>
                                                                 </tr>
                                                                 <tr v-for="(produk, idx2) in item.produk">
-                                                                    <td><span class="text-muted">
+                                                                    <td class="text-center">
+                                                                        <span class="text-muted">
                                                                             {{ produk.nama }}
-                                                                        </span>
+                                                                        </span> <br>
+                                                                        <h6><span class="badge badge-info">Retur:
+                                                                                1</span></h6>
                                                                     </td>
                                                                     <td class="nowraptxt">
                                                                         <button class="btn btn-sm btn-outline-primary"

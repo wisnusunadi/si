@@ -2,7 +2,7 @@
 import axios from 'axios'
 import seriviatext from '../../../penerimaanRework/transfer/modalTransfer/seriviatext.vue'
 export default {
-    props: ['detailSelected', 'paket', 'allPaket'],
+    props: ['detail'],
     components: {
         seriviatext
     },
@@ -31,34 +31,17 @@ export default {
             try {
                 this.loading = true
                 const { data } = await axios.post('/api/tfp/seri-so', {
-                    gdg_barang_jadi_id: this.detailSelected.gudang_id
+                    gdg_barang_jadi_id: this.detail.gudang_id
                 })
                 this.noseri = data
-                if (this.detailSelected?.noseri) {
-                    this.noSeriSelected = JSON.parse(JSON.stringify(this.detailSelected.noseri))
+                if (this.detail?.noseri) {
+                    this.noSeriSelected = JSON.parse(JSON.stringify(this.detail.noseri))
                 }
             } catch (error) {
                 console.error(error)
             } finally {
                 this.loading = false
             }
-        },
-        noseriterpakai(item) {
-            let found = false
-            for (let i = 0; i < this.allPaket.length; i++) {
-                for (let j = 0; j < this.allPaket[i].item.length; j++) {
-                    if (this.allPaket[i].item[j].noseri === undefined) {
-                        continue
-                    }
-                    if (this.allPaket[i].item[j].noseri.find(noseri => noseri.id === item.id)) {
-                        if (this.allPaket[i].item[j].id !== this.detailSelected.id) {
-                            found = true
-                            break
-                        }
-                    }
-                }
-            }
-            return found
         },
         closeModal() {
             $('.modalNoSeri').modal('hide')
@@ -70,7 +53,7 @@ export default {
         checkAllData() {
             this.checkAll = !this.checkAll
             if (this.checkAll) {
-                this.noSeriSelected = this.noseri.filter(noseri => !this.noseriterpakai(noseri))
+                this.noSeriSelected = this.noseri
             } else {
                 this.noSeriSelected = []
             }
@@ -79,9 +62,7 @@ export default {
             if (this.noSeriSelected.find(noseri => noseri.id === item.id)) {
                 this.noSeriSelected = this.noSeriSelected.filter(noseri => noseri.id !== item.id)
             } else {
-                if (!this.noseriterpakai(item)) {
-                    this.noSeriSelected.push(item)
-                }
+                this.noSeriSelected.push(item)
             }
         },
         clickModalViaText() {
@@ -173,18 +154,20 @@ export default {
                 return
             }
 
-            if (this.noSeriSelected.length > this.detailSelected.jumlah) {
+            if (this.noSeriSelected.length > this.detail.jumlah) {
                 swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: `Nomor Seri yang dipilih tidak boleh lebih dari ${this.detailSelected.jumlah}`,
+                    text: `Nomor Seri yang dipilih tidak boleh lebih dari ${this.detail.jumlah}`,
                 })
                 return
             }
 
-            let paket = { ...this.paket }
-            paket.item.find(produk => produk.id === this.detailSelected.id).noseri = this.noSeriSelected
-            this.$emit('submit', paket)
+            let produk = {
+                ...this.detail,
+                noseri: this.noSeriSelected
+            }
+            this.$emit('submit', produk)
             this.closeModal()
         }
     },
@@ -218,7 +201,7 @@ export default {
                     <div class="modal-body">
                         <small>
                             <span class="text-danger">*</span>
-                            Nomor seri yang dipilih tidak boleh lebih dari {{ detailSelected.jumlah }}
+                            Nomor seri yang dipilih tidak boleh lebih dari {{ detail.jumlah }}
                         </small>
                         <div class="d-flex bd-highlight">
                             <div class="p-2 flex-grow-1 bd-highlight">
@@ -242,13 +225,8 @@ export default {
                                 </div>
                             </template>
                             <template #item.id="{ item }">
-                                <div v-if="!noseriterpakai(item)">
-                                    <input type="checkbox" @click="checkNoSeri(item)"
-                                        :checked="noSeriSelected && noSeriSelected.find(noseri => noseri.id === item.id)">
-                                </div>
-                                <div v-else>
-                                    <span class="badge badge-info">No Seri Terpakai</span>
-                                </div>
+                                <input type="checkbox" @click="checkNoSeri(item)"
+                                    :checked="noSeriSelected && noSeriSelected.find(noseri => noseri.id === item.id)">
                             </template>
                         </data-table>
                         <div v-else class="d-flex justify-content-center">

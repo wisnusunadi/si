@@ -1,18 +1,17 @@
 <script>
-import noseri from './noseri.vue';
-import catatan from './catatan.vue';
+import detailnoseri from './detailnoseri.vue';
 export default {
     props: ['detail'],
     components: {
-        noseri,
-        catatan
+        detailnoseri
     },
     data() {
         return {
             headers: [
                 {
-                    text: 'No',
-                    value: 'no'
+                    text: 'id',
+                    value: 'id',
+                    sortable: false,
                 },
                 {
                     text: 'Nama Produk',
@@ -23,116 +22,87 @@ export default {
                     value: 'jumlah'
                 },
                 {
-                    text: 'Jumlah No. Seri Dipilih',
-                    value: 'noseri'
-                },
-                {
                     text: 'Aksi',
                     value: 'aksi'
                 }
             ],
             items: [
                 {
-                    no: 1,
-                    "id": 241,
-                    "gudang_id": 24,
-                    "nama": "BT-100 (Big) ",
-                    jumlah: 1
+                    id: 1,
+                    nama: 'Produk 1',
+                    jumlah: 10
                 },
                 {
-                    no: 2,
-                    "id": 242,
-                    "gudang_id": 24,
-                    "nama": "TROLLEY ",
-                    jumlah: 2
+                    id: 2,
+                    nama: 'Produk 2',
+                    jumlah: 20
                 },
+                {
+                    id: 3,
+                    nama: 'Produk 3',
+                    jumlah: 30
+                }
             ],
             search: '',
+            produkSelected: [],
+            checkAll: false,
             showModal: false,
             detailSelected: {},
-            produkSelected: null
         }
     },
     methods: {
         closeModal() {
-            $('.modalDetailDisiapkan').modal('hide');
+            $('.modalDetailDiambil').modal('hide');
             this.$nextTick(() => {
                 this.$emit('close');
             });
         },
-        openNoSeri(item) {
+        checkedAll() {
+            this.checkAll = !this.checkAll;
+            this.produkSelected = this.checkAll ? this.items : [];
+        },
+        checkedItem(item) {
+            if (this.produkSelected.find(produk => produk.id == item.id)) {
+                this.produkSelected = this.produkSelected.filter(produk => produk.id != item.id);
+            } else {
+                this.produkSelected.push(item);
+            }
+        },
+        openDetailNoSeri(item) {
             this.detailSelected = item;
             this.showModal = true;
             this.$nextTick(() => {
-                $('.modalDetailDisiapkan').modal('hide');
-                $('.modalNoSeri').modal('show');
+                $('.modalDetailDiambil').modal('hide');
+                $('.modalDetailNoSeri').modal('show');
             });
         },
-        closeModalNoSeri() {
+        closeDetailNoSeri() {
             this.showModal = false;
             this.$nextTick(() => {
-                $('.modalDetailDisiapkan').modal('show');
+                $('.modalDetailDiambil').modal('show');
             });
-        },
-        closeModalCatatan() {
-            this.showModal = false;
-            this.$nextTick(() => {
-                $('.modalDetailDisiapkan').modal('show');
-            });
-        },
-        submitNoSeri(data) {
-            this.items = this.items.map(item => {
-                if (item.id === data.id) {
-                    item.noseri = data.noseri;
-                }
-                return item;
-            });
-        },
-        simpan() {
-            let produk = []
-
-            // push when produk has noseri
-            this.items.forEach(item => {
-                if (item.noseri) {
-                    produk.push(item);
-                }
-            });
-
-            if (produk.length === 0) {
-                swal.fire({
-                    title: 'Peringatan',
-                    text: 'Produk yang dipilih belum memiliki nomor seri',
-                    icon: 'warning'
-                });
-                return;
-            }
-
-            this.produkSelected = produk;
-
-            this.showModal = true;
-
-            this.$nextTick(() => {
-                $('.modalDetailDisiapkan').modal('hide');
-                $('.modalCatatan').modal('show');
-            });
-        },
-        closeAll() {
-            this.showModal = false;
-            this.closeModal();
         }
     },
+    watch: {
+        produkSelected() {
+            if (this.produkSelected.length == this.items.length) {
+                this.checkAll = true;
+            } else {
+                this.checkAll = false;
+            }
+        }
+    }
 }
 </script>
 <template>
     <div>
-        <catatan v-if="showModal" @close="closeModalCatatan" :produk="produkSelected" @closeAll="closeAll" />
-        <noseri v-if="showModal" @close="closeModalNoSeri" :detail="detailSelected" @submit="submitNoSeri" />
-        <div class="modal fade modalDetailDisiapkan" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        <detailnoseri v-if="showModal" @close="closeDetailNoSeri" :detail="detailSelected" />
+        <div class="modal fade modalDetailDiambil" data-backdrop="static" data-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Detail Permintaan</h5>
+                        <h5 class="modal-title">Form Penyerahan Barang</h5>
                         <button type="button" class="close" @click="closeModal">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -179,16 +149,21 @@ export default {
                                     </div>
                                 </div>
                                 <data-table :headers="headers" :items="items" :search="search">
-                                    <template #item.aksi="{ item }">
-                                        <button class="btn btn-primary" @click="openNoSeri(item)">
-                                            <i class="fas fa-qrcode"></i>
-                                            Nomor Seri
-                                        </button>
-                                    </template>
-                                    <template #item.noseri="{ item }">
+                                    <template #header.id>
                                         <div>
-                                            {{ item.noseri?.length ?? 0 }}
+                                            <input type="checkbox" :checked="checkAll" @click="checkedAll">
                                         </div>
+                                    </template>
+                                    <template #item.id="{ item }">
+                                        <input type="checkbox"
+                                            :checked="produkSelected && produkSelected.find(produk => produk.id == item.id)"
+                                            @click="checkedItem(item)">
+                                    </template>
+                                    <template #item.aksi="{ item }">
+                                        <button class="btn btn-sm btn-outline-primary" @click="openDetailNoSeri(item)">
+                                            <i class="fas fa-eye"></i>
+                                            Detail
+                                        </button>
                                     </template>
                                 </data-table>
                             </div>
@@ -196,7 +171,7 @@ export default {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                        <button type="button" class="btn btn-primary" @click="simpan">Simpan</button>
+                        <button type="button" class="btn btn-primary">Simpan</button>
                     </div>
                 </div>
             </div>
