@@ -173,11 +173,11 @@ export default {
                 return
             }
 
-            if (this.noSeriSelected.length > this.detailSelected.jumlah_sisa) {
+            if (this.noSeriSelected.length > this.detailSelected.jumlah) {
                 swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: `Nomor Seri yang dipilih tidak boleh lebih dari ${this.detailSelected.jumlah_sisa}`,
+                    text: `Nomor Seri yang dipilih tidak boleh lebih dari ${this.detailSelected.jumlah}`,
                 })
                 return
             }
@@ -191,6 +191,15 @@ export default {
     created() {
         this.getData()
     },
+    watch: {
+        noSeriSelected() {
+            if (this.noSeriSelected.length == this.noseri.length) {
+                this.checkAll = true
+            } else {
+                this.checkAll = false
+            }
+        }
+    }
 }
 </script>
 <template>
@@ -209,7 +218,7 @@ export default {
                     <div class="modal-body">
                         <small>
                             <span class="text-danger">*</span>
-                            Nomor seri yang dipilih tidak boleh lebih dari {{ detailSelected.jumlah_sisa }}
+                            Nomor seri yang dipilih tidak boleh lebih dari {{ detailSelected.jumlah }}
                         </small>
                         <div class="d-flex bd-highlight">
                             <div class="p-2 flex-grow-1 bd-highlight">

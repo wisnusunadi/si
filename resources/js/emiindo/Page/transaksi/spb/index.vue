@@ -159,7 +159,7 @@ export default {
 <template>
     <div class="card">
         <batalComponents v-if="showModal" @close="showModal = false" :batal="detailSelected" />
-        <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected" />
+        <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected" @refresh="$emit('refresh')" />
         <detailComponents v-if="showModal" @close="showModal = false" :detail="detailSelected" />
         <doComponents v-if="showModal" @close="showModal = false" :doData="detailSelected" />
 
@@ -252,7 +252,8 @@ export default {
                                     type="button"><i class="fas fa-times"></i>
                                     Batal</button></a>
                             <a href="#"><button class="dropdown-item openModalBatalRetur" @click="retur(item)"
-                                    type="button"><i class="fa-solid fa-arrow-rotate-left"></i>
+                                    v-if="item.cterkirim > 0" type="button"><i
+                                        class="fa-solid fa-arrow-rotate-left"></i>
                                     Retur</button></a>
                         </div>
                     </div>

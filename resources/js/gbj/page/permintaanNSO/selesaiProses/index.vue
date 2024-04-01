@@ -51,6 +51,7 @@ export default {
             search: '',
             items: [
                 {
+                    id: 1,
                     no_permintaan: 'NSO-2021080001',
                     no_referensi: 'SO-2021080001',
                     tgl_permintaan: '21 Agustus 2021',
@@ -63,6 +64,7 @@ export default {
                     ket: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
                 },
                 {
+                    id: 2,
                     no_permintaan: 'NSO-2021080002',
                     no_referensi: 'SO-2021080002',
                     tgl_permintaan: '21 Agustus 2021',
@@ -75,6 +77,7 @@ export default {
                     ket: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
                 },
                 {
+                    id: 3,
                     no_permintaan: 'NSO-2021080003',
                     no_referensi: 'SO-2021080003',
                     tgl_permintaan: '21 Agustus 2021',
@@ -87,6 +90,16 @@ export default {
                     ket: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
                 },
             ]
+        }
+    },
+    methods: {
+        detail(id) {
+            this.$router.push({
+                name: 'detailNSO',
+                params: {
+                    id
+                }
+            })
         }
     },
 }
@@ -111,7 +124,7 @@ export default {
                     </div>
                 </template>
                 <template #item.aksi="{ item }">
-                    <button class="btn btn-sm btn-outline-primary">
+                    <button class="btn btn-sm btn-outline-primary" @click="detail(item.id)">
                         <i class="fas fa-eye"></i>
                         Detail
                     </button>

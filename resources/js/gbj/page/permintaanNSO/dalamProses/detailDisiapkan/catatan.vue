@@ -1,69 +1,72 @@
 <script>
 export default {
+    props: ['produk'],
     data() {
         return {
-            alasan: ''
+            catatan: ''
         }
     },
     methods: {
         closeModal() {
-            $('.modalTolak').modal('hide');
+            $('.modalCatatan').modal('hide')
             this.$nextTick(() => {
-                this.$emit('close');
-            });
+                this.$emit('close')
+            })
         },
         simpan() {
-            if (!this.alasan) {
-                this.$swal({
-                    title: 'Peringatan!',
-                    text: 'Alasan tidak boleh kosong!',
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
-                })
-                return
+            if (this.catatan == '') {
+                swal.fire({
+                    title: 'Peringatan',
+                    text: 'Catatan tidak boleh kosong',
+                    icon: 'warning'
+                });
+                return;
             }
 
-            this.$swal({
-                title: 'Apakah anda yakin?',
-                text: 'Data yang sudah ditolak tidak dapat diubah!',
+            swal.fire({
+                title: 'Simpan',
+                text: 'Apakah anda yakin ingin menyimpan data ini?',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Tolak!',
+                confirmButtonText: 'Ya, simpan',
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.$swal(
-                        'Ditolak!',
-                        'Data berhasil ditolak.',
+                    let form = {
+                        produk: this.produk,
+                        catatan: this.catatan
+                    }
+                    console.log(form)
+                    swal.fire(
+                        'Berhasil',
+                        'Data berhasil disimpan',
                         'success'
                     )
-                    $('.modalDetail').modal('hide')
-                    this.$nextTick(() => {
-                        this.showModal = false
-                    })
+                    this.$emit('closeAll')
+                    this.closeModal()
                 }
-            })
+            });
         }
     },
 }
 </script>
 <template>
-    <div class="modal fade modalTolak" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    <div class="modal fade modalCatatan" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Alasan Ditolak</h5>
+                    <h5 class="modal-title">Catatan Permintaan</h5>
                     <button type="button" class="close" @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="">Keterangan</label>
-                        <textarea class="form-control" v-model="alasan" rows="3"></textarea>
+                        <label for="">Catatan</label>
+                        <textarea v-model="catatan" cols="5" class="form-control"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

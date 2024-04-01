@@ -261,7 +261,7 @@
     <!-- Modal Daftar Stok-->
     <div class="modal fade daftar-stok" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
         aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Daftar Stok <span id="nm_produk"><b></b></span></h5>
@@ -1402,8 +1402,8 @@
                 processing: true,
                 language: {
                     processing: "<span class='fa-stack fa-md'>\n\
-                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                        </span>&emsp;Mohon Tunggu ...",
+                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                            </span>&emsp;Mohon Tunggu ...",
                 },
                 columns: [{
                         data: null,
