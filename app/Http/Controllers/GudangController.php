@@ -145,7 +145,23 @@ class GudangController extends Controller
         ->leftJoin('penjualan_produk','penjualan_produk.id','=','detail_pesanan.penjualan_produk_id')
         ->where('riwayat_batal_po_id',$id);
 
-        $item = RiwayatBatalPoPrd::select('riwayat_batal_po_prd.detail_riwayat_batal_paket_id','riwayat_batal_po_prd.id as riwayat_batal_po_prd_id','riwayat_batal_po_prd.detail_pesanan_produk_id as id','produk.nama','gdg_barang_jadi.nama as variasi')
+        $item = RiwayatBatalPoPrd::select('riwayat_batal_po_prd.detail_riwayat_batal_paket_id','riwayat_batal_po_prd.id as riwayat_batal_po_prd_id','riwayat_batal_po_prd.detail_pesanan_produk_id as id','produk.nama','gdg_barang_jadi.nama as variasi','produk.merk')
+        ->addSelect([
+            'jumlah' => function ($q) {
+                $q->selectRaw('coalesce(count(t_gbj_noseri.id),0)')
+                    ->from('t_gbj_noseri')
+                    ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->whereColumn('t_gbj_detail.detail_pesanan_produk_id', 'riwayat_batal_po_prd.detail_pesanan_produk_id')
+                    ->limit(1);
+            },
+            'jumlah_tf' => function ($q) {
+                $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                    ->from('riwayat_batal_po_seri')
+                    ->whereColumn('riwayat_batal_po_seri.detail_riwayat_batal_prd_id', 'riwayat_batal_po_prd.id')
+                    ->limit(1);
+            }
+        ])
         ->leftJoin('detail_pesanan_produk','detail_pesanan_produk.id','=','riwayat_batal_po_prd.detail_pesanan_produk_id')
         ->leftJoin('gdg_barang_jadi','gdg_barang_jadi.id','=','detail_pesanan_produk.gudang_barang_jadi_id')
         ->leftJoin('produk','produk.id','=','gdg_barang_jadi.produk_id')
@@ -164,14 +180,31 @@ class GudangController extends Controller
                 }
             }
         }
-
         return response()->json($obj);
     }
 
     function get_batal_po()
     {
         $data = RiwayatBatalPo::
-        select('riwayat_batal_po.id','pesanan.so','pesanan.no_po','c_ekat.nama as c_ekat','c_spa.nama as c_spa','c_spb.nama as c_spb')
+        select('riwayat_batal_po.pesanan_id','riwayat_batal_po.id','pesanan.so','pesanan.no_po','c_ekat.nama as c_ekat','c_spa.nama as c_spa','c_spb.nama as c_spb')
+        ->addSelect([
+            'cseri' => function ($q) {
+                $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                    ->from('riwayat_batal_po_seri')
+                    ->leftjoin('riwayat_batal_po_prd', 'riwayat_batal_po_prd.id', '=', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
+                    ->leftjoin('riwayat_batal_po_paket', 'riwayat_batal_po_paket.id', '=', 'riwayat_batal_po_prd.detail_riwayat_batal_paket_id')
+                    ->whereColumn('riwayat_batal_po_paket.riwayat_batal_po_id', 'riwayat_batal_po.id')
+                    ->limit(1);
+            },
+            'cgbj' => function ($q) {
+                $q->selectRaw('coalesce(count(t_gbj_noseri.id),0)')
+                    ->from('t_gbj_noseri')
+                    ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->whereColumn('t_gbj.pesanan_id', 'riwayat_batal_po.pesanan_id')
+                    ->limit(1);
+            }
+        ])
         ->leftJoin('pesanan','pesanan.id','=','riwayat_batal_po.pesanan_id')
         ->leftJoin('ekatalog','ekatalog.pesanan_id','=','pesanan.id')
         ->leftJoin('spa','spa.pesanan_id','=','pesanan.id')
@@ -195,12 +228,23 @@ class GudangController extends Controller
                 $customer = $d->c_spa;
             }
 
+            if($d->cseri > 0){
+                if($d->cseri != $d->cgbj){
+                    $status = 'Sebagian di Transfer';
+                }else{
+                    $status = 'Sudah di Transfer';
+                }
+            }else{
+                $status = 'Belum Di transfer';
+            }
+
             $obj[] = array(
                 'id' => $d->id,
                 'so' => $d->so,
                 'no_po' => $d->no_po,
                 'customer' => $customer,
-                'status' => ''
+                'jumlah' => $d->cgbj,
+                'jumlah_tf' => $d->cseri
             );
         }
 
@@ -2277,6 +2321,32 @@ class GudangController extends Controller
             group by  tgd.id
             ", [$parameter]);
 
+            $qc = DB::select("select
+            tgd.id,
+            (select jp.no_bppb  from jadwal_perakitan jp
+            join jadwal_rakit_noseri jrn ON jrn.jadwal_id = jp.id
+            where jrn.noseri = ( SELECT nbj.noseri
+             from noseri_barang_jadi nbj
+             left join t_gbj_noseri tgn on tgn.noseri_id = nbj.id
+             where tgn.t_gbj_detail_id  = tgd.id
+             limit 1)
+            ) AS no_ref,
+            (SELECT COUNT(t_gbj_noseri.id) FROM t_gbj_noseri WHERE t_gbj_noseri.t_gbj_detail_id = tgd.id AND t_gbj_noseri.status_id is null and t_gbj_noseri.jenis = 'masuk') AS jumlah,
+            gbj.id as gbj_id,
+            tg.tgl_masuk,
+            tg.created_at,
+            riwayat_batal_po.ket,
+            concat(p.nama, ' ', gbj.nama) as nama
+            from t_gbj_detail tgd
+            left join t_gbj tg on tg.id = tgd.t_gbj_id
+            left join riwayat_batal_po on riwayat_batal_po.id = tg.batal_pesanan_id
+            left join gdg_barang_jadi gbj on gbj.id = tgd.gdg_brg_jadi_id
+            left join produk p on p.id = gbj.produk_id
+            left join t_gbj_noseri tgn on tgn.t_gbj_detail_id = tgd.id
+            where  tgn.status_id is null and tg.dari = 23 and tg.ke = 13 and year(tg.tgl_masuk) = ?
+            group by  tgd.id
+            ", [$parameter]);
+
             // $retur = RiwayatReturPoPrd::select('riwayat_retur_po_prd.id','pesanan.no_po','produk.nama','gdg_barang_jadi.nama as variasi','riwayat_retur_po_paket.updated_at as tgl_masuk')
             // ->addSelect([
             //     'cterjadwal' => function ($q){
@@ -2332,7 +2402,23 @@ class GudangController extends Controller
                     'timestamp' => $r->created_at,
                     'jumlah' => $r->jumlah,
                     'status' => 'retur',
-                    'bagian' => 'Penjualan'
+                    'bagian' => 'Penjualan',
+                    'ket' => ''
+                );
+            }
+
+            foreach ($qc as $r) {
+                $obj[] = array(
+                    'id' => $r->id,
+                    'gbj_id' => $r->gbj_id,
+                    'no_ref' => $r->no_ref,
+                    'nama' => $r->nama,
+                    'tgl_masuk' => $r->tgl_masuk,
+                    'timestamp' => $r->created_at,
+                    'jumlah' => $r->jumlah,
+                    'status' => 'batal',
+                    'bagian' => 'QC',
+                    'ket' => $r->ket
                 );
             }
 
@@ -2346,9 +2432,12 @@ class GudangController extends Controller
                     'timestamp' => $r->created_at,
                     'jumlah' => $r->jumlah,
                     'status' => 'produksi',
-                    'bagian' => 'Produksi'
+                    'bagian' => 'Produksi',
+                    'ket' => ''
                 );
             }
+
+
 
             return response()->json($obj);
 
