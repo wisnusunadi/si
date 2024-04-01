@@ -120,14 +120,28 @@ export default {
         tolak(id) {
             this.showModalTolak = true
             this.$nextTick(() => {
-                $('.modalTolak').modal('show')
+                if (this.showModal) {
+                    $('.modalDetail').modal('hide')
+                    this.$nextTick(() => {
+                        $('.modalTolak').modal('show')
+                    })
+                } else {
+                    $('.modalTolak').modal('show')
+                }
             })
         },
         closeModalTolak() {
             $('.modalTolak').modal('hide');
-            this.$nextTick(() => {
-                this.showModalTolak = false
-            });
+            if (this.showModal) {
+                this.$nextTick(() => {
+                    this.showModalTolak = false
+                    $('.modalDetail').modal('show')
+                });
+            } else {
+                this.$nextTick(() => {
+                    this.showModalTolak = false
+                });
+            }
         },
         detail(item) {
             this.detailSelected = item
@@ -141,7 +155,7 @@ export default {
 </script>
 <template>
     <div class="card">
-        <showModalTolak v-if="showModalTolak" @close="closeModalTolak" />
+        <modalAlasanTolak v-if="showModalTolak" @close="closeModalTolak" />
         <detailComponents :detail="detailSelected" v-if="showModal" @close="showModal = false" @setuju="setuju"
             @tolak="tolak" />
         <div class="card-body">

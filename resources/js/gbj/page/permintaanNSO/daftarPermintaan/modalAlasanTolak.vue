@@ -13,6 +13,16 @@ export default {
             });
         },
         simpan() {
+            if (!this.alasan) {
+                this.$swal({
+                    title: 'Peringatan!',
+                    text: 'Alasan tidak boleh kosong!',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                })
+                return
+            }
+
             this.$swal({
                 title: 'Apakah anda yakin?',
                 text: 'Data yang sudah ditolak tidak dapat diubah!',
@@ -40,8 +50,8 @@ export default {
 }
 </script>
 <template>
-    <div class="modal fade modalTolak" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-        aria-hidden="true">
+    <div class="modal fade modalTolak" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -58,7 +68,7 @@ export default {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-primary" @click="simpan">Simpan</button>
                 </div>
             </div>
         </div>

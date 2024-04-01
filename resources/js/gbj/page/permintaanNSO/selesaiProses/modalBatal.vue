@@ -1,5 +1,6 @@
 <script>
 export default {
+    props: ['detail'],
     methods: {
         closeModal() {
             $('.modalBatal').modal('hide');

@@ -1,12 +1,10 @@
 <script>
 import persentase from '../../../../emiindo/components/persentase.vue'
 import status from '../../../components/status.vue';
-import modalBatal from './modalBatal.vue';
 export default {
     components: {
         persentase,
         status,
-        modalBatal
     },
     data() {
         return {
@@ -90,18 +88,6 @@ export default {
                     status: 'barangsiapdiambil',
                     persentase: 0,
                 },
-                {
-                    no_permintaan: 'NSO-2021080003',
-                    no_referensi: 'SO-2021080003',
-                    tgl_permintaan: '23 Agustus 2021',
-                    tgl_ambil: '2024-08-24',
-                    nama_bagian: 'Bagus-Produksi',
-                    tujuan_permintaan: 'Lorem',
-                    durasi: '1 Hari',
-                    durasi_tanggal: '2024-08-24',
-                    status: 'batal',
-                    persentase: 0,
-                },
             ],
             showModal: false,
             detailSelected: null
@@ -146,7 +132,6 @@ export default {
 </script>
 <template>
     <div class="card">
-        <modalBatal v-if="showModal" @close="showModal = false" :detail="detailSelected" />
         <div class="card-body">
             <div class="d-flex flex-row-reverse bd-highlight">
                 <div class="p-2 bd-highlight">
@@ -167,7 +152,7 @@ export default {
                 <template #item.tgl_ambil="{ item }">
                     <div>
                         <div :class="calculateDateFromNow(item.durasi_tanggal).color">{{
-            dateFormat(item.tgl_ambil) }}</div>
+                        dateFormat(item.tgl_ambil) }}</div>
                         <small :class="calculateDateFromNow(item.durasi_tanggal).color">
                             <i :class="calculateDateFromNow(item.durasi_tanggal).icon"></i>
                             {{ calculateDateFromNow(item.durasi_tanggal).text }}
