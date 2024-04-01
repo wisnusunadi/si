@@ -96,60 +96,74 @@
         <hr>
         <table>
             <tr>
-              <td class="vera" >
-                  <table>
-                      <tr>
-                          <td class="vera" width="25%">Pengiriman :</td>
-                          <td class="vera"><b><u>{{$data->tujuan_kirim}}</u></b></td>
-                      </tr>
-                      <tr>
-                         <td></td>
-                          <td>{{$data->alamat_kirim}}</td>
-                      </tr>
-                      <tr>
-                        <td></td>
-                        <td><b>UP : </b>{{$data->up}}</td>
-                      </tr>
-                  </table>
-              </td>
-              <td class="vera" width="40%">
-                <table style="width: 100%">
-                  <tr>
-                    <td class="td-width-header">Nomor SJ</td>
-                    <td>: {{$data->nosj}}</td>
-                  </tr>
-                  <tr>
-                    <td class="td-width-header">Tanggal SJ</td>
-                    {{-- {{ \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') }} --}}
-                    <td>: {{ \Carbon\Carbon::parse($data->tgl_sj)->isoFormat('DD MMMM YYYY') }}</td>
-                  </tr>
-                  <tr>
-                    <td class="td-width-header">Nomor PO</td>
-                    <td>: {{$data->no_po}}</td>
-                  </tr>
-                  <tr>
-                    <td class="td-width-header">Ket. Pengiriman</td>
-                    <td>:
-                      @switch($data->keterangan_pengiriman)
-                          @case('bayar_tujuan')
-                              <span>BAYAR TUJUAN <span>
-                              @break
-                            @case('bayar_sinko')
-                                <span>BAYAR SINKO </span>
-                                @break
-                          @default
-                          <span>NON BAYAR<span>
-                          @break
-                      @endswitch
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="td-width-header">Ekspedisi</td>
-                    <td>: {{$data->ekspedisi}}</td>
-                  </tr>
-                </table>
-                </tr>
-              </table>
+                <td class="vera">
+                    <table>
+                        <tr>
+                            <td class="vera" width="20%">Pelanggan :</td>
+                            <td><b><u>{{ $data->customer }}</u></b></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>{{ $data->alamat_customer }}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <table>
+                        <tr>
+                            <td class="vera" width="20%">Pengiriman :</td>
+                            <td class="vera"><b><u>{{ $data->tujuan_kirim }}</u></b></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>{{ $data->alamat_kirim }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><b>UP : </b>{{ $data->up }}</td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="1%"></td>
+                <td class="vera" width="35%">
+                    <table style="width: 100%">
+                        <tr>
+                            <td class="td-width-header">Nomor SJ</td>
+                            <td>: {{ $data->nosj }}</td>
+                        </tr>
+                        <tr>
+                            <td class="td-width-header">Tanggal SJ</td>
+                            {{-- {{ \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') }} --}}
+                            <td>: {{ \Carbon\Carbon::parse($data->tgl_sj)->isoFormat('DD MMMM YYYY') }}</td>
+                        </tr>
+                        <tr>
+                            <td class="td-width-header">Nomor PO</td>
+                            <td>: {{ $data->no_po }}</td>
+                        </tr>
+                        <tr>
+                            <td class="td-width-header">Ket. Pengiriman</td>
+                            <td>:
+                                @switch($data->keterangan_pengiriman)
+                                    @case('bayar_tujuan')
+                                        <span>BAYAR TUJUAN <span>
+                                            @break
+
+                                            @case('bayar_sinko')
+                                                <span>BAYAR SINKO </span>
+                                            @break
+
+                                            @default
+                                                <span>NON BAYAR<span>
+                                                    @break
+                                                @endswitch
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td-width-header">Ekspedisi</td>
+                            <td>: {{ $data->ekspedisi }}</td>
+                        </tr>
+                    </table>
+            </tr>
+        </table>
     </header>
     <main>
         <table class="table">
