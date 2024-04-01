@@ -197,6 +197,11 @@ export default {
                 return
             }
 
+            if (this.errorMessage !== '') {
+                this.$swal('Error', 'No Retur sudah digunakan', 'error')
+                return
+            }
+
             if (paket.length > 0 && !error) {
                 this.$swal('Success', 'Berhasil menyimpan', 'success')
             } else {

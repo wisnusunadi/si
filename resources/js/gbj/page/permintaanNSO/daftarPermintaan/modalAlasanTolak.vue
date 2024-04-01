@@ -1,12 +1,14 @@
 <script>
 export default {
     methods: {
-        
+        closeModal() {
+            $('.modalTolak').modal('hide');
+        }
     },
 }
 </script>
 <template>
-    <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade modalTolak" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
