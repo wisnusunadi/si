@@ -8,29 +8,57 @@ export default {
     methods: {
         closeModal() {
             $('.modalTolak').modal('hide');
+            this.$nextTick(() => {
+                this.$emit('close');
+            });
+        },
+        simpan() {
+            this.$swal({
+                title: 'Apakah anda yakin?',
+                text: 'Data yang sudah ditolak tidak dapat diubah!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Tolak!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$swal(
+                        'Ditolak!',
+                        'Data berhasil ditolak.',
+                        'success'
+                    )
+                    $('.modalDetail').modal('hide')
+                    this.$nextTick(() => {
+                        this.showModal = false
+                    })
+                }
+            })
         }
     },
 }
 </script>
 <template>
-    <div class="modal fade modalTolak" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade modalTolak" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Alasan Ditolak</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                      <label for="">Keterangan</label>
-                    <textarea class="form-control" v-model="alasan" rows="3"></textarea>
+                        <label for="">Keterangan</label>
+                        <textarea class="form-control" v-model="alasan" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
+                    <button type="button" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
         </div>

@@ -1,10 +1,12 @@
 <script>
 import detailComponents from './detail.vue'
 import status from '../../../components/status.vue'
+import modalAlasanTolak from './modalAlasanTolak.vue'
 export default {
     components: {
         detailComponents,
-        status
+        status,
+        modalAlasanTolak
     },
     data() {
         return {
@@ -86,7 +88,8 @@ export default {
                 },
             ],
             detailSelected: {},
-            showModal: false
+            showModal: false,
+            showModalTolak: false
         }
     },
     methods: {
@@ -115,28 +118,16 @@ export default {
             })
         },
         tolak(id) {
-            this.$swal({
-                title: 'Apakah anda yakin?',
-                text: 'Data yang sudah ditolak tidak dapat diubah!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Tolak!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.$swal(
-                        'Ditolak!',
-                        'Data berhasil ditolak.',
-                        'success'
-                    )
-                    $('.modalDetail').modal('hide')
-                    this.$nextTick(() => {
-                        this.showModal = false
-                    })
-                }
+            this.showModalTolak = true
+            this.$nextTick(() => {
+                $('.modalTolak').modal('show')
             })
+        },
+        closeModalTolak() {
+            $('.modalTolak').modal('hide');
+            this.$nextTick(() => {
+                this.showModalTolak = false
+            });
         },
         detail(item) {
             this.detailSelected = item
@@ -150,6 +141,7 @@ export default {
 </script>
 <template>
     <div class="card">
+        <showModalTolak v-if="showModalTolak" @close="closeModalTolak" />
         <detailComponents :detail="detailSelected" v-if="showModal" @close="showModal = false" @setuju="setuju"
             @tolak="tolak" />
         <div class="card-body">

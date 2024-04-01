@@ -160,7 +160,8 @@ export default {
 <template>
     <div>
         <batalComponents v-if="showModal" @close="showModal = false" :batal="detailSelected" />
-        <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected" />
+        <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected"
+            @refresh="$emit('refresh')" />
         <detailComponents v-if="showModal" @close="showModal = false" :detail="detailSelected" />
         <doComponents v-if="showModal" @close="showModal = false" :doData="detailSelected" />
         <div class="card">
@@ -246,14 +247,15 @@ export default {
                                         Edit DO
                                     </button>
                                 </a>
-                                <a href="#"><button class="dropdown-item openModalBatalRetur" @click="hapus(item)"
-                                        type="button"><i class="fas fa-trash"></i>
+                                <a href="#"><button class="dropdown-item openModalBatalRetur"
+                                        v-if="item.pesanan.so == null" @click="hapus(item)" type="button"><i
+                                            class="fas fa-trash"></i>
                                         Hapus</button></a>
                                 <a href="#"><button class="dropdown-item openModalBatalRetur" @click="batal(item)"
                                         type="button"><i class="fas fa-times"></i>
                                         Batal</button></a>
-                                <a href="#"><button class="dropdown-item openModalBatalRetur" @click="retur(item)"
-                                        type="button"><i class="fa-solid fa-arrow-rotate-left"></i>
+                                <a href="#"><button class="dropdown-item openModalBatalRetur" v-if="item.cterkirim > 0"
+                                        @click="retur(item)" type="button"><i class="fa-solid fa-arrow-rotate-left"></i>
                                         Retur</button></a>
                             </div>
                         </div>
