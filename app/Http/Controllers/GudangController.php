@@ -2560,6 +2560,7 @@ class GudangController extends Controller
                 // $a = 0;
 
                 $data = NoseriTGbj::select('t_gbj_noseri.id', 't_gbj_noseri.noseri_id', 'noseri_barang_jadi.noseri')
+                     ->addSelect(DB::raw('IF(t_gbj_noseri.status_id IS NULL, "true", "false") AS status'))
                     ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                     ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
                     ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
@@ -2567,12 +2568,13 @@ class GudangController extends Controller
                     ->where('t_gbj_detail.id', $id)
                     ->where('t_gbj.dari', 17)
                     ->where('t_gbj.ke', 13)
-                    ->whereNull('t_gbj_noseri.status_id')
+                    //->whereNull('t_gbj_noseri.status_id')
                     ->where('t_gbj_noseri.jenis', 'masuk')
                     ->get();
             } else {
 
                 $data = NoseriTGbj::select('t_gbj_noseri.id', 't_gbj_noseri.noseri_id', 'noseri_barang_jadi.noseri')
+                    ->addSelect(DB::raw('IF(t_gbj_noseri.status_id IS NULL, "true", "false") AS status'))
                     ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                     ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
                     ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
@@ -2580,7 +2582,7 @@ class GudangController extends Controller
                     ->where('t_gbj_detail.id', $id)
                     ->where('t_gbj.dari', 26)
                     ->where('t_gbj.ke', 13)
-                    ->whereNull('t_gbj_noseri.status_id')
+                  //  ->whereNull('t_gbj_noseri.status_id')
                     ->where('t_gbj_noseri.jenis', 'masuk')
                     ->get();
 
