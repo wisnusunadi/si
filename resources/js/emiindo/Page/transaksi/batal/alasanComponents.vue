@@ -1,6 +1,7 @@
 <script>
+import axios from 'axios'
 export default {
-    props: ['dataBatal'],
+    props: ['items', 'batal'],
     data() {
         return {
             alasan: ''
@@ -8,7 +9,10 @@ export default {
     },
     methods: {
         simpan() {
-            this.$emit('submit', this.alasan)
+            if (this.alasan == '') {
+                this.$swal('Peringatan', 'Alasan batal tidak boleh kosong', 'warning')
+                return
+            }
             this.$swal({
                 title: 'Apakah anda yakin?',
                 text: 'Data yang sudah dibatalkan tidak dapat dikembalikan',
@@ -18,10 +22,21 @@ export default {
                 cancelButtonText: 'Tidak'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.$swal('Berhasil', 'Data berhasil dibatalkan', 'success')
-                    this.$emit('refresh')
-                    this.$emit('closeAllModal')
-                    this.closeModal()
+                    const form = {
+                        item: this.items.filter(item => item.jumlah > 0),
+                        ket: this.alasan,
+                        pesanan_id: this.batal.pesanan_id
+                    }
+
+                    axios.post('/api/penjualan/batal_po/kirim', form).then(res => {
+                        this.$swal('Berhasil', 'Data berhasil dibatalkan', 'success')
+                        this.$emit('refresh')
+                        this.$emit('closeAllModal')
+                        this.closeModal()
+                    }).catch(err => {
+                        this.$swal('Gagal', 'Data gagal dibatalkan', 'error')
+                    })
+
                 }
             })
         },

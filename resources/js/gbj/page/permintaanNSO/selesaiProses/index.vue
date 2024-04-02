@@ -97,7 +97,8 @@ export default {
             this.$router.push({
                 name: 'detailNSO',
                 params: {
-                    id
+                    id,
+                    selesai: true
                 }
             })
         }

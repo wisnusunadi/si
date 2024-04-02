@@ -27,6 +27,7 @@ export default {
             dalamProsesData: [],
             jenisDalamProsesStatus: ["semua"],
             selesaiProsesData: [],
+            batalPOData: []
         }
     },
     methods: {
@@ -44,6 +45,14 @@ export default {
                 const { data: selesaiProses } = await axios.get(`/api/logistik/so/data/selesai/${this.$store.state.years}`)
 
                 this.selesaiProsesData = selesaiProses.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item
+                    }
+                })
+
+                const { data: batalPO } = await axios.get(`/api/penjualan/batal_po/log/show`)
+                this.batalPOData = batalPO.map((item, index) => {
                     return {
                         no: index + 1,
                         ...item
@@ -107,7 +116,7 @@ export default {
                         <SelesaiProses :selesai="selesaiProsesData" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                        <BatalPo />
+                        <BatalPo :items="batalPOData" @refresh="getData" />
                     </div>
                 </div>
             </div>

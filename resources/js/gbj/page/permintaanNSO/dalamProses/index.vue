@@ -1,14 +1,10 @@
 <script>
 import persentase from '../../../../emiindo/components/persentase.vue'
 import status from '../../../components/status.vue';
-import detailPermintaan from './detailDisiapkan/index.vue';
-import detailDiambil from './detailDiambil/index.vue';
 export default {
     components: {
         persentase,
         status,
-        detailPermintaan,
-        detailDiambil
     },
     data() {
         return {
@@ -57,6 +53,7 @@ export default {
             search: '',
             items: [
                 {
+                    id: 1,
                     no_permintaan: 'NSO-2021080001',
                     no_referensi: 'SO-2021080001',
                     tgl_permintaan: '21 Agustus 2021',
@@ -70,6 +67,7 @@ export default {
                     jenis: 'peminjaman', // berapa persen barang yang belum kembali
                 },
                 {
+                    id: 2,
                     no_permintaan: 'NSO-2021080001',
                     no_referensi: 'SO-2021080001',
                     tgl_permintaan: '21 Agustus 2021',
@@ -83,6 +81,7 @@ export default {
                     jenis: 'permintaan',
                 },
                 {
+                    id: 3,
                     no_permintaan: 'NSO-2021080002',
                     no_referensi: 'SO-2021080002',
                     tgl_permintaan: '22 Agustus 2021',
@@ -96,6 +95,7 @@ export default {
                     jenis: 'peminjaman',
                 },
                 {
+                    id: 4,
                     no_permintaan: 'NSO-2021080002',
                     no_referensi: 'SO-2021080002',
                     tgl_permintaan: '22 Agustus 2021',
@@ -109,6 +109,7 @@ export default {
                     jenis: 'permintaan',
                 },
                 {
+                    id: 5,
                     no_permintaan: 'NSO-2021080003',
                     no_referensi: 'SO-2021080003',
                     tgl_permintaan: '23 Agustus 2021',
@@ -122,6 +123,7 @@ export default {
                     jenis: 'permintaan'
                 },
                 {
+                    id: 6,
                     no_permintaan: 'NSO-2021080003',
                     no_referensi: 'SO-2021080003',
                     tgl_permintaan: '23 Agustus 2021',
@@ -135,8 +137,6 @@ export default {
                     jenis: 'peminjaman'
                 },
             ],
-            showModal: false,
-            detailSelected: null
         }
     },
     methods: {
@@ -164,27 +164,21 @@ export default {
                 }
             }
         },
-        aksi(item) {
-            this.detailSelected = item;
-            this.showModal = true;
-            if (item.status == 'barangdisiapkan') {
-                this.$nextTick(() => {
-                    $('.modalDetailDisiapkan').modal('show');
-                });
-            } else if(item.status == 'barangsiapdiambil') {
-                this.$nextTick(() => {
-                    $('.modalDetailDiambil').modal('show');
-                });
-            }
-        }
+        aksi(id) {
+            this.$router.push({
+                name: 'detailNSO',
+                params: {
+                    id,
+                    selesai: false
+                }
+            })
+        },
     },
 }
 </script>
 <template>
     <div class="card">
-        <detailPermintaan :detail="detailSelected" v-if="showModal" @close="showModal = false" />
-        <detailDiambil :detail="detailSelected" v-if="showModal" @close="showModal = false" />
-         <div class="card-body">
+        <div class="card-body">
             <div class="d-flex flex-row-reverse bd-highlight">
                 <div class="p-2 bd-highlight">
                     <input type="text" class="form-control" v-model="search" placeholder="Cari...">
@@ -204,7 +198,7 @@ export default {
                 <template #item.tgl_ambil="{ item }">
                     <div v-if="item.durasi_tanggal">
                         <div :class="calculateDateFromNow(item.durasi_tanggal).color">{{
-                            dateFormat(item.tgl_ambil) }}</div>
+                        dateFormat(item.tgl_ambil) }}</div>
                         <small :class="calculateDateFromNow(item.durasi_tanggal).color">
                             <i :class="calculateDateFromNow(item.durasi_tanggal).icon"></i>
                             {{ calculateDateFromNow(item.durasi_tanggal).text }}
@@ -215,12 +209,12 @@ export default {
                     </div>
                 </template>
                 <template #item.aksi="{ item }">
-                    <button class="btn btn-sm btn-outline-primary" @click="aksi(item)">
+                    <button class="btn btn-sm btn-outline-primary" @click="aksi(item.id)">
                         <i class="fas fa-eye"></i>
                         Detail
                     </button>
                 </template>
             </data-table>
-    </div>
+        </div>
     </div>
 </template>

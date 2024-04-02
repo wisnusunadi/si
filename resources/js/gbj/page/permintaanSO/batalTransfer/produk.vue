@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import noseri from './noseri.vue';
 export default {
     props: ['detail'],
@@ -7,30 +8,7 @@ export default {
     },
     data() {
         return {
-            produk: [
-                {
-                    "id": 194,
-                    "nama": "BT-100 (BIG TROLLEY) + TROLLEY",
-                    "item": [
-                        {
-                            "id": 241,
-                            "gudang_id": 24,
-                            "nama": "BT-100 (Big) ",
-                            "merk": "ELITECH",
-                            sudah_transfer: 0,
-                            total: 5,
-                        },
-                        {
-                            "id": 242,
-                            "gudang_id": 24,
-                            "nama": "TROLLEY",
-                            "merk": "ELITECH",
-                            sudah_transfer: 5,
-                            total: 5,
-                        }
-                    ],
-                }
-            ],
+            produk: [],
             search: '',
             detailSelected: null,
             paketSelected: null,
@@ -38,6 +16,14 @@ export default {
         }
     },
     methods: {
+        async getData() {
+            try {
+                const { data } = await axios.get(`/api/gbj/batal_po/detail/${this.detail.id}`)
+                this.produk = data
+            } catch (error) {
+                console.error(error)
+            }
+        },
         closeModal() {
             $('.modalTransfer').modal('hide');
             this.$nextTick(() => {
@@ -72,29 +58,53 @@ export default {
             let produkNoSeri = []
 
             this.produk.forEach(paket => {
-                paket.item.forEach(item => {
+                paket.produk.forEach(item => {
                     if (item.noseri) {
                         produkNoSeri.push(item)
                     }
                 })
             })
 
-            console.log(produkNoSeri)
-
             if (produkNoSeri.length == 0) {
                 swal.fire('Error', 'Produk belum memiliki no seri', 'error');
+                return
             }
+
+            swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Data yang sudah di transfer tidak bisa diubah lagi",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Lanjutkan!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.post('/api/gbj/batal_po/kirim', {
+                        item: produkNoSeri
+                    }).then(() => {
+                        swal.fire('Success', 'Produk berhasil dikirim', 'success');
+                        this.closeModal()
+                        this.$emit('refresh')
+                    }).catch(err => {
+                        swal.fire('Error', err.response.data.message, 'error');
+                    })
+                }
+            })
+
+
         },
         progressTransfer(item) {
-            if (item.sudah_transfer == item.total) {
-                return {
-                    text: 'Sudah Transfer',
-                    color: 'badge-success'
-                }
-            } else if (item.sudah_transfer == 0) {
+            if (item.jumlah_tf == 0) {
                 return {
                     text: 'Belum Transfer',
                     color: 'badge-danger'
+                }
+            } else if (item.jumlah == item.jumlah_tf) {
+                return {
+                    text: 'Sudah Transfer',
+                    color: 'badge-success'
                 }
             } else {
                 return {
@@ -102,7 +112,7 @@ export default {
                     color: 'badge-warning'
                 }
             }
-        }
+        },
     },
     computed: {
         filterRecursive() {
@@ -123,6 +133,9 @@ export default {
             });
 
         }
+    },
+    created() {
+        this.getData()
     }
 }
 </script>
@@ -151,7 +164,7 @@ export default {
                                     </div>
                                     <div class="col-sm"><label for="">Nomor PO</label>
                                         <div class="card text-white" style="background-color: rgb(223, 116, 88);">
-                                            <div class="card-body"><span id="akn">{{ detail.po ?? '-' }}</span></div>
+                                            <div class="card-body"><span id="akn">{{ detail.no_po ?? '-' }}</span></div>
                                         </div>
                                     </div>
                                     <div class="col-sm"><label for="">Customer</label>
@@ -173,7 +186,8 @@ export default {
                                         <tr>
                                             <th>Produk</th>
                                             <th>Jumlah</th>
-                                            <th v-if="detail.sudah_transfer != detail.total">Jumlah No Seri Dipilih</th>
+                                            <th v-if="detail.jumlah_tf != detail.jumlah">Jumlah No Seri Dipilih
+                                            </th>
                                             <th>Merk</th>
                                             <th>Progress</th>
                                             <th>Aksi</th>
@@ -186,10 +200,10 @@ export default {
                                                     {{ paket.nama }}
                                                 </td>
                                             </tr>
-                                            <tr v-for="item in paket.item" :key="item.id">
+                                            <tr v-for="item in paket.produk" :key="item.id">
                                                 <td>{{ item.nama }}</td>
-                                                <td>{{ item.total }}</td>
-                                                <td v-if="detail.sudah_transfer != detail.total">{{ item.noseri?.length
+                                                <td>{{ item.jumlah }}</td>
+                                                <td v-if="detail.jumlah_tf != detail.jumlah">{{ item.noseri?.length
             ?? 0 }}</td>
                                                 <td>{{ item.merk }}</td>
                                                 <td>
@@ -218,7 +232,7 @@ export default {
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                         <button type="button" class="btn btn-success" @click="transfer"
-                            v-if="detail.sudah_transfer != detail.total">Transfer</button>
+                            v-if="detail.jumlah_tf != detail.jumlah">Transfer</button>
                     </div>
                 </div>
             </div>

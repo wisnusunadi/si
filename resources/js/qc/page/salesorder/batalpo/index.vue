@@ -1,6 +1,7 @@
 <script>
 import produkComponents from './produk.vue'
 export default {
+    props: ['items'],
     components: {
         produkComponents
     },
@@ -17,7 +18,7 @@ export default {
                 },
                 {
                     text: 'Nomor PO',
-                    value: 'po'
+                    value: 'no_po'
                 },
                 {
                     text: 'Customer',
@@ -32,30 +33,13 @@ export default {
                     value: 'aksi'
                 }
             ],
-            items: [
-                {
-                    no: 1,
-                    so: 'SO-2021-0001',
-                    po: 'PO-2021-0001',
-                    customer: 'PT. ABC',
-                    sudah_transfer: 0,
-                    total: 100,
-                },
-                {
-                    no: 2,
-                    so: 'SO-2021-0001',
-                    po: 'PO-2021-0001',
-                    customer: 'PT. ABC',
-                    sudah_transfer: 20,
-                    total: 100,
-                }
-            ],
             detailSelected: {},
             search: '',
             showModal: false,
         }
     },
     methods: {
+
         showDetail(item) {
             this.detailSelected = item
             this.showModal = true
@@ -85,15 +69,15 @@ export default {
             })
         },
         progressTransfer(item) {
-            if (item.sudah_transfer == item.total) {
-                return {
-                    text: 'Sudah Transfer',
-                    color: 'badge-success'
-                }
-            } else if (item.sudah_transfer == 0) {
+            if (item.jumlah_tf == 0) {
                 return {
                     text: 'Belum Transfer',
                     color: 'badge-danger'
+                }
+            } else if (item.jumlah == item.jumlah_tf) {
+                return {
+                    text: 'Sudah Transfer',
+                    color: 'badge-success'
                 }
             } else {
                 return {
@@ -101,13 +85,13 @@ export default {
                     color: 'badge-warning'
                 }
             }
-        }
+        },
     },
 }
 </script>
 <template>
     <div>
-        <produkComponents :detail="detailSelected" v-if="showModal" @close="showModal = false" />
+        <produkComponents :detail="detailSelected" v-if="showModal" @close="showModal = false" @refresh="$emit('refresh')" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" class="form-control" v-model="search">
