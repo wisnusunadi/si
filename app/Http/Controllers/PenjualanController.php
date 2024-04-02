@@ -10099,7 +10099,7 @@ class PenjualanController extends Controller
                 $item[$key_d] = array(
                     'id' => $d->id,
                     'nama' => $d->PenjualanProduk->nama,
-                    'jumlah' => $d->jumlah - $d->getJumlahBatal(),
+                    'qty' => $d->jumlah - $d->getJumlahBatal(),
                     'produk' => array(),
                     'jenis' => 'produk'
                 );

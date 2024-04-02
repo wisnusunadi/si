@@ -24,6 +24,7 @@ export default {
             dataSudahProses: [],
             dataPermintaanBarang: [],
             dataBatal: [],
+            tabs: 'dalam-proses'
         }
     },
     methods: {
@@ -61,6 +62,19 @@ export default {
                         ...item,
                     }
                 })
+
+                const { data: dataBatal } = await axios.get('/api/gbj/batal_po/show', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
+                    }
+                })
+
+                this.dataBatal = dataBatal.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item,
+                    }
+                })
             } catch (error) {
                 console.log(error)
             } finally {
@@ -78,34 +92,46 @@ export default {
         <Header :title="title" :breadcumbs="breadcumbs" />
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
-                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">Dalam Proses</a>
+                <a class="nav-link" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
+                    @click="tabs = 'dalam-proses'"
+                    :class="{ active: tabs == 'dalam-proses' }" type="button" role="tab" aria-controls="pills-home"
+                    aria-selected="true">Dalam Proses</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile" type="button"
-                    role="tab" aria-controls="pills-profile" aria-selected="false">Sudah Proses</a>
+                    @click="tabs = 'sudah-proses'"
+                    :class="{ active: tabs == 'sudah-proses' }" role="tab" aria-controls="pills-profile"
+                    aria-selected="false">Sudah Proses</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-contact" type="button"
-                    role="tab" aria-controls="pills-contact" aria-selected="false">Permintaan Barang</a>
+                    @click="tabs = 'permintaan-barang'"
+                    :class="{ active: tabs == 'permintaan-barang' }" role="tab" aria-controls="pills-contact"
+                    aria-selected="false">Permintaan Barang</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-batal-tab" data-toggle="pill" data-target="#pills-batal" type="button"
-                    role="tab" aria-controls="pills-batal" aria-selected="false">Batal SO</a>
+                    @click="tabs = 'batal-so'"
+                    :class="{ active: tabs == 'batal-so' }" role="tab" aria-controls="pills-batal"
+                    aria-selected="false">Batal SO</a>
             </li>
         </ul>
         <div class="tab-content" id="pills-tabContent" v-if="!$store.state.loading">
-            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                <dalamProses @refresh="getData" :items="dataDalamProses" />
+            <div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
+                :class="{ 'show active': tabs == 'dalam-proses' }">
+                <dalamProses @refresh="getData" :items="dataDalamProses" v-if="tabs == 'dalam-proses'" />
             </div>
-            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                <sudahProses :items="dataSudahProses" />
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
+                :class="{ 'show active': tabs == 'sudah-proses' }">
+                <sudahProses :items="dataSudahProses" v-if="tabs == 'sudah-proses'" />
             </div>
-            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                <permintaanBarang :items="dataPermintaanBarang" />
+            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"
+                :class="{ 'show active': tabs == 'permintaan-barang' }">
+                <permintaanBarang :items="dataPermintaanBarang" v-if="tabs == 'permintaan-barang'" />
             </div>
-            <div class="tab-pane fade" id="pills-batal" role="tabpanel" aria-labelledby="pills-batal-tab">
-                <batalTransfer :items="dataBatal" />
+            <div class="tab-pane fade" id="pills-batal" role="tabpanel" aria-labelledby="pills-batal-tab"
+                :class="{ 'show active': tabs == 'batal-so' }">
+                <batalTransfer :items="dataBatal" @refresh="getData" v-if="tabs == 'batal-so'" />
             </div>
         </div>
         <div class="d-flex justify-content-center" v-else>

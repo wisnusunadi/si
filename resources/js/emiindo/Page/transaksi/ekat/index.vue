@@ -201,7 +201,7 @@ export default {
 </script>
 <template>
     <div>
-        <batalComponents v-if="showModal" @close="showModal = false" :batal="detailSelected" />
+        <batalComponents v-if="showModal" @close="showModal = false" :batal="detailSelected" @refresh="$emit('refresh')" />
         <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected"
             @refresh="$emit('refresh')" />
         <detailComponents v-if="showModal" @close="showModal = false" :detail="detailSelected" />
@@ -313,7 +313,8 @@ export default {
                                             </button>
                                         </a>
                                         <a target="_blank" href="#">
-                                            <button class="dropdown-item" type="button" @click="editEkat(item.id)">
+                                            <button class="dropdown-item" type="button" @click="editEkat(item.id)"
+                                                v-if="item.cgudang == 0">
                                                 <i class="fas fa-pencil-alt"></i>
                                                 Edit
                                             </button>

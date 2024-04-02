@@ -30,9 +30,7 @@ export default {
         async getData() {
             try {
                 this.loading = true
-                const { data } = await axios.post('/api/tfp/seri-so', {
-                    gdg_barang_jadi_id: this.detailSelected.gudang_id
-                })
+                const { data } = await axios.get(`/api/gbj/batal_po/seri/${this.detailSelected.id}`)
                 this.noseri = data
                 if (this.detailSelected?.noseri) {
                     this.noSeriSelected = JSON.parse(JSON.stringify(this.detailSelected.noseri))
@@ -46,12 +44,12 @@ export default {
         noseriterpakai(item) {
             let found = false
             for (let i = 0; i < this.allPaket.length; i++) {
-                for (let j = 0; j < this.allPaket[i].item.length; j++) {
-                    if (this.allPaket[i].item[j].noseri === undefined) {
+                for (let j = 0; j < this.allPaket[i].produk.length; j++) {
+                    if (this.allPaket[i].produk[j]?.noseri === undefined) {
                         continue
                     }
-                    if (this.allPaket[i].item[j].noseri.find(noseri => noseri.id === item.id)) {
-                        if (this.allPaket[i].item[j].id !== this.detailSelected.id) {
+                    if (this.allPaket[i].produk[j]?.noseri?.find(noseri => noseri.id === item.id)) {
+                        if (this.allPaket[i].produk[j].id !== this.detailSelected.id) {
                             found = true
                             break
                         }
@@ -70,7 +68,7 @@ export default {
         checkAllData() {
             this.checkAll = !this.checkAll
             if (this.checkAll) {
-                this.noSeriSelected = this.noseri.filter(noseri => !this.noseriterpakai(noseri))
+                this.noSeriSelected = this.noseri.filter(noseri => !this.noseriterpakai(noseri) && noseri.status)
             } else {
                 this.noSeriSelected = []
             }
@@ -79,7 +77,7 @@ export default {
             if (this.noSeriSelected.find(noseri => noseri.id === item.id)) {
                 this.noSeriSelected = this.noSeriSelected.filter(noseri => noseri.id !== item.id)
             } else {
-                if (!this.noseriterpakai(item)) {
+                if (!this.noseriterpakai(item) && item.status) {
                     this.noSeriSelected.push(item)
                 }
             }
@@ -183,7 +181,7 @@ export default {
             }
 
             let paket = { ...this.paket }
-            paket.item.find(produk => produk.id === this.detailSelected.id).noseri = this.noSeriSelected
+            paket.produk.find(produk => produk.id === this.detailSelected.id).noseri = this.noSeriSelected
             this.$emit('submit', paket)
             this.closeModal()
         }
@@ -191,6 +189,15 @@ export default {
     created() {
         this.getData()
     },
+    watch: {
+        noSeriSelected() {
+            if (this.noSeriSelected.length === this.noseri.length) {
+                this.checkAll = true
+            } else {
+                this.checkAll = false
+            }
+        }
+    }
 }
 </script>
 <template>
@@ -230,11 +237,11 @@ export default {
                             <template #header.id>
                                 <div>
                                     <input type="checkbox" @click="checkAllData" :checked="checkAll"
-                                        v-if="detailSelected.sudah_transfer != detailSelected.total">
+                                        v-if="detailSelected.jumlah_tf != detailSelected.jumlah">
                                 </div>
                             </template>
                             <template #item.id="{ item }">
-                                <div v-if="detailSelected.sudah_transfer != detailSelected.total">
+                                <div v-if="item.status">
                                     <div v-if="!noseriterpakai(item)">
                                         <input type="checkbox" @click="checkNoSeri(item)"
                                             :checked="noSeriSelected && noSeriSelected.find(noseri => noseri.id === item.id)">
@@ -259,7 +266,7 @@ export default {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-info" @click="simpanSeri"
-                            v-if="detailSelected.sudah_transfer != detailSelected.total">Simpan</button>
+                            v-if="detailSelected.jumlah_tf != detailSelected.jumlah">Simpan</button>
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                     </div>
                 </div>

@@ -58,6 +58,14 @@ export default {
                         ...item,
                     }
                 })
+
+                const { data: batalPO } = await axios.get('/api/penjualan/batal_po/qc/show')
+                this.batalPoData = batalPO.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        ...item,
+                    }
+                })
             } catch (error) {
                 console.log(error)
             } finally {
@@ -133,7 +141,7 @@ export default {
                         <selesaiproses :selesai="selesaiProsesData" @filter="filterDataStatusSelesaiProses" />
                     </div>
                     <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                        <batalpo :batal="batalPoData" />
+                        <batalpo :items="batalPoData" @refresh="getData" />
                     </div>
                 </div>
             </div>

@@ -30,10 +30,13 @@ export default {
         async getData() {
             try {
                 this.loading = true
-                const { data } = await axios.post('/api/tfp/seri-so', {
-                    gdg_barang_jadi_id: this.detailSelected.gudang_id
+                const { data } = await axios.get(`/api/penjualan/batal_po/log/seri/${this.detailSelected.id}`)
+                this.noseri = data.map((item, index) => {
+                    return {
+                        ...item,
+                        status: true
+                    }
                 })
-                this.noseri = data
                 if (this.detailSelected?.noseri) {
                     this.noSeriSelected = JSON.parse(JSON.stringify(this.detailSelected.noseri))
                 }
@@ -46,12 +49,12 @@ export default {
         noseriterpakai(item) {
             let found = false
             for (let i = 0; i < this.allPaket.length; i++) {
-                for (let j = 0; j < this.allPaket[i].item.length; j++) {
-                    if (this.allPaket[i].item[j].noseri === undefined) {
+                for (let j = 0; j < this.allPaket[i].produk.length; j++) {
+                    if (this.allPaket[i].produk[j]?.noseri === undefined) {
                         continue
                     }
-                    if (this.allPaket[i].item[j].noseri.find(noseri => noseri.id === item.id)) {
-                        if (this.allPaket[i].item[j].id !== this.detailSelected.id) {
+                    if (this.allPaket[i].produk[j]?.noseri?.find(noseri => noseri.id === item.id)) {
+                        if (this.allPaket[i].produk[j].id !== this.detailSelected.id) {
                             found = true
                             break
                         }
@@ -70,7 +73,7 @@ export default {
         checkAllData() {
             this.checkAll = !this.checkAll
             if (this.checkAll) {
-                this.noSeriSelected = this.noseri.filter(noseri => !this.noseriterpakai(noseri))
+                this.noSeriSelected = this.noseri.filter(noseri => !this.noseriterpakai(noseri) && noseri.status)
             } else {
                 this.noSeriSelected = []
             }
@@ -79,7 +82,7 @@ export default {
             if (this.noSeriSelected.find(noseri => noseri.id === item.id)) {
                 this.noSeriSelected = this.noSeriSelected.filter(noseri => noseri.id !== item.id)
             } else {
-                if (!this.noseriterpakai(item)) {
+                if (!this.noseriterpakai(item) && item.status) {
                     this.noSeriSelected.push(item)
                 }
             }
@@ -173,17 +176,17 @@ export default {
                 return
             }
 
-            if (this.noSeriSelected.length > this.detailSelected.jumlah) {
+            if (this.noSeriSelected.length > this.detailSelected.total) {
                 swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: `Nomor Seri yang dipilih tidak boleh lebih dari ${this.detailSelected.jumlah}`,
+                    text: `Nomor Seri yang dipilih tidak boleh lebih dari ${this.detailSelected.jumlah_sisa}`,
                 })
                 return
             }
 
             let paket = { ...this.paket }
-            paket.item.find(produk => produk.id === this.detailSelected.id).noseri = this.noSeriSelected
+            paket.produk.find(produk => produk.id === this.detailSelected.id).noseri = this.noSeriSelected
             this.$emit('submit', paket)
             this.closeModal()
         }
@@ -193,7 +196,7 @@ export default {
     },
     watch: {
         noSeriSelected() {
-            if (this.noSeriSelected.length == this.noseri.length) {
+            if (this.noSeriSelected.length === this.noseri.length) {
                 this.checkAll = true
             } else {
                 this.checkAll = false
@@ -218,7 +221,7 @@ export default {
                     <div class="modal-body">
                         <small>
                             <span class="text-danger">*</span>
-                            Nomor seri yang dipilih tidak boleh lebih dari {{ detailSelected.jumlah }}
+                            Nomor seri yang dipilih tidak boleh lebih dari {{ detailSelected.total }}
                         </small>
                         <div class="d-flex bd-highlight">
                             <div class="p-2 flex-grow-1 bd-highlight">
@@ -238,17 +241,21 @@ export default {
                         <data-table :items="noseri" :headers="headers" :search="search" v-if="!loading">
                             <template #header.id>
                                 <div>
-                                    <input type="checkbox" @click="checkAllData" :checked="checkAll">
+                                    <input type="checkbox" @click="checkAllData" :checked="checkAll"
+                                        v-if="detailSelected.jumlah_tf != detailSelected.jumlah">
                                 </div>
                             </template>
                             <template #item.id="{ item }">
-                                <div v-if="!noseriterpakai(item)">
-                                    <input type="checkbox" @click="checkNoSeri(item)"
-                                        :checked="noSeriSelected && noSeriSelected.find(noseri => noseri.id === item.id)">
+                                <div v-if="item.status">
+                                    <div v-if="!noseriterpakai(item)">
+                                        <input type="checkbox" @click="checkNoSeri(item)"
+                                            :checked="noSeriSelected && noSeriSelected.find(noseri => noseri.id === item.id)">
+                                    </div>
+                                    <div v-else>
+                                        <span class="badge badge-info">No Seri Terpakai</span>
+                                    </div>
                                 </div>
-                                <div v-else>
-                                    <span class="badge badge-info">No Seri Terpakai</span>
-                                </div>
+                                <div></div>
                             </template>
                         </data-table>
                         <div v-else class="d-flex justify-content-center">
@@ -263,7 +270,8 @@ export default {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-info" @click="simpanSeri">Simpan</button>
+                        <button type="button" class="btn btn-info" @click="simpanSeri"
+                            v-if="detailSelected.jumlah_tf != detailSelected.jumlah">Simpan</button>
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                     </div>
                 </div>

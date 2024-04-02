@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import noseri from './noseri.vue';
 export default {
     props: ['detail'],
@@ -7,23 +8,7 @@ export default {
     },
     data() {
         return {
-            produk: [
-                {
-                    "id": 194,
-                    "nama": "BT-100 (BIG TROLLEY)",
-                    "item": [
-                        {
-                            "id": 241,
-                            "gudang_id": 24,
-                            "nama": "BT-100 (Big) ",
-                            "merk": "ELITECH",
-                            "jumlah": 1,
-                            sudah_transfer: 0,
-                            total: 5,
-                        }
-                    ],
-                }
-            ],
+            produk: [],
             search: '',
             detailSelected: null,
             paketSelected: null,
@@ -31,6 +16,14 @@ export default {
         }
     },
     methods: {
+        async getData() {
+            try {
+                const { data } = await axios.get(`/api/penjualan/batal_po/qc/detail/${this.detail.id}`)
+                this.produk = data
+            } catch (error) {
+                console.log(error)
+            }
+        },
         closeModal() {
             $('.modalTransfer').modal('hide');
             this.$nextTick(() => {
@@ -65,7 +58,7 @@ export default {
             let produkNoSeri = []
 
             this.produk.forEach(paket => {
-                paket.item.forEach(item => {
+                paket.produk.forEach(item => {
                     if (item.noseri) {
                         produkNoSeri.push(item)
                     }
@@ -90,25 +83,29 @@ export default {
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    swal.fire('Berhasil', 'Data berhasil di transfer', 'success')
-                    this.$nextTick(() => {
+                    axios.post('/api/penjualan/batal_po/qc/kirim', {
+                        item: produkNoSeri
+                    }).then(() => {
+                        swal.fire('Success', 'Produk berhasil dikirim', 'success');
                         this.closeModal()
                         this.$emit('refresh')
+                    }).catch(err => {
+                        swal.fire('Error', err.response.data.message, 'error');
                     })
                 }
             })
 
         },
         progressTransfer(item) {
-            if (item.sudah_transfer == item.total) {
-                return {
-                    text: 'Sudah Transfer',
-                    color: 'badge-success'
-                }
-            } else if (item.sudah_transfer == 0) {
+            if (item.jumlah_tf == 0) {
                 return {
                     text: 'Belum Transfer',
                     color: 'badge-danger'
+                }
+            } else if (item.jumlah == item.jumlah_tf) {
+                return {
+                    text: 'Sudah Transfer',
+                    color: 'badge-success'
                 }
             } else {
                 return {
@@ -116,7 +113,7 @@ export default {
                     color: 'badge-warning'
                 }
             }
-        }
+        },
     },
     computed: {
         filterRecursive() {
@@ -137,6 +134,9 @@ export default {
             });
 
         }
+    },
+    created() {
+        this.getData()
     }
 }
 </script>
@@ -200,7 +200,7 @@ export default {
                                                     {{ paket.nama }}
                                                 </td>
                                             </tr>
-                                            <tr v-for="item in paket.item" :key="item.id">
+                                            <tr v-for="item in paket.produk" :key="item.id">
                                                 <td>{{ item.nama }}</td>
                                                 <td>{{ item.jumlah }}</td>
                                                 <td>{{ item.noseri?.length ?? 0 }}</td>
@@ -230,8 +230,7 @@ export default {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                        <button type="button" class="btn btn-primary" @click="transfer"
-                            v-if="detail.persentase_sudah_transfer != 100">Simpan</button>
+                        <button type="button" class="btn btn-success" @click="transfer">Transfer</button>
                     </div>
                 </div>
             </div>

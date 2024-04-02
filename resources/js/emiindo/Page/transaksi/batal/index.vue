@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import alasanComponents from './alasanComponents.vue';
 export default {
     props: ['batal'],
@@ -27,24 +28,24 @@ export default {
                 }
             ],
             items: [
-                {
-                    no: 1,
-                    nama: 'Produk 1',
-                    qty: 10,
-                    jumlah: 0
-                },
-                {
-                    no: 2,
-                    nama: 'Produk 2',
-                    qty: 20,
-                    jumlah: 0
-                },
-                {
-                    no: 3,
-                    nama: 'Produk 3',
-                    qty: 30,
-                    jumlah: 0
-                }
+                // {
+                //     no: 1,
+                //     nama: 'Produk 1',
+                //     qty: 10,
+                //     jumlah: 0
+                // },
+                // {
+                //     no: 2,
+                //     nama: 'Produk 2',
+                //     qty: 20,
+                //     jumlah: 0
+                // },
+                // {
+                //     no: 3,
+                //     nama: 'Produk 3',
+                //     qty: 30,
+                //     jumlah: 0
+                // }
             ],
             showModalAlasan: false
         }
@@ -85,6 +86,20 @@ export default {
                 return false
             }
         },
+        async getData() {
+            try {
+                const { data } = await axios.get(`/api/penjualan/batal_po/detail_paket/${this.batal.pesanan_id}`)
+                this.items = data.map((item, index) => {
+                    return {
+                        ...item,
+                        no: index + 1,
+                        jumlah: 0
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
     },
     watch: {
         // jika jumlah batal di isi melebihi qty maka akan di reset menjadi qty
@@ -100,12 +115,15 @@ export default {
             },
             deep: true
         }
+    },
+    created() {
+        this.getData()
     }
 }
 </script>
 <template>
     <div>
-        <alasanComponents v-if="showModalAlasan" @close="closeModalAlasan" @closeAllModal="closeAllModal" />
+        <alasanComponents :items="items" :batal="batal" v-if="showModalAlasan" @close="closeModalAlasan" @closeAllModal="closeAllModal" @refresh="$emit('refresh')" />
         <div class="modal fade modalBatal" id="staticBackdrop" data-backdrop="static" data-keyboard="false"
             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
