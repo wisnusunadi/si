@@ -11,5 +11,4 @@ class RiwayatBatalPoPaket extends Model
     protected $connection = 'erp';
     protected $table = "riwayat_batal_po_paket";
     protected $fillable = ['detail_pesanan_id', 'jumlah','riwayat_batal_po_id'];
-
 }
