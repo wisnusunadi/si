@@ -74,7 +74,7 @@ export default {
                     </div>
                 </div>
             </div>
-            <div class="p-2">
+            <div class="p-2" v-if="$route.params.selesai">
                 <div class="margin">
                     <small class="text-muted">
                         Keterangan

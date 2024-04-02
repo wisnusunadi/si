@@ -36,7 +36,7 @@ const routes = [
         path: "/gbj/nso/detail/:id",
         name: "detailNSO",
         component: () => import("./page/permintaanNSO/selesaiProses/detail"),
-    }
+    },
 ];
 
 const router = new VueRouter({

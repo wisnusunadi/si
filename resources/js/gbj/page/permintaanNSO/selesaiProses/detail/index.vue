@@ -1,10 +1,16 @@
 <script>
 import Header from '../../../../components/header'
 import headerDetail from './header.vue'
+import pengeluaran from './pengeluaran.vue';
+import pengembalian from './pengembalian.vue';
+import perubahan from './perubahan.vue';
 export default {
     components: {
         Header,
         headerDetail,
+        pengeluaran,
+        pengembalian,
+        perubahan
     },
     data() {
         return {
@@ -23,6 +29,7 @@ export default {
                     link: '#'
                 }
             ],
+
             headersProduk: [
                 {
                     text: 'No',
@@ -64,15 +71,37 @@ export default {
                 produk: [
                     {
                         no: 1,
+                        id: 1,
                         nama: 'Produk 1',
                         waktu_ambil: '2024-08-24 13:00:00',
+                        noSeriSelected: [],
                         jumlah: 2,
                     },
                     {
                         no: 2,
+                        id: 2,
                         nama: 'Produk 2',
                         waktu_ambil: '2024-08-24 13:00:00',
+                        noSeriSelected: [],
                         jumlah: 3,
+                    }
+                ],
+                perubahan: [
+                    {
+                        no: 1,
+                        nama: 'Produk 1',
+                        jumlah: 2,
+                        hari: 1,
+                        diterima: 'Ya',
+                        alasan: '-',
+                    },
+                    {
+                        no: 2,
+                        nama: 'Produk 2',
+                        jumlah: 3,
+                        hari: 1,
+                        diterima: 'Tidak',
+                        alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
                     }
                 ],
                 pengembalian: [
@@ -90,40 +119,7 @@ export default {
                     }
                 ]
             },
-            headersNoSeri: [
-                {
-                    text: 'No',
-                    value: 'no'
-                },
-                {
-                    text: 'No Seri',
-                    value: 'noseri'
-                },
-                {
-                    text: 'Waktu Ambil',
-                    value: 'waktu_ambil'
-                },
-            ],
-            noseriPeminjaman: [],
-            searchNoSeri: '',
-            noseriPengembalian: [],
         }
-    },
-    methods: {
-        detailProduk(item) {
-            this.noseriPeminjaman = [
-                {
-                    no: 1,
-                    noseri: 'NS-2021080001',
-                    waktu_ambil: '2024-08-24 13:00:00',
-                },
-                {
-                    no: 2,
-                    noseri: 'NS-2021080002',
-                    waktu_ambil: '2024-08-24 13:00:00',
-                }
-            ]
-        },
     },
 }
 </script>
@@ -134,63 +130,26 @@ export default {
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
-                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">Peminjaman</a>
+                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">Pengeluaran</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile" type="button"
-                    role="tab" aria-controls="pills-profile" aria-selected="false">Pengembalian</a>
+                    role="tab" aria-controls="pills-profile" aria-selected="false">Perubahan</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-contact" type="button"
+                    role="tab" aria-controls="pills-contact" aria-selected="false">Pengembalian</a>
             </li>
         </ul>
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                <div class="row">
-                    <div :class="noseriPeminjaman.length > 0 ? 'col-8' : 'col-12'">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex flex-row-reverse bd-highlight">
-                                    <div class="p-2 bd-highlight">
-                                        <input type="text" class="form-control" v-model="searchProduk"
-                                            placeholder="Cari...">
-                                    </div>
-                                </div>
-                                <data-table :headers="headersProduk" :items="produk.produk" :search="searchProduk">
-                                    <template #item.waktu_ambil="{ item }">
-                                        {{ dateTimeFormat(item.waktu_ambil) }}
-                                    </template>
-                                    <template #item.aksi="{ item }">
-                                        <button class="btn btn-sm btn-outline-primary" @click="detailProduk(item)">
-                                            <i class="fas fa-eye"></i>
-                                            Detail
-                                        </button>
-                                    </template>
-                                </data-table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4" v-if="noseriPeminjaman.length > 0">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex flex-row-reverse bd-highlight">
-                                    <div class="p-2 bd-highlight">
-                                        <input type="text" class="form-control" v-model="searchNoSeri"
-                                            placeholder="Cari...">
-                                    </div>
-                                </div>
-                                <data-table :headers="headersNoSeri" :items="noseriPeminjaman" :search="searchNoSeri">
-                                    <template #item.waktu_ambil="{ item }">
-                                        {{ dateTimeFormat(item.waktu_ambil) }}
-                                    </template>
-                                </data-table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <pengeluaran :pengeluaran="produk.produk" />
             </div>
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                <div class="row">
-                    <div class="col-8"></div>
-                    <div class="col-4"></div>
-                </div>
+                <perubahan :perubahan="produk.perubahan" />
+            </div>
+            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                <pengembalian :pengembalian="produk.pengembalian" />
             </div>
         </div>
     </div>
