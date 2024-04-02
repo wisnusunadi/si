@@ -9662,7 +9662,6 @@ class PenjualanController extends Controller
             $partByPesananId[$pesanansId][] = $item;
         }
 
-
         foreach ($pesanan as &$pesananItem) {
             $pesananId = $pesananItem['id'];
 
@@ -9674,7 +9673,7 @@ class PenjualanController extends Controller
             }
         }
 
-        //----------------------------------------
+        //------------------
 
         // Group $produk array items by pesanan_id
         foreach ($detail_pesanan_group as $item) {
@@ -9724,15 +9723,11 @@ class PenjualanController extends Controller
                 $pesananItem['produk'] = [];
             }
         }
-
-
-
         return response()->json($pesanan);
     }
 
     public function cek_noretur(Request $request)
     {
-        dd($request->no_retur);
         $data = RiwayatReturPo::where('no_retur', $request->no_retur)->count();
 
         if ($data > 0) {
@@ -9790,10 +9785,8 @@ class PenjualanController extends Controller
                 }
             }
         }
-
         return response()->json($item);
     }
-
     public function get_detail_paket_retur_po($id)
     {
         $data = DetailPesanan::addSelect([
@@ -9833,9 +9826,123 @@ class PenjualanController extends Controller
         return response()->json($obj);
     }
 
+    function kirim_batal_po_divisi($divisi,Request $request)
+    {
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+        DB::beginTransaction();
+        try {
+            $seri_id = array();
+            $seri_batal = array();
+            //code...
+            $tf = TFProduksi::create([
+                'batal_pesanan_id' => $request->id,
+                'dari' => 23,
+                'ke' => 13,
+                'deskripsi' => 'Batal Pesanan',
+                'tgl_masuk' => Carbon::now(),
+                'jenis' => 'masuk'
+            ]);
+
+            foreach ($obj->produk as $produk) {
+                # code...
+
+                $tfd = TFProduksiDetail::create([
+                    't_gbj_id' => $tf->id,
+                    'gdg_brg_jadi_id' => $produk->gudang_barang_jadi_id,
+                    'qty' => count($produk->seri),
+                    'jenis' => 'masuk'
+                ]);
+
+                foreach ($produk->seri as $seri) {
+
+                        NoseriTGbj::create([
+                        't_gbj_detail_id' => $tfd->id,
+                        'noseri_id' =>  $seri->noseri_id,
+                        'jenis' => 'masuk'
+                    ]);
+                        $seri_id[] =  $seri->t_tfbj_noseri_id;
+                        $seri_batal[] =  $seri->id;
+                }
+            }
+
+            if($divisi == 'qc'){
+
+                $ndp = NoseriDetailPesanan::whereIN('t_tfbj_noseri_id',$seri_id);
+                if($ndp->count() > 0){
+                    NoseriDetailPesanan::whereIN('id', $ndp->pluck('id')->toArray())->delete();
+                    NoseriTGbj::whereIN('id', $seri_id)->delete();
+                    RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
+                        'status' => 0
+                    ]);
+
+                    DB::commit();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Berhasil Di tambahkan',
+                    ], 200);
+
+                }else{
+                    RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
+                        'status' => 0
+                    ]);
+                    NoseriTGbj::whereIN('id', $seri_id)->delete();
+
+                    DB::commit();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Berhasil Di tambahkan',
+                    ], 200);
+                }
+            }
+
+            if($divisi == 'log'){
+
+                $ndl = NoseriDetailLogistik::
+                join('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
+                ->whereIN('noseri_detail_pesanan.t_tfbj_noseri_id',$seri_id);
+
+                if($ndl->count() > 0){
+                    NoseriDetailLogistik::whereIN('id', $ndl->pluck('id')->toArray())->delete();
+                    NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id)->delete();
+
+                    RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
+                        'status' => 0
+                    ]);
+
+                    DB::commit();
+
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Berhasil Di tambahkan',
+                    ], 200);
+
+                }else{
+                    NoseriDetailPesanan::whereIN('t_tfbj_noseri_id',$seri_id)->delete();
+                    NoseriTGbj::whereIN('id', $seri_id)->delete();
+                    RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
+                        'status' => 0
+                    ]);
+
+                    DB::commit();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Berhasil Di tambahkan',
+                    ], 200);
+                }
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rolllback();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil Di tambahkan',
+            ], 500);
+        }
+    }
+
     function seri_batal_po_divisi($divisi, $id)
     {
-        $data = RiwayatBatalPoSeri::select('riwayat_batal_po_seri.id', 'noseri_barang_jadi.id as noseri_id', 'noseri_barang_jadi.noseri')
+        $data = RiwayatBatalPoSeri::select('riwayat_batal_po_seri.id','riwayat_batal_po_seri.t_tfbj_noseri_id' ,'noseri_barang_jadi.id as noseri_id', 'noseri_barang_jadi.noseri')
             ->leftjoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'riwayat_batal_po_seri.noseri_id')
             ->where('riwayat_batal_po_seri.detail_riwayat_batal_prd_id', $id)
             ->where('riwayat_batal_po_seri.posisi', $divisi)
@@ -9863,13 +9970,28 @@ class PenjualanController extends Controller
             ->havingRaw('c_batal > 0')
             ->where('riwayat_batal_po_id', $id);
 
-        $item = RiwayatBatalPoPrd::select('riwayat_batal_po_prd.id', 'riwayat_batal_po_prd.detail_riwayat_batal_paket_id', 'produk.nama', 'gdg_barang_jadi.nama as variasi')
+        $item = RiwayatBatalPoPrd::select('riwayat_batal_po_prd.id', 'detail_pesanan_produk.id as detail_pesanan_produk_id','riwayat_batal_po_prd.detail_riwayat_batal_paket_id', 'gdg_barang_jadi.id as gudang_barang_jadi_id','produk.nama', 'gdg_barang_jadi.nama as variasi','produk.merk')
             ->addSelect([
                 'c_batal' => function ($q) use ($divisi) {
                     $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
                         ->from('riwayat_batal_po_seri')
                         ->where('riwayat_batal_po_seri.posisi', $divisi)
                         ->where('riwayat_batal_po_seri.status', 1)
+                        ->whereColumn('riwayat_batal_po_seri.detail_riwayat_batal_prd_id', 'riwayat_batal_po_prd.id')
+                        ->limit(1);
+                },
+                'jumlah_tf' => function ($q) use ($divisi) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                        ->from('riwayat_batal_po_seri')
+                        ->where('riwayat_batal_po_seri.posisi', $divisi)
+                        ->where('riwayat_batal_po_seri.status', 0)
+                        ->whereColumn('riwayat_batal_po_seri.detail_riwayat_batal_prd_id', 'riwayat_batal_po_prd.id')
+                        ->limit(1);
+                },
+                'jumlah' => function ($q) use ($divisi) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                        ->from('riwayat_batal_po_seri')
+                        ->where('riwayat_batal_po_seri.posisi', $divisi)
                         ->whereColumn('riwayat_batal_po_seri.detail_riwayat_batal_prd_id', 'riwayat_batal_po_prd.id')
                         ->limit(1);
                 }
@@ -9887,6 +10009,7 @@ class PenjualanController extends Controller
                 'nama' => $d->nama,
                 'produk' => array()
             );
+
             foreach ($item as  $s) {
                 if ($d->id == $s['detail_riwayat_batal_paket_id']) {
                     $obj[$key_p]['produk'][] = $s;
@@ -9898,7 +10021,6 @@ class PenjualanController extends Controller
     }
     public function batal_po_show_divisi($divisi)
     {
-
         $data = RiwayatBatalPo::select('riwayat_batal_po.id', 'pesanan.so', 'pesanan.no_po', 'c_ekat.nama as c_ekat', 'c_spa.nama as c_spa', 'c_spb.nama as c_spb')
             ->addSelect([
                 'c_batal' => function ($q) use ($divisi) {
@@ -9908,6 +10030,25 @@ class PenjualanController extends Controller
                         ->leftJoin('riwayat_batal_po_paket', 'riwayat_batal_po_paket.id', 'riwayat_batal_po_prd.detail_riwayat_batal_paket_id')
                         ->where('riwayat_batal_po_seri.posisi', $divisi)
                         ->where('riwayat_batal_po_seri.status', 1)
+                        ->whereColumn('riwayat_batal_po_paket.riwayat_batal_po_id', 'riwayat_batal_po.id')
+                        ->limit(1);
+                },
+                'c_batal_tf' => function ($q) use ($divisi) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                        ->from('riwayat_batal_po_seri')
+                        ->leftJoin('riwayat_batal_po_prd', 'riwayat_batal_po_prd.id', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
+                        ->leftJoin('riwayat_batal_po_paket', 'riwayat_batal_po_paket.id', 'riwayat_batal_po_prd.detail_riwayat_batal_paket_id')
+                        ->where('riwayat_batal_po_seri.posisi', $divisi)
+                        ->where('riwayat_batal_po_seri.status', 0)
+                        ->whereColumn('riwayat_batal_po_paket.riwayat_batal_po_id', 'riwayat_batal_po.id')
+                        ->limit(1);
+                },
+                'c_batal_semua' => function ($q) use ($divisi) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                        ->from('riwayat_batal_po_seri')
+                        ->leftJoin('riwayat_batal_po_prd', 'riwayat_batal_po_prd.id', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
+                        ->leftJoin('riwayat_batal_po_paket', 'riwayat_batal_po_paket.id', 'riwayat_batal_po_prd.detail_riwayat_batal_paket_id')
+                        ->where('riwayat_batal_po_seri.posisi', $divisi)
                         ->whereColumn('riwayat_batal_po_paket.riwayat_batal_po_id', 'riwayat_batal_po.id')
                         ->limit(1);
                 }
@@ -9941,7 +10082,8 @@ class PenjualanController extends Controller
                 'so' => $d->so,
                 'no_po' => $d->no_po,
                 'customer' => $customer,
-                'status' => ''
+                'jumlah' => $d->c_batal_semua,
+                'jumlah_tf' => $d->c_batal_tf
             );
         }
 
@@ -9949,7 +10091,6 @@ class PenjualanController extends Controller
     }
     public function get_detail_paket_batal_po($id)
     {
-
         $data = Pesanan::find($id);
         $item = array();
 
@@ -9987,23 +10128,19 @@ class PenjualanController extends Controller
     public function kirim_prd_retur_po(Request $request)
     {
         $obj =  json_decode(json_encode($request->all()), FALSE);
-        //dd($obj);
         DB::beginTransaction();
         try {
             //code...
             foreach ($obj->item as $item) {
-
                 $rpo =  RiwayatReturPo::create([
                     'pesanan_id' => $obj->pesanan_id,
                     'no_retur' => $obj->no_retur,
                 ]);
-
                 $p =  RiwayatReturPoPaket::create([
                     'detail_pesanan_id' => $item->id,
                     'riwayat_retur_po_id' => $rpo->id,
                     'jumlah' => $item->jml_retur,
                 ]);
-
                 $tf = TFProduksi::create([
                     'retur_pesanan_id' => $rpo->id,
                     'dari' => 26,
@@ -10012,7 +10149,6 @@ class PenjualanController extends Controller
                     'tgl_masuk' => Carbon::now(),
                     'jenis' => 'masuk'
                 ]);
-
                 foreach ($item->produk as $produk) {
                     $r =  RiwayatReturPoPrd::create([
                         'detail_riwayat_retur_paket_id' => $p->id,

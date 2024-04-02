@@ -13,7 +13,7 @@ class TFProduksi extends Model
     protected $connection = 'erp';
     protected $table = 't_gbj';
 
-    protected $fillable = ['ke', 'dari', 'deskripsi', 'status_id', 'retur_pesanan_id','pesanan_id', 'retur_penjualan_id', 'tgl_keluar', 'tgl_masuk', 'state_id', 'jenis', 'created_by', 'created_at'];
+    protected $fillable = ['ke', 'dari', 'deskripsi', 'status_id','batal_pesanan_id','retur_pesanan_id','pesanan_id', 'retur_penjualan_id', 'tgl_keluar', 'tgl_masuk', 'state_id', 'jenis', 'created_by', 'created_at'];
 
     function detail()
     {
