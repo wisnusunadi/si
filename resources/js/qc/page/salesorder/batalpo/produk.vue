@@ -84,6 +84,7 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios.post('/api/penjualan/batal_po/qc/kirim', {
+                        id: this.detail.id,
                         item: produkNoSeri
                     }).then(() => {
                         swal.fire('Success', 'Produk berhasil dikirim', 'success');
