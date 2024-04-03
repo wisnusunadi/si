@@ -146,13 +146,6 @@ export default {
                     {
                         text: 'Nama Produk',
                         value: 'nama',
-                        children: [
-
-                            {
-                                text: 'Penyerahan',
-                                value: 'jumlahdiserahkan',
-                            }
-                        ]
                     },
                     {
                         text: 'Jumlah',

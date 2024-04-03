@@ -142,7 +142,6 @@ export default {
                             </td>
                         </template>
                     </template>
-
                 </tr>
             </tbody>
             <tbody v-else>
