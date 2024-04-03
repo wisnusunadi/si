@@ -39,6 +39,28 @@ export default {
                 this.sortColumn = column
                 this.sortDirection = 'asc'
             }
+        },
+        cekHeaderRowspan(header) {
+            if (this.cekHeaderDetectedChidlren) {
+                if (header.children) {
+                    return 1
+                } else {
+                    return 2
+                }
+            } else {
+                return 1
+            }
+        },
+        cekHeaderColspan(header) {
+            if (this.cekHeaderDetectedChidlren) {
+                if (header.children) {
+                    return header.children.length
+                } else {
+                    return 1
+                }
+            } else {
+                return 1
+            }
         }
     },
     computed: {
@@ -65,6 +87,9 @@ export default {
                 return 0
             })
             return sorted
+        },
+        cekHeaderDetectedChidlren() {
+            return this.headers.some(header => header?.children)
         }
     },
 }
@@ -74,9 +99,9 @@ export default {
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col" v-for="header in headers" :key="header.text"
-                        :class="header.align ? header.align : 'text-center'" @click="sort(header)"
-                        :sortable="header.sortable == false ? false : true">
+                    <th scope="col" v-for="header in headers" :key="header.text" :rowspan="cekHeaderRowspan(header)"
+                        :colspan="cekHeaderColspan(header)" :class="header.align ? header.align : 'text-center'"
+                        @click=" sort(header)" :sortable="header.sortable == false ? false : true">
                         <slot :name="`header.${header.value}`">
                             {{ header.text }}
                         </slot>
@@ -84,6 +109,17 @@ export default {
                             <i v-if="sortDirection === 'asc'" class="fas fa-arrow-up"></i>
                             <i v-else class="fas fa-arrow-down"></i>
                         </span>
+                    </th>
+                    <th scope="col" v-if="header?.children" :class="header.align ? header.align : 'text-center'">
+                        {{ header.text }}
+                    </th>
+                </tr>
+                <tr v-for="header in headers" :key="header.text" v-if="header?.children">
+                    <th v-for="child in header.children" :key="child.text"
+                        :class="child.align ? child.align : 'text-center'">
+                        <slot :name="`header.${child.value}`">
+                            {{ child.text }}
+                        </slot>
                     </th>
                 </tr>
             </thead>
