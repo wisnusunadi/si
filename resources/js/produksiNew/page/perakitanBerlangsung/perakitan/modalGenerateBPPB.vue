@@ -194,13 +194,13 @@ export default {
                                 <input type="text" class="form-control" v-model="form.kode_produk" disabled>
                             </div>
                             <div class="form-group">
-                                <label for="">Bulan</label>
-                                <v-select v-model="form.bulan" :options="monthCalc"></v-select>
-                            </div>
-                            <div class="form-group">
                                 <label for="">Tahun</label>
                                 <input type="text" :value="new Date().getFullYear().toString()" class="form-control"
                                     disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Bulan</label>
+                                <v-select v-model="form.bulan" :options="monthCalc"></v-select>
                             </div>
                             <div class="form-group">
                                 <label for="">Nomor BPPB</label>
