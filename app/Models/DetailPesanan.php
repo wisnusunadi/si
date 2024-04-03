@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use TGbjHis;
 
 class DetailPesanan extends Model
 {
@@ -181,6 +182,16 @@ class DetailPesanan extends Model
         ->groupBy('detail_logistik.detail_pesanan_produk_id')
         ->pluck('detail_logistik.detail_pesanan_produk_id')
         ->count('detail_logistik.id');
+
+        return $s;
+    }
+    public function getJumlahPrdTf()
+    {
+        $id = $this->id;
+        $s = TFProduksiDetail::
+        leftJoin('detail_pesanan_produk','t_gbj_detail.detail_pesanan_produk_id','=','detail_pesanan_produk.id')
+        ->where('detail_pesanan_produk.detail_pesanan_id', $id)
+        ->count('t_gbj_detail.id');
 
         return $s;
     }

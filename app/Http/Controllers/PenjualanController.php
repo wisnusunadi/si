@@ -3370,6 +3370,13 @@ class PenjualanController extends Controller
                         ->where('logistik.status_id', 10)
                         ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
                 },
+                'c_tf' => function ($q) {
+                    $q->selectRaw('coalesce(count(t_gbj_noseri.id),0)')
+                        ->from('t_gbj_noseri')
+                        ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                        ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                        ->whereColumn('t_gbj.pesanan_id', 'spa.pesanan_id');
+                },
                 'ckirimprd' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
                         ->from('noseri_logistik')
@@ -3448,6 +3455,13 @@ class PenjualanController extends Controller
                         ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('logistik.status_id', 10)
                         ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'c_tf' => function ($q) {
+                    $q->selectRaw('coalesce(count(t_gbj_noseri.id),0)')
+                        ->from('t_gbj_noseri')
+                        ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                        ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                        ->whereColumn('t_gbj.pesanan_id', 'spa.pesanan_id');
                 },
                 'ckirimprd' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
@@ -10091,30 +10105,58 @@ class PenjualanController extends Controller
     }
     public function get_detail_paket_batal_po($id)
     {
-        $data = Pesanan::find($id);
-        $item = array();
 
-        if ($data->DetailPesanan) {
-            foreach ($data->DetailPesanan as $key_d => $d) {
-                $item[$key_d] = array(
-                    'id' => $d->id,
-                    'nama' => $d->PenjualanProduk->nama,
-                    'qty' => $d->jumlah - $d->getJumlahBatal(),
-                    'produk' => array(),
-                    'jenis' => 'produk'
-                );
-                foreach ($d->DetailPesananProduk as $key_e => $e) {
-                    $item[$key_d]['produk'][$key_e] = array(
-                        'id' => $e->id,
-                        'gudang_barang_jadi_id' => $e->gudang_barang_jadi_id
-                    );
-                }
+        $prd = DetailPesanan::addSelect([
+            'item' => function ($q) {
+                $q->selectRaw('coalesce(count(detail_pesanan_produk.id),0)')
+                    ->from('detail_pesanan_produk')
+                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id');
+            },
+            'seri_log' => function ($q) {
+                $q->selectRaw('coalesce(count(t_gbj_noseri.id),0)')
+                ->from('t_gbj_noseri')
+                ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                ->leftJoin('detail_pesanan_produk','t_gbj_detail.detail_pesanan_produk_id','=','detail_pesanan_produk.id')
+                ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id');
+            },
+        ])->where('pesanan_id', $id);
+
+        $part = DetailPesananPart::where('pesanan_id',$id);
+
+        $obj = array();
+
+        if ($prd->count() > 0) {
+        foreach ($prd->get() as $key_d => $d) {
+            $jumlah = 0;
+            if ($d->getJumlahPrdTf() != $d->item) {
+                $jumlah = 0;
+            } else {
+                $jumlah = $d->seri_log / $d->item;
+                $jumlah =  $jumlah - $d->getJumlahBatal();
             }
-        }
+            $obj[] = array(
+                'id' => $d->id,
+                'nama' => $d->PenjualanProduk->nama,
+                'qty' => $jumlah ,
+                'jumlah_po' => $d->jumlah,
+                'jenis' => 'produk',
+                'produk' => array()
+            );
 
-        if ($data->DetailPesananPart) {
-            foreach ($data->DetailPesananPart as $d) {
-                $item[] = array(
+            foreach ($d->DetailPesananProduk as $key_e => $e) {
+                            $obj[$key_d]['produk'][$key_e] = array(
+                                'id' => $e->id,
+                                'gudang_barang_jadi_id' => $e->gudang_barang_jadi_id
+                            );
+                        }
+        }
+    }
+
+
+       if ($part->count() > 0) {
+            foreach ($part->get() as $d) {
+                $obj[] = array(
                     'id' => $d->id,
                     'nama' => $d->Sparepart->nama,
                     'jumlah' => $d->jumlah - $d->getJumlahBatal(),
@@ -10122,7 +10164,40 @@ class PenjualanController extends Controller
                 );
             }
         }
-        return response()->json($item);
+        return response()->json($obj);
+
+        // $data = Pesanan::find($id);
+        // $item = array();
+
+        // if ($data->DetailPesanan) {
+        //     foreach ($data->DetailPesanan as $key_d => $d) {
+        //         $item[$key_d] = array(
+        //             'id' => $d->id,
+        //             'nama' => $d->PenjualanProduk->nama,
+        //             'qty' => $d->jumlah,
+        //             'produk' => array(),
+        //             'jenis' => 'produk'
+        //         );
+        //         foreach ($d->DetailPesananProduk as $key_e => $e) {
+        //             $item[$key_d]['produk'][$key_e] = array(
+        //                 'id' => $e->id,
+        //                 'gudang_barang_jadi_id' => $e->gudang_barang_jadi_id
+        //             );
+        //         }
+        //     }
+        // }
+
+        // if ($data->DetailPesananPart) {
+        //     foreach ($data->DetailPesananPart as $d) {
+        //         $item[] = array(
+        //             'id' => $d->id,
+        //             'nama' => $d->Sparepart->nama,
+        //             'jumlah' => $d->jumlah - $d->getJumlahBatal(),
+        //             'jenis' => 'part'
+        //         );
+        //     }
+        // }
+        // return response()->json($item);
     }
 
     public function kirim_prd_retur_po(Request $request)
@@ -10288,6 +10363,10 @@ class PenjualanController extends Controller
         DB::beginTransaction();
         try {
             //code...
+            $p = Pesanan::find($obj->pesanan_id);
+            $p->log_id = 20;
+            $p->save();
+
             $po = RiwayatBatalPo::where('pesanan_id', $obj->pesanan_id);
 
             if ($po->count() > 0) {
@@ -10366,9 +10445,9 @@ class PenjualanController extends Controller
             //throw $th;
             DB::rollback();
             return response()->json([
-                'status' => 404,
+                'status' => 500,
                 'message' => 'Gagal Dikirim',
-            ], 200);
+            ], 500);
         }
     }
 
