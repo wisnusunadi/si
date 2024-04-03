@@ -125,6 +125,7 @@ export default {
                 peminjaman: [
                     {
                         no: 1,
+                        expanded: false,
                         nama: 'Produk 1',
                         jumlah: 2,
                         tgl_peminjaman: '2024-08-24',
@@ -132,18 +133,19 @@ export default {
                         noseri: [
                             {
                                 no: 1,
-                                noseri: 'NS-2021080001',
+                                noseri: 'TR12345678',
                                 tgl_pengembalian: '2024-08-24 13:00:00',
                             },
                             {
                                 no: 2,
-                                noseri: 'NS-2021080002',
+                                noseri: 'TE12345678',
                                 tgl_pengembalian: '2024-08-24 13:00:00',
                             }
                         ]
                     },
                     {
                         no: 2,
+                        expanded: false,
                         nama: 'Produk 2',
                         jumlah: 3,
                         tgl_peminjaman: '2024-08-24',
@@ -151,12 +153,12 @@ export default {
                         noseri: [
                             {
                                 no: 1,
-                                noseri: 'NS-2021080001',
+                                noseri: 'TL12345678',
                                 tgl_pengembalian: '2024-08-24 13:00:00',
                             },
                             {
                                 no: 2,
-                                noseri: 'NS-2021080002',
+                                noseri: 'TM12345678',
                                 tgl_pengembalian: '2024-08-24 13:00:00',
                             }
                         ]

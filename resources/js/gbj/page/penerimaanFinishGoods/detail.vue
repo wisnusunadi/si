@@ -234,11 +234,7 @@ export default {
                                 <div v-if="detail.status == 'batal'">
                                     <label for="">Alasan Batal</label>
                                     <div class="card card-detail">
-                                        <div class="card-body"><span id="sudah_tf">Lorem ipsum dolor sit amet
-                                                consectetur
-                                                adipisicing elit. Minima facilis quis cupiditate aut praesentium
-                                                perferendis, architecto natus tempora, omnis corporis ad atque, delectus
-                                                tenetur consequuntur magnam commodi animi sunt impedit.</span></div>
+                                        <div class="card-body"><span id="sudah_tf">{{ detail.keterangan }}</span></div>
                                     </div>
                                 </div>
                             </div>
