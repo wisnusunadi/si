@@ -179,7 +179,8 @@ export default {
 </script>
 <template>
     <div>
-        <batalComponents v-if="showModal" @close="showModal = false" :batal="detailSelected" @refresh="$emit('refresh')" />
+        <batalComponents v-if="showModal" @close="showModal = false" :batal="detailSelected"
+            @refresh="$emit('refresh')" />
         <returComponents v-if="showModal" @close="showModal = false" :retur="detailSelected"
             @refresh="$emit('refresh')" />
         <detailComponents v-if="showModal" @close="showModal = false" :detail="detailSelected" />
@@ -256,42 +257,34 @@ export default {
                                         aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i>
                                     </div>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
-                                        <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="#"
-                                            data-id="5092">
-                                            <button class="dropdown-item" type="button" @click="detail(item)">
-                                                <i class="fas fa-eye"></i>
-                                                Detail
-                                            </button>
-                                        </a>
-                                        <a target="_blank" href="#">
-                                            <button class="dropdown-item" type="button" @click="editSpa(item.id)">
-                                                <i class="fas fa-pencil-alt"></i>
-                                                Edit
-                                            </button>
-                                        </a>
-                                        <a target="_blank" href="#" v-if="item.no_po != null && item.tgl_po != null">
-                                            <button class="dropdown-item" type="button">
-                                                <i class="fas fa-print"></i>
-                                                SPPB
-                                            </button>
-                                        </a>
-                                        <a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="5092">
-                                            <button class="dropdown-item" type="button" @click="openDO(item)">
-                                                <i class="fas fa-pencil-alt"></i>
-                                                Edit DO
-                                            </button>
-                                        </a>
-                                        <a href="#"><button class="dropdown-item openModalBatalRetur"
-                                                v-if="item.pesanan.so == null" @click="hapus(item)" type="button"><i
-                                                    class="fas fa-trash"></i>
-                                                Hapus</button></a>
-                                        <a href="#"><button class="dropdown-item openModalBatalRetur"
-                                                @click="batal(item)" type="button"><i class="fas fa-times"></i>
-                                                Batal</button></a>
-                                        <a href="#"><button class="dropdown-item openModalBatalRetur"
-                                                v-if="item.cterkirim > 0" @click="retur(item)" type="button"><i
-                                                    class="fa-solid fa-arrow-rotate-left"></i>
-                                                Retur</button></a>
+                                        <button class="dropdown-item" type="button" @click="detail(item)">
+                                            <i class="fas fa-eye"></i>
+                                            Detail
+                                        </button>
+                                        <button class="dropdown-item" type="button" @click="editSpa(item.id)"
+                                            v-if="item.cgudang == 0">
+                                            <i class="fas fa-pencil-alt"></i>
+                                            Edit
+                                        </button>
+                                        <button class="dropdown-item" type="button"
+                                            v-if="item.no_po != null && item.tgl_po != null">
+                                            <i class="fas fa-print"></i>
+                                            SPPB
+                                        </button>
+                                        <button class="dropdown-item" type="button" @click="openDO(item)">
+                                            <i class="fas fa-pencil-alt"></i>
+                                            Edit DO
+                                        </button>
+                                        <button class="dropdown-item openModalBatalRetur" v-if="item.pesanan.so == null"
+                                            @click="hapus(item)" type="button"><i class="fas fa-trash"></i>
+                                            Hapus</button>
+                                        <button class="dropdown-item openModalBatalRetur" @click="batal(item)"
+                                            type="button"><i class="fas fa-times"></i>
+                                            Batal</button>
+                                        <button class="dropdown-item openModalBatalRetur" v-if="item.cterkirim > 0"
+                                            @click="retur(item)" type="button"><i
+                                                class="fa-solid fa-arrow-rotate-left"></i>
+                                            Retur</button>
                                     </div>
                                 </div>
                             </td>
