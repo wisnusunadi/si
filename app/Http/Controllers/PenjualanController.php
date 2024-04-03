@@ -9848,31 +9848,31 @@ class PenjualanController extends Controller
             $seri_id = array();
             $seri_batal = array();
             //code...
-            // $tf = TFProduksi::create([
-            //     'batal_pesanan_id' => $request->id,
-            //     'dari' => $divisi == 'qc' ? 23 : 15,
-            //     'ke' => 13,
-            //     'deskripsi' => 'Batal Pesanan',
-            //     'tgl_masuk' => Carbon::now(),
-            //     'jenis' => 'masuk'
-            // ]);
+            $tf = TFProduksi::create([
+                'batal_pesanan_id' => $request->id,
+                'dari' => $divisi == 'qc' ? 23 : 15,
+                'ke' => 13,
+                'deskripsi' => 'Batal Pesanan',
+                'tgl_masuk' => Carbon::now(),
+                'jenis' => 'masuk'
+            ]);
 
             foreach ($obj->item as $produk) {
                 # code...
 
-                // $tfd = TFProduksiDetail::create([
-                //     't_gbj_id' => $tf->id,
-                //     'gdg_brg_jadi_id' => $produk->gudang_barang_jadi_id,
-                //     'qty' => count($produk->noseri),
-                //     'jenis' => 'masuk'
-                // ]);
+                $tfd = TFProduksiDetail::create([
+                    't_gbj_id' => $tf->id,
+                    'gdg_brg_jadi_id' => $produk->gudang_barang_jadi_id,
+                    'qty' => count($produk->noseri),
+                    'jenis' => 'masuk'
+                ]);
 
                 foreach ($produk->noseri as $seri) {
-                    //     NoseriTGbj::create([
-                    //     't_gbj_detail_id' => $tfd->id,
-                    //     'noseri_id' =>  $seri->noseri_id,
-                    //     'jenis' => 'masuk'
-                    // ]);
+                        NoseriTGbj::create([
+                        't_gbj_detail_id' => $tfd->id,
+                        'noseri_id' =>  $seri->noseri_id,
+                        'jenis' => 'masuk'
+                    ]);
                         $seri_id[] =  $seri->t_tfbj_noseri_id;
                         $seri_batal[] =  $seri->id;
                 }
