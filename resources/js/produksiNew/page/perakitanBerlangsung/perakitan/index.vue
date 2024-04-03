@@ -308,7 +308,7 @@ export default {
             <template #item.aksi="{ item }">
                 <button class="btn btn-sm btn-outline-success" @click="generateBPPB(item)" v-if="item.no_bppb == '-'">
                     <i class="fa fa-barcode"></i>
-                    Generate BPPB
+                    Input BPPB
                 </button>
 
                 <button class="btn btn-sm btn-outline-primary" @click="detail(item)"
