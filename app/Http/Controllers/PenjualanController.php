@@ -9848,32 +9848,31 @@ class PenjualanController extends Controller
             $seri_id = array();
             $seri_batal = array();
             //code...
-            $tf = TFProduksi::create([
-                'batal_pesanan_id' => $request->id,
-                'dari' => 23,
-                'ke' => 13,
-                'deskripsi' => 'Batal Pesanan',
-                'tgl_masuk' => Carbon::now(),
-                'jenis' => 'masuk'
-            ]);
+            // $tf = TFProduksi::create([
+            //     'batal_pesanan_id' => $request->id,
+            //     'dari' => $divisi == 'qc' ? 23 : 15,
+            //     'ke' => 13,
+            //     'deskripsi' => 'Batal Pesanan',
+            //     'tgl_masuk' => Carbon::now(),
+            //     'jenis' => 'masuk'
+            // ]);
 
-            foreach ($obj->produk as $produk) {
+            foreach ($obj->item as $produk) {
                 # code...
 
-                $tfd = TFProduksiDetail::create([
-                    't_gbj_id' => $tf->id,
-                    'gdg_brg_jadi_id' => $produk->gudang_barang_jadi_id,
-                    'qty' => count($produk->seri),
-                    'jenis' => 'masuk'
-                ]);
+                // $tfd = TFProduksiDetail::create([
+                //     't_gbj_id' => $tf->id,
+                //     'gdg_brg_jadi_id' => $produk->gudang_barang_jadi_id,
+                //     'qty' => count($produk->noseri),
+                //     'jenis' => 'masuk'
+                // ]);
 
-                foreach ($produk->seri as $seri) {
-
-                        NoseriTGbj::create([
-                        't_gbj_detail_id' => $tfd->id,
-                        'noseri_id' =>  $seri->noseri_id,
-                        'jenis' => 'masuk'
-                    ]);
+                foreach ($produk->noseri as $seri) {
+                    //     NoseriTGbj::create([
+                    //     't_gbj_detail_id' => $tfd->id,
+                    //     'noseri_id' =>  $seri->noseri_id,
+                    //     'jenis' => 'masuk'
+                    // ]);
                         $seri_id[] =  $seri->t_tfbj_noseri_id;
                         $seri_batal[] =  $seri->id;
                 }
@@ -9910,46 +9909,93 @@ class PenjualanController extends Controller
             }
 
             if($divisi == 'log'){
-
-                $ndl = NoseriDetailLogistik::
-                join('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
+                $ndl = NoseriDetailLogistik::select('noseri_logistik.id')
+                ->join('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
                 ->whereIN('noseri_detail_pesanan.t_tfbj_noseri_id',$seri_id);
 
-                if($ndl->count() > 0){
-                    NoseriDetailLogistik::whereIN('id', $ndl->pluck('id')->toArray())->delete();
-                    NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id)->delete();
-
-                    RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
+                  RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
                         'status' => 0
                     ]);
 
-                    DB::commit();
+                if($ndl->count() > 0){
+                    foreach($ndl->get() as $noseri){
 
+                            //Cek Noseri
+                            $seriLog =  NoseriDetailLogistik::find($noseri->id);
+
+                            //Cek Detail Logistik
+                            $detail = DetailLogistik::find($seriLog->detail_logistik_id);
+                            $detailId = $detail->id;
+
+                            //Cek Logistik
+                            $log = Logistik::find($detail->logistik_id);
+                            $logId = $log->id;
+
+                            //Hapus Noseri
+                            NoseriDetailLogistik::where('id',$noseri->id)->delete();
+
+                            //Cek dan Hapus
+                            $cekNdl = NoseriDetailLogistik::where('detail_logistik_id',$detailId)->count();
+
+                            //dd($cekNdl);
+
+                            if($cekNdl == 0){
+                                DetailLogistik::where('id',$detailId)->delete();
+                            }
+
+                            $cekL = DetailLogistik::where('logistik_id',$logId)->count();
+
+                            if($cekL == 0){
+                                Logistik::where('id',$logId)->delete();
+                            }
+
+
+
+                    }
+
+                    DB::commit();
                     return response()->json([
                         'status' => 200,
                         'message' => 'Berhasil Di tambahkan',
                     ], 200);
+
+
+                    //Cek Logistik
+                  //  $logistik = Logistik::whereIN('id',$detail->pluck('logistik_id')->toArray());
+
+                    // NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id)->delete();
+
+                    // RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
+                    //     'status' => 0
+                    // ]);
+
+                    // DB::commit();
+
+                    // return response()->json([
+                    //     'status' => 200,
+                    //     'message' => 'Berhasil Di tambahkan',
+                    // ], 200);
 
                 }else{
-                    NoseriDetailPesanan::whereIN('t_tfbj_noseri_id',$seri_id)->delete();
-                    NoseriTGbj::whereIN('id', $seri_id)->delete();
-                    RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
-                        'status' => 0
-                    ]);
+                    // NoseriDetailPesanan::whereIN('t_tfbj_noseri_id',$seri_id)->delete();
+                    // NoseriTGbj::whereIN('id', $seri_id)->delete();
+                    // RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
+                    //     'status' => 0
+                    // ]);
 
-                    DB::commit();
-                    return response()->json([
-                        'status' => 200,
-                        'message' => 'Berhasil Di tambahkan',
-                    ], 200);
+                    // DB::commit();
+                    // return response()->json([
+                    //     'status' => 200,
+                    //     'message' => 'Berhasil Di tambahkan',
+                    // ], 200);
                 }
             }
         } catch (\Throwable $th) {
             //throw $th;
-            DB::rolllback();
+            DB::rollback();
             return response()->json([
-                'status' => 200,
-                'message' => 'Berhasil Di tambahkan',
+                'status' => 500,
+                'message' => 'Gagal Di tambahkan'.$th->getMessage(),
             ], 500);
         }
     }
@@ -10026,6 +10072,7 @@ class PenjualanController extends Controller
 
             foreach ($item as  $s) {
                 if ($d->id == $s['detail_riwayat_batal_paket_id']) {
+                    $s['jumlah_sisa'] = $s->jumlah - $s->jumlah_tf;
                     $obj[$key_p]['produk'][] = $s;
                 }
             }
@@ -10128,17 +10175,17 @@ class PenjualanController extends Controller
 
         if ($prd->count() > 0) {
         foreach ($prd->get() as $key_d => $d) {
-            $jumlah = 0;
-            if ($d->getJumlahPrdTf() != $d->item) {
-                $jumlah = 0;
-            } else {
-                $jumlah = $d->seri_log / $d->item;
-                $jumlah =  $jumlah - $d->getJumlahBatal();
-            }
+            // $jumlah = 0;
+            // if ($d->getJumlahPrdTf() != $d->item) {
+            //     $jumlah = 0;
+            // } else {
+            //     $jumlah = $d->seri_log / $d->item;
+            //     $jumlah =  $jumlah - $d->getJumlahBatal();
+            // }
             $obj[] = array(
                 'id' => $d->id,
                 'nama' => $d->PenjualanProduk->nama,
-                'qty' => $jumlah ,
+                'qty' => $d->jumlah - $d->getJumlahBatal() ,
                 'jumlah_po' => $d->jumlah,
                 'jenis' => 'produk',
                 'produk' => array()
