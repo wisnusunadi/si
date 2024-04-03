@@ -176,11 +176,11 @@ export default {
                 return
             }
 
-            if (this.noSeriSelected.length > this.detailSelected.jumlah) {
+            if (this.noSeriSelected.length > this.detailSelected.jumlah_sisa) {
                 swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: `Nomor Seri yang dipilih tidak boleh lebih dari ${this.detailSelected.jumlah}`,
+                    text: `Nomor Seri yang dipilih tidak boleh lebih dari ${this.detailSelected.jumlah_sisa}`,
                 })
                 return
             }
@@ -221,7 +221,7 @@ export default {
                     <div class="modal-body">
                         <small>
                             <span class="text-danger">*</span>
-                            Nomor seri yang dipilih tidak boleh lebih dari {{ detailSelected.jumlah }}
+                            Nomor seri yang dipilih tidak boleh lebih dari {{ detailSelected.jumlah_sisa }}
                         </small>
                         <div class="d-flex bd-highlight">
                             <div class="p-2 flex-grow-1 bd-highlight">

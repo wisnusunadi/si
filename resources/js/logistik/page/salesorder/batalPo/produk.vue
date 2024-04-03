@@ -202,12 +202,12 @@ export default {
                                             </tr>
                                             <tr v-for="item in paket.produk" :key="item.id">
                                                 <td>{{ item.nama }}</td>
-                                                <td>{{ item.jumlah }}</td>
+                                                <td>{{ item.jumlah_sisa }}</td>
                                                 <td>{{ item.noseri?.length ?? 0 }}</td>
                                                 <td>{{ item.merk }}</td>
                                                 <td>
                                                     <span :class="'badge ' + progressTransfer(item).color">{{
-            progressTransfer(item).text }}</span>
+                                                        progressTransfer(item).text }}</span>
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-primary"
