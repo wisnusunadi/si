@@ -146,10 +146,17 @@ export default {
                     {
                         text: 'Nama Produk',
                         value: 'nama',
+                        children: [
+
+                            {
+                                text: 'Penyerahan',
+                                value: 'jumlahdiserahkan',
+                            }
+                        ]
                     },
                     {
                         text: 'Jumlah',
-                        value: 'jumlah'
+                        value: 'jumlah',
                     },
                     {
                         text: 'Jumlah Transfer',
@@ -257,6 +264,11 @@ export default {
                         </div>
                     </div>
                     <data-table :headers="headersProduk" :items="pengeluaran" :search="searchProduk">
+                        <template #item.jumlahdisiapkan="{ item }">
+                            <div>
+                                {{ item.jumlahdisiapkan }} Unit
+                            </div>
+                        </template>
                         <template #item.waktu_ambil="{ item }">
                             <div>
                                 {{ dateTimeFormat(item.waktu_ambil) }}
@@ -340,4 +352,3 @@ export default {
         </div>
     </div>
 </template>
-

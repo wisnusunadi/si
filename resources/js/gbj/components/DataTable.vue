@@ -99,20 +99,19 @@ export default {
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col" v-for="header in headers" :key="header.text" :rowspan="cekHeaderRowspan(header)"
-                        :colspan="cekHeaderColspan(header)" :class="header.align ? header.align : 'text-center'"
-                        @click=" sort(header)" :sortable="header.sortable == false ? false : true">
-                        <slot :name="`header.${header.value}`">
-                            {{ header.text }}
-                        </slot>
-                        <span v-if="sortColumn === header.value">
-                            <i v-if="sortDirection === 'asc'" class="fas fa-arrow-up"></i>
-                            <i v-else class="fas fa-arrow-down"></i>
-                        </span>
-                    </th>
-                    <th scope="col" v-if="header?.children" :class="header.align ? header.align : 'text-center'">
-                        {{ header.text }}
-                    </th>
+                    <template v-for="header in headers">
+                        <th scope="col" :key="header.text" :rowspan="cekHeaderRowspan(header)"
+                            :colspan="cekHeaderColspan(header)" :class="header.align ? header.align : 'text-center'"
+                            @click=" sort(header)" :sortable="header.sortable == false ? false : true">
+                            <slot :name="`header.${header.value}`">
+                                {{ header.text }}
+                            </slot>
+                            <span v-if="sortColumn === header.value">
+                                <i v-if="sortDirection === 'asc'" class="fas fa-arrow-up"></i>
+                                <i v-else class="fas fa-arrow-down"></i>
+                            </span>
+                        </th>
+                    </template>
                 </tr>
                 <tr v-for="header in headers" :key="header.text" v-if="header?.children">
                     <th v-for="child in header.children" :key="child.text"
@@ -126,12 +125,24 @@ export default {
             <tbody v-if="renderPaginate.length > 0">
                 <!-- sesuaikan dengan header -->
                 <tr v-for="(data, idx) in renderPaginate" :key="idx">
-                    <td v-for="header in headers" :key="header.value"
-                        :class="header.align ? header.align : 'text-center'">
-                        <slot :name="`item.${header.value}`" :item="data" :index="idx">
-                            {{ data[header.value] }}
-                        </slot>
-                    </td>
+                    <template v-for="header in headers">
+                        <td :class="header.align ? header.align : 'text-center'" v-if="!header?.children">
+                            <template v-if="!header?.children">
+                                <slot :name="`item.${header.value}`" :item="data" :index="idx">
+                                    {{ data[header.value] }}
+                                </slot>
+                            </template>
+                        </td>
+                        <template v-else>
+                            <td v-for="child in header.children" :key="child.text"
+                                :class="child.align ? child.align : 'text-center'">
+                                <slot :name="`item.${child.value}`" :item="data" :index="idx">
+                                    {{ data[child.value] }}
+                                </slot>
+                            </td>
+                        </template>
+                    </template>
+
                 </tr>
             </tbody>
             <tbody v-else>
