@@ -2190,6 +2190,9 @@ class ProduksiController extends Controller
                 ->addColumn('ids', function ($d) {
                     return $d->id;
                 })
+                ->addColumn('layout', function ($d) {
+                    return $d->layout->nama;
+                })
                 ->rawColumns(['checkbox'])
                 ->make(true);
         } catch (\Exception $e) {
@@ -5334,7 +5337,7 @@ class ProduksiController extends Controller
         DB::beginTransaction();
         try {
             foreach ($request->all() as $value) {
-                NoseriBarangJadi::where('id', $value['noseri_id'])->update(['is_aktif' => 1, 'is_ready' => 0, 'used_by' => NULL]);
+                NoseriBarangJadi::where('id', $value['noseri_id'])->update(['is_aktif' => 1, 'is_ready' => 0, 'used_by' => NULL ,'layout_id' => $value['layout']['id']]);
                 NoseriTGbj::where('id', $value['id'])->update(['status_id' => 3, 'state_id' => 16, 'layout_id' => $value['layout']['id']]);
             }
             DB::commit();

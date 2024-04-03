@@ -79,18 +79,34 @@ class GudangController extends Controller
     function kirim_seri_batal_po(Request $request)
     {
         $obj = json_decode(json_encode($request->all()), FALSE);
+        DB::beginTransaction();
+        try {
+            //code...
+            foreach ($obj->item as $item) {
+                foreach ($item->noseri as $noseri) {
+                    RiwayatBatalPoSeri::create([
+                        'detail_riwayat_batal_prd_id' => $item->riwayat_batal_po_prd_id,
+                        't_tfbj_noseri_id' => $noseri->id,
+                        'noseri_id' => $noseri->noseri_id,
+                        'status' => 1,
+                        'posisi' => $noseri->posisi
+                    ]);
+                }
+            }
 
-        // foreach ($obj->item as $item) {
-        //     foreach ($item->noseri as $noseri) {
-        //         RiwayatBatalPoSeri::create([
-        //             'detail_riwayat_batal_prd_id' => $item->riwayat_batal_po_prd_id,
-        //             't_tfbj_noseri_id' => $noseri->id,
-        //             'noseri_id' => $noseri->noseri_id,
-        //             'status' => 1,
-        //             'posisi' => $noseri->posisi
-        //         ]);
-        //     }
-        // }
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollback();
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal Dikirim',
+            ], 500);
+        }
     }
 
     function get_detail_seri_batal_po($id)
@@ -138,14 +154,14 @@ class GudangController extends Controller
 
     function get_detail_batal_po($id)
     {
-        $data = RiwayatBatalPoPaket::select('riwayat_batal_po_paket.id', 'penjualan_produk.nama')
+        $data = RiwayatBatalPoPaket::select('riwayat_batal_po_paket.id', 'penjualan_produk.nama','riwayat_batal_po_paket.jumlah')
             ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'riwayat_batal_po_paket.detail_pesanan_id')
             ->leftJoin('penjualan_produk', 'penjualan_produk.id', '=', 'detail_pesanan.penjualan_produk_id')
             ->where('riwayat_batal_po_id', $id);
 
         $item = RiwayatBatalPoPrd::select('riwayat_batal_po_prd.detail_riwayat_batal_paket_id', 'riwayat_batal_po_prd.id as riwayat_batal_po_prd_id', 'riwayat_batal_po_prd.detail_pesanan_produk_id as id', 'produk.nama', 'gdg_barang_jadi.nama as variasi', 'produk.merk')
             ->addSelect([
-                'jumlah' => function ($q) {
+                'jumlah_seri' => function ($q) {
                     $q->selectRaw('coalesce(count(t_gbj_noseri.id),0)')
                         ->from('t_gbj_noseri')
                         ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
@@ -174,6 +190,8 @@ class GudangController extends Controller
             );
             foreach ($item as  $s) {
                 if ($d->id == $s['detail_riwayat_batal_paket_id']) {
+                    $s['jumlah_sisa'] = $d->jumlah - $s->jumlah_tf;
+                    $s['jumlah'] = $d->jumlah;
                     $obj[$key_p]['produk'][] = $s;
                 }
             }
@@ -2556,6 +2574,7 @@ class GudangController extends Controller
                 // $a = 0;
 
                 $data = NoseriTGbj::select('t_gbj_noseri.id', 't_gbj_noseri.noseri_id', 'noseri_barang_jadi.noseri')
+                     ->addSelect(DB::raw('IF(t_gbj_noseri.status_id IS NULL, "true", "false") AS status'))
                     ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                     ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
                     ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
@@ -2563,12 +2582,13 @@ class GudangController extends Controller
                     ->where('t_gbj_detail.id', $id)
                     ->where('t_gbj.dari', 17)
                     ->where('t_gbj.ke', 13)
-                    ->whereNull('t_gbj_noseri.status_id')
+                    //->whereNull('t_gbj_noseri.status_id')
                     ->where('t_gbj_noseri.jenis', 'masuk')
                     ->get();
             } else {
 
                 $data = NoseriTGbj::select('t_gbj_noseri.id', 't_gbj_noseri.noseri_id', 'noseri_barang_jadi.noseri')
+                    ->addSelect(DB::raw('IF(t_gbj_noseri.status_id IS NULL, "true", "false") AS status'))
                     ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                     ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
                     ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
@@ -2576,7 +2596,7 @@ class GudangController extends Controller
                     ->where('t_gbj_detail.id', $id)
                     ->where('t_gbj.dari', 26)
                     ->where('t_gbj.ke', 13)
-                    ->whereNull('t_gbj_noseri.status_id')
+                  //  ->whereNull('t_gbj_noseri.status_id')
                     ->where('t_gbj_noseri.jenis', 'masuk')
                     ->get();
 
