@@ -3,12 +3,14 @@ import batalComponents from '../batal/index.vue'
 import returComponents from '../retur.vue'
 import detailComponents from '../detail/index.vue'
 import doComponents from '../do.vue'
+import pagination from '../../../components/pagination.vue'
 export default {
     components: {
         batalComponents,
         returComponents,
         detailComponents,
         doComponents,
+        pagination
     },
     props: ['spa'],
     data() {
@@ -68,7 +70,7 @@ export default {
                     value: 11
                 },
             ],
-
+            renderPaginate: [],
         }
     },
     methods: {
@@ -145,6 +147,9 @@ export default {
                 $('.modalDO').modal('show')
             })
         },
+        updateFilteredDalamProses(data) {
+            this.renderPaginate = data;
+        },
     },
     computed: {
         yearsComputed() {
@@ -153,7 +158,22 @@ export default {
                 years.push(moment().subtract(i, 'years').format('YYYY'))
             }
             return years
-        }
+        },
+        filteredDalamProses() {
+            const includesSearch = (obj, search) => {
+                if (obj && typeof obj === 'object') {
+                    return Object.keys(obj).some(key => {
+                        if (typeof obj[key] === 'object') {
+                            return includesSearch(obj[key], search);
+                        }
+                        return String(obj[key]).toLowerCase().includes(search.toLowerCase());
+                    });
+                }
+                return false;
+            };
+
+            return this.spa.filter(data => includesSearch(data, this.search));
+        },
     }
 }
 </script>
@@ -210,57 +230,79 @@ export default {
                     <div class="p-2 bd-highlight"><input type="text" class="form-control" v-model="search"
                             placeholder="Cari..."></div>
                 </div>
-                <data-table :headers="header" :items="spa" :search="search" v-if="!$store.state.loading">
-                    <template #item.status="{ item }">
-                        <div>
-                            <persentase :persentase="item.persentase" v-if="!cekIsString(item.persentase)" />
-                            <span class="red-text badge" v-else>{{ item.persentase }}</span>
-                        </div>
-                    </template>
-                    <template #item.aksi="{ item }">
-                        <div>
-                            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
-                                <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="#"
-                                    data-id="5092">
-                                    <button class="dropdown-item" type="button" @click="detail(item)">
-                                        <i class="fas fa-eye"></i>
-                                        Detail
-                                    </button>
-                                </a>
-                                <a target="_blank" href="#">
-                                    <button class="dropdown-item" type="button" @click="editSpa(item.id)">
-                                        <i class="fas fa-pencil-alt"></i>
-                                        Edit
-                                    </button>
-                                </a>
-                                <a target="_blank" href="#" v-if="item.no_po != null && item.tgl_po != null">
-                                    <button class="dropdown-item" type="button">
-                                        <i class="fas fa-print"></i>
-                                        SPPB
-                                    </button>
-                                </a>
-                                <a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="5092">
-                                    <button class="dropdown-item" type="button" @click="openDO(item)">
-                                        <i class="fas fa-pencil-alt"></i>
-                                        Edit DO
-                                    </button>
-                                </a>
-                                <a href="#"><button class="dropdown-item openModalBatalRetur"
-                                        v-if="item.pesanan.so == null" @click="hapus(item)" type="button"><i
-                                            class="fas fa-trash"></i>
-                                        Hapus</button></a>
-                                <a href="#"><button class="dropdown-item openModalBatalRetur" @click="batal(item)"
-                                        type="button"><i class="fas fa-times"></i>
-                                        Batal</button></a>
-                                <a href="#"><button class="dropdown-item openModalBatalRetur" v-if="item.cterkirim > 0"
-                                        @click="retur(item)" type="button"><i class="fa-solid fa-arrow-rotate-left"></i>
-                                        Retur</button></a>
-                            </div>
-                        </div>
-                    </template>
-                </data-table>
+                <table class="table text-center" v-if="!$store.state.loading">
+                    <thead>
+                        <tr>
+                            <th v-for="(item, index) in header" :key="index">{{ item.text }}</th>
+                        </tr>
+                    </thead>
+                    <tbody v-if="renderPaginate.length > 0">
+                        <tr v-for="(item, index) in renderPaginate" :key="index"
+                            :class="{ 'strike-through-row text-danger font-weight-bold': item.pesanan.log_id == 20 }">
+                            <td :class="{ 'strike-through': item.pesanan.log_id == 20 }">{{ index + 1 }}</td>
+                            <td :class="{ 'strike-through': item.pesanan.log_id == 20 }">{{ item.so }}</td>
+                            <td :class="{ 'strike-through': item.pesanan.log_id == 20 }">{{ item.no_po }}</td>
+                            <td :class="{ 'strike-through': item.pesanan.log_id == 20 }">{{ item.tgl_order }}</td>
+                            <td :class="{ 'strike-through': item.pesanan.log_id == 20 }">{{ item.nama_customer }}</td>
+                            <td>
+                                <div>
+                                    <persentase :persentase="item.persentase" v-if="!cekIsString(item.persentase)" />
+                                    <span class="red-text badge" v-else>{{ item.persentase }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
+                                        aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i>
+                                    </div>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                                        <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="#"
+                                            data-id="5092">
+                                            <button class="dropdown-item" type="button" @click="detail(item)">
+                                                <i class="fas fa-eye"></i>
+                                                Detail
+                                            </button>
+                                        </a>
+                                        <a target="_blank" href="#">
+                                            <button class="dropdown-item" type="button" @click="editSpa(item.id)">
+                                                <i class="fas fa-pencil-alt"></i>
+                                                Edit
+                                            </button>
+                                        </a>
+                                        <a target="_blank" href="#" v-if="item.no_po != null && item.tgl_po != null">
+                                            <button class="dropdown-item" type="button">
+                                                <i class="fas fa-print"></i>
+                                                SPPB
+                                            </button>
+                                        </a>
+                                        <a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="5092">
+                                            <button class="dropdown-item" type="button" @click="openDO(item)">
+                                                <i class="fas fa-pencil-alt"></i>
+                                                Edit DO
+                                            </button>
+                                        </a>
+                                        <a href="#"><button class="dropdown-item openModalBatalRetur"
+                                                v-if="item.pesanan.so == null" @click="hapus(item)" type="button"><i
+                                                    class="fas fa-trash"></i>
+                                                Hapus</button></a>
+                                        <a href="#"><button class="dropdown-item openModalBatalRetur"
+                                                @click="batal(item)" type="button"><i class="fas fa-times"></i>
+                                                Batal</button></a>
+                                        <a href="#"><button class="dropdown-item openModalBatalRetur"
+                                                v-if="item.cterkirim > 0" @click="retur(item)" type="button"><i
+                                                    class="fa-solid fa-arrow-rotate-left"></i>
+                                                Retur</button></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan="100" class="text-center">Data tidak ditemukan</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div v-else>
                     <div class="d-flex justify-content-center">
                         <div class="spinner-border" role="status">
@@ -268,6 +310,9 @@ export default {
                         </div>
                     </div>
                 </div>
+
+                <pagination :filteredDalamProses="filteredDalamProses" v-if="!$store.state.loading"
+                    @updateFilteredDalamProses="updateFilteredDalamProses" />
             </div>
         </div>
     </div>
