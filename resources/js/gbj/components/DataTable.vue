@@ -39,6 +39,28 @@ export default {
                 this.sortColumn = column
                 this.sortDirection = 'asc'
             }
+        },
+        cekHeaderRowspan(header) {
+            if (this.cekHeaderDetectedChidlren) {
+                if (header.children) {
+                    return 1
+                } else {
+                    return 2
+                }
+            } else {
+                return 1
+            }
+        },
+        cekHeaderColspan(header) {
+            if (this.cekHeaderDetectedChidlren) {
+                if (header.children) {
+                    return header.children.length
+                } else {
+                    return 1
+                }
+            } else {
+                return 1
+            }
         }
     },
     computed: {
@@ -65,6 +87,9 @@ export default {
                 return 0
             })
             return sorted
+        },
+        cekHeaderDetectedChidlren() {
+            return this.headers.some(header => header?.children)
         }
     },
 }

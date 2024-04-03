@@ -1,7 +1,7 @@
 <script>
 import Header from '../../../../components/header'
 import headerDetail from './header.vue'
-import pengeluaran from './pengeluaran.vue';
+import pengeluaran from './pengeluaran/index.vue';
 import pengembalian from './pengembalian.vue';
 import perubahan from './perubahan.vue';
 import peminjaman from './peminjaman.vue';
@@ -93,6 +93,8 @@ export default {
                         no: 1,
                         nama: 'Produk 1',
                         jumlah: 2,
+                        jumlahdisiapkan: 2,
+                        jumlahdiserahkan: 2,
                         tanggal_selesai: '2024-08-24',
                         hari: 1,
                         diterima: 'Ya',
@@ -102,6 +104,8 @@ export default {
                         no: 2,
                         nama: 'Produk 2',
                         jumlah: 3,
+                        jumlahdisiapkan: 3,
+                        jumlahdiserahkan: 3,
                         tanggal_selesai: '2024-04-03',
                         hari: 4,
                         diterima: 'Tidak',
@@ -170,7 +174,7 @@ export default {
 }
 </script>
 <template>
-    <div>
+    <div class="body">
         <Header :title="title" :breadcumbs="breadcumbs" />
         <headerDetail :header="produk.header" />
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -207,3 +211,8 @@ export default {
         </div>
     </div>
 </template>
+<style>
+.body {
+    font-size: 14px;
+}
+</style>
