@@ -89,7 +89,7 @@ export default {
                         value: 'noseri',
                     },
                     {
-                        text: 'Waktu Ambil',
+                        text: 'Waktu Diterima',
                         value: 'waktu_ambil',
                     }
                 ]
@@ -175,6 +175,11 @@ export default {
                             <input type="checkbox" @click="checkedOne(item)"
                                 :checked="pengeluaranDuplicate.find(x => x.id === detailSelected.id) ? pengeluaranDuplicate?.find(x => x.id === detailSelected.id)?.noSeriSelected?.find(x => x.id === item.id) : false"
                                 v-if="!$route.params.selesai">
+                        </template>
+                        <template #item.waktu_ambil="{ item }">
+                            <div>
+                                {{ dateTimeFormat(item.waktu_ambil) }}
+                            </div>
                         </template>
                     </data-table>
                 </div>

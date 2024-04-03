@@ -4,13 +4,15 @@ import headerDetail from './header.vue'
 import pengeluaran from './pengeluaran.vue';
 import pengembalian from './pengembalian.vue';
 import perubahan from './perubahan.vue';
+import peminjaman from './peminjaman.vue';
 export default {
     components: {
         Header,
         headerDetail,
         pengeluaran,
         pengembalian,
-        perubahan
+        perubahan,
+        peminjaman
     },
     data() {
         return {
@@ -91,6 +93,7 @@ export default {
                         no: 1,
                         nama: 'Produk 1',
                         jumlah: 2,
+                        tanggal_selesai: '2024-08-24',
                         hari: 1,
                         diterima: 'Ya',
                         alasan: '-',
@@ -99,7 +102,8 @@ export default {
                         no: 2,
                         nama: 'Produk 2',
                         jumlah: 3,
-                        hari: 1,
+                        tanggal_selesai: '2024-04-03',
+                        hari: 4,
                         diterima: 'Tidak',
                         alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
                     }
@@ -117,6 +121,46 @@ export default {
                         waktu_kembali: '2024-08-24 13:00:00',
                         jumlah: 3,
                     }
+                ],
+                peminjaman: [
+                    {
+                        no: 1,
+                        nama: 'Produk 1',
+                        jumlah: 2,
+                        tgl_peminjaman: '2024-08-24',
+                        tgl_pengambilan: '2024-08-25',
+                        noseri: [
+                            {
+                                no: 1,
+                                noseri: 'NS-2021080001',
+                                tgl_pengembalian: '2024-08-24 13:00:00',
+                            },
+                            {
+                                no: 2,
+                                noseri: 'NS-2021080002',
+                                tgl_pengembalian: '2024-08-24 13:00:00',
+                            }
+                        ]
+                    },
+                    {
+                        no: 2,
+                        nama: 'Produk 2',
+                        jumlah: 3,
+                        tgl_peminjaman: '2024-08-24',
+                        tgl_pengambilan: '2024-08-25',
+                        noseri: [
+                            {
+                                no: 1,
+                                noseri: 'NS-2021080001',
+                                tgl_pengembalian: '2024-08-24 13:00:00',
+                            },
+                            {
+                                no: 2,
+                                noseri: 'NS-2021080002',
+                                tgl_pengembalian: '2024-08-24 13:00:00',
+                            }
+                        ]
+                    }
                 ]
             },
         }
@@ -133,6 +177,10 @@ export default {
                     type="button" role="tab" aria-controls="pills-home" aria-selected="true">Pengeluaran</a>
             </li>
             <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pills-peminjaman-tab" data-toggle="pill" data-target="#pills-peminjaman"
+                    type="button" role="tab" aria-controls="pills-peminjaman" aria-selected="false">Peminjaman</a>
+            </li>
+            <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile" type="button"
                     role="tab" aria-controls="pills-profile" aria-selected="false">Perubahan</a>
             </li>
@@ -144,6 +192,9 @@ export default {
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                 <pengeluaran :pengeluaran="produk.produk" />
+            </div>
+            <div class="tab-pane fade" id="pills-peminjaman" role="tabpanel" aria-labelledby="pills-peminjaman-tab">
+                <peminjaman :peminjaman="produk.peminjaman" />
             </div>
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                 <perubahan :perubahan="produk.perubahan" />
