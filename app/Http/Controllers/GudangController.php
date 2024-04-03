@@ -1166,7 +1166,7 @@ class GudangController extends Controller
     function getNoseri(Request $request, $id)
     {
         try {
-            $data = NoseriBarangJadi::select('noseri_barang_jadi.id', 'noseri_barang_jadi.noseri', 'seri_detail_rw.isi as isi', 'seri_detail_rw.created_at', 'seri_detail_rw.packer')
+            $data = NoseriBarangJadi::select('noseri_barang_jadi.id', 'noseri_barang_jadi.noseri', 'noseri_barang_jadi.layout_id', 'seri_detail_rw.isi as isi', 'seri_detail_rw.created_at', 'seri_detail_rw.packer')
                 ->addSelect([
                     'cek_rw' => function ($q) {
                         $q->selectRaw('coalesce(count(seri_detail_rw.id), 0)')
@@ -1184,7 +1184,6 @@ class GudangController extends Controller
                 ])->get();
 
 
-            // return response()->json($data);
             $layout = Layout::where('jenis_id', 1)->get();
             return datatables()->of($data)
                 ->addIndexColumn()
