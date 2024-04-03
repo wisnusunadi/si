@@ -99,9 +99,9 @@ export default {
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col" v-for="header in headers" :key="header.text"
-                        :class="header.align ? header.align : 'text-center'" @click="sort(header)"
-                        :sortable="header.sortable == false ? false : true">
+                    <th scope="col" v-for="header in headers" :key="header.text" :rowspan="cekHeaderRowspan(header)"
+                        :colspan="cekHeaderColspan(header)" :class="header.align ? header.align : 'text-center'"
+                        @click=" sort(header)" :sortable="header.sortable == false ? false : true">
                         <slot :name="`header.${header.value}`">
                             {{ header.text }}
                         </slot>
@@ -109,6 +109,17 @@ export default {
                             <i v-if="sortDirection === 'asc'" class="fas fa-arrow-up"></i>
                             <i v-else class="fas fa-arrow-down"></i>
                         </span>
+                    </th>
+                    <th scope="col" v-if="header?.children" :class="header.align ? header.align : 'text-center'">
+                        {{ header.text }}
+                    </th>
+                </tr>
+                <tr v-for="header in headers" :key="header.text" v-if="header?.children">
+                    <th v-for="child in header.children" :key="child.text"
+                        :class="child.align ? child.align : 'text-center'">
+                        <slot :name="`header.${child.value}`">
+                            {{ child.text }}
+                        </slot>
                     </th>
                 </tr>
             </thead>
