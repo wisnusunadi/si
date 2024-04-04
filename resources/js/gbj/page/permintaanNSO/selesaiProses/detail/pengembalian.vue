@@ -18,7 +18,7 @@ export default {
                     value: 'jumlah'
                 },
                 {
-                    text: 'Waktu Kembali',
+                    text: 'Waktu Closing',
                     value: 'waktu_kembali'
                 },
                 {

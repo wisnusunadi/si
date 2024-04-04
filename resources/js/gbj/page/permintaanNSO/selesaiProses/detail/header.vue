@@ -1,5 +1,7 @@
 <script>
+import status from '../../../../components/status.vue'
 export default {
+    components: { status },
     props: ['header'],
 }
 </script>
@@ -7,6 +9,30 @@ export default {
     <div class="card">
         <div class="card-body">
             <div class="d-flex justify-content-between">
+                <div class="p-2">
+                    <div class="margin">
+                        <small class="text-muted">
+                            Nama
+                        </small>
+                    </div>
+                    <div class="margin">
+                        <b>{{ header.nama }}</b>
+                    </div>
+                    <div class="margin">
+                        <small class="text-muted">
+                            Bagian
+                        </small>
+                    </div>
+                    <div class="margin">
+                        <b>{{ header.bagian }}</b>
+                    </div>
+                    <div class="margin"><small class="text-muted">
+                            Tujuan Permintaan
+                        </small></div>
+                    <div class="margin">
+                        <b>{{ header.tujuan_permintaan }}</b>
+                    </div>
+                </div>
                 <div class="p-2">
                     <div class="margin">
                         <small class="text-muted">No Permintaan</small>
@@ -21,6 +47,14 @@ export default {
                     </div>
                     <div class="margin">
                         <b>{{ header.no_referensi }}</b>
+                    </div>
+                    <div class="margin">
+                        <small class="text-muted">
+                            Status
+                        </small>
+                    </div>
+                    <div class="margin">
+                        <status :status="header.status" />
                     </div>
                 </div>
                 <div class="p-2">
@@ -46,42 +80,60 @@ export default {
                         </small>
                     </div>
                     <div class="margin">
-                        <b>{{ header.durasi }}</b>
+                        <b>{{ header.durasi }} + <span :class="header.lebih_durasi > 0 ? 'text-danger' : ''">{{
+                            header.lebih_durasi }} Hari</span></b>
+
                     </div>
                     <div class="margin">
                         <small class="text-muted">
-                            Tanggal Selesai Proses
+                            Tanggal Close
                         </small>
                     </div>
                     <div class="margin">
                         <b>{{ dateFormat(header.tgl_close) }}</b>
                     </div>
+                    <div class="margin">
+                        <small class="text-muted">
+                            Dokumen FPBJ
+                        </small>
+                    </div>
+                    <div class="margin">
+                        <button class="btn btn-sm btn-outline-warning">
+                            <i class="fas fa-print"></i> Cetak FPBJ
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between" v-if="$route.params.selesai">
+                <div class="p-2">
+                    <div class="margin">
+                        <small class="text-muted">
+                            Keterangan
+                        </small>
+                    </div>
+                    <div class="margin">
+                        <b>{{ header.ket }}</b>
+                    </div>
                 </div>
                 <div class="p-2">
                     <div class="margin">
                         <small class="text-muted">
-                            Nama Bagian
+                            Catatan
                         </small>
                     </div>
                     <div class="margin">
-                        <b>{{ header.nama_bagian }}</b>
+                        <b>{{ header.ket }}</b>
                     </div>
-                    <div class="margin"><small class="text-muted">
-                            Tujuan Permintaan
-                        </small></div>
+                </div>
+                <div class="p-2">
                     <div class="margin">
-                        <b>{{ header.tujuan_permintaan }}</b>
+                        <small class="text-muted">
+                            Alasan
+                        </small>
                     </div>
-                </div>
-            </div>
-            <div class="p-2" v-if="$route.params.selesai">
-                <div class="margin">
-                    <small class="text-muted">
-                        Keterangan
-                    </small>
-                </div>
-                <div class="margin">
-                    <b>{{ header.ket }}</b>
+                    <div class="margin">
+                        <b>{{ header.ket }}</b>
+                    </div>
                 </div>
             </div>
         </div>
