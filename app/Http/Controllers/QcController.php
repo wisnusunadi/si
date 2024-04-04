@@ -1362,7 +1362,7 @@ class QcController extends Controller
                     'id' => $d->id,
                     'so' => $d->so,
                     'no_po' => $d->no_po,
-                    'pengujian' => $d->cqcuji,
+                    'pengujian' => $d->cqcuji + $d->cqcpart,
                     'kalibrasi' => $d->clabprd,
                     // 'status' => $d->jumlah_part,
                     'status' => intval($d->sudah_tf / ($d->jumlah_prd + $d->jumlah_part) * 100),
@@ -1573,38 +1573,26 @@ class QcController extends Controller
         } else {
             return response()->json('Data Kosong');
         }
-
-        if ($dataprd->isEmpty()) {
-            $setPrd = array();
-        } else {
-            $produks = [];
+        $data = array();
+        if ($dataprd->isnotEmpty()) {
             foreach ($dataprd as $d) {
                 $gudang_barang_jadi_id = $d->gudang_barang_jadi_id;
-                if (!isset($produks[$gudang_barang_jadi_id])) {
-                    $produks[$gudang_barang_jadi_id] = [
+                if (!isset($data[$gudang_barang_jadi_id])) {
+                    $data[$gudang_barang_jadi_id] = [
                         'id' => $d->id,
                         "nama" => $d->GudangBarangJadi->Produk->nama,
                         "jenis" => 'produk',
                         "jumlah" => 0,
                     ];
                 }
-                $produks[$gudang_barang_jadi_id]["jumlah"] +=  $d->clabprds + $d->cqcprd;
-                // $setPrd[] = array(
-                //     'id' => $d->id,
-                //     'nama' => $d->GudangBarangJadi->Produk->nama . $d->GudangBarangJadi->nama,
-                //      'jumlah' => $d->clabprds + $d->cqcprd,
-                //     'jenis' => 'produk'
-                // );
-
-
+                $data[$gudang_barang_jadi_id]["jumlah"] +=  $d->clabprds + $d->cqcprd;
             }
-            $setPrd = array_values($produks);
+
+            $data = array_values($data);
         }
-        if ($datapart->isEmpty()) {
-            $setPart = array();
-        } else {
+        if ($datapart->isnotEmpty()) {
             foreach ($datapart as $d) {
-                $setPart[] = array(
+                $data[] = array(
                     'id' => $d->id,
                     'nama' => $d->nama,
                     'jumlah' => $d->jumlah_nok,
@@ -1612,11 +1600,53 @@ class QcController extends Controller
                 );
             }
         }
-        if ($status == 'ok') {
-            $data = array_merge($setPrd, $setPart);
-        }
-        $data = $setPrd;
+
         return response()->json($data);
+
+
+        // if ($dataprd->isEmpty()) {
+        //     $setPrd = array();
+        // } else {
+        //     $produks = [];
+        //     foreach ($dataprd as $d) {
+        //         $gudang_barang_jadi_id = $d->gudang_barang_jadi_id;
+        //         if (!isset($produks[$gudang_barang_jadi_id])) {
+        //             $produks[$gudang_barang_jadi_id] = [
+        //                 'id' => $d->id,
+        //                 "nama" => $d->GudangBarangJadi->Produk->nama,
+        //                 "jenis" => 'produk',
+        //                 "jumlah" => 0,
+        //             ];
+        //         }
+        //         $produks[$gudang_barang_jadi_id]["jumlah"] +=  $d->clabprds + $d->cqcprd;
+        //         // $setPrd[] = array(
+        //         //     'id' => $d->id,
+        //         //     'nama' => $d->GudangBarangJadi->Produk->nama . $d->GudangBarangJadi->nama,
+        //         //      'jumlah' => $d->clabprds + $d->cqcprd,
+        //         //     'jenis' => 'produk'
+        //         // );
+
+
+        //     }
+        //     $setPrd = array_values($produks);
+        // }
+        // if ($datapart->isEmpty()) {
+        //     $setPart = array();
+        // } else {
+        //     foreach ($datapart as $d) {
+        //         $setPart[] = array(
+        //             'id' => $d->id,
+        //             'nama' => $d->nama,
+        //             'jumlah' => $d->jumlah_nok,
+        //             'jenis' => 'sparepart'
+        //         );
+        //     }
+        // }
+        // if ($status == 'ok') {
+        //     $data = array_merge($setPrd, $setPart);
+        // }
+        // $data = $setPrd;
+        // return response()->json($data);
     }
 
     public function tf_so_detail_seri($status, $id)
