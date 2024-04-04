@@ -10,6 +10,10 @@ export default {
                     value: 'no'
                 },
                 {
+                    text: 'No. Perubahan',
+                    value: 'no_ubah'
+                },
+                {
                     text: 'Nama Produk',
                     value: 'nama',
                 },

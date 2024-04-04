@@ -5,6 +5,7 @@ import pengeluaran from './pengeluaran/index.vue';
 import pengembalian from './pengembalian.vue';
 import perubahan from './perubahan.vue';
 import peminjaman from './peminjaman.vue';
+import riwayatpengajuan from './riwayatpengajuan.vue';
 export default {
     components: {
         Header,
@@ -12,7 +13,8 @@ export default {
         pengeluaran,
         pengembalian,
         perubahan,
-        peminjaman
+        peminjaman,
+        riwayatpengajuan
     },
     data() {
         return {
@@ -63,9 +65,11 @@ export default {
                     tgl_permintaan: '21 Agustus 2021',
                     tgl_ambil: '2024-08-24',
                     tgl_close: '2024-08-25',
-                    nama_bagian: 'Bagus-Produksi',
+                    nama: 'Bagus',
+                    bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
                     durasi: '1 Hari',
+                    lebih_durasi: 0,
                     jenis: 'Peminjaman',
                     status: 'selesai',
                     ket: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
@@ -95,6 +99,7 @@ export default {
                 perubahan: [
                     {
                         no: 1,
+                        no_ubah: 'UBAH-2021080003',
                         nama: 'Produk 1',
                         jumlah: 2,
                         tanggal_selesai: '2024-08-24',
@@ -104,6 +109,7 @@ export default {
                     },
                     {
                         no: 2,
+                        no_ubah: 'UBAH-2021080003',
                         nama: 'Produk 2',
                         jumlah: 3,
                         tanggal_selesai: '2024-04-03',
@@ -167,6 +173,30 @@ export default {
                             }
                         ]
                     }
+                ],
+                riwayatpengajuan: [
+                    {
+                        no: 1,
+                        versi: 'V1',
+                        tgl_pengajuan: '2024-08-24',
+                        feedback: [
+                            'Perubahan Produk dari Tensione ke Digit One', 
+                            'Perubahan jumlah produk tensione dari 3 ke 5'
+                        ],
+                        diterima: 'Ya',
+                        alasan: '-',
+                    },
+                    {
+                        no: 2,
+                        versi: 'V2',
+                        tgl_pengajuan: '2024-08-24',
+                        feedback: [
+                            'Perubahan Produk dari Tensione ke Digit One',
+                            'Perubahan jumlah produk tensione dari 3 ke 5'
+                        ],
+                        diterima: 'Tidak',
+                        alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
+                    }
                 ]
             },
         }
@@ -191,6 +221,10 @@ export default {
                     role="tab" aria-controls="pills-profile" aria-selected="false">Perubahan</a>
             </li>
             <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pills-riwayat-tab" data-toggle="pill" data-target="#pills-riwayat" type="button"
+                    role="tab" aria-controls="pills-riwayat" aria-selected="false">Riwayat Pengajuan</a>
+            </li>
+            <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-contact" type="button"
                     role="tab" aria-controls="pills-contact" aria-selected="false">Pengembalian</a>
             </li>
@@ -204,6 +238,9 @@ export default {
             </div>
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                 <perubahan :perubahan="produk.perubahan" />
+            </div>
+            <div class="tab-pane fade" id="pills-riwayat" role="tabpanel" aria-labelledby="pills-riwayat-tab">
+                <riwayatpengajuan :pengajuan="produk.riwayatpengajuan" />
             </div>
             <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                 <pengembalian :pengembalian="produk.pengembalian" />

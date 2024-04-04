@@ -282,7 +282,7 @@ export default {
                 <div class="card-body">
                     <div class="d-flex bd-highlight">
                         <div class="p-2 flex-grow-1 bd-highlight">
-                            <span class="filter">
+                            <span class="filter" v-if="!$route.params.selesai">
                                 <button class="btn btn-sm btn-outline-secondary dropdown-toggle " type="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                     id="filterpenjualan">
@@ -328,6 +328,7 @@ export default {
                                 :checked="noSeriSelected ? noSeriSelected.find((n) => n.id === item.id) : false"
                                 v-if="!$route.params.selesai && item.status != 'barang_keluar'">
                             <div v-else></div>
+                            <span v-if="$route.params.selesai">{{ item.no }}</span>
                         </template>
                         <template #item.waktu_ambil="{ item }">
                             <div>

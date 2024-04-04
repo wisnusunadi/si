@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 import produkComponents from './produk.vue'
 export default {
     props: ['items'],
@@ -47,7 +48,7 @@ export default {
                 $('.modalTransfer').modal('show')
             })
         },
-        kirim() {
+        kirim(id) {
             this.$swal({
                 title: 'Apakah anda yakin?',
                 text: 'Data akan dikirim ke gudang',
@@ -59,13 +60,24 @@ export default {
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.$swal(
-                        'Berhasil!',
-                        'Data berhasil dikirim',
-                        'success'
-                    )
+                    axios.post('/api/penjualan/batal_po/qc/kirim_semua', {
+                        id
+                    }).then((res) => {
+                        this.$swal({
+                            title: 'Berhasil',
+                            text: 'Data berhasil dikirim',
+                            icon: 'success',
+                            timer: 2000
+                        })
+                        this.$emit('refresh')
+                    }).catch((err) => {
+                        this.$swal({
+                            title: 'Gagal',
+                            text: 'Data gagal dikirim',
+                            icon: 'error',
+                        })
+                    })
                 }
-
             })
         },
         progressTransfer(item) {
@@ -108,7 +120,7 @@ export default {
                     <i class="fas fa-eye"></i>
                     Detail
                 </button>
-                <button class="btn btn-sm btn-outline-primary" @click="kirim">
+                <button class="btn btn-sm btn-outline-primary" @click="kirim(item.id)">
                     <i class="fa fa-paper-plane"></i>
                     Kirim
                 </button>
