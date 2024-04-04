@@ -9840,9 +9840,80 @@ class PenjualanController extends Controller
         return response()->json($obj);
     }
 
-    function kirim_batal_po_divisi($divisi,Request $request)
+    function kirim_batal_po_divisi_semua($divisi,Request $request)
     {
-        $obj =  json_decode(json_encode($request->all()), FALSE);
+        $id = $request->id;
+
+        $data = RiwayatBatalPoPrd::select('riwayat_batal_po_prd.id', 'detail_pesanan_produk.id as detail_pesanan_produk_id','riwayat_batal_po_prd.detail_riwayat_batal_paket_id', 'gdg_barang_jadi.id as gudang_barang_jadi_id','produk.nama', 'gdg_barang_jadi.nama as variasi','produk.merk')
+            ->addSelect([
+                'c_batal' => function ($q) use ($divisi) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                        ->from('riwayat_batal_po_seri')
+                        ->where('riwayat_batal_po_seri.posisi', $divisi)
+                        ->where('riwayat_batal_po_seri.status', 1)
+                        ->whereColumn('riwayat_batal_po_seri.detail_riwayat_batal_prd_id', 'riwayat_batal_po_prd.id')
+                        ->limit(1);
+                },
+                'jumlah_tf' => function ($q) use ($divisi) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                        ->from('riwayat_batal_po_seri')
+                        ->where('riwayat_batal_po_seri.posisi', $divisi)
+                        ->where('riwayat_batal_po_seri.status', 0)
+                        ->whereColumn('riwayat_batal_po_seri.detail_riwayat_batal_prd_id', 'riwayat_batal_po_prd.id')
+                        ->limit(1);
+                },
+                'jumlah' => function ($q) use ($divisi) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                        ->from('riwayat_batal_po_seri')
+                        ->where('riwayat_batal_po_seri.posisi', $divisi)
+                        ->whereColumn('riwayat_batal_po_seri.detail_riwayat_batal_prd_id', 'riwayat_batal_po_prd.id')
+                        ->limit(1);
+                }
+            ])
+            ->leftJoin('riwayat_batal_po_paket', 'riwayat_batal_po_paket.id', '=', 'riwayat_batal_po_prd.detail_riwayat_batal_paket_id')
+            ->leftJoin('riwayat_batal_po', 'riwayat_batal_po.id', '=', 'riwayat_batal_po_paket.riwayat_batal_po_id')
+            ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'riwayat_batal_po_prd.detail_pesanan_produk_id')
+            ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+            ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+            ->havingRaw('c_batal > 0')
+            ->where('riwayat_batal_po.id', $id);
+
+        $item = RiwayatBatalPoSeri::select('riwayat_batal_po_seri.detail_riwayat_batal_prd_id','riwayat_batal_po_seri.id','riwayat_batal_po_seri.t_tfbj_noseri_id' ,'noseri_barang_jadi.id as noseri_id', 'noseri_barang_jadi.noseri')
+        ->leftjoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'riwayat_batal_po_seri.noseri_id')
+        ->whereIN('riwayat_batal_po_seri.detail_riwayat_batal_prd_id', $data->pluck('id')->toArray())
+        ->where('riwayat_batal_po_seri.posisi', $divisi)
+        ->where('riwayat_batal_po_seri.status', 1)
+        ->get();
+
+        $object = array();
+        foreach ($data->get() as $key_p => $d) {
+            $object[$key_p] = array(
+                'id' => $d->id,
+                'detail_pesanan_produk_id' => $d->detail_pesanan_produk_id,
+                'detail_riwayat_batal_paket_id' => $d->detail_riwayat_batal_paket_id,
+                'gudang_barang_jadi_id' => $d->gudang_barang_jadi_id,
+                'nama' => $d->nama,
+                'variasi' => $d->variasi,
+                'merk' => $d->merk,
+                'c_batal' => $d->c_batal,
+                'jumlah_tf' => $d->jumlah_tf,
+                'jumlah' => $d->jumlah,
+                'noseri' => array()
+            );
+
+             foreach ($item as $s) {
+               if ($d->id == $s['detail_riwayat_batal_prd_id']) {
+                  $object[$key_p]['noseri'][] = $s;
+                }
+            }
+         }
+
+        $items = new stdClass();
+        $items->id = $request->id;
+        $items->item = $object;
+
+        $obj =  json_decode(json_encode($items), FALSE);
+
         DB::beginTransaction();
         try {
             $seri_id = array();
@@ -9856,17 +9927,14 @@ class PenjualanController extends Controller
                 'tgl_masuk' => Carbon::now(),
                 'jenis' => 'masuk'
             ]);
-
             foreach ($obj->item as $produk) {
                 # code...
-
                 $tfd = TFProduksiDetail::create([
                     't_gbj_id' => $tf->id,
                     'gdg_brg_jadi_id' => $produk->gudang_barang_jadi_id,
                     'qty' => count($produk->noseri),
                     'jenis' => 'masuk'
                 ]);
-
                 foreach ($produk->noseri as $seri) {
                         NoseriTGbj::create([
                         't_gbj_detail_id' => $tfd->id,
@@ -9879,7 +9947,143 @@ class PenjualanController extends Controller
             }
 
             if($divisi == 'qc'){
+                $ndp = NoseriDetailPesanan::whereIN('t_tfbj_noseri_id',$seri_id);
+                if($ndp->count() > 0){
+                    NoseriDetailPesanan::whereIN('id', $ndp->pluck('id')->toArray())->delete();
+                    NoseriTGbj::whereIN('id', $seri_id)->delete();
+                    RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
+                        'status' => 0
+                    ]);
 
+                    DB::commit();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Berhasil Di tambahkan',
+                    ], 200);
+
+                }else{
+                    RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
+                        'status' => 0
+                    ]);
+                    NoseriTGbj::whereIN('id', $seri_id)->delete();
+
+                    DB::commit();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Berhasil Di tambahkan',
+                    ], 200);
+                }
+            }
+
+            if($divisi == 'log'){
+                $ndl = NoseriDetailLogistik::select('noseri_logistik.id')
+                ->join('noseri_detail_pesanan','noseri_detail_pesanan.id','=','noseri_logistik.noseri_detail_pesanan_id')
+                ->whereIN('noseri_detail_pesanan.t_tfbj_noseri_id',$seri_id);
+
+                  RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
+                        'status' => 0
+                    ]);
+
+                if($ndl->count() > 0){
+                    foreach($ndl->get() as $noseri){
+
+                            //Cek Noseri
+                            $seriLog =  NoseriDetailLogistik::find($noseri->id);
+
+                            //Cek Detail Logistik
+                            $detail = DetailLogistik::find($seriLog->detail_logistik_id);
+                            $detailId = $detail->id;
+
+                            //Cek Logistik
+                            $log = Logistik::find($detail->logistik_id);
+                            $logId = $log->id;
+
+                            //Hapus Noseri
+                            NoseriDetailLogistik::where('id',$noseri->id)->delete();
+
+                            //Cek dan Hapus
+                            $cekNdl = NoseriDetailLogistik::where('detail_logistik_id',$detailId)->count();
+
+                            //dd($cekNdl);
+
+                            if($cekNdl == 0){
+                                DetailLogistik::where('id',$detailId)->delete();
+                            }
+
+                            $cekL = DetailLogistik::where('logistik_id',$logId)->count();
+
+                            if($cekL == 0){
+                                Logistik::where('id',$logId)->delete();
+                            }
+                    }
+
+                    DB::commit();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Berhasil Di tambahkan',
+                    ], 200);
+
+                }else{
+                    NoseriDetailPesanan::whereIN('t_tfbj_noseri_id',$seri_id)->delete();
+                    NoseriTGbj::whereIN('id', $seri_id)->delete();
+                    RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
+                        'status' => 0
+                    ]);
+
+                    DB::commit();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Berhasil Di tambahkan',
+                    ], 200);
+                }
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollback();
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal Di tambahkan'.$th->getMessage(),
+            ], 500);
+        }
+    }
+
+    function kirim_batal_po_divisi($divisi,Request $request)
+    {
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+        dd($obj);
+        DB::beginTransaction();
+        try {
+            $seri_id = array();
+            $seri_batal = array();
+            //code...
+            $tf = TFProduksi::create([
+                'batal_pesanan_id' => $request->id,
+                'dari' => $divisi == 'qc' ? 23 : 15,
+                'ke' => 13,
+                'deskripsi' => 'Batal Pesanan',
+                'tgl_masuk' => Carbon::now(),
+                'jenis' => 'masuk'
+            ]);
+            foreach ($obj->item as $produk) {
+                # code...
+                $tfd = TFProduksiDetail::create([
+                    't_gbj_id' => $tf->id,
+                    'gdg_brg_jadi_id' => $produk->gudang_barang_jadi_id,
+                    'qty' => count($produk->noseri),
+                    'jenis' => 'masuk'
+                ]);
+                foreach ($produk->noseri as $seri) {
+                        NoseriTGbj::create([
+                        't_gbj_detail_id' => $tfd->id,
+                        'noseri_id' =>  $seri->noseri_id,
+                        'jenis' => 'masuk'
+                    ]);
+                        $seri_id[] =  $seri->t_tfbj_noseri_id;
+                        $seri_batal[] =  $seri->id;
+                }
+            }
+
+            if($divisi == 'qc'){
                 $ndp = NoseriDetailPesanan::whereIN('t_tfbj_noseri_id',$seri_id);
                 if($ndp->count() > 0){
                     NoseriDetailPesanan::whereIN('id', $ndp->pluck('id')->toArray())->delete();
@@ -9949,8 +10153,6 @@ class PenjualanController extends Controller
                                 Logistik::where('id',$logId)->delete();
                             }
 
-
-
                     }
 
                     DB::commit();
@@ -9960,34 +10162,18 @@ class PenjualanController extends Controller
                     ], 200);
 
 
-                    //Cek Logistik
-                  //  $logistik = Logistik::whereIN('id',$detail->pluck('logistik_id')->toArray());
-
-                    // NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id)->delete();
-
-                    // RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
-                    //     'status' => 0
-                    // ]);
-
-                    // DB::commit();
-
-                    // return response()->json([
-                    //     'status' => 200,
-                    //     'message' => 'Berhasil Di tambahkan',
-                    // ], 200);
-
                 }else{
-                    // NoseriDetailPesanan::whereIN('t_tfbj_noseri_id',$seri_id)->delete();
-                    // NoseriTGbj::whereIN('id', $seri_id)->delete();
-                    // RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
-                    //     'status' => 0
-                    // ]);
+                    NoseriDetailPesanan::whereIN('t_tfbj_noseri_id',$seri_id)->delete();
+                    NoseriTGbj::whereIN('id', $seri_id)->delete();
+                    RiwayatBatalPoSeri::whereIN('id',$seri_batal)->update([
+                        'status' => 0
+                    ]);
 
-                    // DB::commit();
-                    // return response()->json([
-                    //     'status' => 200,
-                    //     'message' => 'Berhasil Di tambahkan',
-                    // ], 200);
+                    DB::commit();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Berhasil Di tambahkan',
+                    ], 200);
                 }
             }
         } catch (\Throwable $th) {
@@ -10077,7 +10263,6 @@ class PenjualanController extends Controller
                 }
             }
         }
-
         return response()->json($obj);
     }
     public function batal_po_show_divisi($divisi)
