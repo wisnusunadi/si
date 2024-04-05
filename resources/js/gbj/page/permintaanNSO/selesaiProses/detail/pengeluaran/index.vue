@@ -1,10 +1,8 @@
 <script>
-import persiapkan from './persiapkan.vue'
-import penyerahan from './penyerahan.vue'
+import noSeriComponents from './noseri.vue'
 export default {
     components: {
-        persiapkan,
-        penyerahan,
+        noSeriComponents
     },
     props: ['pengeluaran'],
     data() {
@@ -17,12 +15,10 @@ export default {
             detailSelected: null,
 
             noSeriSelected: [],
-            persiapkan: [],
-            penyerahan: [],
             filterSelected: [],
 
             showModal: false,
-            renderPaginate: [],
+            checkAll: false
         }
     },
     methods: {
@@ -36,17 +32,9 @@ export default {
         detailProduk(item) {
             this.detailSelected = item
 
+            this.checkAll = false
             this.noSeriSelected = []
-            this.persiapkan = []
-            this.penyerahan = []
             this.noseri = [
-                {
-                    no: 1,
-                    id: 1,
-                    noseri: 'NS-2021080001',
-                    status: 'belum_digunakan',
-                    waktu_ambil: '2024-08-24 13:00:00',
-                },
                 {
                     no: 2,
                     id: 2,
@@ -74,15 +62,13 @@ export default {
             //     }
             //     return x
             // })
-
-            this.noSeriSelected = this.noSeriSelected.find((n) => n.id === item.id) ? this.noSeriSelected.filter((n) => n.id !== item.id) : [...this.noSeriSelected, item]
-            if (item.status == 'belum_digunakan') {
-                this.persiapkan = this.persiapkan.find((n) => n.id === item.id) ? this.persiapkan.filter((n) => n.id !== item.id) : [...this.persiapkan, item]
+            if (this.noSeriSelected.find((n) => n.id === item.id)) {
+                this.noSeriSelected = this.noSeriSelected.filter((n) => n.id !== item.id)
             } else {
-                this.penyerahan = this.penyerahan.find((n) => n.id === item.id) ? this.penyerahan.filter((n) => n.id !== item.id) : [...this.penyerahan, item]
+                this.noSeriSelected.push(item)
             }
         },
-        checkAll() {
+        checkedAll() {
             // const index = this.pengeluaranDuplicate.findIndex(x => x.id === this.detailSelected.id)
             // this.pengeluaranDuplicate = this.pengeluaranDuplicate.map((x, i) => {
             //     if (i === index) {
@@ -94,9 +80,16 @@ export default {
             //     return x
             // })
 
-            this.noSeriSelected = this.noSeriSelected.length === this.noseri.length ? [] : this.noseri
-            this.persiapkan = this.persiapkan.length === this.noseri.filter((n) => n.status == 'belum_digunakan').length ? [] : this.noseri.filter((n) => n.status == 'belum_digunakan')
-            this.penyerahan = this.penyerahan.length === this.noseri.filter((n) => n.status == 'belum_digunakan').length ? [] : this.noseri.filter((n) => n.status == 'siap_diambil')
+            this.checkAll = !this.checkAll
+            if (this.checkAll) {
+                this.noSeriSelected = this.noseri.filter((n) => n.status != 'barang_keluar')
+            } else {
+                this.noSeriSelected = []
+            }
+
+            console.log('checkAll', this.checkAll)
+            console.log('noseriselect', this.noSeriSelected)
+            console.log('noseri', this.noseri.filter((n) => n.status != 'barang_keluar'))
         },
         cekHeaderPengeluaran() {
             if (this.$route.params.selesai) {
@@ -152,19 +145,6 @@ export default {
                         value: 'jumlah',
                     },
                     {
-                        text: 'Jumlah Transfer',
-                        children: [
-                            {
-                                text: 'Persiapkan',
-                                value: 'jumlahdisiapkan',
-                            },
-                            {
-                                text: 'Penyerahan',
-                                value: 'jumlahdiserahkan',
-                            }
-                        ]
-                    },
-                    {
                         text: 'Aksi',
                         value: 'aksi',
                     }
@@ -206,9 +186,12 @@ export default {
                     }
             }
         },
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
+        persiapkanBarang() {
+            this.showModal = true
+            this.$nextTick(() => {
+                $('.modalNoSeri').modal('show');
+            });
+        }
     },
     created() {
         this.cekHeaderPengeluaran()
@@ -243,11 +226,21 @@ export default {
 
             return filter
         }
+    },
+    watch: {
+        noSeriSelected() {
+            if (this.noSeriSelected.length == this.noseri.filter((n) => n.status != 'barang_keluar').length) {
+                this.checkAll = true
+            } else {
+                this.checkAll = false
+            }
+        }
     }
 }
 </script>
 <template>
     <div class="row">
+        <noSeriComponents :detailSelected="detailSelected" v-if="showModal" @close="showModal = false" />
         <div :class="noseri.length > 0 ? 'col-7' : 'col-12'">
             <div class="card">
                 <div class="card-body">
@@ -257,11 +250,6 @@ export default {
                         </div>
                     </div>
                     <data-table :headers="headersProduk" :items="pengeluaran" :search="searchProduk">
-                        <template #item.jumlahdisiapkan="{ item }">
-                            <div>
-                                {{ item.jumlahdisiapkan }} Unit
-                            </div>
-                        </template>
                         <template #item.waktu_ambil="{ item }">
                             <div>
                                 {{ dateTimeFormat(item.waktu_ambil) }}
@@ -291,7 +279,7 @@ export default {
                                 <div class="dropdown-menu" aria-labelledby="filterpenjualan" style="">
                                     <form class="px-4" style="white-space:nowrap;">
                                         <div class="dropdown-header">
-                                            Status Pengujian
+                                            Status Barang
                                         </div>
                                         <div class="form-group" v-for="(status, idx) in getAllStatusUnique" :key="idx">
                                             <div class="form-check">
@@ -305,11 +293,11 @@ export default {
                                     </form>
                                 </div>
                             </span>
-                            <button class="btn btn-sm btn-warning" v-if="persiapkan.length > 0">
-                                <i class="fas fa-check-square"></i>
+                            <button class="btn btn-sm btn-primary" @click="persiapkanBarang">
+                                <i class="fa-solid fa-qrcode"></i>
                                 Persiapkan
                             </button>
-                            <button class=" btn btn-sm btn-info" v-if="penyerahan.length > 0">
+                            <button class=" btn btn-sm btn-info" v-if="noSeriSelected.length > 0">
                                 <i class="fas fa-check-square"></i>
                                 Penyerahan
                             </button>
@@ -320,12 +308,12 @@ export default {
                     </div>
                     <data-table :headers="headersNoSeri" :items="filterNoseri" :search="searchNoSeri">
                         <template #header.no>
-                            <input type="checkbox" v-if="!$route.params.selesai" @click="checkAll"
-                                :checked="noSeriSelected ? noSeriSelected.length === noseri.length : false">
+                            <input type="checkbox" v-if="!$route.params.selesai" @click="checkedAll"
+                                :checked="checkAll">
                         </template>
                         <template #item.no="{ item }">
                             <input type="checkbox" @click="checkedOne(item)"
-                                :checked="noSeriSelected ? noSeriSelected.find((n) => n.id === item.id) : false"
+                                :checked="noSeriSelected && noSeriSelected.find((n) => n.id === item.id) ? true : false"
                                 v-if="!$route.params.selesai && item.status != 'barang_keluar'">
                             <div v-else></div>
                             <span v-if="$route.params.selesai">{{ item.no }}</span>
