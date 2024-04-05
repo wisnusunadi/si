@@ -117,6 +117,16 @@ export default {
                         {
                             no: 1,
                             no_ubah: 'UBAH-2021080003',
+                            nama: 'Produk 3',
+                            jumlah: 3,
+                            tanggal_selesai: '2024-04-03',
+                            hari: 4,
+                            hasil: null,
+                            alasan: null,
+                        },
+                        {
+                            no: 2,
+                            no_ubah: 'UBAH-2021080003',
                             nama: 'Produk 1',
                             jumlah: 2,
                             tanggal_selesai: '2024-08-23',
@@ -125,7 +135,7 @@ export default {
                             alasan: '-',
                         },
                         {
-                            no: 2,
+                            no: 3,
                             no_ubah: 'UBAH-2021080003',
                             nama: 'Produk 2',
                             jumlah: 3,
@@ -134,16 +144,6 @@ export default {
                             hasil: 'Ditolak',
                             alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
                         },
-                        {
-                            no: 3,
-                            no_ubah: 'UBAH-2021080003',
-                            nama: 'Produk 3',
-                            jumlah: 3,
-                            tanggal_selesai: '2024-04-03',
-                            hari: 4,
-                            hasil: null,
-                            alasan: null,
-                        }
                     ],
                     pengembalian: [
                         {
@@ -514,7 +514,9 @@ export default {
 
                     ]
                 }
-            } else if (this.$route.params.selesai && this.$route.params.jenis == 'Permintaan') {
+            } else
+                // if (this.$route.params.selesai && this.$route.params.jenis == 'Permintaan')
+                {
                 this.produk = {
                     header: {
                         id: 3,
