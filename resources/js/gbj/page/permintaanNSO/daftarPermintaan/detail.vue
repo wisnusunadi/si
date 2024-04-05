@@ -70,7 +70,8 @@ export default {
                                     </div>
                                     <div class="col"><label for="">Nama Bagian</label>
                                         <div class="card nomor-akn">
-                                            <div class="card-body"><span id="akn">{{ detail.nama_bagian }}</span></div>
+                                            <div class="card-body"><span id="akn">{{ detail.nama }} - {{ detail.bagian
+                                                    }}</span></div>
                                         </div>
                                     </div>
                                 </div>
