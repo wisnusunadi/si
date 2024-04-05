@@ -607,15 +607,15 @@ export default {
                 <a class="nav-link" id="pills-home-tab" data-toggle="pill" data-target="#pills-home" type="button"
                     role="tab" aria-controls="pills-home" aria-selected="true">Pengeluaran</a>
             </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item" role="presentation" v-if="$route.params.jenis == 'Peminjaman'">
                 <a class="nav-link" id="pills-peminjaman-tab" data-toggle="pill" data-target="#pills-peminjaman"
                     type="button" role="tab" aria-controls="pills-peminjaman" aria-selected="false">Peminjaman</a>
             </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item" role="presentation" v-if="$route.params.jenis == 'Peminjaman'">
                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" data-target="#pills-profile" type="button"
                     role="tab" aria-controls="pills-profile" aria-selected="false">Perubahan</a>
             </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item" role="presentation" v-if="$route.params.jenis == 'Peminjaman'">
                 <a class="nav-link" id="pills-contact-tab" data-toggle="pill" data-target="#pills-contact" type="button"
                     role="tab" aria-controls="pills-contact" aria-selected="false">Pengembalian</a>
             </li>
