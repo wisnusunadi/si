@@ -31,7 +31,25 @@ export default {
                     value: 'aksi',
                 }
             ],
-            headersNoSeri: [],
+            headersNoSeri: [
+                {
+                    text: 'No.',
+                    value: 'no',
+                    sortable: false
+                },
+                {
+                    text: 'No. Seri',
+                    value: 'noseri',
+                },
+                {
+                    text: 'Status',
+                    value: 'status',
+                },
+                {
+                    text: 'Waktu Diterima',
+                    value: 'waktu_ambil',
+                }
+            ],
             noseri: [],
             detailSelected: null,
 
@@ -131,44 +149,6 @@ export default {
             console.log('noseriselect', this.noSeriSelected)
             console.log('noseri', this.noseri.filter((n) => n.status != 'barang_keluar'))
         },
-        cekHeaderPengeluaran() {
-            if (this.$route.params.selesai) {
-                this.headersNoSeri = [
-                    {
-                        text: 'No.',
-                        value: 'no',
-                    },
-                    {
-                        text: 'No. Seri',
-                        value: 'noseri',
-                    },
-                    {
-                        text: 'Waktu Diterima',
-                        value: 'waktu_ambil',
-                    }
-                ]
-            } else {
-                this.headersNoSeri = [
-                    {
-                        text: 'No.',
-                        value: 'no',
-                        sortable: false
-                    },
-                    {
-                        text: 'No. Seri',
-                        value: 'noseri',
-                    },
-                    {
-                        text: 'Status',
-                        value: 'status',
-                    },
-                    {
-                        text: 'Waktu Diterima',
-                        value: 'waktu_ambil',
-                    }
-                ]
-            }
-        },
         statusText(status) {
             switch (status) {
                 case 'siap_diambil':
@@ -194,9 +174,6 @@ export default {
                 $('.modalNoSeri').modal('show');
             });
         }
-    },
-    created() {
-        this.cekHeaderPengeluaran()
     },
     computed: {
         getAllStatusUnique() {
