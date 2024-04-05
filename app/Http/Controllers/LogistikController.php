@@ -1511,6 +1511,12 @@ class LogistikController extends Controller
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
+                'cekatbatal' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id), 0)')
+                        ->from('ekatalog')
+                        ->where('ekatalog.status','batal')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                },
                 'cqcpart' => function ($q) {
                     $q->selectRaw('coalesce(sum(outgoing_pesanan_part.jumlah_ok), 0)')
                         ->from('outgoing_pesanan_part')
@@ -1561,11 +1567,17 @@ class LogistikController extends Controller
                         ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
+                'cekatbatal' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id), 0)')
+                        ->from('ekatalog')
+                        ->where('ekatalog.status','batal')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotIn('log_id', ['10', '20'])
                 ->whereNotNull('no_po')
                 ->whereYear('created_at',  $years)
-                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0  ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
+                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0  ) AND cpoprd > 0  AND cekatbatal = 0) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
                 ->orderBydesc('created_at')
                 ->get();
         } else if ($value == "sebagian_kirim") {
@@ -1625,12 +1637,18 @@ class LogistikController extends Controller
                         ->whereRaw('m_sparepart.kode LIKE "%JASA%"')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                         ->limit(1);
-                }
+                },
+                'cekatbatal' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id), 0)')
+                        ->from('ekatalog')
+                        ->where('ekatalog.status','batal')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotIn('log_id', ['10', '20'])
                 ->whereNotNull('no_po')
                 ->whereYear('created_at',  $years)
-                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
+                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 ) AND cpoprd > 0  AND cekatbatal = 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
                 ->orderBydesc('created_at')
                 ->get();
         } else {
@@ -1709,12 +1727,18 @@ class LogistikController extends Controller
                         ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
                         //->where('m_sparepart.jenis','part')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
-                }
+                },
+                'cekatbatal' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id), 0)')
+                        ->from('ekatalog')
+                        ->where('ekatalog.status','batal')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotIn('log_id', ['10', '20'])
                 ->whereNotNull('no_po')
                 ->whereYear('created_at',  $years)
-                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 OR (cpoprd > clogprd ) ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  (((ctfjasa > 0 AND clogjasa < ctfjasa )OR clogjasa = 0 ) AND ctfjasa > 0 )')
+                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 OR (cpoprd > clogprd ) ) AND cpoprd > 0 AND cekatbatal = 0) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  (((ctfjasa > 0 AND clogjasa < ctfjasa )OR clogjasa = 0 ) AND ctfjasa > 0 )')
                 ->orderBydesc('created_at')
                 ->get();
         }
@@ -1904,7 +1928,7 @@ class LogistikController extends Controller
                         </a>
                         <button class="dropdown-item cetaksj" type="button" data-x="' . $x . '" data-y="' . $pesanan . '" data-z="' . $z . '">
                             <i class="fas fa-print"></i>
-                            Cetak Surat Jalan 
+                            Cetak Surat Jalan
                         </button>
                     </div>
                     ';
@@ -1974,7 +1998,10 @@ class LogistikController extends Controller
                 ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                 ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
                 ->limit(1);
-        }])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderByDesc('created_at');
+        },
+        ])
+        ->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])
+        ->whereYear('created_at',  $years)->whereNotIn('log_id', [7,20])->orderByDesc('created_at');
 
         $part = Pesanan::whereIn('id', function ($q) {
             $q->select('pesanan.id')
@@ -2002,7 +2029,8 @@ class LogistikController extends Controller
                 ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                 ->limit(1);
-        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderByDesc('created_at');
+        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)
+        ->whereNotIn('log_id', [7,20])->orderByDesc('created_at');
 
 
         $partjasa = Pesanan::whereIn('id', function ($q) {
@@ -2032,7 +2060,8 @@ class LogistikController extends Controller
                 ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                 ->limit(1);
-        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderByDesc('created_at')->union($prd)->union($part)->get();
+        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)
+        ->whereNotIn('log_id', [7,20])->orderByDesc('created_at')->union($prd)->union($part)->get();
 
         $data = $partjasa;
         return datatables()->of($data)
