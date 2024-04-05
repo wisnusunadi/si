@@ -1,4 +1,5 @@
 <script>
+import moment from 'moment';
 export default {
     props: ['pengembalian'],
     data() {
@@ -51,14 +52,54 @@ export default {
                 {
                     no: 1,
                     noseri: 'NS-2021080001',
-                    waktu_kembali: '2024-08-24 13:00:00',
+                    waktu_kembali: '2024-08-26 13:00:00',
+                    tgl_close: '2024-08-26 13:00:00',
                 },
                 {
                     no: 2,
                     noseri: 'NS-2021080002',
-                    waktu_kembali: '2024-08-24 13:00:00',
+                    waktu_kembali: '2024-08-26 13:00:00',
+                    tgl_close: '2024-09-03 13:00:00',
                 }
             ]
+        },
+        cekDurasiPengembalian(tgl_close, tgl_kembali) {
+            const waktuKembali = moment(tgl_kembali);
+            const waktuClose = moment(tgl_close);
+
+            const durasi = waktuKembali.diff(waktuClose, 'days');
+
+            // iterasi dari tgl_close sampai tgl_kembali
+            let weekend = 0;
+            let currentDate = waktuClose.clone();
+            while (currentDate.isBefore(waktuKembali)) {
+                if (currentDate.day() === 0 || currentDate.day() === 6) {
+                    weekend++;
+                }
+                currentDate.add(1, 'days');
+            }
+
+            const durasiAkhir = durasi - weekend;
+
+            if (durasiAkhir > 0) {
+                return {
+                    text: `Lebih ${durasiAkhir} Hari`,
+                    color: 'text-danger',
+                    icon: 'fas fa-exclamation-circle'
+                }
+            } else if (durasiAkhir < 0) {
+                return {
+                    text: `Kurang ${Math.abs(durasiAkhir)} Hari`,
+                    color: 'text-success',
+                    icon: 'fas fa-check-circle'
+                }
+            } else {
+                return {
+                    text: 'Tepat Waktu',
+                    color: 'text-primary',
+                    icon: 'fas fa-check-circle'
+                }
+            }
         },
     },
 }
@@ -75,9 +116,13 @@ export default {
                     </div>
                     <data-table :headers="headersProduk" :items="pengembalian" :search="searchProduk">
                         <template #item.waktu_kembali="{ item }">
-                            <div>
-                                {{ dateTimeFormat(item.waktu_kembali) }}
+                            <div :class="cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).color">
+                                {{ dateFormat(item.waktu_kembali) }}
                             </div>
+                            <small :class="cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).color">
+                                <i :class="cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).icon"></i>
+                                {{ cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).text }}
+                            </small>
                         </template>
                         <template #item.aksi="{ item }">
                             <button class="btn btn-sm btn-outline-primary" @click="detailProduk(item)">
@@ -98,6 +143,15 @@ export default {
                         </div>
                     </div>
                     <data-table :headers="headersNoSeri" :items="noseri" :search="searchNoSeri">
+                        <template #item.waktu_kembali="{ item }">
+                            <div :class="cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).color">
+                                {{ dateFormat(item.waktu_kembali) }}
+                            </div>
+                            <small :class="cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).color">
+                                <i :class="cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).icon"></i>
+                                {{ cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).text }}
+                            </small>
+                        </template>
                     </data-table>
                 </div>
             </div>
