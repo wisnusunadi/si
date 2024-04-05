@@ -6,7 +6,7 @@
                 margin: 150px 25px;
             }
 
-           
+
             body {
               font-family: sans-serif;
             }
@@ -199,6 +199,9 @@
                                   @break
                                 @case('bayar_sinko')
                                     <span>BAYAR SINKO </span>
+                                    @break
+                                @case('bayar_transfer')
+                                    <span>BAYAR TRANSFER </span>
                                     @break
                               @default
                               <span>NON BAYAR<span>
