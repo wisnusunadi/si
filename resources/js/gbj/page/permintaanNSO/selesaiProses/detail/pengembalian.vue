@@ -90,8 +90,8 @@ export default {
             } else if (durasiAkhir < 0) {
                 return {
                     text: `Kurang ${Math.abs(durasiAkhir)} Hari`,
-                    color: 'text-success',
-                    icon: 'fas fa-check-circle'
+                    color: 'black--text',
+                    icon: 'fas fa-clock'
                 }
             } else {
                 return {
@@ -144,13 +144,16 @@ export default {
                     </div>
                     <data-table :headers="headersNoSeri" :items="noseri" :search="searchNoSeri">
                         <template #item.waktu_kembali="{ item }">
-                            <div :class="cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).color">
-                                {{ dateFormat(item.waktu_kembali) }}
+                            <div v-if="item.waktu_kembali">
+                                <div :class="cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).color">
+                                    {{ dateFormat(item.waktu_kembali) }}
+                                </div>
+                                <small :class="cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).color">
+                                    <i :class="cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).icon"></i>
+                                    {{ cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).text }}
+                                </small>
                             </div>
-                            <small :class="cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).color">
-                                <i :class="cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).icon"></i>
-                                {{ cekDurasiPengembalian(item.tgl_close, item.waktu_kembali).text }}
-                            </small>
+                            <div v-else></div>
                         </template>
                     </data-table>
                 </div>

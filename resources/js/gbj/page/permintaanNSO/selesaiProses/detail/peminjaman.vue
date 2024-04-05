@@ -78,11 +78,16 @@ export default {
                                             <th>Tanggal Pengembalian</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody v-if="item.noseri.length > 0">
                                         <tr v-for="(noseri, idx2) in item.noseri">
                                             <td>{{ idx2 + 1 }}</td>
                                             <td>{{ noseri.noseri }}</td>
                                             <td>{{ dateFormat(noseri.tgl_pengembalian) }}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else>
+                                        <tr>
+                                            <td colspan="100%" class="text-center">Tidak ada data</td>
                                         </tr>
                                     </tbody>
                                 </table>

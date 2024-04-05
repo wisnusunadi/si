@@ -24,8 +24,12 @@ export default {
                     value: 'tgl_permintaan'
                 },
                 {
-                    text: 'Nama dan Bagian',
-                    value: 'nama_bagian'
+                    text: 'Nama',
+                    value: 'nama'
+                },
+                {
+                    text: 'Bagian',
+                    value: 'bagian'
                 },
                 {
                     text: 'Tujuan Permintaan',
@@ -84,7 +88,8 @@ export default {
                     no_referensi: 'SO-2021080004',
                     tgl_permintaan: '24 Agustus 2021',
                     tgl_kebutuhan: '25 Agustus 2021',
-                    nama_bagian: 'Kiki-Produksi',
+                    nama: 'Susi',
+                    bagian: 'Produksi',
                     tujuan_permintaan: 'Sit Amet',
                     durasi: null,
                     jenis: 'permintaan',

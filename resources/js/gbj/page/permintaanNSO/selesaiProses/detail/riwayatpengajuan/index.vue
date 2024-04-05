@@ -13,7 +13,7 @@ export default {
                     value: 'no'
                 },
                 {
-                    text: 'No. Perubahan',
+                    text: 'No. Pengajuan',
                     value: 'no_perubahan'
                 },
                 {
@@ -30,7 +30,7 @@ export default {
                 },
                 {
                     text: 'Hasil',
-                    value: 'diterima'
+                    value: 'hasil'
                 },
                 {
                     text: 'Alasan Ditolak',
@@ -75,7 +75,7 @@ export default {
 </script>
 <template>
     <div>
-        <tolak v-if="showModal" @close="showModal = false" />
+        <tolak v-if="showModal" :detail="detailSelected" @close="showModal = false" />
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-row-reverse bd-highlight">
@@ -97,8 +97,8 @@ export default {
                             {{ dateFormat(item.tgl_pengajuan) }}
                         </div>
                     </template>
-                    <template #item.diterima="{ item }">
-                        <div v-if="!item.diterima">
+                    <template #item.hasil="{ item }">
+                        <div v-if="!item.hasil">
                             <button class="btn btn-sm btn-outline-success" @click="terima">
                                 <i class="fas fa-check"></i>
                             </button>

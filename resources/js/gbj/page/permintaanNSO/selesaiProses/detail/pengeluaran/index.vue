@@ -9,7 +9,28 @@ export default {
         return {
             searchProduk: '',
             searchNoSeri: '',
-            headersProduk: [],
+            headersProduk: [
+                {
+                    text: 'No.',
+                    value: 'no'
+                },
+                {
+                    text: 'Nama Produk',
+                    value: 'nama',
+                },
+                {
+                    text: 'Jumlah',
+                    value: 'jumlah'
+                },
+                {
+                    text: 'Waktu Ambil',
+                    value: 'waktu_ambil'
+                },
+                {
+                    text: 'Aksi',
+                    value: 'aksi',
+                }
+            ],
             headersNoSeri: [],
             noseri: [],
             detailSelected: null,
@@ -34,22 +55,41 @@ export default {
 
             this.checkAll = false
             this.noSeriSelected = []
-            this.noseri = [
-                {
-                    no: 2,
-                    id: 2,
-                    noseri: 'NS-2021080002',
-                    status: 'siap_diambil',
-                    waktu_ambil: '2024-08-24 13:00:00',
-                },
-                {
-                    no: 3,
-                    id: 3,
-                    noseri: 'NS-2021080003',
-                    status: 'barang_keluar',
-                    waktu_ambil: '2024-08-24 13:00:00',
-                }
-            ]
+            if (this.$route.params.selesai) {
+                this.noseri = [
+                    {
+                        no: 1,
+                        id: 2,
+                        noseri: 'NS-2021080002',
+                        status: 'barang_keluar',
+                        waktu_ambil: '2024-08-24 13:00:00',
+                    },
+                    {
+                        no: 2,
+                        id: 3,
+                        noseri: 'NS-2021080003',
+                        status: 'barang_keluar',
+                        waktu_ambil: '2024-08-24 13:00:00',
+                    }
+                ]
+            } else {
+                this.noseri = [
+                    {
+                        no: 1,
+                        id: 2,
+                        noseri: 'NS-2021080002',
+                        status: 'siap_diambil',
+                        waktu_ambil: null,
+                    },
+                    {
+                        no: 2,
+                        id: 3,
+                        noseri: 'NS-2021080003',
+                        status: 'barang_keluar',
+                        waktu_ambil: '2024-08-24 13:00:00',
+                    }
+                ]
+            }
         },
         checkedOne(item) {
             // const index = this.pengeluaranDuplicate.findIndex(x => x.id === this.detailSelected.id)
@@ -93,29 +133,6 @@ export default {
         },
         cekHeaderPengeluaran() {
             if (this.$route.params.selesai) {
-                this.headersProduk = [
-                    {
-                        text: 'No.',
-                        value: 'no'
-                    },
-                    {
-                        text: 'Nama Produk',
-                        value: 'nama',
-                    },
-                    {
-                        text: 'Jumlah',
-                        value: 'jumlah'
-                    },
-                    {
-                        text: 'Waktu Ambil',
-                        value: 'waktu_ambil'
-                    },
-                    {
-                        text: 'Aksi',
-                        value: 'aksi',
-                    }
-                ]
-
                 this.headersNoSeri = [
                     {
                         text: 'No.',
@@ -131,25 +148,6 @@ export default {
                     }
                 ]
             } else {
-                this.headersProduk = [
-                    {
-                        text: 'No.',
-                        value: 'no',
-                    },
-                    {
-                        text: 'Nama Produk',
-                        value: 'nama',
-                    },
-                    {
-                        text: 'Jumlah',
-                        value: 'jumlah',
-                    },
-                    {
-                        text: 'Aksi',
-                        value: 'aksi',
-                    }
-                ]
-
                 this.headersNoSeri = [
                     {
                         text: 'No.',
@@ -163,6 +161,10 @@ export default {
                     {
                         text: 'Status',
                         value: 'status',
+                    },
+                    {
+                        text: 'Waktu Diterima',
+                        value: 'waktu_ambil',
                     }
                 ]
             }
@@ -293,7 +295,8 @@ export default {
                                     </form>
                                 </div>
                             </span>
-                            <button class="btn btn-sm btn-primary" @click="persiapkanBarang">
+                            <button class="btn btn-sm btn-primary" @click="persiapkanBarang"
+                                v-if="!$route.params.selesai && this.detailSelected?.jumlah != this.noseri.length">
                                 <i class="fa-solid fa-qrcode"></i>
                                 Persiapkan
                             </button>

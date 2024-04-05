@@ -22,8 +22,12 @@ export default {
                     value: 'tgl_permintaan'
                 },
                 {
-                    text: 'Nama dan Bagian',
-                    value: 'nama_bagian'
+                    text: 'Nama',
+                    value: 'nama'
+                },
+                {
+                    text: 'Bagian',
+                    value: 'bagian'
                 },
                 {
                     text: 'Tujuan Permintaan',
@@ -36,6 +40,10 @@ export default {
                 {
                     text: 'Durasi',
                     value: 'durasi'
+                },
+                {
+                    text: 'Jenis',
+                    value: 'jenis'
                 },
                 {
                     text: 'Status',
@@ -58,13 +66,14 @@ export default {
                     no_referensi: 'SO-2021080001',
                     tgl_permintaan: '21 Agustus 2021',
                     tgl_ambil: '2024-08-24',
-                    nama_bagian: 'Bagus-Produksi',
+                    nama: 'Bagus',
+                    bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
                     durasi: '1 Hari',
                     durasi_tanggal: '2024-08-24',
                     status: 'barangkeluar',
                     persentase: 50,
-                    jenis: 'peminjaman', // berapa persen barang yang belum kembali
+                    jenis: 'Peminjaman', // berapa persen barang yang belum kembali
                 },
                 {
                     id: 2,
@@ -72,13 +81,14 @@ export default {
                     no_referensi: 'SO-2021080001',
                     tgl_permintaan: '21 Agustus 2021',
                     tgl_ambil: '2024-08-24',
-                    nama_bagian: 'Bagus-Produksi',
+                    nama: 'Bagus',
+                    bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
                     durasi: null,
                     durasi_tanggal: null,
                     status: 'barangkeluar',
                     persentase: 50, // berapa persen barang yang dikeluarkan
-                    jenis: 'permintaan',
+                    jenis: 'Permintaan',
                 },
                 {
                     id: 3,
@@ -86,13 +96,14 @@ export default {
                     no_referensi: 'SO-2021080002',
                     tgl_permintaan: '22 Agustus 2021',
                     tgl_ambil: '2024-08-24',
-                    nama_bagian: 'Bagus-Produksi',
+                    nama: 'Bagus',
+                    bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
                     durasi: '1 Hari',
                     durasi_tanggal: '2024-08-24',
                     status: 'barangdisiapkan',
                     persentase: 0,
-                    jenis: 'peminjaman',
+                    jenis: 'Peminjaman',
                 },
                 {
                     id: 4,
@@ -100,13 +111,14 @@ export default {
                     no_referensi: 'SO-2021080002',
                     tgl_permintaan: '22 Agustus 2021',
                     tgl_ambil: '2024-08-24',
-                    nama_bagian: 'Bagus-Produksi',
+                    nama: 'Bagus',
+                    bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
                     durasi: null,
                     durasi_tanggal: null,
                     status: 'barangdisiapkan',
                     persentase: 0,
-                    jenis: 'permintaan',
+                    jenis: 'Permintaan',
                 },
                 {
                     id: 5,
@@ -114,13 +126,14 @@ export default {
                     no_referensi: 'SO-2021080003',
                     tgl_permintaan: '23 Agustus 2021',
                     tgl_ambil: '2024-08-24',
-                    nama_bagian: 'Bagus-Produksi',
+                    nama: 'Bagus',
+                    bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
                     durasi: null,
                     durasi_tanggal: null,
                     status: 'barangsiapdiambil',
                     persentase: 0,
-                    jenis: 'permintaan'
+                    jenis: 'Permintaan'
                 },
                 {
                     id: 6,
@@ -128,13 +141,14 @@ export default {
                     no_referensi: 'SO-2021080003',
                     tgl_permintaan: '23 Agustus 2021',
                     tgl_ambil: '2024-08-24',
-                    nama_bagian: 'Bagus-Produksi',
+                    nama: 'Bagus',
+                    bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
                     durasi: '1 Hari',
                     durasi_tanggal: '2024-08-24',
                     status: 'barangsiapdiambil',
                     persentase: 0,
-                    jenis: 'peminjaman'
+                    jenis: 'Peminjaman'
                 },
             ],
         }

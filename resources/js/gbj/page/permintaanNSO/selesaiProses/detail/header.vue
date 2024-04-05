@@ -80,9 +80,8 @@ export default {
                         </small>
                     </div>
                     <div class="margin">
-                        <b>{{ header.durasi }} + <span :class="header.lebih_durasi > 0 ? 'text-danger' : ''">{{
+                        <b>{{ header.durasi }} <span class="text-danger" v-if="header.lebih_durasi > 0"> + {{
                             header.lebih_durasi }} Hari</span></b>
-
                     </div>
                     <div class="margin">
                         <small class="text-muted">
@@ -92,12 +91,12 @@ export default {
                     <div class="margin">
                         <b>{{ dateFormat(header.tgl_close) }}</b>
                     </div>
-                    <div class="margin">
+                    <div class="margin" v-if="$route.params.selesai">
                         <small class="text-muted">
                             Dokumen FPBJ
                         </small>
                     </div>
-                    <div class="margin">
+                    <div class="margin" v-if="$route.params.selesai">
                         <button class="btn btn-sm btn-outline-warning">
                             <i class="fas fa-print"></i> Cetak FPBJ
                         </button>
