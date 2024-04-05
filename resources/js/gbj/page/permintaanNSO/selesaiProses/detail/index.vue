@@ -63,8 +63,8 @@ export default {
                     no_permintaan: 'NSO-2021080003',
                     no_referensi: 'SO-2021080003',
                     tgl_permintaan: '21 Agustus 2021',
-                    tgl_ambil: '2024-08-24',
-                    tgl_close: '2024-08-25',
+                    tgl_ambil: '2024-08-23',
+                    tgl_close: '2024-08-26',
                     nama: 'Bagus',
                     bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
@@ -81,7 +81,7 @@ export default {
                         nama: 'Produk 1',
                         jumlahdisiapkan: 3,
                         jumlahdiserahkan: 2,
-                        waktu_ambil: '2024-08-24 13:00:00',
+                        waktu_ambil: '2024-08-03 13:00:00',
                         noSeriSelected: [],
                         jumlah: 2,
                     },
@@ -91,7 +91,7 @@ export default {
                         nama: 'Produk 2',
                         jumlahdisiapkan: 2,
                         jumlahdiserahkan: 1,
-                        waktu_ambil: '2024-08-24 13:00:00',
+                        waktu_ambil: '2024-08-03 13:00:00',
                         noSeriSelected: [],
                         jumlah: 3,
                     }
@@ -102,7 +102,7 @@ export default {
                         no_ubah: 'UBAH-2021080003',
                         nama: 'Produk 1',
                         jumlah: 2,
-                        tanggal_selesai: '2024-08-24',
+                        tanggal_selesai: '2024-08-23',
                         hari: 1,
                         diterima: 'Ya',
                         alasan: '-',
@@ -122,13 +122,15 @@ export default {
                     {
                         no: 1,
                         nama: 'Produk 1',
-                        waktu_kembali: '2024-08-24 13:00:00',
+                        waktu_kembali: '2024-09-02 13:00:00',
+                        tgl_close: '2024-08-23 13:00:00',
                         jumlah: 2,
                     },
                     {
                         no: 2,
                         nama: 'Produk 2',
-                        waktu_kembali: '2024-08-24 13:00:00',
+                        waktu_kembali: '2024-08-22 13:00:00',
+                        tgl_close: '2024-08-23 13:00:00',
                         jumlah: 3,
                     }
                 ],
@@ -138,18 +140,18 @@ export default {
                         expanded: false,
                         nama: 'Produk 1',
                         jumlah: 2,
-                        tgl_peminjaman: '2024-08-24',
+                        tgl_peminjaman: '2024-08-23',
                         tgl_pengambilan: '2024-08-25',
                         noseri: [
                             {
                                 no: 1,
                                 noseri: 'TR12345678',
-                                tgl_pengembalian: '2024-08-24 13:00:00',
+                                tgl_pengembalian: '2024-08-23 13:00:00',
                             },
                             {
                                 no: 2,
                                 noseri: 'TE12345678',
-                                tgl_pengembalian: '2024-08-24 13:00:00',
+                                tgl_pengembalian: '2024-08-23 13:00:00',
                             }
                         ]
                     },
@@ -158,18 +160,18 @@ export default {
                         expanded: false,
                         nama: 'Produk 2',
                         jumlah: 3,
-                        tgl_peminjaman: '2024-08-24',
+                        tgl_peminjaman: '2024-08-23',
                         tgl_pengambilan: '2024-08-25',
                         noseri: [
                             {
                                 no: 1,
                                 noseri: 'TL12345678',
-                                tgl_pengembalian: '2024-08-24 13:00:00',
+                                tgl_pengembalian: '2024-08-23 13:00:00',
                             },
                             {
                                 no: 2,
                                 noseri: 'TM12345678',
-                                tgl_pengembalian: '2024-08-24 13:00:00',
+                                tgl_pengembalian: '2024-08-23 13:00:00',
                             }
                         ]
                     }
@@ -178,9 +180,9 @@ export default {
                     {
                         no: 1,
                         versi: 'V1',
-                        tgl_pengajuan: '2024-08-24',
+                        tgl_pengajuan: '2024-08-23',
                         feedback: [
-                            'Perubahan Produk dari Tensione ke Digit One', 
+                            'Perubahan Produk dari Tensione ke Digit One',
                             'Perubahan jumlah produk tensione dari 3 ke 5'
                         ],
                         diterima: 'Ya',
@@ -189,7 +191,7 @@ export default {
                     {
                         no: 2,
                         versi: 'V2',
-                        tgl_pengajuan: '2024-08-24',
+                        tgl_pengajuan: '2024-08-23',
                         feedback: [
                             'Perubahan Produk dari Tensione ke Digit One',
                             'Perubahan jumlah produk tensione dari 3 ke 5'
