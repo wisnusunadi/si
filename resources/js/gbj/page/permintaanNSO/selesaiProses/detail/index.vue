@@ -62,7 +62,8 @@ export default {
     },
     methods: {
         dataProdukDetail() {
-            if (!this.$route.params.selesai) {
+            console.log(this.$route.params)
+            if (!this.$route.params.selesai && this.$route.params.jenis == 'Peminjaman') {
                 this.produk = {
                     header: {
                         id: 3,
@@ -233,7 +234,7 @@ export default {
                     ],
                     riwayatpengajuan: [
                         {
-                            no: 3,
+                            no: 1,
                             no_perubahan: 'UBAH-2021080003',
                             versi: 'V3',
                             tgl_pengajuan: '2024-08-23',
@@ -257,7 +258,7 @@ export default {
                             alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
                         },
                         {
-                            no: 1,
+                            no: 3,
                             no_perubahan: 'UBAH-2021080003',
                             versi: 'V1',
                             tgl_pengajuan: '2024-08-23',
@@ -272,7 +273,7 @@ export default {
 
                     ]
                 }
-            } else {
+            } else if (this.$route.params.selesai && this.$route.params.jenis == 'Peminjaman') {
                 this.produk = {
                     header: {
                         id: 3,
@@ -392,6 +393,170 @@ export default {
                             ]
                         }
                     ],
+                    riwayatpengajuan: [
+                        {
+                            no: 2,
+                            no_perubahan: 'UBAH-2021080002',
+                            versi: 'V2',
+                            tgl_pengajuan: '2024-08-23',
+                            feedback: [
+                                'Perubahan Produk dari Tensione ke Digit One',
+                                'Perubahan jumlah produk tensione dari 3 ke 5'
+                            ],
+                            hasil: 'Ditolak',
+                            alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
+                        },
+                        {
+                            no: 1,
+                            no_perubahan: 'UBAH-2021080003',
+                            versi: 'V1',
+                            tgl_pengajuan: '2024-08-23',
+                            feedback: [
+                                'Perubahan Produk dari Tensione ke Digit One',
+                                'Perubahan jumlah produk tensione dari 3 ke 5'
+                            ],
+                            hasil: 'Diterima',
+                            alasan: '-',
+                        },
+                    ]
+                }
+            } else if (!this.$route.params.selesai && this.$route.params.jenis == 'Permintaan') {
+                this.produk = {
+                    header: {
+                        id: 3,
+                        no_permintaan: 'NSO-2021080003',
+                        no_referensi: 'SO-2021080003',
+                        tgl_permintaan: '21 Agustus 2021',
+                        tgl_ambil: '2024-08-23',
+                        tgl_close: '2024-08-26',
+                        nama: 'Bagus',
+                        bagian: 'Produksi',
+                        tujuan_permintaan: 'Lorem',
+                        durasi: '1 Hari',
+                        lebih_durasi: 0,
+                        jenis: 'Peminjaman',
+                        status: 'selesai',
+                        ket: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
+                    },
+                    produk: [
+                        {
+                            no: 1,
+                            id: 1,
+                            gbj_id: 18,
+                            nama: 'Produk 1',
+                            waktu_ambil: '2024-08-03 13:00:00',
+                            noSeriSelected: [],
+                            jumlah: 2,
+                            jumlah_sisa: 0,
+                        },
+                        {
+                            no: 2,
+                            id: 2,
+                            gbj_id: 19,
+                            nama: 'Produk 2',
+                            waktu_ambil: '2024-08-03 13:00:00',
+                            noSeriSelected: [],
+                            jumlah: 3,
+                            jumlah_sisa: 1,
+                        },
+                        {
+                            no: 3,
+                            id: 3,
+                            gbj_id: 19,
+                            nama: 'Produk 3',
+                            waktu_ambil: null,
+                            noSeriSelected: [],
+                            jumlah: 3,
+                            jumlah_sisa: 1,
+                        }
+                    ],
+                    perubahan: [],
+                    pengembalian: [],
+                    peminjaman: [],
+                    riwayatpengajuan: [
+                        {
+                            no: 1,
+                            no_perubahan: 'UBAH-2021080003',
+                            versi: 'V3',
+                            tgl_pengajuan: '2024-08-23',
+                            feedback: [
+                                'Perubahan Produk dari Tensione ke Digit One',
+                                'Perubahan jumlah produk tensione dari 3 ke 5'
+                            ],
+                            hasil: null,
+                            alasan: null,
+                        },
+                        {
+                            no: 2,
+                            no_perubahan: 'UBAH-2021080003',
+                            versi: 'V2',
+                            tgl_pengajuan: '2024-08-23',
+                            feedback: [
+                                'Perubahan Produk dari Tensione ke Digit One',
+                                'Perubahan jumlah produk tensione dari 3 ke 5'
+                            ],
+                            hasil: 'Ditolak',
+                            alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
+                        },
+                        {
+                            no: 3,
+                            no_perubahan: 'UBAH-2021080003',
+                            versi: 'V1',
+                            tgl_pengajuan: '2024-08-23',
+                            feedback: [
+                                'Perubahan Produk dari Tensione ke Digit One',
+                                'Perubahan jumlah produk tensione dari 3 ke 5'
+                            ],
+                            hasil: 'Diterima',
+                            alasan: '-',
+                        },
+
+
+                    ]
+                }
+            } else if (this.$route.params.selesai && this.$route.params.jenis == 'Permintaan') {
+                this.produk = {
+                    header: {
+                        id: 3,
+                        no_permintaan: 'NSO-2021080003',
+                        no_referensi: 'SO-2021080003',
+                        tgl_permintaan: '21 Agustus 2021',
+                        tgl_ambil: '2024-08-23',
+                        tgl_close: '2024-08-26',
+                        nama: 'Bagus',
+                        bagian: 'Produksi',
+                        tujuan_permintaan: 'Lorem',
+                        durasi: '1 Hari',
+                        lebih_durasi: 0,
+                        jenis: 'Peminjaman',
+                        status: 'selesai',
+                        ket: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
+                    },
+                    produk: [
+                        {
+                            no: 1,
+                            id: 1,
+                            gbj_id: 18,
+                            nama: 'Produk 1',
+                            waktu_ambil: '2024-08-03 13:00:00',
+                            noSeriSelected: [],
+                            jumlah: 2,
+                            jumlah_sisa: 0,
+                        },
+                        {
+                            no: 2,
+                            id: 2,
+                            gbj_id: 19,
+                            nama: 'Produk 2',
+                            waktu_ambil: '2024-08-03 13:00:00',
+                            noSeriSelected: [],
+                            jumlah: 3,
+                            jumlah_sisa: 1,
+                        }
+                    ],
+                    perubahan: [],
+                    pengembalian: [],
+                    peminjaman: [],
                     riwayatpengajuan: [
                         {
                             no: 2,

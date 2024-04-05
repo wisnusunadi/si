@@ -20,8 +20,12 @@ export default {
                     value: 'tgl_permintaan'
                 },
                 {
-                    text: 'Nama dan Bagian',
-                    value: 'nama_bagian'
+                    text: 'Nama',
+                    value: 'nama'
+                },
+                {
+                    text: 'Bagian',
+                    value: 'bagian'
                 },
                 {
                     text: 'Tujuan Permintaan',
@@ -56,7 +60,8 @@ export default {
                     no_referensi: 'SO-2021080001',
                     tgl_permintaan: '21 Agustus 2021',
                     tgl_ambil: '2024-08-24',
-                    nama_bagian: 'Bagus-Produksi',
+                    nama: 'Bagus',
+                    bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
                     durasi: '1 Hari',
                     jenis: 'Peminjaman',
@@ -69,7 +74,8 @@ export default {
                     no_referensi: 'SO-2021080002',
                     tgl_permintaan: '21 Agustus 2021',
                     tgl_ambil: '2024-08-24',
-                    nama_bagian: 'Bagus-Produksi',
+                    nama: 'Bagus',
+                    bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
                     durasi: '1 Hari',
                     jenis: 'Peminjaman',
@@ -82,10 +88,25 @@ export default {
                     no_referensi: 'SO-2021080003',
                     tgl_permintaan: '21 Agustus 2021',
                     tgl_ambil: '2024-08-24',
-                    nama_bagian: 'Bagus-Produksi',
+                    nama: 'Bagus',
+                    bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
                     durasi: '1 Hari',
                     jenis: 'Peminjaman',
+                    status: 'selesai',
+                    ket: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
+                },
+                {
+                    id: 4,
+                    no_permintaan: 'NSO-2021080003',
+                    no_referensi: 'SO-2021080003',
+                    tgl_permintaan: '21 Agustus 2021',
+                    tgl_ambil: '2024-08-24',
+                    nama: 'Bagus',
+                    bagian: 'Produksi',
+                    tujuan_permintaan: 'Lorem',
+                    durasi: null,
+                    jenis: 'Permintaan',
                     status: 'selesai',
                     ket: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
                 },
@@ -93,12 +114,13 @@ export default {
         }
     },
     methods: {
-        detail(id) {
+        detail(item) {
             this.$router.push({
                 name: 'detailNSO',
                 params: {
-                    id,
-                    selesai: true
+                    id: item.id,
+                    selesai: true,
+                    jenis: item.jenis
                 }
             })
         }
@@ -125,7 +147,7 @@ export default {
                     </div>
                 </template>
                 <template #item.aksi="{ item }">
-                    <button class="btn btn-sm btn-outline-primary" @click="detail(item.id)">
+                    <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
                         <i class="fas fa-eye"></i>
                         Detail
                     </button>

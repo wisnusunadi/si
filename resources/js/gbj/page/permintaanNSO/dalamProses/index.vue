@@ -178,12 +178,13 @@ export default {
                 }
             }
         },
-        aksi(id) {
+        aksi(item) {
             this.$router.push({
                 name: 'detailNSO',
                 params: {
-                    id,
-                    selesai: false
+                    id: item.id,
+                    selesai: false,
+                    jenis: item.jenis
                 }
             })
         },
@@ -223,7 +224,7 @@ export default {
                     </div>
                 </template>
                 <template #item.aksi="{ item }">
-                    <button class="btn btn-sm btn-outline-primary" @click="aksi(item.id)">
+                    <button class="btn btn-sm btn-outline-primary" @click="aksi(item)">
                         <i class="fas fa-eye"></i>
                         Detail
                     </button>

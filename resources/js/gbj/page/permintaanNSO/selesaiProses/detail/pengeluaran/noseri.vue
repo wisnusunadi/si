@@ -182,6 +182,15 @@ export default {
     },
     created() {
         this.getNoSeri();
+    },
+    watch: {
+        noSeriSelected() {
+            if (this.noSeriSelected.length === this.noseri.length) {
+                this.checkAll = true
+            } else {
+                this.checkAll = false
+            }
+        }
     }
 }
 </script>

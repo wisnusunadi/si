@@ -100,12 +100,12 @@ export default {
                     </div>
                 </div>
                 <div class="p-2">
-                    <div class="margin">
+                    <div class="margin" v-if="!$route.params.selesai && $route.params.jenis == 'Peminjaman'">
                         <small class="text-muted">
                             Durasi
                         </small>
                     </div>
-                    <div class="margin">
+                    <div class="margin" v-if="!$route.params.selesai && $route.params.jenis == 'Peminjaman'">
                         <b>{{ header.durasi }} <span class="text-danger" v-if="header.lebih_durasi > 0"> + {{
                             header.lebih_durasi }} Hari</span></b>
                     </div>
@@ -117,7 +117,8 @@ export default {
                     <div class="margin">
                         <b :class="calculateDateFromNow(header.tgl_close).color">{{
                             dateFormat(header.tgl_close) }}</b> <br>
-                        <small :class="calculateDateFromNow(header.tgl_close).color">
+                        <small :class="calculateDateFromNow(header.tgl_close).color"
+                            v-if="!$route.params.selesai && $route.params.jenis == 'Peminjaman'">
                             <i :class="calculateDateFromNow(header.tgl_close).icon"></i>
                             {{ calculateDateFromNow(header.tgl_close).text }}
                         </small>
