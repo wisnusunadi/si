@@ -82,7 +82,7 @@ export default {
                                             <b class="float-right"> {{ doData.pesanan.so }} </b>
                                         </div>
 
-                                        <div class="margin">
+                                        <div class="margin" v-if="doData.jenis == 'ekatalog'">
                                             <a class="text-muted">No AKN</a>
                                             <b class="float-right">{{ doData.no_paket }}</b>
                                         </div>

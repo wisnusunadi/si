@@ -31,6 +31,10 @@ export default {
                     value: "jumlah",
                 },
                 {
+                    text: "Jumlah No. Seri Dipilih",
+                    value: "noseri",
+                },
+                {
                     text: "Aksi",
                     value: "aksi",
                 },
@@ -135,8 +139,8 @@ export default {
                                         <div class="card nomor-so">
                                             <div class="card-body">
                                                 <span id="so">{{
-                                                    headerSO.customer
-                                                }}</span>
+        headerSO.customer
+    }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -145,8 +149,8 @@ export default {
                                         <div class="card nomor-akn">
                                             <div class="card-body">
                                                 <span id="po">{{
-                                                    headerSO.so
-                                                }}</span>
+            headerSO.so
+        }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -155,8 +159,8 @@ export default {
                                         <div class="card nomor-po">
                                             <div class="card-body">
                                                 <span id="po">{{
-                                                    headerSO.no_po
-                                                }}</span>
+            headerSO.no_po
+        }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -172,6 +176,11 @@ export default {
                                     </div>
                                 </div>
                                 <data-table :headers="headers" :items="produk" :search="search">
+                                    <template #item.noseri="{item}">
+                                        <div v-if="item.jenis == 'produk'">
+                                            {{ item.noseri?.length ?? 0 }}
+                                        </div>
+                                    </template>
                                     <template #item.aksi="{ item }">
                                         <div>
                                             <button @click="detailNoSeri(item)" class="btn btn-primary btn-sm"

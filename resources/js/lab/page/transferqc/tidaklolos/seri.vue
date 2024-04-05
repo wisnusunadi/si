@@ -14,6 +14,7 @@ export default {
                 {
                     text: "No",
                     value: "no",
+                    sortable: false,
                 },
                 {
                     text: "Nomor Seri",
@@ -214,8 +215,8 @@ export default {
                                     Pilih Nomor Seri Via Text
                                 </button>
                                 <span class="filter">
-                                    <button class="btn btn-outline-info btn-sm" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
+                                    <button class="btn btn-outline-info btn-sm" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
                                     <form id="filter_ekat">
@@ -224,14 +225,15 @@ export default {
                                                 <div class="form-group">
                                                     <label for="jenis_penjualan">Keterangan</label>
                                                 </div>
-                                                <div class="form-group" v-for="status in getAllStatusUnique" :key="status">
+                                                <div class="form-group" v-for="status in getAllStatusUnique"
+                                                    :key="status">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" :ref="status"
                                                             :value="status" id="status1" @click="
-                                                                clickFilterHasil(
-                                                                    status
-                                                                )
-                                                                " />
+            clickFilterHasil(
+                status
+            )
+            " />
                                                         <label class="form-check-label text-uppercase" for="status1">
                                                             {{ hasil_noseri(status).text }}
                                                         </label>
@@ -254,8 +256,8 @@ export default {
                             </template>
                             <template #item.no="{ item }">
                                 <input type="checkbox" :checked="noseriSelected && noseriSelected.find(
-                                    (data) => data.id === item.id
-                                )" @click="selectNoSeri(item)" />
+            (data) => data.id === item.id
+        )" @click="selectNoSeri(item)" />
                             </template>
                             <template #item.hasil="{ item }">
                                 <span v-html="hasil_noseri(item.jenis).icon"></span>
