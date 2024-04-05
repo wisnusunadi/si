@@ -89,6 +89,7 @@ export default {
                             waktu_ambil: '2024-08-03 13:00:00',
                             noSeriSelected: [],
                             jumlah: 2,
+                            jumlah_sisa: 0,
                         },
                         {
                             no: 2,
@@ -98,6 +99,7 @@ export default {
                             waktu_ambil: '2024-08-03 13:00:00',
                             noSeriSelected: [],
                             jumlah: 3,
+                            jumlah_sisa: 1,
                         },
                         {
                             no: 3,
@@ -107,6 +109,7 @@ export default {
                             waktu_ambil: null,
                             noSeriSelected: [],
                             jumlah: 3,
+                            jumlah_sisa: 1,
                         }
                     ],
                     perubahan: [
@@ -230,16 +233,16 @@ export default {
                     ],
                     riwayatpengajuan: [
                         {
-                            no: 1,
+                            no: 3,
                             no_perubahan: 'UBAH-2021080003',
-                            versi: 'V1',
+                            versi: 'V3',
                             tgl_pengajuan: '2024-08-23',
                             feedback: [
                                 'Perubahan Produk dari Tensione ke Digit One',
                                 'Perubahan jumlah produk tensione dari 3 ke 5'
                             ],
-                            hasil: 'Diterima',
-                            alasan: '-',
+                            hasil: null,
+                            alasan: null,
                         },
                         {
                             no: 2,
@@ -254,17 +257,19 @@ export default {
                             alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
                         },
                         {
-                            no: 3,
+                            no: 1,
                             no_perubahan: 'UBAH-2021080003',
-                            versi: 'V3',
+                            versi: 'V1',
                             tgl_pengajuan: '2024-08-23',
                             feedback: [
                                 'Perubahan Produk dari Tensione ke Digit One',
                                 'Perubahan jumlah produk tensione dari 3 ke 5'
                             ],
-                            hasil: null,
-                            alasan: null,
-                        }
+                            hasil: 'Diterima',
+                            alasan: '-',
+                        },
+
+
                     ]
                 }
             } else {
@@ -294,6 +299,7 @@ export default {
                             waktu_ambil: '2024-08-03 13:00:00',
                             noSeriSelected: [],
                             jumlah: 2,
+                            jumlah_sisa: 0,
                         },
                         {
                             no: 2,
@@ -303,6 +309,7 @@ export default {
                             waktu_ambil: '2024-08-03 13:00:00',
                             noSeriSelected: [],
                             jumlah: 3,
+                            jumlah_sisa: 1,
                         }
                     ],
                     perubahan: [
@@ -387,18 +394,6 @@ export default {
                     ],
                     riwayatpengajuan: [
                         {
-                            no: 1,
-                            no_perubahan: 'UBAH-2021080003',
-                            versi: 'V1',
-                            tgl_pengajuan: '2024-08-23',
-                            feedback: [
-                                'Perubahan Produk dari Tensione ke Digit One',
-                                'Perubahan jumlah produk tensione dari 3 ke 5'
-                            ],
-                            hasil: 'Diterima',
-                            alasan: '-',
-                        },
-                        {
                             no: 2,
                             no_perubahan: 'UBAH-2021080002',
                             versi: 'V2',
@@ -409,6 +404,18 @@ export default {
                             ],
                             hasil: 'Ditolak',
                             alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
+                        },
+                        {
+                            no: 1,
+                            no_perubahan: 'UBAH-2021080003',
+                            versi: 'V1',
+                            tgl_pengajuan: '2024-08-23',
+                            feedback: [
+                                'Perubahan Produk dari Tensione ke Digit One',
+                                'Perubahan jumlah produk tensione dari 3 ke 5'
+                            ],
+                            hasil: 'Diterima',
+                            alasan: '-',
                         },
                     ]
                 }

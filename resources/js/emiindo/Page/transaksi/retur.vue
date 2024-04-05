@@ -343,14 +343,14 @@ export default {
                                         <span class="fa-li">
                                             <i class="fas fa-address-card fa-fw"></i>
                                         </span>
-                                        {{ retur?.alamat }}
+                                        {{ retur.jenis == 'ekatalog' ? retur?.alamat : retur?.customer?.alamat }}
                                     </li>
                                     <li class="py-2">
                                         <span class="fa-li">
                                             <div class="fas fa-map-marker-alt fa-fw"></div>
                                         </span>
                                         <em class="text-muted" v-if="!retur?.provinsi">Belum Tersedia</em>
-                                        {{ retur?.provinsi?.nama }}
+                                        {{ retur.jenis == 'ekatalog' ? retur?.provinsi?.nama : retur?.provinsi }}
                                     </li>
                                 </ul>
                             </div>
@@ -523,8 +523,8 @@ export default {
                                                                                                                 :ref="`noseri-${noseri.id}`"
                                                                                                                 type="checkbox">
                                                                                                             {{
-            noseri.noseri
-        }}
+                                                                                                            noseri.noseri
+                                                                                                            }}
                                                                                                         </div>
                                                                                                         <div v-else>
                                                                                                             <span

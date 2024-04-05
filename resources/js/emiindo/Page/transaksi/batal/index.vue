@@ -123,7 +123,8 @@ export default {
 </script>
 <template>
     <div>
-        <alasanComponents :items="items" :batal="batal" v-if="showModalAlasan" @close="closeModalAlasan" @closeAllModal="closeAllModal" @refresh="$emit('refresh')" />
+        <alasanComponents :items="items" :batal="batal" v-if="showModalAlasan" @close="closeModalAlasan"
+            @closeAllModal="closeAllModal" @refresh="$emit('refresh')" />
         <div class="modal fade modalBatal" id="staticBackdrop" data-backdrop="static" data-keyboard="false"
             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
@@ -145,14 +146,14 @@ export default {
                                         <span class="fa-li">
                                             <i class="fas fa-address-card fa-fw"></i>
                                         </span>
-                                        {{ batal?.alamat }}
+                                        {{ batal.jenis == 'ekatalog' ? batal?.alamat : batal?.customer?.alamat }}
                                     </li>
                                     <li class="py-2">
                                         <span class="fa-li">
                                             <div class="fas fa-map-marker-alt fa-fw"></div>
                                         </span>
                                         <em class="text-muted" v-if="!batal?.provinsi">Belum Tersedia</em>
-                                        {{ batal?.provinsi?.nama }}
+                                        {{ batal.jenis == 'ekatalog' ? batal?.provinsi?.nama : batal?.provinsi }}
                                     </li>
                                 </ul>
                             </div>

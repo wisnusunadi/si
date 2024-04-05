@@ -3,6 +3,32 @@ import status from '../../../../components/status.vue'
 export default {
     components: { status },
     props: ['header'],
+    methods: {
+        calculateDateFromNow(date) {
+            // kalkulasi tanggal dari sekarang
+            const tglSekarang = new Date();
+            const tglKontrak = new Date(date);
+            if (tglKontrak < tglSekarang) {
+                return {
+                    text: `Lebih ${moment(tglSekarang).diff(tglKontrak, 'days')} Hari`,
+                    color: 'text-danger font-weight-bold',
+                    icon: 'fas fa-exclamation-circle'
+                }
+            } else if (tglKontrak > tglSekarang) {
+                return {
+                    text: `${moment(tglKontrak).diff(tglSekarang, 'days')} Hari Lagi`,
+                    color: 'text-dark',
+                    icon: 'fas fa-clock'
+                }
+            } else {
+                return {
+                    text: 'Tanggal Close Hari Ini',
+                    color: 'text-danger',
+                    icon: 'fas fa-exclamation-circle'
+                }
+            }
+        },
+    },
 }
 </script>
 <template>
@@ -89,7 +115,12 @@ export default {
                         </small>
                     </div>
                     <div class="margin">
-                        <b>{{ dateFormat(header.tgl_close) }}</b>
+                        <b :class="calculateDateFromNow(header.tgl_close).color">{{
+                            dateFormat(header.tgl_close) }}</b> <br>
+                        <small :class="calculateDateFromNow(header.tgl_close).color">
+                            <i :class="calculateDateFromNow(header.tgl_close).icon"></i>
+                            {{ calculateDateFromNow(header.tgl_close).text }}
+                        </small>
                     </div>
                     <div class="margin" v-if="$route.params.selesai">
                         <small class="text-muted">

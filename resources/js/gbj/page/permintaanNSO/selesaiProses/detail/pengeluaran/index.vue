@@ -173,7 +173,27 @@ export default {
             this.$nextTick(() => {
                 $('.modalNoSeri').modal('show');
             });
-        }
+        },
+        penyerahanBarang() {
+            swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Data yang sudah diserahkan tidak dapat diubah lagi",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Lanjutkan!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swal.fire(
+                        'Diterima!',
+                        'Data berhasil diserahkan',
+                        'success'
+                    )
+                }
+            })
+        },
     },
     computed: {
         getAllStatusUnique() {
@@ -273,11 +293,12 @@ export default {
                                 </div>
                             </span>
                             <button class="btn btn-sm btn-primary" @click="persiapkanBarang"
-                                v-if="!$route.params.selesai && this.detailSelected?.jumlah != this.noseri.length">
+                                v-if="!$route.params.selesai && this.detailSelected?.jumlah != this.noseri.length && this.noSeriSelected.length == 0">
                                 <i class="fa-solid fa-qrcode"></i>
                                 Persiapkan
                             </button>
-                            <button class=" btn btn-sm btn-info" v-if="noSeriSelected.length > 0">
+                            <button class=" btn btn-sm btn-info" v-if="noSeriSelected.length > 0"
+                                @click="penyerahanBarang">
                                 <i class="fas fa-check-square"></i>
                                 Penyerahan
                             </button>
