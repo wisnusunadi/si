@@ -14,7 +14,47 @@ export default {
             items: [],
             renderPaginate: [],
             detailSelectedSO: {},
-            showModal: false
+            showModal: false,
+            headers: [
+                {
+                    text: 'No',
+                    value: 'no'
+                },
+                {
+                    text: 'Nomor',
+                    children: [
+                        {
+                            text: 'Sales Order',
+                            value: 'so'
+                        },
+                        {
+                            text: 'Purchase Order',
+                            value: 'no_po'
+                        }
+                    ]
+                },
+                {
+                    text: 'Customer',
+                    value: 'customer'
+                },
+                {
+                    text: 'Jumlah',
+                    children: [
+                        {
+                            text: 'Pesanan',
+                            value: 'count_pesanan'
+                        },
+                        {
+                            text: 'Terkirim',
+                            value: 'count_transfer'
+                        }
+                    ]
+                },
+                {
+                    text: 'Aksi',
+                    value: 'aksi'
+                }
+            ]
         }
     },
     methods: {
@@ -73,7 +113,8 @@ export default {
 <template>
     <div>
         <detailSO v-if="showModal" :detailSelected="detailSelectedSO" @closeModal="closeModalDetailSO" />
-        <div class="modal fade modalDetail" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade modalDetail" id="staticBackdrop" data-backdrop="static" data-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -116,6 +157,7 @@ export default {
                                         <input type="text" class="form-control" v-model="search" placeholder="Cari...">
                                     </div>
                                 </div>
+                                <data-table :headers="header" :items="items" :search="search" />
                                 <table class="table table-striped text-center">
                                     <thead>
                                         <tr>

@@ -61,7 +61,7 @@ export default {
             } else {
                 return 1
             }
-        }
+        },
     },
     computed: {
         filteredDalamProses() {
@@ -90,6 +90,14 @@ export default {
         },
         cekHeaderDetectedChidlren() {
             return this.headers.some(header => header?.children)
+        },
+        groupAllChildren() {
+            return this.headers.reduce((acc, header) => {
+                if (header.children) {
+                    return [...acc, ...header.children]
+                }
+                return acc
+            }, [])
         }
     },
 }
@@ -113,8 +121,8 @@ export default {
                         </th>
                     </template>
                 </tr>
-                <tr v-for="header in headers" :key="header.text" v-if="header?.children">
-                    <th v-for="child in header.children" :key="child.text"
+                <tr v-if="groupAllChildren.length > 0">
+                    <th v-for=" child in groupAllChildren" :key="child.text"
                         :class="child.align ? child.align : 'text-center'">
                         <slot :name="`header.${child.value}`">
                             {{ child.text }}

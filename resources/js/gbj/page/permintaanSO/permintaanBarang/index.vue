@@ -10,15 +10,42 @@ export default {
     data() {
         return {
             search: '',
-            renderPaginate: [],
             showModal: false,
-            detailSelected: {}
+            detailSelected: {},
+            header: [
+                {
+                    text: 'No',
+                    value: 'no'
+                },
+                {
+                    text: 'Nama Produk',
+                    value: 'produkk'
+                },
+                {
+                    text: 'Permintaan',
+                    children: [
+                        {
+                            text: 'Total',
+                            value: 'permintaan'
+                        },
+                        {
+                            text: 'Sisa',
+                            value: 'sisa'
+                        }
+                    ]
+                },
+                {
+                    text: 'Jumlah Transfer',
+                    value: 'count_transfer'
+                },
+                {
+                    text: 'Aksi',
+                    value: 'aksi'
+                }
+            ]
         }
     },
     methods: {
-        updateFilteredDalamProses(data) {
-            this.renderPaginate = data;
-        },
         openModalDetail(item) {
             this.detailSelected = item;
             this.showModal = true;
@@ -27,15 +54,6 @@ export default {
             });
         },
     },
-    computed: {
-        filteredDalamProses() {
-            return this.items.filter((data) => {
-                return Object.keys(data).some((key) => {
-                    return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
-                });
-            });
-        }
-    }
 }
 </script>
 <template>
@@ -47,44 +65,14 @@ export default {
                     <input type="text" class="form-control" v-model="search" placeholder="Cari...">
                 </div>
             </div>
-            <table class="table text-center">
-                <thead>
-                    <tr>
-                        <th rowspan="2">No</th>
-                        <th rowspan="2">Nama Produk</th>
-                        <th colspan="2">Permintaan</th>
-                        <th rowspan="2">Jumlah Transfer</th>
-                        <th rowspan="2">Aksi</th>
-                    </tr>
-                    <tr>
-                        <th>Total</th>
-                        <th>Sisa</th>
-                    </tr>
-                </thead>
-                <tbody v-if="renderPaginate.length > 0">
-                    <tr v-for="(item, index) in renderPaginate" :key="index">
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ item.produkk }}</td>
-                        <td>{{ item.permintaan }}</td>
-                        <td>{{ item.sisa }}</td>
-                        <td>{{ item.count_transfer }}</td>
-                        <td>
-                            <button class="btn btn-outline-info btn-sm" @click="openModalDetail(item)">
-                                <i class="fa fa-eye"></i>
-                                Detail
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-                <tbody v-else>
-                    <tr>
-                        <td colspan=" 100%">Data tidak ditemukan
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <pagination :filteredDalamProses="filteredDalamProses"
-                @updateFilteredDalamProses="updateFilteredDalamProses" />
+            <data-table :search="search" :headers="header" :items="items">
+                <template #item.aksi="{item}">
+                    <button class="btn btn-outline-info btn-sm" @click="openModalDetail(item)">
+                        <i class="fa fa-eye"></i>
+                        Detail
+                    </button>
+                </template>
+            </data-table>
         </div>
     </div>
 </template>
