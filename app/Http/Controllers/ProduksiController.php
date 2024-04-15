@@ -857,7 +857,6 @@ class ProduksiController extends Controller
                         );
                     }
                 } else {
-
                     for ($i = 1; $i <= $obj->jml_noseri; $i++) {
                         $newSeri[] = $prd->kode . $gbj->kode . $tahun . $bulan . $kedatangan . str_pad($max + $i, 5, '0', STR_PAD_LEFT);
                         $newSeries[] = array(
