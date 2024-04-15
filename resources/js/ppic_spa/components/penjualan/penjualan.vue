@@ -1,4 +1,4 @@
-<template >
+<template>
     <div>
         <div class="card mt-6">
             <div class="card-header">
@@ -24,16 +24,18 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(penjualan, idx) in penjualans" :key="idx">
-                                    <td>{{ idx+1 }}</td>
-                                    <td>{{ penjualan.so }}</td>
-                                    <td v-html="checkdata(akn(penjualan.no_paket_ppic, penjualan.status_paket))"></td>
-                                    <td>{{ penjualan.nopo }}</td>
+                                    <td>{{ idx + 1 }}</td>
+                                    <td>{{ penjualan.pesanan.so }}</td>
+                                    <td v-html="checkdata(akn(penjualan.no_paket, penjualan.status))"></td>
+                                    <td>{{ penjualan.pesanan.no_po }}</td>
                                     <td>{{ penjualan.tgl_buat }}</td>
                                     <td>{{ checkdata(penjualan.tgl_edit) }}</td>
                                     <td v-html="checkdata(penjualan.tgl_kontrak)"></td>
-                                    <td>{{ penjualan.nama_customer }}</td>
-                                    <td v-html="status(penjualan.status_ppic)"></td>
-                                    <td><button class="button is-info is-light is-small" @click="detail(penjualan.pesanan.id, penjualan.jenis_ppic, penjualan.status_ppic)">Detail</button></td>
+                                    <td>{{ penjualan.customer.nama }}</td>
+                                    <td v-html="status(penjualan.persentase)"></td>
+                                    <td><button class="button is-info is-light is-small"
+                                            @click="detail(penjualan.pesanan.id, penjualan.jenis, penjualan.persentase)">Detail</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -44,27 +46,27 @@
     </div>
 </template>
 <script>
-    import $ from "jquery";
-    import mixins from "../../mixins/mix";
-    export default {
-        mixins: [mixins],
-        props: {
-            penjualans: {
-                type: Array,
-                required: true
-            },
-            jenis: {
-                type: String,
-                required: true
-            }
+import $ from "jquery";
+import mixins from "../../mixins/mix";
+export default {
+    mixins: [mixins],
+    props: {
+        penjualans: {
+            type: Array,
+            required: true
         },
+        jenis: {
+            type: String,
+            required: true
+        }
+    },
 
-        updated() {
-            if(this.penjualans.length > 0){
-                const table = $('.penjualantable').DataTable();
-                table.destroy();
-                $('.penjualantable').DataTable();
-            }
+    updated() {
+        if (this.penjualans.length > 0) {
+            const table = $('.penjualantable').DataTable();
+            table.destroy();
+            $('.penjualantable').DataTable();
         }
     }
-    </script>
+}
+</script>
