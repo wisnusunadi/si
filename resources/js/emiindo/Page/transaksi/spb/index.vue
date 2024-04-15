@@ -287,10 +287,10 @@ export default {
                                             type="button"><i class="fas fa-trash"></i>
                                             Hapus</button></a>
                                     <a href="#"><button class="dropdown-item openModalBatalRetur" @click="batal(item)"
-                                            type="button"><i class="fas fa-times"></i>
+                                            v-if="item.is_batal" type="button"><i class="fas fa-times"></i>
                                             Batal</button></a>
                                     <a href="#"><button class="dropdown-item openModalBatalRetur" @click="retur(item)"
-                                            v-if="item.cterkirim > 0" type="button"><i
+                                            v-if="item.is_retur" type="button"><i
                                                 class="fa-solid fa-arrow-rotate-left"></i>
                                             Retur</button></a>
                                 </div>
