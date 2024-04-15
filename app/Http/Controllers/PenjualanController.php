@@ -88,6 +88,8 @@ class PenjualanController extends Controller
                     'id' => $d->id,
                     'nama' => $d->PenjualanProduk->nama,
                     'jumlah' => $d->jumlah,
+                    'jumlah_batal' =>  $d->RiwayatBatalPoPaket ? $d->RiwayatBatalPoPaket->jumlah : 0,
+                    'jumlah_retur' =>   $d->RiwayatReturPoPaket ? $d->RiwayatReturPoPaket->jumlah : 0,
                     'ongkir' => $d->ongkir,
                     'harga' => $d->harga,
                     'jenis' => 'paket',
@@ -110,6 +112,8 @@ class PenjualanController extends Controller
                     'id' => $d->id,
                     'nama' => $d->Sparepart->nama,
                     'jumlah' => $d->jumlah,
+                    'jumlah_batal' =>  $d->RiwayatBatalPoPart ? $d->RiwayatBatalPoPart->jumlah : 0,
+                    'jumlah_retur' =>  0,
                     'ongkir' => $d->ongkir,
                     'harga' => $d->harga,
                     'jenis' => 'part'

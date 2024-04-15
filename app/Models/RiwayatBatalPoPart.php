@@ -12,4 +12,9 @@ class RiwayatBatalPoPart extends Model
     protected $connection = 'erp';
     protected $table = "riwayat_batal_po_part";
     protected $fillable = ['detail_pesanan_part_id', 'jumlah','status','riwayat_batal_po_id','jenis','posisi'];
+
+    public function DetailPesananPart()
+    {
+        return $this->belongsTo(DetailPesananPart::class, 'detail_pesanan_part_id');
+    }
 }
