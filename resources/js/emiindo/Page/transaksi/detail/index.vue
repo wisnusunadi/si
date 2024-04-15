@@ -293,8 +293,8 @@ export default {
                                                             <div class="card-body">
                                                                 <h3 class="profile-username text-center"><span
                                                                         id="nama_prd">{{
-                        pengiriman.detail.penjualan_produk.nama
-                    }}</span></h3>
+                                                                        pengiriman.detail.penjualan_produk.nama
+                                                                        }}</span></h3>
                                                                 <ul class="list-group list-group-unbordered mb-3">
                                                                     <li class="list-group-item"
                                                                         v-if="pengiriman.detail.jenis != 'part'">
@@ -302,10 +302,10 @@ export default {
                                                                                 class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span>
                                                                         <a class="float-right mr-2"><b><span
                                                                                     id="c_gudang" class="text-danger">{{
-                        pengiriman.gudang }}</span></b><sub
+                                                                                    pengiriman.gudang }}</span></b><sub
                                                                                 id="tot_gudang"> dari {{
-                        pengiriman.detail.count_jumlah
-                    }}</sub></a>
+                                                                                pengiriman.detail.count_jumlah
+                                                                                }}</sub></a>
                                                                     </li>
                                                                     <li class="list-group-item">
                                                                         <span class="align-self-center"><span
@@ -322,10 +322,10 @@ export default {
                                                                                 class="foo bg-chart-green mr-2"></span><span>Logistik</span></span>
                                                                         <a class="float-right mr-2"><b><span id="c_log"
                                                                                     class="text-danger">{{
-                        pengiriman.log }}</span></b><sub
+                                                                                    pengiriman.log }}</span></b><sub
                                                                                 id="tot_log"> dari {{
-                        pengiriman.detail.count_qc_ok
-                    }}</sub></a>
+                                                                                pengiriman.detail.count_qc_ok
+                                                                                }}</sub></a>
                                                                     </li>
                                                                     <li
                                                                         class="list-group-item bg-chart-blue text-white">
@@ -417,11 +417,14 @@ export default {
                                                                     <td class="text-center">
                                                                         <span class="text-muted">
                                                                             {{ produk.nama }}
-                                                                        </span> <br>
-                                                                        <h6><span class="badge badge-info">Retur:
-                                                                                1</span></h6>
-                                                                        <h6><span class="badge badge-orange">Batal:
-                                                                                1</span></h6>
+                                                                        </span>
+                                                                        <br>
+                                                                        <h6 v-if="item.jumlah_retur"><span
+                                                                                class="badge badge-info">Retur:
+                                                                                {{ item.jumlah_retur }}</span></h6>
+                                                                        <h6 v-if="item.jumlah_batal"><span
+                                                                                class="badge badge-orange">Batal:
+                                                                                {{ item.jumlah_batal }}</span></h6>
                                                                     </td>
                                                                     <td class="nowraptxt">
                                                                         <button class="btn btn-sm btn-outline-primary"
@@ -466,6 +469,7 @@ export default {
 .bg-chart-blue {
     background: rgb(8, 126, 225);
 }
+
 .badge-orange {
     background: #f39c12;
     color: white;
