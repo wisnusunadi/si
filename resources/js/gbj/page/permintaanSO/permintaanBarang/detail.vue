@@ -157,48 +157,15 @@ export default {
                                         <input type="text" class="form-control" v-model="search" placeholder="Cari...">
                                     </div>
                                 </div>
-                                <data-table :headers="header" :items="items" :search="search" />
-                                <table class="table table-striped text-center">
-                                    <thead>
-                                        <tr>
-                                            <th rowspan="2">No</th>
-                                            <th colspan="2">Nomor</th>
-                                            <th rowspan="2">Customer</th>
-                                            <th colspan="2">Jumlah</th>
-                                            <th rowspan="2">Aksi</th>
-                                        </tr>
-                                        <tr>
-                                            <th>Sales Order</th>
-                                            <th>Purchase Order</th>
-                                            <th>Pesanan</th>
-                                            <th>Terkirim</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody v-if="renderPaginate.length > 0">
-                                        <tr v-for="(item, index) in renderPaginate" :key="index">
-                                            <td>{{ item.no }}</td>
-                                            <td>{{ item.so }}</td>
-                                            <td>{{ item.no_po }}</td>
-                                            <td>{{ item.customer }}</td>
-                                            <td>{{ item.count_pesanan }}</td>
-                                            <td>{{ item.count_transfer }}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-outline-primary btn-sm"
-                                                    @click="openModalDetailSO(item)">
-                                                    <i class="fas fa-eye"></i>
-                                                    Detail
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody v-else>
-                                        <tr>
-                                            <td colspan="100%" class="text-center">Tidak ada data</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <pagination :filteredDalamProses="filterDalamProses"
-                                    @updateFilteredDalamProses="updateFilteredDalamProses" />
+                                <data-table :headers="headers" :items="items" :search="search">
+                                    <template #item.aksi="{ item }">
+                                        <button type="button" class="btn btn-outline-primary btn-sm"
+                                            @click="openModalDetailSO(item)">
+                                            <i class="fas fa-eye"></i>
+                                            Detail
+                                        </button>
+                                    </template>
+                                </data-table>
                             </div>
                         </div>
                     </div>

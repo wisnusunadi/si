@@ -1,151 +1,98 @@
 <script>
 import pagination from './pagination.vue';
 export default {
-    components: {
-        pagination,
-    },
+    components: { pagination },
     props: {
-        headers: {
-            type: Array,
-            required: true,
-        },
-        items: {
-            type: Array,
-            required: true,
-        },
-        search: {
-            type: String,
-            required: false,
-            default: '',
-        },
+        headers: { type: Array, required: true },
+        items: { type: Array, required: true },
+        search: { type: String, default: '' },
     },
     data() {
         return {
             renderPaginate: [],
             sortColumn: 'no_urut',
             sortDirection: 'asc',
-        }
+        };
     },
     methods: {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
-        sort(header) {
-            if (header.sortable == false) return;
-            const column = header.value
-            if (column === this.sortColumn) {
-                this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc'
+        sort({ value, sortable }) {
+            if (sortable === false) return;
+            if (this.sortColumn === value) {
+                this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
             } else {
-                this.sortColumn = column
-                this.sortDirection = 'asc'
+                this.sortColumn = value;
+                this.sortDirection = 'asc';
             }
         },
         cekHeaderRowspan(header) {
-            if (this.cekHeaderDetectedChidlren) {
-                if (header.children) {
-                    return 1
-                } else {
-                    return 2
-                }
-            } else {
-                return 1
-            }
+            return this.cekHeaderDetectedChidlren ? (header.children ? 1 : 2) : 1;
         },
         cekHeaderColspan(header) {
-            if (this.cekHeaderDetectedChidlren) {
-                if (header.children) {
-                    return header.children.length
-                } else {
-                    return 1
-                }
-            } else {
-                return 1
-            }
+            return this.cekHeaderDetectedChidlren ? (header.children ? header.children.length : 1) : 1;
         },
     },
     computed: {
         filteredDalamProses() {
             const includesSearch = (obj, search) => {
-                if (obj && typeof obj === 'object') {
-                    return Object.keys(obj).some(key => {
-                        if (typeof obj[key] === 'object') {
-                            return includesSearch(obj[key], search);
-                        }
-                        return String(obj[key]).toLowerCase().includes(search.toLowerCase());
-                    });
-                }
-                return false;
+                if (!obj || typeof obj !== 'object') return false;
+                return Object.keys(obj).some(key => {
+                    if (typeof obj[key] === 'object') return includesSearch(obj[key], search);
+                    return String(obj[key]).toLowerCase().includes(search.toLowerCase());
+                });
             };
-
             return this.sortedDataTable.filter(data => includesSearch(data, this.search));
         },
         sortedDataTable() {
-            const sorted = this.items.sort((a, b) => {
-                const modifier = this.sortDirection === 'asc' ? 1 : -1
-                if (a[this.sortColumn] < b[this.sortColumn]) return -1 * modifier
-                if (a[this.sortColumn] > b[this.sortColumn]) return 1 * modifier
-                return 0
-            })
-            return sorted
+            const modifier = this.sortDirection === 'asc' ? 1 : -1;
+            return this.items.slice().sort((a, b) => (a[this.sortColumn] < b[this.sortColumn] ? -1 * modifier : 1 * modifier));
         },
         cekHeaderDetectedChidlren() {
-            return this.headers.some(header => header?.children)
+            return this.headers.some(header => header.children);
         },
         groupAllChildren() {
-            return this.headers.reduce((acc, header) => {
-                if (header.children) {
-                    return [...acc, ...header.children]
-                }
-                return acc
-            }, [])
-        }
+            return this.headers.flatMap(header => header.children || []);
+        },
     },
-}
+};
 </script>
 <template>
     <div>
         <table class="table">
             <thead>
                 <tr>
-                    <template v-for="header in headers">
-                        <th scope="col" :key="header.text" :rowspan="cekHeaderRowspan(header)"
-                            :colspan="cekHeaderColspan(header)" :class="header.align ? header.align : 'text-center'"
-                            @click=" sort(header)" :sortable="header.sortable == false ? false : true">
-                            <slot :name="`header.${header.value}`">
-                                {{ header.text }}
-                            </slot>
-                            <span v-if="sortColumn === header.value">
-                                <i v-if="sortDirection === 'asc'" class="fas fa-arrow-up"></i>
-                                <i v-else class="fas fa-arrow-down"></i>
-                            </span>
-                        </th>
-                    </template>
+                    <!-- Use array destructuring for v-for -->
+                    <th v-for="({ text, align, value, children, sortable }) in headers" :key="text"
+                        :rowspan="cekHeaderRowspan({ children })" :colspan="cekHeaderColspan({ children })"
+                        @click="sort({ value, sortable })" style="cursor: pointer;"
+                        :class="[align || 'text-center', { 'sortable': sortable !== false, 'sorting': sortColumn === value }]">
+                        <slot :name="`header.${value}`">{{ text }}</slot>
+                        <span v-if="sortColumn === value">
+                            <i v-if="sortDirection === 'asc'" class="fas fa-arrow-up"></i>
+                            <i v-else class="fas fa-arrow-down"></i>
+                        </span>
+                    </th>
                 </tr>
+                <!-- Render children headers in the same row -->
                 <tr v-if="groupAllChildren.length > 0">
-                    <th v-for=" child in groupAllChildren" :key="child.text"
-                        :class="child.align ? child.align : 'text-center'">
-                        <slot :name="`header.${child.value}`">
-                            {{ child.text }}
-                        </slot>
+                    <th v-for="child in groupAllChildren" :key="child.text"
+                        :class="[child.align || 'text-center', 'child-header']">
+                        <slot :name="`header.${child.value}`">{{ child.text }}</slot>
                     </th>
                 </tr>
             </thead>
             <tbody v-if="renderPaginate.length > 0">
-                <!-- sesuaikan dengan header -->
                 <tr v-for="(data, idx) in renderPaginate" :key="idx">
-                    <template v-for="header in headers">
-                        <td :class="header.align ? header.align : 'text-center'" v-if="!header?.children">
-                            <template v-if="!header?.children">
-                                <slot :name="`item.${header.value}`" :item="data" :index="idx">
-                                    {{ data[header.value] }}
-                                </slot>
-                            </template>
+                    <!-- Use array destructuring for v-for -->
+                    <template v-for="({ value, children, align }) in headers">
+                        <td v-if="!children" :class="[align || 'text-center']">
+                            <slot :name="`item.${value}`" :item="data" :index="idx">{{ data[value] }}</slot>
                         </td>
                         <template v-else>
-                            <td v-for="child in header.children" :key="child.text"
-                                :class="child.align ? child.align : 'text-center'">
-                                <slot :name="`item.${child.value}`" :item="data" :index="idx">
-                                    {{ data[child.value] }}
+                            <td v-for="child in children" :key="child.text" :class="[child.align || 'text-center']">
+                                <slot :name="`item.${child.value}`" :item="data" :index="idx">{{ data[child.value] }}
                                 </slot>
                             </td>
                         </template>
