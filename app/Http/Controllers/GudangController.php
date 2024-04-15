@@ -242,7 +242,7 @@ class GudangController extends Controller
             ->leftJoin('customer as c_ekat', 'c_ekat.id', '=', 'ekatalog.customer_id')
             ->leftJoin('customer as c_spa', 'c_spa.id', '=', 'spa.customer_id')
             ->leftJoin('customer as c_spb', 'c_spb.id', '=', 'spa.customer_id')
-            ->havingRaw('cseri_batal > 0')
+            ->havingRaw('cseri = 0 OR (c_seri > 0 AND cseri_batal > 0)')
             ->get();
 
         $obj = array();
