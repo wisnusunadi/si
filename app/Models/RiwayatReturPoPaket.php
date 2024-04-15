@@ -11,4 +11,9 @@ class RiwayatReturPoPaket extends Model
     protected $connection = 'erp';
     protected $table = "riwayat_retur_po_paket";
     protected $fillable = ['detail_pesanan_id', 'jumlah','riwayat_retur_po_id'];
+
+    public function DetailPesanan()
+    {
+        return $this->belongsTo(DetailPesanan::class, 'detail_pesanan_id');
+    }
 }

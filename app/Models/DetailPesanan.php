@@ -22,6 +22,18 @@ class DetailPesanan extends Model
     {
         return $this->belongsTo(PenjualanProduk::class, 'penjualan_produk_id');
     }
+    public function RiwayatBatalPoPaket()
+    {
+        return $this->hasOne(RiwayatBatalPoPaket::class);
+    }
+    public function RiwayatReturPoPaket()
+    {
+        return $this->hasOne(RiwayatReturPoPaket::class);
+    }
+    public function RiwayatBatalPoPart()
+    {
+        return $this->hasOne(RiwayatBatalPoPart::class);
+    }
     public function DetailPesananProduk()
     {
         return $this->hasMany(DetailPesananProduk::class);
