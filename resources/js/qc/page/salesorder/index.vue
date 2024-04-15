@@ -111,7 +111,7 @@ export default {
 }
 </script>
 <template>
-    <div>
+    <div class="font-medium">
         <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="card">
             <div class="card-body">
@@ -148,3 +148,8 @@ export default {
         </div>
     </div>
 </template>
+<style>
+.font-medium {
+    font-size: 13px;
+}
+</style>

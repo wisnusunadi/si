@@ -90,7 +90,7 @@ export default {
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
                 <span class="filter">
-                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true"
+                    <button class="btn btn-sm btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
                         <i class="fas fa-filter"></i> Filter Jenis Penjualan
                     </button>
