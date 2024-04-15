@@ -10151,6 +10151,7 @@ class PenjualanController extends Controller
         foreach ($dataPart->get() as  $d) {
             $obj[] = array(
                 'id' => $d->id,
+                'detail_pesanan_part_id' => $d->detail_pesanan_part_id,
                 'nama' => $d->nama,
                 'jumlah' => $d->jumlah,
                 'jenis' => 'part',
