@@ -217,6 +217,15 @@ class GudangController extends Controller
                         ->whereColumn('riwayat_batal_po_paket.riwayat_batal_po_id', 'riwayat_batal_po.id')
                         ->limit(1);
                 },
+                'cseri_batal' => function ($q) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                        ->from('riwayat_batal_po_seri')
+                        ->leftjoin('riwayat_batal_po_prd', 'riwayat_batal_po_prd.id', '=', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
+                        ->leftjoin('riwayat_batal_po_paket', 'riwayat_batal_po_paket.id', '=', 'riwayat_batal_po_prd.detail_riwayat_batal_paket_id')
+                        ->where('riwayat_batal_po_seri.status', 1)
+                        ->whereColumn('riwayat_batal_po_paket.riwayat_batal_po_id', 'riwayat_batal_po.id')
+                        ->limit(1);
+                },
                 'cgbj' => function ($q) {
                     $q->selectRaw('coalesce(count(t_gbj_noseri.id),0)')
                         ->from('t_gbj_noseri')
@@ -233,6 +242,7 @@ class GudangController extends Controller
             ->leftJoin('customer as c_ekat', 'c_ekat.id', '=', 'ekatalog.customer_id')
             ->leftJoin('customer as c_spa', 'c_spa.id', '=', 'spa.customer_id')
             ->leftJoin('customer as c_spb', 'c_spb.id', '=', 'spa.customer_id')
+            ->havingRaw('cseri_batal > 0')
             ->get();
 
         $obj = array();
