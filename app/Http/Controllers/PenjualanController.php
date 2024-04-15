@@ -10538,7 +10538,7 @@ class PenjualanController extends Controller
     public function kirim_prd_batal_po(Request $request)
     {
         $obj =  json_decode(json_encode($request->all()), FALSE);
-        //dd($obj);
+      //  dd($obj);
         DB::beginTransaction();
         try {
             //code...
@@ -10546,10 +10546,10 @@ class PenjualanController extends Controller
             $p->log_id = 20;
             $p->save();
 
-            $tgbj = TFProduksi::where('pesanan_id', $obj->pesanan_id);
+            // $tgbj = TFProduksi::where('pesanan_id', $obj->pesanan_id);
             $po = RiwayatBatalPo::where('pesanan_id', $obj->pesanan_id);
 
-            if ($tgbj->count() > 0) {
+           // if ($tgbj->count() > 0) {
                 if ($po->count() > 0) {
                     foreach ($obj->item as $item) {
                         if ($item->jenis == 'produk') {
@@ -10623,17 +10623,17 @@ class PenjualanController extends Controller
                         }
                     }
                 }
-            } else {
-                $item['item'] = $obj->item;
-                $item['ket'] =  $obj->ket;
+         //   } else {
+                $itemx['item'] = $obj->item;
+                $itemx['ket'] =  $obj->ket;
 
                 SystemLog::create([
                     'tipe' => 'Penjualan',
                     'header' =>  $obj->pesanan_id,
                     'subjek' =>   'Batal PO',
-                    'response' =>   json_encode($item),
+                    'response' =>   json_encode($itemx),
                 ]);
-            }
+            //}
             DB::commit();
             return response()->json([
                 'status' => 200,
