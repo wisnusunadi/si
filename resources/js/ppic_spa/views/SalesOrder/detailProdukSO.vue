@@ -1,9 +1,11 @@
 <script>
 import pagination from '../../components/pagination.vue';
 import axios from 'axios';
+import detailSO from './detailSO.vue';
 export default {
     components: {
-        pagination
+        pagination,
+        detailSO
     },
     props: ['showModal', 'detailSelected'],
     data() {
@@ -11,6 +13,8 @@ export default {
             renderPaginate: [],
             items: [],
             search: '',
+            detailSOSelected: {},
+            showModalDetail: false,
         }
     },
     methods: {
@@ -32,7 +36,11 @@ export default {
             } catch (error) {
                 console.log(error)
             }
-        }
+        },
+        openModalDetail(item) {
+            this.detailSOSelected = item
+            this.showModalDetail = true
+        },
     },
     created() {
         this.getData()
@@ -49,50 +57,58 @@ export default {
 }
 </script>
 <template>
-    <div class="modal" :class="{ 'is-active': showModal }">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <header class="modal-card-head">
-                <p class="modal-card-title"></p>
-                <button class="delete" @click="closeModal"></button>
-            </header>
-            <section class="modal-card-body">
-                <table class="table is-fullwidth">
-                    <thead>
-                        <tr>
-                            <th class="has-text-centered" rowspan="2">No</th>
-                            <th class="has-text-centered" colspan="2">Nomor</th>
-                            <th class="has-text-centered" rowspan="2">Customer</th>
-                            <th class="has-text-centered" colspan="2">Jumlah</th>
-                            <th class="has-text-centered" rowspan="2">Aksi</th>
-                        </tr>
-                        <tr>
-                            <th>Sales Order</th>
-                            <th>Purchase Order</th>
-                            <th>Pesanan</th>
-                            <th>Terkirim</th>
-                        </tr>
-                    </thead>
-                    <tbody v-if="renderPaginate.length > 0">
-                        <tr v-for="(item, index) in renderPaginate" :key="index">
-                            <td>{{ item.no }}</td>
-                            <td>{{ item.so }}</td>
-                            <td>{{ item.no_po }}</td>
-                            <td>{{ item.customer }}</td>
-                            <td>{{ item.count_pesanan }}</td>
-                            <td>{{ item.count_transfer }}</td>
-
-                        </tr>
-                    </tbody>
-                    <tbody v-else>
-                        <tr>
-                            <td colspan="100%" class="text-center">Tidak ada data</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <pagination :filteredDalamProses="filterDalamProses"
-                    @updateFilteredDalamProses="updateFilteredDalamProses" />
-            </section>
+    <div>
+        <div class="modal" :class="{ 'is-active': showModal }">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title"></p>
+                    <button class="delete" @click="closeModal"></button>
+                </header>
+                <section class="modal-card-body">
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th class="has-text-centered" rowspan="2">No</th>
+                                <th class="has-text-centered" colspan="2">Nomor</th>
+                                <th class="has-text-centered" rowspan="2">Customer</th>
+                                <th class="has-text-centered" colspan="2">Jumlah</th>
+                                <th class="has-text-centered" rowspan="2">Aksi</th>
+                            </tr>
+                            <tr>
+                                <th>Sales Order</th>
+                                <th>Purchase Order</th>
+                                <th>Pesanan</th>
+                                <th>Terkirim</th>
+                            </tr>
+                        </thead>
+                        <tbody v-if="renderPaginate.length > 0">
+                            <tr v-for="(item, index) in renderPaginate" :key="index">
+                                <td>{{ item.no }}</td>
+                                <td>{{ item.so }}</td>
+                                <td>{{ item.no_po }}</td>
+                                <td>{{ item.customer }}</td>
+                                <td>{{ item.count_pesanan }}</td>
+                                <td>{{ item.count_transfer }}</td>
+                                <td>
+                                    <button class="button is-light" @click="openModalDetail(item)">
+                                        <i class="fa fa-eye"></i> Detail
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody v-else>
+                            <tr>
+                                <td colspan="100%" class="text-center">Tidak ada data</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pagination :filteredDalamProses="filterDalamProses"
+                        @updateFilteredDalamProses="updateFilteredDalamProses" />
+                </section>
+            </div>
         </div>
+        <detailSO v-if="showModalDetail" :detailSelected="detailSOSelected" :showModal="showModalDetail"
+            @close="showModalDetail = false" />
     </div>
 </template>

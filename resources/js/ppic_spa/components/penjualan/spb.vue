@@ -22,12 +22,14 @@
                             <tbody>
                                 <tr v-for="(penjualanspb, idx) in penjualanspbs" :key="idx">
                                     <td>{{ idx + 1 }}</td>
-                                    <td>{{ penjualanspb.so }}</td>
-                                    <td>{{ penjualanspb.nopo }}</td>
-                                    <td>{{ penjualanspb.tglpo }}</td>
-                                    <td>{{ penjualanspb.nama_customer }}</td>
-                                    <td v-html="status(penjualanspb.status_ppic)"></td>
-                                    <td><button class="button is-info is-light is-small"  @click="detail(penjualanspb.pesanan.id, jenis, penjualanspb.status_ppic)" >Detail</button></td>
+                                    <td>{{ penjualanspb.pesanan.so }}</td>
+                                    <td>{{ penjualanspb.pesanan.no_po }}</td>
+                                    <td>{{ penjualanspb.pesanan.tgl_po }}</td>
+                                    <td>{{ penjualanspb.customer.nama }}</td>
+                                    <td v-html="status(penjualanspb.persentase)"></td>
+                                    <td><button class="button is-info is-light is-small"
+                                            @click="detail(penjualanspb.pesanan.id, jenis, penjualanspb.persentase)">Detail</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -54,7 +56,7 @@ export default {
         }
     },
     updated() {
-        if(this.penjualanspbs.length > 0) {
+        if (this.penjualanspbs.length > 0) {
             const table = $('.spbtable').DataTable();
             table.destroy();
             $('.spbtable').DataTable();

@@ -83,7 +83,7 @@
                                 this.$store.commit('setIsLoading', true);
                                 await axios.post(`/penjualan/penjualan/ekatalog/data/semua/${this.yearsSelected}`)
                                     .then(response => {
-                                        this.penjualanekatalogs = response.data.data;
+                                        this.penjualanekatalogs = response.data;
                                     })
                                     .catch(error => {
                                         console.log(error);
@@ -98,7 +98,7 @@
                                 this.$store.commit('setIsLoading', true);
                                 await axios.post(`/penjualan/penjualan/spa/data/semua/${this.yearsSelected}`)
                                     .then(response => {
-                                        this.penjualanspas = response.data.data;
+                                        this.penjualanspas = response.data;
                                     })
                                     .catch(error => {
                                         console.log(error);
@@ -114,7 +114,7 @@
                                 this.$store.commit('setIsLoading', true);
                                 await axios.post(`/penjualan/penjualan/spb/data/semua/${this.yearsSelected}`)
                                     .then(response => {
-                                        this.penjualanspbs = response.data.data;
+                                        this.penjualanspbs = response.data;
                                     })
                                     .catch(error => {
                                         console.log(error);
@@ -129,7 +129,7 @@
                                 this.$store.commit('setIsLoading', true);
                                 await axios.post(`/api/penjualan/penjualan/data/semua/semua/${this.yearsSelected}`)
                                     .then(response => {
-                                        this.penjualans = response.data.data;
+                                        this.penjualans = response.data;
                                     })
                                     .catch(error => {
                                         console.log(error);
