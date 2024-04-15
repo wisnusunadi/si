@@ -47,21 +47,12 @@ export default {
             }
         },
         noseriterpakai(item) {
-            let found = false
-            for (let i = 0; i < this.allPaket.length; i++) {
-                for (let j = 0; j < this.allPaket[i].produk.length; j++) {
-                    if (this.allPaket[i].produk[j]?.noseri === undefined) {
-                        continue
-                    }
-                    if (this.allPaket[i].produk[j]?.noseri?.find(noseri => noseri.id === item.id)) {
-                        if (this.allPaket[i].produk[j].id !== this.detailSelected.id) {
-                            found = true
-                            break
-                        }
-                    }
-                }
-            }
-            return found
+            return this.allPaket.some(paket =>
+                paket.jenis === 'produk' &&
+                paket.produk.some(produk =>
+                    produk.noseri?.some(noseri => noseri.id === item.id && produk.id !== this.detailSelected.id)
+                )
+            );
         },
         closeModal() {
             $('.modalNoSeri').modal('hide')

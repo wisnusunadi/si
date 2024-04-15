@@ -19,7 +19,9 @@ export default {
         async getData() {
             try {
                 const { data } = await axios.get(`/api/penjualan/batal_po/log/detail/${this.detail.id}`)
+                // group data if part
                 this.produk = data
+
             } catch (error) {
                 console.log(error)
             }
@@ -58,11 +60,15 @@ export default {
             let produkNoSeri = []
 
             this.produk.forEach(paket => {
-                paket.produk.forEach(item => {
-                    if (item.noseri) {
-                        produkNoSeri.push(item)
-                    }
-                })
+                if (paket.jenis != 'produk') {
+                    produkNoSeri.push(paket)
+                } else {
+                    paket.produk.forEach(item => {
+                        if (item.noseri?.length > 0) {
+                            produkNoSeri.push(item)
+                        }
+                    })
+                }
             })
 
             console.log(produkNoSeri)
@@ -186,6 +192,7 @@ export default {
                                 <table class="table">
                                     <thead>
                                         <tr>
+                                            <th>No</th>
                                             <th>Produk</th>
                                             <th>Jumlah</th>
                                             <th>Jumlah No Seri Dipilih</th>
@@ -195,20 +202,25 @@ export default {
                                         </tr>
                                     </thead>
                                     <tbody v-if="filterRecursive.length > 0">
-                                        <template v-for="paket in filterRecursive">
-                                            <tr class="table-dark">
-                                                <td colspan="100%">
+                                        <template v-for="(paket, idx) in filterRecursive">
+                                            <tr :class="paket.jenis != 'part' ? 'table-dark' : ''">
+                                                <td>{{ idx + 1 }}</td>
+                                                <td :colspan="paket.jenis != 'part' ? '100%' : ''">
                                                     {{ paket.nama }}
+                                                </td>
+                                                <td v-if="paket.jenis == 'part'" colspan="100%">
+                                                    {{ paket.jumlah }}
                                                 </td>
                                             </tr>
                                             <tr v-for="item in paket.produk" :key="item.id">
+                                                <td></td>
                                                 <td>{{ item.nama }}</td>
                                                 <td>{{ item.jumlah_sisa }}</td>
                                                 <td>{{ item.noseri?.length ?? 0 }}</td>
                                                 <td>{{ item.merk }}</td>
                                                 <td>
                                                     <span :class="'badge ' + progressTransfer(item).color">{{
-                                                        progressTransfer(item).text }}</span>
+            progressTransfer(item).text }}</span>
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-primary"
