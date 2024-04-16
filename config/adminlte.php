@@ -908,6 +908,12 @@ return [
                     'text' => 'Cetak Nomor Seri',
                     'url'  => '/produksi/cetak_nomor_seri',
                     'auth' => [17],
+                ],
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Permintaan Barang',
+                    'url'  => '/produksi/permintaan_goods',
+                    'auth' => [17],
                 ]
             ]
         ],
