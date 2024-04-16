@@ -1,5 +1,6 @@
 <script>
 import produkComponents from './produk.vue'
+import axios from 'axios'
 export default {
     props: ['items'],
     components: {
