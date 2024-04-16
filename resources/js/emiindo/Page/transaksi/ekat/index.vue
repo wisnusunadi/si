@@ -287,7 +287,7 @@ export default {
                             <td :class="{ 'strike-through': item.status == 'batal' }">
                                 <div v-if="item.tgl_kontrak_custom">
                                     <div :class="calculateDateFromNow(item.tgl_kontrak_custom).color">{{
-            dateFormat(item.tgl_kontrak_custom) }}</div>
+                                        dateFormat(item.tgl_kontrak_custom) }}</div>
                                     <small :class="calculateDateFromNow(item.tgl_kontrak_custom).color">
                                         <i :class="calculateDateFromNow(item.tgl_kontrak_custom).icon"></i>
                                         {{ calculateDateFromNow(item.tgl_kontrak_custom).text }}
@@ -310,31 +310,34 @@ export default {
                                             <i class="fas fa-eye"></i>
                                             Detail
                                         </button>
-                                        <button class="dropdown-item" type="button" @click="editEkat(item.id)"
-                                            v-if="item.cgudang == 0">
-                                            <i class="fas fa-pencil-alt"></i>
-                                            Edit
-                                        </button>
                                         <button class="dropdown-item" type="button"
                                             v-if="item.no_po != null && item.tgl_po != null"
                                             @click="cetakSPPB(item.pesanan_id)">
                                             <i class="fas fa-print"></i>
                                             SPPB
                                         </button>
-                                        <button class="dropdown-item" type="button" @click="openDO(item)">
-                                            <i class="fas fa-pencil-alt"></i>
-                                            Edit No Urut &amp; DO
-                                        </button>
-                                        <button class="dropdown-item openModalBatalRetur" v-if="item.pesanan.so == null"
-                                            @click="hapus(item)" type="button"><i class="fas fa-trash"></i>
-                                            Hapus</button>
-                                        <button class="dropdown-item openModalBatalRetur" @click="batal(item)"
-                                            v-if="item.is_batal" type="button"><i class="fas fa-times"></i>
-                                            Batal</button>
-                                        <button class="dropdown-item openModalBatalRetur" v-if="item.is_retur"
-                                            @click="retur(item)" type="button"><i
-                                                class="fa-solid fa-arrow-rotate-left"></i>
-                                            Retur</button>
+                                        <div v-if="item.status != 'batal'">
+                                            <button class="dropdown-item" type="button" @click="editEkat(item.id)"
+                                                v-if="item.cgudang == 0">
+                                                <i class="fas fa-pencil-alt"></i>
+                                                Edit
+                                            </button>
+                                            <button class="dropdown-item" type="button" @click="openDO(item)">
+                                                <i class="fas fa-pencil-alt"></i>
+                                                Edit No Urut &amp; DO
+                                            </button>
+                                            <button class="dropdown-item openModalBatalRetur"
+                                                v-if="item.pesanan.so == null" @click="hapus(item)" type="button"><i
+                                                    class="fas fa-trash"></i>
+                                                Hapus</button>
+                                            <button class="dropdown-item openModalBatalRetur" @click="batal(item)"
+                                                v-if="item.is_batal" type="button"><i class="fas fa-times"></i>
+                                                Batal</button>
+                                            <button class="dropdown-item openModalBatalRetur" v-if="item.is_retur"
+                                                @click="retur(item)" type="button"><i
+                                                    class="fa-solid fa-arrow-rotate-left"></i>
+                                                Retur</button>
+                                        </div>
                                     </div>
                                 </div>
                             </td>

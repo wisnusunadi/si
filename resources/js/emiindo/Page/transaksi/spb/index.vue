@@ -265,34 +265,37 @@ export default {
                                             Detail
                                         </button>
                                     </a>
-                                    <a target="_blank" href="#">
-                                        <button class="dropdown-item" type="button" @click="editSpb(item.id)">
-                                            <i class="fas fa-pencil-alt"></i>
-                                            Edit
-                                        </button>
-                                    </a>
                                     <a target="_blank" href="#" v-if="item.no_po != null && item.tgl_po != null">
                                         <button class="dropdown-item" type="button" @click="cetakSPPB(item.pesanan_id)">
                                             <i class="fas fa-print"></i>
                                             SPPB
                                         </button>
                                     </a>
-                                    <a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="5092">
-                                        <button class="dropdown-item" type="button" @click="openDO(item)">
-                                            <i class="fas fa-pencil-alt"></i>
-                                            Edit DO
-                                        </button>
-                                    </a>
-                                    <a href="#"><button class="dropdown-item openModalBatalRetur" @click="hapus(item)"
-                                            type="button"><i class="fas fa-trash"></i>
-                                            Hapus</button></a>
-                                    <a href="#"><button class="dropdown-item openModalBatalRetur" @click="batal(item)"
-                                            v-if="item.is_batal" type="button"><i class="fas fa-times"></i>
-                                            Batal</button></a>
-                                    <a href="#"><button class="dropdown-item openModalBatalRetur" @click="retur(item)"
-                                            v-if="item.is_retur" type="button"><i
-                                                class="fa-solid fa-arrow-rotate-left"></i>
-                                            Retur</button></a>
+                                    <div v-if="item.status != 'batal'">
+                                        <a target="_blank" href="#">
+                                            <button class="dropdown-item" type="button" @click="editSpb(item.id)">
+                                                <i class="fas fa-pencil-alt"></i>
+                                                Edit
+                                            </button>
+                                        </a>
+                                        <a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="5092">
+                                            <button class="dropdown-item" type="button" @click="openDO(item)">
+                                                <i class="fas fa-pencil-alt"></i>
+                                                Edit DO
+                                            </button>
+                                        </a>
+                                        <a href="#"><button class="dropdown-item openModalBatalRetur"
+                                                @click="hapus(item)" type="button"><i class="fas fa-trash"></i>
+                                                Hapus</button></a>
+                                        <a href="#"><button class="dropdown-item openModalBatalRetur"
+                                                @click="batal(item)" v-if="item.is_batal" type="button"><i
+                                                    class="fas fa-times"></i>
+                                                Batal</button></a>
+                                        <a href="#"><button class="dropdown-item openModalBatalRetur"
+                                                @click="retur(item)" v-if="item.is_retur" type="button"><i
+                                                    class="fa-solid fa-arrow-rotate-left"></i>
+                                                Retur</button></a>
+                                    </div>
                                 </div>
                             </div>
                         </td>
