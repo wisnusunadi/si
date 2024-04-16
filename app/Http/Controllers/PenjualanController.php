@@ -9471,8 +9471,9 @@ class PenjualanController extends Controller
                 'c_batal' => $d->c_batal,
                 'jumlah_tf' => $d->jumlah_tf,
                 'jumlah' => $d->jumlah,
+                'jenis' => 'produk',
                 'noseri' => array(),
-                'jenis' => 'produk'
+
             );
 
             foreach ($item as $s) {
@@ -9483,7 +9484,7 @@ class PenjualanController extends Controller
         }
 
         foreach ($dataPart->get() as  $d) {
-            $object[] = array($d);
+            $object[] = $d;
         }
 
         $items = new stdClass();
@@ -9491,21 +9492,22 @@ class PenjualanController extends Controller
         $items->item = $object;
 
         $obj =  json_decode(json_encode($items), FALSE);
-        //dd($obj);
-        DB::beginTransaction();
+       // dd($obj);
+      DB::beginTransaction();
         try {
+
             $seri_id = array();
             $seri_batal = array();
             //code...
 
-            foreach ($obj->item as $produk) {
+            foreach ($obj->item as $produk){
                 $jenis_item[] = $produk->jenis;
                 if ($produk->jenis == 'part') {
                     $part_id[] = $produk->detail_pesanan_part_id;
                     $batal_part_id[] = $produk->id;
                 }
             }
-
+           // dd($jenis_item);
             if (in_array('produk', $jenis_item)) {
                 $tf = TFProduksi::create([
                     'batal_pesanan_id' => $request->id,
@@ -9831,6 +9833,8 @@ class PenjualanController extends Controller
                     $batal_part_id[] = $produk->id;
                 }
             }
+
+
 
             if (in_array('produk', $jenis_item)) {
                 $tf = TFProduksi::create([

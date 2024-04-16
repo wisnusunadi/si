@@ -33,6 +33,7 @@ use App\Models\RiwayatBatalPoPaket;
 use App\Models\RiwayatBatalPoPrd;
 use App\Models\RiwayatBatalPoSeri;
 use App\Models\RiwayatGagalKalibrasi;
+use App\Models\RiwayatReturPo;
 use App\Models\RiwayatReturPoPrd;
 use App\Models\RiwayatReturPoSeri;
 use App\Models\Satuan;
@@ -1491,7 +1492,7 @@ class GudangController extends Controller
                 ->leftjoin('m_state as stt', 'stt.id', '=', 'p.log_id')
                 ->leftjoin('divisi as d', 'd.id', '=', 'h.dari')
                 ->leftjoin('divisi as dd', 'dd.id', '=', 'h.ke')
-                ->select('p.so as so', 't_gbj_noseri.created_at as tgl_keluar', 'h.pesanan_id as p_id', 'h.tgl_masuk', 'h.jenis', 't_gbj_detail.qty', 'dd.nama as ke', 'd.nama as dari', DB::raw('concat(prd.nama, " ", g.nama) as produkk'),   DB::raw('COUNT(t_gbj_noseri.id) as qty'), 't_gbj_detail.id', DB::raw('group_concat(t_gbj_noseri.id) as id_seri'), (DB::raw("DATE_FORMAT(t_gbj_noseri.created_at, '%Y-%m-%d') as tgl_keluar_seri")))
+                ->select('p.so as so', 'h.batal_pesanan_id', 'h.retur_pesanan_id','t_gbj_noseri.created_at as tgl_keluar', 'h.pesanan_id as p_id', 'h.tgl_masuk', 'h.jenis', 't_gbj_detail.qty', 'dd.nama as ke', 'd.nama as dari', DB::raw('concat(prd.nama, " ", g.nama) as produkk'),   DB::raw('COUNT(t_gbj_noseri.id) as qty'), 't_gbj_detail.id', DB::raw('group_concat(t_gbj_noseri.id) as id_seri'), (DB::raw("DATE_FORMAT(t_gbj_noseri.created_at, '%Y-%m-%d') as tgl_keluar_seri")))
                 ->orderByDesc('t_gbj_noseri.created_at')
                 ->groupBy(DB::raw("DATE_FORMAT(t_gbj_noseri.created_at, '%d-%m-%Y')"), "t_gbj_noseri.t_gbj_detail_id")
                 ->get();
@@ -1535,7 +1536,19 @@ class GudangController extends Controller
                 //     }
                 // })
                 ->addColumn('so', function ($d) {
+                  if($d->batal_pesanan_id != NULL){
+                    $data = Pesanan::join('riwayat_batal_po as rpo','rpo.pesanan_id','=','pesanan.id')
+                    ->where('rpo.id',$d->batal_pesanan_id)
+                    ->first()->no_po;
+                    return $data;
+                  }else if($d->retur_pesanan_id != NULL){
+                    $data = RiwayatReturPo::where('id',$d->retur_pesanan_id)->first()->no_retur;
+                    return $data;
+                  }
+                  else{
                     return $d->p_id != NULL ? $d->so : '-';
+                  }
+
                 })
                 ->addColumn('date_in', function ($d) {
                     if (isset($d->tgl_masuk)) {
@@ -2628,7 +2641,7 @@ class GudangController extends Controller
                     ->where('t_gbj_detail.id', $id)
                     ->where('t_gbj.dari', 17)
                     ->where('t_gbj.ke', 13)
-                    //->whereNull('t_gbj_noseri.status_id')
+                    ->whereNull('t_gbj_noseri.status_id')
                     ->where('t_gbj_noseri.jenis', 'masuk')
                     ->get();
             }
@@ -2655,7 +2668,7 @@ class GudangController extends Controller
 
                     })
                     ->where('t_gbj.ke', 13)
-                    //->whereNull('t_gbj_noseri.status_id')
+                    ->whereNull('t_gbj_noseri.status_id')
                     ->where('t_gbj_noseri.jenis', 'masuk')
                     ->get();
             }
@@ -2671,7 +2684,7 @@ class GudangController extends Controller
                     ->where('t_gbj_detail.id', $id)
                     ->where('t_gbj.dari', 26)
                     ->where('t_gbj.ke', 13)
-                  //  ->whereNull('t_gbj_noseri.status_id')
+                   ->whereNull('t_gbj_noseri.status_id')
                     ->where('t_gbj_noseri.jenis', 'masuk')
                     ->get();
                 // $data = NoseriTGbj::whereHas('detail', function ($q) use ($id, $value) {
