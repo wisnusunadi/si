@@ -9491,6 +9491,7 @@ class PenjualanController extends Controller
         $items->item = $object;
 
         $obj =  json_decode(json_encode($items), FALSE);
+        //dd($obj);
         DB::beginTransaction();
         try {
             $seri_id = array();
@@ -9546,23 +9547,11 @@ class PenjualanController extends Controller
                         RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
                             'status' => 0
                         ]);
-
-
                     } else {
                         RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
                             'status' => 0
                         ]);
                         NoseriTGbj::whereIN('id', $seri_id)->delete();
-
-                    }
-
-                    $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
-                    RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
-                        'status' => 0
-                    ]);
-
-                    if ($opp->count() > 0) {
-                        $opp->delete();
                     }
                 }
 
@@ -9895,14 +9884,6 @@ class PenjualanController extends Controller
 
                     }
 
-                    $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
-                    RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
-                        'status' => 0
-                    ]);
-
-                    if ($opp->count() > 0) {
-                        $opp->delete();
-                    }
                 }
                 if (in_array('part', $jenis_item))  {
                     $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);

@@ -112,6 +112,7 @@ class GudangController extends Controller
     function get_detail_seri_batal_po($id)
     {
         $data = NoseriTGbj::select('t_gbj_noseri.id', 'noseri_barang_jadi.id as noseri_id', 'noseri_barang_jadi.noseri')
+
             ->addSelect([
                 'c_uji' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
@@ -148,7 +149,7 @@ class GudangController extends Controller
             ])
             ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
             ->leftjoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
-            ->havingRaw('c_batal_terima > 0')
+          //  ->havingRaw('c_batal_terima > 0')
             ->where('t_gbj_detail.detail_pesanan_produk_id', $id)
             ->get();
 
