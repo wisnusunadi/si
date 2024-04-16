@@ -1788,6 +1788,7 @@ class MasterController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                        ->where('noseri_detail_pesanan.is_ready', 0)
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->limit(1);
                 },
@@ -1837,8 +1838,82 @@ class MasterController extends Controller
                         ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
                         ->limit(1);
                 }
+                // 'count_gudang' => function ($q) {
+                //     $q->selectRaw('count(t_gbj_noseri.id)')
+                //         ->from('t_gbj_noseri')
+                //         ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                //         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 't_gbj_detail.detail_pesanan_produk_id')
+                //         ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                //         ->limit(1);
+                // }, 'count_qc_ok' => function ($q) {
+                //     $q->selectRaw('count(noseri_detail_pesanan.id)')
+                //         ->from('noseri_detail_pesanan')
+                //         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                //         ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                //         ->where('noseri_detail_pesanan.status', 'ok')
+                //         ->limit(1);
+                // },
+                // 'count_qc_nok' => function ($q) {
+                //     $q->selectRaw('count(noseri_detail_pesanan.id)')
+                //         ->from('noseri_detail_pesanan')
+                //         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                //         ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                //         ->where('noseri_detail_pesanan.status', 'nok')
+                //         ->limit(1);
+                // }, 'count_log' => function ($q) {
+                //     $q->selectRaw('count(noseri_logistik.id)')
+                //         ->from('noseri_logistik')
+                //         ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                //         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                //         // ->leftjoin('detail_logistik', 'detail_logistik.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                //         ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                //         ->limit(1);
+                // },
+                // 'count_belum_kirim' => function ($q) {
+                //     $q->selectRaw('count(noseri_logistik.id)')
+                //         ->from('noseri_logistik')
+                //         // ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                //         ->leftjoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+                //         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
+                //         ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+                //         ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                //         ->where('logistik.status_id', '11')
+                //         ->limit(1);
+                // },
+                // 'count_kirim' => function ($q) {
+                //     $q->selectRaw('count(noseri_logistik.id)')
+                //         ->from('noseri_logistik')
+                //         // ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                //         ->leftjoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+                //         ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
+                //         ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+                //         ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                //         ->where('logistik.status_id', '10')
+                //         ->limit(1);
+                // }, 'count_jumlah' => function ($q) {
+                //     $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                //         ->from('detail_pesanan_produk')
+                //         ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                //         ->join('detail_penjualan_produk', 'detail_penjualan_produk.produk_id', '=', 'gdg_barang_jadi.produk_id')
+                //         ->whereColumn('detail_penjualan_produk.penjualan_produk_id', 'detail_pesanan.penjualan_produk_id')
+                //         ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                //         ->limit(1);
+                // }
             ])->with('PenjualanProduk')->first();
 
+            // $data = array();
+            // $data['detail']['penjualan_produk']['nama'] = $detail_pesanan->PenjualanProduk->nama;
+            // $data['detail']['count_gudang'] = $detail_pesanan->count_gudang;
+            // $data['detail']['count_jumlah'] = $detail_pesanan->count_jumlah;
+            // $data['detail']['count_log'] = $detail_pesanan->count_log;
+            // $data['detail']['count_qc_nok'] =  $detail_pesanan->count_qc_nok;
+            // $data['detail']['count_qc_ok'] = $detail_pesanan->count_qc_ok;
+            // $data['detail'] = $detail_pesanan;
+            // $data['gudang'] = $detail_pesanan->count_jumlah - $detail_pesanan->count_gudang + $detail_pesanan->count_qc_nok;
+            // $data['qc'] =  $detail_pesanan->count_gudang - $detail_pesanan->count_qc_ok;
+            // $data['log'] =  $detail_pesanan->count_qc_ok -  $detail_pesanan->count_log + $detail_pesanan->count_belum_kirim;
+            // $data['kir'] =  $detail_pesanan->count_kirim;
+            // $data['detail']['jenis'] = 'paket';
             $data = array();
             $data['detail']['penjualan_produk']['nama'] = $detail_pesanan->PenjualanProduk->nama;
             $data['detail']['count_gudang'] = $detail_pesanan->count_gudang;
@@ -1880,6 +1955,7 @@ class MasterController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->whereColumn('noseri_detail_pesanan.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
                         ->where('status', 'ok')
+                        ->where('is_ready', 0)
                         ->limit(1);
                 },
                 'count_qc_nok' => function ($q) {
@@ -1933,6 +2009,7 @@ class MasterController extends Controller
                 'count_qc_ok' => function ($q) {
                     $q->selectRaw('coalesce(sum(outgoing_pesanan_part.jumlah_ok),0)')
                         ->from('outgoing_pesanan_part')
+                        ->where('outgoing_pesanan_part.is_ready', 0)
                         ->whereColumn('outgoing_pesanan_part.detail_pesanan_part_id', 'detail_pesanan_part.id');
                 },
                 'count_qc_nok' => function ($q) {

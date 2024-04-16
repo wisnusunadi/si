@@ -1024,7 +1024,7 @@ class LogistikController extends Controller
                         $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($id) {
                             $q->where('detail_pesanan_produk_id', $id);
                         })->count();
-                        $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id])->count();
+                        $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'is_ready' => 0, 'detail_pesanan_produk_id' => $id])->count();
                         $s = $jumlahsudahuji - $jumlahterkirim;
                         return '<input type="number" max="' . $s . '" min="0" value="' . $s . '" name="jumlah_dikirim[]" style="width:100%;" readonly="true" class="form-control jumlah_kirim"/>';
                     } else {
@@ -1038,7 +1038,7 @@ class LogistikController extends Controller
                 ->addColumn('array_check', function ($data) {
                     if (isset($data->gudangbarangjadi)) {
                         $id = $data->id;
-                        $s = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id])->DoesntHave('NoseriDetailLogistik')->get();
+                        $s = NoseriDetailPesanan::where(['status' => 'ok', 'is_ready' => 0, 'detail_pesanan_produk_id' => $id])->DoesntHave('NoseriDetailLogistik')->get();
                         return '<div name="array_check[]">' . $s->implode('id', ',') . '</div>';
                     }
                 })
@@ -1145,6 +1145,7 @@ class LogistikController extends Controller
             ->havingRaw('cek_logistik = 0')
             ->where('noseri_detail_pesanan.detail_pesanan_produk_id', $id)
             ->where('noseri_detail_pesanan.status', 'ok')
+            ->where('noseri_detail_pesanan.is_ready', 0)
             ->get();
 
 
@@ -2692,7 +2693,7 @@ class LogistikController extends Controller
                         </a>
                         <button class="dropdown-item cetaksj" type="button" data-x="' . $x . '" data-y="' . $pesanan . '" data-z="' . $z . '">
                             <i class="fas fa-print"></i>
-                            Cetak Surat Jalan 
+                            Cetak Surat Jalan
                         </button>
                     </div>
                     ';
