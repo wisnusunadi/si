@@ -137,11 +137,18 @@ class GudangController extends Controller
                         ->from('riwayat_batal_po_seri')
                         ->whereColumn('riwayat_batal_po_seri.t_tfbj_noseri_id', 't_gbj_noseri.id')
                         ->limit(1);
+                },
+                'c_batal_terima' => function ($q) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                        ->from('riwayat_batal_po_seri')
+                        ->where('riwayat_batal_po_seri.status', 1)
+                        ->whereColumn('riwayat_batal_po_seri.t_tfbj_noseri_id', 't_gbj_noseri.id')
+                        ->limit(1);
                 }
             ])
             ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
             ->leftjoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
-
+            ->havingRaw('c_batal_terima > 0')
             ->where('t_gbj_detail.detail_pesanan_produk_id', $id)
             ->get();
 
@@ -161,8 +168,26 @@ class GudangController extends Controller
     function get_detail_batal_po($id)
     {
         $data = RiwayatBatalPoPaket::select('riwayat_batal_po_paket.id', 'penjualan_produk.nama','riwayat_batal_po_paket.jumlah')
-            ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'riwayat_batal_po_paket.detail_pesanan_id')
+        ->addSelect([
+            'cseri' => function ($q) {
+                $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                    ->from('riwayat_batal_po_seri')
+                    ->leftjoin('riwayat_batal_po_prd', 'riwayat_batal_po_prd.id', '=', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
+                    ->whereColumn('riwayat_batal_po_prd.detail_riwayat_batal_paket_id', 'riwayat_batal_po_paket.id')
+                    ->limit(1);
+            },
+            'cseri_batal' => function ($q) {
+                $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                    ->from('riwayat_batal_po_seri')
+                    ->leftjoin('riwayat_batal_po_prd', 'riwayat_batal_po_prd.id', '=', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
+                    ->where('riwayat_batal_po_seri.status', 1)
+                    ->whereColumn('riwayat_batal_po_prd.detail_riwayat_batal_paket_id', 'riwayat_batal_po_paket.id')
+                    ->limit(1);
+            },
+        ])
+        ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'riwayat_batal_po_paket.detail_pesanan_id')
             ->leftJoin('penjualan_produk', 'penjualan_produk.id', '=', 'detail_pesanan.penjualan_produk_id')
+            ->havingRaw('cseri = 0 OR (cseri > 0 AND cseri_batal > 0)')
             ->where('riwayat_batal_po_id', $id);
 
         $item = RiwayatBatalPoPrd::select('riwayat_batal_po_prd.detail_riwayat_batal_paket_id', 'riwayat_batal_po_prd.id as riwayat_batal_po_prd_id', 'riwayat_batal_po_prd.detail_pesanan_produk_id as id', 'produk.nama', 'gdg_barang_jadi.nama as variasi', 'produk.merk')
@@ -180,11 +205,19 @@ class GudangController extends Controller
                         ->from('riwayat_batal_po_seri')
                         ->whereColumn('riwayat_batal_po_seri.detail_riwayat_batal_prd_id', 'riwayat_batal_po_prd.id')
                         ->limit(1);
+                },
+                'jumlah_tf_batal' => function ($q) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                        ->from('riwayat_batal_po_seri')
+                        ->where('riwayat_batal_po_seri.status', 1)
+                        ->whereColumn('riwayat_batal_po_seri.detail_riwayat_batal_prd_id', 'riwayat_batal_po_prd.id')
+                        ->limit(1);
                 }
             ])
             ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'riwayat_batal_po_prd.detail_pesanan_produk_id')
             ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
             ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+            ->havingRaw('jumlah_tf = 0 OR (jumlah_tf > 0 AND jumlah_tf_batal > 0)')
             ->whereIN('detail_riwayat_batal_paket_id', $data->pluck('id')->toArray())->get();
 
         $obj = array();

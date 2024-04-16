@@ -9547,22 +9547,13 @@ class PenjualanController extends Controller
                             'status' => 0
                         ]);
 
-                        DB::commit();
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Berhasil Di tambahkan',
-                        ], 200);
+
                     } else {
                         RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
                             'status' => 0
                         ]);
                         NoseriTGbj::whereIN('id', $seri_id)->delete();
 
-                        DB::commit();
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Berhasil Di tambahkan',
-                        ], 200);
                     }
 
                     $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
@@ -9573,22 +9564,25 @@ class PenjualanController extends Controller
                     if ($opp->count() > 0) {
                         $opp->delete();
                     }
-                } else {
-                    $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
-                    RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
-                        'status' => 0
-                    ]);
-
-                    if ($opp->count() > 0) {
-                        $opp->delete();
-                    }
-
-                    DB::commit();
-                    return response()->json([
-                        'status' => 200,
-                        'message' => 'Berhasil Di tambahkan',
-                    ], 200);
                 }
+
+                if (in_array('part', $jenis_item)){
+                    $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
+                    RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
+                        'status' => 0
+                    ]);
+
+                    if ($opp->count() > 0) {
+                        $opp->delete();
+                    }
+
+                }
+
+                DB::commit();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Berhasil Di tambahkan',
+                ], 200);
             }
 
             if ($divisi == 'log') {
@@ -9637,11 +9631,7 @@ class PenjualanController extends Controller
                             }
                         }
 
-                        DB::commit();
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Berhasil Di tambahkan',
-                        ], 200);
+
                     } else {
                         NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id)->delete();
                         NoseriTGbj::whereIN('id', $seri_id)->delete();
@@ -9649,13 +9639,11 @@ class PenjualanController extends Controller
                             'status' => 0
                         ]);
 
-                        DB::commit();
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Berhasil Di tambahkan',
-                        ], 200);
+
                     }
-                } else {
+                }
+
+                if (in_array('part', $jenis_item)){
                     $dlp = DetailLogistikPart::whereIN('detail_pesanan_part_id', $part_id);
 
                     RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
@@ -9675,11 +9663,7 @@ class PenjualanController extends Controller
                                 Logistik::where('id', $logId)->delete();
                             }
                         }
-                        DB::commit();
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Berhasil Di tambahkan',
-                        ], 200);
+
                     } else {
                         $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
                         RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
@@ -9690,13 +9674,15 @@ class PenjualanController extends Controller
                             $opp->delete();
                         }
 
-                        DB::commit();
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Berhasil Di tambahkan',
-                        ], 200);
+
                     }
                 }
+
+                DB::commit();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Berhasil Di tambahkan',
+                ], 200);
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -9842,6 +9828,7 @@ class PenjualanController extends Controller
     function kirim_batal_po_divisi($divisi, Request $request)
     {
         $obj =  json_decode(json_encode($request->all()), FALSE);
+
         DB::beginTransaction();
         try {
             $seri_id = array();
@@ -9898,22 +9885,14 @@ class PenjualanController extends Controller
                             'status' => 0
                         ]);
 
-                        DB::commit();
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Berhasil Di tambahkan',
-                        ], 200);
+
                     } else {
                         RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
                             'status' => 0
                         ]);
                         NoseriTGbj::whereIN('id', $seri_id)->delete();
 
-                        DB::commit();
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Berhasil Di tambahkan',
-                        ], 200);
+
                     }
 
                     $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
@@ -9924,22 +9903,24 @@ class PenjualanController extends Controller
                     if ($opp->count() > 0) {
                         $opp->delete();
                     }
-                } else {
-                    $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
-                    RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
-                        'status' => 0
-                    ]);
-
-                    if ($opp->count() > 0) {
-                        $opp->delete();
-                    }
-
-                    DB::commit();
-                    return response()->json([
-                        'status' => 200,
-                        'message' => 'Berhasil Di tambahkan',
-                    ], 200);
                 }
+                if (in_array('part', $jenis_item))  {
+                    $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
+                    RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
+                        'status' => 0
+                    ]);
+
+                    if ($opp->count() > 0) {
+                        $opp->delete();
+                    }
+
+                }
+
+                DB::commit();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Berhasil Di tambahkan',
+                ], 200);
             }
 
             if ($divisi == 'log') {
@@ -9988,11 +9969,7 @@ class PenjualanController extends Controller
                             }
                         }
 
-                        DB::commit();
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Berhasil Di tambahkan',
-                        ], 200);
+
                     } else {
                         NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id)->delete();
                         NoseriTGbj::whereIN('id', $seri_id)->delete();
@@ -10000,13 +9977,12 @@ class PenjualanController extends Controller
                             'status' => 0
                         ]);
 
-                        DB::commit();
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Berhasil Di tambahkan',
-                        ], 200);
+
                     }
-                } else {
+                }
+
+
+                if (in_array('part', $jenis_item)){
                     $dlp = DetailLogistikPart::whereIN('detail_pesanan_part_id', $part_id);
 
                     RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
@@ -10026,11 +10002,7 @@ class PenjualanController extends Controller
                                 Logistik::where('id', $logId)->delete();
                             }
                         }
-                        DB::commit();
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Berhasil Di tambahkan',
-                        ], 200);
+
                     } else {
                         $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
                         RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
@@ -10041,13 +10013,15 @@ class PenjualanController extends Controller
                             $opp->delete();
                         }
 
-                        DB::commit();
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Berhasil Di tambahkan',
-                        ], 200);
+
                     }
                 }
+
+                DB::commit();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Berhasil Di tambahkan',
+                ], 200);
             }
         } catch (\Throwable $th) {
             //throw $th;
