@@ -10,44 +10,49 @@ const routes = [
     {
         path: "/produksi/permintaanreworks",
         component: PermintaanReworks,
-        name: "permintaanreworks"
+        name: "permintaanreworks",
     },
     {
         path: "/produksi/prosesSetReworks",
         component: prosesSetReworks,
-        name: "prosesSetReworks"
+        name: "prosesSetReworks",
     },
     {
         path: "/produksi/prosesSetReworks/:id",
         component: prosesSetReworksDetail,
-        name: "prosesSetReworksDetail"
+        name: "prosesSetReworksDetail",
     },
     {
         path: "/produksi/jadwal_perakitan",
         component: perakitanBerlangsung,
-        name: "perakitanBerlangsung"
+        name: "perakitanBerlangsung",
     },
-        {
+    {
         path: "/produksi/pengiriman",
         component: Transfer,
-        name: "pengiriman"
+        name: "pengiriman",
     },
     {
         path: "/produksi/riwayat_perakitan",
         component: RiwayatPerakitan,
-        name: "riwayatPerakitan"
+        name: "riwayatPerakitan",
     },
     {
-        path: '/produksi/kamus_produk',
-        name: 'kamusProduk',
-        component: () => import('./page/kamusProduk')
+        path: "/produksi/kamus_produk",
+        name: "kamusProduk",
+        component: () => import("./page/kamusProduk"),
     },
     {
-        path: '/produksi/cetak_nomor_seri',
-        name: 'cetakNomorSeri',
-        component: () => import('./page/cetaknoseri')
-    }
-]
+        path: "/produksi/cetak_nomor_seri",
+        name: "cetakNomorSeri",
+        component: () => import("./page/cetaknoseri"),
+    },
+    {
+        path: "/produksi/permintaan_goods",
+        name: "permintaanGoods",
+        component: () => import("./page/permintaanGoods"),
+    },
+];
 const router = new VueRouter({
     mode: "history",
     routes

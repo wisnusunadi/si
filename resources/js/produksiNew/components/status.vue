@@ -2,46 +2,73 @@
 export default {
     props: ['status'],
     methods: {
-        statusProses(status) {
+        statusClassText(status) {
             switch (status) {
                 case 'Proses':
-                    return 'badge-warning'
-                    break;
-
+                    return {
+                        class: 'badge-warning',
+                        text: 'Menunggu Proses Gudang'
+                    }
                 case 'belum_dikerjakan':
-                    return 'badge-danger'
-                    break;
-
+                    return {
+                        class: 'badge-danger',
+                        text: 'Belum Dikerjakan'
+                    }
                 case 'sedang_dikerjakan':
-                    return 'badge-warning'
-                    break;
-
+                    return {
+                        class: 'badge-warning',
+                        text: 'Sedang Dikerjakan'
+                    }
                 case 'selesai':
-                    return 'badge-success'
-                    break;
-            
+                    return {
+                        class: 'badge-success',
+                        text: 'Selesai'
+                    }
+                case 'batal':
+                    return {
+                        class: 'badge-danger',
+                        text: 'Batal'
+                    }
+                case 'menunggu_persetujuan_atasan':
+                    return {
+                        class: 'badge-warning',
+                        text: 'Menunggu Persetujuan Atasan'
+                    }
+                case 'permintaan_ditolak_atasan':
+                    return {
+                        class: 'badge-danger',
+                        text: 'Permintaan Ditolak Atasan'
+                    }
+                case 'menunggu_persetujuan_gudang':
+                    return {
+                        class: 'badge-success',
+                        text: 'Permintaan Disetujui Atasan'
+                    }
+                case 'permintaan_gagal_diacc':
+                    return {
+                        class: 'badge-danger',
+                        text: 'Permintaan Gagal Diacc'
+                    }
+                case 'permintaan_ditolak_gudang':
+                    return {
+                        class: 'badge-danger',
+                        text: 'Permintaan Ditolak Gudang'
+                    }
+                case 'permintaan': 
+                    return {
+                        class: 'badge-primary',
+                        text: 'Permintaan'
+                    }
+                case 'peminjaman':
+                    return {
+                        class: 'badge-info',
+                        text: 'Peminjaman'
+                    }
                 default:
-                    return 'badge-primary'
-                    break;
-            }
-        },
-        statusText(status) {
-            switch (status) {
-                case 'Proses':
-                    return 'Menunggu Proses Gudang'
-                    break;
-                case 'belum_dikerjakan':
-                    return 'Belum Dikerjakan'
-                    break;
-                case 'sedang_dikerjakan':
-                    return 'Sedang Dikerjakan'
-                    break;
-                case 'selesai':
-                    return 'Selesai'
-                    break;
-                default:
-                    return 'Permintaan Baru'
-                    break;
+                    return {
+                        class: 'badge-primary',
+                        text: 'Permintaan Baru'
+                    }
             }
         }
     },
@@ -49,6 +76,6 @@ export default {
 </script>
 <template>
     <div>
-        <span class="badge" :class="statusProses(status)">{{ statusText(status) }}</span>
+        <span class="badge" :class="statusClassText(status).class">{{ statusClassText(status).text }}</span>
     </div>
 </template>
