@@ -392,7 +392,14 @@ export default {
                                                                         class="nowraptxt">{{ idx + 1 }}
                                                                     </td>
                                                                     <td class="text-center"><b class="wb">{{ item.nama
-                                                                            }}</b></td>
+                                                                            }}</b> <br>
+                                                                         <h6 v-if="item.jumlah_retur"><span
+                                                                                class="badge badge-info">Retur:
+                                                                                {{ item.jumlah_retur }}</span></h6>
+                                                                        <h6 v-if="item.jumlah_batal"><span
+                                                                                class="badge badge-orange">Batal:
+                                                                                {{ item.jumlah_batal }}</span></h6>    
+                                                                        </td>
                                                                     <td class="nowraptxt">
                                                                         <button class="btn btn-sm btn-outline-primary"
                                                                             @click="getChartPengiriman(item.id, item.jenis)"><i
