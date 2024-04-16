@@ -3,26 +3,49 @@ export default {
     data() {
         return {
             form: {
-                jenis: null,
-                tgl_permintaan: new Date().toISOString().substr(0, 10),
-                tgl_kebutuhan: null,
-                tujuan: null,
+                "jenis": {
+                    "label": "Peminjaman",
+                    "value": "peminjaman"
+                },
+                "tgl_permintaan": "2024-04-16",
+                "tgl_kebutuhan": "2024-04-16",
+                "tujuan": "okeee",
+                "tgl_pengembalian": "2024-04-16"
             },
             jenisChoices: [
                 { label: 'Peminjaman', value: 'peminjaman' },
                 { label: 'Permintaan', value: 'permintaan' },
             ],
             produkChoices: [
-                { label: 'Produk 1', value: 'produk_1', stok: 100},
-                { label: 'Produk 2', value: 'produk_2', stok: 200},
+                { label: 'Produk 1', value: 'produk_1', stok: 100 },
+                { label: 'Produk 2', value: 'produk_2', stok: 200 },
                 { label: 'Produk 3', value: 'produk_3', stok: 0 },
             ],
-            items: [],
+            items: [
+                {
+                    "nama_produk": {
+                        "label": "Produk 1",
+                        "value": "produk_1",
+                        "stok": 100
+                    },
+                    "stok": 100,
+                    "jumlah": "12"
+                },
+                {
+                    "nama_produk": {
+                        "label": "Produk 2",
+                        "value": "produk_2",
+                        "stok": 200
+                    },
+                    "stok": 200,
+                    "jumlah": "45"
+                }
+            ],
         }
     },
     methods: {
         closeModal() {
-            $('.modalTambah').modal('hide');
+            $('.modalEdit').modal('hide');
             this.$nextTick(() => {
                 this.$emit('close');
             });
@@ -52,7 +75,7 @@ export default {
                 console.log(this.form);
                 console.log(this.items);
                 swal.fire('Berhasil', 'Data berhasil disimpan', 'success');
-                this.$emit('refresh');  
+                this.$emit('refresh');
                 this.closeModal();
             }
         }
@@ -87,12 +110,12 @@ export default {
 }
 </script>
 <template>
-    <div class="modal fade modalTambah" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    <div class="modal fade modalEdit" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Form Permintaan Barang</h5>
+                    <h5 class="modal-title">Form Permintaan Edit Barang</h5>
                     <button type="button" class="close" @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -104,7 +127,7 @@ export default {
                                 <label class="col-5 text-right">Jenis</label>
                                 <select v-model="form.jenis" class="form-control col-4">
                                     <option v-for="choice in jenisChoices" :value="choice" :key="choice.value">{{
-                                        choice.label }}</option>
+                        choice.label }}</option>
                                 </select>
                             </div>
                             <div class="form-group row">
@@ -113,9 +136,8 @@ export default {
                             </div>
                             <div class="form-group row" v-if="form?.jenis?.value == 'peminjaman'">
                                 <label class="col-5 text-right">Tanggal Pengembalian</label>
-                                <input type="date"
-                                :min="form.tgl_kebutuhan"
-                                class="form-control col-4" v-model="form.tgl_pengembalian">
+                                <input type="date" :min="form.tgl_kebutuhan" class="form-control col-4"
+                                    v-model="form.tgl_pengembalian">
                             </div>
                             <div class="form-group row">
                                 <label class="col-5 text-right">Tujuan Permintaan</label>
