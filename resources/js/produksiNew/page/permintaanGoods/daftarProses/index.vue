@@ -1,8 +1,9 @@
 <script>
 import status from '../../../components/status.vue';
 import tambah from './tambah.vue';
+import edit from './edit.vue';
 export default {
-    components: { status, tambah },
+    components: { status, tambah, edit },
     data() {
         return {
             search: '',
@@ -38,6 +39,7 @@ export default {
             ],
             items: [
                 {
+                    id: 1,
                     no_permintaan: 'NSO-2021080001',
                     no_referensi: 'SO-2021080001',
                     tgl_permintaan: '2021-08-01',
@@ -48,6 +50,7 @@ export default {
                     jenis: 'peminjaman',
                 },
                 {
+                    id: 2,
                     no_permintaan: 'NSO-2021080002',
                     no_referensi: 'SO-2021080002',
                     tgl_permintaan: '2021-08-02',
@@ -58,6 +61,7 @@ export default {
                     jenis: 'permintaan',
                 },
                 {
+                    id: 3,
                     no_permintaan: 'NSO-2021080003',
                     no_referensi: 'SO-2021080003',
                     tgl_permintaan: '2021-08-03',
@@ -68,6 +72,7 @@ export default {
                     jenis: 'peminjaman',
                 },
                 {
+                    id: 4,
                     no_permintaan: 'NSO-2021080004',
                     no_referensi: 'SO-2021080004',
                     tgl_permintaan: '2021-08-04',
@@ -78,6 +83,7 @@ export default {
                     jenis: 'permintaan',
                 },
                 {
+                    id: 5,
                     no_permintaan: 'NSO-2021080005',
                     no_referensi: 'SO-2021080005',
                     tgl_permintaan: '2021-08-05',
@@ -88,6 +94,7 @@ export default {
                     jenis: 'peminjaman',
                 },
                 {
+                    id: 6,
                     no_permintaan: 'NSO-2021080006',
                     no_referensi: 'SO-2021080006',
                     tgl_permintaan: '2021-08-06',
@@ -108,13 +115,40 @@ export default {
             this.$nextTick(() => {
                 $('.modalTambah').modal('show');
             });
-        }  
+        },
+        openEdit(item) {
+            this.detailSelected = item;
+            this.showModal = true;
+            this.$nextTick(() => {
+                $('.modalEdit').modal('show');
+            });
+        },
+        batalPinjam(id) {
+            swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Data yang sudah dibatalkan tidak dapat dikembalikan!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, batalkan!',
+                cancelButtonText: 'Keluar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swal.fire('Berhasil', 'Data berhasil dibatalkan', 'success');
+                    // change status batal
+                    const index = this.items.findIndex(item => item.id === id);
+                    this.items[index].status = 'batal';
+                }
+            });
+        }
     },
 }
 </script>
 <template>
     <div>
         <tambah v-if="showModal" @close="showModal = false" />
+        <edit v-if="showModal" @close="showModal = false" :item="detailSelected" />
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
                 <button class="btn btn-primary" @click="openTambah">
@@ -140,15 +174,16 @@ export default {
             </template>
             <template #item.aksi="{item}">
                 <div>
-                    <button class="btn btn-outline-primary btn-sm">
+                    <button class="btn btn-outline-primary btn-sm"
+                        @click="$router.push({ name: 'permintaanGoodsDetail', params: { id: item.id, status: item.status } })">
                         <i class="fas fa-eye"></i>
                         Detail
                     </button>
-                    <button class="btn btn-outline-warning btn-sm">
+                    <button class="btn btn-outline-warning btn-sm" v-if="item.status != 'batal'" @click="openEdit(item)">
                         <i class="fas fa-edit"></i>
                         Edit
                     </button>
-                    <button class="btn btn-outline-danger btn-sm">
+                    <button class="btn btn-outline-danger btn-sm" v-if="item.status != 'batal'" @click="batalPinjam(item.id)">
                         <i class="fas fa-times"></i>
                         Batal
                     </button>
