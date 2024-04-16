@@ -41,8 +41,8 @@ export default {
                     }
                 case 'menunggu_persetujuan_gudang':
                     return {
-                        class: 'badge-success',
-                        text: 'Permintaan Disetujui Atasan'
+                        class: 'badge-warning',
+                        text: 'Menunggu Persetujuan Gudang'
                     }
                 case 'permintaan_gagal_diacc':
                     return {

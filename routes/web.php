@@ -141,7 +141,7 @@ Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
     // Route::view('/manager/produk', 'manager.gbj.produksi');
 });
 
-Route::group(['prefix' => '/produksi', 'middleware' => ['divisi:prd']], function () {
+Route::group(['prefix' => '/produksi'], function () {
     Route::view('/dashboard', 'page.produksi.dashboard');
     Route::view('/so', 'page.produksi.so');
     // Route::view('/jadwal_perakitan', 'page.produksi.jadwal_perakitan');

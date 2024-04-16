@@ -831,11 +831,17 @@ return [
             'text'    => 'Dashboard',
             'icon'    => 'fas fa-layer-group',
             'url'  => '/produksi/dashboard',
-            'auth' => [17]
+            'auth' => [17, 35]
         ],
         [
             'header' => 'PRODUKSI',
-            'auth' => [17]
+            'auth' => [17, 35]
+        ],
+        [
+            'text' => 'Permintaan Barang',
+            'icon' => 'fas fa-cogs',
+            'url'  => '/produksi/permintaan_goods_mgr',
+            'auth' => [35]
         ],
         // [
         //     'text'    => 'Jadwal Kerja Produksi',

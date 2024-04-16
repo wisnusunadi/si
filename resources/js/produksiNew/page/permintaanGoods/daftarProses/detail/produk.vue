@@ -24,6 +24,13 @@ export default {
         }
     },
     methods: {
+        statusEdit({ status }) {
+            if (status === 'permintaan_ditolak_atasan' || status === 'permintaan_gagal_diacc' || status === 'permintaan_ditolak_gudang') {
+                return true;
+            } else {
+                return false;
+            }
+        },
         openEdit() {
             this.showModal = true;
             this.$nextTick(() => {
@@ -62,8 +69,7 @@ export default {
             </div>
             <div class="d-flex bd-highlight">
                 <div class="p-2 flex-grow-1 bd-highlight">
-                    <button class="btn btn-outline-warning btn-sm" v-if="detail.headers.status != 'batal'"
-                        @click="openEdit">
+                    <button class="btn btn-outline-warning btn-sm" v-if="statusEdit(detail.headers) " @click="openEdit">
                         <i class="fas fa-edit"></i>
                         Edit
                     </button>

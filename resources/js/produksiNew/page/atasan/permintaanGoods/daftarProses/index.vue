@@ -1,5 +1,5 @@
 <script>
-import status from '../../../components/status.vue';
+import status from '../../../../components/status.vue';
 import tambah from './tambah.vue';
 import edit from './edit.vue';
 export default {
@@ -50,26 +50,15 @@ export default {
                     jenis: 'peminjaman',
                 },
                 {
-                    id: 2,
-                    no_permintaan: 'NSO-2021080002',
-                    no_referensi: 'SO-2021080002',
-                    tgl_permintaan: '2021-08-02',
+                    id: 4,
+                    no_permintaan: 'NSO-2021080004',
+                    no_referensi: 'SO-2021080004',
+                    tgl_permintaan: '2021-08-04',
                     tujuan_permintaan: 'Lorem Ipsum',
-                    tgl_kebutuhan: '2021-08-02',
-                    status: 'menunggu_persetujuan_atasan',
+                    tgl_kebutuhan: '2021-08-04',
+                    status: 'menunggu_persetujuan_gudang',
                     durasi: null,
                     jenis: 'permintaan',
-                },
-                {
-                    id: 3,
-                    no_permintaan: 'NSO-2021080003',
-                    no_referensi: 'SO-2021080003',
-                    tgl_permintaan: '2021-08-03',
-                    tujuan_permintaan: 'Lorem Ipsum',
-                    tgl_kebutuhan: '2021-08-03',
-                    status: 'permintaan_ditolak_atasan',
-                    durasi: '2 hari',
-                    jenis: 'peminjaman',
                 },
                 {
                     id: 4,
@@ -78,7 +67,7 @@ export default {
                     tgl_permintaan: '2021-08-04',
                     tujuan_permintaan: 'Lorem Ipsum',
                     tgl_kebutuhan: '2021-08-04',
-                    status: 'menunggu_persetujuan_gudang',
+                    status: 'menunggu_persetujuan_atasan',
                     durasi: null,
                     jenis: 'permintaan',
                 },
@@ -148,6 +137,38 @@ export default {
             } else {
                 return false;
             }
+        },
+        setuju(id) {
+            swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Data yang sudah disetujui tidak dapat dikembalikan!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, setujui!',
+                cancelButtonText: 'Keluar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swal.fire('Berhasil', 'Data berhasil disetujui', 'success');
+                }
+            });
+        },
+        tolak(id) {
+            swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Data yang sudah ditolak tidak dapat dikembalikan!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, tolak!',
+                cancelButtonText: 'Keluar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swal.fire('Berhasil', 'Data berhasil ditolak', 'success');
+                }
+            });
         }
     },
 }
@@ -167,25 +188,25 @@ export default {
             </div>
         </div>
         <data-table :headers="headers" :items="items" :search="search">
-            <template #item.tgl_permintaan="{item}">
+            <template #item.tgl_permintaan="{ item }">
                 <div>
                     {{ dateFormat(item.tgl_permintaan) }} <br>
                     <status :status="item.jenis" />
                 </div>
             </template>
-            <template #item.tgl_kebutuhan="{item}">
+            <template #item.tgl_kebutuhan="{ item }">
                 <div>
                     {{ dateFormat(item.tgl_kebutuhan) }} <br>
                     <status :status="item.status" />
                 </div>
             </template>
-            <template #item.aksi="{item}">
+            <template #item.aksi="{ item }">
                 <div>
                     <div data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"
                         class="dropdown-toggle"><i class="fas fa-ellipsis-v"></i></div>
                     <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
                         <button class="dropdown-item" type="button"
-                            @click="$router.push({ name: 'permintaanGoodsDetail', params: { id: item.id, status: item.status } })">
+                            @click="$router.push({ name: 'permintaanGoodsMgrDetail', params: { id: item.id, status: item.status } })">
                             <i class="fas fa-eye"></i>
                             Detail
                         </button>
@@ -199,12 +220,12 @@ export default {
                             Batal
                         </button>
                         <div v-if="item.status == 'menunggu_persetujuan_atasan'">
-                            <button class="dropdown-item" type="button">
+                            <button class="dropdown-item" type="button" @click="setuju(item.id)">
                                 <i class="fas fa-check"></i>
                                 Setuju
                             </button>
-                            <button class="dropdown-item" type="button">
-                                <i class="fas fa-times"></i>
+                            <button class="dropdown-item" type="button" @click="tolak(item.id)">
+                                <i class="fas fa-ban"></i>
                                 Tolak
                             </button>
                         </div>

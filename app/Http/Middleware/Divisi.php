@@ -43,7 +43,7 @@ class Divisi
             return redirect('/penjualan/dashboard');
         } else if ($request->user()->hasRole("13")) {
             return redirect('/gbj/dashboard');
-        } else if ($request->user()->hasRole("17")) {
+        } else if ($request->user()->hasRole("17") || $request->user()->hasRole("35")) {
             return redirect('/produksi/dashboard');
         } else if ($request->user()->hasRole("12")) {
             return redirect('/gk/dashboard');
