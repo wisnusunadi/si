@@ -1,8 +1,10 @@
 <script>
 import status from '../../../components/status.vue';
+import persentase from '../../../../emiindo/components/persentase.vue'
 export default {
     components: {
-        status
+        status,
+        persentase
     },
     data() {
         return {
@@ -119,6 +121,11 @@ export default {
             <template #item.status="{item}">
                 <div>
                     <status :status="item.status" />
+                </div>
+            </template>
+            <template #item.persentase="{item}">
+                <div>
+                    <persentase :persentase="item.persentase" />
                 </div>
             </template>
         </data-table>
