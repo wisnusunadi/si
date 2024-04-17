@@ -85,7 +85,7 @@ export default {
                     durasi: '1 Hari',
                     jenis: 'peminjaman',
                     status: 'barang_keluar',
-                    persentase: 50,
+                    persentase: 0,
                 },
                 {
                     no_permintaan: 'NSO-2021080004',
@@ -96,6 +96,17 @@ export default {
                     durasi: '2 Hari',
                     jenis: 'permintaan',
                     status: 'barang_keluar',
+                    persentase: 0,
+                },
+                {
+                    no_permintaan: 'NSO-2021080005',
+                    no_referensi: 'SO-2021080005',
+                    tgl_permintaan: '21 Agustus 2021',
+                    tujuan: 'Consectetur',
+                    tgl_pengambilan: '2024-08-22',
+                    durasi: '3 Hari',
+                    jenis: 'peminjaman',
+                    status: 'proses_peminjaman',
                     persentase: 50,
                 }
             ],
@@ -134,6 +145,36 @@ export default {
             this.$nextTick(() => {
                 $('.modalPengambilan').modal('show');
             });
+        },
+        pengambilanBarang({ id }) {
+            swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Anda akan mengambil barang ini',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, ambil barang'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swal.fire('Berhasil!', 'Barang telah diambil', 'success');
+                }
+            });
+        },
+        terimaBarang({ id }) {
+            swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Anda akan menerima barang ini',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, terima barang'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swal.fire('Berhasil!', 'Barang telah diterima', 'success');
+                }
+            });
         }
     },
 }
@@ -143,7 +184,7 @@ export default {
         <pengambilan v-if="showModal" @close="showModal = false" :detailSelected="detailSelected" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
-                <input type="text" class="form-control" v-model="search">
+                <input type="text" class="form-control" v-model="search" placeholder="Cari...">
             </div>
         </div>
         <data-table :headers="headers" :items="items" :search="search">
@@ -153,8 +194,8 @@ export default {
                 </div>
             </template>
             <template #item.jenis="{ item }">
-                <div>
-                    <status :status="item.jenis" />
+                <div class="text-capitalize">
+                    {{ item.jenis }}
                 </div>
             </template>
             <template #item.status="{ item }">
@@ -183,11 +224,12 @@ export default {
             <template #item.aksi="{ item }">
                 <div>
                     <button class="btn btn-outline-info btn-sm" v-if="item.status == 'barang_siap_diambil'"
-                        @click="openModalPengambilan(item)">
+                        @click="pengambilanBarang(item)">
                         <i class="fas fa-hand-holding"></i>
                         Pengambilan
                     </button>
-                    <button class="btn btn-outline-success btn-sm" v-if="item.status == 'barang_keluar'">
+                    <button class="btn btn-outline-success btn-sm" v-if="item.status == 'barang_keluar'"
+                        @click="terimaBarang(item)">
                         <i class="fas fa-check"></i>
                         Terima
                     </button>

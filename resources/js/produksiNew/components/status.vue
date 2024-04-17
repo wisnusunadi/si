@@ -70,6 +70,12 @@ export default {
                         class: 'badge-success',
                         text: 'Barang Keluar'
                     }
+                case 'proses_peminjaman':
+                    return {
+                        class: 'badge-info',
+                        text: 'Proses Peminjaman'
+                    }
+                    // permintaan barang
                 case 'permintaan': 
                     return {
                         class: 'badge-primary',
