@@ -1,10 +1,12 @@
 <script>
 import status from '../../../components/status.vue';
 import persentase from '../../../../emiindo/components/persentase.vue'
+import pengambilan from './pengambilan.vue';
 export default {
     components: {
         status,
-        persentase
+        persentase,
+        pengambilan
     },
     data() {
         return {
@@ -96,7 +98,9 @@ export default {
                     status: 'barang_keluar',
                     persentase: 50,
                 }
-            ]
+            ],
+            showModal: false,
+            detailSelected: null
         }
     },
     methods: {
@@ -124,38 +128,46 @@ export default {
                 }
             }
         },
+        openModalPengambilan(item) {
+            this.detailSelected = item;
+            this.showModal = true;
+            this.$nextTick(() => {
+                $('.modalPengambilan').modal('show');
+            });
+        }
     },
 }
 </script>
 <template>
     <div>
+        <pengambilan v-if="showModal" @close="showModal = false" :detailSelected="detailSelected" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" class="form-control" v-model="search">
             </div>
         </div>
         <data-table :headers="headers" :items="items" :search="search">
-            <template #item.tgl_pengambilan="{item}">
+            <template #item.tgl_pengambilan="{ item }">
                 <div v-if="item.tgl_pengambilan">
 
                 </div>
             </template>
-            <template #item.jenis="{item}">
+            <template #item.jenis="{ item }">
                 <div>
                     <status :status="item.jenis" />
                 </div>
             </template>
-            <template #item.status="{item}">
+            <template #item.status="{ item }">
                 <div>
                     <status :status="item.status" />
                 </div>
             </template>
-            <template #item.persentase="{item}">
+            <template #item.persentase="{ item }">
                 <div>
                     <persentase :persentase="item.persentase" />
                 </div>
             </template>
-            <template #item.tgl_pengambilan="{item}">
+            <template #item.tgl_pengambilan="{ item }">
                 <div v-if="item.jenis == 'peminjaman'">
                     <div :class="calculateDateFromNow(item.tgl_pengambilan).color">{{
                         dateFormat(item.tgl_pengambilan) }}</div>
@@ -170,7 +182,8 @@ export default {
             </template>
             <template #item.aksi="{ item }">
                 <div>
-                    <button class="btn btn-outline-warning btn-sm" v-if="item.status == 'barang_siap_diambil'">
+                    <button class="btn btn-outline-info btn-sm" v-if="item.status == 'barang_siap_diambil'"
+                        @click="openModalPengambilan(item)">
                         <i class="fas fa-hand-holding"></i>
                         Pengambilan
                     </button>
