@@ -128,31 +128,29 @@ export default {
 }
 </script>
 <template>
-    <div class="card">
-        <div class="card-body">
-            <div class="d-flex flex-row-reverse bd-highlight">
-                <div class="p-2 bd-highlight">
-                    <input type="text" class="form-control" v-model="search" placeholder="Cari...">
-                </div>
+    <div>
+        <div class="d-flex flex-row-reverse bd-highlight">
+            <div class="p-2 bd-highlight">
+                <input type="text" class="form-control" v-model="search" placeholder="Cari...">
             </div>
-            <data-table :headers="headers" :items="items" :search="search">
-                <template #item.no_referensi="{ item }">
-                    {{ item.no_referensi }}
-                    <status :status="item.status" />
-                </template>
-                <template #item.ket="{ item }">
-                    <!-- truncate text -->
-                    <div class="text-truncate" style="max-width: 150px;">
-                        {{ item.ket }}
-                    </div>
-                </template>
-                <template #item.aksi="{ item }">
-                    <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
-                        <i class="fas fa-eye"></i>
-                        Detail
-                    </button>
-                </template>
-            </data-table>
         </div>
+        <data-table :headers="headers" :items="items" :search="search">
+            <template #item.no_referensi="{ item }">
+                {{ item.no_referensi }}
+                <status :status="item.status" />
+            </template>
+            <template #item.ket="{ item }">
+                <!-- truncate text -->
+                <div class="text-truncate" style="max-width: 150px;">
+                    {{ item.ket }}
+                </div>
+            </template>
+            <template #item.aksi="{ item }">
+                <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
+                    <i class="fas fa-eye"></i>
+                    Detail
+                </button>
+            </template>
+        </data-table>
     </div>
 </template>

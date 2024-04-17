@@ -59,7 +59,7 @@ export default {
                             }}</b></div>
                     <div v-if="header.alasan">
                         <div class="margin"><small class="text-muted">
-                                Alasan
+                                Alasan Ditolak
                             </small></div>
                         <div class="margin"><b>{{ header.alasan
                                 }}</b></div>

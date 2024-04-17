@@ -162,40 +162,38 @@ export default {
 }
 </script>
 <template>
-    <div class="card">
+    <div>
         <modalAlasanTolak v-if="showModalTolak" @close="closeModalTolak" />
         <detailComponents :detail="detailSelected" v-if="showModal" @close="showModal = false" @setuju="setuju"
             @tolak="tolak" />
-        <div class="card-body">
-            <div class="d-flex flex-row-reverse bd-highlight">
-                <div class="p-2 bd-highlight">
-                    <input type="text" class="form-control" v-model="search" placeholder="Cari...">
-                </div>
+        <div class="d-flex flex-row-reverse bd-highlight">
+            <div class="p-2 bd-highlight">
+                <input type="text" class="form-control" v-model="search" placeholder="Cari...">
             </div>
-            <data-table :headers="headers" :items="items" :search="search">
-                <template #item.tgl_permintaan="{ item }">
-                    <div>
-                        {{ item.tgl_permintaan }}
-                        <status :status="item.jenis" />
-                    </div>
-                </template>
-                <template #item.aksi="{ item }">
-                    <div>
-                        <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
-                            <i class="fas fa-eye"></i>
-                            Detail
-                        </button>
-                        <button class="btn btn-sm btn-outline-success" @click="setuju(item.id)">
-                            <i class="fas fa-check"></i>
-                            Setuju
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger" @click="tolak(item.id)">
-                            <i class="fas fa-times"></i>
-                            Tolak
-                        </button>
-                    </div>
-                </template>
-            </data-table>
         </div>
+        <data-table :headers="headers" :items="items" :search="search">
+            <template #item.tgl_permintaan="{ item }">
+                <div>
+                    {{ item.tgl_permintaan }}
+                    <status :status="item.jenis" />
+                </div>
+            </template>
+            <template #item.aksi="{ item }">
+                <div>
+                    <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                    </button>
+                    <button class="btn btn-sm btn-outline-success" @click="setuju(item.id)">
+                        <i class="fas fa-check"></i>
+                        Setuju
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" @click="tolak(item.id)">
+                        <i class="fas fa-times"></i>
+                        Tolak
+                    </button>
+                </div>
+            </template>
+        </data-table>
     </div>
 </template>

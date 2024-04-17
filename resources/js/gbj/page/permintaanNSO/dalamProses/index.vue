@@ -192,44 +192,42 @@ export default {
 }
 </script>
 <template>
-    <div class="card">
-        <div class="card-body">
-            <div class="d-flex flex-row-reverse bd-highlight">
-                <div class="p-2 bd-highlight">
-                    <input type="text" class="form-control" v-model="search" placeholder="Cari...">
-                </div>
+    <div>
+        <div class="d-flex flex-row-reverse bd-highlight">
+            <div class="p-2 bd-highlight">
+                <input type="text" class="form-control" v-model="search" placeholder="Cari...">
             </div>
-            <data-table :headers="headers" :items="items" :search="search">
-                <template #item.status="{ item }">
-                    <div>
-                        <status :status="item.status" />
-                    </div>
-                </template>
-                <template #item.persentase="{ item }">
-                    <div>
-                        <persentase :persentase="item.persentase"></persentase>
-                    </div>
-                </template>
-                <template #item.tgl_ambil="{ item }">
-                    <div v-if="item.durasi_tanggal">
-                        <div :class="calculateDateFromNow(item.durasi_tanggal).color">{{
-                        dateFormat(item.tgl_ambil) }}</div>
-                        <small :class="calculateDateFromNow(item.durasi_tanggal).color">
-                            <i :class="calculateDateFromNow(item.durasi_tanggal).icon"></i>
-                            {{ calculateDateFromNow(item.durasi_tanggal).text }}
-                        </small>
-                    </div>
-                    <div v-else>
-                        {{ dateFormat(item.tgl_ambil) }}
-                    </div>
-                </template>
-                <template #item.aksi="{ item }">
-                    <button class="btn btn-sm btn-outline-primary" @click="aksi(item)">
-                        <i class="fas fa-eye"></i>
-                        Detail
-                    </button>
-                </template>
-            </data-table>
         </div>
+        <data-table :headers="headers" :items="items" :search="search">
+            <template #item.status="{ item }">
+                <div>
+                    <status :status="item.status" />
+                </div>
+            </template>
+            <template #item.persentase="{ item }">
+                <div>
+                    <persentase :persentase="item.persentase"></persentase>
+                </div>
+            </template>
+            <template #item.tgl_ambil="{ item }">
+                <div v-if="item.durasi_tanggal">
+                    <div :class="calculateDateFromNow(item.durasi_tanggal).color">{{
+                    dateFormat(item.tgl_ambil) }}</div>
+                    <small :class="calculateDateFromNow(item.durasi_tanggal).color">
+                        <i :class="calculateDateFromNow(item.durasi_tanggal).icon"></i>
+                        {{ calculateDateFromNow(item.durasi_tanggal).text }}
+                    </small>
+                </div>
+                <div v-else>
+                    {{ dateFormat(item.tgl_ambil) }}
+                </div>
+            </template>
+            <template #item.aksi="{ item }">
+                <button class="btn btn-sm btn-outline-primary" @click="aksi(item)">
+                    <i class="fas fa-eye"></i>
+                    Detail
+                </button>
+            </template>
+        </data-table>
     </div>
 </template>

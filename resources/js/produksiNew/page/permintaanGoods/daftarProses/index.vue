@@ -198,16 +198,6 @@ export default {
                             <i class="fas fa-times"></i>
                             Batal
                         </button>
-                        <div v-if="item.status == 'menunggu_persetujuan_atasan'">
-                            <button class="dropdown-item" type="button">
-                                <i class="fas fa-check"></i>
-                                Setuju
-                            </button>
-                            <button class="dropdown-item" type="button">
-                                <i class="fas fa-times"></i>
-                                Tolak
-                            </button>
-                        </div>
                     </div>
                 </div>
             </template>
