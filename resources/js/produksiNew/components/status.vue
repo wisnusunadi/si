@@ -54,6 +54,22 @@ export default {
                         class: 'badge-danger',
                         text: 'Permintaan Ditolak Gudang'
                     }
+                    // dalam proses
+                case 'persiapan_barang': 
+                    return {
+                        class: 'badge-info',
+                        text: 'Persiapan Barang'
+                    }
+                case 'barang_siap_diambil':
+                    return {
+                        class: 'badge-warning',
+                        text: 'Barang Siap Diambil'
+                    }
+                case 'barang_keluar':
+                    return {
+                        class: 'badge-success',
+                        text: 'Barang Keluar'
+                    }
                 case 'permintaan': 
                     return {
                         class: 'badge-primary',

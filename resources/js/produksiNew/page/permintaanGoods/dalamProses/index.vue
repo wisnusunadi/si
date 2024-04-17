@@ -1,5 +1,9 @@
 <script>
+import status from '../../../components/status.vue';
 export default {
+    components: {
+        status
+    },
     data() {
         return {
             headers: [
@@ -51,11 +55,43 @@ export default {
                     no_referensi: 'SO-2021080001',
                     tgl_permintaan: '21 Agustus 2021',
                     tujuan: 'Lorem',
-                    tgl_pengambilan: '22 Agustus 2021',
-                    durasi: '1 hari',
+                    tgl_pengambilan: null,
+                    durasi: null,
+                    jenis: 'permintaan',
+                    status: 'persiapan_barang',
+                    persentase: 0,
+                },
+                {
+                    no_permintaan: 'NSO-2021080002',
+                    no_referensi: 'SO-2021080002',
+                    tgl_permintaan: '21 Agustus 2021',
+                    tujuan: 'Ipsum',
+                    tgl_pengambilan: null,
+                    durasi: null,
+                    jenis: 'permintaan',
+                    status: 'barang_siap_diambil',
+                    persentase: 0,
+                },
+                {
+                    no_permintaan: 'NSO-2021080003',
+                    no_referensi: 'SO-2021080003',
+                    tgl_permintaan: '21 Agustus 2021',
+                    tujuan: 'Dolor',
+                    tgl_pengambilan: null,
+                    durasi: '1 Hari',
                     jenis: 'peminjaman',
-                    status: 'Dalam Proses',
-                    persentase: 50,
+                    status: 'barang_keluar',
+                    persentase: 0,
+                },
+                {
+                    no_permintaan: 'NSO-2021080004',
+                    no_referensi: 'SO-2021080004',
+                    tgl_permintaan: '21 Agustus 2021',
+                    tujuan: 'Sit Amet',
+                    tgl_pengambilan: null,
+                    durasi: '2 Hari',
+                    jenis: 'permintaan',
+                    status: 'barang_keluar',
                 }
             ]
         }
@@ -69,6 +105,22 @@ export default {
                 <input type="text" class="form-control" v-model="search">
             </div>
         </div>
-        <data-table :headers="headers" :items="items" :search="search" />
+        <data-table :headers="headers" :items="items" :search="search">
+            <template #item.tgl_pengambilan="{item}">
+                <div v-if="item.tgl_pengambilan">
+
+                </div>
+            </template>
+            <template #item.jenis="{item}">
+                <div>
+                    <status :status="item.jenis" />
+                </div>
+            </template>
+            <template #item.status="{item}">
+                <div>
+                    <status :status="item.status" />
+                </div>
+            </template>
+        </data-table>
     </div>
 </template>
