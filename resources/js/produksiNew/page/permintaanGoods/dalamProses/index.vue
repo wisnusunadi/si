@@ -79,24 +79,51 @@ export default {
                     no_referensi: 'SO-2021080003',
                     tgl_permintaan: '21 Agustus 2021',
                     tujuan: 'Dolor',
-                    tgl_pengambilan: null,
+                    tgl_pengambilan: '2024-08-22',
                     durasi: '1 Hari',
                     jenis: 'peminjaman',
                     status: 'barang_keluar',
-                    persentase: 0,
+                    persentase: 50,
                 },
                 {
                     no_permintaan: 'NSO-2021080004',
                     no_referensi: 'SO-2021080004',
                     tgl_permintaan: '21 Agustus 2021',
                     tujuan: 'Sit Amet',
-                    tgl_pengambilan: null,
+                    tgl_pengambilan: '2024-08-22',
                     durasi: '2 Hari',
                     jenis: 'permintaan',
                     status: 'barang_keluar',
+                    persentase: 50,
                 }
             ]
         }
+    },
+    methods: {
+        calculateDateFromNow(date) {
+            // kalkulasi tanggal dari sekarang
+            const tglSekarang = new Date();
+            const tglKontrak = new Date(date);
+            if (tglKontrak < tglSekarang) {
+                return {
+                    text: `Lebih ${moment(tglSekarang).diff(tglKontrak, 'days')} Hari`,
+                    color: 'text-danger font-weight-bold',
+                    icon: 'fas fa-exclamation-circle'
+                }
+            } else if (tglKontrak > tglSekarang) {
+                return {
+                    text: `${moment(tglKontrak).diff(tglSekarang, 'days')} Hari Lagi`,
+                    color: 'text-dark',
+                    icon: 'fas fa-clock'
+                }
+            } else {
+                return {
+                    text: 'Batas Peminjaman Habis',
+                    color: 'text-danger',
+                    icon: 'fas fa-exclamation-circle'
+                }
+            }
+        },
     },
 }
 </script>
@@ -126,6 +153,31 @@ export default {
             <template #item.persentase="{item}">
                 <div>
                     <persentase :persentase="item.persentase" />
+                </div>
+            </template>
+            <template #item.tgl_pengambilan="{item}">
+                <div v-if="item.jenis == 'peminjaman'">
+                    <div :class="calculateDateFromNow(item.tgl_pengambilan).color">{{
+                        dateFormat(item.tgl_pengambilan) }}</div>
+                    <small :class="calculateDateFromNow(item.tgl_pengambilan).color">
+                        <i :class="calculateDateFromNow(item.tgl_pengambilan).icon"></i>
+                        {{ calculateDateFromNow(item.tgl_pengambilan).text }}
+                    </small>
+                </div>
+                <div v-else>
+                    {{ dateFormat(item.tgl_pengambilan) }}
+                </div>
+            </template>
+            <template #item.aksi="{ item }">
+                <div>
+                    <button class="btn btn-outline-warning btn-sm" v-if="item.status == 'barang_siap_diambil'">
+                        <i class="fas fa-hand-holding"></i>
+                        Pengambilan
+                    </button>
+                    <button class="btn btn-outline-success btn-sm" v-if="item.status == 'barang_keluar'">
+                        <i class="fas fa-check"></i>
+                        Terima
+                    </button>
                 </div>
             </template>
         </data-table>
