@@ -39,17 +39,6 @@ export default {
             ],
             items: [
                 {
-                    id: 1,
-                    no_permintaan: 'NSO-2021080001',
-                    no_referensi: 'SO-2021080001',
-                    tgl_permintaan: '2021-08-01',
-                    tujuan_permintaan: 'Lorem Ipsum',
-                    tgl_kebutuhan: '2021-08-01',
-                    status: 'batal',
-                    durasi: '1 hari',
-                    jenis: 'peminjaman',
-                },
-                {
                     id: 4,
                     no_permintaan: 'NSO-2021080004',
                     no_referensi: 'SO-2021080004',
