@@ -233,6 +233,10 @@ export default {
                         <i class="fas fa-check"></i>
                         Terima
                     </button>
+                    <button class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                    </button>
                 </div>
             </template>
         </data-table>
