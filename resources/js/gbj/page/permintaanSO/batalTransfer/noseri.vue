@@ -42,18 +42,18 @@ export default {
     },
     methods: {
         async getData() {
-            // try {
-            //     this.loading = true
-            //     const { data } = await axios.get(`/api/gbj/batal_po/seri/${this.detailSelected.id}`)
-            //     this.noseri = data
-            //     if (this.detailSelected?.noseri) {
-            //         this.noSeriSelected = JSON.parse(JSON.stringify(this.detailSelected.noseri))
-            //     }
-            // } catch (error) {
-            //     console.error(error)
-            // } finally {
-            //     this.loading = false
-            // }
+            try {
+                this.loading = true
+                const { data } = await axios.get(`/api/gbj/batal_po/seri/${this.detailSelected.id}`)
+                this.noseri = data
+                if (this.detailSelected?.noseri) {
+                    this.noSeriSelected = JSON.parse(JSON.stringify(this.detailSelected.noseri))
+                }
+            } catch (error) {
+                console.error(error)
+            } finally {
+                this.loading = false
+            }
         },
         noseriterpakai(item) {
             let found = false
@@ -267,7 +267,7 @@ export default {
                                 </div>
                             </template>
                             <template #item.id="{ item }">
-                                <div v-if="item.status && showSimpanSeri">
+                                <div v-if="item.status && !showSimpanSeri">
                                     <div v-if="!noseriterpakai(item)">
                                         <input type="checkbox" @click="checkNoSeri(item)"
                                             :checked="noSeriSelected && noSeriSelected.find(noseri => noseri.id === item.id)">

@@ -10122,7 +10122,7 @@ class PenjualanController extends Controller
     }
     public function batal_po_show_divisi($divisi)
     {
-        $data = RiwayatBatalPo::select('riwayat_batal_po.id', 'pesanan.so', 'pesanan.no_po', 'c_ekat.nama as c_ekat', 'c_spa.nama as c_spa', 'c_spb.nama as c_spb')
+        $data = RiwayatBatalPo::select('riwayat_batal_po.id','riwayat_batal_po.ket', 'pesanan.so', 'pesanan.no_po', 'c_ekat.nama as c_ekat', 'c_spa.nama as c_spa', 'c_spb.nama as c_spb')
             ->addSelect([
                 'c_batal_part' => function ($q) use ($divisi) {
                     $q->selectRaw('coalesce(count(riwayat_batal_po_part.id),0)')
@@ -10206,6 +10206,7 @@ class PenjualanController extends Controller
                 'so' => $d->so,
                 'no_po' => $d->no_po,
                 'customer' => $customer,
+                'ket' => $d->ket,
                 'jumlah' => $d->c_batal_semua + $d->c_batal_semua,
                 'jumlah_tf' => $d->c_batal_tf + $d->c_batal_part_tf
             );

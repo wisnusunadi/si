@@ -154,7 +154,8 @@ class GudangController extends Controller
             ->where('t_gbj_detail.detail_pesanan_produk_id', $id)
             ->get();
 
-        $posisi = ['qc', 'qc','log','log'];
+        $posisi = ['QC', 'QC','LOGISTIK','LOGISTIK'];
+        $obj = array();
         foreach ($data as $d) {
             $obj[] = array(
                 'id' => $d->id,
