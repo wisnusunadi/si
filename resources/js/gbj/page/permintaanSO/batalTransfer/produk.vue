@@ -8,7 +8,46 @@ export default {
     },
     data() {
         return {
-            produk: [],
+            produk: [
+                {
+                    "id": 35,
+                    "nama": "ABPM50",
+                    "produk": [
+                        {
+                            "detail_riwayat_batal_paket_id": 35,
+                            "riwayat_batal_po_prd_id": 49,
+                            "id": 29570,
+                            "nama": "ABPM50",
+                            "variasi": "",
+                            "merk": "ELITECH",
+                            "jumlah_seri": 0,
+                            "jumlah_tf": 1,
+                            "jumlah_tf_batal": 0,
+                            "jumlah_sisa": 1,
+                            "jumlah": 1
+                        }
+                    ]
+                },
+                {
+                    "id": 36,
+                    "nama": "BL-50B",
+                    "produk": [
+                        {
+                            "detail_riwayat_batal_paket_id": 36,
+                            "riwayat_batal_po_prd_id": 50,
+                            "id": 29571,
+                            "nama": "BL-50B",
+                            "variasi": "",
+                            "merk": "ELITECH",
+                            "jumlah_seri": 0,
+                            "jumlah_tf": 0,
+                            "jumlah_tf_batal": 0,
+                            "jumlah_sisa": 2,
+                            "jumlah": 2
+                        }
+                    ]
+                }
+            ],
             search: '',
             detailSelected: null,
             paketSelected: null,
@@ -135,7 +174,7 @@ export default {
         }
     },
     created() {
-        this.getData()
+        // this.getData()
     }
 }
 </script>

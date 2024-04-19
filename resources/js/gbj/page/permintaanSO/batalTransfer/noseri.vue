@@ -9,14 +9,28 @@ export default {
     data() {
         return {
             noSeriSelected: [],
-            noseri: [],
+            noseri: [
+                {
+                    id: 1,
+                    noseri: '123456',
+                    posisi: 'logistik',
+                    status: false
+                },
+                {
+                    id: 2,
+                    noseri: '12345678',
+                    posisi: 'logistik',
+                    status: true
+                }
+            ],
             headers: [
-                { text: 'No. Seri', value: 'noseri', align: 'text-left' },
                 {
                     text: 'id', value: 'id',
                     align: 'text-left',
                     sortable: false,
                 },
+                { text: 'No. Seri', value: 'noseri', align: 'text-left' },
+                { text: 'Posisi', value: 'posisi', align: 'text-left' }
             ],
             search: '',
             checkAll: false,
@@ -28,18 +42,18 @@ export default {
     },
     methods: {
         async getData() {
-            try {
-                this.loading = true
-                const { data } = await axios.get(`/api/gbj/batal_po/seri/${this.detailSelected.id}`)
-                this.noseri = data
-                if (this.detailSelected?.noseri) {
-                    this.noSeriSelected = JSON.parse(JSON.stringify(this.detailSelected.noseri))
-                }
-            } catch (error) {
-                console.error(error)
-            } finally {
-                this.loading = false
-            }
+            // try {
+            //     this.loading = true
+            //     const { data } = await axios.get(`/api/gbj/batal_po/seri/${this.detailSelected.id}`)
+            //     this.noseri = data
+            //     if (this.detailSelected?.noseri) {
+            //         this.noSeriSelected = JSON.parse(JSON.stringify(this.detailSelected.noseri))
+            //     }
+            // } catch (error) {
+            //     console.error(error)
+            // } finally {
+            //     this.loading = false
+            // }
         },
         noseriterpakai(item) {
             let found = false
@@ -189,9 +203,20 @@ export default {
     created() {
         this.getData()
     },
+    computed: {
+        showSimpanSeri() {
+            // cek noseri status true
+            const cekLengthStatusNoSeri = this.noseri.filter(noseri => noseri.status).length
+            if (cekLengthStatusNoSeri === this.detailSelected.jumlah_sisa) {
+                return false
+            } else {
+                return true
+            }
+        }
+    },
     watch: {
         noSeriSelected() {
-            if (this.noSeriSelected.length === this.noseri.length) {
+            if (this.noSeriSelected.length === this.noseri.filter(noseri => !this.noseriterpakai(noseri) && noseri.status).length) {
                 this.checkAll = true
             } else {
                 this.checkAll = false
@@ -214,15 +239,16 @@ export default {
                         </button>
                     </div>
                     <div class="modal-body">
-                        <small>
+                        <small v-if="showSimpanSeri">
                             <span class="text-danger">*</span>
                             Nomor seri yang dipilih tidak boleh lebih dari {{ detailSelected.jumlah_sisa }}
                         </small>
                         <div class="d-flex bd-highlight">
                             <div class="p-2 flex-grow-1 bd-highlight">
-                                <button class="btn btn-primary" @click="clickModalViaText">Pilih Nomor Seri Via
+                                <button class="btn btn-primary" @click="clickModalViaText" v-if="showSimpanSeri">Pilih
+                                    Nomor Seri Via
                                     Text</button> <br>
-                                <div class="custom-control custom-switch my-2">
+                                <div class="custom-control custom-switch my-2" v-if="showSimpanSeri">
                                     <input type="checkbox" class="custom-control-input" id="customSwitch1"
                                         @click="scanSeri" :checked="isScan">
                                     <label class="custom-control-label" for="customSwitch1">Scan Nomor Seri</label>
@@ -237,11 +263,11 @@ export default {
                             <template #header.id>
                                 <div>
                                     <input type="checkbox" @click="checkAllData" :checked="checkAll"
-                                        v-if="detailSelected.jumlah_tf != detailSelected.jumlah">
+                                        v-if="detailSelected.jumlah_tf != detailSelected.jumlah && showSimpanSeri">
                                 </div>
                             </template>
                             <template #item.id="{ item }">
-                                <div v-if="item.status">
+                                <div v-if="item.status && showSimpanSeri">
                                     <div v-if="!noseriterpakai(item)">
                                         <input type="checkbox" @click="checkNoSeri(item)"
                                             :checked="noSeriSelected && noSeriSelected.find(noseri => noseri.id === item.id)">
@@ -251,6 +277,12 @@ export default {
                                     </div>
                                 </div>
                                 <div></div>
+                            </template>
+                            <template #item.noseri="{item}">
+                                <div>
+                                    {{ item.noseri }} <br>
+                                    <small class="text-danger" v-if="!item.status">No. Seri Batal</small>
+                                </div>
                             </template>
                         </data-table>
                         <div v-else class="d-flex justify-content-center">
@@ -266,7 +298,7 @@ export default {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-info" @click="simpanSeri"
-                            v-if="detailSelected.jumlah_tf != detailSelected.jumlah">Simpan</button>
+                            v-if="detailSelected.jumlah_tf != detailSelected.jumlah && showSimpanSeri">Simpan</button>
                         <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
                     </div>
                 </div>
