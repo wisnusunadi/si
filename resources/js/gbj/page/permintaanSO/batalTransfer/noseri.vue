@@ -206,12 +206,7 @@ export default {
     computed: {
         showSimpanSeri() {
             // cek noseri status true
-            const cekLengthStatusNoSeri = this.noseri.filter(noseri => noseri.status).length
-            if (cekLengthStatusNoSeri === this.detailSelected.jumlah_sisa) {
-                return false
-            } else {
-                return true
-            }
+            return this.detailSelected.jumlah_sisa > 0
         }
     },
     watch: {
@@ -267,7 +262,7 @@ export default {
                                 </div>
                             </template>
                             <template #item.id="{ item }">
-                                <div v-if="item.status && !showSimpanSeri">
+                                <div v-if="item.status && showSimpanSeri">
                                     <div v-if="!noseriterpakai(item)">
                                         <input type="checkbox" @click="checkNoSeri(item)"
                                             :checked="noSeriSelected && noSeriSelected.find(noseri => noseri.id === item.id)">
