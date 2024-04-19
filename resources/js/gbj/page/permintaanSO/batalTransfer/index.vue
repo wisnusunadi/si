@@ -49,17 +49,17 @@ export default {
         progressTransfer(item) {
             if (item.jumlah_tf == 0) {
                 return {
-                    text: 'Belum Transfer',
+                    text: 'Belum Diinfokan',
                     color: 'badge-danger'
                 }
             } else if (item.jumlah == item.jumlah_tf) {
                 return {
-                    text: 'Sudah Transfer',
+                    text: 'Sudah Diinfokan',
                     color: 'badge-success'
                 }
             } else {
                 return {
-                    text: 'Sudah Transfer Sebagian',
+                    text: 'Sudah Diinfokan Sebagian',
                     color: 'badge-warning'
                 }
             }

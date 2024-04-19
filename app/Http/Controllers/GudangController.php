@@ -242,7 +242,7 @@ class GudangController extends Controller
 
     function get_batal_po()
     {
-        $data = RiwayatBatalPo::select('riwayat_batal_po.pesanan_id', 'riwayat_batal_po.id', 'pesanan.so', 'pesanan.no_po', 'c_ekat.nama as c_ekat', 'c_spa.nama as c_spa', 'c_spb.nama as c_spb')
+        $data = RiwayatBatalPo::select('riwayat_batal_po.pesanan_id', 'riwayat_batal_po.id', 'pesanan.so', 'pesanan.no_po', 'c_ekat.nama as c_ekat', 'c_spa.nama as c_spa', 'c_spb.nama as c_spb', 'riwayat_batal_po.ket')
             ->addSelect([
                 'cseri' => function ($q) {
                     $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
@@ -310,7 +310,8 @@ class GudangController extends Controller
                 'no_po' => $d->no_po,
                 'customer' => $customer,
                 'jumlah' => $d->cgbj,
-                'jumlah_tf' => $d->cseri
+                'jumlah_tf' => $d->cseri,
+                'ket' => $d->ket,
             );
         }
 
