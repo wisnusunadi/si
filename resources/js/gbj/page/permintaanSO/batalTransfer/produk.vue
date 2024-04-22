@@ -249,7 +249,7 @@ export default {
                                             </tr>
                                             <tr v-for="item in paket.produk" :key="item.id">
                                                 <td>{{ item.nama }}</td>
-                                                <td>{{ item.jumlah_sisa }}</td>
+                                                <td>{{ item.jumlah_sisa != 0 ? item.jumlah_sisa : item.jumlah }}</td>
                                                 <td v-if="detail.jumlah_tf != detail.jumlah">{{ item.noseri?.length
             ?? 0 }}</td>
                                                 <td>{{ item.merk }}</td>

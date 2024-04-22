@@ -45,7 +45,12 @@ export default {
             try {
                 this.loading = true
                 const { data } = await axios.get(`/api/gbj/batal_po/seri/${this.detailSelected.id}`)
-                this.noseri = data
+                if (this.detailSelected.jumlah_sisa == 0) {
+                    // show array status false
+                    this.noseri = data.filter(noseri => !noseri.status)
+                } else {
+                    this.noseri = data
+                }
                 if (this.detailSelected?.noseri) {
                     this.noSeriSelected = JSON.parse(JSON.stringify(this.detailSelected.noseri))
                 }
