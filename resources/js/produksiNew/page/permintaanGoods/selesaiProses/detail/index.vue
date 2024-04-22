@@ -4,7 +4,12 @@ export default {
     components: { Header },
     data() {
         return {
-            title
+            title: 'Detail Permintaan Barang',
+            breadcumbs: [
+                {
+                    name: 'Permintaan Barang',
+                }
+            ]
         }
     },
 }

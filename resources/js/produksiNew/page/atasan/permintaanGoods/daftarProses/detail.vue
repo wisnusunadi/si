@@ -80,6 +80,38 @@ export default {
                 return false;
             }
         },
+        setuju(id) {
+            swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Data yang sudah disetujui tidak dapat dikembalikan!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, setujui!',
+                cancelButtonText: 'Keluar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swal.fire('Berhasil', 'Data berhasil disetujui', 'success');
+                }
+            });
+        },
+        tolak(id) {
+            swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Data yang sudah ditolak tidak dapat dikembalikan!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, tolak!',
+                cancelButtonText: 'Keluar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swal.fire('Berhasil', 'Data berhasil ditolak', 'success');
+                }
+            });
+        }
     },
 }
 </script>
@@ -147,12 +179,21 @@ export default {
                             <div class="card-footer">
                                 <div class="d-flex bd-highlight">
                                     <div class="p-2 flex-grow-1 bd-highlight">
-                                        <button class="btn btn-warning" @click="showModalEdit"
-                                            v-if="statusEdit(item)">
+                                        <button class="btn btn-success"
+                                            v-if="item.status == 'menunggu_persetujuan_atasan'" @click="setuju(item)">
+                                            <i class="fas fa-check"></i>
+                                            Setuju
+                                        </button>
+                                        <button class="btn btn-danger"
+                                            v-if="item.status == 'menunggu_persetujuan_atasan'" @click="tolak(item)">
+                                            <i class="fas fa-ban"></i>
+                                            Tolak
+                                        </button>
+                                        <button class="btn btn-warning" @click="showModalEdit" v-if="statusEdit(item)">
                                             <i class="fas fa-pencil-alt"></i> Edit
                                         </button>
                                         <button class="btn btn-danger" @click="batalPinjam"
-                                            v-if="item.status != 'batal'">
+                                            v-if="item.status != 'batal' && item.status != 'menunggu_persetujuan_atasan'">
                                             <i class="fas fa-times"></i> Batal
                                         </button>
                                     </div>

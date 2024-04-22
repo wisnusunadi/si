@@ -2,8 +2,9 @@
 import status from '../../../../components/status.vue';
 import tambah from './tambah.vue';
 import edit from './edit.vue';
+import detail from './detail.vue';
 export default {
-    components: { status, tambah, edit },
+    components: { status, tambah, edit, detail },
     data() {
         return {
             search: '',
@@ -101,6 +102,13 @@ export default {
                 $('.modalEdit').modal('show');
             });
         },
+        openDetail(item) {
+            this.detailSelected = item;
+            this.showModal = true;
+            this.$nextTick(() => {
+                $('.modalDetail').modal('show');
+            });
+        },  
         batalPinjam(id) {
             swal.fire({
                 title: 'Apakah anda yakin?',
@@ -166,6 +174,7 @@ export default {
     <div>
         <tambah v-if="showModal" @close="showModal = false" />
         <edit v-if="showModal" @close="showModal = false" :item="detailSelected" />
+        <detail v-if="showModal" @close="showModal = false" :item="detailSelected" />
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
                 <button class="btn btn-primary" @click="openTambah">
@@ -191,34 +200,29 @@ export default {
             </template>
             <template #item.aksi="{ item }">
                 <div>
-                    <div data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"
-                        class="dropdown-toggle"><i class="fas fa-ellipsis-v"></i></div>
-                    <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
-                        <button class="dropdown-item" type="button"
-                            @click="$router.push({ name: 'permintaanGoodsMgrDetail', params: { id: item.id, status: item.status } })">
-                            <i class="fas fa-eye"></i>
-                            Detail
-                        </button>
-                        <button class="dropdown-item" type="button" v-if="statusEdit(item)" @click="openEdit(item)">
-                            <i class="fas fa-edit"></i>
-                            Edit
-                        </button>
-                        <button class="dropdown-item" type="button" v-if="item.status != 'batal'"
-                            @click="batalPinjam(item.id)">
-                            <i class="fas fa-times"></i>
-                            Batal
-                        </button>
-                        <div v-if="item.status == 'menunggu_persetujuan_atasan'">
-                            <button class="dropdown-item" type="button" @click="setuju(item.id)">
-                                <i class="fas fa-check"></i>
-                                Setuju
-                            </button>
-                            <button class="dropdown-item" type="button" @click="tolak(item.id)">
-                                <i class="fas fa-ban"></i>
-                                Tolak
-                            </button>
-                        </div>
-                    </div>
+                    <button class="btn btn-sm btn-outline-primary" @click="openDetail(item)">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                    </button>
+                    <button class="btn btn-sm btn-outline-warning" v-if="statusEdit(item)" @click="openEdit(item)">
+                        <i class="fas fa-edit"></i>
+                        Edit
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" @click="batalPinjam(item.id)"
+                        v-if="item.status != 'batal' && item.status != 'menunggu_persetujuan_atasan'">
+                        <i class="fas fa-times"></i>
+                        Batal
+                    </button>
+                    <button class="btn btn-sm btn-outline-success" v-if="item.status == 'menunggu_persetujuan_atasan'"
+                        @click="setuju(item)">
+                        <i class="fas fa-check"></i>
+                        Setuju
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" v-if="item.status == 'menunggu_persetujuan_atasan'"
+                        @click="tolak(item)">
+                        <i class="fas fa-ban"></i>
+                        Tolak
+                    </button>
                 </div>
             </template>
         </data-table>

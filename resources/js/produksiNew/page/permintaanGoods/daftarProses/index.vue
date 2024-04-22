@@ -2,8 +2,9 @@
 import status from '../../../components/status.vue';
 import tambah from './tambah.vue';
 import edit from './edit.vue';
+import detail from './detail.vue';
 export default {
-    components: { status, tambah, edit },
+    components: { status, tambah, edit, detail },
     data() {
         return {
             search: '',
@@ -131,12 +132,20 @@ export default {
                 }
             });
         },
-        statusEdit({status}) {
+        statusEdit({ status }) {
             if (status === 'permintaan_ditolak_atasan' || status === 'permintaan_gagal_diacc' || status === 'permintaan_ditolak_gudang') {
                 return true;
             } else {
                 return false;
             }
+        },
+        detail({ id, status }) {
+            // this.$router.push({ name: 'permintaanGoodsDetail', params: { id, status } });
+            this.detailSelected = this.items.find(item => item.id === id);
+            this.showModal = true;
+            this.$nextTick(() => {
+                $('.modalDetail').modal('show');
+            });
         }
     },
 }
@@ -145,6 +154,7 @@ export default {
     <div>
         <tambah v-if="showModal" @close="showModal = false" />
         <edit v-if="showModal" @close="showModal = false" :item="detailSelected" />
+        <detail v-if="showModal" @close="showModal = false" :item="detailSelected" />
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
                 <button class="btn btn-primary" @click="openTambah">
@@ -156,39 +166,32 @@ export default {
             </div>
         </div>
         <data-table :headers="headers" :items="items" :search="search">
-            <template #item.tgl_permintaan="{item}">
+            <template #item.tgl_permintaan="{ item }">
                 <div>
                     {{ dateFormat(item.tgl_permintaan) }} <br>
                     <status :status="item.jenis" />
                 </div>
             </template>
-            <template #item.tgl_kebutuhan="{item}">
+            <template #item.tgl_kebutuhan="{ item }">
                 <div>
                     {{ dateFormat(item.tgl_kebutuhan) }} <br>
                     <status :status="item.status" />
                 </div>
             </template>
-            <template #item.aksi="{item}">
-                <div>
-                    <div data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"
-                        class="dropdown-toggle"><i class="fas fa-ellipsis-v"></i></div>
-                    <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
-                        <button class="dropdown-item" type="button"
-                            @click="$router.push({ name: 'permintaanGoodsDetail', params: { id: item.id, status: item.status } })">
-                            <i class="fas fa-eye"></i>
-                            Detail
-                        </button>
-                        <button class="dropdown-item" type="button" v-if="statusEdit(item)" @click="openEdit(item)">
-                            <i class="fas fa-edit"></i>
-                            Edit
-                        </button>
-                        <button class="dropdown-item" type="button" v-if="item.status != 'batal'"
-                            @click="batalPinjam(item.id)">
-                            <i class="fas fa-times"></i>
-                            Batal
-                        </button>
-                    </div>
-                </div>
+            <template #item.aksi="{ item }">
+                <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
+                    <i class="fas fa-eye"></i>
+                    Detail
+                </button>
+                <button class="btn btn-sm btn-outline-warning" v-if="statusEdit(item)" @click="openEdit(item)">
+                    <i class="fas fa-edit"></i>
+                    Edit
+                </button>
+                <button class="btn btn-sm btn-outline-danger" v-if="item.status != 'batal'"
+                    @click="batalPinjam(item.id)">
+                    <i class="fas fa-times"></i>
+                    Batal
+                </button>
             </template>
         </data-table>
     </div>

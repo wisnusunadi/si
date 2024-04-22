@@ -53,26 +53,15 @@ const routes = [
         component: () => import("./page/permintaanGoods"),
     },
     {
-        path: "/produksi/permintaan_goods/:id",
-        name: "permintaanGoodsDetail",
-        component: () => import("./page/permintaanGoods/daftarProses/detail"),
-    },
-    {
         path: "/produksi/permintaan_goods_mgr",
         name: "permintaanGoodsMgr",
         component: () => import("./page/atasan/permintaanGoods"),
     },
-    {
-        path: "/produksi/permintaan_goods_mgr/:id",
-        name: "permintaanGoodsMgrDetail",
-        component: () =>
-            import("./page/atasan/permintaanGoods/daftarProses/detail"),
-    },
-    {
-        path: "/produksi/permintaan_goods_detail/:id",
-        name: "permintaanGoodsDetailLain",
-        component: () => import("./page/permintaanGoods/selesaiProses/detail"),
-    }
+    // {
+    //     path: "/produksi/permintaan_goods_detail/:id",
+    //     name: "permintaanGoodsDetailLain",
+    //     component: () => import("./page/permintaanGoods/selesaiProses/detail"),
+    // }
 ];
 const router = new VueRouter({
     mode: "history",
