@@ -231,7 +231,7 @@ export default {
             </template>
             <template #item.aksi="{ item }">
                 <div>
-                    <button class="btn btn-outline-info btn-sm" v-if="item.status == 'barang_siap_diambil'"
+                    <!-- <button class="btn btn-outline-info btn-sm" v-if="item.status == 'barang_siap_diambil'"
                         @click="pengambilanBarang(item)">
                         <i class="fas fa-hand-holding"></i>
                         Pengambilan
@@ -240,7 +240,7 @@ export default {
                         @click="terimaBarang(item)">
                         <i class="fas fa-check"></i>
                         Terima
-                    </button>
+                    </button> -->
                     <button class="btn btn-outline-primary btn-sm" @click="detail(item)">
                         <i class="fas fa-eye"></i>
                         Detail

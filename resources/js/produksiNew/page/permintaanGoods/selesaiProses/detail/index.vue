@@ -2,12 +2,12 @@
 import Header from '../../../../components/header.vue'
 import headerDetail from './header.vue'
 import pengajuan from './pengajuan'
-import pengeluaran from './pengeluaran'
+import pemasukan from './pemasukan'
 import peminjaman from './peminjaman'
 import perubahan from './perubahan'
 import pengembalian from './pengembalian'
 export default {
-    components: { Header, headerDetail, pengajuan, pengeluaran, peminjaman, perubahan, pengembalian },
+    components: { Header, headerDetail, pengajuan, pemasukan, peminjaman, perubahan, pengembalian },
     data() {
         return {
             title: 'Detail Permintaan Barang',
@@ -73,7 +73,7 @@ export default {
                 <pengajuan />
             </div>
             <div class="tab-pane fade" id="pills-pemasukan" role="tabpanel" aria-labelledby="pills-profile-tab">
-                <pengeluaran />
+                <pemasukan />
             </div>
             <div class="tab-pane fade" id="pills-peminjaman" role="tabpanel" aria-labelledby="pills-peminjaman-tab">
                 <peminjaman />
