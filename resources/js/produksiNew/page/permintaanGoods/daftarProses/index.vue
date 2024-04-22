@@ -60,6 +60,7 @@ export default {
                     status: 'permintaan_ditolak_atasan',
                     durasi: '2 hari',
                     jenis: 'peminjaman',
+                    ket: 'Lorem Ipsum Dolor Sit Amet',
                 },
                 {
                     id: 4,
@@ -82,6 +83,7 @@ export default {
                     status: 'permintaan_gagal_diacc',
                     durasi: '3 hari',
                     jenis: 'peminjaman',
+                    ket: 'Lorem Ipsum Dolor Sit Amet',
                 },
                 {
                     id: 6,
@@ -93,6 +95,7 @@ export default {
                     status: 'permintaan_ditolak_gudang',
                     durasi: '3 hari',
                     jenis: 'permintaan',
+                    ket: 'Lorem Ipsum Dolor Sit Amet',
                 }
             ],
             showModal: false,

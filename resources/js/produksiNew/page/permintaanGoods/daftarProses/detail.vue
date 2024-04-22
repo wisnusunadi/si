@@ -134,6 +134,12 @@ export default {
                                             </div>
                                         </div>
                                     </div>
+                                    <div v-if="item.ket"><label for="">Alasan Ditolak</label>
+                                        <div class="card">
+                                            <div class="card-body"><span id="instansi">{{ item.ket }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -147,8 +153,7 @@ export default {
                             <div class="card-footer">
                                 <div class="d-flex bd-highlight">
                                     <div class="p-2 flex-grow-1 bd-highlight">
-                                        <button class="btn btn-warning" @click="showModalEdit"
-                                            v-if="statusEdit(item)">
+                                        <button class="btn btn-warning" @click="showModalEdit" v-if="statusEdit(item)">
                                             <i class="fas fa-pencil-alt"></i> Edit
                                         </button>
                                         <button class="btn btn-danger" @click="batalPinjam"

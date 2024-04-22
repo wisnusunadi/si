@@ -182,7 +182,7 @@ export default {
             });
         },
         detail({ id }) {
-            this.$router.push({ name: 'permintaanGoodsDetailLain', params: { id } });
+            this.$router.push({ name: 'permintaanGoodsDetail', params: { id } });
         }
     },
 }

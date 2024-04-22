@@ -41,6 +41,7 @@ export default {
             ],
             items: [
                 {
+                    id:1,
                     no_permintaan: 'NSO-2021080001',
                     no_referensi: 'SO-2021080001',
                     tgl_permintaan: '21 Agustus 2021',
@@ -51,6 +52,7 @@ export default {
                     status: 'selesai',
                 },
                 {
+                    id:2,
                     no_permintaan: 'NSO-2021080002',
                     no_referensi: 'SO-2021080002',
                     tgl_permintaan: '21 Agustus 2021',
@@ -65,7 +67,7 @@ export default {
     },
     methods: {
         detail({ id }) {
-            this.$router.push({ name: 'permintaanGoodsDetailLain', params: { id } });
+            this.$router.push({ name: 'permintaanGoodsDetail', params: { id } });
         }
     },
 }

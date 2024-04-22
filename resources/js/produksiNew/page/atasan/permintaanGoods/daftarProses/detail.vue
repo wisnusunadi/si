@@ -166,6 +166,12 @@ export default {
                                             </div>
                                         </div>
                                     </div>
+                                    <div v-if="item.ket"><label for="">Alasan Ditolak</label>
+                                        <div class="card">
+                                            <div class="card-body"><span id="instansi">{{ item.ket }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-body">
