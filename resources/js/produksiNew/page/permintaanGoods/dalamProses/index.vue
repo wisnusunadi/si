@@ -55,6 +55,7 @@ export default {
             search: '',
             items: [
                 {
+                    id:1,
                     no_permintaan: 'NSO-2021080001',
                     no_referensi: 'SO-2021080001',
                     tgl_permintaan: '21 Agustus 2021',
@@ -66,6 +67,7 @@ export default {
                     persentase: 0,
                 },
                 {
+                    id:2,
                     no_permintaan: 'NSO-2021080002',
                     no_referensi: 'SO-2021080002',
                     tgl_permintaan: '21 Agustus 2021',
@@ -77,6 +79,7 @@ export default {
                     persentase: 0,
                 },
                 {
+                    id:3,
                     no_permintaan: 'NSO-2021080003',
                     no_referensi: 'SO-2021080003',
                     tgl_permintaan: '21 Agustus 2021',
@@ -88,6 +91,7 @@ export default {
                     persentase: 0,
                 },
                 {
+                    id:4,
                     no_permintaan: 'NSO-2021080004',
                     no_referensi: 'SO-2021080004',
                     tgl_permintaan: '21 Agustus 2021',
@@ -99,6 +103,7 @@ export default {
                     persentase: 0,
                 },
                 {
+                    id:5,
                     no_permintaan: 'NSO-2021080005',
                     no_referensi: 'SO-2021080005',
                     tgl_permintaan: '21 Agustus 2021',
@@ -175,6 +180,9 @@ export default {
                     swal.fire('Berhasil!', 'Barang telah diterima', 'success');
                 }
             });
+        },
+        detail({ id }) {
+            this.$router.push({ name: 'permintaanGoodsDetailLain', params: { id } });
         }
     },
 }
@@ -233,7 +241,7 @@ export default {
                         <i class="fas fa-check"></i>
                         Terima
                     </button>
-                    <button class="btn btn-outline-primary btn-sm">
+                    <button class="btn btn-outline-primary btn-sm" @click="detail(item)">
                         <i class="fas fa-eye"></i>
                         Detail
                     </button>

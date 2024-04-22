@@ -1,5 +1,5 @@
 <script>
-import status from '../../../components/status.vue';    
+import status from '../../../components/status.vue';
 export default {
     components: { status },
     data() {
@@ -63,6 +63,11 @@ export default {
             ]
         }
     },
+    methods: {
+        detail({ id }) {
+            this.$router.push({ name: 'permintaanGoodsDetailLain', params: { id } });
+        }
+    },
 }
 </script>
 <template>
@@ -73,15 +78,23 @@ export default {
             </div>
         </div>
         <data-table :headers="headers" :items="items" :search="search">
-            <template #item.jenis="{item}">
+            <template #item.jenis="{ item }">
                 <div class="text-capitalize">
                     {{ item.jenis }}
                 </div>
             </template>
-            <template #item.no_referensi="{item}">
+            <template #item.no_referensi="{ item }">
                 <div>
                     {{ item.no_referensi }}
                     <status :status="item.status" />
+                </div>
+            </template>
+            <template #item.aksi="{ item }">
+                <div>
+                    <button class="btn btn-sm btn-outline-primary" @click="detail(item)">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                    </button>
                 </div>
             </template>
         </data-table>

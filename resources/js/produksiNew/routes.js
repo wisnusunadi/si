@@ -68,6 +68,11 @@ const routes = [
         component: () =>
             import("./page/atasan/permintaanGoods/daftarProses/detail"),
     },
+    {
+        path: "/produksi/permintaan_goods_detail/:id",
+        name: "permintaanGoodsDetailLain",
+        component: () => import("./page/permintaanGoods/selesaiProses/detail"),
+    }
 ];
 const router = new VueRouter({
     mode: "history",
