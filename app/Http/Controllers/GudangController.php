@@ -115,6 +115,11 @@ class GudangController extends Controller
         $data = NoseriTGbj::select('t_gbj_noseri.id', 'noseri_barang_jadi.id as noseri_id', 'noseri_barang_jadi.noseri')
 
             ->addSelect([
+                'c_on_uji' => function ($q) {
+                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
+                        ->from('noseri_detail_pesanan')
+                        ->whereColumn('noseri_detail_pesanan.t_tfbj_noseri_id', 't_gbj_noseri.id');
+                },
                 'c_uji' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
                         ->from('noseri_detail_pesanan')
@@ -155,13 +160,23 @@ class GudangController extends Controller
             ->get();
 
         $posisi = ['QC', 'QC','LOGISTIK','LOGISTIK'];
+
+        $o = 0;
         $obj = array();
         foreach ($data as $d) {
+            if($d->c_on_uji > 0){
+                $o = 1;
+            }else{
+                $o = $d->c_uji;
+            }
+
+
             $obj[] = array(
                 'id' => $d->id,
                 'noseri_id' => $d->noseri_id,
                 'noseri' => $d->noseri,
-                'posisi' => $posisi[$d->c_uji + $d->c_log + $d->c_sj],
+                'posisi' => 99,
+                'posisi' => $posisi[$o + $d->c_log + $d->c_sj],
                 'status' => $d->c_batal  > 0 ? false : true
             );
         }
