@@ -140,8 +140,15 @@ class QcController extends Controller
                             ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
                             ->where('detail_pesanan.kalibrasi', 1)
                             ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'is_batal' => function ($q) {
+                        $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id), 0)')
+                            ->from('riwayat_batal_po_seri')
+                            ->where('riwayat_batal_po_seri.posisi', 'qc')
+                            ->whereColumn('riwayat_batal_po_seri.t_tfbj_noseri_id', 't_gbj_noseri.id');
                     }
                 ])
+               ->havingRaw('is_batal = 0')
                 ->where('t_gbj.pesanan_id', $idpesanan)
                 ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
                 ->get();
@@ -181,8 +188,15 @@ class QcController extends Controller
                             ->leftjoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
                             ->where('detail_pesanan.kalibrasi', 1)
                             ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
+                    },
+                    'is_batal' => function ($q) {
+                        $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id), 0)')
+                            ->from('riwayat_batal_po_seri')
+                            ->where('riwayat_batal_po_seri.posisi', 'qc')
+                            ->whereColumn('riwayat_batal_po_seri.t_tfbj_noseri_id', 't_gbj_noseri.id');
                     }
                 ])
+               ->havingRaw('is_batal = 0')
                 ->where('t_gbj.pesanan_id', $idpesanan)
                 ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
                 ->whereNull('noseri_detail_pesanan.id')
@@ -223,7 +237,15 @@ class QcController extends Controller
                             ->where('detail_pesanan.kalibrasi', 1)
                             ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
                     }
+                    ,
+                    'is_batal' => function ($q) {
+                        $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id), 0)')
+                            ->from('riwayat_batal_po_seri')
+                            ->where('riwayat_batal_po_seri.posisi', 'qc')
+                            ->whereColumn('riwayat_batal_po_seri.t_tfbj_noseri_id', 't_gbj_noseri.id');
+                    }
                 ])
+               ->havingRaw('is_batal = 0')
                 ->where('t_gbj.pesanan_id', $idpesanan)
                 ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
                 ->whereNotNull('noseri_detail_pesanan.id')
@@ -264,7 +286,15 @@ class QcController extends Controller
                             ->where('detail_pesanan.kalibrasi', 1)
                             ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
                     }
+                    ,
+                    'is_batal' => function ($q) {
+                        $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id), 0)')
+                            ->from('riwayat_batal_po_seri')
+                            ->where('riwayat_batal_po_seri.posisi', 'qc')
+                            ->whereColumn('riwayat_batal_po_seri.t_tfbj_noseri_id', 't_gbj_noseri.id');
+                    }
                 ])
+               ->havingRaw('is_batal = 0')
                 ->where('t_gbj.pesanan_id', $idpesanan)
                 ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
                 ->whereNotNull('uji_lab_detail.id')
@@ -305,7 +335,15 @@ class QcController extends Controller
                             ->where('detail_pesanan.kalibrasi', 1)
                             ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
                     }
+                    ,
+                    'is_batal' => function ($q) {
+                        $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id), 0)')
+                            ->from('riwayat_batal_po_seri')
+                            ->where('riwayat_batal_po_seri.posisi', 'qc')
+                            ->whereColumn('riwayat_batal_po_seri.t_tfbj_noseri_id', 't_gbj_noseri.id');
+                    }
                 ])
+               ->havingRaw('is_batal = 0')
                 ->where('t_gbj.pesanan_id', $idpesanan)
                 ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
                 ->where('uji_lab_detail.status', 'belum')
@@ -347,7 +385,15 @@ class QcController extends Controller
                             ->where('detail_pesanan.kalibrasi', 1)
                             ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
                     }
+                    ,
+                    'is_batal' => function ($q) {
+                        $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id), 0)')
+                            ->from('riwayat_batal_po_seri')
+                            ->where('riwayat_batal_po_seri.posisi', 'qc')
+                            ->whereColumn('riwayat_batal_po_seri.t_tfbj_noseri_id', 't_gbj_noseri.id');
+                    }
                 ])
+               ->havingRaw('is_batal = 0')
                 ->where('t_gbj.pesanan_id', $idpesanan)
                 ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
                 ->where('uji_lab_detail.status', 'nok')
@@ -389,7 +435,15 @@ class QcController extends Controller
                             ->where('detail_pesanan.kalibrasi', 1)
                             ->whereColumn('t_gbj_noseri.noseri_id', 'noseri_barang_jadi.id');
                     }
+                    ,
+                    'is_batal' => function ($q) {
+                        $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id), 0)')
+                            ->from('riwayat_batal_po_seri')
+                            ->where('riwayat_batal_po_seri.posisi', 'qc')
+                            ->whereColumn('riwayat_batal_po_seri.t_tfbj_noseri_id', 't_gbj_noseri.id');
+                    }
                 ])
+               ->havingRaw('is_batal = 0')
                 ->where('t_gbj.pesanan_id', $idpesanan)
                 ->where('noseri_barang_jadi.gdg_barang_jadi_id', $id)
                 ->where('uji_lab_detail.status', 'ok')

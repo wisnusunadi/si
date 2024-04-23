@@ -11,4 +11,9 @@ class RiwayatBatalPo extends Model
     protected $connection = 'erp';
     protected $table = "riwayat_batal_po";
     protected $fillable = ['id', 'pesanan_id','ket'];
+
+    public function RiwayatBatalPoPaket()
+    {
+        return $this->hasMany(RiwayatBatalPoPaket::class);
+    }
 }

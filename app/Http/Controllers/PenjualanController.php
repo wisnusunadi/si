@@ -3568,11 +3568,16 @@ class PenjualanController extends Controller
 
     public function cekBatal($item)
     {
-        if ($item->cterkirim == 0 && $item->c_batal == 0 && $item->Pesanan->log_id != 20 && $item->c_retur == 0) {
+        if ($item->cterkirim == 0  && $item->c_retur == 0) {
             return true;
         } else {
             return false;
         }
+        // if ($item->cterkirim == 0 && $item->c_batal == 0 && $item->Pesanan->log_id != 20 && $item->c_retur == 0) {
+        //     return true;
+        // } else {
+        //     return false;
+        // }
     }
     public function cekRetur($item)
     {
@@ -10499,12 +10504,11 @@ class PenjualanController extends Controller
     {
         $obj =  json_decode(json_encode($request->all()), FALSE);
       //  dd($obj);
+
+
         DB::beginTransaction();
         try {
-            //code...
-            $p = Pesanan::find($obj->pesanan_id);
-            $p->log_id = 20;
-            $p->save();
+
 
             // $tgbj = TFProduksi::where('pesanan_id', $obj->pesanan_id);
             $po = RiwayatBatalPo::where('pesanan_id', $obj->pesanan_id);
@@ -10594,6 +10598,21 @@ class PenjualanController extends Controller
                     'response' =>   json_encode($itemx),
                 ]);
             //}
+
+
+    //Penjualan PO
+    $j_po = Pesanan::find($obj->pesanan_id)->DetailPesanan->sum('jumlah');
+
+    //Riwayat Batal
+    $j_batal = RiwayatBatalPo::where('pesanan_id',$obj->pesanan_id)->first()->RiwayatBatalPoPaket->sum('jumlah');
+
+
+    if ($j_po == $j_batal){
+        $p = Pesanan::find($obj->pesanan_id);
+        $p->log_id = 20;
+        $p->save();
+    }
+
             DB::commit();
             return response()->json([
                 'status' => 200,
