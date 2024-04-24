@@ -155,6 +155,58 @@ export default {
 
             return this.items.filter(data => includesSearch(data, this.search));
         },
+    },
+    created() {
+        if (this.$route.params.selesai) {
+            this.items = [
+                {
+                    no: 2,
+                    no_ubah: 'UBAH-2021080003',
+                    nama: 'Produk 1',
+                    jumlah: 2,
+                    tanggal_selesai: '2024-08-23',
+                    hari: 1,
+                    hasil: 'Diterima',
+                    alasan: '-',
+                    expanded: false,
+                    noseri: [
+                        {
+                            noseri: '123456',
+                            id: 1
+                        },
+                        {
+                            noseri: '123457',
+                            id: 2
+                        }
+                    ]
+                },
+                {
+                    no: 3,
+                    no_ubah: 'UBAH-2021080003',
+                    nama: 'Produk 2',
+                    jumlah: 3,
+                    tanggal_selesai: '2024-04-03',
+                    hari: 4,
+                    hasil: 'Ditolak',
+                    alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
+                    expanded: false,
+                    noseri: [
+                        {
+                            noseri: '123456',
+                            id: 1
+                        },
+                        {
+                            noseri: '123457',
+                            id: 2
+                        },
+                        {
+                            noseri: '123458',
+                            id: 3
+                        }
+                    ]
+                },
+            ]
+        }
     }
 }
 </script>

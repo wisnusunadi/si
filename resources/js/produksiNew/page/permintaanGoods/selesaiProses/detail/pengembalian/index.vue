@@ -142,8 +142,8 @@ export default {
                         no: 2,
                         id: 2,
                         noseri: 'NS-2021080002',
-                        waktu_kembali: null,
-                        status: 'Menunggu Approval GBJ',
+                        waktu_kembali: '2024-09-03 13:00:00',
+                        status: 'Pengembalian',
                         tgl_close: '2024-09-03 13:00:00',
                     }
                 ]
@@ -188,12 +188,6 @@ export default {
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
                     });
-                    this.noSeriSelected = this.noSeriSelected.map(item => {
-                        return {
-                            ...item,
-                            status: 'Menunggu Approval GBJ'
-                        }
-                    });
                     this.loading = false;
                 }
             });
@@ -208,19 +202,37 @@ export default {
             }
 
             // add to parent
-            // const index = this.items.findIndex(i => i.no === this.detailProdukSelected.no);
-            // this.$set(this.items, index, {
-            //     ...this.detailProdukSelected,
-            //     noseri: this.noSeriSelected,
-            // });
+            const index = this.items.findIndex(i => i.no === this.detailProdukSelected.no);
+            this.$set(this.items, index, {
+                ...this.detailProdukSelected,
+                noseri: this.noSeriSelected,
+            });
 
-            console.log('noSeriSelected', this.noSeriSelected);
-            console.log('noseri', this.noseri.filter(item => !item.waktu_kembali).length);
         },
         detailProdukSelected() {
             this.noSeriSelected = this.detailProdukSelected?.noseri || [];
         }
-    }
+    },
+    created() {
+        if (this.$route.params.selesai) {
+            this.items = [
+                {
+                    no: 1,
+                    nama: 'Produk 1',
+                    jumlah: 10,
+                    waktu_kembali: '2024-08-26 13:00:00',
+                    tgl_close: '2024-09-03 13:00:00',
+                },
+                {
+                    no: 2,
+                    nama: 'Produk 2',
+                    jumlah: 20,
+                    waktu_kembali: '2024-08-26 13:00:00',
+                    tgl_close: '2024-08-26 13:00:00',
+                },
+            ]
+        }
+    },
 }
 </script>
 <template>
@@ -278,7 +290,7 @@ export default {
                         </template>
                         <template #item.id="{ item }">
                             <input type="checkbox" :checked="noSeriSelected.find(i => i.id === item.id)"
-                                @click="checkOne(item)" v-if="!item.waktu_kembali && !item?.status">
+                                @click="checkOne(item)" v-if="!item.waktu_kembali">
                             <div v-if="detailProdukSelected?.waktu_kembali">{{ item.no }}</div>
                         </template>
                         <template #item.noseri="{item}">

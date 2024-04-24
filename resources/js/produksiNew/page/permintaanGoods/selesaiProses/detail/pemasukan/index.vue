@@ -30,7 +30,7 @@ export default {
                     no: 1,
                     nama: 'Produk 1',
                     jumlah: 2,
-                    waktu_ambil: '03 Agustus 2024 13:00'
+                    waktu_ambil: null
                 }
             ],
             detailSelected: null,
@@ -140,7 +140,7 @@ export default {
                     )
                 }
             })
-        }
+        },
     },
     computed: {
         getAllStatusUnique() {
@@ -163,6 +163,34 @@ export default {
             } else {
                 this.checkAll = false
             }
+        }
+    },
+    created() {
+        if (this.$route.params.selesai) {
+            this.itemsProduk = [
+                {
+                    no: 1,
+                    nama: 'Produk 1',
+                    jumlah: 2,
+                    waktu_ambil: '03 Agustus 2024 13:00'
+                }
+            ],
+            this.itemsNoSeri = [
+                {
+                    no: 1,
+                    id: 1,
+                    noseri: 'NS-2021080001',
+                    status: 'barang_keluar',
+                    waktu_diterima: '03 Agustus 2024 13:00'
+                },
+                {
+                    no: 2,
+                    id: 2,
+                    noseri: 'NS-2021080002',
+                    status: 'barang_keluar',
+                    waktu_diterima: '03 Agustus 2024 13:00'
+                }
+            ]
         }
     }
 }
@@ -216,8 +244,8 @@ export default {
                                     </form>
                                 </div>
                             </span>
-                            <button class="btn btn-sm btn-info" v-if="noSeriSelected.length > 0"
-                                @click="penerimaanBarang">
+                            <button class="btn btn-sm btn-info"
+                                v-if="noSeriSelected.length > 0" @click="penerimaanBarang">
                                 <i class="fas fa-check-square"></i>
                                 Penerimaan Barang
                             </button>
@@ -228,7 +256,8 @@ export default {
                     </div>
                     <data-table :headers="headersNoSeri" :items="filterNoSeri" :search="searchNoSeri">
                         <template #header.id>
-                            <input type="checkbox" @click="checkedAll" :checked="checkAll">
+                            <input type="checkbox" @click="checkedAll" :checked="checkAll" v-if="!$route.params.selesai">
+                            <div v-else></div>
                         </template>
                         <template #item.id="{ item }">
                             <input type="checkbox" @click="checkedOne(item)" v-if="item.status != 'barang_keluar'"

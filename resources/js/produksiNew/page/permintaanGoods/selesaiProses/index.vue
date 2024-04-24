@@ -67,7 +67,7 @@ export default {
     },
     methods: {
         detail({ id }) {
-            this.$router.push({ name: 'permintaanGoodsDetail', params: { id } });
+            this.$router.push({ name: 'permintaanGoodsDetail', params: { id, selesai: true } });
         }
     },
 }

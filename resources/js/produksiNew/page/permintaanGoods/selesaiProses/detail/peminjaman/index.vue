@@ -100,7 +100,73 @@ export default {
 
             return this.peminjaman.filter(data => includesSearch(data, this.search));
         },
-    }
+    },
+    created() {
+        if (this.$route.params.selesai) {
+            this.peminjaman = [
+                {
+                    no: 1,
+                    expanded: false,
+                    nama: 'Produk 1',
+                    jumlah: 2,
+                    tgl_peminjaman: '2024-08-23',
+                    tgl_pengambilan: '2024-08-25',
+                    noseri: [
+                        {
+                            no: 1,
+                            noseri: 'TR12345678',
+                            tgl_pengembalian: '2024-08-23 13:00:00',
+                        },
+                        {
+                            no: 2,
+                            noseri: 'TE12345678',
+                            tgl_pengembalian: '2024-08-23 13:00:00',
+                        }
+                    ]
+                },
+                {
+                    no: 2,
+                    expanded: false,
+                    nama: 'Produk 2',
+                    jumlah: 3,
+                    tgl_peminjaman: '2024-08-23',
+                    tgl_pengambilan: '2024-08-25',
+                    noseri: [
+                        {
+                            no: 1,
+                            noseri: 'TL12345678',
+                            tgl_pengembalian: '2024-08-23 13:00:00',
+                        },
+                        {
+                            no: 2,
+                            noseri: 'TM12345678',
+                            tgl_pengembalian: '2024-08-23 13:00:00',
+                        }
+                    ]
+                },
+                {
+                    no: 3,
+                    expanded: false,
+                    nama: 'Produk 3',
+                    jumlah: 3,
+                    tgl_peminjaman: '2024-08-23',
+                    tgl_pengambilan: '2024-08-25',
+                    noseri: [
+                        {
+                            no: 1,
+                            noseri: 'TL12345678',
+                            tgl_pengembalian: '2024-08-23 13:00:00',
+                        },
+                        {
+                            no: 2,
+                            noseri: 'TM12345678',
+                            tgl_pengembalian: '2024-08-23 13:00:00',
+                        }
+                    ]
+                },
+            ]
+        }
+    },
 }
 </script>
 <template>

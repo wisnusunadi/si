@@ -50,20 +50,24 @@ export default {
                     <div class="margin"><b>{{ dateFormat(header.tgl_pengambilan) }}</b></div>
                     <div class="margin"><small class="text-muted">Status</small></div>
                     <div class="margin"><b>
-                            <status :status="header.status" />
+                            <status :status="$route.params.status" />
                         </b></div>
                 </div>
                 <div class="p-2">
-                    <div class="margin"><small class="text-muted">Durasi</small></div>
-                    <div class="margin"><b>{{ header.durasi }}</b></div>
+                    <div class="margin" v-if="$route.params.jenis == 'peminjaman'"><small
+                            class="text-muted">Durasi</small></div>
+                    <div class="margin" v-if="$route.params.jenis == 'peminjaman'"><b>{{ header.durasi }}</b></div>
                     <div class="margin"><small class="text-muted">Tanggal Close</small></div>
-                    <div class="margin">
+                    <div class="margin" v-if="$route.params.jenis == 'peminjaman'">
                         <b :class="calculateDateFromNow(header.tgl_close).color">{{
                             dateFormat(header.tgl_close) }}</b> <br>
                         <small :class="calculateDateFromNow(header.tgl_close).color">
                             <i :class="calculateDateFromNow(header.tgl_close).icon"></i>
                             {{ calculateDateFromNow(header.tgl_close).text }}
                         </small>
+                    </div>
+                    <div class="margin" v-else>
+                        <b>{{ dateFormat(header.tgl_close) }}</b>
                     </div>
                 </div>
             </div>
