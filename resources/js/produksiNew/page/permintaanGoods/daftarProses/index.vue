@@ -149,6 +149,9 @@ export default {
             this.$nextTick(() => {
                 $('.modalDetail').modal('show');
             });
+        },
+        cetakPermintaan() {
+            window.open('/produksiReworks/surat_permintaan/3', '_blank')
         }
     },
 }

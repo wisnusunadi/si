@@ -61,13 +61,24 @@ export default {
                     durasi: null,
                     jenis: 'permintaan',
                     status: 'batal'
+                },
+                {
+                    id: 2,
+                    no_permintaan: 'NSO-2021080002',
+                    no_referensi: 'SO-2021080002',
+                    tgl_permintaan: '21 Agustus 2021',
+                    tujuan: 'Ipsum',
+                    tgl_pengambilan: '21 Agustus 2021',
+                    durasi: '1 Hari',
+                    jenis: 'peminjaman',
+                    status: 'selesai'
                 }
             ]
         }
     },
     methods: {
-        detail({ id }) {
-            this.$router.push({ name: 'permintaanGoodsDetail', params: { id, selesai: true } });
+        detail({ id, status, jenis }) {
+            this.$router.push({ name: 'permintaanGoodsDetail', params: { id, selesai: true, status, jenis } });
         }
     },
 }
