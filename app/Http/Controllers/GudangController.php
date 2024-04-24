@@ -115,6 +115,11 @@ class GudangController extends Controller
         $data = NoseriTGbj::select('t_gbj_noseri.id', 'noseri_barang_jadi.id as noseri_id', 'noseri_barang_jadi.noseri')
 
             ->addSelect([
+                'c_on_uji' => function ($q) {
+                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
+                        ->from('noseri_detail_pesanan')
+                        ->whereColumn('noseri_detail_pesanan.t_tfbj_noseri_id', 't_gbj_noseri.id');
+                },
                 'c_uji' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id),0)')
                         ->from('noseri_detail_pesanan')
@@ -155,13 +160,23 @@ class GudangController extends Controller
             ->get();
 
         $posisi = ['QC', 'QC','LOGISTIK','LOGISTIK'];
+
+        $o = 0;
         $obj = array();
         foreach ($data as $d) {
+            if($d->c_on_uji > 0){
+                $o = 1;
+            }else{
+                $o = $d->c_uji;
+            }
+
+
             $obj[] = array(
                 'id' => $d->id,
                 'noseri_id' => $d->noseri_id,
                 'noseri' => $d->noseri,
-                'posisi' => $posisi[$d->c_uji + $d->c_log + $d->c_sj],
+                'posisi' => 99,
+                'posisi' => $posisi[$o + $d->c_log + $d->c_sj],
                 'status' => $d->c_batal  > 0 ? false : true
             );
         }
@@ -228,12 +243,13 @@ class GudangController extends Controller
             $obj[$key_p] = array(
                 'id' => $d->id,
                 'nama' => $d->nama,
-                'produk' => array()
+                'produk' => array(),
             );
             foreach ($item as  $s) {
                 if ($d->id == $s['detail_riwayat_batal_paket_id']) {
                     $s['jumlah_sisa'] = $d->jumlah - $s->jumlah_tf;
                     $s['jumlah'] = $d->jumlah;
+                    $s['is_seri'] = $d->jumlah_seri > 0 ? true : false ;
                     $obj[$key_p]['produk'][] = $s;
                 }
             }
@@ -269,7 +285,14 @@ class GudangController extends Controller
                         ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
                         ->whereColumn('t_gbj.pesanan_id', 'riwayat_batal_po.pesanan_id')
                         ->limit(1);
-                }
+                },
+                'cjumlahprd' => function ($q) {
+                    $q->selectRaw('coalesce(sum(riwayat_batal_po_paket.jumlah),0)')
+                        ->from('riwayat_batal_po_paket')
+                        ->join('riwayat_batal_po_prd', 'riwayat_batal_po_paket.id', '=', 'riwayat_batal_po_prd.detail_riwayat_batal_paket_id')
+                        ->whereColumn('riwayat_batal_po_paket.riwayat_batal_po_id', 'riwayat_batal_po.id');
+                },
+
             ])
             ->leftJoin('pesanan', 'pesanan.id', '=', 'riwayat_batal_po.pesanan_id')
             ->leftJoin('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
@@ -295,22 +318,22 @@ class GudangController extends Controller
                 $customer = $d->c_spa;
             }
 
-            if ($d->cseri > 0) {
-                if ($d->cseri != $d->cgbj) {
-                    $status = 'Sebagian di Transfer';
-                } else {
-                    $status = 'Sudah di Transfer';
-                }
-            } else {
-                $status = 'Belum Di transfer';
-            }
+            // if ($d->cseri > 0) {
+            //     if ($d->cseri != $d->cjumlahprd) {
+            //         $status = 'Sebagian di Transfer';
+            //     } else {
+            //         $status = 'Sudah di Transfer';
+            //     }
+            // } else {
+            //     $status = 'Belum Di transfer';
+            // }
 
             $obj[] = array(
                 'id' => $d->id,
                 'so' => $d->so,
                 'no_po' => $d->no_po,
                 'customer' => $customer,
-                'jumlah' => $d->cgbj,
+                'jumlah' => $d->cjumlahprd,
                 'jumlah_tf' => $d->cseri,
                 'ket' => $d->ket,
             );
