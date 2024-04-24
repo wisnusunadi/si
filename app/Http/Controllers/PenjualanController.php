@@ -9875,23 +9875,23 @@ class PenjualanController extends Controller
 
             if ($divisi == 'qc') {
                 if (in_array('produk', $jenis_item)) {
-                    $ndp = NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id);
-                    if ($ndp->count() > 0) {
-                        NoseriDetailPesanan::whereIN('id', $ndp->pluck('id')->toArray())->delete();
-                        NoseriTGbj::whereIN('id', $seri_id)->delete();
-                        RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
-                            'status' => 0
-                        ]);
+                    // $ndp = NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id);
+                    // if ($ndp->count() > 0) {
+                    //     NoseriDetailPesanan::whereIN('id', $ndp->pluck('id')->toArray())->delete();
+                    //     NoseriTGbj::whereIN('id', $seri_id)->delete();
+                    //     RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
+                    //         'status' => 0
+                    //     ]);
 
 
-                    } else {
-                        RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
-                            'status' => 0
-                        ]);
-                        NoseriTGbj::whereIN('id', $seri_id)->delete();
+                    // } else {
+                    //     RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
+                    //         'status' => 0
+                    //     ]);
+                    //     NoseriTGbj::whereIN('id', $seri_id)->delete();
 
 
-                    }
+                    // }
 
                 }
                 if (in_array('part', $jenis_item))  {
@@ -9915,60 +9915,60 @@ class PenjualanController extends Controller
 
             if ($divisi == 'log') {
                 if (in_array('produk', $jenis_item)) {
-                    $ndl = NoseriDetailLogistik::select('noseri_logistik.id')
-                        ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-                        ->whereIN('noseri_detail_pesanan.t_tfbj_noseri_id', $seri_id);
+                    // $ndl = NoseriDetailLogistik::select('noseri_logistik.id')
+                    //     ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    //     ->whereIN('noseri_detail_pesanan.t_tfbj_noseri_id', $seri_id);
 
-                    RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
-                        'status' => 0
-                    ]);
+                    // RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
+                    //     'status' => 0
+                    // ]);
 
-                    if ($ndl->count() > 0) {
-                        foreach ($ndl->get() as $noseri) {
+                    // if ($ndl->count() > 0) {
+                    //     foreach ($ndl->get() as $noseri) {
 
-                            //Cek Noseri
-                            $seriLog =  NoseriDetailLogistik::find($noseri->id);
+                    //         //Cek Noseri
+                    //         $seriLog =  NoseriDetailLogistik::find($noseri->id);
 
-                            //Cek Detail Logistik
-                            $detail = DetailLogistik::find($seriLog->detail_logistik_id);
-                            $detailId = $detail->id;
+                    //         //Cek Detail Logistik
+                    //         $detail = DetailLogistik::find($seriLog->detail_logistik_id);
+                    //         $detailId = $detail->id;
 
-                            //Cek Logistik
-                            $log = Logistik::find($detail->logistik_id);
-                            $logId = $log->id;
+                    //         //Cek Logistik
+                    //         $log = Logistik::find($detail->logistik_id);
+                    //         $logId = $log->id;
 
-                            //Cek Logistik Part
-                            $partLog = DetailLogistikPart::where('logistik_id', $logId)->count();
+                    //         //Cek Logistik Part
+                    //         $partLog = DetailLogistikPart::where('logistik_id', $logId)->count();
 
-                            //Hapus Noseri
-                            NoseriDetailLogistik::where('id', $noseri->id)->delete();
+                    //         //Hapus Noseri
+                    //         NoseriDetailLogistik::where('id', $noseri->id)->delete();
 
-                            //Cek dan Hapus
-                            $cekNdl = NoseriDetailLogistik::where('detail_logistik_id', $detailId)->count();
+                    //         //Cek dan Hapus
+                    //         $cekNdl = NoseriDetailLogistik::where('detail_logistik_id', $detailId)->count();
 
-                            //dd($cekNdl);
+                    //         //dd($cekNdl);
 
-                            if ($cekNdl == 0) {
-                                DetailLogistik::where('id', $detailId)->delete();
-                            }
+                    //         if ($cekNdl == 0) {
+                    //             DetailLogistik::where('id', $detailId)->delete();
+                    //         }
 
-                            $cekL = DetailLogistik::where('logistik_id', $logId)->count();
+                    //         $cekL = DetailLogistik::where('logistik_id', $logId)->count();
 
-                            if ($cekL == 0 && $partLog == 0) {
-                                Logistik::where('id', $logId)->delete();
-                            }
-                        }
-
-
-                    } else {
-                        NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id)->delete();
-                        NoseriTGbj::whereIN('id', $seri_id)->delete();
-                        RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
-                            'status' => 0
-                        ]);
+                    //         if ($cekL == 0 && $partLog == 0) {
+                    //             Logistik::where('id', $logId)->delete();
+                    //         }
+                    //     }
 
 
-                    }
+                    // } else {
+                    //     NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id)->delete();
+                    //     NoseriTGbj::whereIN('id', $seri_id)->delete();
+                    //     RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
+                    //         'status' => 0
+                    //     ]);
+
+
+                    // }
                 }
 
 
