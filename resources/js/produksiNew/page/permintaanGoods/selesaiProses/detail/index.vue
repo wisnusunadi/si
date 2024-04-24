@@ -52,18 +52,22 @@ export default {
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-pemasukan-tab" data-toggle="pill" data-target="#pills-pemasukan"
-                    type="button" role="tab" aria-controls="pills-pemasukan" aria-selected="false">Pemasukan</a>
+                    v-if="$route.params.selesai || $route.params.status != 'persiapan_barang'" type="button" role="tab"
+                    aria-controls="pills-pemasukan" aria-selected="false">Pengambilan</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-peminjaman-tab" data-toggle="pill" data-target="#pills-peminjaman"
+                    v-if="$route.params.jenis == 'peminjaman' && $route.params.status == 'proses_peminjaman'"
                     type="button" role="tab" aria-controls="pills-peminjaman" aria-selected="false">Peminjaman</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-perubahan-tab" data-toggle="pill" data-target="#pills-perubahan"
+                    v-if="$route.params.jenis == 'peminjaman' && $route.params.status == 'proses_peminjaman'"
                     type="button" role="tab" aria-controls="pills-perubahan" aria-selected="false">Perubahan</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-pengembalian-tab" data-toggle="pill" data-target="#pills-pengembalian"
+                    v-if="$route.params.jenis == 'peminjaman' && $route.params.status == 'proses_peminjaman'"
                     type="button" role="tab" aria-controls="pills-pengembalian" aria-selected="false">Pengembalian</a>
             </li>
         </ul>

@@ -181,8 +181,8 @@ export default {
                 }
             });
         },
-        detail({ id }) {
-            this.$router.push({ name: 'permintaanGoodsDetail', params: { id } });
+        detail({ id, jenis, status }) {
+            this.$router.push({ name: 'permintaanGoodsDetail', params: { id, selesai: false, jenis, status } });
         }
     },
 }
@@ -231,16 +231,6 @@ export default {
             </template>
             <template #item.aksi="{ item }">
                 <div>
-                    <!-- <button class="btn btn-outline-info btn-sm" v-if="item.status == 'barang_siap_diambil'"
-                        @click="pengambilanBarang(item)">
-                        <i class="fas fa-hand-holding"></i>
-                        Pengambilan
-                    </button>
-                    <button class="btn btn-outline-success btn-sm" v-if="item.status == 'barang_keluar'"
-                        @click="terimaBarang(item)">
-                        <i class="fas fa-check"></i>
-                        Terima
-                    </button> -->
                     <button class="btn btn-outline-primary btn-sm" @click="detail(item)">
                         <i class="fas fa-eye"></i>
                         Detail
