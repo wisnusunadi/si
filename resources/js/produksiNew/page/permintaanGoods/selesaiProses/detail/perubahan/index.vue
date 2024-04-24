@@ -1,17 +1,15 @@
 <script>
+import pagination from '../../../../../../emiindo/components/pagination.vue'
 import formPerubahan from './formPerubahan.vue'
 export default {
     components: {
-        formPerubahan
+        formPerubahan,
+        pagination
     },
     data() {
         return {
             search: '',
             headers: [
-                {
-                    text: 'No.',
-                    value: 'no'
-                },
                 {
                     text: 'No. Perubahan',
                     value: 'no_ubah'
@@ -47,6 +45,21 @@ export default {
                     hari: 4,
                     hasil: null,
                     alasan: null,
+                    expanded: false,
+                    noseri: [
+                        {
+                            noseri: '123456',
+                            id: 1
+                        },
+                        {
+                            noseri: '123457',
+                            id: 2
+                        },
+                        {
+                            noseri: '123458',
+                            id: 3
+                        }
+                    ]
                 },
                 {
                     no: 2,
@@ -57,6 +70,16 @@ export default {
                     hari: 1,
                     hasil: 'Diterima',
                     alasan: '-',
+                    noseri: [
+                        {
+                            noseri: '123456',
+                            id: 1
+                        },
+                        {
+                            noseri: '123457',
+                            id: 2
+                        }
+                    ]
                 },
                 {
                     no: 3,
@@ -67,8 +90,23 @@ export default {
                     hari: 4,
                     hasil: 'Ditolak',
                     alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
+                    noseri: [
+                        {
+                            noseri: '123456',
+                            id: 1
+                        },
+                        {
+                            noseri: '123457',
+                            id: 2
+                        },
+                        {
+                            noseri: '123458',
+                            id: 3
+                        }
+                    ]
                 },
             ],
+            renderPaginate: [],
             showModal: false,
         }
     },
@@ -94,8 +132,28 @@ export default {
             this.$nextTick(() => {
                 $('.modalPerubahan').modal('show');
             })
-        }
+        },
+        updateFilteredDalamProses(data) {
+            this.renderPaginate = data;
+        },
     },
+    computed: {
+        filterRecursive() {
+            const includesSearch = (obj, search) => {
+                if (obj && typeof obj === 'object') {
+                    return Object.keys(obj).some(key => {
+                        if (typeof obj[key] === 'object') {
+                            return includesSearch(obj[key], search);
+                        }
+                        return String(obj[key]).toLowerCase().includes(search.toLowerCase());
+                    });
+                }
+                return false;
+            };
+
+            return this.items.filter(data => includesSearch(data, this.search));
+        },
+    }
 }
 </script>
 <template>
@@ -113,13 +171,57 @@ export default {
                     <input type="text" class="form-control" placeholder="Cari..." v-model="search">
                 </div>
             </div>
-            <data-table :headers="headers" :items="items" :search="search">
-                <template #item.hari="{ item }">
-                    <div>
-                        {{ ketPerubahan(item) }}
-                    </div>
-                </template>
-            </data-table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th v-for="header in headers" :key="header.value">{{ header.text }}</th>
+                    </tr>
+                </thead>
+                <tbody v-if="renderPaginate.length > 0">
+                    <template v-for="(item, idx) in renderPaginate">
+                        <tr>
+                            <td>
+                                <button class="btn btn-sm"
+                                    :class="item.expanded ? 'btn-outline-danger' : 'btn-outline-primary'"
+                                    @click="item.expanded = !item.expanded">
+                                    <i class="fa" :class="item.expanded ? 'fa-minus' : 'fa-plus'"></i>
+                                </button>
+                            </td>
+                            <td>{{ item.no_ubah }}</td>
+                            <td>{{ item.nama }}</td>
+                            <td>{{ item.jumlah }}</td>
+                            <td>{{ ketPerubahan(item) }}</td>
+                            <td>{{ item.hasil }}</td>
+                            <td>{{ item.alasan ?? '-' }}</td>
+                        </tr>
+                        <tr v-if="item.expanded">
+                            <td colspan="100%">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nomor Seri</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody v-if="item.noseri.length > 0">
+                                        <tr v-for="(noseri, idx2) in item.noseri">
+                                            <td>{{ idx2 + 1 }}</td>
+                                            <td>{{ noseri.noseri }}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else>
+                                        <tr>
+                                            <td colspan="100%" class="text-center">Tidak ada data</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+            <pagination :filteredDalamProses="filterRecursive" @updateFilteredDalamProses="updateFilteredDalamProses" />
         </div>
     </div>
 </template>

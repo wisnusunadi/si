@@ -157,7 +157,7 @@ export default {
                                 <button class="btn btn-primary" @click="openModalNoSeri">Pilih Nomor Seri Via
                                     Text</button>
                             </div>
-                            <div class="p-2 bd-highlight"><input type="text" class="form-control" v-model="search">
+                            <div class="p-2 bd-highlight"><input type="text" class="form-control" v-model="search" placeholder="Cari...">
                             </div>
                         </div>
                         <data-table :headers="headers" :items="noseri" :search="search">
