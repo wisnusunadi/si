@@ -43,7 +43,7 @@ export default {
         }
     },
     methods: {
-        addWeekDays(date, daysToAdd) {
+        addWeekDays(date, daysToAdd) { 
             let dateCopy = new Date(date)
             let count = 0
             while (count < daysToAdd) {
