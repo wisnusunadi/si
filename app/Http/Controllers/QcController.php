@@ -1211,6 +1211,7 @@ class QcController extends Controller
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
@@ -1218,6 +1219,7 @@ class QcController extends Controller
                         ->where('noseri_detail_pesanan.is_kalibrasi', 0)
                         ->where('noseri_detail_pesanan.is_lab', 0)
                         ->whereNull('uji_lab_detail.id')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 // 'cqcuji' => function ($q) {
@@ -1307,11 +1309,14 @@ class QcController extends Controller
                 'cqcprd' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
                         ->from('noseri_detail_pesanan')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         // ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 1)
                         ->where('noseri_detail_pesanan.is_lab', 0)
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqcuji' => function ($q) {
@@ -1320,10 +1325,12 @@ class QcController extends Controller
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('uji_lab_detail', 'uji_lab_detail.noseri_id', '=', 'noseri_detail_pesanan.id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'nok')
                         ->where('noseri_detail_pesanan.is_ready', 1)
                         ->where('noseri_detail_pesanan.is_lab', 0)
                         ->whereNull('uji_lab_detail.id')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 // 'cqcuji' => function ($q) {
@@ -1374,8 +1381,10 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.is_ready', 0)
                         ->where('noseri_detail_pesanan.is_lab', 0)
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 // 'ctfpart' => function ($q) {
@@ -1859,8 +1868,10 @@ class QcController extends Controller
                 'ctfprd' => function ($q) {
                     $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
                         ->from('t_gbj_noseri')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
                         ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                         ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
                 },
                 'cqcprd' => function ($q) {
@@ -1868,8 +1879,10 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 0)
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqcok' => function ($q) {
@@ -1877,15 +1890,19 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqnok' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
                         ->from('noseri_detail_pesanan')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('noseri_detail_pesanan.status', 'nok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqcpartok' => function ($q) {
@@ -1955,8 +1972,10 @@ class QcController extends Controller
                 'ctfprd' => function ($q) {
                     $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
                         ->from('t_gbj_noseri')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
                         ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                         ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
                 },
                 'cqcprd' => function ($q) {
@@ -1964,8 +1983,10 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 0)
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqcok' => function ($q) {
@@ -1973,15 +1994,19 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqnok' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
                         ->from('noseri_detail_pesanan')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('noseri_detail_pesanan.status', 'nok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqcpartok' => function ($q) {
@@ -2052,8 +2077,10 @@ class QcController extends Controller
                 'ctfprd' => function ($q) {
                     $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
                         ->from('t_gbj_noseri')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
                         ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                         ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
                 },
                 'cqcok' => function ($q) {
@@ -2061,15 +2088,19 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqnok' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
                         ->from('noseri_detail_pesanan')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('noseri_detail_pesanan.status', 'nok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqcpartok' => function ($q) {
@@ -2149,8 +2180,10 @@ class QcController extends Controller
                 'ctfprd' => function ($q) {
                     $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
                         ->from('t_gbj_noseri')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
                         ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                         ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
                 },
                 'cqcok' => function ($q) {
@@ -2158,7 +2191,9 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqnok' => function ($q) {
@@ -2190,8 +2225,10 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 0)
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'ctfpart' => function ($q) {
@@ -2246,8 +2283,10 @@ class QcController extends Controller
                 'ctfprd' => function ($q) {
                     $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
                         ->from('t_gbj_noseri')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
                         ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                         ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
                 },
                 'cqcok' => function ($q) {
@@ -2255,15 +2294,19 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqnok' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
                         ->from('noseri_detail_pesanan')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('noseri_detail_pesanan.status', 'nok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqcpartok' => function ($q) {
@@ -2287,8 +2330,10 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 0)
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'ctfpart' => function ($q) {
@@ -2346,15 +2391,19 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqnok' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
                         ->from('noseri_detail_pesanan')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('noseri_detail_pesanan.status', 'nok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqcpartok' => function ($q) {
@@ -2385,8 +2434,10 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 0)
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'ctfpart' => function ($q) {
@@ -2444,15 +2495,19 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqnok' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
                         ->from('noseri_detail_pesanan')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('noseri_detail_pesanan.status', 'nok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqcpartok' => function ($q) {
@@ -2483,8 +2538,10 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 0)
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'ctfpart' => function ($q) {
@@ -2549,15 +2606,19 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqnok' => function ($q) {
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
                         ->from('noseri_detail_pesanan')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('noseri_detail_pesanan.status', 'nok')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqcpartok' => function ($q) {
@@ -2581,8 +2642,10 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 0)
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'ctfpart' => function ($q) {
@@ -2677,7 +2740,8 @@ class QcController extends Controller
             $item->jumlah_ok = $item->cqcok + $item->cqcpartok;
             $item->jumlah_nok = $item->cqnok + $item->cqcpartnok;
             $item->persentase = get_status($item);
-            $item->customer = getCustomer($item);
+            $item->customer = $item->ctfprd ;
+          //  $item->customer = getCustomer($item);
             return $item;
         });
 
@@ -3771,8 +3835,10 @@ class QcController extends Controller
                 'ctfprd' => function ($q) {
                     $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
                         ->from('t_gbj_noseri')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
                         ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                         ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
                 },
                 'cqcprd' => function ($q) {
@@ -3780,8 +3846,10 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 0)
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'ctfpart' => function ($q) {
@@ -3919,8 +3987,10 @@ class QcController extends Controller
                 'ctfprd' => function ($q) {
                     $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
                         ->from('t_gbj_noseri')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
                         ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                         ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
                 },
                 'cqcprd' => function ($q) {
@@ -3928,8 +3998,10 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 0)
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'ctfpart' => function ($q) {
@@ -4047,8 +4119,10 @@ class QcController extends Controller
                 'ctfprd' => function ($q) {
                     $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
                         ->from('t_gbj_noseri')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
                         ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                         ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
                 },
                 'cqcprd' => function ($q) {
@@ -4056,8 +4130,10 @@ class QcController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->where('noseri_detail_pesanan.is_ready', 0)
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'ctfpart' => function ($q) {
