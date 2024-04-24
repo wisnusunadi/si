@@ -123,6 +123,21 @@ export default {
                             hari: 4,
                             hasil: null,
                             alasan: null,
+                            expanded: false,
+                            noseri: [
+                                {
+                                    no: 1,
+                                    noseri: 'TL12345678',
+                                },
+                                {
+                                    no: 2,
+                                    noseri: 'TM12345678',
+                                },
+                                {
+                                    no: 3,
+                                    noseri: 'TN12345678',
+                                }
+                            ]
                         },
                         {
                             no: 2,
@@ -133,6 +148,17 @@ export default {
                             hari: 1,
                             hasil: 'Diterima',
                             alasan: '-',
+                            expanded: false,
+                            noseri: [
+                                {
+                                    no: 1,
+                                    noseri: 'TL12345678',
+                                },
+                                {
+                                    no: 2,
+                                    noseri: 'TM12345678',
+                                },
+                            ]
                         },
                         {
                             no: 3,
@@ -143,6 +169,21 @@ export default {
                             hari: 4,
                             hasil: 'Ditolak',
                             alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
+                            expanded: false,
+                            noseri: [
+                                {
+                                    no: 1,
+                                    noseri: 'TL12345678',
+                                },
+                                {
+                                    no: 2,
+                                    noseri: 'TM12345678',
+                                },
+                                {
+                                    no: 3,
+                                    noseri: 'TN12345678',
+                                }
+                            ]
                         },
                     ],
                     pengembalian: [
@@ -323,6 +364,17 @@ export default {
                             hari: 1,
                             hasil: 'Diterima',
                             alasan: '-',
+                            expanded: false,
+                            noseri: [
+                                {
+                                    no: 1,
+                                    noseri: 'TR12345678',
+                                },
+                                {
+                                    no: 2,
+                                    noseri: 'TE12345678',
+                                }
+                            ]
                         },
                         {
                             no: 2,
@@ -333,6 +385,21 @@ export default {
                             hari: 4,
                             hasil: 'Ditolak',
                             alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
+                            expanded: false,
+                            noseri: [
+                                {
+                                    no: 1,
+                                    noseri: 'TL12345678',
+                                },
+                                {
+                                    no: 2,
+                                    noseri: 'TM12345678',
+                                },
+                                {
+                                    no: 3,
+                                    noseri: 'TN12345678',
+                                }
+                            ]
                         },
                     ],
                     pengembalian: [

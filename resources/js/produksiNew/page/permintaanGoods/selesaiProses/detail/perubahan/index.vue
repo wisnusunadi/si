@@ -70,6 +70,7 @@ export default {
                     hari: 1,
                     hasil: 'Diterima',
                     alasan: '-',
+                    expanded: false,
                     noseri: [
                         {
                             noseri: '123456',
@@ -90,6 +91,7 @@ export default {
                     hari: 4,
                     hasil: 'Ditolak',
                     alasan: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc nec ultricies.',
+                    expanded: false,
                     noseri: [
                         {
                             noseri: '123456',
@@ -219,6 +221,11 @@ export default {
                             </td>
                         </tr>
                     </template>
+                </tbody>
+                <tbody v-else>
+                    <tr>
+                        <td colspan="100%" class="text-center">Tidak ada data</td>
+                    </tr>
                 </tbody>
             </table>
             <pagination :filteredDalamProses="filterRecursive" @updateFilteredDalamProses="updateFilteredDalamProses" />
