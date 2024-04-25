@@ -39,10 +39,7 @@ export default {
                         'Data berhasil ditolak.',
                         'success'
                     )
-                    $('.modalDetail').modal('hide')
-                    this.$nextTick(() => {
-                        this.showModal = false
-                    })
+                    this.closeModal()
                 }
             })
         }

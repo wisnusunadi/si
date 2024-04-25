@@ -39,10 +39,10 @@ export default {
                         class: 'badge-danger',
                         text: 'Permintaan Ditolak Atasan'
                     }
-                case 'menunggu_persetujuan_gudang':
+                case 'menunggu_persetujuan':
                     return {
                         class: 'badge-warning',
-                        text: 'Menunggu Persetujuan Gudang'
+                        text: 'Menunggu Persetujuan'
                     }
                 case 'permintaan_gagal_diacc':
                     return {

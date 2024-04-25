@@ -3,8 +3,9 @@ import status from '../../../../components/status.vue';
 import tambah from './tambah.vue';
 import edit from './edit.vue';
 import detail from './detail.vue';
+import alasan from './alasan.vue';
 export default {
-    components: { status, tambah, edit, detail },
+    components: { status, tambah, edit, detail, alasan },
     data() {
         return {
             search: '',
@@ -46,7 +47,7 @@ export default {
                     tgl_permintaan: '2021-08-04',
                     tujuan_permintaan: 'Lorem Ipsum',
                     tgl_kebutuhan: '2021-08-04',
-                    status: 'menunggu_persetujuan_gudang',
+                    status: 'menunggu_persetujuan',
                     durasi: null,
                     jenis: 'permintaan',
                 },
@@ -153,20 +154,11 @@ export default {
                 }
             });
         },
-        tolak(id) {
-            swal.fire({
-                title: 'Apakah anda yakin?',
-                text: 'Data yang sudah ditolak tidak dapat dikembalikan!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, tolak!',
-                cancelButtonText: 'Keluar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    swal.fire('Berhasil', 'Data berhasil ditolak', 'success');
-                }
+        tolak(item) {
+            this.detailSelected = item;
+            this.showModal = true;
+            this.$nextTick(() => {
+                $('.modalAlasan').modal('show');
             });
         }
     },
@@ -177,6 +169,7 @@ export default {
         <tambah v-if="showModal" @close="showModal = false" />
         <edit v-if="showModal" @close="showModal = false" :item="detailSelected" />
         <detail v-if="showModal" @close="showModal = false" :item="detailSelected" />
+        <alasan v-if="showModal" @close="showModal = false" :item="detailSelected" />
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
                 <button class="btn btn-primary" @click="openTambah">

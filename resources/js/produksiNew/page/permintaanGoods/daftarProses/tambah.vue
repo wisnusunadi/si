@@ -55,6 +55,13 @@ export default {
                 this.$emit('refresh');  
                 this.closeModal();
             }
+        },
+        checkProdukFilled(idx) {
+            const selectedProduk = this.items.map(item => item.nama_produk?.value);
+
+            return this.produkChoices.filter((produk) => {
+                return !selectedProduk.includes(produk.value) || this.items[idx].nama_produk?.value === produk.value;
+            });
         }
     },
     watch: {
@@ -113,9 +120,8 @@ export default {
                             </div>
                             <div class="form-group row" v-if="form?.jenis?.value == 'peminjaman'">
                                 <label class="col-5 text-right">Tanggal Pengembalian</label>
-                                <input type="date"
-                                :min="form.tgl_kebutuhan"
-                                class="form-control col-4" v-model="form.tgl_pengembalian">
+                                <input type="date" :min="form.tgl_kebutuhan" class="form-control col-4"
+                                    v-model="form.tgl_pengembalian">
                             </div>
                             <div class="form-group row">
                                 <label class="col-5 text-right">Tujuan Permintaan</label>
@@ -141,7 +147,8 @@ export default {
                                     <tr v-for="(item, index) in items" :key="index">
                                         <td>{{ index + 1 }}</td>
                                         <td>
-                                            <v-select :options="produkChoices" v-model="item.nama_produk"></v-select>
+                                            <v-select :options="checkProdukFilled(index)"
+                                                v-model="item.nama_produk"></v-select>
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" v-model="item.stok" readonly>

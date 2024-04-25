@@ -69,7 +69,7 @@ export default {
                     tgl_permintaan: '2021-08-04',
                     tujuan_permintaan: 'Lorem Ipsum',
                     tgl_kebutuhan: '2021-08-04',
-                    status: 'menunggu_persetujuan_gudang',
+                    status: 'menunggu_persetujuan',
                     durasi: null,
                     jenis: 'permintaan',
                 },
