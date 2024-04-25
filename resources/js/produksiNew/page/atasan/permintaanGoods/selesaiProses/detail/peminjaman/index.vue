@@ -1,5 +1,5 @@
 <script>
-import pagination from '../../../../../../emiindo/components/pagination.vue';
+import pagination from '../../../../../../../emiindo/components/pagination.vue';
 export default {
     components: {pagination},
     data() {

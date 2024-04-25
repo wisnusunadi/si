@@ -61,6 +61,11 @@ const routes = [
         path: "/produksi/permintaan_goods/:id",
         name: "permintaanGoodsDetail",
         component: () => import("./page/permintaanGoods/selesaiProses/detail"),
+    },
+    {
+        path: "/produksi/permintaan_goods_mgr/:id",
+        name: "permintaanGoodsMgrDetail",
+        component: () => import("./page/atasan/permintaanGoods/selesaiProses/detail"),
     }
 ];
 const router = new VueRouter({

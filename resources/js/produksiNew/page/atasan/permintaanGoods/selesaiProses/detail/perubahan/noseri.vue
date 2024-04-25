@@ -1,5 +1,5 @@
 <script>
-import seriviatext from '../../../../../../gbj/page/penerimaanRework/transfer/modalTransfer/seriviatext.vue';
+import seriviatext from '../../../../../../../gbj/page/penerimaanRework/transfer/modalTransfer/seriviatext.vue';
 export default {
     props: ['detail'],
     components: {

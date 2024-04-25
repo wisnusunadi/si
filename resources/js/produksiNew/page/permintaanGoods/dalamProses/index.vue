@@ -1,12 +1,10 @@
 <script>
 import status from '../../../components/status.vue';
 import persentase from '../../../../emiindo/components/persentase.vue'
-import pengambilan from './pengambilan.vue';
 export default {
     components: {
         status,
         persentase,
-        pengambilan
     },
     data() {
         return {
@@ -115,8 +113,6 @@ export default {
                     persentase: 50,
                 }
             ],
-            showModal: false,
-            detailSelected: null
         }
     },
     methods: {
@@ -144,43 +140,6 @@ export default {
                 }
             }
         },
-        openModalPengambilan(item) {
-            this.detailSelected = item;
-            this.showModal = true;
-            this.$nextTick(() => {
-                $('.modalPengambilan').modal('show');
-            });
-        },
-        pengambilanBarang({ id }) {
-            swal.fire({
-                title: 'Apakah anda yakin?',
-                text: 'Anda akan mengambil barang ini',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, ambil barang'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    swal.fire('Berhasil!', 'Barang telah diambil', 'success');
-                }
-            });
-        },
-        terimaBarang({ id }) {
-            swal.fire({
-                title: 'Apakah anda yakin?',
-                text: 'Anda akan menerima barang ini',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, terima barang'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    swal.fire('Berhasil!', 'Barang telah diterima', 'success');
-                }
-            });
-        },
         detail({ id, jenis, status }) {
             this.$router.push({ name: 'permintaanGoodsDetail', params: { id, selesai: false, jenis, status } });
         }
@@ -189,7 +148,6 @@ export default {
 </script>
 <template>
     <div>
-        <pengambilan v-if="showModal" @close="showModal = false" :detailSelected="detailSelected" />
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
                 <input type="text" class="form-control" v-model="search" placeholder="Cari...">

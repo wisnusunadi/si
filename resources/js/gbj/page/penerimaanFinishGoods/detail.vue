@@ -221,7 +221,7 @@ export default {
                                     </div>
                                     <div class="col"><label for="">Tanggal Masuk</label>
                                         <div class="card nomor-akn">
-                                            <div class="card-body"><span id="belum_tf">{{ detail.tgl_masuk }}</span>
+                                            <div class="card-body"><span id="belum_tf">{{ detail.datetime }}</span>
                                             </div>
                                         </div>
                                     </div>

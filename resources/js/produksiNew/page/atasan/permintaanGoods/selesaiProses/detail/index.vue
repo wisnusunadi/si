@@ -1,5 +1,5 @@
 <script>
-import Header from '../../../../components/header.vue'
+import Header from '../../../../../components/header.vue'
 import headerDetail from './header.vue'
 import pengajuan from './pengajuan'
 import pemasukan from './pemasukan'
@@ -18,7 +18,7 @@ export default {
                 },
                 {
                     name: 'Permintaan Barang',
-                    link: '/produksi/permintaan_goods'
+                    link: '/produksi/permintaan_goods_mgr'
                 },
                 {
                     name: 'Detail Permintaan Barang',

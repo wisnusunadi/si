@@ -1,10 +1,12 @@
 <script>
-import pagination from '../../../../../../emiindo/components/pagination.vue'
+import pagination from '../../../../../../../emiindo/components/pagination.vue'
 import formPerubahan from './formPerubahan.vue'
+import alasan from './alasan.vue'
 export default {
     components: {
         formPerubahan,
-        pagination
+        pagination,
+        alasan
     },
     data() {
         return {
@@ -28,7 +30,8 @@ export default {
                 },
                 {
                     text: 'Hasil',
-                    value: 'hasil'
+                    value: 'hasil',
+                    align: 'customWidthResult text-center'
                 },
                 {
                     text: 'Alasan Ditolak',
@@ -138,6 +141,38 @@ export default {
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
+        terima({ id }) {
+            swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Data yang sudah disetujui tidak dapat diubah!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Terima!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swal.fire(
+                        'Berhasil!',
+                        'Data berhasil disetujui.',
+                        'success'
+                    )
+                    this.items = this.items.map(item => {
+                        if (item.no === id) {
+                            item.hasil = 'Diterima'
+                        }
+                        return item
+                    })
+                }
+            })
+        },
+        tolakPengajuan({ id }) {
+            this.showModal = true
+            this.$nextTick(() => {
+                $('.modalAlasan').modal('show');
+            })
+        }
     },
     computed: {
         filterRecursive() {
@@ -213,6 +248,7 @@ export default {
 <template>
     <div class="card">
         <formPerubahan v-if="showModal" @close="showModal = false" />
+        <alasan v-if="showModal" @close="showModal = false" />
         <div class="card-body">
             <div class="d-flex bd-highlight">
                 <div class="p-2 flex-grow-1 bd-highlight">
@@ -229,7 +265,7 @@ export default {
                 <thead>
                     <tr>
                         <th></th>
-                        <th v-for="header in headers" :key="header.value">{{ header.text }}</th>
+                        <th v-for="header in headers" :class="header.align" :key="header.value">{{ header.text }}</th>
                     </tr>
                 </thead>
                 <tbody v-if="renderPaginate.length > 0">
@@ -246,7 +282,19 @@ export default {
                             <td>{{ item.nama }}</td>
                             <td>{{ item.jumlah }}</td>
                             <td>{{ ketPerubahan(item) }}</td>
-                            <td>{{ item.hasil }}</td>
+                            <td class="text-center">
+                                <div v-if="!item.hasil">
+                                    <button class="btn btn-sm btn-outline-success" @click="terima">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" @click="tolakPengajuan(item)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div v-else>
+                                    {{ item.hasil }}
+                                </div>
+                            </td>
                             <td>{{ item.alasan ?? '-' }}</td>
                         </tr>
                         <tr v-if="item.expanded">
@@ -284,3 +332,8 @@ export default {
         </div>
     </div>
 </template>
+<style>
+.customWidthResult {
+    width: 10%;
+}
+</style>

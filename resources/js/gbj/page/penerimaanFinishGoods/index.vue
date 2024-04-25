@@ -55,7 +55,44 @@ export default {
                     value: 'aksi'
                 }
             ],
-            items: [],
+            items: [
+                {
+                    no: 1,
+                    no_ref: 'NOMOR BPPB',
+                    datetime: '23 September 2024 12:00',
+                    nama: 'Produk 1',
+                    bagian: 'Produksi',
+                    jumlah: 100,
+                    status: 'produksi'
+                },
+                {
+                    no: 2,
+                    no_ref: 'NOMOR SO',
+                    datetime: '25 Januari 2024 12:00',
+                    nama: 'Produk 1',
+                    bagian: 'Penjualan',
+                    jumlah: 100,
+                    status: 'retur'
+                },
+                {
+                    no: 3,
+                    no_ref: 'NOMOR SO',
+                    datetime: '23 Februari 2024 12:00',
+                    nama: 'Produk 1',
+                    bagian: 'Logistik',
+                    jumlah: 100,
+                    status: 'batal'
+                },
+                {
+                    no: 4,
+                    no_ref: 'NOMOR PERMINTAAN',
+                    datetime: '23 Maret 2024 12:00',
+                    nama: 'Produk 1',
+                    bagian: 'Produksi',
+                    jumlah: 10,
+                    status: 'peminjaman',
+                }
+            ],
             search: '',
             years: new Date().getFullYear(),
             showModal: false,
@@ -66,14 +103,14 @@ export default {
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true)
-                const { data } = await axios.get(`/api/tfp/rakit?tahun=${this.years}`)
-                this.items = data.map((item, index) => {
-                    return {
-                        no: index + 1,
-                        datetime: this.dateTimeFormat(item.timestamp),
-                        ...item
-                    }
-                })
+                // const { data } = await axios.get(`/api/tfp/rakit?tahun=${this.years}`)
+                // this.items = data.map((item, index) => {
+                //     return {
+                //         no: index + 1,
+                //         datetime: this.dateTimeFormat(item.timestamp),
+                //         ...item
+                //     }
+                // })
             } catch (error) {
                 console.log(error)
             } finally {
@@ -106,6 +143,12 @@ export default {
                         // batal mengikuti data noseri dari departemen mana saja
                         text: 'Batal',
                         color: 'badge-danger'
+                    }
+
+                case 'peminjaman':
+                    return {
+                        text: 'Peminjaman',
+                        color: 'badge-info'
                     }
 
                 default:
