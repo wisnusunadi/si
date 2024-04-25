@@ -28,7 +28,7 @@ export default {
 }
 </script>
 <template>
-    <div>
+    <div class="body">
         <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="card">
             <div class="card-body">
@@ -62,6 +62,10 @@ export default {
                 </div>
             </div>
         </div>
-
     </div>
 </template>
+<style>
+.body {
+    font-size: 14px;
+}
+</style>

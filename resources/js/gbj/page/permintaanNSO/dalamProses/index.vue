@@ -68,7 +68,7 @@ export default {
                     tgl_ambil: '2024-08-24',
                     nama: 'Bagus',
                     bagian: 'Produksi',
-                    tujuan_permintaan: 'Lorem',
+                    tujuan_permintaan: 'perhitungan persentase: jika permintaan yang dihitung barang yang sudah dikeluarkan, jika peminjaman yang dihitung barang yang sudah dikembalikan',
                     durasi: '1 Hari',
                     durasi_tanggal: '2024-08-24',
                     status: 'barangkeluar',
