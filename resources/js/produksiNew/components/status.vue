@@ -75,6 +75,11 @@ export default {
                         class: 'badge-info',
                         text: 'Proses Peminjaman'
                     }
+                case 'pengembalian':
+                    return {
+                        class: 'badge-success',
+                        text: 'Pengembalian'
+                    }
                     // permintaan barang
                 case 'permintaan': 
                     return {

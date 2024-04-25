@@ -42,7 +42,7 @@ export default {
 }
 </script>
 <template>
-    <div>
+    <div class="body">
         <Header :title="title" :breadcumbs="breadcumbs" />
         <headerDetail :header="detail.headers" />
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -91,3 +91,8 @@ export default {
         </div>
     </div>
 </template>
+<style>
+.body {
+    font-size: 14px;
+}
+</style>

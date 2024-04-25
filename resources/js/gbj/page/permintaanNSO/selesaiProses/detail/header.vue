@@ -80,7 +80,7 @@ export default {
                         </small>
                     </div>
                     <div class="margin">
-                        <status :status="header.status" />
+                        <status :status="$route.params.status" />
                     </div>
                 </div>
                 <div class="p-2">

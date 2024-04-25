@@ -42,7 +42,7 @@ export default {
 }
 </script>
 <template>
-    <div>
+    <div class="body">
         <Header :title="title" :breadcumbs="breadcumbs" />
         <headerDetail :header="detail.headers" />
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -57,17 +57,17 @@ export default {
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-peminjaman-tab" data-toggle="pill" data-target="#pills-peminjaman"
-                    v-if="$route.params.jenis == 'peminjaman' && $route.params.status == 'proses_peminjaman'"
+                    v-if="$route.params.jenis == 'peminjaman' && ($route.params.status == 'proses_peminjaman' || $route.params.status == 'selesai' || $route.params.status == 'pengembalian') "
                     type="button" role="tab" aria-controls="pills-peminjaman" aria-selected="false">Peminjaman</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-perubahan-tab" data-toggle="pill" data-target="#pills-perubahan"
-                    v-if="$route.params.jenis == 'peminjaman' && $route.params.status == 'proses_peminjaman'"
+                    v-if="$route.params.jenis == 'peminjaman' && ($route.params.status == 'proses_peminjaman' || $route.params.status == 'selesai' || $route.params.status == 'pengembalian') "
                     type="button" role="tab" aria-controls="pills-perubahan" aria-selected="false">Perubahan</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-pengembalian-tab" data-toggle="pill" data-target="#pills-pengembalian"
-                    v-if="$route.params.jenis == 'peminjaman' && $route.params.status == 'proses_peminjaman'"
+                    v-if="$route.params.jenis == 'peminjaman' && ($route.params.status == 'proses_peminjaman' || $route.params.status == 'selesai' || $route.params.status == 'pengembalian')"
                     type="button" role="tab" aria-controls="pills-pengembalian" aria-selected="false">Pengembalian</a>
             </li>
         </ul>
@@ -91,3 +91,8 @@ export default {
         </div>
     </div>
 </template>
+<style>
+.body {
+    font-size: 14px;
+}
+</style>

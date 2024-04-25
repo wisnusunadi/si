@@ -95,7 +95,7 @@ export default {
                     no_permintaan: 'NSO-2021080002',
                     no_referensi: 'SO-2021080002',
                     tgl_permintaan: '22 Agustus 2021',
-                    tgl_ambil: '2024-08-24',
+                    tgl_ambil: null,
                     nama: 'Bagus',
                     bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
@@ -110,7 +110,7 @@ export default {
                     no_permintaan: 'NSO-2021080002',
                     no_referensi: 'SO-2021080002',
                     tgl_permintaan: '22 Agustus 2021',
-                    tgl_ambil: '2024-08-24',
+                    tgl_ambil: null,
                     nama: 'Bagus',
                     bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
@@ -125,7 +125,7 @@ export default {
                     no_permintaan: 'NSO-2021080003',
                     no_referensi: 'SO-2021080003',
                     tgl_permintaan: '23 Agustus 2021',
-                    tgl_ambil: '2024-08-24',
+                    tgl_ambil: null,
                     nama: 'Bagus',
                     bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
@@ -140,7 +140,7 @@ export default {
                     no_permintaan: 'NSO-2021080003',
                     no_referensi: 'SO-2021080003',
                     tgl_permintaan: '23 Agustus 2021',
-                    tgl_ambil: '2024-08-24',
+                    tgl_ambil: null,
                     nama: 'Bagus',
                     bagian: 'Produksi',
                     tujuan_permintaan: 'Lorem',
@@ -184,7 +184,8 @@ export default {
                 params: {
                     id: item.id,
                     selesai: false,
-                    jenis: item.jenis
+                    jenis: item.jenis,
+                    status: item.status,
                 }
             })
         },
@@ -210,9 +211,9 @@ export default {
                 </div>
             </template>
             <template #item.tgl_ambil="{ item }">
-                <div v-if="item.durasi_tanggal">
+                <div v-if="item.jenis == 'Peminjaman' && item.tgl_ambil">
                     <div :class="calculateDateFromNow(item.durasi_tanggal).color">{{
-                    dateFormat(item.tgl_ambil) }}</div>
+                        dateFormat(item.tgl_ambil) }}</div>
                     <small :class="calculateDateFromNow(item.durasi_tanggal).color">
                         <i :class="calculateDateFromNow(item.durasi_tanggal).icon"></i>
                         {{ calculateDateFromNow(item.durasi_tanggal).text }}

@@ -57,7 +57,7 @@ export default {
                     no_permintaan: 'NSO-2021080001',
                     no_referensi: 'SO-2021080001',
                     tgl_permintaan: '21 Agustus 2021',
-                    tujuan: 'Lorem',
+                    tujuan: 'perhitungan persentase: jika permintaan (barang yang sudah diterima), jika peminjaman (barang yang sudah dikembalikan)',
                     tgl_pengambilan: null,
                     durasi: null,
                     jenis: 'permintaan',

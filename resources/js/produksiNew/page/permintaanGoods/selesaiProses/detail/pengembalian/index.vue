@@ -112,7 +112,26 @@ export default {
         },
         detailProduk(item) {
             this.detailProdukSelected = item;
-            if (item.waktu_kembali) {
+            if (this.$route.params.status == 'pengembalian') {
+                this.noseri = [
+                    {
+                        no: 1,
+                        id: 1,
+                        noseri: 'NS-2021080001',
+                        waktu_kembali: '2024-09-03 13:00:00',
+                        status: 'Pengembalian',
+                        tgl_close: '2024-09-03 13:00:00',
+                    },
+                    {
+                        no: 2,
+                        id: 2,
+                        noseri: 'NS-2021080002',
+                        waktu_kembali: '2024-09-03 13:00:00',
+                        status: 'Pengembalian',
+                        tgl_close: '2024-09-03 13:00:00',
+                    }
+                ]
+            } else if(item.waktu_kembali) {
                 this.noseri = [
                     {
                         no: 1,
@@ -214,7 +233,7 @@ export default {
         }
     },
     created() {
-        if (this.$route.params.selesai) {
+        if (this.$route.params.selesai || this.$route.params.status == 'pengembalian') {
             this.items = [
                 {
                     no: 1,
