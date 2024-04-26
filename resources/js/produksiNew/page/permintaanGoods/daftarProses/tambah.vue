@@ -47,14 +47,20 @@ export default {
 
             if (!form || !items || this.items.length === 0) {
                 swal.fire('Peringatan', 'Pastikan semua form terisi', 'warning')
-            } else {
-                // do something
-                console.log(this.form);
-                console.log(this.items);
-                swal.fire('Berhasil', 'Data berhasil disimpan', 'success');
-                this.$emit('refresh');  
-                this.closeModal();
+                return
+            } 
+
+            // jika ada isError didalam items, tampilkan peringatan
+            if (this.items.some(item => item.isError)) {
+                swal.fire('Peringatan', 'Jumlah melebihi stok', 'warning');
+                return;
             }
+
+            console.log(this.form);
+            console.log(this.items);
+            swal.fire('Berhasil', 'Data berhasil disimpan', 'success');
+            this.$emit('refresh');
+            this.closeModal();
         },
         checkProdukFilled(idx) {
             const selectedProduk = this.items.map(item => item.nama_produk?.value);
@@ -84,6 +90,13 @@ export default {
                             this.$set(this.items[index], 'isDisabled', true);
                         } else {
                             delete this.items[index].isDisabled;
+                        }
+
+                        // jika jumlah melebihi stok, buat object key baru isError = true, jika tidak delete key tersebut
+                        if (item.jumlah > produk.stok) {
+                            this.$set(this.items[index], 'isError', true);
+                        } else {
+                            delete this.items[index].isError;
                         }
                     }
                 });
@@ -155,7 +168,11 @@ export default {
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" v-model="item.jumlah"
+                                                :class="item?.isError ? 'is-invalid' : ''"
                                                 :disabled="item?.isDisabled">
+                                                <div class="invalid-feedback">
+                                                    Jumlah melebihi stok
+                                                </div>
                                         </td>
                                         <td>
                                             <button class="btn btn-outline-danger btn-sm"
