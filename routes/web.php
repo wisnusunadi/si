@@ -99,14 +99,18 @@ Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
 Route::group(['prefix' => '/produksiReworks', 'middleware' => 'auth'], function () {
     Route::get('/export_excel/{id}', [ProduksiController::class, 'export_rework_excel']);
     Route::get('/cetak_seri_finish_goods/{seri}', [ProduksiController::class, 'cetak_seri_finish_goods']);
-    Route::get('/cetak_seri_fg_medium', [ProduksiController::class, 'cetak_seri_finish_goods_medium']);
-    Route::get('/cetak_seri_fg_medium_repeated', [ProduksiController::class, 'cetak_seri_finish_goods_medium_repeated']);
     Route::get('/cetak_seri_fg_small', [ProduksiController::class, 'cetak_seri_finish_goods_small']);;
     Route::get('/cetak_seri_fg_small_repeated', [ProduksiController::class, 'cetak_seri_finish_goods_small_repeated']);;
-    Route::get('/cetak_seri_fg_medium_nonstok', [ProduksiController::class, 'cetak_seri_finish_goods_medium_nonstok']);
-    Route::get('/cetak_seri_fg_medium_repeated_nonstok', [ProduksiController::class, 'cetak_seri_finish_goods_medium_repeated_nonstok']);
+    Route::get('/cetak_seri_fg_medium', [ProduksiController::class, 'cetak_seri_finish_goods_medium']);
+    Route::get('/cetak_seri_fg_medium_repeated', [ProduksiController::class, 'cetak_seri_finish_goods_medium_repeated']);
+    Route::get('/cetak_seri_fg_big', [ProduksiController::class, 'cetak_seri_finish_goods_big']);
+    Route::get('/cetak_seri_fg_big_repeated', [ProduksiController::class, 'cetak_seri_finish_goods_big_repeated']);
     Route::get('/cetak_seri_fg_small_nonstok', [ProduksiController::class, 'cetak_seri_finish_goods_small_nonstok']);;
     Route::get('/cetak_seri_fg_small_repeated_nonstok', [ProduksiController::class, 'cetak_seri_finish_goods_small_repeated_nonstok']);;
+    Route::get('/cetak_seri_fg_medium_nonstok', [ProduksiController::class, 'cetak_seri_finish_goods_medium_nonstok']);
+    Route::get('/cetak_seri_fg_medium_repeated_nonstok', [ProduksiController::class, 'cetak_seri_finish_goods_medium_repeated_nonstok']);
+    Route::get('/cetak_seri_fg_big_nonstok', [ProduksiController::class, 'cetak_seri_finish_goods_big_nonstok']);
+    Route::get('/cetak_seri_fg_big_repeated_nonstok', [ProduksiController::class, 'cetak_seri_finish_goods_big_repeated_nonstok']);
     Route::get('/cetakseriReworkAll', [ProduksiController::class, 'cetak_seri_rework_all']);
     Route::get('/cetakseriReworkAllKardus', [ProduksiController::class, 'cetak_seri_rework_all_kardus']);
     Route::get('/viewpackinglist/{id}', [ProduksiController::class, 'view_packing_list']);

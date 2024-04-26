@@ -29,6 +29,10 @@ export default {
             window.open(`/produksiReworks/cetak_seri_fg_medium_nonstok?data=${this.data}&merk=${this.merkSelected}`, '_blank')
             this.closeModal();
         },
+        big() {
+            window.open(`/produksiReworks/cetak_seri_fg_big_nonstok?data=${this.data}&merk=${this.merkSelected}`, '_blank')
+            this.closeModal();
+        }
     },
 }
 </script>
@@ -48,12 +52,14 @@ export default {
                         <label for="">Merk</label>
                         <v-select :options="merk" :reduce="option => option.value" v-model="merkSelected"
                             placeholder="Pilih Merk" />
-                        <small class="text-muted"><span class="text-danger">*</span>Merk akan tampil jika cetak kertas medium</small>
+                        <small class="text-muted"><span class="text-danger">*</span>Merk akan tampil jika cetak kertas
+                            medium</small>
                     </div>
                     <div class="text-center">
                         <h1>Silahkan Pilih Hasil Cetak</h1>
                         <button type="button" class="btn btn-primary btn-lg" @click="small">Kertas Kecil</button>
                         <button type="button" class="btn btn-primary btn-lg" @click="medium">Kertas Medium</button>
+                        <button type="button" class="btn btn-primary btn-lg" @click="big">Kertas A4</button>
                     </div>
                 </div>
             </div>
