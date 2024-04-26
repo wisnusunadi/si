@@ -145,6 +145,7 @@ export default {
                 this.items = data.map((item) => {
                     return {
                         tanggal: this.dateTimeFormat(item.tgl_buat),
+                        noseri: `${item.noseri.length}noseri`,
                         ...item
                     }
                 })
@@ -290,7 +291,7 @@ export default {
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>

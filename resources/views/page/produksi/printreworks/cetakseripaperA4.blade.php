@@ -30,7 +30,39 @@
             margin-top: 0.2cm;
         }
 
-        */
+        .image-container-logo-11 {
+            /* margin-left: -0.85cm; */
+            /* antro */
+            margin-left: -0.75cm;
+        }
+
+        .image-container-logo-12 {
+            margin-left: -0.86cm;
+        }
+
+        .image-container-logo-13 {
+
+        }
+
+        .image-container-logo-14 {
+            margin-left: -1.12cm;
+        }
+
+        .image-container-11 {
+            margin-left: -0.58cm;
+        }
+
+        .image-container-12 {
+            margin-left: -0.8cm;
+        }
+
+        .image-container-13 {
+
+        }
+
+        .image-container-14 {
+            margin-left: -1cm;
+        }
     </style>
 </head>
 
@@ -64,13 +96,48 @@
                         $sizeHeight = $merkLogo != '' ? 29 : 33;
                         $sizeWidth = $merkLogo != '' ? 0.97 : 0.91;
 
+                        $classLogo = '';
+
+                        switch (strlen($data[$j]->noseri)) {
+                            case 11:
+                                $classLogo = 'image-container-logo-11';
+                                break;
+                            case 12:
+                                $classLogo = 'image-container-logo-12';
+                                break;
+                            case 13:
+                                $classLogo = 'image-container-logo-13';
+                                break;
+                            default:
+                                $classLogo = 'image-container-logo-14';
+                                break;
+                        }
+
+                        $classNotLogo = '';
+
+                        switch (strlen($data[$j]->noseri)) {
+                            case 11:
+                                $classNotLogo = 'image-container-11';
+                                break;
+                            case 12:
+                                $classNotLogo = 'image-container-12';
+                                break;
+                            case 13:
+                                $classNotLogo = 'image-container-13';
+                                break;
+                            default:
+                                $classNotLogo = 'image-container-14';
+                                break;
+                        }
 
                     @endphp
                     <td style="height: 100px; {{ $j === $i + 2 ? 'border-right: none;' : '' }}">
-                        <span class="{{ $merkLogo != '' ? 'font-size-elitech' : 'logo' }}">{{ $merkLogo }}</span>
-                        <img
-                            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($data[$j]->noseri, $generator::TYPE_CODE_128_B, $sizeWidth, $sizeHeight)) }}" />
-                        <div class="text-center">{{ $data[$j]->noseri }}</div>
+                        <div class="{{ $merkLogo != '' ? $classLogo : $classNotLogo }}">
+                            <span class="{{ $merkLogo != '' ? 'font-size-elitech' : 'logo' }}">{{ $merkLogo }}</span>
+                            <img
+                                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($data[$j]->noseri, $generator::TYPE_CODE_128_B, $sizeWidth, $sizeHeight)) }}" />
+                            <div class="text-center">{{ $data[$j]->noseri }}</div>
+                        </div>
                     </td>
                 @endfor
 
