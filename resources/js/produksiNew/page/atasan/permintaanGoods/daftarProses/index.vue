@@ -199,15 +199,6 @@ export default {
                         <i class="fas fa-eye"></i>
                         Detail
                     </button>
-                    <button class="btn btn-sm btn-outline-warning" v-if="statusEdit(item)" @click="openEdit(item)">
-                        <i class="fas fa-edit"></i>
-                        Edit
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger" @click="batalPinjam(item.id)"
-                        v-if="item.status != 'batal' && item.status != 'menunggu_persetujuan_atasan'">
-                        <i class="fas fa-times"></i>
-                        Batal
-                    </button>
                     <button class="btn btn-sm btn-outline-success" v-if="item.status == 'menunggu_persetujuan_atasan'"
                         @click="setuju(item)">
                         <i class="fas fa-check"></i>

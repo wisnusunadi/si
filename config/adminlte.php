@@ -838,9 +838,15 @@ return [
             'auth' => [17, 35]
         ],
         [
+            'text' => 'Persetujuan Permintaan',
+            'icon' => 'fas fa-cogs',
+            'url'  => '/produksi/persetujuan_permintaan',
+            'auth' => [35]
+        ],
+        [
             'text' => 'Permintaan Barang',
             'icon' => 'fas fa-cogs',
-            'url'  => '/produksi/permintaan_goods_mgr',
+            'url'  => '/produksi/permintaan_goods',
             'auth' => [35]
         ],
         // [

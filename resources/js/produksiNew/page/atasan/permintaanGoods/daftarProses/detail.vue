@@ -195,13 +195,6 @@ export default {
                                             <i class="fas fa-ban"></i>
                                             Tolak
                                         </button>
-                                        <button class="btn btn-warning" @click="showModalEdit" v-if="statusEdit(item)">
-                                            <i class="fas fa-pencil-alt"></i> Edit
-                                        </button>
-                                        <button class="btn btn-danger" @click="batalPinjam"
-                                            v-if="item.status != 'batal' && item.status != 'menunggu_persetujuan_atasan'">
-                                            <i class="fas fa-times"></i> Batal
-                                        </button>
                                     </div>
                                     <div class="p-2 bd-highlight">
                                         <button type="button" class="btn btn-secondary"
