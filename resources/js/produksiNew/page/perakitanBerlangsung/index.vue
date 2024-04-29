@@ -5,12 +5,14 @@ import riwayat from './riwayat';
 import axios from 'axios';
 import moment from 'moment'
 import fleksibel from './fleksibel'
+import noperakitan from './noperakitan'
 export default {
     components: {
         Header,
         perakitan,
         riwayat,
-        fleksibel
+        fleksibel,
+        noperakitan
     },
     data() {
         return {
@@ -189,6 +191,10 @@ export default {
                     <a class="nav-link" id="pills-riwayat-tab" data-toggle="pill" data-target="#pills-riwayat"
                         type="button" role="tab" aria-controls="pills-riwayat" aria-selected="false">Riwayat</a>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="pills-noperakitan-tab" data-toggle="pill" data-target="#pills-noperakitan"
+                        type="button" role="tab" aria-controls="pills-noperakitan" aria-selected="false">Generate No Perakitan</a>
+                </li>
             </ul>
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-terjadwal" role="tabpanel"
@@ -213,6 +219,13 @@ export default {
                         <div class="card-body">
                             <riwayat :dataRiwayat="dataRiwayat" :tanggalAwal="tanggalAwal" :tanggalAkhir="tanggalAkhir"
                                 :loading="loadingRiwayat" @updateTanggal="updateTanggal" @updateSearch="updateSearch" />
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-noperakitan" role="tabpanel" aria-labelledby="pills-noperakitan-tab">
+                    <div class="card">
+                        <div class="card-body">
+                            <noperakitan/>
                         </div>
                     </div>
                 </div>

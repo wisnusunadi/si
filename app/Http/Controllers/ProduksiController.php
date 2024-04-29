@@ -6213,4 +6213,15 @@ class ProduksiController extends Controller
         $waktu = Carbon::now();
         return Excel::download(new ExportRework($urutan), 'PerakitanReworks  ' . $waktu->toDateTimeString() . '.xlsx');
     }
+    function cetak_seri_perakitan_custom_a4($alias,$awal,$akhir)
+    {
+
+        for ($i = $awal; $i <= $akhir; $i++) {
+            $data[] =  $alias . str_pad($i, 4, '0', STR_PAD_LEFT);
+        }
+
+
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakseripaperA4New', compact('data'))->setPaper('A4');
+        return $pdf->stream();
+    }
 }
