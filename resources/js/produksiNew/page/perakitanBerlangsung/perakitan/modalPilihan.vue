@@ -62,7 +62,7 @@ export default {
                         <h1>Silahkan Pilih Hasil Cetak</h1>
                         <button type="button" class="btn btn-primary btn-lg" @click="small">Kertas Kecil</button>
                         <button type="button" class="btn btn-primary btn-lg" @click="medium">Kertas Medium</button>
-                        <button type="button" class="btn btn-primary btn-lg" @click="big">Kertas A4</button>
+                        <!-- <button type="button" class="btn btn-primary btn-lg" @click="big">Kertas A4</button> -->
                     </div>
                 </div>
             </div>

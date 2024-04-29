@@ -27,7 +27,28 @@ export default {
                 );
                 return;
       }
-      if (urutan_awal > urutan_akhir || urutan_awal == urutan_akhir ) {
+      if (alias.length !== 2) {
+        this.$swal(
+                    "Peringatan",
+                    "Maksimal 2 Karakter",
+                    "warning"
+                );
+                return;
+      }
+
+
+
+         // Check if urutan_awal and urutan_akhir are within the range of 1 to 9999
+         if (parseInt(urutan_awal) < 1 || parseInt(urutan_awal) > 9999 || parseInt(urutan_akhir) < 1 || parseInt(urutan_akhir) > 9999) {
+            this.$swal(
+                    "Peringatan",
+                    "Perhatikan Urutan",
+                    "warning"
+                );
+                return;
+      }
+
+      if (parseInt(urutan_awal) > parseInt(urutan_akhir) || urutan_awal == urutan_akhir ) {
         this.$swal(
                     "Peringatan",
                     "Cek Urutan Kembali",
@@ -69,13 +90,13 @@ export default {
                                             <div class="col">
                                                 <div class="form-group">
                                                     <label for="">No Urut Awal</label>
-                                                    <input type="number"   v-model="form.urutan_awal"  class="form-control">
+                                                    <input type="number"    v-model="form.urutan_awal"  class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="form-group">
                                                     <label for="">No Urut Akhir</label>
-                                                    <input type="number"  v-model="form.urutan_akhir" class="form-control">
+                                                    <input type="number"     v-model="form.urutan_akhir" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
