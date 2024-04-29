@@ -15,11 +15,18 @@
         th,
         td {
             padding: 8px;
-        }
-
-        ,
+            vertical-align: top;
+        },
         .font-size-elitech {
             font-size: 13pt;
+        }
+        .center {
+  text-align: center;
+}
+
+        .font-size-nonelitech {
+            font-size: 10px;
+            text-align: center;
         }
 
         .text-left {
@@ -75,10 +82,10 @@
 </head>
 
 <body>
-    <table>
-        @for ($i = 0; $i < count($data); $i += 3)
+    <table border="0">
+        @for ($i = 0; $i < count($data); $i += 5)
             <tr>
-                @for ($j = $i; $j < $i + 3 && $j < count($data); $j++)
+                @for ($j = $i; $j < $i + 5 && $j < count($data); $j++)
                     @php
                         $generator = new Picqer\Barcode\BarcodeGeneratorSVG();
                         $merkLogo = '';
@@ -101,8 +108,10 @@
                                 break;
                         }
 
-                        $sizeHeight = $merkLogo != '' ? 29 : 33;
+                        $sizeHeight = $merkLogo != '' ? 29 : 15;
                         $sizeWidth = $merkLogo != '' ? 0.97 : 0.91;
+                        // $sizeHeight = $merkLogo != '' ? 29 : 33;
+                        // $sizeWidth = $merkLogo != '' ? 0.97 : 0.91;
 
                         // $classLogo = '';
 
@@ -139,26 +148,26 @@
                         // }
 
                     @endphp
-                    <td style="height: 100px; {{ $j === $i + 2 ? 'border-right: none;' : '' }}" >
+                    <td style="height: 20px; {{ $j === $i + 2 ? 'border-right: none;' : '' }}"  >
                         <div class="image-container-semua">
                         {{-- <div class="{{ $merkLogo != '' ? $classLogo : $classNotLogo }}"> --}}
                             <span class="{{ $merkLogo != '' ? 'font-size-elitech' : 'logo' }}">{{ $merkLogo }}</span>
                             <br>
+                            <div class="center" >
                             <img
-                                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($data[$j]->noseri, $generator::TYPE_CODE_128_B, $sizeWidth, $sizeHeight)) }}" />
-                                <div class="text-center">{{$data[$j]->noseri}}</div>
+                                src="data:image/png;base64,{{ base64_encode($generator->getBarcode('AD0001', $generator::TYPE_CODE_128_B, $sizeWidth, $sizeHeight)) }}"  />
+                            </div>
+                                <div class="font-size-nonelitech">AD0010</div>
                         </div>
                     </td>
                 @endfor
-
-                @if ($j % 3 !== 0)
-                    @for ($k = $j % 3; $k < 3; $k++)
-                        <td style="height: 100px; border-left: none;"></td>
+                @if ($j % 5 !== 0)
+                    @for ($k = $j % 5; $k < 5; $k++)
+                        <td style="height: 20px; border-left: none;"></td>
                     @endfor
                 @endif
             </tr>
         @endfor
     </table>
 </body>
-
 </html>
