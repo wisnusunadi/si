@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contoh Tabel DOMPDF</title>
+    <title>Cetak Seri A4</title>
     <style>
         /* Styling opsional */
         table {
@@ -22,6 +22,9 @@
             font-size: 13pt;
         }
 
+        .text-left {
+            margin-left: 0.1cm;
+        }
         .text-center {
             margin-left: 0.8cm;
         }
@@ -63,6 +66,11 @@
         .image-container-14 {
             margin-left: -1cm;
         }
+
+
+        .image-container-semua {
+            margin-left: -0.2cm;
+        }
     </style>
 </head>
 
@@ -96,47 +104,49 @@
                         $sizeHeight = $merkLogo != '' ? 29 : 33;
                         $sizeWidth = $merkLogo != '' ? 0.97 : 0.91;
 
-                        $classLogo = '';
+                        // $classLogo = '';
 
-                        switch (strlen($data[$j]->noseri)) {
-                            case 11:
-                                $classLogo = 'image-container-logo-11';
-                                break;
-                            case 12:
-                                $classLogo = 'image-container-logo-12';
-                                break;
-                            case 13:
-                                $classLogo = 'image-container-logo-13';
-                                break;
-                            default:
-                                $classLogo = 'image-container-logo-14';
-                                break;
-                        }
+                        // switch (strlen($data[$j]->noseri)) {
+                        //     case 11:
+                        //         $classLogo = 'image-container-logo-11';
+                        //         break;
+                        //     case 12:
+                        //         $classLogo = 'image-container-logo-12';
+                        //         break;
+                        //     case 13:
+                        //         $classLogo = 'image-container-logo-13';
+                        //         break;
+                        //     default:
+                        //         $classLogo = 'image-container-logo-14';
+                        //         break;
+                        // }
 
-                        $classNotLogo = '';
+                        // $classNotLogo = '';
 
-                        switch (strlen($data[$j]->noseri)) {
-                            case 11:
-                                $classNotLogo = 'image-container-11';
-                                break;
-                            case 12:
-                                $classNotLogo = 'image-container-12';
-                                break;
-                            case 13:
-                                $classNotLogo = 'image-container-13';
-                                break;
-                            default:
-                                $classNotLogo = 'image-container-14';
-                                break;
-                        }
+                        // switch (strlen($data[$j]->noseri)) {
+                        //     case 11:
+                        //         $classNotLogo = 'image-container-11';
+                        //         break;
+                        //     case 12:
+                        //         $classNotLogo = 'image-container-12';
+                        //         break;
+                        //     case 13:
+                        //         $classNotLogo = 'image-container-11';
+                        //         break;
+                        //     default:
+                        //         $classNotLogo = 'image-container-14';
+                        //         break;
+                        // }
 
                     @endphp
-                    <td style="height: 100px; {{ $j === $i + 2 ? 'border-right: none;' : '' }}">
-                        <div class="{{ $merkLogo != '' ? $classLogo : $classNotLogo }}">
+                    <td style="height: 100px; {{ $j === $i + 2 ? 'border-right: none;' : '' }}" >
+                        <div class="image-container-semua">
+                        {{-- <div class="{{ $merkLogo != '' ? $classLogo : $classNotLogo }}"> --}}
                             <span class="{{ $merkLogo != '' ? 'font-size-elitech' : 'logo' }}">{{ $merkLogo }}</span>
+                            <br>
                             <img
                                 src="data:image/png;base64,{{ base64_encode($generator->getBarcode($data[$j]->noseri, $generator::TYPE_CODE_128_B, $sizeWidth, $sizeHeight)) }}" />
-                            <div class="text-center">{{ $data[$j]->noseri }}</div>
+                                <div class="text-center">{{$data[$j]->noseri}}</div>
                         </div>
                     </td>
                 @endfor
