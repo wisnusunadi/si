@@ -36,13 +36,10 @@ export default {
                 return;
       }
 
-
-
-         // Check if urutan_awal and urutan_akhir are within the range of 1 to 9999
          if (parseInt(urutan_awal) < 1 || parseInt(urutan_awal) > 9999 || parseInt(urutan_akhir) < 1 || parseInt(urutan_akhir) > 9999) {
             this.$swal(
                     "Peringatan",
-                    "Perhatikan Urutan",
+                    "Cek Urutan Kembali",
                     "warning"
                 );
                 return;
@@ -52,6 +49,15 @@ export default {
         this.$swal(
                     "Peringatan",
                     "Cek Urutan Kembali",
+                    "warning"
+                );
+                return;
+      }
+
+      if (!/^[a-zA-Z]+$/.test(alias)) {
+        this.$swal(
+                    "Peringatan",
+                    "Harus Mengandung Karakter",
                     "warning"
                 );
                 return;

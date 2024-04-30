@@ -5199,6 +5199,7 @@ class LogistikController extends Controller
 
     public function create_logistik_draft(Request $request)
     {
+
         $items = array();
 
         if (isset($request->part)) {
@@ -5267,48 +5268,37 @@ class LogistikController extends Controller
                     if ($item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363) {
                         $tas = true;
                     }
-                    // if( $item["penjualan_produk_id"] == 183 ){
-                    //     $produk[$id]["detail"][] = array(
-                    //         "kode"=> "-",
-                    //         "nama"=>  "POWER ADAPTOR",
-                    //         "jumlah"=> $item['jumlah'],
-                    //         "jumlah_noseri" =>  $item['jumlah_noseri'],
-                    //         "satuan" => 'Unit',
-                    //         "noseri"=> array('-')
-                    //     );
-                    // }
 
-                    // if( $item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363){
-                    //     $produk[$id]["detail"][$maxJumlah+1] = array(
-                    //         "kode"=> "-",
-                    //         "nama"=>  "TAS ANTROPOMETRI KIT",
-                    //         "jumlah"=> $item['jumlah'],
-                    //         "jumlah_noseri" =>  $item['jumlah_noseri'],
-                    //         "satuan" => 'Unit',
-                    //         "noseri"=> array('-')
-                    //     );
-                    // }
                 }
 
-                if ($item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363) {
-                    $produk[$id]["detail"][0] = array(
-                        "kode" => $item['kode'] ?? "",
-                        "nama" =>  $item['nama'],
-                        "jumlah" => $item['jumlah'],
-                        "jumlah_noseri" => $item['jumlah_noseri'],
-                        "satuan" => 'Unit',
-                        "noseri" => $item['noseri_selected']
-                    );
-                } else {
-                    $produk[$id]["detail"][] = array(
-                        "kode" => $item['kode'] ?? "",
-                        "nama" =>  $item['nama'],
-                        "jumlah" => $item['jumlah'],
-                        "jumlah_noseri" => $item['jumlah_noseri'],
-                        "satuan" => 'Unit',
-                        "noseri" => $item['noseri_selected']
-                    );
-                }
+                $produk[$id]["detail"][] = array(
+                    "kode" => $item['kode'] ?? "",
+                    "nama" =>  $item['nama'],
+                    "jumlah" => $item['jumlah'],
+                    "jumlah_noseri" => $item['jumlah_noseri'],
+                    "satuan" => 'Unit',
+                    "noseri" => $item['noseri_selected']
+                );
+
+                // if ($item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363) {
+                //     $produk[$id]["detail"][0] = array(
+                //         "kode" => $item['kode'] ?? "",
+                //         "nama" =>  $item['nama'],
+                //         "jumlah" => $item['jumlah'],
+                //         "jumlah_noseri" => $item['jumlah_noseri'],
+                //         "satuan" => 'Unit',
+                //         "noseri" => $item['noseri_selected']
+                //     );
+                // } else {
+                //     $produk[$id]["detail"][] = array(
+                //         "kode" => $item['kode'] ?? "",
+                //         "nama" =>  $item['nama'],
+                //         "jumlah" => $item['jumlah'],
+                //         "jumlah_noseri" => $item['jumlah_noseri'],
+                //         "satuan" => 'Unit',
+                //         "noseri" => $item['noseri_selected']
+                //     );
+                // }
             }
 
             if ($tas) {
@@ -5361,7 +5351,6 @@ class LogistikController extends Controller
             }
             $items = array_merge($items, $produk);
         }
-        //dd($items);
 
         $p = Pesanan::find($request->dataform['pesanan_id']);
         if ($p->Ekatalog) {
@@ -5371,6 +5360,7 @@ class LogistikController extends Controller
             $paket = 'OFFLINE';
             $ket = '';
         }
+
         $isi = array(
             "pesanan_id" => $request->dataform['pesanan_id'],
             "customer" => $request->dataform['nama_customer'],

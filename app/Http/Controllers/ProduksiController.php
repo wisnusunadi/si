@@ -6217,9 +6217,8 @@ class ProduksiController extends Controller
     {
 
         for ($i = $awal; $i <= $akhir; $i++) {
-            $data[] =  $alias . str_pad($i, 4, '0', STR_PAD_LEFT);
+            $data[] = strtoupper($alias) . str_pad($i, 4, '0', STR_PAD_LEFT);
         }
-
 
         $pdf = PDF::loadview('page.produksi.printreworks.cetakseripaperA4New', compact('data'))->setPaper('A4');
         return $pdf->stream();
