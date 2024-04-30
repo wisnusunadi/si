@@ -99,7 +99,7 @@
                             <br>
                             <div class="center" >
                             <img
-                                src="data:image/png;base64,{{ base64_encode($generator->getBarcode('AD0001', $generator::TYPE_CODE_128_B, $sizeWidth, $sizeHeight)) }}"  />
+                                src="data:image/png;base64,{{ base64_encode($generator->getBarcode({{$data[$j]}}, $generator::TYPE_CODE_128_B, $sizeWidth, $sizeHeight)) }}"  />
                             </div>
                                 <div class="font-size-nonelitech">{{$data[$j]}}</div>
                         </div>
