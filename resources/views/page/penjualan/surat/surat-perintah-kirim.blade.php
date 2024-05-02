@@ -17,7 +17,7 @@
           }
           @page {
 
-            margin :  70px 30px 70px 30px
+            margin :  85px 30px 70px 30px
           }
 
           .text-center {
@@ -220,7 +220,7 @@
                             {{$item['kode']}}
                         </td>
                         <td class="vera">
-                            {{$item['nama']}} 
+                            {{$item['nama']}}
                             @if(isset($item['variasi']))
                               @foreach ($item['variasi'] as $key => $variasi)
                                 {{-- cek jika ini terakhir maka tidak ada koma dibelakangnya --}}

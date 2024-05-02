@@ -9059,7 +9059,7 @@ class PenjualanController extends Controller
     public function cetak_surat_perintah($id)
     {
         $pesanan = Pesanan::find($id);
-        $customPaper = array(0, 0, 605.44, 788.031);
+        $customPaper = array(0, 0, 605.44, 760.031);
 
         $data = [];
         if ($pesanan->DetailPesanan->isNotEmpty()) {
