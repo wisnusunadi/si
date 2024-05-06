@@ -5449,7 +5449,9 @@ class LogistikController extends Controller
             if ($pesanan->Ekatalog->provinsi_id != NULL) {
                 $instansi = array(
                     'id' => $pesanan->Ekatalog->provinsi_id,
-                    'nama' => $pesanan->Ekatalog->Provinsi->nama
+                    'nama' => $pesanan->Ekatalog->Provinsi->nama,
+                    'customer' => $pesanan->Ekatalog->instansi,
+                    'alamat' => $pesanan->Ekatalog->alamat
                 );
                 $provinsi['instansi'] = $instansi;
             }
@@ -5458,7 +5460,8 @@ class LogistikController extends Controller
                 $dsb = array(
                     'id' => $pesanan->Ekatalog->Customer->id_provinsi,
                     'nama' => $pesanan->Ekatalog->Customer->Provinsi->nama,
-                    'customer' => $pesanan->Ekatalog->Customer->nama
+                    'customer' => $pesanan->Ekatalog->Customer->nama,
+                    'alamat' => $pesanan->Ekatalog->Customer->alamat
                 );
                 $provinsi['dsb'] = $dsb;
             }
