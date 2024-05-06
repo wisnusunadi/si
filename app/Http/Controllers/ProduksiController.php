@@ -5946,8 +5946,12 @@ class ProduksiController extends Controller
     function cetak_seri_finish_goods_small(Request $request)
     {
         $seri = $this->get_detail_noseri_rakit($request->id, $request->dd);
+        $data = array();
         foreach ($seri as $s) {
-            $data[] = $s->noseri;
+            $data[] = array(
+                'noseri' => $s->noseri,
+                'id' => $s->id,
+            );
         }
 
         $customPaperSmall = array(0, 0, 60.46, 150.69);
