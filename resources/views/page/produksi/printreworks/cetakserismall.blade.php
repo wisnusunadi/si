@@ -38,6 +38,10 @@
             margin-left: 0.9cm;
         }
 
+        .small-text-custom {
+            margin-left: 0.1cm;
+        }
+
         .page-break {
             page-break-after: always;
         }
@@ -45,7 +49,6 @@
 </head>
 
 <body>
-
     {{-- ulangi 5 kali --}}
     @foreach ($data as $item)
         @php
@@ -53,7 +56,7 @@
 
             $classPage = '';
 
-            switch (strlen($item)) {
+            switch (strlen($item['noseri'])) {
                 case 11:
                     $classPage = 'margin-left-11';
                     break;
@@ -70,11 +73,20 @@
 
         {{-- when last page not page break --}}
         <div class="{{ $loop->last ? '' : 'page-break' }}">
-            <div class="{{ $classPage }}">
-                <img
-                    src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item, $generator::TYPE_CODE_93, 0.9, 16)) }}" />
-                <div class="small-text">{{ $item }}</div>
-            </div>
+            @if ($item['id'] == 11)
+                <div class="{{ $classPage }}">
+                    <img
+                        src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_93, 0.5, 16)) }}" />
+                    <div class="small-text-custom">{{ $item['noseri'] }}</div>
+                </div>
+            @else
+                <div class="{{ $classPage }}">
+                    <img
+                        src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_93, 0.9, 16)) }}" />
+                    <div class="small-text">{{ $item['noseri'] }}</div>
+                </div>
+            @endif
+
         </div>
     @endforeach
 </body>

@@ -5959,9 +5959,16 @@ class ProduksiController extends Controller
     function cetak_seri_finish_goods_small_repeated(Request $request)
     {
         $getData =  json_decode($request->data, true);
-        $seri = JadwalRakitNoseri::select('noseri')->whereIn('id', $getData)->get();
+        $seri = JadwalRakitNoseri::select('noseri', 'gdg_barang_jadi.produk_id as id')
+        ->leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+        ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+        ->whereIn('jadwal_rakit_noseri.id', $getData)->get();
+        $data = array();
         foreach ($seri as $s) {
-            $data[] = $s->noseri;
+            $data[] = array(
+                'noseri' => $s->noseri,
+                'id' => $s->id,
+            );
         }
 
         $customPaperSmall = array(0, 0, 60.46, 150.69);
