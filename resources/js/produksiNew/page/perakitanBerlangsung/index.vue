@@ -65,7 +65,6 @@ export default {
                 this.dataRiwayat = riwayat.map(item => {
                     return {
                         ...item,
-                        noseri: `${item.noseri.length}noseri`,
                         tgl_buat: this.dateFormat(item.tgl_buat),
                     }
                 })
