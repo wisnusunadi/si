@@ -193,7 +193,8 @@ export default {
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" id="pills-noperakitan-tab" data-toggle="pill" data-target="#pills-noperakitan"
-                        type="button" role="tab" aria-controls="pills-noperakitan" aria-selected="false">Generate No Perakitan</a>
+                        type="button" role="tab" aria-controls="pills-noperakitan" aria-selected="false">Generate No
+                        Perakitan</a>
                 </li>
             </ul>
             <div class="tab-content" id="pills-tabContent">
@@ -202,8 +203,7 @@ export default {
                     <div class="card">
                         <div class="card-body">
                             <perakitan :dataTable="dataPerakitan" @refresh="refresh" @refreshData="refreshData"
-                                :openDataAfterGenerate="openDataAfterGenerate"
-                                 />
+                                :openDataAfterGenerate="openDataAfterGenerate" />
                         </div>
                     </div>
                 </div>
@@ -222,12 +222,9 @@ export default {
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="pills-noperakitan" role="tabpanel" aria-labelledby="pills-noperakitan-tab">
-                    <div class="card">
-                        <div class="card-body">
-                            <noperakitan/>
-                        </div>
-                    </div>
+                <div class="tab-pane fade" id="pills-noperakitan" role="tabpanel"
+                    aria-labelledby="pills-noperakitan-tab">
+                    <noperakitan />
                 </div>
             </div>
         </div>

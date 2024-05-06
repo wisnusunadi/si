@@ -1,121 +1,139 @@
 <script>
 import axios from 'axios'
-import DataTable from '../../../components/DataTable.vue'
-import modalPilihan from '../perakitan/modalPilihan.vue'
-import Seriviatext from '../../../../gbj/page/PermintaanReworkGBJ/permintaan/formPermintaan/seriviatext.vue'
-import moment from 'moment'
 export default {
-    data(){
+    data() {
         return {
-            form:{
-                alias:'',
-                urutan_awal:'',
-                urutan_akhiir:''
+            form: {
+                alias: '',
+                urutan_awal: '',
+                urutan_akhir: ''
             }
         }
     },
     methods: {
-  async simpan() {
-    try {
-      const { alias, urutan_awal, urutan_akhir } = this.form;
-
-      if (!alias || !urutan_awal || !urutan_akhir) {
-        this.$swal(
-                    "Peringatan",
-                    "Form Kosong",
-                    "warning"
-                );
-                return;
-      }
-      if (alias.length !== 2) {
-        this.$swal(
-                    "Peringatan",
-                    "Maksimal 2 Karakter",
-                    "warning"
-                );
-                return;
-      }
-
-         if (parseInt(urutan_awal) < 1 || parseInt(urutan_awal) > 9999 || parseInt(urutan_akhir) < 1 || parseInt(urutan_akhir) > 9999) {
-            this.$swal(
-                    "Peringatan",
-                    "Cek Urutan Kembali",
-                    "warning"
-                );
-                return;
-      }
-
-      if (parseInt(urutan_awal) > parseInt(urutan_akhir) || urutan_awal == urutan_akhir ) {
-        this.$swal(
-                    "Peringatan",
-                    "Cek Urutan Kembali",
-                    "warning"
-                );
-                return;
-      }
-
-      if (!/^[a-zA-Z]+$/.test(alias)) {
-        this.$swal(
-                    "Peringatan",
-                    "Harus Mengandung Karakter",
-                    "warning"
-                );
-                return;
-      }
+        async simpan() {
+            try {
+                const cekKosong = Object.values(this.form).every((val) => val !== '');
+                if (!cekKosong) {
+                    this.$swal(
+                        "Peringatan",
+                        "Data Tidak Boleh Kosong",
+                        "warning"
+                    );
+                    return;
+                }
 
 
-      const response = await axios.get(`/produksiReworks/cetak_seri_perakitan_custom_a4/${alias}/${urutan_awal}/${urutan_akhir}`, {
-        responseType: 'blob'
-      });
+                if (this.form.alias.length !== 2) {
+                    this.$swal(
+                        "Peringatan",
+                        "Maksimal 2 Karakter",
+                        "warning"
+                    );
+                    return;
+                }
+
+                if (parseInt(this.form.urutan_awal) < 1 || parseInt(this.form.urutan_awal) > 9999 || parseInt(this.form.urutan_akhir) < 1 || parseInt(this.form.urutan_akhir) > 9999) {
+                    this.$swal(
+                        "Peringatan",
+                        "Cek Urutan Kembali",
+                        "warning"
+                    );
+                    return;
+                }
+
+                if (parseInt(this.form.urutan_akhir) > parseInt(this.form.urutan_akhir) || this.form.urutan_awal == this.form.urutan_akhir) {
+                    this.$swal(
+                        "Peringatan",
+                        "Cek Urutan Kembali",
+                        "warning"
+                    );
+                    return;
+                }
+
+                if (!/^[a-zA-Z]+$/.test(this.form.alias)) {
+                    this.$swal(
+                        "Peringatan",
+                        "Harus Mengandung Karakter",
+                        "warning"
+                    );
+                    return;
+                }
 
 
-      const blob = new Blob([response.data], { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
+                const response = await axios.get(`/produksiReworks/cetak_seri_perakitan_custom_a4/${this.form.alias}/${this.form.urutan_awal}/${this.form.urutan_akhir}`, {
+                    responseType: 'blob'
+                });
 
 
-      window.open(url, '_blank');
-    } catch (error) {
-      console.log(error);
+                const blob = new Blob([response.data], { type: 'application/pdf' });
+                const url = window.URL.createObjectURL(blob);
+
+
+                window.open(url, '_blank');
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    },
+    watch: {
+        form: {
+            handler() {
+                // Mengubah alias menjadi huruf kapital
+                this.form.alias = this.form.alias.toUpperCase();
+                // Mengubah urutan_awal menjadi angka
+                this.form.urutan_awal = parseInt(this.form.urutan_awal);
+                // Mengubah urutan_akhir menjadi angka
+                this.form.urutan_akhir = parseInt(this.form.urutan_akhir);
+                // jika urutan_awal lebih besar dari urutan_akhir maka urutan_akhir akan diubah menjadi urutan_awal
+                if (this.form.urutan_awal > this.form.urutan_akhir) {
+                    this.form.urutan_akhir = this.form.urutan_awal;
+                }
+                // urutan awal dan urutan akhir tidak boleh kuran dari 1 dan tidak boleh lebih dari 9999
+                if (this.form.urutan_awal < 1) {
+                    this.form.urutan_awal = 1;
+                }
+                if (this.form.urutan_awal > 9999) {
+                    this.form.urutan_awal = 9999;
+                }
+                if (this.form.urutan_akhir < 1) {
+                    this.form.urutan_akhir = 1;
+                }
+                if (this.form.urutan_akhir > 9999) {
+                    this.form.urutan_akhir = 9999;
+                }
+            },
+            deep: true
+        }
     }
-  }
-}
 }
 </script>
 <template>
-    <div>
-        <div class="modal-body">
-                        <div class="card">
-                            <div class="card-body" >
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="form-group">
-                                            <label for="">Nama Alias</label>
-                                            <input type="text"   v-model="form.alias" class="form-control">
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label for="">No Urut Awal</label>
-                                                    <input type="number"    v-model="form.urutan_awal"  class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label for="">No Urut Akhir</label>
-                                                    <input type="number"     v-model="form.urutan_akhir" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="d-flex bd-highlight">
-                            <div class="p-2 bd-highlight">
-                                <button class="btn btn-success" @click="simpan" >Cetak</button>
-                            </div>
-                        </div>
-                    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group row">
+                <label for="" class="col-lg-5 text-right">Nama Alias</label>
+                <input type="text" v-model="form.alias" class="form-control col-lg-2">
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-lg-5 text-right">No Urut Awal</label>
+                <input type="number" v-model.number="form.urutan_awal" @keypress="numberOnly($event)"
+                    class="form-control col-lg-2">
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-lg-5 text-right">No Urut Akhir</label>
+                <input type="number" v-model.number="form.urutan_akhir" @keypress="numberOnly($event)"
+                    class="form-control col-lg-2">
+            </div>
+            <div class="row">
+                <div class="col-lg-5">
+                </div>
+                <div class="col-lg-2 text-right">
+                    <!-- Mengubah kolom dari col menjadi col-lg-5 dan menambahkan kelas text-right -->
+                    <button class="btn btn-success" @click="simpan">Cetak</button>
+                </div>
+            </div>
+        </div>
     </div>
+
 </template>
