@@ -18,7 +18,7 @@ export default {
                 },
                 {
                     name: 'Permintaan Barang',
-                    link: '/produksi/permintaan_goods_mgr'
+                    link: '/produksi/persetujuan_permintaan'
                 },
                 {
                     name: 'Detail Permintaan Barang',

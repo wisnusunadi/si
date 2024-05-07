@@ -37,11 +37,11 @@ export default {
 
             searchNoSeri: '',
             headersNoSeri: [
-                {
-                    text: 'id',
-                    value: 'id',
-                    sortable: false
-                },
+                // {
+                //     text: 'id',
+                //     value: 'id',
+                //     sortable: false
+                // },
                 {
                     text: 'No. Seri',
                     value: 'noseri'

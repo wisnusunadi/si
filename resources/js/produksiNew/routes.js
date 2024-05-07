@@ -53,14 +53,14 @@ const routes = [
         component: () => import("./page/permintaanGoods"),
     },
     {
-        path: "/produksi/persetujuan_permintaan",
-        name: "permintaanGoodsMgr",
-        component: () => import("./page/atasan/permintaanGoods"),
-    },
-    {
         path: "/produksi/permintaan_goods/:id",
         name: "permintaanGoodsDetail",
         component: () => import("./page/permintaanGoods/selesaiProses/detail"),
+    },
+    {
+        path: "/produksi/persetujuan_permintaan",
+        name: "permintaanGoodsMgr",
+        component: () => import("./page/atasan/permintaanGoods"),
     },
     {
         path: "/produksi/persetujuan_permintaan/:id",

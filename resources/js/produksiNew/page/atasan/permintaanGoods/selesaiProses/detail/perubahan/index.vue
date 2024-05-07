@@ -252,10 +252,10 @@ export default {
         <div class="card-body">
             <div class="d-flex bd-highlight">
                 <div class="p-2 flex-grow-1 bd-highlight">
-                    <button class="btn btn-sm btn-primary" @click="openModalPerubahan">
+                    <!-- <button class="btn btn-sm btn-primary" @click="openModalPerubahan">
                         <i class="fa fa-plus"></i>
                         Permintaan Perubahan Durasi Peminjaman
-                    </button>
+                    </button> -->
                 </div>
                 <div class="p-2 bd-highlight">
                     <input type="text" class="form-control" placeholder="Cari..." v-model="search">
