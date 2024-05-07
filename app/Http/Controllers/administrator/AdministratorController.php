@@ -57,16 +57,16 @@ class AdministratorController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('akses', function ($data) {
-                return $data->Divisi->nama;
+                return $data->Divisi->nama ?? '-';
             })
             ->addColumn('divisi', function ($data) {
-                return $data->Karyawan->Divisi->nama;
+                return $data->Karyawan->Divisi->nama ?? '-';
             })
             ->addColumn('username', function ($data) {
                 return $data->username;
             })
             ->addColumn('nama', function ($data) {
-                return $data->Karyawan->nama;
+                return $data->Karyawan->nama ?? '-';
             })
             ->addColumn('email', function ($data) {
                 return $data->email;
