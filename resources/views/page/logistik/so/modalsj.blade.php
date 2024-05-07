@@ -220,6 +220,7 @@
                           <select name="keterangan_pengiriman" class="form-control">
                             <option value="bayar_tujuan">BAYAR TUJUAN</option>
                             <option value="bayar_sinko">BAYAR SINKO</option>
+                            <option value="bayar_transfer">BAYAR TRANSFER</option>
                             <option value="non_bayar">NON BAYAR</option>
                           </select>
                       </div>
@@ -676,14 +677,17 @@
           text: dataprovinsi.dsb.nama
         })
         selectElement.empty().append(option).val(dataprovinsi.dsb.id).trigger('change');
+        $('#perusahaan_pengiriman').val(dataprovinsi.dsb.customer)
+        $('#alamat_pengiriman').val(dataprovinsi.dsb.alamat)
       } else {
         let option = $('<option>', {
           value: dataprovinsi.instansi.id,
           text: dataprovinsi.instansi.nama
         })
         selectElement.empty().append(option).val(dataprovinsi.instansi.id).trigger('change');
+        $('#perusahaan_pengiriman').val(dataprovinsi.instansi.customer)
+        $('#alamat_pengiriman').val(dataprovinsi.instansi.alamat)
       }
-
       let id = $('.provinsi_pengiriman').val()
           $('.ekspedisi_id').select2({
               ajax: {

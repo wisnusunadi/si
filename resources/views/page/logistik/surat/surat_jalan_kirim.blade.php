@@ -12,6 +12,10 @@
             font-family: sans-serif;
         }
 
+            body {
+              font-family: sans-serif;
+            }
+
         main {
             position: relative;
             top: 145px;
@@ -221,6 +225,54 @@
                                 @endif
                             </td>
                         </tr>
+                      <tr>
+                        <td class="td-width-header">Nomor SJ</td>
+                        <td>: {{$data->nosurat}}</td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Tanggal SJ</td>
+                        {{-- {{ \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') }} --}}
+                        <td>: {{ \Carbon\Carbon::parse($data->tgl_kirim)->isoFormat('DD MMMM YYYY') }}</td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Nomor PO</td>
+                        <td>:
+                            @if (isset($data->DetailLogistik[0]))
+                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                          @else
+                            {{ $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->no_po}}
+                          @endif
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Ket. Pengiriman</td>
+                        <td>:
+                          @switch($data->ket)
+                              @case('bayar_tujuan')
+                                  <span>BAYAR TUJUAN <span>
+                                  @break
+                                @case('bayar_sinko')
+                                    <span>BAYAR SINKO </span>
+                                    @break
+                                @case('bayar_transfer')
+                                    <span>BAYAR TRANSFER </span>
+                                    @break
+                              @default
+                              <span>NON BAYAR<span>
+                              @break
+                          @endswitch
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="td-width-header">Ekspedisi</td>
+                        <td>:
+                            @if ($data->nama_pengirim == '')
+                            {{$data->Ekspedisi->nama}}
+                            @else
+                            {{$data->nama_pengirim}}
+                            @endif
+                        </td>
+                      </tr>
                     </table>
             </tr>
         </table>

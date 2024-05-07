@@ -279,29 +279,25 @@ class LogistikController extends Controller
         //dd($data);
         // ekat, spa
 
-        if ($name[1] == 'SPB') {
-            return view('page.logistik.surat.surat_jalan_draft_spb', ['data' => $log]);
+        $customPaper = array(0, 0, 605.44, 788.031);
+        $options = [
+            'isPhpEnabled' => true, // Allow PHP code in the view
+            'isHtml5ParserEnabled' => true, // Enable HTML5 parser
+            'isFontSubsettingEnabled' => true, // Enable font subsetting
+        ];
+
+        $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft', ['data' => $log])
+            ->setPaper($customPaper)
+            ->setOptions($options); // Use setOptions() to set PDF options
+        $pdf->stream();
+
+        // check amount of pages
+        $pageAmount = $pdf->getDomPDF()->getCanvas()->get_page_count();
+
+        if ($pageAmount > 1) {
+            return view('page.logistik.surat.surat_jalan_draft_test', ['data' => $log]);
         } else {
-            $customPaper = array(0, 0, 605.44, 788.031);
-            $options = [
-                'isPhpEnabled' => true, // Allow PHP code in the view
-                'isHtml5ParserEnabled' => true, // Enable HTML5 parser
-                'isFontSubsettingEnabled' => true, // Enable font subsetting
-            ];
-
-            $pdf = PDF::loadView('page.logistik.surat.surat_jalan_draft', ['data' => $log])
-                ->setPaper($customPaper)
-                ->setOptions($options); // Use setOptions() to set PDF options
-            $pdf->stream();
-
-            // check amount of pages
-            $pageAmount = $pdf->getDomPDF()->getCanvas()->get_page_count();
-
-            if ($pageAmount > 1) {
-                return view('page.logistik.surat.surat_jalan_draft_test', ['data' => $log]);
-            } else {
-                return $pdf->stream();
-            }
+            return $pdf->stream();
         }
 
         //         foreach ($log->item as $key => $item) {
@@ -1134,6 +1130,7 @@ class LogistikController extends Controller
     }
     public function get_noseri_so_belum_kirim($id, $array)
     {
+        // dd($id);
         // dd($id);
         $arr = explode(',', $array);
         // $data = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $id, 'status' => 'ok'])->doesntHave('NoseriDetailLogistik')->get();
@@ -2295,6 +2292,12 @@ class LogistikController extends Controller
                         ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
+                'cekatbatal' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id), 0)')
+                        ->from('ekatalog')
+                        ->where('ekatalog.status','batal')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                },
                 'cqcpart' => function ($q) {
                     $q->selectRaw('coalesce(sum(outgoing_pesanan_part.jumlah_ok), 0)')
                         ->from('outgoing_pesanan_part')
@@ -2348,11 +2351,17 @@ class LogistikController extends Controller
                         ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
+                'cekatbatal' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id), 0)')
+                        ->from('ekatalog')
+                        ->where('ekatalog.status','batal')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotIn('log_id', ['10', '20'])
                 ->whereNotNull('no_po')
                 ->whereYear('created_at',  $years)
-                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0  ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
+                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0  ) AND cpoprd > 0  AND cekatbatal = 0) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
                 ->orderBydesc('created_at')
                 ->get();
         } else if ($value == "sebagian_kirim") {
@@ -2427,12 +2436,18 @@ class LogistikController extends Controller
                         ->whereRaw('m_sparepart.kode LIKE "%JASA%"')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                         ->limit(1);
-                }
+                },
+                'cekatbatal' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id), 0)')
+                        ->from('ekatalog')
+                        ->where('ekatalog.status','batal')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotIn('log_id', ['10', '20'])
                 ->whereNotNull('no_po')
                 ->whereYear('created_at',  $years)
-                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 ) AND cpoprd > 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
+                ->havingRaw('(((cqcprd > 0 AND clogprd < cqcprd) OR clogprd = 0 ) AND cpoprd > 0  AND cekatbatal = 0 ) OR (((cqcpart > 0 AND clogpart < cqcpart) OR clogpart = 0 ) AND cpopart > 0 ) OR  ((clogjasa < ctfjasa OR clogjasa = 0 ) AND ctfjasa > 0 )')
                 ->orderBydesc('created_at')
                 ->get();
         } else {
@@ -2495,6 +2510,7 @@ class LogistikController extends Controller
                         ->from('detail_logistik_part')
                         ->Join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                         ->Join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                        ->Join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
                         ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                         ->limit(1);
@@ -2522,7 +2538,13 @@ class LogistikController extends Controller
                         ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
                         ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
-                }
+                },
+                'cekatbatal' => function ($q) {
+                    $q->selectRaw('coalesce(count(ekatalog.id), 0)')
+                        ->from('ekatalog')
+                        ->where('ekatalog.status','batal')
+                        ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
+                },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotIn('log_id', ['10', '20'])
                 ->whereNotNull('no_po')
@@ -2634,6 +2656,7 @@ class LogistikController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
+                return  $data->so;
                 return  $data->so;
             })
             ->addColumn('po', function ($data) {
@@ -2786,6 +2809,7 @@ class LogistikController extends Controller
                         <button class="dropdown-item cetaksj" type="button" data-x="' . $x . '" data-y="' . $pesanan . '" data-z="' . $z . '">
                             <i class="fas fa-print"></i>
                             Cetak Surat Jalan
+                            Cetak Surat Jalan
                         </button>
                     </div>
                     ';
@@ -2864,7 +2888,10 @@ class LogistikController extends Controller
                 ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                 ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
                 ->limit(1);
-        }])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderByDesc('created_at');
+        },
+        ])
+        ->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])
+        ->whereYear('created_at',  $years)->whereNotIn('log_id', [7,20])->orderByDesc('created_at');
 
         $part = Pesanan::whereIn('id', function ($q) {
             $q->select('pesanan.id')
@@ -2892,7 +2919,8 @@ class LogistikController extends Controller
                 ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                 ->limit(1);
-        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderByDesc('created_at');
+        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)
+        ->whereNotIn('log_id', [7,20])->orderByDesc('created_at');
 
 
         $partjasa = Pesanan::whereIn('id', function ($q) {
@@ -2922,7 +2950,8 @@ class LogistikController extends Controller
                 ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                 ->limit(1);
-        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)->whereNotIn('log_id', ['7'])->orderByDesc('created_at')->union($prd)->union($part)->get();
+        }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)
+        ->whereNotIn('log_id', [7,20])->orderByDesc('created_at')->union($prd)->union($part)->get();
 
         $data = $partjasa;
 
@@ -5825,6 +5854,7 @@ class LogistikController extends Controller
         ])
             ->whereNotIn('log_id', ['7', '20'])
             ->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'State'])
+            ->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'State'])
             ->havingRaw('clogprd < cjumlahprd OR clogpart < cjumlahpart')
             ->get();
         return datatables()->of($data)
@@ -6163,6 +6193,7 @@ class LogistikController extends Controller
 
     public function create_logistik_draft(Request $request)
     {
+
         $items = array();
 
         if (isset($request->part)) {
@@ -6231,48 +6262,37 @@ class LogistikController extends Controller
                     if ($item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363) {
                         $tas = true;
                     }
-                    // if( $item["penjualan_produk_id"] == 183 ){
-                    //     $produk[$id]["detail"][] = array(
-                    //         "kode"=> "-",
-                    //         "nama"=>  "POWER ADAPTOR",
-                    //         "jumlah"=> $item['jumlah'],
-                    //         "jumlah_noseri" =>  $item['jumlah_noseri'],
-                    //         "satuan" => 'Unit',
-                    //         "noseri"=> array('-')
-                    //     );
-                    // }
 
-                    // if( $item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363){
-                    //     $produk[$id]["detail"][$maxJumlah+1] = array(
-                    //         "kode"=> "-",
-                    //         "nama"=>  "TAS ANTROPOMETRI KIT",
-                    //         "jumlah"=> $item['jumlah'],
-                    //         "jumlah_noseri" =>  $item['jumlah_noseri'],
-                    //         "satuan" => 'Unit',
-                    //         "noseri"=> array('-')
-                    //     );
-                    // }
                 }
 
-                if ($item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363) {
-                    $produk[$id]["detail"][0] = array(
-                        "kode" => $item['kode'] ?? "",
-                        "nama" =>  $item['nama'],
-                        "jumlah" => $item['jumlah'],
-                        "jumlah_noseri" => $item['jumlah_noseri'],
-                        "satuan" => 'Unit',
-                        "noseri" => $item['noseri_selected']
-                    );
-                } else {
-                    $produk[$id]["detail"][] = array(
-                        "kode" => $item['kode'] ?? "",
-                        "nama" =>  $item['nama'],
-                        "jumlah" => $item['jumlah'],
-                        "jumlah_noseri" => $item['jumlah_noseri'],
-                        "satuan" => 'Unit',
-                        "noseri" => $item['noseri_selected']
-                    );
-                }
+                $produk[$id]["detail"][] = array(
+                    "kode" => $item['kode'] ?? "",
+                    "nama" =>  $item['nama'],
+                    "jumlah" => $item['jumlah'],
+                    "jumlah_noseri" => $item['jumlah_noseri'],
+                    "satuan" => 'Unit',
+                    "noseri" => $item['noseri_selected']
+                );
+
+                // if ($item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363) {
+                //     $produk[$id]["detail"][0] = array(
+                //         "kode" => $item['kode'] ?? "",
+                //         "nama" =>  $item['nama'],
+                //         "jumlah" => $item['jumlah'],
+                //         "jumlah_noseri" => $item['jumlah_noseri'],
+                //         "satuan" => 'Unit',
+                //         "noseri" => $item['noseri_selected']
+                //     );
+                // } else {
+                //     $produk[$id]["detail"][] = array(
+                //         "kode" => $item['kode'] ?? "",
+                //         "nama" =>  $item['nama'],
+                //         "jumlah" => $item['jumlah'],
+                //         "jumlah_noseri" => $item['jumlah_noseri'],
+                //         "satuan" => 'Unit',
+                //         "noseri" => $item['noseri_selected']
+                //     );
+                // }
             }
 
             if ($tas) {
@@ -6325,7 +6345,6 @@ class LogistikController extends Controller
             }
             $items = array_merge($items, $produk);
         }
-        //dd($items);
 
         $p = Pesanan::find($request->dataform['pesanan_id']);
         if ($p->Ekatalog) {
@@ -6335,6 +6354,7 @@ class LogistikController extends Controller
             $paket = 'OFFLINE';
             $ket = '';
         }
+
         $isi = array(
             "pesanan_id" => $request->dataform['pesanan_id'],
             "customer" => $request->dataform['nama_customer'],
@@ -6423,7 +6443,9 @@ class LogistikController extends Controller
             if ($pesanan->Ekatalog->provinsi_id != NULL) {
                 $instansi = array(
                     'id' => $pesanan->Ekatalog->provinsi_id,
-                    'nama' => $pesanan->Ekatalog->Provinsi->nama
+                    'nama' => $pesanan->Ekatalog->Provinsi->nama,
+                    'customer' => $pesanan->Ekatalog->instansi,
+                    'alamat' => $pesanan->Ekatalog->alamat
                 );
                 $provinsi['instansi'] = $instansi;
             }
@@ -6432,7 +6454,8 @@ class LogistikController extends Controller
                 $dsb = array(
                     'id' => $pesanan->Ekatalog->Customer->id_provinsi,
                     'nama' => $pesanan->Ekatalog->Customer->Provinsi->nama,
-                    'customer' => $pesanan->Ekatalog->Customer->nama
+                    'customer' => $pesanan->Ekatalog->Customer->nama,
+                    'alamat' => $pesanan->Ekatalog->Customer->alamat
                 );
                 $provinsi['dsb'] = $dsb;
             }
@@ -6526,6 +6549,8 @@ class LogistikController extends Controller
 
     public function pack_wilayah_reworks_show(Request $request, $urutan)
     {
+    public function pack_wilayah_reworks_show(Request $request, $urutan)
+    {
         $data = PackRwHead::addSelect([
             'cpack' => function ($q) {
                 $q->selectRaw('coalesce(count(pack_rw.id), 0)')
@@ -6535,16 +6560,34 @@ class LogistikController extends Controller
         ])
             ->get();
         $sr = SeriDetailRw::where('urutan', $urutan)
+            ->get();
+        $sr = SeriDetailRw::where('urutan', $urutan)
             ->count();
 
         if ($data->isempty()) {
             $obj = (object)[
                 'jumlah' => $sr,
+                'jumlah' => $sr,
                 'data' => array()
+            ];
             ];
         } else {
             $permintaan = 0;
 
+            foreach ($data as $d) {
+                $datas[] =  array(
+                    'id' => $d->id,
+                    'produk' => 'ANTROPOMETRI KIT 10',
+                    'wilayah' => $d->prov . ' - ' . $d->kota,
+                    'belum' => $d->jumlah - $d->cpack,
+                    'selesai' => $d->cpack,
+                );
+                $permintaan  += $d->jumlah;
+            }
+            $obj = (object)[
+                'jumlah' => $sr - $permintaan,
+                'data' => $datas
+            ];
             foreach ($data as $d) {
                 $datas[] =  array(
                     'id' => $d->id,
@@ -6566,6 +6609,8 @@ class LogistikController extends Controller
 
     public function pack_wilayah_reworks_store(Request $request, $urutan)
     {
+    public function pack_wilayah_reworks_store(Request $request, $urutan)
+    {
         DB::beginTransaction();
         try {
             //code...
@@ -6573,7 +6618,9 @@ class LogistikController extends Controller
             PackRwHead::create([
                 'jadwal_perakitan_rw_id' => $urutan,
                 'jumlah' => $obj->jumlah,
+                'jumlah' => $obj->jumlah,
                 'prov' => $obj->provinsi->label,
+                'kota' => $obj->kota->label
                 'kota' => $obj->kota->label
             ]);
 
@@ -6595,10 +6642,14 @@ class LogistikController extends Controller
 
     public function pack_reworks_store(Request $request, $urutan)
     {
+    public function pack_reworks_store(Request $request, $urutan)
+    {
 
         DB::beginTransaction();
         try {
             //code...
+            $obj =  json_decode(json_encode($request->all()), FALSE);
+            $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
             $obj =  json_decode(json_encode($request->all()), FALSE);
             $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
 
@@ -6607,7 +6658,37 @@ class LogistikController extends Controller
             $getPack = PackRwHead::find($urutan);
             $cekJumlahAvailable = PackRw::where('pack_rw_head_id', $urutan)->count();
             $tersedia = $getPack->jumlah - $cekJumlahAvailable;
+            $cekSeri = SeriDetailRw::whereIn('noseri', $seriValues)->get();
+            $cekPeti = PackRw::whereIn('noseri', $seriValues)->count();
+            $getPack = PackRwHead::find($urutan);
+            $cekJumlahAvailable = PackRw::where('pack_rw_head_id', $urutan)->count();
+            $tersedia = $getPack->jumlah - $cekJumlahAvailable;
 
+            //  dd($seriValues);
+            if (count($seriValues) == count($cekSeri)) {
+                if ($cekPeti > 0) {
+                    $getUsed = PackRw::whereIn('noseri', $seriValues)->pluck('noseri')->toArray();
+                    DB::rollBack();
+                    return response()->json([
+                        'message' =>  'Noseri Sudah Terdaftar',
+                        'values' => $getUsed,
+                    ], 500);
+                } else {
+                    if (count($seriValues) > $tersedia) {
+                        return response()->json([
+                            'message' =>  'Noseri Melebihi Batas',
+                            'values' => [],
+                        ], 500);
+                    } else {
+                        foreach ($seriValues as $n) {
+                            $id = NoseriBarangJadi::where('noseri', $n)->first();
+                            $pr =  PackRw::create([
+                                'noseri_id' => $id->id,
+                                'noseri' => $n,
+                                'user_id' => auth()->user()->karyawan->nama,
+                                'pack_rw_head_id' => $urutan
+                            ]);
+                        }
             //  dd($seriValues);
             if (count($seriValues) == count($cekSeri)) {
                 if ($cekPeti > 0) {
@@ -6645,13 +6726,28 @@ class LogistikController extends Controller
                     }
                 }
             } else {
+                        $sr = SeriDetailRw::where('noseri_id', $pr->noseri_id)->first();
+                        DB::commit();
+                        return response()->json([
+                            'message' =>  'Berhasil Di tambahkan',
+                            'id' => $pr->noseri_id,
+                            'itemnoseri' =>  json_decode($sr->isi),
+                            'values' => [],
+                        ], 200);
+                    }
+                }
+            } else {
 
+                $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+                DB::rollBack();
+                return response()->json([
                 $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
                 DB::rollBack();
                 return response()->json([
                     'message' =>  'No Seri Tidak Terdaftar',
                     'values' => array_values($getNotFound)
                 ], 500);
+            }
             }
         } catch (\Throwable $th) {
             $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
@@ -6693,6 +6789,9 @@ class LogistikController extends Controller
                     'urutan' => 'PRD-' . $d->urutan,
                     'sudah' => $d->cpack,
                     'belum' => $d->csiap - $d->cpack,
+                    'urutan' => 'PRD-' . $d->urutan,
+                    'sudah' => $d->cpack,
+                    'belum' => $d->csiap - $d->cpack,
                     'nama' => $d->ProdukRw->nama,
                 );
             }
@@ -6717,10 +6816,12 @@ class LogistikController extends Controller
             $obj = array();
         } else {
             foreach ($data as $d) {
+            foreach ($data as $d) {
                 $obj[] = array(
                     'id' => $d->no_urut,
                     'no_urut' => $d->no_urut,
                     'tgl_buat' => $d->created_at,
+                    'tgl_ubah' => $d->total_count > 3 ? $d->updates : NULL,
                     'tgl_ubah' => $d->total_count > 3 ? $d->updates : NULL,
                     'ket' => $d->total_count > 3 ? true : false,
                     'packer' => $d->nama,
@@ -6734,10 +6835,19 @@ class LogistikController extends Controller
     {
         $data = PackRw::where('noseri_id', $id)->first();
         $sr = SeriDetailRw::where('noseri_id', $id)->first();
+        $data = PackRw::where('noseri_id', $id)->first();
+        $sr = SeriDetailRw::where('noseri_id', $id)->first();
         if (!$data) {
             $obj = array();
         } else {
 
+            $obj = (object)[
+                'noseri_id' => $data->noseri_id,
+                'noseri' => $data->noseri,
+                'tgl_buat' => $data->created_at->format('Y-m-d'),
+                'packer' =>  $data->user_id,
+                'itemnoseri' =>  json_decode($sr->isi),
+            ];
             $obj = (object)[
                 'noseri_id' => $data->noseri_id,
                 'noseri' => $data->noseri,
@@ -6751,10 +6861,12 @@ class LogistikController extends Controller
     public function pack_reworks_details($id)
     {
         $data = PackRw::where('pack_rw_head_id', $id)->get();
+        $data = PackRw::where('pack_rw_head_id', $id)->get();
 
         if ($data->isEmpty()) {
             $obj = array();
         } else {
+            foreach ($data as $d) {
             foreach ($data as $d) {
                 $obj[] = array(
                     'id' => $d->noseri_id,
@@ -6769,10 +6881,12 @@ class LogistikController extends Controller
     public function peti_reworks_detail($urut)
     {
         $data = PetiRw::where('no_urut', $urut)->get();
+        $data = PetiRw::where('no_urut', $urut)->get();
 
         if ($data->isempty()) {
             $obj = array();
         } else {
+            foreach ($data as $d) {
             foreach ($data as $d) {
                 $obj[] = array(
                     'id' => $d->no_urut,
@@ -6815,6 +6929,7 @@ class LogistikController extends Controller
                         $status = "Error";
                 }
                 $y =  $d->csiap - $d->cpeti;
+                $y =  $d->csiap - $d->cpeti;
                 if ($y % 3 !== 0) {
                     $remainder = $y % 3;
                     $y += (3 - $remainder);
@@ -6822,6 +6937,9 @@ class LogistikController extends Controller
 
                 $obj[] = array(
                     'id' => $d->urutan,
+                    'urutan' => 'PRD-' . $d->urutan,
+                    'sudah' => $d->cpeti,
+                    'belum' => $y,
                     'urutan' => 'PRD-' . $d->urutan,
                     'sudah' => $d->cpeti,
                     'belum' => $y,
@@ -6834,13 +6952,19 @@ class LogistikController extends Controller
     }
 
     public function peti_reworks_store(Request $request, $urutan)
+    public function peti_reworks_store(Request $request, $urutan)
     {
         DB::beginTransaction();
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
             $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
+            $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
 
+            $max = PetiRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_urut');
+            $urut = $max + 1;
+            $cekSeri = SeriDetailRw::whereIn('noseri', $seriValues)->get();
+            $cekPeti = PetiRw::whereIn('noseri', $seriValues)->count();
             $max = PetiRw::whereYear('created_at', (Carbon::now()->format('Y')))->max('no_urut');
             $urut = $max + 1;
             $cekSeri = SeriDetailRw::whereIn('noseri', $seriValues)->get();
@@ -6873,13 +6997,44 @@ class LogistikController extends Controller
                     ], 200);
                 }
             } else {
+            if (count($seriValues) == count($cekSeri)) {
+                if ($cekPeti > 0) {
+                    $getUsed = PetiRw::whereIn('noseri', $seriValues)->pluck('noseri')->toArray();
+                    DB::rollBack();
+                    return response()->json([
+                        'message' =>  'Noseri Sudah Terdaftar',
+                        'values' => $getUsed,
+                    ], 500);
+                } else {
+                    foreach ($seriValues as $n) {
+                        $id = NoseriBarangJadi::where('noseri', $n)->first();
+                        PetiRw::create([
+                            'no_urut' => $urut,
+                            'noseri_id' => $id->id,
+                            'noseri' => $n,
+                            'packer' => auth()->user()->id,
+                            'jadwal_perakitan_rw_id' => $urutan
+                        ]);
+                    }
+                    DB::commit();
+                    return response()->json([
+                        'message' =>  'Berhasil Di tambahkan',
+                        'no_urut' => $urut,
+                        'values' => [],
+                    ], 200);
+                }
+            } else {
 
+                $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
+                DB::rollBack();
+                return response()->json([
                 $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
                 DB::rollBack();
                 return response()->json([
                     'message' =>  'No Seri Tidak Terdaftar',
                     'values' => array_values($getNotFound)
                 ], 500);
+            }
             }
         } catch (\Throwable $th) {
             $getNotFound = array_diff($seriValues, $cekSeri->pluck('noseri')->toArray());
@@ -6892,6 +7047,7 @@ class LogistikController extends Controller
         }
     }
     public function peti_reworks_update(Request $request, $urut)
+    public function peti_reworks_update(Request $request, $urut)
     {
         // $obj =  json_decode(json_encode($request->all()), FALSE);
         // $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
@@ -6900,13 +7056,21 @@ class LogistikController extends Controller
         // $currentId = array_values(array_diff($data, $seriValues));
         // dd($currentId);
         DB::beginTransaction();
+        DB::beginTransaction();
         try {
             //code...
             $obj =  json_decode(json_encode($request->all()), FALSE);
             $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
             $data = PetiRw::where('no_urut', $urut)->pluck('noseri')->toArray();
             $newId = array_values(array_diff($seriValues, $data));
+            $seriValues = collect($obj->noseri)->pluck('seri')->unique()->values()->all();
+            $data = PetiRw::where('no_urut', $urut)->pluck('noseri')->toArray();
+            $newId = array_values(array_diff($seriValues, $data));
 
+            $currentId = array_values(array_diff($data, $seriValues));
+            // if(count($currentId) > 0){
+            //     $ids = PetiRw::where('noseri',$currentId[0])->first();
+            // }
             $currentId = array_values(array_diff($data, $seriValues));
             // if(count($currentId) > 0){
             //     $ids = PetiRw::where('noseri',$currentId[0])->first();
@@ -6926,7 +7090,22 @@ class LogistikController extends Controller
                     } else {
                         // PetiRw::whereIn('noseri',$currentId)->delete();
                         for ($j = 0; $j < count($newId); $j++) {
+            if ($newId) {
+                $cekSeri = SeriDetailRw::whereIn('noseri', $newId)->get();
+                $cekPeti = PetiRw::whereIn('noseri', $newId)->get();
+                if (count($cekSeri) == count($newId)) {
+                    if (count($cekPeti) > 0) {
+                        DB::rollBack();
+                        return response()->json([
+                            'message' => 'No Seri Sudah Digunakan',
+                            'values' => $cekPeti->pluck('noseri')->toArray()
+                        ], 500);
+                    } else {
+                        // PetiRw::whereIn('noseri',$currentId)->delete();
+                        for ($j = 0; $j < count($newId); $j++) {
 
+                            $nbj = NoseriBarangJadi::where('noseri', $currentId[$j])->first();
+                            $nbj_new = NoseriBarangJadi::where('noseri', $newId[$j])->first();
                             $nbj = NoseriBarangJadi::where('noseri', $currentId[$j])->first();
                             $nbj_new = NoseriBarangJadi::where('noseri', $newId[$j])->first();
 
@@ -6935,10 +7114,35 @@ class LogistikController extends Controller
                             $npeti->noseri_id = $nbj_new->id;
                             $npeti->save();
                         }
+                            $npeti = PetiRw::where('noseri_id', $nbj->id)->first();
+                            $npeti->noseri = $nbj_new->noseri;
+                            $npeti->noseri_id = $nbj_new->id;
+                            $npeti->save();
+                        }
 
                         // foreach($newId as $n){
                         //     $id = NoseriBarangJadi::where('noseri',$n)->first();
+                        // foreach($newId as $n){
+                        //     $id = NoseriBarangJadi::where('noseri',$n)->first();
 
+                        //     PetiRw::create([
+                        //         'no_urut'=> $urut,
+                        //         'noseri_id'=> $id->id,
+                        //         'noseri'=> $n,
+                        //         'packer' => auth()->user()->id,
+                        //         'jadwal_perakitan_rw_id' => $ids->jadwal_perakitan_rw_id
+                        //     ]);
+                        // }
+                        DB::commit();
+                        return response()->json([
+                            'message' =>  'Berhasil Di Ubah',
+                            'values' => [],
+                            'no_urut' => $urut
+                        ], 200);
+                    }
+                } else {
+                    $getNotFound = array_diff($newId, $cekSeri->pluck('noseri')->toArray());
+                    DB::rollBack();
                         //     PetiRw::create([
                         //         'no_urut'=> $urut,
                         //         'noseri_id'=> $id->id,
@@ -6969,6 +7173,17 @@ class LogistikController extends Controller
                     'values' => []
                 ], 500);
             }
+                        'message' => 'No Seri Tidak Terdaftar',
+                        'values' => array_values($getNotFound)
+                    ], 500);
+                }
+            } else {
+                DB::rollBack();
+                return response()->json([
+                    'message' =>  'No Seri Tidak Ada Perubahan',
+                    'values' => []
+                ], 500);
+            }
         } catch (\Throwable $th) {
             // throw $th;
             DB::rollBack();
@@ -6976,7 +7191,14 @@ class LogistikController extends Controller
                 'message' =>  $th->getMessage(),
                 'values' => []
             ], 500);
+            // throw $th;
+            DB::rollBack();
+            return response()->json([
+                'message' =>  $th->getMessage(),
+                'values' => []
+            ], 500);
         }
+        //code...
         //code...
 
 
@@ -7041,6 +7263,8 @@ class LogistikController extends Controller
 
     public function view_peti($id)
     {
+    public function view_peti($id)
+    {
         // set paper A5 landscape
         $loadView = $this->peti_reworks_detail($id);
         return view('page.produksi.printreworks.viewpeti', compact('loadView'));
@@ -7048,11 +7272,16 @@ class LogistikController extends Controller
 
     public function export_pack_wilayah_excel($id)
     {
+    public function export_pack_wilayah_excel($id)
+    {
         $waktu = Carbon::now();
 
         $wilayah = PackRwHead::find($id);
         return Excel::download(new ExportPackWilayah($id), 'ExportPackWilayah  ' . $wilayah->prov . '-' . $wilayah->kota . ' ' . $waktu->toDateTimeString() . '.xlsx');
+        return Excel::download(new ExportPackWilayah($id), 'ExportPackWilayah  ' . $wilayah->prov . '-' . $wilayah->kota . ' ' . $waktu->toDateTimeString() . '.xlsx');
     }
+    public function cetak_peti($id)
+    {
     public function cetak_peti($id)
     {
         $loadView = $this->peti_reworks_detail($id);

@@ -154,6 +154,10 @@
                                                 <span>BAYAR SINKO </span>
                                             @break
 
+                                            @case('bayar_transfer')
+                                             <span>BAYAR TRANSFER </span>
+                                            @break
+
                                             @default
                                                 <span>NON BAYAR<span>
                                                     @break

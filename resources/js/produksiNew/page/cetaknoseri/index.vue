@@ -290,7 +290,7 @@ export default {
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>

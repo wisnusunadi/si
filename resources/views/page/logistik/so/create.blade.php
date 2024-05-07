@@ -195,6 +195,7 @@
                                           <select name="keterangan_pengiriman" id="keterangan_pengiriman" class="form-control">
                                             <option value="bayar_tujuan">BAYAR TUJUAN</option>
                                             <option value="bayar_sinko">BAYAR SINKO</option>
+                                            <option value="bayar_transfer">BAYAR TRANSFER</option>
                                             <option value="non_bayar">NON BAYAR</option>
                                           </select>
                                       </div>

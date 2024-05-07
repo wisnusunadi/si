@@ -12,7 +12,9 @@ export default {
                 bulan: '',
                 // dapatkan angka 2 digit ke belakang
                 tahun: new Date().getFullYear().toString().substr(-2),
-                urutanBE: ''
+                urutanBE: '',
+                no_bppb: '',
+                tgl_bppb: ''
             },
             formHasilGenerate: {
                 hasilGen: '',
@@ -67,7 +69,7 @@ export default {
             return true
         },
         simpanOut() {
-            const cekForm = Object.keys(this.formHasilGenerate).every(key => this.formHasilGenerate[key] !== '')
+            const cekForm = Object.keys(this.form).every(key => this.form[key] !== '')
             if (!cekForm) {
                 swal.fire('Peringatan', 'Pastikan semua form terisi', 'warning')
                 return
@@ -76,8 +78,8 @@ export default {
             const form = {
                 jadwal_id: this.dataGenerate.jadwal_id,
                 kode: this.form.kode_produk,
-                tgl_bppb: this.formHasilGenerate.tgl,
-                no_bppb: this.formHasilGenerate.hasilGen,
+                tgl_bppb: this.form.tgl_bppb,
+                no_bppb: this.form.no_bppb,
                 tahun: new Date().getFullYear().toString(),
                 no_urut: this.form.urutanBE,
                 bulan: this.form.bulan.numberMonth
@@ -92,7 +94,7 @@ export default {
             })
         },
         simpanGenerate() {
-            const cekForm = Object.keys(this.formHasilGenerate).every(key => this.formHasilGenerate[key] !== '')
+            const cekForm = Object.keys(this.form).every(key => this.form[key] !== '')
             if (!cekForm) {
                 // Simpan data ke BE
                 swal.fire('Peringatan', 'Pastikan semua form terisi', 'warning')
@@ -101,8 +103,8 @@ export default {
             const form = {
                 jadwal_id: this.dataGenerate.jadwal_id,
                 kode: this.form.kode_produk,
-                tgl_bppb: this.formHasilGenerate.tgl,
-                no_bppb: this.formHasilGenerate.hasilGen,
+                tgl_bppb: this.form.tgl_bppb,
+                no_bppb: this.form.no_bppb,
                 tahun: new Date().getFullYear().toString(),
                 no_urut: this.form.urutanBE,
                 bulan: this.form.bulan.numberMonth
@@ -168,7 +170,7 @@ export default {
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Form Generate BPPB</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Form Input BPPB</h5>
                     <button type="button" class="close" @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -183,25 +185,35 @@ export default {
                                 </select>
                             </div>
                             <!-- nanti di disable ngambil dari BE -->
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label for="">No Urut</label>
                                 <input type="text" class="form-control" v-model="form.urutan" disabled>
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <label for="">Kode Produk</label>
                                 <input type="text" class="form-control" v-model="form.kode_produk" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Bulan</label>
-                                <v-select v-model="form.bulan" :options="monthCalc"></v-select>
                             </div>
                             <div class="form-group">
                                 <label for="">Tahun</label>
                                 <input type="text" :value="new Date().getFullYear().toString()" class="form-control"
                                     disabled>
                             </div>
+                            <div class="form-group">
+                                <label for="">Bulan</label>
+                                <v-select v-model="form.bulan" :options="monthCalc"></v-select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Nomor BPPB</label>
+                                <input type="text" class="form-control" v-model="form.no_bppb">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Tanggal BPPB</label>
+                                <input type="date" class="form-control" v-model="form.tgl_bppb"
+                                    :min="new Date().getFullYear() + '-01-01'"
+                                    :max="new Date().toISOString().split('T')[0]">
+                            </div>
                         </div>
-                        <div class="col" v-if="cekFormFilled">
+                        <!-- <div class="col" v-if="cekFormFilled">
                             <div class="form-group">
                                 <label for="">No BPPB</label>
                                 <div class="card">
@@ -216,7 +228,7 @@ export default {
                                     :min="new Date().getFullYear() + '-01-01'"
                                     :max="new Date().toISOString().split('T')[0]">
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="d-flex bd-highlight">
                         <div class="p-2 flex-grow-1 bd-highlight">

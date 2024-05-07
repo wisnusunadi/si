@@ -5956,8 +5956,12 @@ class ProduksiController extends Controller
     function cetak_seri_finish_goods_small(Request $request)
     {
         $seri = $this->get_detail_noseri_rakit($request->id, $request->dd);
+        $data = array();
         foreach ($seri as $s) {
-            $data[] = $s->noseri;
+            $data[] = array(
+                'noseri' => $s->noseri,
+                'id' => $s->id,
+            );
         }
 
         $customPaperSmall = array(0, 0, 60.46, 150.69);
@@ -5969,9 +5973,16 @@ class ProduksiController extends Controller
     function cetak_seri_finish_goods_small_repeated(Request $request)
     {
         $getData =  json_decode($request->data, true);
-        $seri = JadwalRakitNoseri::select('noseri')->whereIn('id', $getData)->get();
+        $seri = JadwalRakitNoseri::select('noseri', 'gdg_barang_jadi.produk_id as id')
+        ->leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+        ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+        ->whereIn('jadwal_rakit_noseri.id', $getData)->get();
+        $data = array();
         foreach ($seri as $s) {
-            $data[] = $s->noseri;
+            $data[] = array(
+                'noseri' => $s->noseri,
+                'id' => $s->id,
+            );
         }
 
         $customPaperSmall = array(0, 0, 60.46, 150.69);
@@ -6000,6 +6011,68 @@ class ProduksiController extends Controller
         $isLogo = $request->merk;
         $customPaperMedium = array(0, 0, 88.46, 170.69);
         $pdf = PDF::loadview('page.produksi.printreworks.cetakserimedium', compact('data', 'isLogo'))->setPaper($customPaperMedium, 'landscape');
+        return $pdf->stream();
+    }
+
+    function cetak_seri_finish_goods_big(Request $request)
+    {
+        $seri = $this->get_detail_noseri_rakit($request->id, $request->dd);
+        foreach ($seri as $s) {
+            $data[] = (object)[
+                'noseri' => $s->noseri,
+            ];
+        }
+        $isLogo = $request->merk;
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakseripaperA4', compact('data', 'isLogo'))->setPaper('A4');
+        return $pdf->stream();
+    }
+
+    function cetak_seri_finish_goods_big_repeated(Request $request)
+    {
+        $getData =  json_decode($request->data, true);
+        // $seri = JadwalRakitNoseri::select('noseri')->whereIn('id', $getData)->get();
+        // foreach ($seri as $s) {
+        //     $data[] = $s->noseri;
+        // }
+
+        //SetLogo
+        $seri = JadwalRakitNoseri::select('noseri', 'produk.merk as merk')
+        ->leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+        ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+        ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+        ->whereIn('jadwal_rakit_noseri.id', $getData)->get();
+
+        foreach ($seri as $s) {
+            $data[] = (object)[
+                'noseri' => $s->noseri,
+            ];
+        }
+
+        $isLogo = $request->merk;
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakseripaperA4', compact('data', 'isLogo'))->setPaper('A4', 'portrait');
+        return $pdf->stream();
+    }
+
+
+    function cetak_seri_finish_goods_big_repeated_nonstok(Request $request)
+    {
+        $getData =  json_decode($request->data, true);
+        // $seri = JadwalRakitNoseri::select('noseri')->whereIn('id', $getData)->get();
+        // foreach ($seri as $s) {
+        //     $data[] = $s->noseri;
+        // }
+
+        //SetLogo
+        $seri = JadwalRakitNoseriNonStok::whereIn('id', $getData)->get();
+
+        foreach ($seri as $s) {
+            $data[] = (object)[
+                'noseri' => $s->noseri,
+            ];
+        }
+
+        $isLogo = $request->merk;
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakseripaperA4', compact('data', 'isLogo'))->setPaper('A4');
         return $pdf->stream();
     }
 
@@ -6160,5 +6233,15 @@ class ProduksiController extends Controller
     {
         $waktu = Carbon::now();
         return Excel::download(new ExportRework($urutan), 'PerakitanReworks  ' . $waktu->toDateTimeString() . '.xlsx');
+    }
+    function cetak_seri_perakitan_custom_a4($alias,$awal,$akhir)
+    {
+
+        for ($i = $awal; $i <= $akhir; $i++) {
+            $data[] = strtoupper($alias) . str_pad($i, 4, '0', STR_PAD_LEFT);
+        }
+
+        $pdf = PDF::loadview('page.produksi.printreworks.cetakseripaperA4New', compact('data'))->setPaper('A4');
+        return $pdf->stream();
     }
 }

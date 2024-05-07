@@ -20,6 +20,10 @@ class Divisi
     {
         // return $next($request);
 
+        if (request()->user() === null) {
+            return redirect('/');
+        }
+
         $allow = array();
         foreach ($allowed_roles as $a) {
             $d = ModelsDivisi::where('kode', $a)->first();
