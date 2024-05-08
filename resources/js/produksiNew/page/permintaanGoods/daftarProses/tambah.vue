@@ -35,6 +35,10 @@ export default {
             });
         },
         simpan() {
+
+            // if form produk is empty delete the form
+            this.items = this.items.filter(item => item.nama_produk);
+
             // check every form is filled
             const form = Object.entries(this.form).every(([key, value]) => {
                 if (key === 'tgl_pengembalian') {
@@ -48,7 +52,7 @@ export default {
             if (!form || !items || this.items.length === 0) {
                 swal.fire('Peringatan', 'Pastikan semua form terisi', 'warning')
                 return
-            } 
+            }
 
             // jika ada isError didalam items, tampilkan peringatan
             if (this.items.some(item => item.isError)) {
