@@ -59,18 +59,7 @@ export default {
                     );
                     return;
                 }
-
-
-                const response = await axios.get(`/produksiReworks/cetak_seri_perakitan_custom_a4/${this.form.alias}/${this.form.urutan_awal}/${this.form.urutan_akhir}`, {
-                    responseType: 'blob'
-                });
-
-
-                const blob = new Blob([response.data], { type: 'application/pdf' });
-                const url = window.URL.createObjectURL(blob);
-
-
-                window.open(url, '_blank');
+                window.open(`/produksiReworks/cetak_seri_perakitan_custom_a4/${this.form.alias}/${this.form.urutan_awal}/${this.form.urutan_akhir}`, '_blank');
             } catch (error) {
                 console.log(error);
             }
