@@ -434,8 +434,6 @@ class PpicController extends Controller
                 $detail_id[] = $d->id;
                 $did[] = $d->pesanan_id;
             }
-
-
             $g = collect(DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get());
             $g_part = collect(DetailPesananPart::whereIn('pesanan_id', $did)->get());
             $g_data = $g->merge($g_part);
