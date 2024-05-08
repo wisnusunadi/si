@@ -51,9 +51,7 @@
                     <div v-if="this.loading">Loading...</div>
                     <div class="field" v-else>
                         <label class="label">Keterangan</label>
-                        <div class="control">
-                            <input class="input" type="text" placeholder="" v-model="detail" readonly>
-                        </div>
+                        {{ detail }}
                     </div>
                 </section>
                 <footer class="modal-card-foot">
