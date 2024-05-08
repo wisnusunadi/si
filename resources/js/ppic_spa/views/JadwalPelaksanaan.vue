@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Jadwal :status="'pelaksanaan'" />
+    <Jadwal :status="'pelaksanaan'" @refresh="loadData" />
   </div>
 </template>
 

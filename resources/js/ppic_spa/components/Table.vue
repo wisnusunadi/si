@@ -1,5 +1,6 @@
 <script>
 import axios from "axios";
+import moment from "moment";
 
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
@@ -309,9 +310,9 @@ export default {
         await axios
           .post("/api/ppic/create/perakitan", data)
           .then((response) => {
-            this.$store.commit("setJadwal", response.data);
             this.addProdukModal = false;
             this.$swal('Success', 'Berhasil menambahkan data', 'success');
+            this.$emit('refresh')
           })
           .catch((err) => {
             this.$swal({
@@ -676,6 +677,23 @@ export default {
   },
 
   computed: {
+    tanggalMulaiError() {
+      const tanggal_mulai = moment(this.start_date)
+      const tanggal_selesai = moment(this.end_date)
+      if (tanggal_mulai.isAfter(tanggal_selesai)) {
+        return true
+      }
+      return false
+    },
+    tanggalSelesaiError() {
+      const tanggal_mulai = moment(this.start_date)
+      const tanggal_selesai = moment(this.end_date)
+      if (tanggal_selesai.isBefore(tanggal_mulai)) {
+        return true
+      }
+      return false
+    },
+
     options: function () {
       let data = this.data_produk.map((data) => ({
         merk: `${data.produk.merk}`,
@@ -807,18 +825,14 @@ export default {
     <div class="columns">
       <div class="column">
         <div class="buttons">
-      <template v-if="$store.state.user.divisi_id === 24">
-        <button
-          v-if="
+          <template v-if="$store.state.user.divisi_id === 24">
+            <button v-if="
             this.$store.state.state_ppic === 'pembuatan' ||
             this.$store.state.state_ppic === 'revisi'
-          "
-          class="button is-success"
-          @click="showAddProdukModal"
-        >
-          <span>Tambah <i class="fas fa-plus"></i></span>
-        </button>
-        <button
+          " class="button is-success" @click="showAddProdukModal">
+              <span>Tambah <i class="fas fa-plus"></i></span>
+            </button>
+            <!-- <button
           v-if="
             this.$store.state.state_ppic === 'pembuatan' ||
             this.$store.state.state_ppic === 'revisi'
@@ -833,56 +847,37 @@ export default {
           @click="sendEvent('persetujuan')"
         >
           Kirim
-        </button>
-        <button
-          v-if="
+        </button> -->
+            <button v-if="
             this.$store.state.state_ppic === 'menunggu' &&
             this.$store.state.state === 'persetujuan'
-          "
-          class="button is-warning"
-          @click="sendEvent('pembatalan')"
-        >
-          Batal
-        </button>
-        <button
-          v-if="this.$store.state.state_ppic === 'disetujui'"
-          class="button is-success"
-          :class="{ 'is-loading': this.$store.state.isLoading }"
-          @click="sendEvent('perubahan')"
-        >
-          Minta Perubahan
-        </button>
-      </template>
-      <button
-        class="button is-info"
-        :disabled="events.length === 0"
-        @click="convertToExcel('export_table', 'W3C Example Table')"
-      >
-        Export
-      </button>
-      <button
-        v-if="data_komentar.length > 0 && $store.state.user.divisi_id === 24"
-        class="button is-circle"
-        @click="komentarModal = true"
-      >
-        <i class="fas fa-envelope"></i>
-      </button>
-    </div>
+          " class="button is-warning" @click="sendEvent('pembatalan')">
+              Batal
+            </button>
+            <button v-if="this.$store.state.state_ppic === 'disetujui'" class="button is-success"
+              :class="{ 'is-loading': this.$store.state.isLoading }" @click="sendEvent('perubahan')">
+              Minta Perubahan
+            </button>
+          </template>
+          <button class="button is-info" :disabled="events.length === 0"
+            @click="convertToExcel('export_table', 'W3C Example Table')">
+            Export
+          </button>
+          <button v-if="data_komentar.length > 0 && $store.state.user.divisi_id === 24" class="button is-circle"
+            @click="komentarModal = true">
+            <i class="fas fa-envelope"></i>
+          </button>
         </div>
-        <div class="column is-flex-shrink-1">
-          <input class="input" type="text" placeholder="Cari" v-model="searchPerencanaan"/>
-        </div>
+      </div>
+      <div class="column is-flex-shrink-1">
+        <input class="input" type="text" placeholder="Cari" v-model="searchPerencanaan" />
+      </div>
     </div>
 
     <div class="table-container">
-      <template
-        v-if="status === 'pelaksanaan'"
-      >
+      <template v-if="status === 'pelaksanaan'">
         <h1 class="subtitle">Perencanaan</h1>
-        <table
-          class="table has-text-centered is-bordered"
-          style="white-space: nowrap"
-        >
+        <table class="table has-text-centered is-bordered" style="white-space: nowrap">
           <thead>
             <tr>
               <th rowspan="2">Nama Produk</th>
@@ -899,18 +894,14 @@ export default {
             <tr v-for="item in renderPaginate" :key="item.id">
               <td>{{ item.title }}</td>
               <td>{{ item.jumlah }}</td>
-              <td
-                v-for="i in Array.from(Array(last_date).keys())"
-                :key="i"
-                :style="{
+              <td v-for="i in Array.from(Array(last_date).keys())" :key="i" :style="{
                   backgroundColor:
                     weekend_date.indexOf(i + 1) !== -1
                       ? 'black'
                       : isDate(item.events, i + 1)
                       ? 'yellow'
                       : '',
-                }"
-              ></td>
+                }"></td>
             </tr>
           </tbody>
           <tbody v-else>
@@ -921,37 +912,30 @@ export default {
         </table>
         <nav class="pagination is-centered" role="navigation" aria-label="pagination">
           <a class="pagination-previous" :disabled="currentPage == 1" @click="previousPage">Previous</a>
-          <a class="pagination-next"  :disabled="currentPage == pages[pages.length - 1]"
-                            @click="nextPage">Next page</a>
+          <a class="pagination-next" :disabled="currentPage == pages[pages.length - 1]" @click="nextPage">Next page</a>
           <ul class="pagination-list">
             <li>
-              <a class="pagination-link" :class="paginate == currentPage ? 'is-current' : ''" 
-              v-for="paginate in pages" :key="paginate" 
-              @click="nowPage(paginate)">
+              <a class="pagination-link" :class="paginate == currentPage ? 'is-current' : ''" v-for="paginate in pages"
+                :key="paginate" @click="nowPage(paginate)">
                 {{ paginate }}
-              </a></li>
+              </a>
+            </li>
           </ul>
         </nav>
       </template>
 
       <div class="columns" v-if="status === 'pelaksanaan'">
         <div class="column">
-          <h1
-            class="subtitle"
-          >
+          <h1 class="subtitle">
             Pelaksanaan
           </h1>
         </div>
         <div class="column is-flex-shrink-1">
-          <input class="input" type="text" placeholder="Cari" v-model="searchPelaksanaan"/>
+          <input class="input" type="text" placeholder="Cari" v-model="searchPelaksanaan" />
         </div>
       </div>
-      <table
-        class="table has-text-centered is-bordered"
-        style="white-space: nowrap"
-        id="export_table"
-        v-if="status !== 'perencanaan'"
-      >
+      <table class="table has-text-centered is-bordered" style="white-space: nowrap" id="export_table"
+        v-if="status !== 'perencanaan'">
         <thead>
           <tr class="is-hidden">
             <th :colspan="table_header_length" :style="{ fontSize: '2rem' }">
@@ -962,15 +946,12 @@ export default {
             <th rowspan="2">Nama Produk</th>
             <th rowspan="2">Jumlah</th>
             <th rowspan="2" v-if="status === 'pelaksanaan'">Progres</th>
-            <th
-              v-if="
+            <th v-if="
                 $store.state.user.divisi_id === 24 &&
                 ($store.state.state_ppic === 'pembuatan' ||
                   $store.state.state_ppic === 'revisi') &&
                 !hiddenAction
-              "
-              rowspan="2"
-            >
+              " rowspan="2">
               Aksi
             </th>
             <th :colspan="last_date">Tanggal</th>
@@ -986,14 +967,12 @@ export default {
             <td>{{ item.title }}</td>
             <td>{{ item.jumlah }}</td>
             <td v-if="status === 'pelaksanaan'">{{ item.progres }}</td>
-            <td
-              v-if="
+            <td v-if="
                 $store.state.user.divisi_id === 24 &&
                 ($store.state.state_ppic === 'pembuatan' ||
                   $store.state.state_ppic === 'revisi') &&
                 !hiddenAction
-              "
-            >
+              ">
               <div>
                 <span class="is-clickable" @click="updateEvent(item)">
                   <i class="fas fa-edit"></i>
@@ -1004,18 +983,14 @@ export default {
                 </span>
               </div>
             </td>
-            <td
-              v-for="i in Array.from(Array(last_date).keys())"
-              :key="i"
-              :style="{
+            <td v-for="i in Array.from(Array(last_date).keys())" :key="i" :style="{
                 backgroundColor:
                   weekend_date.indexOf(i + 1) !== -1
                     ? 'black'
                     : isDate(item.events, i + 1)
                     ? 'yellow'
                     : '',
-              }"
-            ></td>
+              }"></td>
           </tr>
         </tbody>
         <tbody v-else>
@@ -1025,18 +1000,19 @@ export default {
         </tbody>
       </table>
       <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-          <a class="pagination-previous" :disabled="currentPagePelaksanaan == 1" @click="previousPagePelaksanaan">Previous</a>
-          <a class="pagination-next"  :disabled="currentPagePelaksanaan == pagesPelaksanaan[pagesPelaksanaan.length - 1]"
-                            @click="nextPagePelaksanaan">Next page</a>
-          <ul class="pagination-list">
-            <li>
-              <a class="pagination-link" :class="paginate == currentPagePelaksanaan ? 'is-current' : ''" 
-              v-for="paginate in pagesPelaksanaan" :key="paginate" 
-              @click="nowPagePelaksanaan(paginate)">
-                {{ paginate }}
-              </a></li>
-          </ul>
-        </nav>
+        <a class="pagination-previous" :disabled="currentPagePelaksanaan == 1"
+          @click="previousPagePelaksanaan">Previous</a>
+        <a class="pagination-next" :disabled="currentPagePelaksanaan == pagesPelaksanaan[pagesPelaksanaan.length - 1]"
+          @click="nextPagePelaksanaan">Next page</a>
+        <ul class="pagination-list">
+          <li>
+            <a class="pagination-link" :class="paginate == currentPagePelaksanaan ? 'is-current' : ''"
+              v-for="paginate in pagesPelaksanaan" :key="paginate" @click="nowPagePelaksanaan(paginate)">
+              {{ paginate }}
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
 
     <div class="modal" :class="{ 'is-active': addProdukModal }">
@@ -1046,10 +1022,7 @@ export default {
           <p class="modal-card-title">
             {{ this.action === "add" ? "Pilih Produk" : "Ubah Jadwal" }}
           </p>
-          <button
-            class="delete"
-            @click="addProdukModal = !addProdukModal"
-          ></button>
+          <button class="delete" @click="addProdukModal = !addProdukModal"></button>
         </header>
         <section class="modal-card-body">
           <div class="columns">
@@ -1057,12 +1030,11 @@ export default {
               <div class="field">
                 <label class="label">Tanggal Mulai</label>
                 <div class="control">
-                  <input
-                    type="date"
-                    :max="dateFormatter(year, month, last_date)"
-                    class="input"
-                    v-model="start_date"
-                  />
+                  <input type="date" :max="dateFormatter(year, month, last_date)" class="input"
+                    :class="{ 'is-danger': tanggalMulaiError }" v-model="start_date" />
+                  <p class="help is-danger" v-if="tanggalMulaiError">
+                    Tanggal mulai harus lebih kecil dari tanggal selesai
+                  </p>
                 </div>
               </div>
             </div>
@@ -1070,12 +1042,11 @@ export default {
               <div class="field">
                 <label class="label">Tanggal Selesai</label>
                 <div class="control">
-                  <input
-                    type="date"
-                    :max="dateFormatter(year, month, last_date)"
-                    class="input"
-                    v-model="end_date"
-                  />
+                  <input type="date" :max="dateFormatter(year, month, last_date)" class="input"
+                    :class="{ 'is-danger': tanggalSelesaiError }" v-model="end_date" />
+                  <p class="help is-danger" v-if="tanggalSelesaiError">
+                    Tanggal selesai harus lebih besar dari tanggal mulai
+                  </p>
                 </div>
               </div>
             </div>
@@ -1099,11 +1070,7 @@ export default {
             <div class="field-body">
               <div class="field">
                 <div class="control">
-                  <v-select
-                    :options="options"
-                    v-model="produk"
-                    @input="changeProduk"
-                  >
+                  <v-select :options="options" v-model="produk" @input="changeProduk">
                     <template v-slot:option="option">
                       <b>{{ option.merk }}</b> - {{ option.produk }}
                     </template>
@@ -1139,20 +1106,12 @@ export default {
           </div>
         </section>
         <footer class="modal-card-foot">
-          <button
-            v-if="action === 'add'"
-            class="button is-success"
-            :class="{ 'is-loading': this.$store.state.isLoading }"
-            @click="handleSubmit"
-          >
+          <button v-if="action === 'add'" class="button is-success"
+            :class="{ 'is-loading': this.$store.state.isLoading }" @click="handleSubmit">
             Tambah
           </button>
-          <button
-            v-else-if="action"
-            class="button is-info"
-            :class="{ 'is-loading': this.$store.state.isLoading }"
-            @click="handleSubmit"
-          >
+          <button v-else-if="action" class="button is-info" :class="{ 'is-loading': this.$store.state.isLoading }"
+            @click="handleSubmit">
             Ubah
           </button>
         </footer>
@@ -1196,36 +1155,18 @@ export default {
             <div class="column is-3">
               <div class="field">
                 <label class="label">Tanggal Mulai</label>
-                <div
-                  v-for="(item, index) in updated_events.events"
-                  :key="'start' + index"
-                  class="control"
-                >
-                  <input
-                    type="date"
-                    :min="dateFormatter(year, month, 1)"
-                    :max="dateFormatter(year, month, last_date)"
-                    class="input"
-                    v-model="item.start"
-                  />
+                <div v-for="(item, index) in updated_events.events" :key="'start' + index" class="control">
+                  <input type="date" :min="dateFormatter(year, month, 1)" :max="dateFormatter(year, month, last_date)"
+                    class="input" v-model="item.start" />
                 </div>
               </div>
             </div>
             <div class="column is-3">
               <div class="field">
                 <label class="label">Tanggal Selesai</label>
-                <div
-                  v-for="(item, index) in updated_events.events"
-                  :key="'end' + index"
-                  class="control"
-                >
-                  <input
-                    type="date"
-                    :min="dateFormatter(year, month, 1)"
-                    :max="dateFormatter(year, month, last_date)"
-                    class="input"
-                    v-model="item.end"
-                  />
+                <div v-for="(item, index) in updated_events.events" :key="'end' + index" class="control">
+                  <input type="date" :min="dateFormatter(year, month, 1)" :max="dateFormatter(year, month, last_date)"
+                    class="input" v-model="item.end" />
                 </div>
               </div>
             </div>
@@ -1241,49 +1182,24 @@ export default {
             <div class="column is-2">
               <div class="field">
                 <label class="label">Jumlah</label>
-                <div
-                  v-for="(item, index) in updated_events.events"
-                  :key="'jumlah' + index"
-                  class="control"
-                >
-                  <input
-                    class="input"
-                    type="number"
-                    :min="item.progres > 0 ? item.progres : 1"
-                    v-model="item.jumlah"
-                  />
+                <div v-for="(item, index) in updated_events.events" :key="'jumlah' + index" class="control">
+                  <input class="input" type="number" :min="item.progres > 0 ? item.progres : 1" v-model="item.jumlah" />
                 </div>
               </div>
             </div>
             <div class="column is-2">
               <div class="field">
                 <label class="label">Progres</label>
-                <div
-                  v-for="(item, index) in updated_events.events"
-                  :key="'progress' + index"
-                  class="control"
-                >
-                  <input
-                    class="input"
-                    type="number"
-                    v-model="item.progres"
-                    disabled
-                  />
+                <div v-for="(item, index) in updated_events.events" :key="'progress' + index" class="control">
+                  <input class="input" type="number" v-model="item.progres" disabled />
                 </div>
               </div>
             </div>
             <div class="column is-2">
               <div class="field">
                 <label class="label">Aksi</label>
-                <div
-                  v-for="(item, index) in updated_events.events"
-                  :key="'aksi' + index"
-                  class="control"
-                >
-                  <button
-                    class="button is-light"
-                    @click="deleteSingleEvent(index)"
-                  >
+                <div v-for="(item, index) in updated_events.events" :key="'aksi' + index" class="control">
+                  <button class="button is-light" @click="deleteSingleEvent(index)">
                     <i class="fas fa-trash"></i>
                   </button>
                 </div>
@@ -1321,11 +1237,7 @@ export default {
       <div class="modal-card">
         <header class="modal-card-head">
           <p class="modal-card-title">Komentar</p>
-          <button
-            class="delete"
-            aria-label="close"
-            @click="komentarModal = !komentarModal"
-          ></button>
+          <button class="delete" aria-label="close" @click="komentarModal = !komentarModal"></button>
         </header>
         <section class="modal-card-body">
           <table class="table is-fullwidth has-text-centered">
