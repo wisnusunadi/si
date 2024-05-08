@@ -112,7 +112,7 @@ export default {
         <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Form Permintaan Barang</h5>
+                    <h5 class="modal-title">{{ form.jenis?.value == 'peminjaman' ? 'Form Peminjaman Barang' : 'Form Permintaan Barang' }}</h5>
                     <button type="button" class="close" @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -137,7 +137,8 @@ export default {
                                     v-model="form.tgl_pengembalian">
                             </div>
                             <div class="form-group row">
-                                <label class="col-5 text-right">Tujuan Permintaan</label>
+                                <label class="col-5 text-right">{{ form.jenis?.value == 'peminjaman' ? 'Tujuan Peminjaman' :
+                                    'Tujuan Permintaan' }}</label>
                                 <textarea class="form-control col-4" cols="5" v-model="form.tujuan"></textarea>
                             </div>
                         </div>
@@ -168,11 +169,10 @@ export default {
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" v-model="item.jumlah"
-                                                :class="item?.isError ? 'is-invalid' : ''"
-                                                :disabled="item?.isDisabled">
-                                                <div class="invalid-feedback">
-                                                    Jumlah melebihi stok
-                                                </div>
+                                                :class="item?.isError ? 'is-invalid' : ''" :disabled="item?.isDisabled">
+                                            <div class="invalid-feedback">
+                                                Jumlah melebihi stok
+                                            </div>
                                         </td>
                                         <td>
                                             <button class="btn btn-outline-danger btn-sm"

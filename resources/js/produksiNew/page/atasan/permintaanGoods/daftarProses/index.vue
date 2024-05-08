@@ -172,9 +172,6 @@ export default {
         <alasan v-if="showModal" @close="showModal = false" :item="detailSelected" />
         <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight">
-                <button class="btn btn-primary" @click="openTambah">
-                    <i class="fas fa-plus"></i> Tambah
-                </button>
             </div>
             <div class="p-2 bd-highlight">
                 <input type="text" class="form-control" v-model="search" placeholder="Cari...">
