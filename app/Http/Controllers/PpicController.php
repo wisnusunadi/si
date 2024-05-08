@@ -330,13 +330,18 @@ class PpicController extends Controller
                     "</small><br>";
             })
             ->addColumn('status', function ($data) {
-                if ($data->status == 6) {
-                    return 'Penyusunan';
-                } elseif ($data->status == 7) {
-                    return 'Pelaksanaan';
-                } else {
-                    return 'Selesai';
+                if($data->noseri_count != $data->jumlah && $data->evaluasi!= null){
+                    return 'Close BPPB';
+                }else{
+                    if ($data->status == 6) {
+                        return 'Penyusunan';
+                    } elseif ($data->status == 7) {
+                        return 'Pelaksanaan';
+                    } else {
+                        return 'Selesai';
+                    }
                 }
+
             })
             ->addColumn('aksi', function ($data) {
                 return $data->id;
