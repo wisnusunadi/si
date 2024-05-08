@@ -255,6 +255,24 @@ class PpicController extends Controller
      *
      * @return array datatables formatted data
      */
+
+    function tglSelesai($x, $d)
+    {
+        if ($x >= -10 && $x < -5) {
+            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
+        } elseif ($x >= -5 && $x <= -2) {
+            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
+        } elseif ($x > -2 && $x <= 0) {
+            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-danger">Kurang ' . $x . ' Hari</span>';
+        } elseif ($x > 0) {
+            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-danger">Lebih ' . $x . ' Hari</span>';
+        } elseif ($x < -10) {
+            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
+        } else {
+            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ' . $x;
+        }
+    }
+
     public function get_datatables_data_perakitan()
     {
         $data = JadwalPerakitan::with(['Produk.produk'])->addSelect([
@@ -292,23 +310,16 @@ class PpicController extends Controller
                 $s = $a - $m;
                 $x = floor($s / (60 * 60 * 24));
 
-                if (isset($d->tanggal_selesai)) {
-                    if ($x >= -10 && $x < -5) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
-                    } elseif ($x >= -5 && $x <= -2) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
-                    } elseif ($x > -2 && $x <= 0) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-danger">Kurang ' . $x . ' Hari</span>';
-                    } elseif ($x > 0) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-danger">Lebih ' . $x . ' Hari</span>';
-                    } elseif ($x < -10) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
-                    } else {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ' . $x;
-                    }
-                    // return date('d-m-Y', strtotime($d->tanggal_selesai)).' '.$x;
+                if ($d->noseri_count != $d->jumlah && $d->evaluasi != null) {
+                    return  '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ';
                 } else {
-                    return '-';
+                    if ($d->status == 6) {
+                        return $this->tglSelesai($x, $d);
+                    } elseif ($d->status == 7) {
+                        return $this->tglSelesai($x, $d);
+                    } else {
+                        return  '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ';
+                    }
                 }
             })
             ->addColumn('progres', function ($data) {
@@ -328,12 +339,16 @@ class PpicController extends Controller
                     "</small><br>";
             })
             ->addColumn('status', function ($data) {
-                if ($data->status == 6) {
-                    return 'Penyusunan';
-                } elseif ($data->status == 7) {
-                    return 'Pelaksanaan';
+                if ($data->noseri_count != $data->jumlah && $data->evaluasi != null) {
+                    return 'Close BPPB';
                 } else {
-                    return 'Selesai';
+                    if ($data->status == 6) {
+                        return 'Penyusunan';
+                    } elseif ($data->status == 7) {
+                        return 'Pelaksanaan';
+                    } else {
+                        return 'Selesai';
+                    }
                 }
             })
             ->addColumn('aksi', function ($data) {
@@ -434,8 +449,6 @@ class PpicController extends Controller
                 $detail_id[] = $d->id;
                 $did[] = $d->pesanan_id;
             }
-
-
             $g = collect(DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get());
             $g_part = collect(DetailPesananPart::whereIn('pesanan_id', $did)->get());
             $g_data = $g->merge($g_part);

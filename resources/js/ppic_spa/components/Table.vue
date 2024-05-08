@@ -1,5 +1,6 @@
 <script>
 import axios from "axios";
+import moment from "moment";
 
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
@@ -300,9 +301,9 @@ export default {
         await axios
           .post("/api/ppic/create/perakitan", data)
           .then((response) => {
-            this.$store.commit("setJadwal", response.data);
             this.addProdukModal = false;
             this.$swal('Success', 'Berhasil menambahkan data', 'success');
+            this.$emit('refresh')
           })
           .catch((err) => {
             this.$swal({
@@ -658,6 +659,23 @@ export default {
   },
 
   computed: {
+    tanggalMulaiError() {
+      const tanggal_mulai = moment(this.start_date)
+      const tanggal_selesai = moment(this.end_date)
+      if (tanggal_mulai.isAfter(tanggal_selesai)) {
+        return true
+      }
+      return false
+    },
+    tanggalSelesaiError() {
+      const tanggal_mulai = moment(this.start_date)
+      const tanggal_selesai = moment(this.end_date)
+      if (tanggal_selesai.isBefore(tanggal_mulai)) {
+        return true
+      }
+      return false
+    },
+
     options: function () {
       let data = this.data_produk.map((data) => ({
         merk: `${data.produk.merk}`,
@@ -790,23 +808,32 @@ export default {
       <div class="column">
         <div class="buttons">
           <template v-if="$store.state.user.divisi_id === 24">
-            <button v-if="this.$store.state.state_ppic === 'pembuatan' ||
-              this.$store.state.state_ppic === 'revisi'
-              " class="button is-success" @click="showAddProdukModal">
+            <button v-if="
+            this.$store.state.state_ppic === 'pembuatan' ||
+            this.$store.state.state_ppic === 'revisi'
+          " class="button is-success" @click="showAddProdukModal">
               <span>Tambah <i class="fas fa-plus"></i></span>
             </button>
-            <button v-if="this.$store.state.state_ppic === 'pembuatan' ||
-              this.$store.state.state_ppic === 'revisi'
-              " class="button" :class="{
-    'is-loading': this.$store.state.isLoading,
-    'is-primary': this.$store.state.state_ppic === 'pembuatan',
-    'is-danger': this.$store.state.state_ppic === 'revisi',
-  }" :disabled="events.length === 0" @click="sendEvent('persetujuan')">
-              Kirim
-            </button>
-            <button v-if="this.$store.state.state_ppic === 'menunggu' &&
-              this.$store.state.state === 'persetujuan'
-              " class="button is-warning" @click="sendEvent('pembatalan')">
+            <!-- <button
+          v-if="
+            this.$store.state.state_ppic === 'pembuatan' ||
+            this.$store.state.state_ppic === 'revisi'
+          "
+          class="button"
+          :class="{
+            'is-loading': this.$store.state.isLoading,
+            'is-primary': this.$store.state.state_ppic === 'pembuatan',
+            'is-danger': this.$store.state.state_ppic === 'revisi',
+          }"
+          :disabled="events.length === 0"
+          @click="sendEvent('persetujuan')"
+        >
+          Kirim
+        </button> -->
+            <button v-if="
+            this.$store.state.state_ppic === 'menunggu' &&
+            this.$store.state.state === 'persetujuan'
+          " class="button is-warning" @click="sendEvent('pembatalan')">
               Batal
             </button>
             <button v-if="this.$store.state.state_ppic === 'disetujui'" class="button is-success"
@@ -850,13 +877,13 @@ export default {
               <td>{{ item.title }}</td>
               <td>{{ item.jumlah }}</td>
               <td v-for="i in Array.from(Array(last_date).keys())" :key="i" :style="{
-                backgroundColor:
-                  weekend_date.indexOf(i + 1) !== -1
-                    ? 'black'
-                    : isDate(item.events, i + 1)
+                  backgroundColor:
+                    weekend_date.indexOf(i + 1) !== -1
+                      ? 'black'
+                      : isDate(item.events, i + 1)
                       ? 'yellow'
                       : '',
-              }"></td>
+                }"></td>
             </tr>
           </tbody>
           <tbody v-else>
@@ -901,10 +928,11 @@ export default {
             <th rowspan="2">Nama Produk</th>
             <th rowspan="2">Jumlah</th>
             <th rowspan="2" v-if="status === 'pelaksanaan'">Progres</th>
-            <th v-if="$store.state.user.divisi_id === 24 &&
-              ($store.state.state_ppic === 'pembuatan' ||
-                $store.state.state_ppic === 'revisi') &&
-              !hiddenAction
+            <th v-if="
+                $store.state.user.divisi_id === 24 &&
+                ($store.state.state_ppic === 'pembuatan' ||
+                  $store.state.state_ppic === 'revisi') &&
+                !hiddenAction
               " rowspan="2">
               Aksi
             </th>
@@ -921,10 +949,11 @@ export default {
             <td>{{ item.title }}</td>
             <td>{{ item.jumlah }}</td>
             <td v-if="status === 'pelaksanaan'">{{ item.progres }}</td>
-            <td v-if="$store.state.user.divisi_id === 24 &&
-              ($store.state.state_ppic === 'pembuatan' ||
-                $store.state.state_ppic === 'revisi') &&
-              !hiddenAction
+            <td v-if="
+                $store.state.user.divisi_id === 24 &&
+                ($store.state.state_ppic === 'pembuatan' ||
+                  $store.state.state_ppic === 'revisi') &&
+                !hiddenAction
               ">
               <div>
                 <span class="is-clickable" @click="updateEvent(item)">
@@ -937,13 +966,13 @@ export default {
               </div>
             </td>
             <td v-for="i in Array.from(Array(last_date).keys())" :key="i" :style="{
-              backgroundColor:
-                weekend_date.indexOf(i + 1) !== -1
-                  ? 'black'
-                  : isDate(item.events, i + 1)
+                backgroundColor:
+                  weekend_date.indexOf(i + 1) !== -1
+                    ? 'black'
+                    : isDate(item.events, i + 1)
                     ? 'yellow'
                     : '',
-            }"></td>
+              }"></td>
           </tr>
         </tbody>
         <tbody v-else>
@@ -983,7 +1012,11 @@ export default {
               <div class="field">
                 <label class="label">Tanggal Mulai</label>
                 <div class="control">
-                  <input type="date" :max="dateFormatter(year, month, last_date)" class="input" v-model="start_date" />
+                  <input type="date" :max="dateFormatter(year, month, last_date)" class="input"
+                    :class="{ 'is-danger': tanggalMulaiError }" v-model="start_date" />
+                  <p class="help is-danger" v-if="tanggalMulaiError">
+                    Tanggal mulai harus lebih kecil dari tanggal selesai
+                  </p>
                 </div>
               </div>
             </div>
@@ -991,7 +1024,11 @@ export default {
               <div class="field">
                 <label class="label">Tanggal Selesai</label>
                 <div class="control">
-                  <input type="date" :max="dateFormatter(year, month, last_date)" class="input" v-model="end_date" />
+                  <input type="date" :max="dateFormatter(year, month, last_date)" class="input"
+                    :class="{ 'is-danger': tanggalSelesaiError }" v-model="end_date" />
+                  <p class="help is-danger" v-if="tanggalSelesaiError">
+                    Tanggal selesai harus lebih besar dari tanggal mulai
+                  </p>
                 </div>
               </div>
             </div>
@@ -1051,8 +1088,8 @@ export default {
           </div>
         </section>
         <footer class="modal-card-foot">
-          <button v-if="action === 'add'" class="button is-success" :class="{ 'is-loading': this.$store.state.isLoading }"
-            @click="handleSubmit">
+          <button v-if="action === 'add'" class="button is-success"
+            :class="{ 'is-loading': this.$store.state.isLoading }" @click="handleSubmit">
             Tambah
           </button>
           <button v-else-if="action" class="button is-info" :class="{ 'is-loading': this.$store.state.isLoading }"

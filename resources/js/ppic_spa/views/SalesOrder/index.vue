@@ -140,7 +140,8 @@
             </div>
         </div>
 
-        <detailProdukSO v-if="showModal" :showModal="showModal" :detailSelected="detailSelected" @close="showModal = false" />
+        <detailProdukSO v-if="showModal" :showModal="showModal" :detailSelected="detailSelected"
+            @close="showModal = false" />
     </div>
 </template>
 

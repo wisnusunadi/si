@@ -33,7 +33,7 @@
                 <a href="/">Kembali ke Beranda</a>
             </p>
             <div class="notfound-social">
-                <p>Hubungi tim IT jika masih ada kendala
+                <p>Laporkan kendala <a target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSeuESWTp3A3C39v86JGDB9uGcWohM-hpsGqCxTyadv2BTvzZg/viewform">di sini</a>
                 </p>
             </div>
         </div>

@@ -114,7 +114,7 @@
       <div class="columns">
         <div class="column is-12">
           <div class="box">
-            <Table :events="events" :status="status" />
+            <Table :events="events" :status="status" @refresh="$emit('refresh')" />
           </div>
         </div>
       </div>
