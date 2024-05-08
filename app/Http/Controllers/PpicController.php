@@ -82,11 +82,10 @@ class PpicController extends Controller
     public function show_perencanaan_rework()
     {
         $data = JadwalPerakitanRw::where('state', 17)->groupBy('urutan')->get();
-        if($data->isempty()){
-           $obj = array();
-
-        }else{
-            foreach($data as $d){
+        if ($data->isempty()) {
+            $obj = array();
+        } else {
+            foreach ($data as $d) {
                 $obj[] = array(
                     'id' => $d->id,
                     'urutan' => $d->urutan,
@@ -108,11 +107,10 @@ class PpicController extends Controller
     public function show_pelaksanaan_rework()
     {
         $data = JadwalPerakitanRw::where('state', 18)->groupBy('urutan')->get();
-        if($data->isempty()){
-           $obj = array();
-
-        }else{
-            foreach($data as $d){
+        if ($data->isempty()) {
+            $obj = array();
+        } else {
+            foreach ($data as $d) {
                 $obj[] = array(
                     'id' => $d->id,
                     'urutan' => $d->urutan,
@@ -133,14 +131,14 @@ class PpicController extends Controller
 
     public function delete_ppic_rework(Request $request)
     {
-        $jumlah_tf = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
-        if($jumlah_tf > 0){
+        $jumlah_tf = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
+        if ($jumlah_tf > 0) {
             return response()->json([
                 'status' => 200,
                 'message' => 'Gagal Di ubah',
             ], 500);
-        }else{
-            $data = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->delete();
+        } else {
+            $data = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->delete();
         }
         return response()->json([
             'status' => 200,
@@ -149,39 +147,38 @@ class PpicController extends Controller
     }
     public function update_ppic_rework(Request $request)
     {
-        $jumlah_tf = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
-        $data = JadwalPerakitanRw::where('urutan',$request->urutan)->where('produk_reworks_id',$request->produk_reworks_id)->get();
+        $jumlah_tf = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->whereRaw('status_tf != 11')->count();
+        $data = JadwalPerakitanRw::where('urutan', $request->urutan)->where('produk_reworks_id', $request->produk_reworks_id)->get();
 
-        if($jumlah_tf > 0){
+        if ($jumlah_tf > 0) {
             return response()->json([
                 'status' => 200,
                 'message' => 'Gagal Di ubah',
             ], 500);
-        }else{
-            foreach($data as $d){
+        } else {
+            foreach ($data as $d) {
                 JadwalPerakitanRw::where('id', $d->id)
-                            ->update([
-                                'tanggal_mulai' => $request->tanggal_mulai,
-                                'tanggal_selesai' => $request->tanggal_selesai,
-                                'jumlah' => $request->jumlah
-                        ]);
+                    ->update([
+                        'tanggal_mulai' => $request->tanggal_mulai,
+                        'tanggal_selesai' => $request->tanggal_selesai,
+                        'jumlah' => $request->jumlah
+                    ]);
             }
         }
         return response()->json([
             'status' => 200,
             'message' => 'Berhasil',
         ], 200);
-
     }
 
 
     public function edit_ppic_rework($id)
     {
         $data = JadwalPerakitanRw::where('id', $id)->groupBy('urutan')->get();
-        if($data->isempty()){
-           $obj = array();
-        }else{
-            foreach($data as $d){
+        if ($data->isempty()) {
+            $obj = array();
+        } else {
+            foreach ($data as $d) {
                 $obj[] = array(
                     'id' => $d->id,
                     'urutan' => $d->urutan,
@@ -257,6 +254,24 @@ class PpicController extends Controller
      *
      * @return array datatables formatted data
      */
+
+    function tglSelesai($x, $d)
+    {
+        if ($x >= -10 && $x < -5) {
+            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
+        } elseif ($x >= -5 && $x <= -2) {
+            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
+        } elseif ($x > -2 && $x <= 0) {
+            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-danger">Kurang ' . $x . ' Hari</span>';
+        } elseif ($x > 0) {
+            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-danger">Lebih ' . $x . ' Hari</span>';
+        } elseif ($x < -10) {
+            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
+        } else {
+            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ' . $x;
+        }
+    }
+
     public function get_datatables_data_perakitan()
     {
         $data = JadwalPerakitan::with(['Produk.produk'])->addSelect([
@@ -294,23 +309,16 @@ class PpicController extends Controller
                 $s = $a - $m;
                 $x = floor($s / (60 * 60 * 24));
 
-                if (isset($d->tanggal_selesai)) {
-                    if ($x >= -10 && $x < -5) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
-                    } elseif ($x >= -5 && $x <= -2) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
-                    } elseif ($x > -2 && $x <= 0) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-danger">Kurang ' . $x . ' Hari</span>';
-                    } elseif ($x > 0) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-danger">Lebih ' . $x . ' Hari</span>';
-                    } elseif ($x < -10) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
-                    } else {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ' . $x;
-                    }
-                    // return date('d-m-Y', strtotime($d->tanggal_selesai)).' '.$x;
+                if ($d->noseri_count != $d->jumlah && $d->evaluasi != null) {
+                    return  '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ';
                 } else {
-                    return '-';
+                    if ($d->status == 6) {
+                        return $this->tglSelesai($x, $d);
+                    } elseif ($d->status == 7) {
+                        return $this->tglSelesai($x, $d);
+                    } else {
+                        return  '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ';
+                    }
                 }
             })
             ->addColumn('progres', function ($data) {
@@ -330,9 +338,9 @@ class PpicController extends Controller
                     "</small><br>";
             })
             ->addColumn('status', function ($data) {
-                if($data->noseri_count != $data->jumlah && $data->evaluasi!= null){
+                if ($data->noseri_count != $data->jumlah && $data->evaluasi != null) {
                     return 'Close BPPB';
-                }else{
+                } else {
                     if ($data->status == 6) {
                         return 'Penyusunan';
                     } elseif ($data->status == 7) {
@@ -341,7 +349,6 @@ class PpicController extends Controller
                         return 'Selesai';
                     }
                 }
-
             })
             ->addColumn('aksi', function ($data) {
                 return $data->id;
@@ -858,7 +865,7 @@ class PpicController extends Controller
     public function create_data_perakitan_rework_perencanaan(Request $request)
     {
         try {
-            $detail = DetailProdukRw::where('produk_parent_id',$request->produk_id)->get();
+            $detail = DetailProdukRw::where('produk_parent_id', $request->produk_id)->get();
             //code...
             $status = $this->change_status($request->status);
             $state = $this->change_state($request->state);
@@ -866,9 +873,9 @@ class PpicController extends Controller
             $color = ["#007bff", "#6c757d", "#28a745", "#dc3545", "#ffc107", "#17a2b8"];
             $selected_color = $color[array_rand($color)];
 
-           $cek = JadwalPerakitanRw::max('urutan');
+            $cek = JadwalPerakitanRw::max('urutan');
 
-            foreach($detail as $d){
+            foreach ($detail as $d) {
                 JadwalPerakitanRw::create([
                     'no_bppb' => $request->no_bppb,
                     'urutan' => $cek + 1,
@@ -895,13 +902,11 @@ class PpicController extends Controller
                 'message' => 'Gagal Ditambahkan',
             ], 500);
         }
-
-
     }
     public function create_data_perakitan_rework_pelaksanaan(Request $request)
     {
         try {
-            $detail = DetailProdukRw::where('produk_parent_id',$request->produk_id)->get();
+            $detail = DetailProdukRw::where('produk_parent_id', $request->produk_id)->get();
             //code...
             $status = $this->change_status($request->status);
             $state = $this->change_state($request->state);
@@ -909,9 +914,9 @@ class PpicController extends Controller
             $color = ["#007bff", "#6c757d", "#28a745", "#dc3545", "#ffc107", "#17a2b8"];
             $selected_color = $color[array_rand($color)];
 
-           $cek = JadwalPerakitanRw::max('urutan');
+            $cek = JadwalPerakitanRw::max('urutan');
 
-            foreach($detail as $d){
+            foreach ($detail as $d) {
                 JadwalPerakitanRw::create([
                     'no_bppb' => $request->no_bppb,
                     'urutan' => $cek + 1,
@@ -938,8 +943,6 @@ class PpicController extends Controller
                 'message' => 'Gagal Ditambahhkan',
             ], 500);
         }
-
-
     }
 
 

@@ -30,8 +30,8 @@
                                 <td v-html="item.tanggal_selesai"></td>
                                 <td v-html="item.progres"></td>
                                 <td>{{ item.status }}</td>
-                                <td><button class="button is-primary" @click="modal(item.aksi, item.nama)"
-                                        v-if="item.keterangan || item.keterangan_transfer">Detail</button></td>
+                                <td><button class="button is-primary" @click="modal(item.aksi, item.nama, item.evaluasi)"
+                                        v-if="item.keterangan || item.keterangan_transfer || item.evaluasi">Detail</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -112,18 +112,22 @@ export default {
                 this.error = err;
             }
         },
-        async modal(data, nama) {
+        async modal(data, nama, evaluasi) {
             this.showModal = true;
             try {
                 this.loading = true;
                 this.nama_produk = nama;
-                await axios.get("/api/ppic/datatables/perakitandetail/" + data, {
-                    headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
-                    }
-                }).then((response) => {
-                    this.detail = response.data;
-                });
+                if (evaluasi) {
+                    this.detail = evaluasi;
+                } else {
+                    await axios.get("/api/ppic/datatables/perakitandetail/" + data, {
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                        }
+                    }).then((response) => {
+                        this.detail = response.data;
+                    });
+                }
                 this.loading = false;
             } catch (err) {
                 this.error = err;
