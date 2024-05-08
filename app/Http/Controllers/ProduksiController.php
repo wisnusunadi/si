@@ -6119,7 +6119,10 @@ class ProduksiController extends Controller
         $getData =  json_decode($request->data, true);
         $seri = JadwalRakitNoseriNonStok::whereIn('id', $getData)->get();
         foreach ($seri as $s) {
-            $data[] = $s->noseri;
+            $data[] = array(
+                'noseri' => $s->noseri,
+                'id' => $s->id,
+            );
         }
 
         $customPaperSmall = array(0, 0, 60.46, 150.69);
