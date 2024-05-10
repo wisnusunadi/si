@@ -87,22 +87,26 @@ switch ($isLogo) {
 }
 
 $sizeHeight = $merkLogo != '' ? 29 : 33;
-$sizeWidth =  $merkLogo != '' ? 0.97 : 0.91;
+
 
 $classLogo = '';
 
 switch (strlen($item->noseri)) {
     case 11:
         $classLogo = 'image-container-logo-11';
+        $sizeWidth =  $merkLogo != '' ? 0.97 : 0.91;
         break;
     case 12:
         $classLogo = 'image-container-logo-12';
+        $sizeWidth =  $merkLogo != '' ? 0.96 : 0.91;
         break;
     case 13:
         $classLogo = 'image-container-logo-13';
+        $sizeWidth =  $merkLogo != '' ? 0.96 : 0.91;
         break;
     default:
         $classLogo = 'image-container-logo-14';
+        $sizeWidth =  $merkLogo != '' ? 0.96 : 0.91;
         break;
 }
 
