@@ -432,7 +432,7 @@
                                                                 aria-selected="false">Purchase Order</a>
                                                         </li>
                                                         <li class="nav-item" role="presentation">
-                                                            <a class="nav-link disabled" id="pills-instansi-tab"
+                                                            <a class="nav-link" id="pills-instansi-tab"
                                                                 data-toggle="pill" href="#pills-instansi" role="tab"
                                                                 aria-controls="pills-instansi"
                                                                 aria-selected="false">Instansi</a>
@@ -1771,11 +1771,7 @@
                                 'input[type="checkbox"][name="isi_nopaket"]:checked').length <= 0) && !$(
                                 "#no_paket").hasClass('is-invalid')) {
                             $('#pills-instansi-tab').removeClass('disabled');
-                        } else {
-                            $('#pills-instansi-tab').addClass('disabled');
                         }
-                    } else {
-                        $('#pills-instansi-tab').addClass('disabled');
                     }
                 } else {
                     if ((!$("#no_urut").hasClass('is-invalid')) && ($("#no_paket")
@@ -1786,11 +1782,8 @@
                         if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja")
                             .val() != "" && $("#deskripsi").val() != "") {
                             $('#pills-produk-tab').removeClass('disabled');
-                        } else {
-                            $('#pills-produk-tab').addClass('disabled');
                         }
                     } else {
-                        $('#pills-instansi-tab').addClass('disabled');
                         $('#pills-produk-tab').addClass('disabled');
                     }
                 }
