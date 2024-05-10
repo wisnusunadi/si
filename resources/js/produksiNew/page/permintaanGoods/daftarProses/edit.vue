@@ -115,7 +115,8 @@ export default {
         <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Form Permintaan Edit Barang</h5>
+                    <h5 class="modal-title">Form {{ form.jenis?.value == 'permintaan' ? 'Permintaan' : 'Peminjaman' }}
+                        Edit Barang</h5>
                     <button type="button" class="close" @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -127,7 +128,7 @@ export default {
                                 <label class="col-5 text-right">Jenis</label>
                                 <select v-model="form.jenis" class="form-control col-4">
                                     <option v-for="choice in jenisChoices" :value="choice" :key="choice.value">{{
-                        choice.label }}</option>
+                                        choice.label }}</option>
                                 </select>
                             </div>
                             <div class="form-group row">
@@ -140,7 +141,8 @@ export default {
                                     v-model="form.tgl_pengembalian">
                             </div>
                             <div class="form-group row">
-                                <label class="col-5 text-right">Tujuan Permintaan</label>
+                                <label class="col-5 text-right">Tujuan {{ form.jenis?.value == 'permintaan' ?
+                                    'Permintaan' : 'Peminjaman' }}</label>
                                 <textarea class="form-control col-4" cols="5" v-model="form.tujuan"></textarea>
                             </div>
                         </div>

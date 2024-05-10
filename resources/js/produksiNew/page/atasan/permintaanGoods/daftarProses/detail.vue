@@ -93,6 +93,7 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     swal.fire('Berhasil', 'Data berhasil disetujui', 'success');
+                    this.closeModal();
                 }
             });
         },
@@ -109,6 +110,7 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     swal.fire('Berhasil', 'Data berhasil ditolak', 'success');
+                    this.closeModal();
                 }
             });
         }
