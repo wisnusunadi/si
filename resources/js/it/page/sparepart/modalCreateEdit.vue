@@ -47,7 +47,7 @@ export default {
     methods: {
         tambah() {
             this.selectPart.push({
-                kelompok_produk_id: '',
+                kelompok_produk_id: 3,
                 kode: '',
                 nama: '',
             })
