@@ -99,7 +99,7 @@ export default {
 </script>
 <template>
     <div>
-        <modalSelectData :openDialog="showModalSelect" @simpan="selectData" @close="showModalSelect = false"></modalSelectData>
+        <!-- <modalSelectData :openDialog="showModalSelect" @simpan="selectData" @close="showModalSelect = false"></modalSelectData> -->
         <Modal @closeDialog="showDialog = false" @refresh="refresh" v-if="showDialog" :dialogCreate="showDialog"
             :part="part" :selectPart="selectPart"></Modal>
         <div class="d-flex">
@@ -107,7 +107,7 @@ export default {
                 <v-text-field v-model="search" placeholder="Cari Sparepart"></v-text-field>
             </v-card>
             <v-card flat>
-                <v-btn @click="showModalSelect = true">Pilih Data</v-btn>
+                <!-- <v-btn @click="showModalSelect = true">Pilih Data</v-btn> -->
                 <v-btn color="primary" @click="showDialog = true">
                     Tambah atau Edit Sparepart
                 </v-btn>
@@ -132,6 +132,6 @@ export default {
                 <v-checkbox v-model="selectPart" :value="item"></v-checkbox>
             </template>
         </v-data-table>
-        <v-textarea v-model="sparepartnotfound"></v-textarea>
+        <!-- <v-textarea v-model="sparepartnotfound"></v-textarea> -->
     </div>
 </template>
