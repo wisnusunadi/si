@@ -3028,6 +3028,7 @@
                                         <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` +
                                 x + `]" id="ketstok` + index + `` + x +
                                 `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
+                                <small class="text-muted">Jumlah barang dipinjamkan: 10</small>
                                       </div>`);
                             if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
                                 data.push({
@@ -3313,7 +3314,9 @@
                                         <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` +
                                 x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x +
                                 `" data-id="` + x + `"></span>
-                                      </div>`);
+                                <small class="text-muted">Jumlah barang dipinjamkan: 10</small>
+                                      </div>
+                                      `);
                             if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
                                 data.push({
                                     id: res[0].produk[x].gudang_barang_jadi[0].id,

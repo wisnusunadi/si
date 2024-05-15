@@ -1149,6 +1149,7 @@
                                                                                                                     id="ketstok{{ $produkpenjualan }}{{ $variasi }}"
                                                                                                                     data-attr="ketstok{{ $variasi }}"
                                                                                                                     data-id="{{ $variasi }}"></span>
+                                                                                                                    <small class="text-muted">Jumlah barang dipinjamkan: 10</small>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <?php $variasi = $variasi + 1; ?>
@@ -2772,6 +2773,7 @@
                                             <span class="invalid-feedback d-block ketstok" name="ketstok[` + index +
                                     `][` + x + `]" id="ketstok` + index + `` + x +
                                     `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
+                                <small class="text-muted">Jumlah barang dipinjamkan: 10</small>
                                         </div>`);
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi
                                     .length; y++) {
@@ -3118,6 +3120,7 @@
                                             <span class="invalid-feedback d-block ketstok" name="ketstok[` + index +
                                 `][` + x + `]" id="ketstok` + index + `` + x +
                                 `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
+                                <small class="text-muted">Jumlah barang dipinjamkan: 10</small>
                                         </div>`);
 
                             for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
