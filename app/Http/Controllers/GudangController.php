@@ -27,6 +27,8 @@ use App\Models\NoseriBrgJadiLog;
 use App\Models\NoseriDetailPesanan;
 use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
+use App\Models\PinjamintaBrg;
+use App\Models\PinjamintaBrgDetail;
 use App\Models\Produk;
 use App\Models\RiwayatBatalPo;
 use App\Models\RiwayatBatalPoPaket;
@@ -7009,6 +7011,159 @@ class GudangController extends Controller
                 'error' => true,
                 'msg' => $e->getMessage(),
             ]);
+        }
+    }
+
+    public function pinjaminta_detail($id){
+       $data =  PinjamintaBrg::find($id);
+       $detail = array();
+       foreach($data->PinjamintaBrgDetail as $d){
+            $detail[] = array(
+                'id' => $d->id,
+                'nama' => $d->Produk->nama,
+                'jumlah' => $d->jumlah
+            );
+       }
+       $obj = array(
+        'id' => $data->id,
+        'no' => $data->no,
+        'no_permintaan' => $data->no_permintaan,
+        'jenis' => $data->jenis,
+        'divisi_id' => $data->divisi_id,
+        'tgl_kebutuhan' => $data->tgl_kebutuhan,
+        'tgl_kembali' => $data->tgl_kembali,
+        'ket' => $data->ket,
+        'created_at' => $data->created_at,
+        'updated_at' => $data->updated_at,
+        'detail'=> $detail
+       );
+
+       return response()->json($obj);
+    }
+
+    public function pinjaminta_update_gbj(Request $request){
+        DB::beginTransaction();
+        try {
+            //code...
+            $data = PinjamintaBrg::find($request->id);
+            $data->status = $request->status;
+            $data->save();
+
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+            ], 200);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 500,
+                'message' => 'Update Gagal',
+            ], 500);
+        }
+    }
+
+    public function pinjaminta_show_gbj(Request $request){
+        $data = array();
+        if ($request->status == "permintaan") {
+            # code...
+            $data = PinjamintaBrg::select('pinjaminta_brg.id',
+        'no',
+        'no_permintaan',
+        'jenis',
+        'divisi.nama',
+        'tgl_kebutuhan',
+        'tgl_kembali',
+        'ket',
+        'status',
+        'pinjaminta_brg.created_at',
+        'pinjaminta_brg.updated_at'
+
+
+
+            )->leftJoin('divisi','divisi.id','=','pinjaminta_brg.divisi_id')
+            ->where('status','permintaan')->get();
+        }
+
+        return response()->json($data);
+    }
+
+
+    public function pinjaminta_show(Request $request){
+        $data = array();
+        if ($request->status == "permintaan") {
+            # code...
+            $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)->whereIN('status',['permintaan','ditolak'])->get();
+        }
+
+        return response()->json($data);
+    }
+
+    public function pinjaminta_selectitem(){
+        $data = Produk::addselect([
+            'stok' => function ($q) {
+                $q->selectRaw('coalesce(count(noseri_barang_jadi.id),0)')
+                    ->from('noseri_barang_jadi')
+                    ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                    ->where('noseri_barang_jadi.is_ready', '0')
+                    ->where('noseri_barang_jadi.divisi_id', Auth::user()->divisi_id)
+                    ->whereNull('noseri_barang_jadi.used_by')
+                    ->whereColumn('gdg_barang_jadi.produk_id', 'produk.id');
+            },
+        ])->get();
+
+        $obj = array();
+        foreach ($data as $d) {
+            $obj[] = array(
+                'id' => $d->id,
+                'nama' => $d->nama,
+                'stok' => $d->stok
+            );
+        }
+        return response()->json($obj);
+
+    }
+
+    public function pinjaminta_kirim(Request $request){
+
+        $obj =  json_decode(json_encode($request->all()), FALSE);
+        DB::beginTransaction();
+        try {
+            //code...
+            $no_urut= PinjamintaBrg::whereYear('created_at', now()->year)->max('no')+1;
+            $p = PinjamintaBrg::create([
+              'no' => $no_urut,
+              'no_permintaan' => 'NSO-'.now()->year.sprintf("%02d", now()->month).sprintf("%03d", $no_urut),
+              'jenis' => $obj->jenis->value,
+              'divisi_id' => Auth::user()->divisi_id,
+              'tgl_kebutuhan' => $obj->tgl_kebutuhan,
+              'tgl_kembali' => $obj->tgl_pengembalian,
+              'ket' => $obj->tujuan,
+              'status' => 'permintaan',
+            ]);
+
+            foreach ($obj->items as $items) {
+                PinjamintaBrgDetail::create([
+                    'pinjaminta_brg_id' => $p->id,
+                    'produk_id' => $items->nama_produk->value,
+                    'jumlah' => $items->jumlah,
+                ]);
+            }
+
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 404,
+                'message' => 'Transaksi Update Gagal' . $th,
+            ], 500);
         }
     }
 }
