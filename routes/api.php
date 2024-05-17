@@ -35,14 +35,13 @@ Route::prefix('/pinjaminta')->group(function () {
     Route::get('/show', [App\Http\Controllers\GudangController::class, 'pinjaminta_show'])->middleware('jwt.verify');
     Route::get('/detail/{id}', [App\Http\Controllers\GudangController::class, 'pinjaminta_detail'])->middleware('jwt.verify');
     Route::post('/update', [App\Http\Controllers\GudangController::class, 'pinjaminta_update'])->middleware('jwt.verify');
+    Route::post('/update_status', [App\Http\Controllers\GudangController::class, 'pinjaminta_update_status'])->middleware('jwt.verify');
 
     Route::prefix('/atasan')->group(function () {
         Route::get('/show', [App\Http\Controllers\GudangController::class, 'pinjaminta_atasan_show'])->middleware('jwt.verify');
-        Route::post('/update', [App\Http\Controllers\GudangController::class, 'pinjaminta_update'])->middleware('jwt.verify');
+        Route::post('/update_status', [App\Http\Controllers\GudangController::class, 'pinjaminta_update_status'])->middleware('jwt.verify');
     });
 });
-
-
 
 Route::prefix('/master')->group(function () {
     Route::prefix('/buka_periode')->group(function () {
@@ -248,8 +247,8 @@ Route::prefix('/gbj')->group(function () {
         Route::post('/kirim/', [App\Http\Controllers\GudangController::class, 'kirim_seri_batal_po']);
     });
     Route::prefix('/pinjaminta')->group(function () {
-        Route::get('/show', [App\Http\Controllers\GudangController::class, 'pinjaminta_show_gbj']);
-        Route::post('/update', [App\Http\Controllers\GudangController::class, 'pinjaminta_update']);
+        Route::get('/show', [App\Http\Controllers\GudangController::class, 'pinjaminta_show_gbj'])->middleware('jwt.verify');
+        Route::post('/update', [App\Http\Controllers\GudangController::class, 'pinjaminta_update_status'])->middleware('jwt.verify');
     });
 
     Route::prefix('/ganti_unit')->group(function () {

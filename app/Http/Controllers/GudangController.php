@@ -7040,35 +7040,76 @@ class GudangController extends Controller
        return response()->json($obj);
     }
 
+    public function pinjaminta_update_status(Request $request){
+        DB::beginTransaction();
+       try {
+        //code...
+        if (Auth::user()->divisi_id == 13){
+            $data = PinjamintaBrg::find($request->id);
+            $data->status_gdg = $request->status;
+            $data->save();
+        }else{
+
+        $atasan = ['supervisor','manager','direkur'];
+        if(in_array(Auth::user()->Karyawan->jabatan, $atasan) ){
+            if(isset($request->status)){
+                $data = PinjamintaBrg::find($request->id);
+                $data->status_atasan = $request->status;
+                if($request->status == 'setuju'){
+                    $data->status_gdg = 'permintaan';
+                }
+                $data->save();
+            }else{
+                $data = PinjamintaBrg::find($request->id);
+                $data->status = $request->status_permintaan;
+                $data->save();
+            }
+        }else{
+            $jenis = 'staff';
+            $data = PinjamintaBrg::find($request->id);
+            $data->status = $request->status_permintaan;
+            $data->save();
+        }
+    }
+        DB::commit();
+        return response()->json([
+            'status' => 200,
+            'message' => 'Berhasil',
+        ], 200);
+       } catch (\Throwable $th) {
+        //throw $th;
+        DB::rollBack();
+        return response()->json([
+            'status' => 500,
+            'message' => 'Update Gagal'.$th->getMessage(),
+        ], 500);
+       }
+
+        }
+
     public function pinjaminta_update(Request $request){
         DB::beginTransaction();
         try {
             //code...
-            if($request->jenis == 'atasan'){
-
-            $data = PinjamintaBrg::find($request->id);
-            $data->status_atasan = $request->status;
-            if($data->status_atasan == 'setuju'){
-                $data->status_gdg = 'permintaan';
+            if (Auth::user()->divisi_id == 13){
+                $jenis = 'gudang';
+            }else{
+                $atasan = ['supervisor','manager','direkur'];
+                if(in_array(Auth::user()->Karyawan->jabatan, $atasan) ){
+                    $jenis = 'atasan';
+                }else{
+                    $jenis = 'staff';
+                }
             }
-            $data->save();
-
-            }else if($request->jenis == 'gudang'){
 
                 $data = PinjamintaBrg::find($request->id);
-                $data->status_gdg = $request->status;
+                $data->jenis =  $request->jenis['value'];
+                $data->status_atasan =  $jenis == 'atasan' ? 'setuju' : 'permintaan';
+                $data->status_gdg =  $jenis == 'atasan' ?  'permintaan' : NULL ;
+                $data->tgl_kebutuhan = $request->tgl_kebutuhan;
+                $data->tgl_kembali = $request->tgl_pengembalian;
+                $data->ket = $request->tujuan;
                 $data->save();
-
-            }elseif($request->jenis == 'staff'){
-                dd($request->all());
-            }else{
-
-                DB::rollBack();
-                return response()->json([
-                    'status' => 500,
-                    'message' => 'Update Gagal',
-                ], 500);
-            }
 
             DB::commit();
             return response()->json([
@@ -7081,7 +7122,7 @@ class GudangController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 500,
-                'message' => 'Update Gagal',
+                'message' => 'Update Gagal'.$th->getMessage(),
             ], 500);
         }
     }
@@ -7101,7 +7142,9 @@ class GudangController extends Controller
         'pinjaminta_brg.created_at',
         'pinjaminta_brg.updated_at'
             )->leftJoin('divisi','divisi.id','=','pinjaminta_brg.divisi_id')
-            ->where('status_gdg','permintaan')->get();
+            ->where('status_gdg','permintaan')
+            ->whereNull('status')
+            ->get();
         }
         else if ($request->status == "proses") {
             $data = PinjamintaBrg::select('pinjaminta_brg.id',
@@ -7116,7 +7159,9 @@ class GudangController extends Controller
         'pinjaminta_brg.created_at',
         'pinjaminta_brg.updated_at'
             )->leftJoin('divisi','divisi.id','=','pinjaminta_brg.divisi_id')
-            ->where('status_gdg','setuju')->get();
+            ->where('status_gdg','setuju')
+            ->whereNull('status')
+            ->get();
         }
         return response()->json($data);
     }
@@ -7125,9 +7170,8 @@ class GudangController extends Controller
         $data = array();
         if ($request->status == "permintaan") {
             $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)
-            ->where(function ($query) {
-                $query->where('status_atasan', '!=', 'setuju');
-            })
+            ->where('status_atasan','permintaan')
+            ->whereNULL('status')
             ->get();
 
             $data->each(function ($item) {
@@ -7138,6 +7182,7 @@ class GudangController extends Controller
             $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)
             ->where('status_atasan','setuju')
             ->where('status_gdg','setuju')
+            ->whereNULL('status')
             ->get();
 
             $data->each(function ($item) {
@@ -7154,7 +7199,9 @@ class GudangController extends Controller
             ->where(function ($query) {
                 $query->where('status_atasan', '!=', 'setuju')
                       ->orWhere('status_gdg', '!=', 'setuju');
+
             })
+            ->whereNull('status')
             ->get();
 
             $data->each(function ($item) {
@@ -7165,6 +7212,17 @@ class GudangController extends Controller
             $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)
             ->where('status_atasan','setuju')
             ->where('status_gdg','setuju')
+            ->whereNull('status')
+            ->get();
+
+            $data->each(function ($item) {
+                $item->is_edit = false;
+            });
+
+        }
+         else if($request->status == "selesai"){
+            $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)
+            ->where('status','batal')
             ->get();
 
             $data->each(function ($item) {
@@ -7209,9 +7267,11 @@ class GudangController extends Controller
             //code...
             $atasan = ['supervisor','manager','direkur'];
             if(in_array(Auth::user()->Karyawan->jabatan, $atasan) ){
-                $status = 'setuju';
+                $status_atasan = 'setuju';
+                $status_gdg = 'permintaan';
             }else{
-                $status = 'permintaan';
+                $status_atasan = 'permintaan';
+                $status_gdg = NULL;
             }
 
             $no_urut= PinjamintaBrg::whereYear('created_at', now()->year)->max('no')+1;
@@ -7223,7 +7283,8 @@ class GudangController extends Controller
               'tgl_kebutuhan' => $obj->tgl_kebutuhan,
               'tgl_kembali' => $obj->tgl_pengembalian,
               'ket' => $obj->tujuan,
-              'status_atasan' => $status,
+              'status_atasan' => $status_atasan,
+              'status_gdg' => $status_gdg,
             ]);
 
             foreach ($obj->items as $items) {
