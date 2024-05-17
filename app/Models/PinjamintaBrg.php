@@ -10,7 +10,7 @@ class PinjamintaBrg extends Model
     use HasFactory;
     protected $connection = 'erp';
     protected $table = 'pinjaminta_brg';
-    protected $fillable = ['no','jenis', 'divisi_id', 'tgl_kebutuhan', 'tgl_kembali', 'ket','no_permintaan','status'];
+    protected $fillable = ['no','jenis', 'divisi_id', 'tgl_kebutuhan', 'tgl_kembali', 'ket','no_permintaan','status_gdg','status_atasan'];
 
     public function PinjamintaBrgDetail()
     {

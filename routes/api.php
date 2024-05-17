@@ -34,7 +34,15 @@ Route::prefix('/pinjaminta')->group(function () {
     Route::get('/selectitem', [App\Http\Controllers\GudangController::class, 'pinjaminta_selectitem'])->middleware('jwt.verify');
     Route::get('/show', [App\Http\Controllers\GudangController::class, 'pinjaminta_show'])->middleware('jwt.verify');
     Route::get('/detail/{id}', [App\Http\Controllers\GudangController::class, 'pinjaminta_detail'])->middleware('jwt.verify');
+    Route::post('/update', [App\Http\Controllers\GudangController::class, 'pinjaminta_update'])->middleware('jwt.verify');
+
+    Route::prefix('/atasan')->group(function () {
+        Route::get('/show', [App\Http\Controllers\GudangController::class, 'pinjaminta_atasan_show'])->middleware('jwt.verify');
+        Route::post('/update', [App\Http\Controllers\GudangController::class, 'pinjaminta_update'])->middleware('jwt.verify');
+    });
 });
+
+
 
 Route::prefix('/master')->group(function () {
     Route::prefix('/buka_periode')->group(function () {
@@ -67,6 +75,7 @@ Route::prefix('/ppic')->group(function () {
             Route::post('/delete', [App\Http\Controllers\PpicController::class, 'delete_ppic_rework']);
         });
     });
+
     Route::post('/update_pwd', [App\Http\Controllers\Auth\ResetPasswordController::class, 'updatePwd'])->middleware('jwt.verify');
     Route::post('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data'])->middleware('jwt.verify');
     Route::post('/master_stok/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_stok'])->middleware('jwt.verify');
@@ -240,7 +249,7 @@ Route::prefix('/gbj')->group(function () {
     });
     Route::prefix('/pinjaminta')->group(function () {
         Route::get('/show', [App\Http\Controllers\GudangController::class, 'pinjaminta_show_gbj']);
-        Route::post('/update', [App\Http\Controllers\GudangController::class, 'pinjaminta_update_gbj']);
+        Route::post('/update', [App\Http\Controllers\GudangController::class, 'pinjaminta_update']);
     });
 
     Route::prefix('/ganti_unit')->group(function () {

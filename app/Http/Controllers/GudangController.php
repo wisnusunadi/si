@@ -7037,17 +7037,38 @@ class GudangController extends Controller
         'updated_at' => $data->updated_at,
         'detail'=> $detail
        );
-
        return response()->json($obj);
     }
 
-    public function pinjaminta_update_gbj(Request $request){
+    public function pinjaminta_update(Request $request){
         DB::beginTransaction();
         try {
             //code...
+            if($request->jenis == 'atasan'){
+
             $data = PinjamintaBrg::find($request->id);
-            $data->status = $request->status;
+            $data->status_atasan = $request->status;
+            if($data->status_atasan == 'setuju'){
+                $data->status_gdg = 'permintaan';
+            }
             $data->save();
+
+            }else if($request->jenis == 'gudang'){
+
+                $data = PinjamintaBrg::find($request->id);
+                $data->status_gdg = $request->status;
+                $data->save();
+
+            }elseif($request->jenis == 'staff'){
+                dd($request->all());
+            }else{
+
+                DB::rollBack();
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Update Gagal',
+                ], 500);
+            }
 
             DB::commit();
             return response()->json([
@@ -7068,7 +7089,6 @@ class GudangController extends Controller
     public function pinjaminta_show_gbj(Request $request){
         $data = array();
         if ($request->status == "permintaan") {
-            # code...
             $data = PinjamintaBrg::select('pinjaminta_brg.id',
         'no',
         'no_permintaan',
@@ -7077,25 +7097,80 @@ class GudangController extends Controller
         'tgl_kebutuhan',
         'tgl_kembali',
         'ket',
-        'status',
+        'status_gdg',
         'pinjaminta_brg.created_at',
         'pinjaminta_brg.updated_at'
-
-
-
             )->leftJoin('divisi','divisi.id','=','pinjaminta_brg.divisi_id')
-            ->where('status','permintaan')->get();
+            ->where('status_gdg','permintaan')->get();
         }
-
+        else if ($request->status == "proses") {
+            $data = PinjamintaBrg::select('pinjaminta_brg.id',
+        'no',
+        'no_permintaan',
+        'jenis',
+        'divisi.nama',
+        'tgl_kebutuhan',
+        'tgl_kembali',
+        'ket',
+        'status_gdg',
+        'pinjaminta_brg.created_at',
+        'pinjaminta_brg.updated_at'
+            )->leftJoin('divisi','divisi.id','=','pinjaminta_brg.divisi_id')
+            ->where('status_gdg','setuju')->get();
+        }
         return response()->json($data);
     }
 
+    public function pinjaminta_atasan_show(Request $request){
+        $data = array();
+        if ($request->status == "permintaan") {
+            $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)
+            ->where(function ($query) {
+                $query->where('status_atasan', '!=', 'setuju');
+            })
+            ->get();
 
+            $data->each(function ($item) {
+                $item->is_edit = $item->status_gdg == 'permintaan' || $item->status_atasan == 'permintaan' ? false : true ;
+            });
+
+        } else if($request->status == "proses"){
+            $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)
+            ->where('status_atasan','setuju')
+            ->where('status_gdg','setuju')
+            ->get();
+
+            $data->each(function ($item) {
+                $item->is_edit = false;
+            });
+
+        }
+        return response()->json($data);
+    }
     public function pinjaminta_show(Request $request){
         $data = array();
         if ($request->status == "permintaan") {
-            # code...
-            $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)->whereIN('status',['permintaan','ditolak'])->get();
+            $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)
+            ->where(function ($query) {
+                $query->where('status_atasan', '!=', 'setuju')
+                      ->orWhere('status_gdg', '!=', 'setuju');
+            })
+            ->get();
+
+            $data->each(function ($item) {
+                $item->is_edit = $item->status_gdg == 'permintaan' || $item->status_atasan == 'permintaan' ? false : true ;
+            });
+
+        } else if($request->status == "proses"){
+            $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)
+            ->where('status_atasan','setuju')
+            ->where('status_gdg','setuju')
+            ->get();
+
+            $data->each(function ($item) {
+                $item->is_edit = false;
+            });
+
         }
 
         return response()->json($data);
@@ -7132,6 +7207,13 @@ class GudangController extends Controller
         DB::beginTransaction();
         try {
             //code...
+            $atasan = ['supervisor','manager','direkur'];
+            if(in_array(Auth::user()->Karyawan->jabatan, $atasan) ){
+                $status = 'setuju';
+            }else{
+                $status = 'permintaan';
+            }
+
             $no_urut= PinjamintaBrg::whereYear('created_at', now()->year)->max('no')+1;
             $p = PinjamintaBrg::create([
               'no' => $no_urut,
@@ -7141,7 +7223,7 @@ class GudangController extends Controller
               'tgl_kebutuhan' => $obj->tgl_kebutuhan,
               'tgl_kembali' => $obj->tgl_pengembalian,
               'ket' => $obj->tujuan,
-              'status' => 'permintaan',
+              'status_atasan' => $status,
             ]);
 
             foreach ($obj->items as $items) {
