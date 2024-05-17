@@ -41,6 +41,7 @@ export default {
                     "jumlah": "45"
                 }
             ],
+            copyAllFormAndItems: {}
         }
     },
     methods: {
@@ -56,6 +57,60 @@ export default {
                 stok: null,
                 jumlah: null
             });
+        },
+        compareJson() {
+            const changes = []
+
+            const formBefore = this.copyAllFormAndItems.form;
+            const formAfter = this.form;
+            const itemsBefore = this.copyAllFormAndItems.items;
+            const itemsAfter = this.items;
+
+            // compare form fields
+            for (let key in formBefore) {
+                if (formBefore[key] !== formAfter[key]) {
+                    if (typeof formBefore[key] === 'object' && typeof formAfter[key] === 'object') {
+                        for (let subKey in formBefore[key]) {
+                            if (formBefore[key][subKey] !== formAfter[key][subKey]) {
+                                changes.push(`Perubahan pada form ${key} ${subKey} dari ${formBefore[key][subKey]} menjadi ${formAfter[key][subKey]}`)
+                            }
+                        }
+                    } else {
+                        changes.push(`Perubahan pada form ${key} dari ${formBefore[key]} menjadi ${formAfter[key]}`)
+                    }
+                }
+            }
+
+            // Compare items
+            itemsBefore.forEach((itemBefore, index) => {
+                const itemAfter = itemsAfter[index];
+                if (itemAfter) {
+                    for (let key in itemBefore) {
+                        if (itemBefore[key] !== itemAfter[key]) {
+                            if (typeof itemBefore[key] === 'object' && typeof itemAfter[key] === 'object') {
+                                for (let subKey in itemBefore[key]) {
+                                    if (itemBefore[key][subKey] !== itemAfter[key][subKey]) {
+                                        changes.push(`Perubahan ${subKey} produk ${itemBefore.nama_produk.label} dari ${itemBefore[key][subKey]} ke ${itemAfter[key][subKey]}`);
+                                    }
+                                }
+                            } else {
+                                changes.push(`Perubahan ${key} produk ${itemBefore.nama_produk.label} dari ${itemBefore[key]} ke ${itemAfter[key]}`);
+                            }
+                        }
+                    }
+                } else {
+                    changes.push(`Produk ${itemBefore.nama_produk.label} dihapus`);
+                }
+            });
+
+            itemsAfter.forEach((itemAfter, index) => {
+                const itemBefore = itemsBefore[index];
+                if (!itemBefore) {
+                    changes.push(`Produk ${itemAfter.nama_produk.label} ditambahkan`);
+                }
+            });
+
+            return changes;
         },
         simpan() {
             // check every form is filled
@@ -78,6 +133,7 @@ export default {
                 this.$emit('refresh');
                 this.closeModal();
             }
+            console.log(this.compareJson());
         }
     },
     watch: {
@@ -106,6 +162,9 @@ export default {
             },
             deep: true
         }
+    },
+    mounted() {
+        this.copyAllFormAndItems = JSON.parse(JSON.stringify({ form: this.form, items: this.items }));
     }
 }
 </script>
