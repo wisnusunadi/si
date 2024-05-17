@@ -41,6 +41,7 @@ export default {
                     "jumlah": "45"
                 }
             ],
+            copyAllFormAndItems: {}
         }
     },
     methods: {
@@ -57,6 +58,55 @@ export default {
                 jumlah: null
             });
         },
+        compareJson() {
+            const changes = []
+
+            const formBefore = this.copyAllFormAndItems.form;
+            const formAfter = this.form;
+            const itemsBefore = this.copyAllFormAndItems.items;
+            const itemsAfter = this.items;
+
+            // compare form fields
+            for (let key in formBefore) {
+                if (formBefore[key] !== formAfter[key]) {
+                    if (typeof formBefore[key] === 'object' && typeof formAfter[key] === 'object') {
+                        for (let subKey in formBefore[key]) {
+                            if (formBefore[key][subKey] !== formAfter[key][subKey]) {
+                                changes.push(`Perubahan pada form ${key} ${subKey} dari ${formBefore[key][subKey]} menjadi ${formAfter[key][subKey]}`)
+                            }
+                        }
+                    } else {
+                        changes.push(`Perubahan pada form ${key} dari ${formBefore[key]} menjadi ${formAfter[key]}`)
+                    }
+                }
+            }
+
+            // Compare items
+            itemsBefore.forEach((itemBefore, index) => {
+                const itemAfter = itemsAfter[index];
+                if (itemAfter) {
+                    if (itemBefore.nama_produk.label !== itemAfter.nama_produk.label) {
+                        changes.push(`Perubahan produk dari ${itemBefore.nama_produk.label} menjadi ${itemAfter.nama_produk.label}`)
+                    }
+                    // compare jumlah
+                    if (itemBefore.jumlah !== itemAfter.jumlah) {
+                        changes.push(`Perubahan jumlah produk ${itemAfter.nama_produk.label} dari ${itemBefore.jumlah} menjadi ${itemAfter.jumlah}`)
+                    }
+                } else {
+                    changes.push(`Produk ${itemBefore.nama_produk.label} dihapus`)
+                }
+            })
+
+            // detect new item
+            if (itemsAfter.length > itemsBefore.length) {
+                const newItems = itemsAfter.slice(itemsBefore.length);
+                newItems.forEach(item => {
+                    changes.push(`Produk ${item.nama_produk.label} ditambahkan`)
+                })
+            }
+
+            return changes;
+        },
         simpan() {
             // check every form is filled
             const form = Object.entries(this.form).every(([key, value]) => {
@@ -70,14 +120,28 @@ export default {
 
             if (!form || !items || this.items.length === 0) {
                 swal.fire('Peringatan', 'Pastikan semua form terisi', 'warning')
-            } else {
-                // do something
-                console.log(this.form);
-                console.log(this.items);
-                swal.fire('Berhasil', 'Data berhasil disimpan', 'success');
-                this.$emit('refresh');
-                this.closeModal();
+                return
             }
+
+            // cek tanggal pengembalian harus lebih besar dari tanggal kebutuhan
+            if (this.form.jenis.value === 'peminjaman' && this.form.tgl_pengembalian < this.form.tgl_kebutuhan) {
+                swal.fire('Peringatan !', 'Tanggal pengembalian harus lebih besar dari tanggal kebutuhan', 'warning');
+                return;
+            }
+
+            console.log(this.form);
+            console.log(this.items);
+            swal.fire('Berhasil', 'Data berhasil disimpan', 'success');
+            this.$emit('refresh');
+            this.closeModal();
+            console.log(this.compareJson());
+        },
+        checkProdukFilled(idx) {
+            const selectedProduk = this.items.map(item => item.nama_produk?.value);
+
+            return this.produkChoices.filter((produk) => {
+                return !selectedProduk.includes(produk.value) || this.items[idx].nama_produk?.value === produk.value;
+            });
         }
     },
     watch: {
@@ -86,7 +150,7 @@ export default {
                 // add tgl_pengembalian key to form object if jenis is peminjaman, if not delete tgl_pengembalian key
                 this.$set(this.form, 'tgl_pengembalian', null);
             } else {
-                delete this.form.tgl_pengembalian;
+                this.$delete(this.form, 'tgl_pengembalian');
             }
         },
         'items': {
@@ -98,14 +162,18 @@ export default {
                         // jika stok sama dengan 0, buat disabled input jumlah dengan menambahkan object key baru isDisabled = true, jika tidak delete key tersebut
                         if (produk.stok === 0) {
                             this.$set(this.items[index], 'isDisabled', true);
+                            this.$set(this.items[index], 'jumlah', null);
                         } else {
-                            delete this.items[index].isDisabled;
+                            this.$delete(this.items[index], 'isDisabled');
                         }
                     }
                 });
             },
             deep: true
         }
+    },
+    mounted() {
+        this.copyAllFormAndItems = JSON.parse(JSON.stringify({ form: this.form, items: this.items }));
     }
 }
 </script>
@@ -126,7 +194,7 @@ export default {
                         <div class="card-body">
                             <div class="form-group row">
                                 <label class="col-5 text-right">Jenis</label>
-                                <select v-model="form.jenis" class="form-control col-4">
+                                <select v-model="form.jenis" class="form-control col-4" disabled>
                                     <option v-for="choice in jenisChoices" :value="choice" :key="choice.value">{{
                                         choice.label }}</option>
                                 </select>
@@ -165,7 +233,8 @@ export default {
                                     <tr v-for="(item, index) in items" :key="index">
                                         <td>{{ index + 1 }}</td>
                                         <td>
-                                            <v-select :options="produkChoices" v-model="item.nama_produk"></v-select>
+                                            <v-select :options="checkProdukFilled(index)"
+                                                v-model="item.nama_produk"></v-select>
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" v-model="item.stok" readonly>
