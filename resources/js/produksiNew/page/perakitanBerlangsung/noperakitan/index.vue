@@ -7,12 +7,14 @@ export default {
                 alias: '',
                 urutan_awal: '',
                 urutan_akhir: ''
-            }
+            },
+            loading: false
         }
     },
     methods: {
         async simpan() {
             try {
+                this.loading = true;
                 const cekKosong = Object.values(this.form).every((val) => val !== '');
                 if (!cekKosong) {
                     this.$swal(
@@ -71,6 +73,7 @@ export default {
 
 
                 window.open(url, '_blank');
+                this.loading = false;
             } catch (error) {
                 console.log(error);
             }
@@ -130,10 +133,14 @@ export default {
                 </div>
                 <div class="col-lg-2 text-right">
                     <!-- Mengubah kolom dari col menjadi col-lg-5 dan menambahkan kelas text-right -->
-                    <button class="btn btn-success" @click="simpan">Cetak</button>
+                    <button class="btn btn-success" @click="simpan" :disabled="loading">
+                        <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        {{ loading ? 'Loading...' : 'Cetak' }}
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-
 </template>

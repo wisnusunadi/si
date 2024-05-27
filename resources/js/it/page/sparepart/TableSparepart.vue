@@ -1,8 +1,9 @@
 <script>
 import axios from 'axios'
 import Modal from './modalCreateEdit.vue'
+import modalSelectData from './modalSelectData.vue';
 export default {
-    components: { Modal },
+    components: { Modal, modalSelectData },
     props: ['part'],
     data() {
         return {
@@ -29,6 +30,8 @@ export default {
             showDialog: false,
             selectPart: [],
             selectAll: false,
+            showModalSelect: false,
+            sparepartnotfound: []
         }
     },
     methods: {
@@ -65,11 +68,38 @@ export default {
         refresh() {
             this.$emit('refresh')
         },
+        selectData(data) {
+            let sparepartnotfound = []
+
+            let sparepartarray = data.split(/\n+/);
+            sparepartarray = sparepartarray.filter((item) => item !== '')
+            sparepartarray = [...new Set(sparepartarray)]
+
+            for (let i = 0; i < sparepartarray.length; i++) {
+                let found = false
+                for (let j = 0; j < this.part.length; j++) {
+                    if (this.part[j].nama === sparepartarray[i]) {
+                        this.selectPart.push(this.part[j])
+                        found = true
+                        break
+                    }
+                }
+                if (!found) {
+                    sparepartnotfound.push(sparepartarray[i])
+                }
+            }
+
+            if (sparepartnotfound.length) {
+                this.$swal('Gagal', `Sparepart tidak ditemukan`, 'error')
+                this.sparepartnotfound = sparepartnotfound.join('\n')
+            }
+        }
     },
 }
 </script>
 <template>
     <div>
+        <!-- <modalSelectData :openDialog="showModalSelect" @simpan="selectData" @close="showModalSelect = false"></modalSelectData> -->
         <Modal @closeDialog="showDialog = false" @refresh="refresh" v-if="showDialog" :dialogCreate="showDialog"
             :part="part" :selectPart="selectPart"></Modal>
         <div class="d-flex">
@@ -77,6 +107,7 @@ export default {
                 <v-text-field v-model="search" placeholder="Cari Sparepart"></v-text-field>
             </v-card>
             <v-card flat>
+                <!-- <v-btn @click="showModalSelect = true">Pilih Data</v-btn> -->
                 <v-btn color="primary" @click="showDialog = true">
                     Tambah atau Edit Sparepart
                 </v-btn>
@@ -101,5 +132,6 @@ export default {
                 <v-checkbox v-model="selectPart" :value="item"></v-checkbox>
             </template>
         </v-data-table>
+        <!-- <v-textarea v-model="sparepartnotfound"></v-textarea> -->
     </div>
 </template>
