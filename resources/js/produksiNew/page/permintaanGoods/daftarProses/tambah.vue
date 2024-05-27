@@ -3,7 +3,7 @@ export default {
     data() {
         return {
             form: {
-                jenis: null,
+                jenis: { "label": "Permintaan", "value": "permintaan" },
                 tgl_permintaan: new Date().toISOString().substr(0, 10),
                 tgl_kebutuhan: null,
                 tujuan: null,
@@ -133,7 +133,9 @@ export default {
                             </div>
                             <div class="form-group row">
                                 <label class="col-5 text-right">Tanggal Kebutuhan</label>
-                                <input type="date" class="form-control col-4" v-model="form.tgl_kebutuhan">
+                                <input type="date" class="form-control col-4"
+                                :min="new Date().toISOString().substr(0, 10)"
+                                v-model="form.tgl_kebutuhan">
                             </div>
                             <div class="form-group row" v-if="form?.jenis?.value == 'peminjaman'">
                                 <label class="col-5 text-right">Tanggal Pengembalian</label>
