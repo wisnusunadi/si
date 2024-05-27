@@ -83,6 +83,25 @@ export default {
             });
         },
         simpan() {
+            // cek jika salah satu produk belum memiliki noseri
+            let produkNoSeri = []
+
+            this.items.forEach(item => {
+                if (item.noseri) {
+                    produkNoSeri.push(item)
+                }
+            })
+
+            if (this.form.tanggal_selesai == null) {
+                swal.fire('Peringatan', 'Tanggal akhir peminjaman setelah perubahan harus diisi', 'warning');
+                return;
+            }
+
+            if (produkNoSeri.length == 0) {
+                swal.fire('Peringatan', 'Produk belum memiliki nomor seri', 'warning');
+                return;
+            }
+
             console.log(this.items);
             swal.fire('Berhasil', 'Data berhasil disimpan', 'success');
             this.closeModal();

@@ -78,6 +78,7 @@ export default {
                         </button>
                     </div>
                 </template>
+                
             </data-table>
         </div>
     </div>
