@@ -116,108 +116,96 @@ export default {
                     <div class="modal-body">
                         <div class="card">
                             <div class="card-header">
-                                <div class="card-header">
-                                    <div class="row row-cols-2">
-                                        <div class="col">
-                                            <label for=""
-                                                >Nomor Permintaan</label
-                                            >
-                                            <div class="card nomor-so">
-                                                <div class="card-body">
-                                                    <span id="so">{{
-                                                        item.no_permintaan
-                                                    }}</span>
-                                                </div>
+                                <div class="row row-cols-2">
+                                    <div class="col">
+                                        <label for="">Nomor Permintaan</label>
+                                        <div class="card nomor-so">
+                                            <div class="card-body">
+                                                <span id="so">{{
+                                                    item.no_permintaan
+                                                }}</span>
                                             </div>
                                         </div>
-                                        <div class="col">
-                                            <label for="">Jenis</label>
-                                            <div class="card instansi">
-                                                <div class="card-body">
-                                                    <span
-                                                        id="instansi"
-                                                        class="text-capitalize"
-                                                        >{{ item.jenis }}</span
-                                                    >
-                                                </div>
+                                    </div>
+                                    <div class="col">
+                                        <label for="">Jenis</label>
+                                        <div class="card instansi">
+                                            <div class="card-body">
+                                                <span
+                                                    id="instansi"
+                                                    class="text-capitalize"
+                                                    >{{ item.jenis }}</span
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="row"
+                                    :class="
+                                        item.jenis == 'peminjaman'
+                                            ? 'row-cols-3'
+                                            : 'row-cols-2'
+                                    "
+                                >
+                                    <div class="col">
+                                        <label for="">Tanggal Permintaan</label>
+                                        <div class="card nomor-po">
+                                            <div class="card-body">
+                                                <span id="po">{{
+                                                    dateFormat(
+                                                        item.tgl_permintaan
+                                                    )
+                                                }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label for="">Tanggal Kebutuhan</label>
+                                        <div class="card nomor-akn">
+                                            <div class="card-body">
+                                                <span id="akn">{{
+                                                    dateFormat(
+                                                        item.tgl_kebutuhan
+                                                    )
+                                                }}</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div
-                                        class="row"
-                                        :class="
-                                            item.jenis == 'peminjaman'
-                                                ? 'row-cols-3'
-                                                : 'row-cols-2'
-                                        "
+                                        class="col"
+                                        v-if="item.jenis == 'peminjaman'"
                                     >
-                                        <div class="col">
-                                            <label for=""
-                                                >Tanggal Permintaan</label
-                                            >
-                                            <div class="card nomor-po">
-                                                <div class="card-body">
-                                                    <span id="po">{{
-                                                        dateFormat(
-                                                            item.tgl_permintaan
-                                                        )
-                                                    }}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <label for=""
-                                                >Tanggal Kebutuhan</label
-                                            >
-                                            <div class="card nomor-akn">
-                                                <div class="card-body">
-                                                    <span id="akn">{{
-                                                        dateFormat(
-                                                            item.tgl_kebutuhan
-                                                        )
-                                                    }}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="col"
-                                            v-if="item.jenis == 'peminjaman'"
-                                        >
-                                            <label for="">Durasi</label>
-                                            <div class="card durasi">
-                                                <div class="card-body">
-                                                    <span id="instansi">{{
-                                                        item.durasi
-                                                    }}</span>
-                                                </div>
+                                        <label for="">Durasi</label>
+                                        <div class="card durasi">
+                                            <div class="card-body">
+                                                <span id="instansi">{{
+                                                    item.durasi
+                                                }}</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div
-                                            :class="
-                                                item.ket ? 'col-6' : 'col-12'
-                                            "
+                                </div>
+                                <div class="row">
+                                    <div :class="item.ket ? 'col-6' : 'col-12'">
+                                        <label class="text-capitalize"
+                                            >Tujuan {{ item.jenis }}</label
                                         >
-                                            <label class="text-capitalize"
-                                                >Tujuan {{ item.jenis }}</label
-                                            >
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <span id="instansi">{{
-                                                        item.tujuan_permintaan
-                                                    }}</span>
-                                                </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <span id="instansi">{{
+                                                    item.tujuan_permintaan
+                                                }}</span>
                                             </div>
                                         </div>
-                                        <div class="col" v-if="item.ket">
-                                            <label for="">Alasan Ditolak</label>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <span id="instansi">{{
-                                                        item.ket
-                                                    }}</span>
-                                                </div>
+                                    </div>
+                                    <div class="col" v-if="item.ket">
+                                        <label for="">Alasan Ditolak</label>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <span id="instansi">{{
+                                                    item.ket
+                                                }}</span>
                                             </div>
                                         </div>
                                     </div>
