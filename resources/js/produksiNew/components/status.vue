@@ -31,7 +31,7 @@ export default {
                     }
                 case 'menunggu_persetujuan_atasan':
                     return {
-                        class: 'badge-warning',
+                        class: 'badge-dark',
                         text: 'Menunggu Persetujuan Atasan'
                     }
                 case 'permintaan_ditolak_atasan':

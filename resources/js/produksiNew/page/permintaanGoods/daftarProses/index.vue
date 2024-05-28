@@ -14,16 +14,13 @@ export default {
                     value: 'no_permintaan',
                 },
                 {
-                    text: 'Nomor Referensi',
-                    value: 'no_referensi',
-                },
-                {
                     text: 'Tanggal Permintaan',
                     value: 'tgl_permintaan',
                 },
                 {
                     text: 'Tujuan Permintaan',
                     value: 'tujuan_permintaan',
+                    align: 'text-truncate text-center maxwidthTujuan'
                 },
                 {
                     text: 'Tanggal Kebutuhan',
@@ -42,9 +39,8 @@ export default {
                 {
                     id: 2,
                     no_permintaan: 'NSO-2021080002',
-                    no_referensi: 'SO-2021080002',
                     tgl_permintaan: '2021-08-02',
-                    tujuan_permintaan: 'Lorem Ipsum',
+                    tujuan_permintaan: 'Lorem Ipsum Dolor Sit Amet, Consectetur Adipiscing Elit, Sed Do Eiusmod Tempor Incididunt Ut Labore Et Dolore Magna Aliqua. Ut Enim Ad Minim Veniam, Quis Nostrud Exercitation Ullamco Laboris Nisi Ut Aliquip Ex Ea Commodo Consequat. Duis Aute Irure Dolor In Reprehenderit In Voluptate Velit Esse Cillum Dolore Eu Fugiat Nulla Pariatur. Excepteur Sint Occaecat Cupidatat Non Proident, Sunt In Culpa Qui Officia Deserunt Mollit Anim Id Est Laborum', 
                     tgl_kebutuhan: '2021-08-02',
                     status: 'menunggu_persetujuan_atasan',
                     durasi: null,
@@ -53,7 +49,6 @@ export default {
                 {
                     id: 3,
                     no_permintaan: 'NSO-2021080003',
-                    no_referensi: 'SO-2021080003',
                     tgl_permintaan: '2021-08-03',
                     tujuan_permintaan: 'Lorem Ipsum',
                     tgl_kebutuhan: '2021-08-03',
@@ -65,7 +60,6 @@ export default {
                 {
                     id: 4,
                     no_permintaan: 'NSO-2021080004',
-                    no_referensi: 'SO-2021080004',
                     tgl_permintaan: '2021-08-04',
                     tujuan_permintaan: 'Lorem Ipsum',
                     tgl_kebutuhan: '2021-08-04',
@@ -76,7 +70,6 @@ export default {
                 {
                     id: 5,
                     no_permintaan: 'NSO-2021080005',
-                    no_referensi: 'SO-2021080005',
                     tgl_permintaan: '2021-08-05',
                     tujuan_permintaan: 'Lorem Ipsum',
                     tgl_kebutuhan: '2021-08-05',
@@ -88,7 +81,6 @@ export default {
                 {
                     id: 6,
                     no_permintaan: 'NSO-2021080006',
-                    no_referensi: 'SO-2021080006',
                     tgl_permintaan: '2021-08-06',
                     tujuan_permintaan: 'Lorem Ipsum',
                     tgl_kebutuhan: '2021-08-06',
@@ -202,3 +194,8 @@ export default {
         </data-table>
     </div>
 </template>
+<style>
+.maxwidthTujuan {
+    max-width: 100px;
+}
+</style>

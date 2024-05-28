@@ -487,6 +487,12 @@ return [
             'url'  => '/penjualan/transaksi',
         ],
         [
+            'text' => 'Memo Permintaan',
+            'icon' => 'fas fa-file-signature',
+            'auth' => [26],
+            'url'  => '/penjualan/memo',
+        ],
+        [
             'text' => 'Request Emiindo',
             'icon' => 'fas fa-mail-bulk',
             'auth' => [26],
