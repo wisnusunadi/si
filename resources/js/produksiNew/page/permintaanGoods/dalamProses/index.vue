@@ -1,6 +1,6 @@
 <script>
-import status from '../../../components/status.vue';
-import persentase from '../../../../emiindo/components/persentase.vue'
+import status from "../../../components/status.vue";
+import persentase from "../../../../emiindo/components/persentase.vue";
 export default {
     components: {
         status,
@@ -10,122 +10,123 @@ export default {
         return {
             headers: [
                 {
-                    text: 'Nomor Permintaan',
-                    value: 'no_permintaan'
+                    text: "Nomor Permintaan",
+                    value: "no_permintaan",
                 },
                 {
-                    text: 'Nomor Referensi',
-                    value: 'no_referensi'
+                    text: "Nomor Referensi",
+                    value: "no_referensi",
                 },
                 {
-                    text: 'Tanggal Permintaan',
-                    value: 'tgl_permintaan'
+                    text: "Tanggal Permintaan",
+                    value: "tgl_permintaan",
                 },
                 {
-                    text: 'Tujuan Permintaan',
-                    value: 'tujuan'
+                    text: "Tujuan Permintaan",
+                    value: "tujuan",
+                    align: "text-center text-truncate maxWidthTujuan"
                 },
                 {
-                    text: 'Tanggal Pengambilan',
-                    value: 'tgl_pengambilan'
+                    text: "Tanggal Pengambilan",
+                    value: "tgl_pengambilan",
                 },
                 {
-                    text: 'Durasi',
-                    value: 'durasi'
+                    text: "Durasi",
+                    value: "durasi",
                 },
                 {
-                    text: 'Jenis',
-                    value: 'jenis'
+                    text: "Jenis",
+                    value: "jenis",
                 },
                 {
-                    text: 'Status',
-                    value: 'status'
+                    text: "Status",
+                    value: "status",
                 },
                 {
-                    text: 'Persentase',
-                    value: 'persentase'
+                    text: "Persentase",
+                    value: "persentase",
                 },
                 {
-                    text: 'Aksi',
-                    value: 'aksi'
-                }
+                    text: "Aksi",
+                    value: "aksi",
+                },
             ],
-            search: '',
+            search: "",
             items: [
                 {
-                    id:1,
-                    no_permintaan: 'NSO-2021080001',
-                    no_referensi: 'SO-2021080001',
-                    tgl_permintaan: '21 Agustus 2021',
-                    tujuan: 'perhitungan persentase: jika permintaan (barang yang sudah diterima), jika peminjaman (barang yang sudah dikembalikan)',
+                    id: 1,
+                    no_permintaan: "NSO-2021080001",
+                    no_referensi: "SO-2021080001",
+                    tgl_permintaan: "21 Agustus 2021",
+                    tujuan: "perhitungan persentase: jika permintaan (barang yang sudah diterima), jika peminjaman (barang yang sudah dikembalikan)",
                     tgl_pengambilan: null,
                     durasi: null,
-                    jenis: 'permintaan',
-                    status: 'persiapan_barang',
+                    jenis: "permintaan",
+                    status: "persiapan_barang",
                     persentase: 0,
                 },
                 {
-                    id:2,
-                    no_permintaan: 'NSO-2021080002',
-                    no_referensi: 'SO-2021080002',
-                    tgl_permintaan: '21 Agustus 2021',
-                    tujuan: 'Ipsum',
+                    id: 2,
+                    no_permintaan: "NSO-2021080002",
+                    no_referensi: "SO-2021080002",
+                    tgl_permintaan: "21 Agustus 2021",
+                    tujuan: "Ipsum",
                     tgl_pengambilan: null,
                     durasi: null,
-                    jenis: 'permintaan',
-                    status: 'barang_siap_diambil',
+                    jenis: "permintaan",
+                    status: "barang_siap_diambil",
                     persentase: 0,
                 },
                 {
-                    id:3,
-                    no_permintaan: 'NSO-2021080003',
-                    no_referensi: 'SO-2021080003',
-                    tgl_permintaan: '21 Agustus 2021',
-                    tujuan: 'Dolor',
-                    tgl_pengambilan: '2024-08-22',
-                    durasi: '1 Hari',
-                    jenis: 'peminjaman',
-                    status: 'barang_keluar',
-                    persentase: 0,
-                },
-                {
-                    id:4,
-                    no_permintaan: 'NSO-2021080004',
-                    no_referensi: 'SO-2021080004',
-                    tgl_permintaan: '21 Agustus 2021',
-                    tujuan: 'Sit Amet',
-                    tgl_pengambilan: '2024-08-22',
+                    id: 4,
+                    no_permintaan: "NSO-2021080004",
+                    no_referensi: "SO-2021080004",
+                    tgl_permintaan: "21 Agustus 2021",
+                    tujuan: "Sit Amet",
+                    tgl_pengambilan: "2024-08-22",
                     durasi: null,
-                    jenis: 'permintaan',
-                    status: 'barang_keluar',
+                    jenis: "permintaan",
+                    status: "barang_keluar",
                     persentase: 0,
                 },
                 {
-                    id:5,
-                    no_permintaan: 'NSO-2021080005',
-                    no_referensi: 'SO-2021080005',
-                    tgl_permintaan: '21 Agustus 2021',
-                    tujuan: 'Consectetur',
-                    tgl_pengambilan: '2024-08-22',
-                    durasi: '3 Hari',
-                    jenis: 'peminjaman',
-                    status: 'proses_peminjaman',
+                    id: 5,
+                    no_permintaan: "NSO-2021080005",
+                    no_referensi: null,
+                    tgl_permintaan: "21 Agustus 2021",
+                    tujuan: "Consectetur",
+                    tgl_pengambilan: "2024-08-22",
+                    durasi: "3 Hari",
+                    jenis: "peminjaman",
+                    status: "proses_peminjaman",
                     persentase: 50,
                 },
                 {
                     id: 5,
-                    no_permintaan: 'NSO-2021080005',
-                    no_referensi: 'SO-2021080005',
-                    tgl_permintaan: '21 Agustus 2021',
-                    tujuan: 'Consectetur',
-                    tgl_pengambilan: '2024-08-22',
-                    durasi: '3 Hari',
-                    jenis: 'peminjaman',
-                    status: 'pengembalian',
+                    no_permintaan: "NSO-2021080005",
+                    no_referensi: null,
+                    tgl_permintaan: "21 Agustus 2021",
+                    tujuan: "Consectetur",
+                    tgl_pengambilan: "2024-08-22",
+                    durasi: "3 Hari",
+                    jenis: "peminjaman",
+                    status: "pengembalian",
                     persentase: 100,
+                },
+                {
+                    id: 6,
+                    no_permintaan: "NSO-2021080006",
+                    no_referensi: "SO-2021080006",
+                    tgl_permintaan: "21 Agustus 2021",
+                    tujuan: "Adipisicing",
+                    tgl_pengambilan: "2024-08-22",
+                    durasi: "3 Hari",
+                    jenis: "peminjaman",
+                    status: "menunggu_penerimaan_barang",
+                    persentase: 0,
                 }
             ],
-        }
+        };
     },
     methods: {
         calculateDateFromNow(date) {
@@ -134,42 +135,54 @@ export default {
             const tglKontrak = new Date(date);
             if (tglKontrak < tglSekarang) {
                 return {
-                    text: `Lebih ${moment(tglSekarang).diff(tglKontrak, 'days')} Hari`,
-                    color: 'text-danger font-weight-bold',
-                    icon: 'fas fa-exclamation-circle'
-                }
+                    text: `Lebih ${moment(tglSekarang).diff(
+                        tglKontrak,
+                        "days"
+                    )} Hari`,
+                    color: "text-danger font-weight-bold",
+                    icon: "fas fa-exclamation-circle",
+                };
             } else if (tglKontrak > tglSekarang) {
                 return {
-                    text: `${moment(tglKontrak).diff(tglSekarang, 'days')} Hari Lagi`,
-                    color: 'text-dark',
-                    icon: 'fas fa-clock'
-                }
+                    text: `${moment(tglKontrak).diff(
+                        tglSekarang,
+                        "days"
+                    )} Hari Lagi`,
+                    color: "text-dark",
+                    icon: "fas fa-clock",
+                };
             } else {
                 return {
-                    text: 'Batas Peminjaman Habis',
-                    color: 'text-danger',
-                    icon: 'fas fa-exclamation-circle'
-                }
+                    text: "Batas Peminjaman Habis",
+                    color: "text-danger",
+                    icon: "fas fa-exclamation-circle",
+                };
             }
         },
         detail({ id, jenis, status }) {
-            this.$router.push({ name: 'permintaanGoodsDetail', params: { id, selesai: false, jenis, status } });
-        }
+            this.$router.push({
+                name: "permintaanGoodsDetail",
+                params: { id, selesai: false, jenis, status },
+            });
+        },
     },
-}
+};
 </script>
 <template>
     <div>
         <div class="d-flex flex-row-reverse bd-highlight">
             <div class="p-2 bd-highlight">
-                <input type="text" class="form-control" v-model="search" placeholder="Cari...">
+                <input
+                    type="text"
+                    class="form-control"
+                    v-model="search"
+                    placeholder="Cari..."
+                />
             </div>
         </div>
         <data-table :headers="headers" :items="items" :search="search">
             <template #item.tgl_pengambilan="{ item }">
-                <div v-if="item.tgl_pengambilan">
-
-                </div>
+                <div v-if="item.tgl_pengambilan"></div>
             </template>
             <template #item.jenis="{ item }">
                 <div class="text-capitalize">
@@ -187,21 +200,37 @@ export default {
                 </div>
             </template>
             <template #item.tgl_pengambilan="{ item }">
-                <div v-if="item.jenis == 'peminjaman'">
-                    <div :class="calculateDateFromNow(item.tgl_pengambilan).color">{{
-                        dateFormat(item.tgl_pengambilan) }}</div>
-                    <small :class="calculateDateFromNow(item.tgl_pengambilan).color">
-                        <i :class="calculateDateFromNow(item.tgl_pengambilan).icon"></i>
+                {{ dateFormat(item.tgl_pengambilan) }}
+            </template>
+            <template #item.durasi="{ item }">
+                <div v-if="item.durasi">
+                    <div
+                        :class="
+                            calculateDateFromNow(item.tgl_pengambilan).color
+                        "
+                    >
+                        {{ item.durasi }}
+                    </div>
+                    <small
+                        :class="
+                            calculateDateFromNow(item.tgl_pengambilan).color
+                        "
+                    >
+                        <i
+                            :class="
+                                calculateDateFromNow(item.tgl_pengambilan).icon
+                            "
+                        ></i>
                         {{ calculateDateFromNow(item.tgl_pengambilan).text }}
                     </small>
-                </div>
-                <div v-else>
-                    {{ dateFormat(item.tgl_pengambilan) }}
                 </div>
             </template>
             <template #item.aksi="{ item }">
                 <div>
-                    <button class="btn btn-outline-primary btn-sm" @click="detail(item)">
+                    <button
+                        class="btn btn-outline-primary btn-sm"
+                        @click="detail(item)"
+                    >
                         <i class="fas fa-eye"></i>
                         Detail
                     </button>
@@ -210,3 +239,8 @@ export default {
         </data-table>
     </div>
 </template>
+<style>
+.maxWidthTujuan {
+    max-width: 200px;
+}
+</style>

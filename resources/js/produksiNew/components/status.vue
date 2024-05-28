@@ -80,6 +80,11 @@ export default {
                         class: 'badge-success',
                         text: 'Pengembalian'
                     }
+                case 'menunggu_penerimaan_barang':
+                    return {
+                        class: 'badge-secondary',
+                        text: 'Menunggu Penerimaan Barang'
+                    }
                     // permintaan barang
                 case 'permintaan': 
                     return {

@@ -97,16 +97,6 @@ export default {
                             {{ dateFormat(item.tgl_pengajuan) }}
                         </div>
                     </template>
-                    <template #item.hasil="{ item }">
-                        <div v-if="!item.hasil">
-                            <button class="btn btn-sm btn-outline-success" @click="terima">
-                                <i class="fas fa-check"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger" @click="tolakPengajuan(item)">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </template>
                 </data-table>
             </div>
         </div>

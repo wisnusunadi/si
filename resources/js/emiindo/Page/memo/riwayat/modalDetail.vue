@@ -45,7 +45,7 @@ export default {
                 swal.fire('Peringatan', 'No. Memo tidak boleh kosong', 'warning')
             } else {
                 swal.fire('Berhasil', 'Data berhasil disimpan', 'success')
-                this.closeModal()
+                this.closeModal();
             }
         },
     },
@@ -74,12 +74,24 @@ export default {
                 <div class="modal-body">
                     <div class="card">
                         <div class="card-header">
-                            <div class="row row-cols-2">
+                            <div class="row row-cols-3">
                                 <div class="col">
                                     <label for="">Nomor Permintaan</label>
                                     <div class="card nomorPermintaan">
                                         <div class="card-body">
                                             <span id="so">{{ item.no }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label for="">Nomor Memo</label>
+                                    <div class="card nomorMemo">
+                                        <div class="card-body">
+                                            <span
+                                                id="instansi"
+                                                class="text-capitalize"
+                                                >{{ item.noMemo }}</span
+                                            >
                                         </div>
                                     </div>
                                 </div>
@@ -143,22 +155,6 @@ export default {
                     </div>
 
                     <div class="card">
-                        <div class="card-header">
-                            <div class="d-flex flex-row bd-highlight mb-3">
-                                <div class="p-2 bd-highlight">
-                                    <label for="exampleInputEmail1"
-                                        >No. Memo</label
-                                    >
-                                    <input
-                                        v-model="noMemo"
-                                        type="text"
-                                        class="form-control"
-                                        id="exampleInputEmail1"
-                                        aria-describedby="emailHelp"
-                                    />
-                                </div>
-                            </div>
-                        </div>
                         <div class="card-body">
                             <div class="d-flex bd-highlight mb-3">
                                 <div class="p-2 bd-highlight">
@@ -181,19 +177,43 @@ export default {
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        @click="closeModal"
-                    >
-                        Keluar
-                    </button>
-                    <button type="button" class="btn btn-primary" @click="simpan">
-                        Simpan
-                    </button>
-                </div>
             </div>
         </div>
     </div>
 </template>
+<style>
+.nomorPermintaan {
+    background-color: #f64e60;
+    color: #fff;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+}
+
+.nomorMemo {
+    background-color: #6993FF;
+    color: #fff;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+}
+
+.divisiPermintaan {
+    background-color: #1BC5BD;
+    color: #fff;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+}
+
+.tglPermintaan {
+    background-color: #3699FF;
+    color: #fff;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+}
+
+.tglKebutuhan {
+    background-color: #212121;
+    color: #fff;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+}
+</style>
