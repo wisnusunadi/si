@@ -31,7 +31,7 @@
         }
 
         .margin-left-14 {
-            margin-left: -0.6cm;
+            margin-left: -0.55cm;
         }
 
         .small-text {
