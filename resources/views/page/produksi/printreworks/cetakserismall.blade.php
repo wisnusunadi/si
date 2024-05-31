@@ -82,7 +82,7 @@
             @else
                 <div class="{{ $classPage }}">
                     <img
-                        src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_93, 0.8, 16)) }}" />
+                        src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_93, 0.88, 16)) }}" />
                     <div class="small-text">{{ $item['noseri'] }}</div>
                 </div>
             @endif
