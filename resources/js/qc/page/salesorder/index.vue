@@ -114,7 +114,7 @@ export default {
     <div class="font-medium">
         <Header :title="title" :breadcumbs="breadcumbs" />
         <div class="card">
-            <div class="card-body">
+            <div class="card-body" v-if="!$store.state.loading">
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="pills-home-tab" data-toggle="pill" data-target="#pills-home"
@@ -135,13 +135,20 @@ export default {
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                         aria-labelledby="pills-home-tab">
-                        <dalamproses :dalam="dalamProsesData" @filter="filterDataStatusDalamProses" />
+                        <dalamproses :dalam="dalamProsesData" @filter="filterDataStatusDalamProses" @refresh="getData" />
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                         <selesaiproses :selesai="selesaiProsesData" @filter="filterDataStatusSelesaiProses" />
                     </div>
                     <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                         <batalpo :items="batalPoData" @refresh="getData" />
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" v-else>
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
                     </div>
                 </div>
             </div>

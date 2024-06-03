@@ -89,7 +89,7 @@ export default {
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
-        <div class="card">
+        <div class="card" v-if="$store.state.loading">
             <div class="card-body">
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
@@ -118,6 +118,13 @@ export default {
                     <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                         <BatalPo :items="batalPOData" @refresh="getData" />
                     </div>
+                </div>
+            </div>
+        </div>
+        <div v-else>
+            <div class="d-flex justify-content-center align-items-center" style="height: 100vh">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
                 </div>
             </div>
         </div>

@@ -657,7 +657,7 @@
                         visible: divisi_id == 15 ? true : false
                     }, {
                         data: 'array_check',
-                        className: ''
+                        className: 'hide',
                     },
                     {
                         data: 'button',
@@ -962,7 +962,7 @@
                         },
                         {
                             data: 'array',
-                            className: 'nowrap-text align-center',
+                            className: 'nowrap-text align-center hide',
                             orderable: false,
                             searchable: false
                         }
