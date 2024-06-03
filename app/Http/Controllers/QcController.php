@@ -1196,7 +1196,9 @@ class QcController extends Controller
                     $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->whereNull('riwayat_batal_po_seri.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'jumlah_part' => function ($q) {

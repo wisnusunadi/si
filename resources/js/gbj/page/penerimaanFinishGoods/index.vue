@@ -103,14 +103,14 @@ export default {
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true)
-                // const { data } = await axios.get(`/api/tfp/rakit?tahun=${this.years}`)
-                // this.items = data.map((item, index) => {
-                //     return {
-                //         no: index + 1,
-                //         datetime: this.dateTimeFormat(item.timestamp),
-                //         ...item
-                //     }
-                // })
+                const { data } = await axios.get(`/api/tfp/rakit?tahun=${this.years}`)
+                this.items = data.map((item, index) => {
+                    return {
+                        no: index + 1,
+                        datetime: this.dateTimeFormat(item.timestamp),
+                        ...item
+                    }
+                })
             } catch (error) {
                 console.log(error)
             } finally {

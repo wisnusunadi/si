@@ -2347,9 +2347,7 @@ class ProduksiController extends Controller
                 ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) != ?', [0])
                 ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) != ?', ['sum(case when dpp.status_cek = 4 then 1 else 0 end)'])
                 ->get();
-
             return response()->json($datax);
-
             // return datatables()->of($datax)
             //     ->addIndexColumn()
             //     ->addColumn('so', function ($data) {

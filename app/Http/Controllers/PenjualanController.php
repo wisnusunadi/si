@@ -9839,8 +9839,6 @@ class PenjualanController extends Controller
                 }
             }
 
-
-
             if (in_array('produk', $jenis_item)) {
                 $tf = TFProduksi::create([
                     'batal_pesanan_id' => $request->id,
@@ -9875,6 +9873,9 @@ class PenjualanController extends Controller
 
             if ($divisi == 'qc') {
                 if (in_array('produk', $jenis_item)) {
+                    RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
+                                'status' => 0
+                            ]);
                     // $ndp = NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id);
                     // if ($ndp->count() > 0) {
                     //     NoseriDetailPesanan::whereIN('id', $ndp->pluck('id')->toArray())->delete();
@@ -9889,8 +9890,6 @@ class PenjualanController extends Controller
                     //         'status' => 0
                     //     ]);
                     //     NoseriTGbj::whereIN('id', $seri_id)->delete();
-
-
                     // }
 
                 }
@@ -10121,10 +10120,9 @@ class PenjualanController extends Controller
                 'jenis' => 'part',
             );
         }
-
-
         return response()->json($obj);
     }
+
     public function batal_po_show_divisi($divisi)
     {
         $data = RiwayatBatalPo::select('riwayat_batal_po.id','riwayat_batal_po.ket', 'pesanan.so', 'pesanan.no_po', 'c_ekat.nama as c_ekat', 'c_spa.nama as c_spa', 'c_spb.nama as c_spb')
