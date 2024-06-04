@@ -18,7 +18,7 @@ export default {
     methods: {
         async getData() {
             try {
-                const { data } = await axios.get(`/api/penjualan/batal_po/log/detail/${this.detail.id}`)
+                const { data } = await axios.get(`/api/penjualan/batal_po/logistik/detail/${this.detail.id}`)
                 // group data if part
                 this.produk = data
 
@@ -89,7 +89,7 @@ export default {
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.post('/api/penjualan/batal_po/log/kirim', {
+                    axios.post('/api/penjualan/batal_po/logistik/kirim', {
                         id: this.detail.id,
                         item: produkNoSeri
                     }).then(() => {

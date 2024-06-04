@@ -51,7 +51,7 @@ export default {
                     }
                 })
 
-                const { data: batalPO } = await axios.get(`/api/penjualan/batal_po/log/show`)
+                const { data: batalPO } = await axios.get(`/api/penjualan/batal_po/logistik/show`)
                 this.batalPOData = batalPO.map((item, index) => {
                     return {
                         no: index + 1,
@@ -89,7 +89,7 @@ export default {
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
-        <div class="card" v-if="$store.state.loading">
+        <div class="card" v-if="!$store.state.loading">
             <div class="card-body">
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">

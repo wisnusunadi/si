@@ -60,7 +60,7 @@ export default {
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.post('/api/penjualan/batal_po/log/kirim_semua', {
+                    axios.post('/api/penjualan/batal_po/logistik/kirim_semua', {
                         id
                     }).then((res) => {
                         this.$swal({

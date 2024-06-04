@@ -30,7 +30,7 @@ export default {
         async getData() {
             try {
                 this.loading = true
-                const { data } = await axios.get(`/api/penjualan/batal_po/log/seri/${this.detailSelected.id}`)
+                const { data } = await axios.get(`/api/penjualan/batal_po/logistik/seri/${this.detailSelected.id}`)
                 this.noseri = data.map((item, index) => {
                     return {
                         ...item,
