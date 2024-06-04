@@ -840,6 +840,41 @@
                 }
             });
 
+            // btnsimpan
+            $(document).on('click', '#btnsimpan', function() {
+                var action = $('#form-pengiriman-update').attr('action');
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "PUT",
+                    url: action,
+                    data: $('#form-pengiriman-update').serialize(),
+                    success: function(response) {
+                        if (response['data'] == "success") {
+                            swal.fire(
+                                'Berhasil',
+                                'Berhasil melakukan ubah data Pengiriman',
+                                'success'
+                            );
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        } else if (response['data'] == "error") {
+                            swal.fire(
+                                'Gagal',
+                                'Gagal melakukan ubah data Pengiriman',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert($('#form-customer-update').serialize());
+                    }
+                });
+                return false;
+            });
+
             function ekspedisi_select(id) {
                 $('.ekspedisi_id').select2({
                     placeholder: "Pilih Ekspedisi",
