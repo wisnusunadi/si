@@ -244,8 +244,11 @@ export default {
                                                         </div>
                                                         <data-table :headers="headers" :items="items" :search="search">
                                                             <template #item.jumlah="{ item }">
-                                                                <input type="text" class="form-control"
+                                                                <input type="text" class="form-control" v-if="item.jenis == 'produk'"
                                                                     v-model="item.jumlah" @keypress="numberOnly">
+                                                                <input type="checkbox" v-if="item.qty > 0 && item.jenis != 'produk'"
+                                                                :checked="item.jumlah == item.qty" @change="item.jumlah = item.jumlah == item.qty ? 0 : item.qty"
+                                                                >
                                                             </template>
                                                         </data-table>
                                                     </div>
