@@ -568,11 +568,10 @@ class LogistikController extends Controller
                 $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($id) {
                     $q->where('detail_pesanan_produk_id', $id);
                 })->count();
-                $jumlahsudahuji = NoseriDetailPesanan::
-                leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                ->where(['noseri_detail_pesanan.status' => 'ok', 'noseri_detail_pesanan.detail_pesanan_produk_id' => $id, 'noseri_detail_pesanan.is_ready' => 0])
-                ->whereNull('riwayat_batal_po_seri.id')
-                ->count();
+                $jumlahsudahuji = NoseriDetailPesanan::leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                    ->where(['noseri_detail_pesanan.status' => 'ok', 'noseri_detail_pesanan.detail_pesanan_produk_id' => $id, 'noseri_detail_pesanan.is_ready' => 0])
+                    ->whereNull('riwayat_batal_po_seri.id')
+                    ->count();
                 $detail_pesanan = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
                     $q->where('id', $id);
                 })->get();
@@ -612,12 +611,11 @@ class LogistikController extends Controller
                     $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($id) {
                         $q->where('detail_pesanan_produk_id', $id);
                     })->count();
-                   // $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id, 'is_ready' => 0])->count();
-                    $jumlahsudahuji = NoseriDetailPesanan::
-                    leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                    ->where(['noseri_detail_pesanan.status' => 'ok', 'noseri_detail_pesanan.detail_pesanan_produk_id' => $id, 'noseri_detail_pesanan.is_ready' => 0])
-                    ->whereNull('riwayat_batal_po_seri.id')
-                    ->count();
+                    // $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id, 'is_ready' => 0])->count();
+                    $jumlahsudahuji = NoseriDetailPesanan::leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                        ->where(['noseri_detail_pesanan.status' => 'ok', 'noseri_detail_pesanan.detail_pesanan_produk_id' => $id, 'noseri_detail_pesanan.is_ready' => 0])
+                        ->whereNull('riwayat_batal_po_seri.id')
+                        ->count();
                     $s = $jumlahsudahuji - $jumlahterkirim;
                     return '<div id="jumlah_transfer">' . $s . '</div>';
                 })
@@ -626,12 +624,11 @@ class LogistikController extends Controller
                     $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($id) {
                         $q->where('detail_pesanan_produk_id', $id);
                     })->count();
-                  //  $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id, 'is_ready' => 0])->count();
-                    $jumlahsudahuji = NoseriDetailPesanan::
-                    leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                    ->where(['noseri_detail_pesanan.status' => 'ok', 'noseri_detail_pesanan.detail_pesanan_produk_id' => $id, 'noseri_detail_pesanan.is_ready' => 0])
-                    ->whereNull('riwayat_batal_po_seri.id')
-                    ->count();
+                    //  $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id, 'is_ready' => 0])->count();
+                    $jumlahsudahuji = NoseriDetailPesanan::leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                        ->where(['noseri_detail_pesanan.status' => 'ok', 'noseri_detail_pesanan.detail_pesanan_produk_id' => $id, 'noseri_detail_pesanan.is_ready' => 0])
+                        ->whereNull('riwayat_batal_po_seri.id')
+                        ->count();
                     $s = $jumlahsudahuji - $jumlahterkirim;
                     return '<input type="number" class="form-control jumlah_kirim" max="' . $s . '" min="0" value="' . $s . '" style="width:100%;" readonly="true" name="jumlah_dikirim[]"/>';
                 })
@@ -644,14 +641,14 @@ class LogistikController extends Controller
                 ->addColumn('array_check', function ($data) {
                     if (isset($data->gudangbarangjadi)) {
                         $id = $data->id;
-                       // $s = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id, 'is_ready' => 0])->DoesntHave('NoseriDetailLogistik')->get();
+                        // $s = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id, 'is_ready' => 0])->DoesntHave('NoseriDetailLogistik')->get();
 
                         $s = NoseriDetailPesanan::select('noseri_detail_pesanan.id')
-                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->where(['noseri_detail_pesanan.status' => 'ok', 'noseri_detail_pesanan.detail_pesanan_produk_id' => $id, 'noseri_detail_pesanan.is_ready' => 0])
-                        ->whereNull('riwayat_batal_po_seri.id')
-                        ->DoesntHave('NoseriDetailLogistik')
-                        ->get();
+                            ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->where(['noseri_detail_pesanan.status' => 'ok', 'noseri_detail_pesanan.detail_pesanan_produk_id' => $id, 'noseri_detail_pesanan.is_ready' => 0])
+                            ->whereNull('riwayat_batal_po_seri.id')
+                            ->DoesntHave('NoseriDetailLogistik')
+                            ->get();
 
 
                         return '<div name="array_check[]">' . $s->implode('id', ',') . '</div>';
@@ -674,13 +671,12 @@ class LogistikController extends Controller
                     $q->where('detail_pesanan_produk_id', $id);
                 })->count();
 
-                $jumlahsudahuji = NoseriDetailPesanan::
-                leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                ->where(['noseri_detail_pesanan.status' => 'ok', 'noseri_detail_pesanan.detail_pesanan_produk_id' => $id, 'noseri_detail_pesanan.is_ready' => 0])
-                ->whereNull('riwayat_batal_po_seri.id')
-                ->count();
+                $jumlahsudahuji = NoseriDetailPesanan::leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                    ->where(['noseri_detail_pesanan.status' => 'ok', 'noseri_detail_pesanan.detail_pesanan_produk_id' => $id, 'noseri_detail_pesanan.is_ready' => 0])
+                    ->whereNull('riwayat_batal_po_seri.id')
+                    ->count();
 
-               // $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id, 'is_ready' => 0])->count();
+                // $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id, 'is_ready' => 0])->count();
                 $detail_pesanan = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
                     $q->where('id', $id);
                 })->get();
@@ -701,11 +697,11 @@ class LogistikController extends Controller
                 }
             }
 
-            $datapart = DetailPesananPart::where('pesanan_id', $pesanan_id)->get();
+            $datapart = DetailPesananPart::where('pesanan_id', $pesanan_id)->DoesntHave('RiwayatBatalPoPart')->get();
 
             $datas_jasa = DetailPesananPart::where('pesanan_id', $pesanan_id)->whereHas('Sparepart', function ($q) {
                 $q->where('kode', 'LIKE', '%JASA%');
-            })->DoesntHave('DetailLogistikPart')->get();
+            })->DoesntHave('DetailLogistikPart')->DoesntHave('RiwayatBatalPoPart')->get();
 
             $pid = array();
             foreach ($datapart as $z) {
@@ -767,11 +763,10 @@ class LogistikController extends Controller
                             $q->where('detail_pesanan_produk_id', $id);
                         })->count();
 
-                        $jumlahsudahuji = NoseriDetailPesanan::
-                        leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->where(['noseri_detail_pesanan.status' => 'ok', 'detail_pesanan_produk_id' => $id, 'is_ready' => 0])
-                        ->whereNull('riwayat_batal_po_seri.id')
-                        ->count();
+                        $jumlahsudahuji = NoseriDetailPesanan::leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->where(['noseri_detail_pesanan.status' => 'ok', 'detail_pesanan_produk_id' => $id, 'is_ready' => 0])
+                            ->whereNull('riwayat_batal_po_seri.id')
+                            ->count();
 
                         $s = $jumlahsudahuji - $jumlahterkirim;
                         return '<div id="jumlah_transfer">' . $s . '</div>';
@@ -789,13 +784,12 @@ class LogistikController extends Controller
                         $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($id) {
                             $q->where('detail_pesanan_produk_id', $id);
                         })->count();
-                        $jumlahsudahuji = NoseriDetailPesanan::
-                        leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->where(['noseri_detail_pesanan.status' => 'ok', 'detail_pesanan_produk_id' => $id, 'is_ready' => 0])
-                        ->whereNull('riwayat_batal_po_seri.id')
-                        ->count();
+                        $jumlahsudahuji = NoseriDetailPesanan::leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->where(['noseri_detail_pesanan.status' => 'ok', 'detail_pesanan_produk_id' => $id, 'is_ready' => 0])
+                            ->whereNull('riwayat_batal_po_seri.id')
+                            ->count();
 
-                     //   $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'is_ready' => 0, 'detail_pesanan_produk_id' => $id])->count();
+                        //   $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'is_ready' => 0, 'detail_pesanan_produk_id' => $id])->count();
                         $s = $jumlahsudahuji - $jumlahterkirim;
                         return '<input type="number" max="' . $s . '" min="0" value="' . $s . '" name="jumlah_dikirim[]" style="width:100%;" readonly="true" class="form-control jumlah_kirim"/>';
                     } else {
@@ -810,10 +804,10 @@ class LogistikController extends Controller
                     if (isset($data->gudangbarangjadi)) {
                         $id = $data->id;
                         $s = NoseriDetailPesanan::select('noseri_detail_pesanan.id')
-                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
-                        ->where(['noseri_detail_pesanan.status' => 'ok', 'is_ready' => 0, 'detail_pesanan_produk_id' => $id])
-                        ->whereNull('riwayat_batal_po_seri.id')
-                        ->DoesntHave('NoseriDetailLogistik')->get();
+                            ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->where(['noseri_detail_pesanan.status' => 'ok', 'is_ready' => 0, 'detail_pesanan_produk_id' => $id])
+                            ->whereNull('riwayat_batal_po_seri.id')
+                            ->DoesntHave('NoseriDetailLogistik')->get();
                         return '<div name="array_check[]">' . $s->implode('id', ',') . '</div>';
                     }
                 })
@@ -863,7 +857,7 @@ class LogistikController extends Controller
     }
     public function get_noseri_so_belum_kirim($id, $array)
     {
- // dd($id);
+        // dd($id);
         // dd($id);
         $arr = explode(',', $array);
         // $data = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $id, 'status' => 'ok'])->doesntHave('NoseriDetailLogistik')->get();
@@ -1577,7 +1571,7 @@ class LogistikController extends Controller
                 'cekatbatal' => function ($q) {
                     $q->selectRaw('coalesce(count(ekatalog.id), 0)')
                         ->from('ekatalog')
-                        ->where('ekatalog.status','batal')
+                        ->where('ekatalog.status', 'batal')
                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
                 },
                 'cqcpart' => function ($q) {
@@ -1636,7 +1630,7 @@ class LogistikController extends Controller
                 'cekatbatal' => function ($q) {
                     $q->selectRaw('coalesce(count(ekatalog.id), 0)')
                         ->from('ekatalog')
-                        ->where('ekatalog.status','batal')
+                        ->where('ekatalog.status', 'batal')
                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
                 },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
@@ -1722,7 +1716,7 @@ class LogistikController extends Controller
                 'cekatbatal' => function ($q) {
                     $q->selectRaw('coalesce(count(ekatalog.id), 0)')
                         ->from('ekatalog')
-                        ->where('ekatalog.status','batal')
+                        ->where('ekatalog.status', 'batal')
                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
                 },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
@@ -1823,7 +1817,7 @@ class LogistikController extends Controller
                 'cekatbatal' => function ($q) {
                     $q->selectRaw('coalesce(count(ekatalog.id), 0)')
                         ->from('ekatalog')
-                        ->where('ekatalog.status','batal')
+                        ->where('ekatalog.status', 'batal')
                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
                 },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
@@ -1925,15 +1919,13 @@ class LogistikController extends Controller
             $jenis = get_jenis($item->so);
             $item->jenis = $jenis;
             $item->jenis_id = get_jenis_id($item, get_jenis($item->so));
-           // $item->customer = $item->cbatalpo;
+            // $item->customer = $item->cbatalpo;
             $item->customer = getCustomer($item);
             $item->persentase = getPersentase($item);
             $item->showDetail = $item->cqcprd + $item->cqcpart + $item->ctfjasa;
             return $item;
         });
-
         return response()->json($data);
-
     }
 
     public function get_data_selesai_so($years)
@@ -2028,7 +2020,7 @@ class LogistikController extends Controller
             'cekatbatal' => function ($q) {
                 $q->selectRaw('coalesce(count(ekatalog.id), 0)')
                     ->from('ekatalog')
-                    ->where('ekatalog.status','batal')
+                    ->where('ekatalog.status', 'batal')
                     ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
             },
         ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
@@ -2059,26 +2051,27 @@ class LogistikController extends Controller
             left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
             where detail_pesanan.pesanan_id = pesanan.id
             having count(noseri_logistik.id) > 0)');
-        })->addSelect(['tgl_kirim_min' => function ($q) {
-            $q->selectRaw('MIN(logistik.tgl_kirim)')
-                ->from('logistik')
-                ->leftjoin('detail_logistik', 'detail_logistik.logistik_id', '=', 'logistik.id')
-                ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
-                ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-                ->limit(1);
-        }, 'tgl_kirim_max' => function ($q) {
-            $q->selectRaw('MAX(logistik.tgl_kirim)')
-                ->from('logistik')
-                ->leftjoin('detail_logistik', 'detail_logistik.logistik_id', '=', 'logistik.id')
-                ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
-                ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-                ->limit(1);
-        },
+        })->addSelect([
+            'tgl_kirim_min' => function ($q) {
+                $q->selectRaw('MIN(logistik.tgl_kirim)')
+                    ->from('logistik')
+                    ->leftjoin('detail_logistik', 'detail_logistik.logistik_id', '=', 'logistik.id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+                    ->limit(1);
+            }, 'tgl_kirim_max' => function ($q) {
+                $q->selectRaw('MAX(logistik.tgl_kirim)')
+                    ->from('logistik')
+                    ->leftjoin('detail_logistik', 'detail_logistik.logistik_id', '=', 'logistik.id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+                    ->limit(1);
+            },
         ])
-        ->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])
-        ->whereYear('created_at',  $years)->whereNotIn('log_id', [7,20])->orderByDesc('created_at');
+            ->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])
+            ->whereYear('created_at',  $years)->whereNotIn('log_id', [7, 20])->orderByDesc('created_at');
 
         $part = Pesanan::whereIn('id', function ($q) {
             $q->select('pesanan.id')
@@ -2107,7 +2100,7 @@ class LogistikController extends Controller
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                 ->limit(1);
         }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)
-        ->whereNotIn('log_id', [7,20])->orderByDesc('created_at');
+            ->whereNotIn('log_id', [7, 20])->orderByDesc('created_at');
 
 
         $partjasa = Pesanan::whereIn('id', function ($q) {
@@ -2138,7 +2131,7 @@ class LogistikController extends Controller
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                 ->limit(1);
         }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)
-        ->whereNotIn('log_id', [7,20])->orderByDesc('created_at')->union($prd)->union($part)->get();
+            ->whereNotIn('log_id', [7, 20])->orderByDesc('created_at')->union($prd)->union($part)->get();
 
         $data = $partjasa;
         return response()->json($data);
@@ -2934,7 +2927,6 @@ class LogistikController extends Controller
             } else if ($dataeks == "" && $datanoneks != "") {
                 $data = $datanoneks;
             }
-
         } else if ($pengiriman == "semua" && $provinsi != "semua" && $jenis_penjualan == "semua") {
             $ekatalogeks = "";
             $spaeks = "";
@@ -5344,7 +5336,6 @@ class LogistikController extends Controller
                     if ($item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363) {
                         $tas = true;
                     }
-
                 }
 
                 $produk[$id]["detail"][] = array(

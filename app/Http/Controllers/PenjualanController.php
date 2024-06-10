@@ -89,7 +89,7 @@ class PenjualanController extends Controller
                     'nama' => $d->PenjualanProduk->nama,
                     'jumlah' => $d->jumlah,
                     'jumlah_batal' =>  $d->RiwayatBatalPoPaket ? $d->RiwayatBatalPoPaket->jumlah : 0,
-                    'jumlah_retur' =>   $d->RiwayatReturPoPaket ? $d->RiwayatReturPoPaket->jumlah : 0,
+                    'jumlah_retur' =>   $d->RiwayatReturPoPaket ? $d->getJumlahRetur() : 0,
                     'ongkir' => $d->ongkir,
                     'harga' => $d->harga,
                     'jenis' => 'paket',
@@ -3234,7 +3234,6 @@ class PenjualanController extends Controller
                         ->where('detail_pesanan_produk.status_cek', '4')
                         ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 }
-
             ])->whereYear('tgl_buat',  $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
         } else {
             $x = explode(',', $value);
@@ -3321,6 +3320,7 @@ class PenjualanController extends Controller
             $item->persentase = persentase_and_status($item);
             $item->is_batal = $this->cekBatal($item);
             $item->is_retur = $this->cekRetur($item);
+            $item->is_editDo = $this->cekEditDoEkat($item);
             return $item;
         });
 
@@ -3344,6 +3344,14 @@ class PenjualanController extends Controller
                         ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('logistik.status_id', 10)
                         ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'cterkirimpart' => function ($q) {
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                        ->from('detail_logistik_part')
+                        ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                        ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik_part.logistik_id')
+                        ->where('logistik.status_id', 10)
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
                 },
                 'c_batal' => function ($q) {
                     $q->selectRaw('coalesce(count(riwayat_batal_po.id),0)')
@@ -3441,6 +3449,14 @@ class PenjualanController extends Controller
                         ->where('logistik.status_id', 10)
                         ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
                 },
+                'cterkirimpart' => function ($q) {
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                        ->from('detail_logistik_part')
+                        ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                        ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik_part.logistik_id')
+                        ->where('logistik.status_id', 10)
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                },
                 'c_batal' => function ($q) {
                     $q->selectRaw('coalesce(count(riwayat_batal_po.id),0)')
                         ->from('riwayat_batal_po')
@@ -3534,8 +3550,10 @@ class PenjualanController extends Controller
         $data = $data->map(function ($item) {
             $item->persentase = $this->persentase_and_status($item);
             $item->provinsi = $this->getProvinsi($item);
-            $item->is_batal = $this->cekBatal($item);
+            $item->is_batal = $this->cekBatalNonEkat($item);
             $item->is_retur = $this->cekRetur($item);
+            $item->is_edit = $this->cekEdit($item);
+            $item->is_editDo = $this->cekEditDo($item);
             return $item;
         });
 
@@ -3579,9 +3597,43 @@ class PenjualanController extends Controller
         //     return false;
         // }
     }
+    public function cekEditDoEkat($item)
+    {
+        if ($item->cterkirim = 0 && $item->status = 'sepakat') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function cekEditDo($item)
+    {
+        if ($item->cterkirim = 0 || $item->terkirimpart) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function cekEdit($item)
+    {
+        if ((($item->cjumlahprd > 0 && $item->c_tf == 0) || (($item->cujipart + $item->cujijasa) == 0 && $item->cjumlahpart > 0))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function cekBatalNonEkat($item)
+    {
+        if ((($item->cterkirim == 0 && $item->c_tf > 0) || ($item->cterkirimpart == 0 && $item->cjumlahpart > 0)) && $item->Pesanan->log_id != 20 && $item->c_retur == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function cekRetur($item)
     {
-        if ($item->cterkirim > 0 && $item->c_batal == 0 && $item->Pesanan->log_id != 20 && $item->c_retur == 0) {
+        if ($item->cterkirim > 0 && $item->c_batal == 0 && $item->Pesanan->log_id != 20) {
+            // if ($item->cterkirim > 0 && $item->c_batal == 0 && $item->Pesanan->log_id != 20 && $item->c_retur == 0) {
             return true;
         } else {
             return false;
@@ -3605,6 +3657,14 @@ class PenjualanController extends Controller
                         ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->where('logistik.status_id', 10)
                         ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                },
+                'cterkirimpart' => function ($q) {
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                        ->from('detail_logistik_part')
+                        ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                        ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik_part.logistik_id')
+                        ->where('logistik.status_id', 10)
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
                 },
                 'c_batal' => function ($q) {
                     $q->selectRaw('coalesce(count(riwayat_batal_po.id),0)')
@@ -3694,6 +3754,14 @@ class PenjualanController extends Controller
                         ->where('logistik.status_id', 10)
                         ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
                 },
+                'cterkirimpart' => function ($q) {
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                        ->from('detail_logistik_part')
+                        ->leftjoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                        ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik_part.logistik_id')
+                        ->where('logistik.status_id', 10)
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                },
                 'c_batal' => function ($q) {
                     $q->selectRaw('coalesce(count(riwayat_batal_po.id),0)')
                         ->from('riwayat_batal_po')
@@ -3778,8 +3846,10 @@ class PenjualanController extends Controller
         $data = $data->map(function ($item) {
             $item->persentase = $this->persentase_and_status($item);
             $item->provinsi = $this->getProvinsi($item);
-            $item->is_batal = $this->cekBatal($item);
+            $item->is_batal = $this->cekBatalNonEkat($item);
             $item->is_retur = $this->cekRetur($item);
+            $item->is_edit = $this->cekEdit($item);
+            $item->is_editDo = $this->cekEditDo($item);
             return $item;
         });
 
@@ -9497,22 +9567,22 @@ class PenjualanController extends Controller
         $items->item = $object;
 
         $obj =  json_decode(json_encode($items), FALSE);
-       // dd($obj);
-      DB::beginTransaction();
+        // dd($obj);
+        DB::beginTransaction();
         try {
 
             $seri_id = array();
             $seri_batal = array();
             //code...
 
-            foreach ($obj->item as $produk){
+            foreach ($obj->item as $produk) {
                 $jenis_item[] = $produk->jenis;
                 if ($produk->jenis == 'part') {
                     $part_id[] = $produk->detail_pesanan_part_id;
                     $batal_part_id[] = $produk->id;
                 }
             }
-           // dd($jenis_item);
+            // dd($jenis_item);
             if (in_array('produk', $jenis_item)) {
                 $tf = TFProduksi::create([
                     'batal_pesanan_id' => $request->id,
@@ -9562,7 +9632,7 @@ class PenjualanController extends Controller
                     }
                 }
 
-                if (in_array('part', $jenis_item)){
+                if (in_array('part', $jenis_item)) {
                     $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
                     RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
                         'status' => 0
@@ -9571,7 +9641,6 @@ class PenjualanController extends Controller
                     if ($opp->count() > 0) {
                         $opp->delete();
                     }
-
                 }
 
                 DB::commit();
@@ -9626,20 +9695,16 @@ class PenjualanController extends Controller
                                 Logistik::where('id', $logId)->delete();
                             }
                         }
-
-
                     } else {
                         NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id)->delete();
                         NoseriTGbj::whereIN('id', $seri_id)->delete();
                         RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
                             'status' => 0
                         ]);
-
-
                     }
                 }
 
-                if (in_array('part', $jenis_item)){
+                if (in_array('part', $jenis_item)) {
                     $dlp = DetailLogistikPart::whereIN('detail_pesanan_part_id', $part_id);
 
                     RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
@@ -9659,7 +9724,6 @@ class PenjualanController extends Controller
                                 Logistik::where('id', $logId)->delete();
                             }
                         }
-
                     } else {
                         $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
                         RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
@@ -9669,8 +9733,6 @@ class PenjualanController extends Controller
                         if ($opp->count() > 0) {
                             $opp->delete();
                         }
-
-
                     }
                 }
 
@@ -9874,8 +9936,8 @@ class PenjualanController extends Controller
             if ($divisi == 'qc') {
                 if (in_array('produk', $jenis_item)) {
                     RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
-                                'status' => 0
-                            ]);
+                        'status' => 0
+                    ]);
                     // $ndp = NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id);
                     // if ($ndp->count() > 0) {
                     //     NoseriDetailPesanan::whereIN('id', $ndp->pluck('id')->toArray())->delete();
@@ -9893,7 +9955,7 @@ class PenjualanController extends Controller
                     // }
 
                 }
-                if (in_array('part', $jenis_item))  {
+                if (in_array('part', $jenis_item)) {
                     $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
                     RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
                         'status' => 0
@@ -9902,7 +9964,6 @@ class PenjualanController extends Controller
                     if ($opp->count() > 0) {
                         $opp->delete();
                     }
-
                 }
 
                 DB::commit();
@@ -9912,15 +9973,15 @@ class PenjualanController extends Controller
                 ], 200);
             }
 
-            if ($divisi == 'log') {
+            if ($divisi == 'logistik') {
                 if (in_array('produk', $jenis_item)) {
                     // $ndl = NoseriDetailLogistik::select('noseri_logistik.id')
                     //     ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
                     //     ->whereIN('noseri_detail_pesanan.t_tfbj_noseri_id', $seri_id);
 
-                    // RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
-                    //     'status' => 0
-                    // ]);
+                    RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
+                        'status' => 0
+                    ]);
 
                     // if ($ndl->count() > 0) {
                     //     foreach ($ndl->get() as $noseri) {
@@ -9971,7 +10032,7 @@ class PenjualanController extends Controller
                 }
 
 
-                if (in_array('part', $jenis_item)){
+                if (in_array('part', $jenis_item)) {
                     $dlp = DetailLogistikPart::whereIN('detail_pesanan_part_id', $part_id);
 
                     RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
@@ -9991,7 +10052,6 @@ class PenjualanController extends Controller
                                 Logistik::where('id', $logId)->delete();
                             }
                         }
-
                     } else {
                         $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
                         RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
@@ -10001,8 +10061,6 @@ class PenjualanController extends Controller
                         if ($opp->count() > 0) {
                             $opp->delete();
                         }
-
-
                     }
                 }
 
@@ -10125,12 +10183,13 @@ class PenjualanController extends Controller
 
     public function batal_po_show_divisi($divisi)
     {
-        $data = RiwayatBatalPo::select('riwayat_batal_po.id','riwayat_batal_po.ket', 'pesanan.so', 'pesanan.no_po', 'c_ekat.nama as c_ekat', 'c_spa.nama as c_spa', 'c_spb.nama as c_spb')
+
+        $data = RiwayatBatalPo::select('riwayat_batal_po.id', 'riwayat_batal_po.ket', 'pesanan.so', 'pesanan.no_po', 'c_ekat.nama as c_ekat', 'c_spa.nama as c_spa', 'c_spb.nama as c_spb')
             ->addSelect([
                 'c_batal_part' => function ($q) use ($divisi) {
                     $q->selectRaw('coalesce(count(riwayat_batal_po_part.id),0)')
                         ->from('riwayat_batal_po_part')
-                        ->where('riwayat_batal_po_part.posisi', $divisi)
+                        ->where('riwayat_batal_po_part.posisi', 'qc')
                         ->where('riwayat_batal_po_part.status', 1)
                         ->whereColumn('riwayat_batal_po_part.riwayat_batal_po_id', 'riwayat_batal_po.id')
                         ->limit(1);
@@ -10295,7 +10354,7 @@ class PenjualanController extends Controller
                     $p = 2;
                 }
 
-                $ps = ['po', 'qc', 'log'];
+                $ps = ['po', 'qc', 'logistik'];
                 $obj[] = array(
                     'id' => $d->id,
                     'nama' => $d->Sparepart->nama,
@@ -10501,7 +10560,7 @@ class PenjualanController extends Controller
     public function kirim_prd_batal_po(Request $request)
     {
         $obj =  json_decode(json_encode($request->all()), FALSE);
-      //  dd($obj);
+        // dd($obj);
 
 
         DB::beginTransaction();
@@ -10511,57 +10570,18 @@ class PenjualanController extends Controller
             // $tgbj = TFProduksi::where('pesanan_id', $obj->pesanan_id);
             $po = RiwayatBatalPo::where('pesanan_id', $obj->pesanan_id);
 
-           // if ($tgbj->count() > 0) {
-                if ($po->count() > 0) {
-                    foreach ($obj->item as $item) {
-                        if ($item->jenis == 'produk') {
-                            $riwayatPrd = RiwayatBatalPoPaket::where('detail_pesanan_id', $item->id);
-                            if ($riwayatPrd->count() > 0) {
-                                $riwayats = $riwayatPrd->first();
-                                $riwayats->jumlah = $riwayats->jumlah + $item->jumlah;
-                                $riwayats->save();
-                            } else {
-                                $rb =   RiwayatBatalPoPaket::create([
-                                    'riwayat_batal_po_id' => $po->first()->id,
-                                    'detail_pesanan_id' => $item->id,
-                                    'jumlah' => $item->jumlah,
-                                ]);
-
-                                foreach ($item->produk as $produk) {
-                                    RiwayatBatalPoPrd::create([
-                                        'detail_riwayat_batal_paket_id' => $rb->id,
-                                        'gudang_barang_jadi_id' => $produk->gudang_barang_jadi_id,
-                                        'detail_pesanan_produk_id' => $produk->id
-                                    ]);
-                                }
-                            }
+            // if ($tgbj->count() > 0) {
+            if ($po->count() > 0) {
+                foreach ($obj->item as $item) {
+                    if ($item->jenis == 'produk') {
+                        $riwayatPrd = RiwayatBatalPoPaket::where('detail_pesanan_id', $item->id);
+                        if ($riwayatPrd->count() > 0) {
+                            $riwayats = $riwayatPrd->first();
+                            $riwayats->jumlah = $riwayats->jumlah + $item->jumlah;
+                            $riwayats->save();
                         } else {
-                            $riwayatPart = RiwayatBatalPoPart::where('detail_pesanan_part_id', $item->id);
-                            if ($riwayatPart->count() > 0) {
-                                $riwayats = $riwayatPart->first();
-                                $riwayats->jumlah = $riwayats->jumlah + $item->jumlah;
-                                $riwayats->save();
-                            } else {
-                                RiwayatBatalPoPart::create([
-                                    'riwayat_batal_po_id' => $po->first()->id,
-                                    'detail_pesanan_part_id' => $item->id,
-                                    'jumlah' => $item->jumlah,
-                                    'jenis' => $item->jenis,
-                                    'posisi' => $item->posisi,
-                                    'status' => $item->posisi == 'po' ? 0 : 1,
-                                ]);
-                            }
-                        }
-                    }
-                } else {
-                    $po =  RiwayatBatalPo::create([
-                        'pesanan_id' => $obj->pesanan_id,
-                        'ket' => $obj->ket,
-                    ]);
-                    foreach ($obj->item as $item) {
-                        if ($item->jenis == 'produk') {
-                            $rb =     RiwayatBatalPoPaket::create([
-                                'riwayat_batal_po_id' => $po->id,
+                            $rb =   RiwayatBatalPoPaket::create([
+                                'riwayat_batal_po_id' => $po->first()->id,
                                 'detail_pesanan_id' => $item->id,
                                 'jumlah' => $item->jumlah,
                             ]);
@@ -10573,9 +10593,16 @@ class PenjualanController extends Controller
                                     'detail_pesanan_produk_id' => $produk->id
                                 ]);
                             }
+                        }
+                    } else {
+                        $riwayatPart = RiwayatBatalPoPart::where('detail_pesanan_part_id', $item->id);
+                        if ($riwayatPart->count() > 0) {
+                            $riwayats = $riwayatPart->first();
+                            $riwayats->jumlah = $riwayats->jumlah + $item->jumlah;
+                            $riwayats->save();
                         } else {
                             RiwayatBatalPoPart::create([
-                                'riwayat_batal_po_id' => $po->id,
+                                'riwayat_batal_po_id' => $po->first()->id,
                                 'detail_pesanan_part_id' => $item->id,
                                 'jumlah' => $item->jumlah,
                                 'jenis' => $item->jenis,
@@ -10585,31 +10612,65 @@ class PenjualanController extends Controller
                         }
                     }
                 }
-         //   } else {
-                $itemx['item'] = $obj->item;
-                $itemx['ket'] =  $obj->ket;
-
-                SystemLog::create([
-                    'tipe' => 'Penjualan',
-                    'header' =>  $obj->pesanan_id,
-                    'subjek' =>   'Batal PO',
-                    'response' =>   json_encode($itemx),
+            } else {
+                $po =  RiwayatBatalPo::create([
+                    'pesanan_id' => $obj->pesanan_id,
+                    'ket' => $obj->ket,
                 ]);
+                foreach ($obj->item as $item) {
+                    if ($item->jenis == 'produk') {
+                        $rb =     RiwayatBatalPoPaket::create([
+                            'riwayat_batal_po_id' => $po->id,
+                            'detail_pesanan_id' => $item->id,
+                            'jumlah' => $item->jumlah,
+                        ]);
+
+                        foreach ($item->produk as $produk) {
+                            RiwayatBatalPoPrd::create([
+                                'detail_riwayat_batal_paket_id' => $rb->id,
+                                'gudang_barang_jadi_id' => $produk->gudang_barang_jadi_id,
+                                'detail_pesanan_produk_id' => $produk->id
+                            ]);
+                        }
+                    } else {
+                        RiwayatBatalPoPart::create([
+                            'riwayat_batal_po_id' => $po->id,
+                            'detail_pesanan_part_id' => $item->id,
+                            'jumlah' => $item->jumlah,
+                            'jenis' => $item->jenis,
+                            'posisi' => $item->posisi,
+                            'status' => $item->posisi == 'po' ? 0 : 1,
+                        ]);
+                    }
+                }
+            }
+            //   } else {
+            $itemx['item'] = $obj->item;
+            $itemx['ket'] =  $obj->ket;
+
+            SystemLog::create([
+                'tipe' => 'Penjualan',
+                'header' =>  $obj->pesanan_id,
+                'subjek' =>   'Batal PO',
+                'response' =>   json_encode($itemx),
+            ]);
             //}
 
 
-    //Penjualan PO
-    $j_po = Pesanan::find($obj->pesanan_id)->DetailPesanan->sum('jumlah');
+            //Penjualan PO
+            $j_po = Pesanan::find($obj->pesanan_id)->DetailPesanan->sum('jumlah');
+            $j_poPart = Pesanan::find($obj->pesanan_id)->DetailPesananPart->sum('jumlah');
 
-    //Riwayat Batal
-    $j_batal = RiwayatBatalPo::where('pesanan_id',$obj->pesanan_id)->first()->RiwayatBatalPoPaket->sum('jumlah');
+            //Riwayat Batal
+            $j_batal = RiwayatBatalPo::where('pesanan_id', $obj->pesanan_id)->first()->RiwayatBatalPoPaket->sum('jumlah');
+            $j_batalPart = RiwayatBatalPo::where('pesanan_id', $obj->pesanan_id)->first()->RiwayatBatalPoPart->sum('jumlah');
 
 
-    if ($j_po == $j_batal){
-        $p = Pesanan::find($obj->pesanan_id);
-        $p->log_id = 20;
-        $p->save();
-    }
+            if (($j_po + $j_poPart) == ($j_batal + $j_batalPart)) {
+                $p = Pesanan::find($obj->pesanan_id);
+                $p->log_id = 20;
+                $p->save();
+            }
 
             DB::commit();
             return response()->json([
