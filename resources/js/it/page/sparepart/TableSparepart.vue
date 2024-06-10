@@ -1,117 +1,143 @@
 <script>
-import axios from 'axios'
-import Modal from './modalCreateEdit.vue'
-import modalSelectData from './modalSelectData.vue';
+import axios from "axios";
+import Modal from "./modalCreateEdit.vue";
+import modalSelectData from "./modalSelectData.vue";
 export default {
     components: { Modal, modalSelectData },
-    props: ['part'],
+    props: ["part"],
     data() {
         return {
-            search: '',
+            search: "",
             header: [
                 {
-                    text: 'id',
-                    value: 'id',
-                    sortable: false
+                    text: "id",
+                    value: "id",
+                    sortable: false,
                 },
                 {
-                    text: 'Kategori',
-                    value: 'kategori',
+                    text: "Kategori",
+                    value: "kategori",
                 },
                 {
-                    text: 'Kode',
-                    value: 'kode',
+                    text: "Kode",
+                    value: "kode",
                 },
                 {
-                    text: 'Nama',
-                    value: 'nama',
-                }
+                    text: "Nama",
+                    value: "nama",
+                },
             ],
             showDialog: false,
             selectPart: [],
             selectAll: false,
             showModalSelect: false,
-            sparepartnotfound: []
-        }
+            sparepartnotfound: [],
+        };
     },
     methods: {
         async deletePart() {
             this.$swal({
-                text: `Yakin ingin menghapus ${this.selectPart.length} produk?`,
-                icon: 'warning',
+                text: `Yakin ingin menghapus ${this.selectPart.length} sparepart?`,
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: 'Ya',
-                cancelButtonText: 'Tidak',
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonText: "Ya",
+                cancelButtonText: "Tidak",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
             }).then(async (result) => {
-                {
-                    try {
-                        const { data } = await axios.delete('/api/sparepart', {
-                            data: this.selectPart
-                        })
-                        this.$swal('Berhasil', 'Sparepart berhasil dihapus', 'success')
-                        this.$emit('refresh')
-                    } catch (error) {
-                        this.$swal('Gagal', 'Sparepart gagal dihapus', 'error')
+                if (result.isConfirmed) {
+                    {
+                        try {
+                            const { data } = await axios.delete(
+                                "/api/sparepart",
+                                {
+                                    data: this.selectPart,
+                                }
+                            );
+                            this.$swal(
+                                "Berhasil",
+                                "Sparepart berhasil dihapus",
+                                "success"
+                            );
+                            this.$emit("refresh");
+                        } catch (error) {
+                            this.$swal(
+                                "Gagal",
+                                "Sparepart gagal dihapus",
+                                "error"
+                            );
+                        }
                     }
-                } 
-            })
+                }
+            });
         },
         checkAll() {
             if (this.selectAll) {
-                this.selectPart = [...this.part]
+                this.selectPart = [...this.part];
             } else {
-                this.selectPart = []
+                this.selectPart = [];
             }
         },
         refresh() {
-            this.$emit('refresh')
+            this.$emit("refresh");
         },
         selectData(data) {
-            let sparepartnotfound = []
+            let sparepartnotfound = [];
 
             let sparepartarray = data.split(/\n+/);
-            sparepartarray = sparepartarray.filter((item) => item !== '')
-            sparepartarray = [...new Set(sparepartarray)]
+            sparepartarray = sparepartarray.filter((item) => item !== "");
+            sparepartarray = [...new Set(sparepartarray)];
 
             for (let i = 0; i < sparepartarray.length; i++) {
-                let found = false
+                let found = false;
                 for (let j = 0; j < this.part.length; j++) {
                     if (this.part[j].nama === sparepartarray[i]) {
-                        this.selectPart.push(this.part[j])
-                        found = true
-                        break
+                        this.selectPart.push(this.part[j]);
+                        found = true;
+                        break;
                     }
                 }
                 if (!found) {
-                    sparepartnotfound.push(sparepartarray[i])
+                    sparepartnotfound.push(sparepartarray[i]);
                 }
             }
 
             if (sparepartnotfound.length) {
-                this.$swal('Gagal', `Sparepart tidak ditemukan`, 'error')
-                this.sparepartnotfound = sparepartnotfound.join('\n')
+                this.$swal("Gagal", `Sparepart tidak ditemukan`, "error");
+                this.sparepartnotfound = sparepartnotfound.join("\n");
             }
-        }
+        },
     },
-}
+};
 </script>
 <template>
     <div>
         <!-- <modalSelectData :openDialog="showModalSelect" @simpan="selectData" @close="showModalSelect = false"></modalSelectData> -->
-        <Modal @closeDialog="showDialog = false" @refresh="refresh" v-if="showDialog" :dialogCreate="showDialog"
-            :part="part" :selectPart="selectPart"></Modal>
+        <Modal
+            @closeDialog="showDialog = false"
+            @refresh="refresh"
+            v-if="showDialog"
+            :dialogCreate="showDialog"
+            :part="part"
+            :selectPart="selectPart"
+        ></Modal>
         <div class="d-flex">
             <v-card flat class="ml-5 mr-auto">
-                <v-text-field v-model="search" placeholder="Cari Sparepart"></v-text-field>
+                <v-text-field
+                    v-model="search"
+                    placeholder="Cari Sparepart"
+                ></v-text-field>
             </v-card>
             <v-card flat>
                 <!-- <v-btn @click="showModalSelect = true">Pilih Data</v-btn> -->
                 <v-btn color="primary" @click="showDialog = true">
                     Tambah atau Edit Sparepart
                 </v-btn>
-                <v-btn color="error" v-if="selectPart.length" @click="deletePart">
+                <v-btn
+                    color="error"
+                    v-if="selectPart.length"
+                    @click="deletePart"
+                >
                     Hapus Sparepart
                 </v-btn>
             </v-card>
@@ -124,8 +150,13 @@ export default {
             </template>
 
             <template #header.id>
-                <v-checkbox :indeterminate="selectPart.length > 0 && selectPart.length < part.length"
-                    @click.native="checkAll" v-model="selectAll"></v-checkbox>
+                <v-checkbox
+                    :indeterminate="
+                        selectPart.length > 0 && selectPart.length < part.length
+                    "
+                    @click.native="checkAll"
+                    v-model="selectAll"
+                ></v-checkbox>
             </template>
 
             <template #item.id="{ item }">
