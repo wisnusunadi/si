@@ -3615,7 +3615,7 @@ class PenjualanController extends Controller
     }
     public function cekEdit($item)
     {
-        if ((($item->cjumlahprd > 0 && $item->c_tf == 0) || (($item->cujipart + $item->cujijasa) == 0 && $item->cjumlahpart > 0))) {
+        if ((($item->cjumlahprd > 0 && $item->c_tf == 0) || (($item->cujipart + $item->cujijasa) == 0 && $item->cjumlahpart > 0) && $item->Pesanan->log_id != 20)) {
             return true;
         } else {
             return false;
@@ -9619,8 +9619,8 @@ class PenjualanController extends Controller
                 if (in_array('produk', $jenis_item)) {
                     $ndp = NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id);
                     if ($ndp->count() > 0) {
-                        NoseriDetailPesanan::whereIN('id', $ndp->pluck('id')->toArray())->delete();
-                        NoseriTGbj::whereIN('id', $seri_id)->delete();
+                        // NoseriDetailPesanan::whereIN('id', $ndp->pluck('id')->toArray())->delete();
+                        // NoseriTGbj::whereIN('id', $seri_id)->delete();
                         RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
                             'status' => 0
                         ]);
@@ -9628,19 +9628,19 @@ class PenjualanController extends Controller
                         RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
                             'status' => 0
                         ]);
-                        NoseriTGbj::whereIN('id', $seri_id)->delete();
+                        // NoseriTGbj::whereIN('id', $seri_id)->delete();
                     }
                 }
 
                 if (in_array('part', $jenis_item)) {
-                    $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
+                    // $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
                     RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
                         'status' => 0
                     ]);
 
-                    if ($opp->count() > 0) {
-                        $opp->delete();
-                    }
+                    // if ($opp->count() > 0) {
+                    //     $opp->delete();
+                    // }
                 }
 
                 DB::commit();
@@ -9650,7 +9650,7 @@ class PenjualanController extends Controller
                 ], 200);
             }
 
-            if ($divisi == 'log') {
+            if ($divisi == 'logistik') {
                 if (in_array('produk', $jenis_item)) {
                     $ndl = NoseriDetailLogistik::select('noseri_logistik.id')
                         ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
@@ -9663,41 +9663,41 @@ class PenjualanController extends Controller
                     if ($ndl->count() > 0) {
                         foreach ($ndl->get() as $noseri) {
 
-                            //Cek Noseri
-                            $seriLog =  NoseriDetailLogistik::find($noseri->id);
+                            // //Cek Noseri
+                            // $seriLog =  NoseriDetailLogistik::find($noseri->id);
 
-                            //Cek Detail Logistik
-                            $detail = DetailLogistik::find($seriLog->detail_logistik_id);
-                            $detailId = $detail->id;
+                            // //Cek Detail Logistik
+                            // $detail = DetailLogistik::find($seriLog->detail_logistik_id);
+                            // $detailId = $detail->id;
 
-                            //Cek Logistik
-                            $log = Logistik::find($detail->logistik_id);
-                            $logId = $log->id;
+                            // //Cek Logistik
+                            // $log = Logistik::find($detail->logistik_id);
+                            // $logId = $log->id;
 
-                            //Cek Logistik Part
-                            $partLog = DetailLogistikPart::where('logistik_id', $logId)->count();
+                            // //Cek Logistik Part
+                            // $partLog = DetailLogistikPart::where('logistik_id', $logId)->count();
 
-                            //Hapus Noseri
-                            NoseriDetailLogistik::where('id', $noseri->id)->delete();
+                            // //Hapus Noseri
+                            // NoseriDetailLogistik::where('id', $noseri->id)->delete();
 
-                            //Cek dan Hapus
-                            $cekNdl = NoseriDetailLogistik::where('detail_logistik_id', $detailId)->count();
+                            // //Cek dan Hapus
+                            // $cekNdl = NoseriDetailLogistik::where('detail_logistik_id', $detailId)->count();
 
-                            //dd($cekNdl);
+                            // //dd($cekNdl);
 
-                            if ($cekNdl == 0) {
-                                DetailLogistik::where('id', $detailId)->delete();
-                            }
+                            // if ($cekNdl == 0) {
+                            //     DetailLogistik::where('id', $detailId)->delete();
+                            // }
 
-                            $cekL = DetailLogistik::where('logistik_id', $logId)->count();
+                            // $cekL = DetailLogistik::where('logistik_id', $logId)->count();
 
-                            if ($cekL == 0 && $partLog == 0) {
-                                Logistik::where('id', $logId)->delete();
-                            }
+                            // if ($cekL == 0 && $partLog == 0) {
+                            //     Logistik::where('id', $logId)->delete();
+                            // }
                         }
                     } else {
-                        NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id)->delete();
-                        NoseriTGbj::whereIN('id', $seri_id)->delete();
+                        // NoseriDetailPesanan::whereIN('t_tfbj_noseri_id', $seri_id)->delete();
+                        // NoseriTGbj::whereIN('id', $seri_id)->delete();
                         RiwayatBatalPoSeri::whereIN('id', $seri_batal)->update([
                             'status' => 0
                         ]);
@@ -9712,27 +9712,27 @@ class PenjualanController extends Controller
                     ]);
 
                     if ($dlp->count() > 0) {
-                        foreach ($dlp->get() as $d) {
+                        // foreach ($dlp->get() as $d) {
 
-                            $logId = $d->logistik_id;
-                            DetailLogistikPart::where('id', $d->id)->delete();
+                        //     $logId = $d->logistik_id;
+                        //     DetailLogistikPart::where('id', $d->id)->delete();
 
-                            $partLog =  DetailLogistikPart::where('logistik_id', $logId)->count();
-                            $cekL = DetailLogistik::where('logistik_id', $logId)->count();
+                        //     $partLog =  DetailLogistikPart::where('logistik_id', $logId)->count();
+                        //     $cekL = DetailLogistik::where('logistik_id', $logId)->count();
 
-                            if ($cekL == 0 && $partLog == 0) {
-                                Logistik::where('id', $logId)->delete();
-                            }
-                        }
+                        //     if ($cekL == 0 && $partLog == 0) {
+                        //         Logistik::where('id', $logId)->delete();
+                        //     }
+                        // }
                     } else {
-                        $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
+                        // $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
                         RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
                             'status' => 0
                         ]);
 
-                        if ($opp->count() > 0) {
-                            $opp->delete();
-                        }
+                        // if ($opp->count() > 0) {
+                        //     $opp->delete();
+                        // }
                     }
                 }
 
@@ -9961,9 +9961,9 @@ class PenjualanController extends Controller
                         'status' => 0
                     ]);
 
-                    if ($opp->count() > 0) {
-                        $opp->delete();
-                    }
+                    // if ($opp->count() > 0) {
+                    //     $opp->delete();
+                    // }
                 }
 
                 DB::commit();
@@ -10039,29 +10039,29 @@ class PenjualanController extends Controller
                         'status' => 0
                     ]);
 
-                    if ($dlp->count() > 0) {
-                        foreach ($dlp->get() as $d) {
+                    // if ($dlp->count() > 0) {
+                    //     foreach ($dlp->get() as $d) {
 
-                            $logId = $d->logistik_id;
-                            DetailLogistikPart::where('id', $d->id)->delete();
+                    //         $logId = $d->logistik_id;
+                    //         DetailLogistikPart::where('id', $d->id)->delete();
 
-                            $partLog =  DetailLogistikPart::where('logistik_id', $logId)->count();
-                            $cekL = DetailLogistik::where('logistik_id', $logId)->count();
+                    //         $partLog =  DetailLogistikPart::where('logistik_id', $logId)->count();
+                    //         $cekL = DetailLogistik::where('logistik_id', $logId)->count();
 
-                            if ($cekL == 0 && $partLog == 0) {
-                                Logistik::where('id', $logId)->delete();
-                            }
-                        }
-                    } else {
-                        $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
-                        RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
-                            'status' => 0
-                        ]);
+                    //         if ($cekL == 0 && $partLog == 0) {
+                    //             Logistik::where('id', $logId)->delete();
+                    //         }
+                    //     }
+                    // } else {
+                    //     $opp = OutgoingPesananPart::whereIN('detail_pesanan_part_id', $part_id);
+                    //     RiwayatBatalPoPart::whereIN('id', $batal_part_id)->update([
+                    //         'status' => 0
+                    //     ]);
 
-                        if ($opp->count() > 0) {
-                            $opp->delete();
-                        }
-                    }
+                    //     if ($opp->count() > 0) {
+                    //         $opp->delete();
+                    //     }
+                    // }
                 }
 
                 DB::commit();
@@ -10189,7 +10189,7 @@ class PenjualanController extends Controller
                 'c_batal_part' => function ($q) use ($divisi) {
                     $q->selectRaw('coalesce(count(riwayat_batal_po_part.id),0)')
                         ->from('riwayat_batal_po_part')
-                        ->where('riwayat_batal_po_part.posisi', 'qc')
+                        ->where('riwayat_batal_po_part.posisi', $divisi)
                         ->where('riwayat_batal_po_part.status', 1)
                         ->whereColumn('riwayat_batal_po_part.riwayat_batal_po_id', 'riwayat_batal_po.id')
                         ->limit(1);
