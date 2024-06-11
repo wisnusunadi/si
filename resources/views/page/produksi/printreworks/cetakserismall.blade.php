@@ -31,7 +31,7 @@
         }
 
         .margin-left-14 {
-            margin-left: -0.7cm;
+            margin-left: -0.55cm;
         }
 
         .small-text {
@@ -82,7 +82,7 @@
             @else
                 <div class="{{ $classPage }}">
                     <img
-                        src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_93, 0.9, 16)) }}" />
+                        src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_93, 0.86, 16)) }}" />
                     <div class="small-text">{{ $item['noseri'] }}</div>
                 </div>
             @endif

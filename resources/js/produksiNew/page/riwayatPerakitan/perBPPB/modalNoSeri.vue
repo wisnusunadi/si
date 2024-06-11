@@ -21,6 +21,7 @@ export default {
             ],
             items: [],
             loading: false,
+            search: '',
         }
     },
     methods: {

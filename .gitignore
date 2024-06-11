@@ -16,3 +16,6 @@ yarn-error.log
 /.vscode
 mix-manifest.json
 package-lock.json
+docker
+docker-compose.yml
+Dockerfile
