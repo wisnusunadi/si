@@ -2,7 +2,7 @@
 import Header from '../../components/header.vue'
 import Transfer from './transfer'
 import Riwayat from './riwayat'
-import axios from 'axios';
+import { penerimaanRework, riwayatPenerimaanRework } from '../../service/index.js'
 export default {
     components: {
         Header,
@@ -30,8 +30,8 @@ export default {
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true);
-                const { data: penerimaan } = await axios.get(`/api/gbj/rw/dp/seri`);
-                const { data:riwayat } = await axios.get('/api/gbj/rw/riwayat_penerimaan')
+                const penerimaan = await penerimaanRework();
+                const riwayat = await riwayatPenerimaanRework();
                 this.penerimaan = penerimaan.map(terima => {
                     return {
                         nama: terima.item[0].nama_produk,

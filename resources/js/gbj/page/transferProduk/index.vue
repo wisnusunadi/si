@@ -3,6 +3,7 @@ import axios from 'axios'
 import Header from '../../components/header.vue'
 import modalTransfer from './modalTransfer'
 import modalUnggah from './modalUnggah.vue'
+import { getDataSO } from '../../service/index.js'
 export default {
     components: {
         Header,
@@ -70,11 +71,7 @@ export default {
         async getData() {
             try {
                 this.$store.commit('setLoading', true)
-                const { data } = await axios.get('/api/tfp/data-so', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
-                    }
-                })
+                const data = await getDataSO()
                 this.items = data.map((item, index) => {
                     return {
                         ...item,

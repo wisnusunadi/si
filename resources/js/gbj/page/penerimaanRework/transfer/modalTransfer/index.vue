@@ -1,8 +1,8 @@
 <script>
-import axios from 'axios';
 import Seriviatext from './seriviatext.vue';
 import modalDetail from '../../riwayat/modalProduk/noseri.vue'
 import pagination from '../../../../components/pagination.vue';
+import { terimaRework } from '../../../../service/index.js';
 export default {
     components: {
         Seriviatext,
@@ -185,12 +185,7 @@ export default {
                     item: this.dataTable,
                 }
 
-                await axios.post('/api/gbj/rw/terima', kirim, {
-                    headers: {
-                        'Authorization': `Bearer` + localStorage.getItem('lokal_token'),
-
-                    }
-                })
+                await terimaRework(kirim)
                 this.$swal({
                     title: 'Berhasil!',
                     text: 'Data berhasil disimpan',
