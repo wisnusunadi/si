@@ -438,17 +438,21 @@
                                             <table class="table table-hover" id="ekatalogtable" style="width:100%">
                                                 <thead>
                                                     <tr>
-                                                        <th>No</th>
-                                                        <th>No Urut</th>
-                                                        <th>Nomor SO</th>
-                                                        <th>Nomor AKN</th>
-                                                        <th>Nomor PO</th>
-                                                        <th>Tanggal Buat</th>
-                                                        <th>Tanggal Edit</th>
-                                                        <th>Tanggal Delivery</th>
-                                                        <th>Customer</th>
-                                                        <th>Status</th>
-                                                        <th>Aksi</th>
+                                                        <th rowspan="2">No</th>
+                                                        <th rowspan="2">No Urut</th>
+                                                        <th rowspan="2">Nomor SO</th>
+                                                        <th rowspan="2">Nomor AKN</th>
+                                                        <th rowspan="2">Nomor PO</th>
+                                                        <th rowspan="2">Tanggal Buat</th>
+                                                        <th rowspan="2">Tanggal Edit</th>
+                                                        <th colspan="2">Tanggal Delivery</th>
+                                                        <th rowspan="2">Customer</th>
+                                                        <th rowspan="2">Status</th>
+                                                        <th rowspan="2">Aksi</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Saat Ini</th>
+                                                        <th>Perhitungan</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -849,15 +853,19 @@
                                             <table class="table table-hover" id="penjualantable" style="width:100%">
                                                 <thead>
                                                     <tr>
-                                                        <th>No</th>
-                                                        <th>Nomor SO</th>
-                                                        <th>Nomor AKN</th>
-                                                        <th>Nomor PO</th>
-                                                        <th>Tanggal PO</th>
-                                                        <th>Tanggal Delivery</th>
-                                                        <th>Customer</th>
-                                                        <th>Status</th>
-                                                        <th>Aksi</th>
+                                                        <th rowspan="2">No</th>
+                                                        <th rowspan="2">Nomor SO</th>
+                                                        <th rowspan="2">Nomor AKN</th>
+                                                        <th rowspan="2">Nomor PO</th>
+                                                        <th rowspan="2">Tanggal PO</th>
+                                                        <th colspan="2">Tanggal Delivery</th>
+                                                        <th rowspan="2">Customer</th>
+                                                        <th rowspan="2">Status</th>
+                                                        <th rowspan="2">Aksi</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Saat Ini</th>
+                                                        <th>Perhitungan</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -984,7 +992,11 @@
                         data: 'tgl_order',
                     }, {
                         data: 'tgl_kontrak',
-                    }, {
+                    },
+                    {
+                        data: 'tgl_kontrak_custom',
+                    },
+                    {
                         data: 'nama_customer',
                     }, {
                         data: 'status',
@@ -1043,6 +1055,11 @@
                         },
                         {
                             data: 'tgl_kontrak',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'tgl_kontrak_custom',
                             orderable: false,
                             searchable: false
                         },

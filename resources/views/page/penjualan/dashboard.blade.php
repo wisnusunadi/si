@@ -393,14 +393,18 @@
                                             <table class="table table-hover" id="pengirimantable" style="width:100%;">
                                                 <thead>
                                                     <tr>
-                                                        <th>No</th>
-                                                        <th>No SO</th>
-                                                        <th>No PO</th>
-                                                        <th>Tanggal PO</th>
-                                                        <th>Distibutor</th>
-                                                        <th>Status</th>
-                                                        <th>Tanggal Delivery</th>
-                                                        <th>Aksi</th>
+                                                        <th rowspan="2">No</th>
+                                                        <th rowspan="2">No SO</th>
+                                                        <th rowspan="2">No PO</th>
+                                                        <th rowspan="2">Tanggal PO</th>
+                                                        <th rowspan="2">Distibutor</th>
+                                                        <th rowspan="2">Status</th>
+                                                        <th colspan="2">Tanggal Delivery</th>
+                                                        <th rowspan="2">Aksi</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Saat Ini</th>
+                                                        <th>Perhitungan</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -553,6 +557,10 @@
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'tgl_kontrak',
+                        className: 'nowrap-text align-center',
                     },
                     {
                         data: 'batas_kontrak',

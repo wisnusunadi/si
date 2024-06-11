@@ -573,7 +573,7 @@ class PenjualanController extends Controller
                     return "-";
                 }
             })
-            ->addColumn('tgl_kontrak', function ($data) {
+            ->addColumn('tgl_kontrak_custom', function ($data) {
                 $name = $data->getTable();
                 if ($name == 'ekatalog') {
                     if ($data->tgl_kontrak_custom != "") {
@@ -781,7 +781,7 @@ class PenjualanController extends Controller
                     </a>';
                 }
             })
-            ->rawColumns(['button', 'status', 'tgl_order', 'tgl_kontrak', 'no_paket'])
+            ->rawColumns(['button', 'status', 'tgl_order', 'tgl_kontrak_custom', 'no_paket'])
             ->setRowClass(function ($data) {
                 // return 'text-danger font-weight-bold line-through';
                 $name =  $data->getTable();
@@ -2963,7 +2963,7 @@ class PenjualanController extends Controller
                 if (!empty($data->tgl_edit)) {
                     return Carbon::createFromFormat('Y-m-d', $data->tgl_edit)->format('d-m-Y');
                 }
-            })->editColumn('tgl_kontrak', function ($data) {
+            })->editColumn('tgl_kontrak_custom', function ($data) {
 
                 if ($data->tgl_kontrak_custom != "") {
                     if ($data->Pesanan->log_id != "10") {
@@ -3136,7 +3136,7 @@ class PenjualanController extends Controller
             })
 
 
-            ->rawColumns(['button', 'status', 'tgl_kontrak', 'no_paket'])
+            ->rawColumns(['button', 'status', 'tgl_kontrak_custom', 'no_paket'])
             ->setRowClass(function ($data) {
                 if ($data->status == 'batal' || $data->Pesanan->State->nama == 'Batal') {
                     return 'text-danger font-weight-bold line-through';
