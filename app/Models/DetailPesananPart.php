@@ -9,7 +9,7 @@ class DetailPesananPart extends Model
 {
     protected $connection = 'erp';
     protected $table = 'detail_pesanan_part';
-    protected $fillable = ['pesanan_id', 'm_sparepart_id', 'jumlah', 'harga', 'ongkir','ppn'];
+    protected $fillable = ['pesanan_id', 'm_sparepart_id', 'jumlah', 'harga', 'ongkir', 'ppn'];
 
     public function Pesanan()
     {
@@ -23,6 +23,10 @@ class DetailPesananPart extends Model
     {
         return $this->hasOne(DetailLogistikPart::class);
     }
+    public function RiwayatBatalPoPart()
+    {
+        return $this->hasOne(RiwayatBatalPoPart::class);
+    }
     public function OutgoingPesananPart()
     {
         return $this->hasMany(OutgoingPesananPart::class, 'detail_pesanan_part_id');
@@ -31,12 +35,30 @@ class DetailPesananPart extends Model
     public function getJumlahBatal()
     {
         $id = $this->id;
-        $s = RiwayatBatalPoPart::where(['detail_pesanan_part_id'=> $id,'status' => 1])->sum('jumlah');
+        $s = RiwayatBatalPoPart::where(['detail_pesanan_part_id' => $id, 'status' => 1])->sum('jumlah');
 
         return $s;
     }
 
     public function getJumlahCekPart($status)
+    {
+        $id = $this->id;
+        $jumlah = 0;
+        $s = OutgoingPesananPart::where('detail_pesanan_part_id', $id)->get();
+        if ($s) {
+            foreach ($s as $i) {
+                if ($status == 'ok') {
+                    $jumlah = $jumlah + $i->jumlah_ok;
+                } else {
+                    $jumlah = $jumlah + $i->jumlah_nok;
+                }
+            }
+        } else {
+            $jumlah = 0;
+        }
+        return $jumlah;
+    }
+    public function getJumlahCekPartwBatal($status)
     {
         $id = $this->id;
         $jumlah = 0;
@@ -88,7 +110,8 @@ class DetailPesananPart extends Model
         return $jumlah;
     }
 
-    public function LaporanQcPart($tgl_awal, $tgl_akhir){
+    public function LaporanQcPart($tgl_awal, $tgl_akhir)
+    {
         $id = $this->id;
         $res = OutgoingPesananPart::whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir])->where('detail_pesanan_part_id', $id)->get();
         return $res;
