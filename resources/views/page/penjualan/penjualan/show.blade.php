@@ -960,6 +960,18 @@
             }
             var divisi_id = "{{ Auth::user()->divisi_id }}";
 
+            function formatDateDaysMonthYears(date) {
+                var d = new Date(date);
+                var month = '' + (d.getMonth() + 1);
+                var day = '' + d.getDate();
+                var year = d.getFullYear();
+
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+
+                return [day, month, year].join('-');
+            }
+
             function p_show() {
                 var penjualantable = $('#penjualantable').DataTable({
                     destroy: true,
@@ -978,33 +990,37 @@
                         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                     },
                     columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    }, {
-                        data: 'so',
-                    }, {
-                        data: 'no_paket',
-                    }, {
-                        data: 'nopo',
-                    }, {
-                        data: 'tgl_order',
-                    }, {
-                        data: 'tgl_kontrak',
-                    },
-                    {
-                        data: 'tgl_kontrak_custom',
-                    },
-                    {
-                        data: 'nama_customer',
-                    }, {
-                        data: 'status',
-                    }, {
-                        data: 'button',
-                        orderable: false,
-                        searchable: false
-                    }, ]
+                            data: 'DT_RowIndex',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        }, {
+                            data: 'so',
+                        }, {
+                            data: 'no_paket',
+                        }, {
+                            data: 'nopo',
+                        }, {
+                            data: 'tgl_order',
+                        }, {
+                            data: 'tgl_kontrak',
+                            render: function(data, type, row) {
+                                return formatDateDaysMonthYears(data);
+                            }
+                        },
+                        {
+                            data: 'tgl_kontrak_custom',
+                        },
+                        {
+                            data: 'nama_customer',
+                        }, {
+                            data: 'status',
+                        }, {
+                            data: 'button',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ]
                 });
             }
 
@@ -1056,7 +1072,10 @@
                         {
                             data: 'tgl_kontrak',
                             orderable: false,
-                            searchable: false
+                            searchable: false,
+                            render: function(data, type, row) {
+                                return formatDateDaysMonthYears(data);
+                            }
                         },
                         {
                             data: 'tgl_kontrak_custom',
