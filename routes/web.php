@@ -13,6 +13,7 @@ use App\Http\Controllers\inventory\PerawatanController;
 use App\Http\Controllers\inventory\VerifikasiController;
 use App\Http\Controllers\inventory\KalibrasiPerbaikanController;
 use App\Http\Controllers\LogistikController;
+use App\Http\Controllers\MeetingController;
 
 /*
 |--------------------------------------------------------------------------
