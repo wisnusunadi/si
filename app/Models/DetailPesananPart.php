@@ -58,7 +58,7 @@ class DetailPesananPart extends Model
         }
         return $jumlah;
     }
-    public function getJumlahCekPartwBatal($status)
+    public function getJumlahCekPartAll($status)
     {
         $id = $this->id;
         $jumlah = 0;

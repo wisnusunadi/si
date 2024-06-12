@@ -992,7 +992,11 @@ class LogistikController extends Controller
                     }
                 })
                 ->addColumn('jumlah', function ($data) {
-                    $c = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
+                    $c = NoseriDetailLogistik::leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                        ->where('detail_logistik_id', $data->id)
+                        ->whereNull('riwayat_batal_po_seri.id')
+                        ->count();
                     return $c;
                 })
                 ->addColumn('button', function ($data) {
@@ -1068,7 +1072,11 @@ class LogistikController extends Controller
                 ->addColumn('jumlah', function ($data) {
 
                     if (isset($data->DetailPesananProduk)) {
-                        $c = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
+                        $c = NoseriDetailLogistik::leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                            ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                            ->where('detail_logistik_id', $data->id)
+                            ->whereNull('riwayat_batal_po_seri.id')
+                            ->count();
                         return $c;
                     } else {
                         return $data->jumlah;
@@ -1095,14 +1103,18 @@ class LogistikController extends Controller
 
     public function get_noseri_so_selesai_kirim_data($id)
     {
-        $data = NoseriDetailPesanan::whereHas('NoseriDetailLogistik', function ($q) use ($id) {
-            $q->where('detail_logistik_id', $id);
-        })->with('NoseriTGbj.NoseriBarangJadi')->get();
+
+        $data = NoseriDetailLogistik::leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+            ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+            ->where('detail_logistik_id', $id)
+            ->whereNull('riwayat_batal_po_seri.id')
+            ->get();
+
 
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('no_seri', function ($data) {
-                return $data->NoseriTGbj->NoseriBarangJadi->noseri;
+                return $data->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri;
             })
             ->make(true);
     }
@@ -1740,10 +1752,12 @@ class LogistikController extends Controller
                         ->from('noseri_detail_pesanan')
                         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->leftJoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                         ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                         ->where('noseri_detail_pesanan.is_ready', 0)
                         ->where('noseri_detail_pesanan.status', 'ok')
                         ->whereNull('riwayat_batal_po_seri.id')
+                        ->whereNull('noseri_logistik.id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cqcpart' => function ($q) {
@@ -1921,6 +1935,7 @@ class LogistikController extends Controller
             $item->jenis_id = get_jenis_id($item, get_jenis($item->so));
             // $item->customer = $item->cbatalpo;
             $item->customer = getCustomer($item);
+            // $item->customer = $item->cqcpart;
             $item->persentase = getPersentase($item);
             $item->showDetail = $item->cqcprd + $item->cqcpart + $item->ctfjasa;
             return $item;
