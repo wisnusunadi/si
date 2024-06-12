@@ -325,17 +325,17 @@
                         <tr>
                             <td class="text-center">{{ $index + 1 }}</td>
                             <td>
-                                {{-- <a href="{{ showLinkOnExternalUrl($doc['nama']) }}" target="_blank">
-                                {{ $doc['original'] }}
-                            </a> --}}
-                                @if ($type == 'foto')
+                                <a href="{{ showLinkOnExternalUrl($doc['nama']) }}" target="_blank">
+                                    {{ $doc['original'] }}
+                                </a>
+                                {{-- @if ($type == 'foto')
                                     <img src="{{ showImageFromExternalUrl($doc['nama']) }}" alt="foto"
                                         style="width: 100%">
                                 @else
                                     <a href="{{ showLinkOnExternalUrl($doc['nama']) }}" target="_blank">
                                         {{ $doc['original'] }}
                                     </a>
-                                @endif
+                                @endif --}}
                             </td>
                         </tr>
                     @endforeach
