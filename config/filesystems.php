@@ -53,6 +53,16 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
 
+        'ftp' => [
+            'driver' => 'sftp',
+            'host' => env('FTP_HOST'),
+            'username' => env('FTP_USERNAME'),
+            'password' => env('FTP_PASSWORD'),
+            'root' => 'File Server/IT/ERP_Storage',
+            'port' => 22,
+            'passive'  => true,
+        ]
+
     ],
 
     /*

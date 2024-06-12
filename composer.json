@@ -19,6 +19,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
+        "league/flysystem-sftp": "~1.0",
         "maatwebsite/excel": "^3.1",
         "phpoffice/phpspreadsheet": "^1.23",
         "picqer/php-barcode-generator": "^2.4",
