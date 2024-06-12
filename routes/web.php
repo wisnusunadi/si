@@ -543,6 +543,13 @@ Route::group(['prefix' => '/gbmp'], function () {
     Route::view('/{any?}', 'page.gbmp.view')->where('any', '.*');
 });
 
+Route::view('/meeting/{any?}', 'page.meeting.index')->where('any', '.*');
+
+Route::group(['prefix' => '/pdfmeet'], function () {
+    Route::get('/undangan/{id}', [MeetingController::class, 'cetakUndangan']);
+    Route::get('/hasil/{id}', [MeetingController::class, 'cetakHasil']);
+});
+
 Route::get('/testing/pbj', [ProduksiController::class, 'cetakTest']);
 
 Route::view('/uit', 'page.login_page.index');

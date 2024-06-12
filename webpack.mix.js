@@ -31,6 +31,7 @@ mix.js('resources/js/direksi/index.js', 'public/native/js/direksi.js').vue();
 mix.js('resources/js/produksi/app.js', 'public/native/js/produksi.js').vue();
 mix.js('resources/js/emiindo/index.js', 'public/native/js/emiindo.js').vue();
 mix.js('resources/js/it/app.js', 'public/native/js/it.js').vue();
+mix.js("resources/js/meeting/app.js", "public/native/js/meeting.js").vue();
 mix.js('resources/js/lab/app.js', 'public/native/js/lab.js').vue();
 mix.js('resources/js/gbj/app.js', 'public/native/js/gbj.js').vue();
 mix.js('resources/js/logistik/app.js', 'public/native/js/logistik.js').vue();

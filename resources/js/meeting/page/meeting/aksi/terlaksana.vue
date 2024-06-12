@@ -1,0 +1,471 @@
+<script>
+import dokumentasi from "./dokumentasi.vue";
+import axios from "axios";
+import VueSelect from "vue-select";
+import uploadFile from "../../../components/uploadFile.vue";
+export default {
+    components: {
+        VueSelect,
+        dokumentasi,
+        uploadFile,
+    },
+    props: ["meeting"],
+    data() {
+        return {
+            cloneMeeting: JSON.parse(JSON.stringify(this.meeting)),
+            form: {
+                dokumentasi: [],
+                notulensi: [
+                    {
+                        pic: "",
+                        isi: "",
+                    },
+                ],
+                hasil: [
+                    {
+                        isi: "",
+                    },
+                ],
+            },
+            karyawan: [],
+            hourRangeAkhir: [],
+            loading: false,
+            lokasiMeeting: [],
+        };
+    },
+    methods: {
+        closeModal() {
+            this.$nextTick(() => {
+                $(".modalterlaksana").modal("hide");
+            });
+            this.$emit("closeModal");
+        },
+        async getDataKaryawan() {
+            try {
+                const { data: karyawan } = await axios.get("/api/karyawan_all");
+                const { data: lokasi } = await axios.get(
+                    "/api/hr/meet/lokasi/show"
+                );
+                this.karyawan = karyawan;
+                this.lokasiMeeting = lokasi.map((item) => {
+                    return {
+                        id: item.id,
+                        label: item.nama,
+                    };
+                });
+
+                // remove peserta jika sudah ada di notulen, moderator, pimpinan
+                this.meeting.peserta = this.meeting.peserta.filter(
+                    (peserta) => {
+                        return (
+                            peserta !== this.meeting.notulen &&
+                            peserta !== this.meeting.moderator &&
+                            peserta !== this.meeting.pimpinan
+                        );
+                    }
+                );
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        tambahpic() {
+            this.form.notulensi.push({
+                pic: "",
+                isi: "",
+            });
+        },
+        tambahhasil() {
+            this.form.hasil.push({
+                isi: "",
+            });
+        },
+        calculateHourAkhir() {
+            if (this.meeting.mulai !== "") {
+                const waktu_awal = this.meeting.mulai.split(":");
+                const hour = [];
+                for (let i = waktu_awal[0]; i <= 23; i++) {
+                    hour.push(i);
+                }
+                this.hourRangeAkhir = hour;
+            } else {
+                this.hourRangeAkhir = [];
+            }
+        },
+        save() {
+            // check is form not empty is "" and array length is 0
+            const isFormEmpty = Object.values(this.form).some((item) => {
+                if (Array.isArray(item)) {
+                    if (item.length === 0) {
+                        return true;
+                    } else {
+                        return item.some((subItem) => {
+                            return Object.values(subItem).some((subSubItem) => {
+                                return subSubItem === "";
+                            });
+                        });
+                    }
+                } else {
+                    return item === "";
+                }
+            });
+
+            if (isFormEmpty) {
+                this.$swal("Gagal", "Form tidak boleh kosong", "error");
+                return;
+            }
+
+            let formData = new FormData();
+
+            let peserta = [
+                ...this.meeting.peserta,
+                this.meeting.notulen,
+                this.meeting.moderator,
+                this.meeting.pimpinan,
+            ];
+
+            // filter peserta jika ada yang sama
+            peserta = peserta.filter(
+                (item, index) => peserta.indexOf(item) === index
+            );
+
+            let form = {
+                ...this.meeting, // Add all entries from this.meeting
+                ...this.form, // Add all entries from this.form
+                peserta,
+                dokumentasi: this.form.dokumentasi.map((file) => {
+                    return {
+                        file,
+                    };
+                }),
+            };
+
+            console.log(form);
+
+            // Iterate over form data and append to formData
+            for (let key in form) {
+                // Detect when key is an array
+                if (Array.isArray(form[key])) {
+                    form[key].forEach((item, index) => {
+                        // If the item is an object, iterate over its properties
+                        if (typeof item === "object" && item !== null) {
+                            for (let keyItem in item) {
+                                formData.append(
+                                    `${key}[${index}][${keyItem}]`,
+                                    item[keyItem]
+                                );
+                            }
+                        } else {
+                            // If the item is a primitive type (e.g., number or string), directly append it
+                            formData.append(`${key}[${index}]`, item);
+                        }
+                    });
+                } else {
+                    formData.append(key, form[key]);
+                }
+            }
+
+            this.loading = true;
+
+            axios
+                .post("/api/hr/meet/jadwal/update/terlaksana", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "lokal_token"
+                        )}`,
+                    },
+                })
+                .then((response) => {
+                    this.$swal("Berhasil", "Data berhasil disimpan", "success");
+                    this.$emit("refresh");
+                    this.closeModal();
+                })
+                .catch((error) => {
+                    this.$swal("Gagal", "Data gagal disimpan", "error");
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        uploadDokumen(file) {
+            this.form.dokumentasi = file;
+        },
+        checkKaryawanFilled(idx) {
+            const selectedEmployee = this.form.notulensi.map(
+                (item) => item.pic
+            );
+
+            return this.meeting.peserta
+                .filter((item) => {
+                    return (
+                        !selectedEmployee.includes(item) ||
+                        item === this.form.notulensi[idx].pic
+                    );
+                })
+                .map((item) => {
+                    const karyawan = this.karyawan.find((k) => k?.id === item);
+                    return karyawan;
+                });
+        },
+    },
+    mounted() {
+        this.getDataKaryawan();
+    },
+    computed: {
+        showKeteranganKetidaksesuaian() {
+            if (
+                this.meeting.tanggal != this.cloneMeeting.tanggal ||
+                this.meeting.lokasi != this.cloneMeeting.lokasi ||
+                this.meeting.mulai != this.cloneMeeting.mulai ||
+                this.meeting.selesai != this.cloneMeeting.selesai
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        // filter karyawan jika sudah menjadi notulen, moderator, pimpinan rapat. tidak usah muncul di peserta
+        karyawanFilteredPeserta() {
+            return this.karyawan.filter((item) => {
+                return (
+                    item.id !== this.meeting.notulen &&
+                    item.id !== this.meeting.moderator &&
+                    item.id !== this.meeting.pimpinan
+                );
+            });
+        },
+        karyawanFilteredNonPeserta() {
+            // filter karyawan yang belum ada di peserta
+            return this.karyawan.filter((item) => {
+                return !this.meeting.peserta.includes(item.id);
+            });
+        },
+    },
+};
+</script>
+<template>
+    <div
+        class="modal fade modalterlaksana"
+        data-backdrop="static"
+        data-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ meeting.nama }}</h5>
+                    <button type="button" class="close" @click="closeModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label for="tanggal" class="col-form-label"
+                                >Tanggal</label
+                            >
+                            <input
+                                type="date"
+                                class="form-control"
+                                v-model="meeting.tanggal"
+                                :min="new Date().toISOString().split('T')[0]"
+                            />
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="tanggal" class="col-form-label"
+                                >Lokasi</label
+                            >
+                            <vue-select
+                                :reduce="(lokasi) => lokasi.id"
+                                :options="lokasiMeeting"
+                                v-model="meeting.lokasi"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="mulai" class="col-sm-2 col-form-label"
+                            >Jam</label
+                        >
+                        <div class="col-sm-4">
+                            <vue-timepicker
+                                v-model="meeting.mulai"
+                                input-width="100%"
+                                autocomplete="on"
+                                @input="calculateHourAkhir"
+                            />
+                        </div>
+                        -
+                        <div class="col-sm-4">
+                            <vue-timepicker
+                                v-model="meeting.selesai"
+                                input-width="100%"
+                                autocomplete="on"
+                                :hour-range="hourRangeAkhir"
+                            />
+                        </div>
+                    </div>
+                    <div
+                        class="form-group"
+                        v-if="showKeteranganKetidaksesuaian"
+                    >
+                        <label for="">Keterangan Ketidaksesuaian</label>
+                        <textarea
+                            class="form-control"
+                            v-model="form.keteranganketidaksesuaian"
+                        ></textarea>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col">
+                            <label for="">Notulen</label>
+                            <vue-select
+                                :options="karyawanFilteredNonPeserta"
+                                label="nama"
+                                :reduce="(karyawan) => karyawan.id"
+                                v-model="meeting.notulen"
+                            />
+                        </div>
+                        <div class="col">
+                            <label for="">Moderator</label>
+                            <vue-select
+                                :options="karyawanFilteredNonPeserta"
+                                label="nama"
+                                :reduce="(karyawan) => karyawan.id"
+                                v-model="meeting.moderator"
+                            />
+                        </div>
+                        <div class="col">
+                            <label for="">Pimpinan Rapat</label>
+                            <vue-select
+                                :options="karyawanFilteredNonPeserta"
+                                label="nama"
+                                :reduce="(karyawan) => karyawan.id"
+                                v-model="meeting.pimpinan"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Peserta Meeting</label>
+                        <vue-select
+                            multiple
+                            :options="karyawanFilteredPeserta"
+                            label="nama"
+                            :reduce="(karyawan) => karyawan.id"
+                            v-model="meeting.peserta"
+                        />
+                    </div>
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2 col-form-label"
+                            >Hasil Notulensi</label
+                        >
+                        <div class="col-sm-10">
+                            <div class="d-flex flex-row-reverse bd-highlight">
+                                <div class="p-2 bd-highlight">
+                                    <button
+                                        class="btn btn-primary"
+                                        @click="tambahpic"
+                                    >
+                                        Tambah
+                                    </button>
+                                </div>
+                            </div>
+                            <div
+                                v-for="(notulen, idx) in form.notulensi"
+                                class="row mb-1"
+                            >
+                                <div class="col-sm-4">
+                                    <vue-select
+                                        v-model="notulen.pic"
+                                        :options="checkKaryawanFilled(idx)"
+                                        label="nama"
+                                        :reduce="(karyawan) => karyawan?.id"
+                                        placeholder="penanggung jawab"
+                                    />
+                                </div>
+                                <div class="col-sm-6">
+                                    <textarea
+                                        class="form-control"
+                                        v-model="notulen.isi"
+                                        placeholder="Isi Notulensi"
+                                    ></textarea>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button
+                                        class="btn btn-danger"
+                                        @click="form.notulensi.splice(idx, 1)"
+                                    >
+                                        x
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2 col-form-label"
+                            >Hasil Rapat</label
+                        >
+                        <div class="col-sm-10">
+                            <div class="d-flex flex-row-reverse bd-highlight">
+                                <div class="p-2 bd-highlight">
+                                    <button
+                                        class="btn btn-primary"
+                                        @click="tambahhasil"
+                                    >
+                                        Tambah
+                                    </button>
+                                </div>
+                            </div>
+                            <div v-for="(hasil, idx) in form.hasil" class="row">
+                                <div class="col-10">
+                                    <textarea
+                                        class="form-control mb-2"
+                                        v-model="hasil.isi"
+                                    ></textarea>
+                                </div>
+                                <div class="col-2">
+                                    <button
+                                        class="btn btn-danger"
+                                        @click="form.hasil.splice(idx, 1)"
+                                    >
+                                        x
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2 col-form-label"
+                            >Dokumentasi</label
+                        >
+                        <uploadFile @changed="uploadDokumen" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        @click="closeModal"
+                    >
+                        Keluar
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        :disabled="loading"
+                        @click="save"
+                    >
+                        <div
+                            class="spinner-border spinner-border-sm"
+                            role="status"
+                            v-if="loading"
+                        >
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        {{ loading ? "Menyimpan..." : "Simpan" }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

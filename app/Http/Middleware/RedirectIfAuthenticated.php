@@ -60,6 +60,8 @@ class RedirectIfAuthenticated
                     return redirect('/penjualan/lacak/show');
                 } else if ($request->user()->hasRole("11")) {
                     return redirect('/gbmp/perakitan');
+                } else if ($request->user()->hasRole("30")) {
+                    return redirect('/meeting/hr');
                 }
             }
         }

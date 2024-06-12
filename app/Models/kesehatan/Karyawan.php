@@ -3,17 +3,24 @@
 namespace App\Models\kesehatan;
 
 use App\Models\Divisi;
-use App\Models\UjiLab;
-use App\Models\UjiLabDetail;
+use App\Models\PesertaMeeting;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Karyawan extends Model
 {
+
     protected $table = 'karyawans';
     protected $connection = 'kesehatan';
-    protected $fillable = ['nama', 'kode_karyawan', 'divisi_id', 'jabatan', 'foto', 'tgllahir', 'tgl_kerja', 'kelamin', 'is_aktif'];
+    protected $fillable = [
+        'nama',
+        'kode_karyawan', 'divisi_id', 'jabatan', 'foto', 'tgllahir',
+        'tgl_kerja', 'kode', 'kelamin', 'is_aktif', 'status_hidup', 'telp_dihubungi', 'status_dihubungi',
+        'nama_dihubungi', 'faskes_tingkat', 'status_karyawan', 'upah_lembur', 'no_rekening', 'durasi_kontrak',
+        'nama_kontrak', 'bpjs', 'ktp', 'npwp', 'tgl_resign', 'tempat_lahir', 'email', 'alamat_ktp', 'alamat', 'no_telp', 'bpjs_tk', 'durasi_kontrak', 'nama_pasangan'
+    ];
+
 
     public function User()
     {
@@ -35,6 +42,10 @@ class Karyawan extends Model
     {
         return $this->hasMany(Vaksin_karyawan::class);
     }
+    public function PesertaMeeting()
+    {
+        return $this->hasMany(PesertaMeeting::class, 'karyawan_id');
+    }
     public function Riwayat_penyakit()
     {
         return $this->hasMany(Riwayat_penyakit::class);
@@ -54,9 +65,5 @@ class Karyawan extends Model
     public function karyawan_sakit()
     {
         return $this->hasMany(Karyawan_sakit::class);
-    }
-    public function UjiLabDetail()
-    {
-        return $this->hasMany(UjiLabDetail::class);
     }
 }

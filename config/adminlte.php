@@ -1934,7 +1934,13 @@ return [
             'icon' => 'fas fa-cubes',
             'auth' => [31],
         ],
-
+        // hr
+        [
+            'text' => 'Meeting',
+            'url' => '/meeting/hr/',
+            'icon' => 'fas fa-users',
+            'auth' => [30],
+        ],
         //Manager Penjualan
         [
             'header' => 'TRANSAKSI',
@@ -1950,7 +1956,17 @@ return [
             'text' => 'Logistik',
             'icon' => 'fas fa-dolly fa-fw',
             'url' => '/manager/logistik/show',
-            'auth' => [32],
+        ],
+        [
+            'header' => 'Meeting',
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2],
+        ],
+        // peserta meet
+        [
+            'text'        => 'Jadwal Meeting',
+            'url'         => '/meeting/jadwal_meet',
+            'icon'        => 'fa fa-calendar',
+            'auth'        => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2],
         ],
         [
             'header' => 'Setting',
