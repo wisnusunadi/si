@@ -1956,6 +1956,7 @@ return [
             'text' => 'Logistik',
             'icon' => 'fas fa-dolly fa-fw',
             'url' => '/manager/logistik/show',
+            'auth' => [32],
         ],
         [
             'header' => 'Meeting',

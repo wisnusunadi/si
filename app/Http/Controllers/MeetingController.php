@@ -732,6 +732,7 @@ class MeetingController extends Controller
     public function show_jadwal_meet_person($status)
     {
         try {
+            dd(auth()->user()->karyawan_id);
             $id = auth()->user()->karyawan_id;;
             if ($status == 'belum') {
                 $data = PesertaMeeting::select(
