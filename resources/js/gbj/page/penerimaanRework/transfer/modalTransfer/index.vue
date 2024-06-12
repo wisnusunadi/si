@@ -2,7 +2,6 @@
 import Seriviatext from './seriviatext.vue';
 import modalDetail from '../../riwayat/modalProduk/noseri.vue'
 import pagination from '../../../../components/pagination.vue';
-import { terimaRework } from '../../../../service/index.js';
 export default {
     components: {
         Seriviatext,
@@ -185,7 +184,7 @@ export default {
                     item: this.dataTable,
                 }
 
-                await terimaRework(kirim)
+                await this.$post('/api/gbj/rw/terima', kirim)
                 this.$swal({
                     title: 'Berhasil!',
                     text: 'Data berhasil disimpan',

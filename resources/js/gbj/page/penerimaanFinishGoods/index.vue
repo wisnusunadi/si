@@ -2,7 +2,6 @@
 import Header from "../../components/header.vue";
 import moment from "moment";
 import detail from "./detail.vue";
-import { finishGoods } from "../../service/index.js";
 export default {
     components: {
         Header,
@@ -66,7 +65,7 @@ export default {
         async getData() {
             try {
                 this.$store.dispatch("setLoading", true);
-                const data = await finishGoods(this.years);
+                const data = await this.$get(`/api/tfp/rakit?tahun=${this.years}`);
                 this.items = data.map((item, index) => {
                     return {
                         no: index + 1,

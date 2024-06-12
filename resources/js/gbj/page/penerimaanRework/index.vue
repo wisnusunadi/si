@@ -2,7 +2,6 @@
 import Header from '../../components/header.vue'
 import Transfer from './transfer'
 import Riwayat from './riwayat'
-import { penerimaanRework, riwayatPenerimaanRework } from '../../service/index.js'
 export default {
     components: {
         Header,
@@ -30,8 +29,8 @@ export default {
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true);
-                const penerimaan = await penerimaanRework();
-                const riwayat = await riwayatPenerimaanRework();
+                const penerimaan = await this.$get('/api/gbj/rw/dp/seri');
+                const riwayat = await this.$get('/api/gbj/rw/dp/riwayat_penerimaan')
                 this.penerimaan = penerimaan.map(terima => {
                     return {
                         nama: terima.item[0].nama_produk,

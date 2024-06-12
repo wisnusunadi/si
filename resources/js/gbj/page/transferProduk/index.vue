@@ -3,7 +3,6 @@ import axios from 'axios'
 import Header from '../../components/header.vue'
 import modalTransfer from './modalTransfer'
 import modalUnggah from './modalUnggah.vue'
-import { getDataSO } from '../../service/index.js'
 export default {
     components: {
         Header,
@@ -71,7 +70,7 @@ export default {
         async getData() {
             try {
                 this.$store.commit('setLoading', true)
-                const data = await getDataSO()
+                const data = await this.$get('/api/tfp/data-so')
                 this.items = data.map((item, index) => {
                     return {
                         ...item,

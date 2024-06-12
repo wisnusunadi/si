@@ -11,6 +11,7 @@ import dateTimeFormat from "./plugins/dateTimeFormat";
 import storeData from "./store";
 import DataTable from "./components/DataTable.vue";
 import "vue-select/dist/vue-select.css";
+import axiosPlugin from "./plugins/axiosPlugin";
 
 window.Vue = Vue;
 Vue.use(VueRouter);
@@ -21,6 +22,7 @@ Vue.component("data-table", DataTable);
 Vue.use(dateFormat);
 Vue.use(dateTimeFormat);
 Vue.use(numberOnly);
+Vue.use(axiosPlugin);
 
 const store = new Vuex.Store(storeData);
 
