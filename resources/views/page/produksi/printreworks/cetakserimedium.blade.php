@@ -29,7 +29,7 @@
         }
 
         .image-container-logo-13 {
-            margin-left: -1cm;
+            margin-left: -1.5cm;
         }
 
         .image-container-logo-14 {
