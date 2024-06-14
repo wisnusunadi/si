@@ -21,7 +21,7 @@ export default {
                 },
                 {
                     name: "Meeting",
-                    link: "/meeting/hr",
+                    link: "/meeting/jadwalmeeting",
                 },
                 {
                     name: "Detail Meeting",
