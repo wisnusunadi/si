@@ -517,6 +517,10 @@
     <script>
         $(function() {
             function formatDateDaysMonthYears(date) {
+                if (date == null) {
+                    return '';
+                }
+
                 var d = new Date(date);
                 var month = '' + (d.getMonth() + 1);
                 var day = '' + d.getDate();
