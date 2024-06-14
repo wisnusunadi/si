@@ -217,7 +217,7 @@ export default {
                     this.closeModal();
                 })
                 .catch((error) => {
-                    this.$swal("Gagal", "Data gagal disimpan", "error");
+                    this.$swal("Gagal", `${error.response.data.message}`, "error");
                 })
                 .finally(() => {
                     this.loading = false;

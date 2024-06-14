@@ -1969,6 +1969,17 @@ return [
             'icon'        => 'fa fa-calendar',
             'auth'        => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2],
         ],
+        // direksi
+        [
+            'header' => 'Meeting',
+            'auth' => [14],
+        ],
+        [
+            'text' => 'Meeting',
+            'url' => '/meeting/jadwalmeeting',
+            'icon' => 'fas fa-users',
+            'auth' => [14],
+        ],
         [
             'header' => 'Setting',
             'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 14, 22]
