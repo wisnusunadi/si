@@ -92,25 +92,61 @@ export default {
             }
         },
         save() {
+            // hapus jika di hasil notulensi satu baris pic dan isi kosong
+            this.form.notulensi = this.form.notulensi.filter(
+                (item) => item.pic !== "" || item.isi !== ""
+            );
+
+            // hapus hasil rapat jika isi kosong
+            this.form.hasil = this.form.hasil.filter((item) => item.isi !== "");
+
+            // jika form notulensi array kosong, tambahkan satu baris
+            if (this.form.notulensi.length === 0) {
+                this.form.notulensi.push({
+                    pic: "",
+                    isi: "",
+                });
+            }
+
+            // jika form hasil array kosong, tambahkan satu baris
+            if (this.form.hasil.length === 0) {
+                this.form.hasil.push({
+                    isi: "",
+                });
+            }
+
             // check is form not empty is "" and array length is 0
-            const isFormEmpty = Object.values(this.form).some((item) => {
+            const emptyFields = []
+            const isFormEmpty = Object.entries(this.form).some(([key, item]) => {
                 if (Array.isArray(item)) {
                     if (item.length === 0) {
-                        return true;
+                        emptyFields.push(key)
+                        return true
                     } else {
-                        return item.some((subItem) => {
-                            return Object.values(subItem).some((subSubItem) => {
-                                return subSubItem === "";
-                            });
-                        });
+                        return item.some((subItem, index) => {
+                            const subEmptyFields = []
+                            const isSubItemEmpty = Object.entries(subItem).some(([subKey, subItem]) => {
+                                if (subItem === "") {
+                                    subEmptyFields.push(subKey)
+                                    return true
+                                }
+                                return false
+                            })
+                            if (isSubItemEmpty) {
+                                emptyFields.push(`${key} baris ${index + 1} ${subEmptyFields.join(', ')}`)
+                            }
+                            return isSubItemEmpty   
+                        })
                     }
                 } else {
-                    return item === "";
+                    if (item === "") {
+                        emptyFields.push(key)
+                    }
                 }
-            });
+           })
 
             if (isFormEmpty) {
-                this.$swal("Gagal", "Form tidak boleh kosong", "error");
+                this.$swal("Gagal", `Form ${emptyFields.join(', ')} tidak boleh kosong`, "error");
                 return;
             }
 
@@ -190,23 +226,6 @@ export default {
         uploadDokumen(file) {
             this.form.dokumentasi = file;
         },
-        checkKaryawanFilled(idx) {
-            const selectedEmployee = this.form.notulensi.map(
-                (item) => item.pic
-            );
-
-            return this.meeting.peserta
-                .filter((item) => {
-                    return (
-                        !selectedEmployee.includes(item) ||
-                        item === this.form.notulensi[idx].pic
-                    );
-                })
-                .map((item) => {
-                    const karyawan = this.karyawan.find((k) => k?.id === item);
-                    return karyawan;
-                });
-        },
     },
     mounted() {
         this.getDataKaryawan();
@@ -238,6 +257,17 @@ export default {
             // filter karyawan yang belum ada di peserta
             return this.karyawan.filter((item) => {
                 return !this.meeting.peserta.includes(item.id);
+            });
+        },
+        // gabungan peserta, notulen, moderator, pimpinan
+        karyawanPeserta() {
+            return this.karyawan.filter((item) => {
+                return (
+                    item.id === this.meeting.notulen ||
+                    item.id === this.meeting.moderator ||
+                    item.id === this.meeting.pimpinan ||
+                    this.meeting.peserta.includes(item.id)
+                );
             });
         },
     },
@@ -324,6 +354,7 @@ export default {
                                 label="nama"
                                 :reduce="(karyawan) => karyawan.id"
                                 v-model="meeting.notulen"
+                                disabled
                             />
                         </div>
                         <div class="col">
@@ -377,7 +408,7 @@ export default {
                                 <div class="col-sm-4">
                                     <vue-select
                                         v-model="notulen.pic"
-                                        :options="checkKaryawanFilled(idx)"
+                                        :options="karyawanPeserta"
                                         label="nama"
                                         :reduce="(karyawan) => karyawan?.id"
                                         placeholder="penanggung jawab"

@@ -47,6 +47,22 @@ class MeetingController extends Controller
         }
     }
 
+    public function getKaryawanForNotulen() {
+        try {
+            $karyawan = auth()->user()->Karyawan;
+
+            return response()->json([
+                'status' => 200,
+                'data' => $karyawan,
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal',
+            ], 500);
+        }
+    }
+
     public function update_lokasi_meet(Request $request)
     {
 

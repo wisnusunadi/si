@@ -80,14 +80,26 @@ export default {
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true)
-                const { data: belum_terlaksana } = await axios.get('/api/hr/meet/jadwal/show/belum', {
+               const { data: belum_terlaksana } = await axios.get(
+                    "/api/hr/meet/jadwal/show/belum",
+                    {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem(
                                 "lokal_token"
                             )}`,
                         },
-                    })
-                const { data: selesai } = await axios.get('/api/hr/meet/jadwal/show/selesai')
+                    }
+                );
+                               const { data: selesai } = await axios.get(
+                    "/api/hr/meet/jadwal/show/selesai",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                                "lokal_token"
+                            )}`,
+                        },
+                    }
+                );
                 this.dataTable = belum_terlaksana.map((item, index) => {
                     return {
                         ...item,

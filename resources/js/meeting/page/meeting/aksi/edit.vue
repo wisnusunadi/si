@@ -234,6 +234,7 @@ export default {
                                 label="nama"
                                 :reduce="(karyawan) => karyawan.id"
                                 v-model="meeting.notulen"
+                                disabled
                             />
                         </div>
                         <div class="col">

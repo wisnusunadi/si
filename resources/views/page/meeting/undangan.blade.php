@@ -159,10 +159,12 @@
                     </tr>
                     <tr style="text-align: left">
                         <td>
+                            {{ $data->notulen }}
                             <hr>
                         </td>
                         <td></td>
                         <td>
+                            Tan Evi Anggraeni
                             <hr>
                         </td>
                     </tr>
@@ -182,15 +184,6 @@
         foreach ($data->peserta as $item) {
             $peserta[] = $item['nama'] . ' - ' . $item['jabatan'];
         }
-
-        if (count($peserta) < 20) {
-            $kosong = array_fill(count($peserta), 20 - count($peserta), '...');
-        } else {
-            $kosong = [];
-        }
-
-        // gabungkan array peserta rapat dengan array kosong
-        $peserta = array_merge($peserta, $kosong);
     @endphp
 
     <p>Turut mengundang peserta rapat:</p>

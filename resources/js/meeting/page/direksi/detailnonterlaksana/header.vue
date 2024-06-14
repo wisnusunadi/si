@@ -153,22 +153,6 @@ export default {
                                             </button>
                                         </b>
                                     </div>
-                                    <div v-if="!showImageFail">
-                                        <small class="text-muted"
-                                            >Edit Meeting</small
-                                        >
-                                    </div>
-                                    <div v-if="!showImageFail">
-                                        <b id="no_so">
-                                            <button
-                                                class="btn btn-warning btn-sm mr-2 mb-2"
-                                                @click="openEdit"
-                                            >
-                                                <i class="fas fa-edit"></i>
-                                                Edit Meeting
-                                            </button>
-                                        </b>
-                                    </div>
                                 </div>
                             </div>
                         </div>

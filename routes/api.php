@@ -405,6 +405,8 @@ Route::prefix('/tfp')->group(function () {
 
 Route::prefix('/hr')->group(function () {
     Route::prefix('/meet')->group(function () {
+        Route::get('/getKaryawan', [MeetingController::class, 'getKaryawanForNotulen'])->middleware('jwt.verify');
+        
         Route::prefix('/lokasi')->group(function () {
             Route::post('/store', [MeetingController::class, 'store_lokasi_meet']);
             Route::get('/show', [MeetingController::class, 'show_lokasi_meet']);

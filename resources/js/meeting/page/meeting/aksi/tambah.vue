@@ -43,6 +43,16 @@ export default {
                 const { data: lokasi } = await axios.get(
                     "/api/hr/meet/lokasi/show"
                 );
+                const { data: notulen } = await axios.get("/api/hr/meet/getKaryawan", {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("lokal_token")}`,
+                    }
+                });
+
+
+                this.meeting.notulen = notulen.data.id;
+
+                
                 this.karyawan = karyawan;
                 this.lokasiMeeting = lokasi.map((item) => {
                     return {
@@ -245,6 +255,7 @@ export default {
                                 label="nama"
                                 :reduce="(karyawan) => karyawan.id"
                                 v-model="meeting.notulen"
+                                disabled
                             />
                         </div>
                         <div class="col">
