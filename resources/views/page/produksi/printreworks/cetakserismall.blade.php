@@ -11,7 +11,7 @@
         /* small new */
         /* 45 x 36 : kertas kecil */
         @page {
-            margin-top: 0.1cm;
+            margin-top: 0.2cm;
             /* margin-left: 0.4cm; */
             margin-bottom: 0cm;
             font-size: 7pt;
@@ -23,15 +23,15 @@
         }
 
         .margin-left-12 {
-            margin-left: -0.5cm;
+            margin-left: -0.3cm;
         }
 
         .margin-left-13 {
-            margin-left: -0.6cm;
+            margin-left: -0.3cm;
         }
 
         .margin-left-14 {
-            margin-left: -0.55cm;
+            margin-left: -0.43cm;
         }
 
         .small-text {
