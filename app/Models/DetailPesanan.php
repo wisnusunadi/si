@@ -11,7 +11,7 @@ class DetailPesanan extends Model
 {
     protected $connection = 'erp';
     protected $table = 'detail_pesanan';
-    protected $fillable = ['pesanan_id', 'penjualan_produk_id', 'detail_rencana_penjualan_id', 'jumlah', 'harga', 'ongkir','ppn','kalibrasi'];
+    protected $fillable = ['pesanan_id', 'penjualan_produk_id', 'detail_rencana_penjualan_id', 'jumlah', 'harga', 'ongkir', 'ppn', 'kalibrasi'];
 
     public function Pesanan()
     {
@@ -177,7 +177,7 @@ class DetailPesanan extends Model
     public function getJumlahRetur()
     {
         $id = $this->id;
-        $k = RiwayatReturPoPaket::where(['detail_pesanan_id'=> $id])
+        $k = RiwayatReturPoPaket::where(['detail_pesanan_id' => $id])
             ->sum('jumlah');
 
         return $k;
@@ -186,31 +186,29 @@ class DetailPesanan extends Model
     public function getJumlahPrdLog()
     {
         $id = $this->id;
-        $s = DetailLogistik::
-        leftJoin('detail_pesanan_produk','detail_logistik.detail_pesanan_produk_id','=','detail_pesanan_produk.id')
-        ->leftJoin('logistik','logistik.id','=','detail_logistik.logistik_id')
-        ->where('detail_pesanan_produk.detail_pesanan_id', $id)
-        ->where('logistik.status_id', 10)
-        ->groupBy('detail_logistik.detail_pesanan_produk_id')
-        ->pluck('detail_logistik.detail_pesanan_produk_id')
-        ->count('detail_logistik.id');
+        $s = DetailLogistik::leftJoin('detail_pesanan_produk', 'detail_logistik.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+            ->leftJoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+            ->where('detail_pesanan_produk.detail_pesanan_id', $id)
+            ->where('logistik.status_id', 10)
+            ->groupBy('detail_logistik.detail_pesanan_produk_id')
+            ->pluck('detail_logistik.detail_pesanan_produk_id')
+            ->count('detail_logistik.id');
 
         return $s;
     }
     public function getJumlahPrdTf()
     {
         $id = $this->id;
-        $s = TFProduksiDetail::
-        leftJoin('detail_pesanan_produk','t_gbj_detail.detail_pesanan_produk_id','=','detail_pesanan_produk.id')
-        ->where('detail_pesanan_produk.detail_pesanan_id', $id)
-        ->count('t_gbj_detail.id');
+        $s = TFProduksiDetail::leftJoin('detail_pesanan_produk', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+            ->where('detail_pesanan_produk.detail_pesanan_id', $id)
+            ->count('t_gbj_detail.id');
 
         return $s;
     }
     public function getJumlahBatal()
     {
         $id = $this->id;
-        $s = RiwayatBatalPoPaket::where(['detail_pesanan_id'=> $id])->sum('jumlah');
+        $s = RiwayatBatalPoPaket::where(['detail_pesanan_id' => $id])->sum('jumlah');
         return $s;
     }
 
