@@ -47,7 +47,8 @@ class MeetingController extends Controller
         }
     }
 
-    public function getKaryawanForNotulen() {
+    public function getKaryawanForNotulen()
+    {
         try {
             $karyawan = auth()->user()->Karyawan;
 
@@ -709,26 +710,41 @@ class MeetingController extends Controller
     public function update_hadir_jadwal_meet(Request $request)
     {
 
+
         $obj =  json_decode(json_encode($request->all()), FALSE);
         DB::beginTransaction();
         try {
-            $kehadiran = $request->kehadiran == 'hadir' ? 'hadir' : 'tidak_hadir';
-            $alasan = isset($request->alasan) ? $request->alasan : NULL;
-            $p = PesertaMeeting::where(['karyawan_id' => auth()->user()->karyawan_id, 'meeting_id' => $request->id]);
-            $p->update(['status' => $kehadiran, 'ket' => $alasan]);
-            if ($request->kehadiran == 'tidak_hadir') {
-                for ($j = 0; $j < count($request->dokumentasi); $j++) {
-                    $randomCollectionName = Str::uuid()->toString();
-                    $extension = $request->dokumentasi[$j]['file']->getClientOriginalExtension();
-                    $file = $randomCollectionName . '.' . $extension;
-                    Storage::disk('ftp')->put($file, fopen($request->dokumentasi[$j]['file'], 'r+'));
 
-                    DokumenPeserta::create([
-                        'peserta_meeting_id' => $p->first()->id,
-                        'nama' => $file,
-                    ]);
+            if ($request->kehadiran == 'status_lalu') {
+                $get_history_id = RiwayatJadwalMeeting::where('meeting_id', $request->id)
+                    ->latest('id')
+                    ->value('id');
+                $get_data_history = RiwayatJadwalMeeting::find($get_history_id);
+                $data_history = json_decode($get_data_history->isi);
+                $data = collect($data_history->peserta)->where('karyawan_id', auth()->user()->karyawan_id);
+
+                $p = PesertaMeeting::where(['karyawan_id' => auth()->user()->karyawan_id, 'meeting_id' => $request->id]);
+                $p->update(['status' => $data->pluck('status')->implode(', '), 'ket' =>  $data->pluck('ket')->implode(', ')]);
+            } else {
+                $kehadiran = $request->kehadiran == 'hadir' ? 'hadir' : 'tidak_hadir';
+                $alasan = isset($request->alasan) ? $request->alasan : NULL;
+                $p = PesertaMeeting::where(['karyawan_id' => auth()->user()->karyawan_id, 'meeting_id' => $request->id]);
+                $p->update(['status' => $kehadiran, 'ket' => $alasan]);
+                if ($request->kehadiran == 'tidak_hadir') {
+                    for ($j = 0; $j < count($request->dokumentasi); $j++) {
+                        $randomCollectionName = Str::uuid()->toString();
+                        $extension = $request->dokumentasi[$j]['file']->getClientOriginalExtension();
+                        $file = $randomCollectionName . '.' . $extension;
+                        Storage::disk('ftp')->put($file, fopen($request->dokumentasi[$j]['file'], 'r+'));
+
+                        DokumenPeserta::create([
+                            'peserta_meeting_id' => $p->first()->id,
+                            'nama' => $file,
+                        ]);
+                    }
                 }
             }
+
             DB::commit();
             return response()->json([
                 'status' => 200,
@@ -763,9 +779,11 @@ class MeetingController extends Controller
                     'jadwal_meeting.moderator',
                     'jadwal_meeting.deskripsi',
                     'lokasi_meeting.nama as lokasi',
+                    DB::raw('(SELECT COUNT(*) FROM riwayat_meeting WHERE riwayat_meeting.meeting_id = jadwal_meeting.id) as riwayat_count')
                 )
                     ->leftJoin('jadwal_meeting', 'jadwal_meeting.id', '=', 'peserta_meeting.meeting_id')
                     ->leftJoin('lokasi_meeting', 'lokasi_meeting.id', '=', 'jadwal_meeting.lokasi')
+                    ->leftJoin('riwayat_meeting', 'riwayat_meeting.meeting_id', '=', 'jadwal_meeting.id')
                     ->where('karyawan_id', $id)
                     ->whereIN('jadwal_meeting.status', ['belum', 'menyusun_hasil_meeting', 'menunggu_approval_pimpinan'])->get();
             } else if ($status == 'selesai') {
@@ -782,6 +800,7 @@ class MeetingController extends Controller
                     'jadwal_meeting.moderator',
                     'jadwal_meeting.deskripsi',
                     'lokasi_meeting.nama as lokasi',
+                    DB::raw('(SELECT COUNT(*) FROM riwayat_meeting WHERE riwayat_meeting.meeting_id = jadwal_meeting.id) as riwayat_count')
                 )
                     ->leftJoin('jadwal_meeting', 'jadwal_meeting.id', '=', 'peserta_meeting.meeting_id')
                     ->leftJoin('lokasi_meeting', 'lokasi_meeting.id', '=', 'jadwal_meeting.lokasi')
@@ -807,6 +826,7 @@ class MeetingController extends Controller
                         "status_peserta" => $d->status,
                         "moderator" =>  $d->moderator,
                         "deskripsi" => $d->deskripsi,
+                        "is_perubahan" => $d->riwayat_count > 0 ? true : false,
                         "is_kehadiran" => $d->status == 'belum' ? true : false,
                     ];
                 }
