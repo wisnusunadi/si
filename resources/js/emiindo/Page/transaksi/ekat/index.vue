@@ -326,32 +326,32 @@ export default {
               :key="index"
               :class="{
                 'strike-through-row text-danger font-weight-bold':
-                  item.status == 'batal',
+                  item.status == 'batal' || item.pesanan.log_id == 20,
               }"
             >
-              <td :class="{ 'strike-through': item.status == 'batal' }">
+              <td :class="{ 'strike-through': item.status == 'batal' || item.pesanan.log_id == 20 }">
                 {{ index + 1 }}
               </td>
-              <td :class="{ 'strike-through': item.status == 'batal' }">
+              <td :class="{ 'strike-through': item.status == 'batal' || item.pesanan.log_id == 20 }">
                 {{ item.urutan }}
               </td>
-              <td :class="{ 'strike-through': item.status == 'batal' }">
+              <td :class="{ 'strike-through': item.status == 'batal' || item.pesanan.log_id == 20 }">
                 {{ item.so }}
               </td>
-              <td :class="{ 'strike-through': item.status == 'batal' }">
+              <td :class="{ 'strike-through': item.status == 'batal' || item.pesanan.log_id == 20 }">
                 {{ item.no_paket }}
                 <statusComponents :status="item.status" />
               </td>
-              <td :class="{ 'strike-through': item.status == 'batal' }">
+              <td :class="{ 'strike-through': item.status == 'batal' || item.pesanan.log_id == 20 }">
                 {{ item.no_po }}
               </td>
-              <td :class="{ 'strike-through': item.status == 'batal' }">
+              <td :class="{ 'strike-through': item.status == 'batal' || item.pesanan.log_id == 20 }">
                 {{ item.tgl_buat }}
               </td>
-              <td :class="{ 'strike-through': item.status == 'batal' }">
+              <td :class="{ 'strike-through': item.status == 'batal' || item.pesanan.log_id == 20 }">
                 {{ item.tgl_edit }}
               </td>
-              <td :class="{ 'strike-through': item.status == 'batal' }">
+              <td :class="{ 'strike-through': item.status == 'batal' || item.pesanan.log_id == 20 }">
                 <div v-if="item.tgl_kontrak_custom">
                   <div
                     :class="calculateDateFromNow(item.tgl_kontrak_custom).color"
@@ -371,7 +371,7 @@ export default {
                 </div>
                 <div v-else></div>
               </td>
-              <td :class="{ 'strike-through': item.status == 'batal' }">
+              <td :class="{ 'strike-through': item.status == 'batal' || item.pesanan.log_id == 20 }">
                 {{ item.nama_customer }}
               </td>
               <td>
@@ -421,7 +421,7 @@ export default {
                         @click="editEkat(item.id)"
                         v-if="
                           item.cgudang == 0 ||
-                          (item.status != 'sepakat' && item.log_id != 20)
+                          (item.status != 'sepakat' && item.pesanan.log_id != 20)
                         "
                       >
                         <i class="fas fa-pencil-alt"></i>
@@ -447,7 +447,7 @@ export default {
                       <button
                         class="dropdown-item openModalBatalRetur"
                         @click="batal(item)"
-                        v-if="item.is_batal"
+                        v-if="item.is_batal && item.pesanan.log_id != 20"
                         type="button"
                       >
                         <i class="fas fa-times"></i> Batal
