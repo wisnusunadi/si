@@ -388,7 +388,7 @@ export default {
                       <button
                         class="dropdown-item openModalBatalRetur"
                         @click="batal(item)"
-                        v-if="item.is_batal"
+                        v-if="item.is_batal && item.pesanan.log_id != 20"
                         type="button"
                       >
                         <i class="fas fa-times"></i> Batal

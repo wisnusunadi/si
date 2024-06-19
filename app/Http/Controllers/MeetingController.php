@@ -1261,7 +1261,6 @@ class MeetingController extends Controller
 
 
         return PDF::loadView('page.meeting.hasil', compact('data'))
-            ->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])
             ->setPaper('a4', 'potrait')->stream('undangan.pdf');
         // return view('page.meeting.hasil', compact('data'));
     }

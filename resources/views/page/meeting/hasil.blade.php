@@ -107,7 +107,7 @@
             <td rowspan="5" class="judul">
                 {{ $data->judul }} <br>
                 @if ($data->status != 'terlaksana')
-                    <img src="{{ public_path('/images/draft.png') }}" alt="not-approved" style="width: 50px">
+                    <img src="{{ public_path('images/draft.png') }}" alt="not-approved" style="width: 50px">
                 @endif
             </td>
         </tr>
