@@ -3586,7 +3586,7 @@ class PenjualanController extends Controller
 
     public function cekBatal($item)
     {
-        if ($item->cterkirim == 0  && $item->c_retur == 0) {
+        if ($item->cterkirim == 0  && $item->c_retur == 0  && $item->no_po != '') {
             return true;
         } else {
             return false;
