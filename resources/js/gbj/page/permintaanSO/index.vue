@@ -4,6 +4,7 @@ import dalamProses from './dalamProses'
 import sudahProses from './sudahProses'
 import permintaanBarang from './permintaanBarang'
 import batalTransfer from './batalTransfer'
+import axios from 'axios'
 export default {
     components: {
         Header,
