@@ -47,6 +47,8 @@ export default {
                 this.selesaiProsesData = selesaiProses.map((item, index) => {
                     return {
                         no: index + 1,
+                        jenis_id: this.jenisId(item).id,
+                        jenis: this.jenisId(item).jenis,
                         ...item
                     }
                 })
@@ -62,6 +64,24 @@ export default {
                 console.log(error)
             } finally {
                 this.$store.dispatch('setLoading', false)
+            }
+        },
+        jenisId(item) {
+            if (item.ekatalog) {
+                return {
+                    id: item.ekatalog.id,
+                    jenis: 'EKAT'
+                }
+            } else if (item.spa) {
+                return {
+                    id: item.spa.id,
+                    jenis: 'SPA'
+                }
+            } else {
+                return {
+                    id: item.spb.id,
+                    jenis: 'SPB'
+                }
             }
         },
         filterDataStatusDalamProses(status) {
