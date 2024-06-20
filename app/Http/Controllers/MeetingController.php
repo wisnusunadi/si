@@ -725,6 +725,15 @@ class MeetingController extends Controller
 
                 $p = PesertaMeeting::where(['karyawan_id' => auth()->user()->karyawan_id, 'meeting_id' => $request->id]);
                 $p->update(['status' => $data->pluck('status')->implode(', '), 'ket' =>  $data->pluck('ket')->implode(', ')]);
+
+
+                if ($data->pluck('status')->implode(', ') == 'belum') {
+                    DB::rollBack();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Belum Di isi Sebelumnya',
+                    ], 500);
+                }
             } else {
                 $kehadiran = $request->kehadiran == 'hadir' ? 'hadir' : 'tidak_hadir';
                 $alasan = isset($request->alasan) ? $request->alasan : NULL;
