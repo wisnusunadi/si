@@ -196,7 +196,7 @@ export default {
                             </div>
                         </div>
                     </div>
-                    <div v-if="form.update_kehadiran == 'status_baru'">
+                    <div v-if="form.update_kehadiran == 'status_baru' || !kehadiran.is_perubahan">
                         <div class="form-group row">
                             <label class="col-4">Kehadiran</label>
                             <div class="col-8">
