@@ -715,7 +715,7 @@ class MeetingController extends Controller
         DB::beginTransaction();
         try {
 
-            if ($request->kehadiran == 'status_lalu') {
+            if ($request->update_kehadiran == 'status_lalu') {
                 $get_history_id = RiwayatJadwalMeeting::where('meeting_id', $request->id)
                     ->latest('id')
                     ->value('id');
@@ -783,7 +783,6 @@ class MeetingController extends Controller
                 )
                     ->leftJoin('jadwal_meeting', 'jadwal_meeting.id', '=', 'peserta_meeting.meeting_id')
                     ->leftJoin('lokasi_meeting', 'lokasi_meeting.id', '=', 'jadwal_meeting.lokasi')
-                    ->leftJoin('riwayat_meeting', 'riwayat_meeting.meeting_id', '=', 'jadwal_meeting.id')
                     ->where('karyawan_id', $id)
                     ->whereIN('jadwal_meeting.status', ['belum', 'menyusun_hasil_meeting', 'menunggu_approval_pimpinan'])->get();
             } else if ($status == 'selesai') {

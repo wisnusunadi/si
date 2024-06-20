@@ -51,7 +51,7 @@ class RedirectIfAuthenticated
                 } else if ($request->user()->hasRole("28")) {
                     return redirect()->route('kesehatan.dashboard');
                 } else if ($request->user()->hasRole("16") || $request->user()->hasRole("34")) {
-                    return redirect('/mtc/air/masuk');
+                    return redirect('/meeting/ruangan');
                 } else if ($request->user()->hasRole("22")) {
                     return redirect('/lab/kalibrasi');
                 } else if ($request->user()->hasRole("14")) {

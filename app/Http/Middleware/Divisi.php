@@ -62,7 +62,7 @@ class Divisi
         } else if ($request->user()->hasRole("14")) {
             return redirect('/administrator/dashboard');
         } else if ($request->user()->hasRole("16") || $request->user()->hasRole("34")) {
-            return redirect('/mtc/air/masuk');
+            return redirect('/meeting/ruangan');
         } else if ($request->user()->hasRole("20")) {
             return redirect('/penjualan/lacak/show');
         } else if ($request->user()->hasRole("11")) {

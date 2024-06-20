@@ -151,7 +151,6 @@ export default {
                     return {
                         ...item,
                         tgl_meet: this.dateFormat(item.tanggal),
-                        perubahan: true,
                         status_peserta:
                             item.status_peserta == "belum"
                                 ? "belum_mengisi_daftar_hadir"
@@ -524,7 +523,7 @@ export default {
                             <template #item.urutan="{ item }">
                                 <div>
                                     {{ item.urutan }} <br>
-                                    <span class="badge badge-light" v-if="item.perubahan">
+                                    <span class="badge badge-light" v-if="item.is_perubahan">
                                         Mengalami Perubahan Jadwal
                                     </span>
                                 </div>
@@ -561,7 +560,7 @@ export default {
                                             "
                                         >
                                             <i class="fas fa-check-circle"></i>
-                                            {{ item.perubahan ? 'Update Kehadiran' : 'Kehadiran' }}
+                                            {{ item.is_perubahan ? 'Update Kehadiran' : 'Kehadiran' }}
                                         </button>
                                         <button
                                             class="dropdown-item"

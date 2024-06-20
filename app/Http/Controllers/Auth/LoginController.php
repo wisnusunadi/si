@@ -103,7 +103,7 @@ class LoginController extends Controller
         } else if (auth()->user()->divisi_id == 16 || auth()->user()->divisi_id == 10) {
             return redirect('/lab/dashboard');
         } else if (auth()->user()->divisi_id == 16 || auth()->user()->divisi_id == 34) {
-            return redirect('/mtc/air/masuk');
+            return redirect('/meeting/ruangan');
         } else if (auth()->user()->divisi_id == 14) {
             return redirect('/administrator/dashboard');
         }

@@ -993,3 +993,16 @@ Route::prefix('/labs')->group(function () {
 
 Route::namespace('v2')->group(__DIR__ . '/yogi/api.php');
 Route::namespace('inventory')->group(__DIR__ . '/inventory/api.php');
+// check connection
+Route::get('/check', function () {
+    try {
+        DB::connection()->getPdo();
+        if (DB::connection()->getDatabaseName()) {
+            echo "Yes! Successfully connected to the DB: " . DB::connection()->getDatabaseName();
+        } else {
+            die("Could not find the database. Please check your configuration.");
+        }
+    } catch (\Exception $e) {
+        die("Could not open connection to database server.  Please check your configuration." . $e->getMessage());
+    }
+});
