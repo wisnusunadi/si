@@ -59,13 +59,17 @@ export default {
             years: new Date().getFullYear(),
             showModal: false,
             detailSelected: {},
+            bagian: null,
+            status: null,
         };
     },
     methods: {
         async getData() {
             try {
                 this.$store.dispatch("setLoading", true);
-                const data = await this.$get(`/api/tfp/rakit?tahun=${this.years}`);
+                const data = await this.$get(
+                    `/api/tfp/rakit?tahun=${this.years}`
+                );
                 this.items = data.map((item, index) => {
                     return {
                         no: index + 1,
@@ -132,6 +136,42 @@ export default {
             }
             return years;
         },
+        getBagian() {
+            return [...new Set(this.items.map((item) => item.bagian))];
+        },
+        getStatus() {
+            const status = [...new Set(this.items.map((item) => item.status))];
+            // change to capitalize
+            const capitalize = (s) => {
+                if (typeof s !== "string") return "";
+                return s.charAt(0).toUpperCase() + s.slice(1);
+            };
+            // change produksi to perakitan
+            return status.map((item) => {
+                if (item == "produksi") {
+                    return {
+                        value: item,
+                        label: capitalize("perakitan"),
+                    };
+                }
+                return {
+                    value: item,
+                    label: capitalize(item),
+                };
+            });
+        },
+        // filter items jika bagian dan status sesuai dan tidak kosong, jika kosong maka tampilkan semua    
+        filterItems() {
+            if (this.items == null && this.bagian == null && this.status == null) {
+                return this.items;
+            } 
+
+            return this.items.filter((item) => {
+                const bagianMatch = this.bagian == null || item.bagian == this.bagian;
+                const statusMatch = this.status == null || item.status == this.status.value;
+                return bagianMatch && statusMatch;
+            })
+        },
     },
 };
 </script>
@@ -146,35 +186,46 @@ export default {
         />
         <div class="card">
             <div class="card-body">
-                <div class="d-flex bd-highlight">
-                    <div class="p-2 flex-grow-1 bd-highlight">
-                        <div class="form-group row">
-                            <label
-                                for="inputEmail3"
-                                class="col-1 col-form-label"
-                                >Tahun</label
-                            >
-                            <div class="col-2">
+                <div class="row mb-3">
+                    <div class="col-8">
+                        <div class="d-flex bd-highlight">
+                            <div class="p-2 flex-fill bd-highlight">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="search"
+                                    placeholder="Cari..."
+                                />
+                            </div>
+                            <div class="p-2 flex-fill bd-highlight">
                                 <v-select
                                     :options="yearsComputed"
                                     v-model="years"
                                     @input="getData"
-                                ></v-select>
+                                    placeholder="Pilih Tahun"
+                                />
+                            </div>
+                            <div class="p-2 flex-fill bd-highlight">
+                                <v-select
+                                    placeholder="Pilih Bagian"
+                                    :options="getBagian"
+                                    v-model="bagian"
+                                />
+                            </div>
+                            <div class="p-2 flex-fill bd-highlight">
+                                <v-select
+                                    placeholder="Pilih Status"
+                                    :options="getStatus"
+                                    v-model="status"
+                                />
                             </div>
                         </div>
                     </div>
-                    <div class="p-2 bd-highlight">
-                        <input
-                            type="text"
-                            class="form-control"
-                            v-model="search"
-                            placeholder="Cari..."
-                        />
-                    </div>
+                    <div class="col-4 text-right"></div>
                 </div>
                 <data-table
                     :headers="headers"
-                    :items="items"
+                    :items="filterItems"
                     :search="search"
                     v-if="!$store.state.loading"
                 >
