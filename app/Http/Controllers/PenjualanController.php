@@ -1389,7 +1389,7 @@ class PenjualanController extends Controller
                 ->orderBy('noseri_barang_jadi.noseri', 'ASC')
                 ->get();
 
-                return response()->json(['data' => $data]);
+            return response()->json(['data' => $data]);
 
             // return datatables()->of($data)
             //     ->addIndexColumn()
@@ -1511,7 +1511,7 @@ class PenjualanController extends Controller
                 ->leftjoin('spa_on', 'spa_on.nolkpp_on', '=', 'seri_on.lkppfk_on')
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_on.pabrik_on')
                 ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spa_on.idprod_on')
-                ->where('seri_on.noseri_on',$value)
+                ->where('seri_on.noseri_on', $value)
                 ->whereNotNull('gudang_on.tglsj_on')
                 ->groupby('seri_on.noseri_on');
 
@@ -1594,14 +1594,14 @@ class PenjualanController extends Controller
                 ->leftjoin('qc_spb', 'qc_spb.noqc_spb', '=', 'seri_spb.nogdgfk')
                 ->leftjoin('spb', 'spb.nospb', '=', 'seri_spb.nogdgfk')
                 ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spb.idprod_spb')
-                ->where('seri_spb.noseri_spb',  $value )
+                ->where('seri_spb.noseri_spb',  $value)
                 ->whereNotNull('gudang_spb.tglsjgdg_spb')
                 ->groupby('seri_spb.noseri_spb');
 
             $seriERP =  NoseriBarangJadi::where('noseri', $value);
             $Istransaksi = NoseriBarangJadi::join('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
-            ->where('noseri',$value)
-            ->where('t_gbj_noseri.jenis','keluar');
+                ->where('noseri', $value)
+                ->where('t_gbj_noseri.jenis', 'keluar');
 
 
 
@@ -1668,39 +1668,41 @@ class PenjualanController extends Controller
                 ->whereNotNull('t_gbj.retur_penjualan_id')
                 ->orderBy('noseri_barang_jadi.noseri', 'ASC')
                 ->groupBy('retur_penjualan.id');
-                //dd($Istransaksi->count());
-                $data = array();
-                if($si_spa21->count() > 0 ){
-                    $data = $si_spa21->get();
-                }
+            //dd($Istransaksi->count());
+            $data = array();
+            if ($si_spa21->count() > 0) {
+                $data = $si_spa21->get();
+            }
 
-                if($si_spa20->count() > 0 ){
-                    $data = $si_spa20->get();
-                }
+            if ($si_spa20->count() > 0) {
+                $data = $si_spa20->get();
+            }
 
-                if($si_spb20->count() > 0 ){
-                    $data = $si_spb20->get();
-                }
+            if ($si_spb20->count() > 0) {
+                $data = $si_spb20->get();
+            }
 
-                if($si_spb21->count() > 0 ){
-                    $data = $si_spb21->get();
-                }
+            if ($si_spb21->count() > 0) {
+                $data = $si_spb21->get();
+            }
 
-                if($si_ekat20->count() > 0 ){
-                    $data = $si_ekat20->get();
-                }
+            if ($si_ekat20->count() > 0) {
+                $data = $si_ekat20->get();
+            }
 
-                if($si_ekat21->count() > 0 ){
-                    $data = $si_ekat21->get();
-                }
+            if ($si_ekat21->count() > 0) {
+                $data = $si_ekat21->get();
+            }
 
 
-                if($seriERP->count() > 0){
+            if ($seriERP->count() > 0) {
 
-                    if($Istransaksi->count() > 0){
+                if ($Istransaksi->count() > 0) {
 
-                     if($spa->count() > 0 ){
+                    if ($spa->count() > 0) {
+
                         $datas = $spa->first();
+
                         $data[] = array(
                             'noseri' => $value,
                             'no_po' => $datas->no_po,
@@ -1716,26 +1718,25 @@ class PenjualanController extends Controller
                         );
                     }
 
-                    if($noseriretur->count() > 0 ){
-                        $data = $noseriretur->get();
-                    }
+                    // if ($noseriretur->count() > 0) {
+                    //     $data = $noseriretur->get();
+                    // }
+                } else {
+                    $data[] = array(
+                        'noseri' => $value,
+                        'no_po' => '-',
+                        'so' => '-',
+                        'tgl_uji' => null,
+                        'tgl_sj' => null,
+                        'no_sj' => '-',
+                        'p_nama' => '-',
+                        'c_ekat_nama' => '-',
+                        'c_spb_nama' => '-',
+                        'satuan' => '-',
+                        'state_nama' => 'Stok Barang',
+                    );
+                }
 
-                    }else{
-                        $data[] = array(
-                            'noseri' => $value,
-                            'no_po' => '-',
-                            'so' => '-',
-                            'tgl_uji' => null,
-                            'tgl_sj' => null,
-                            'no_sj' => '-',
-                            'p_nama' => '-',
-                            'c_ekat_nama' => '-',
-                            'c_spb_nama' => '-',
-                            'satuan' => '-',
-                            'state_nama' => 'Stok Barang',
-                        );
-
-                    }
                 //  'noseri_barang_jadi.noseri',
                 // 'pesanan.no_po',
                 // 'pesanan.so',
@@ -1749,18 +1750,18 @@ class PenjualanController extends Controller
                 // 'ekatalog.satuan as satuan',
                 // 'm_state.nama as state_nama',
 
-                    // if($spa->count() > 0 ){
-                    //     $data = $spa->get();
-                    // }
+                // if($spa->count() > 0 ){
+                //     $data = $spa->get();
+                // }
 
-                    // if($noseriretur->count() > 0 ){
-                    //     $data = $noseriretur->get();
-                    // }
+                // if($noseriretur->count() > 0 ){
+                //     $data = $noseriretur->get();
+                // }
 
-                }
+            }
 
 
-          //  $data = $si_spa21->merge($si_spa20)->merge($si_spb20)->merge($si_spb21)->merge($si_ekat20)->merge($si_ekat21)->merge($spa)->merge($noseriretur);
+            //  $data = $si_spa21->merge($si_spa20)->merge($si_spb20)->merge($si_spb21)->merge($si_ekat20)->merge($si_ekat21)->merge($spa)->merge($noseriretur);
 
             return response()->json(['data' => $data]);
             // $data =  NoseriBarangJadi::select(
@@ -1908,7 +1909,7 @@ class PenjualanController extends Controller
                 ->where('so', 'LIKE', '%' . $val . '%')
                 ->get();
 
-                return response()->json(['data' => $data]);
+            return response()->json(['data' => $data]);
             // return datatables()->of($data)
             //     ->addIndexColumn()
             //     ->addColumn('nama_customer', function ($data) {
@@ -1989,7 +1990,7 @@ class PenjualanController extends Controller
             $si_spb21 = array();
             $si_spb20 = array();
 
-                $si_ekat21 = DB::connection('si_21')->table('gudang_on')
+            $si_ekat21 = DB::connection('si_21')->table('gudang_on')
                 ->select(
                     'gudang_on.tglsj_on as tgl_kirim',
                     'gudang_on.nosj_on as no_sj',
@@ -2005,7 +2006,7 @@ class PenjualanController extends Controller
                 ->groupby('gudang_on.nosj_on')
                 ->get();
 
-                $si_ekat20 = DB::connection('si_20')->table('gudang_on')
+            $si_ekat20 = DB::connection('si_20')->table('gudang_on')
                 ->select(
                     'gudang_on.tglsj_on as tgl_kirim',
                     'gudang_on.nosj_on as no_sj',
@@ -2022,7 +2023,7 @@ class PenjualanController extends Controller
                 ->get();
 
 
-                $si_spa21 = DB::connection('si_21')->table('gudang_off')
+            $si_spa21 = DB::connection('si_21')->table('gudang_off')
                 ->select(
                     'gudang_off.tglsj_off as tgl_kirim',
                     'gudang_off.nosj_off as no_sj',
@@ -2038,7 +2039,7 @@ class PenjualanController extends Controller
                 ->groupby('gudang_off.nosj_off')
                 ->get();
 
-                $si_spa20 = DB::connection('si_20')->table('gudang_off')
+            $si_spa20 = DB::connection('si_20')->table('gudang_off')
                 ->select(
                     'gudang_off.tglsj_off as tgl_kirim',
                     'gudang_off.nosj_off as no_sj',
@@ -2056,7 +2057,7 @@ class PenjualanController extends Controller
 
 
 
-                $si_spb21 = DB::connection('si_21')->table('gudang_spb')
+            $si_spb21 = DB::connection('si_21')->table('gudang_spb')
                 ->select(
                     'gudang_spb.tglsjgdg_spb as tgl_kirim',
                     'gudang_spb.nosjgdg_spb as no_sj',
@@ -2072,7 +2073,7 @@ class PenjualanController extends Controller
                 ->groupby('gudang_spb.nosjgdg_spb')
                 ->get();
 
-                $si_spb20 = DB::connection('si_20')->table('gudang_spb')
+            $si_spb20 = DB::connection('si_20')->table('gudang_spb')
                 ->select(
                     'gudang_spb.tglsjgdg_spb as tgl_kirim',
                     'gudang_spb.nosjgdg_spb as no_sj',
@@ -2088,7 +2089,7 @@ class PenjualanController extends Controller
                 ->groupby('gudang_spb.nosjgdg_spb')
                 ->get();
 
-             $erp = Logistik::select(
+            $erp = Logistik::select(
                 'logistik.id',
                 'logistik.nosurat as no_sj',
                 'logistik.tgl_kirim as tgl_sj',
@@ -2103,8 +2104,8 @@ class PenjualanController extends Controller
                 'c_spb_prd.nama as c_spb_prd_nama',
                 'c_spb_prt.nama as c_spb_prt_nama',
 
-                 'p_prd.no_po as po_prd',
-                 'p_prt.no_po as po_prt',
+                'p_prd.no_po as po_prd',
+                'p_prt.no_po as po_prt',
 
             )
                 ->leftJoin('detail_logistik_part',  'detail_logistik_part.logistik_id',  '=',  'logistik.id')
@@ -2117,62 +2118,62 @@ class PenjualanController extends Controller
                 ->leftJoin('pesanan as p_prd',  'p_prd.id',  '=',  'detail_pesanan.pesanan_id')
 
 
-                 ->leftJoin('ekatalog',  'ekatalog.pesanan_id',  '=',  'p_prd.id')
-                 ->leftJoin('customer as c_ekat',  'c_ekat.id',  '=',  'ekatalog.customer_id')
+                ->leftJoin('ekatalog',  'ekatalog.pesanan_id',  '=',  'p_prd.id')
+                ->leftJoin('customer as c_ekat',  'c_ekat.id',  '=',  'ekatalog.customer_id')
 
-                 ->leftJoin('spa as spa_prd',  'spa_prd.pesanan_id',  '=',  'p_prd.id')
-                 ->leftJoin('customer as c_spa_prd',  'c_spa_prd.id',  '=',  'spa_prd.customer_id')
-                 ->leftJoin('spa as spa_prt',  'spa_prt.pesanan_id',  '=',  'p_prt.id')
-                 ->leftJoin('customer as c_spa_prt',  'c_spa_prt.id',  '=',  'spa_prt.customer_id')
+                ->leftJoin('spa as spa_prd',  'spa_prd.pesanan_id',  '=',  'p_prd.id')
+                ->leftJoin('customer as c_spa_prd',  'c_spa_prd.id',  '=',  'spa_prd.customer_id')
+                ->leftJoin('spa as spa_prt',  'spa_prt.pesanan_id',  '=',  'p_prt.id')
+                ->leftJoin('customer as c_spa_prt',  'c_spa_prt.id',  '=',  'spa_prt.customer_id')
 
-                 ->leftJoin('spb as spb_prd',  'spb_prd.pesanan_id',  '=',  'p_prd.id')
-                 ->leftJoin('customer as c_spb_prd',  'c_spb_prd.id',  '=',  'spb_prd.customer_id')
-                 ->leftJoin('spb as spb_prt',  'spb_prt.pesanan_id',  '=',  'p_prt.id')
-                 ->leftJoin('customer as c_spb_prt',  'c_spb_prt.id',  '=',  'spb_prt.customer_id')
+                ->leftJoin('spb as spb_prd',  'spb_prd.pesanan_id',  '=',  'p_prd.id')
+                ->leftJoin('customer as c_spb_prd',  'c_spb_prd.id',  '=',  'spb_prd.customer_id')
+                ->leftJoin('spb as spb_prt',  'spb_prt.pesanan_id',  '=',  'p_prt.id')
+                ->leftJoin('customer as c_spb_prt',  'c_spb_prt.id',  '=',  'spb_prt.customer_id')
 
 
                 ->where('logistik.nosurat',  'LIKE', '%' . $val . '%')
-                ->orderBy('logistik.id','DESC')
+                ->orderBy('logistik.id', 'DESC')
                 ->groupBy('logistik.id');
 
-             if($erp->count() > 0){
-                    foreach($erp->get() as $d){
-                        if($d->c_ekat_nama != null){
-                            $c = $d->c_ekat_nama;
-                        }else if($d->c_spa_prd_nama != null){
-                            $c = $d->c_spa_prd_nama;
-                        }else if($d->c_spa_prt_nama != null){
-                            $c = $d->c_spa_prt_nama;
-                        }else if($d->c_spb_prd_nama != null){
-                            $c = $d->c_spb_prd_nama;
-                        }else if($d->c_spb_prt_nama != null){
-                            $c = $d->c_spb_prt_nama;
-                        }
-
-                        if($d->po_prd != null){
-                            $po = $d->po_prd;
-                        }else{
-                            $po = $d->po_prt;
-                        }
-
-
-                        $erps[] = array(
-                            'tgl_kirim' => $d->tgl_sj,
-                            'no_sj' => $d->no_sj,
-                            'po' => $po,
-                            'customer' => $c,
-                            'resi' => $d->resi,
-                            'ket' => $d->ket
-                        );
+            if ($erp->count() > 0) {
+                foreach ($erp->get() as $d) {
+                    if ($d->c_ekat_nama != null) {
+                        $c = $d->c_ekat_nama;
+                    } else if ($d->c_spa_prd_nama != null) {
+                        $c = $d->c_spa_prd_nama;
+                    } else if ($d->c_spa_prt_nama != null) {
+                        $c = $d->c_spa_prt_nama;
+                    } else if ($d->c_spb_prd_nama != null) {
+                        $c = $d->c_spb_prd_nama;
+                    } else if ($d->c_spb_prt_nama != null) {
+                        $c = $d->c_spb_prt_nama;
                     }
-             }
 
-                 $si =  $si_ekat21->merge($si_ekat20)->merge($si_spa21)->merge($si_spa20)->merge($si_spb21)->merge($si_spb20)->toArray();
-                 $merge =array_merge($erps,$si);
+                    if ($d->po_prd != null) {
+                        $po = $d->po_prd;
+                    } else {
+                        $po = $d->po_prt;
+                    }
+
+
+                    $erps[] = array(
+                        'tgl_kirim' => $d->tgl_sj,
+                        'no_sj' => $d->no_sj,
+                        'po' => $po,
+                        'customer' => $c,
+                        'resi' => $d->resi,
+                        'ket' => $d->ket
+                    );
+                }
+            }
+
+            $si =  $si_ekat21->merge($si_ekat20)->merge($si_spa21)->merge($si_spa20)->merge($si_spb21)->merge($si_spb20)->toArray();
+            $merge = array_merge($erps, $si);
 
 
 
-                return response()->json(['data'=> $merge]);
+            return response()->json(['data' => $merge]);
         } else if ($parameter == 'no_seri_gbj') {
             $data = NoseriBarangJadi::where([
                 ['noseri', 'LIKE', '%' . $value . '%'],
