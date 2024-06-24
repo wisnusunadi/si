@@ -1,0 +1,15 @@
+/* Option.css */
+.react-select__option {
+    padding: 10px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.react-select__option:hover {
+    background-color: #DEEBFF;
+}
+
+.react-select__option_selected {
+    background-color: #2684FF;
+    color: white;
+}

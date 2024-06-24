@@ -5,7 +5,9 @@ import detailComponents from "../detail/index.vue";
 import doComponents from "../do.vue";
 import statusComponents from "../../../components/status.vue";
 import pagination from "../../../components/pagination.vue";
+import persentase from "../../../components/persentase.vue";
 import axios from "axios";
+
 export default {
   components: {
     batalComponents,
@@ -14,6 +16,7 @@ export default {
     statusComponents,
     doComponents,
     pagination,
+    persentase,
   },
   props: ["ekat"],
   data() {
@@ -58,7 +61,7 @@ export default {
         {
           text: "Status",
           value: "status",
-        },
+        }, 
         {
           text: "Aksi",
           value: "aksi",
@@ -73,7 +76,7 @@ export default {
   },
   methods: {
     tambah() {
-      window.location.href = "/penjualan/penjualan/create";
+      window.location.href = "/penjualanv2/create";
     },
     batal(item) {
       this.detailSelected = item;
@@ -141,8 +144,8 @@ export default {
     updateFilteredDalamProses(data) {
       this.renderPaginate = data;
     },
-    editEkat(item) {
-      window.location.href = `/penjualan/penjualan/edit_ekatalog/${item}/ekatalog`;
+    editEkat(pesananId) {
+      window.location.href = `/penjualanv2/edit/${pesananId}`;
     },
     cekIsString(value) {
       if (typeof value === "string") {
@@ -418,7 +421,7 @@ export default {
                       <button
                         class="dropdown-item"
                         type="button"
-                        @click="editEkat(item.id)"
+                        @click="editEkat(item.pesanan.id)"
                         v-if="
                           item.cgudang == 0 ||
                           (item.status != 'sepakat' && item.pesanan.log_id != 20)
@@ -510,4 +513,3 @@ export default {
   z-index: 2;
 }
 </style>
-
