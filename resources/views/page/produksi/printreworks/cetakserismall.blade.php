@@ -27,7 +27,7 @@
         }
 
         .margin-left-13 {
-            margin-left: -0.3cm;
+            margin-left: -0.4cm;
         }
 
         .margin-left-14 {
