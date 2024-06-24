@@ -448,7 +448,7 @@ class MeetingController extends Controller
                     foreach ($data->PesertaMeeting as $p) {
                         $peserta[] = (object)[
                             'id' => $p->id,
-                            'karyawan_id' => $p->id,
+                            'karyawan_id' => $p->karyawan_id,
                             'nama' => $p->Karyawan->nama,
                             'jabatan' => $p->Karyawan->Divisi->nama,
                             'status' => $p->status,
@@ -641,7 +641,7 @@ class MeetingController extends Controller
                     foreach ($data->PesertaMeeting as $p) {
                         $peserta[] = (object)[
                             'id' => $p->id,
-                            'karyawan_id' => $p->id,
+                            'karyawan_id' => $p->karyawan_id,
                             'nama' => $p->Karyawan->nama,
                             'jabatan' => $p->Karyawan->Divisi->nama,
                             'status' => $p->status,
@@ -712,7 +712,7 @@ class MeetingController extends Controller
 
 
         $obj =  json_decode(json_encode($request->all()), FALSE);
-        DB::beginTransaction();
+        // DB::beginTransaction();
         try {
 
             if ($request->update_kehadiran == 'status_lalu') {

@@ -135,7 +135,6 @@ Route::prefix('/produk')->group(function () {
         Route::get('/select', [App\Http\Controllers\MasterController::class, 'select_parent_rw']);
         Route::get('/select/{id}', [App\Http\Controllers\MasterController::class, 'select_item_rw']);
     });
-
     Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_produk']);
     Route::get('variasi', [App\Http\Controllers\MasterController::class, 'get_data_produk_variasi']);
     Route::post('create', [App\Http\Controllers\MasterController::class, 'create_produk']);
@@ -418,7 +417,7 @@ Route::prefix('/tfp')->group(function () {
 Route::prefix('/hr')->group(function () {
     Route::prefix('/meet')->group(function () {
         Route::get('/getKaryawan', [MeetingController::class, 'getKaryawanForNotulen'])->middleware('jwt.verify');
-        
+
         Route::prefix('/lokasi')->group(function () {
             Route::post('/store', [MeetingController::class, 'store_lokasi_meet']);
             Route::get('/show', [MeetingController::class, 'show_lokasi_meet']);
