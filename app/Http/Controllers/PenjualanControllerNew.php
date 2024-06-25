@@ -580,12 +580,12 @@ class PenjualanControllerNew extends Controller
                             'ongkir' => $produk['ongkir'],
                             'ppn' => $produk['pajak'] == 'true' ? 1 : 0,
                             'kalibrasi' => $produk['kalibrasi'] == 'true' ? 1 : 0,
-                            'keterangan' => $produk['catatan']
+                            // 'keterangan' => $produk['catatan']
                         ]);
                         foreach ($produk['variasi'] as $variasi) {
                             DetailPesananProduk::create([
                                 'detail_pesanan_id' => $detail_pesanan['id'],
-                                'gudang_barang_jadi_id' => $variasi['id']
+                                'gudang_barang_jadi_id' => $variasi['variasiSelected']
                             ]);
                         }
                     } else {
@@ -601,7 +601,7 @@ class PenjualanControllerNew extends Controller
                         foreach ($produk['variasi'] as $variasi) {
                             DetailPesananProdukDsb::create([
                                 'detail_pesanan_dsb_id' => $dsb['id'],
-                                'gudang_barang_jadi_id' => $variasi['id']
+                                'gudang_barang_jadi_id' => $variasi['variasiSelected']
                             ]);
                         }
                         if (isset($produk['noseridsb']) > 0) {
@@ -621,7 +621,7 @@ class PenjualanControllerNew extends Controller
                     'customer_id' => $request->customer_id != '' ?  $request->customer_id : 484,
                     'provinsi_id' => $request->provinsi == 'NULL' ? NULL : $request->provinsi,
                     'pesanan_id' => $pesanan->id,
-                    'no_paket' => $request->is_no_paket_disabled !== true ? $request->no_paket_awal . $request->no_paket_akhir: NULL,
+                    'no_paket' => $request->no_paket != '' && $request->is_no_paket_disabled == true ? $request->no_paket_awal . $request->no_paket : NULL,
                     'no_urut' => $request->no_urut,
                     'deskripsi' => $request->deskripsi,
                     'instansi' => $request->instansi,
@@ -657,9 +657,14 @@ class PenjualanControllerNew extends Controller
                     'updated_at' => $randomDate,
                 ]);
             }
+
+            $x = $pesanan->id;
+            $no_po_nonekat = $pesanan->no_po;
+
             DB::commit();
             return response()->json([
                 'message' => 'ok',
+                'pesanan_id' =>  $no_po_nonekat != null ? $x : 'refresh',
             ], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
