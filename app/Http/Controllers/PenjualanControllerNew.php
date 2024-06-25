@@ -440,7 +440,7 @@ class PenjualanControllerNew extends Controller
 
                 $ekatalog->customer_id = $request->customer_id != '' ?  $request->customer_id : 484;
                 $ekatalog->provinsi_id = $request->provinsi == 'NULL' ? NULL : $request->provinsi;
-                $ekatalog->no_paket = $request->no_paket != '' && $request->is_no_paket_disabled == true ? $request->no_paket_awal . $request->no_paket : NULL;
+                $ekatalog->no_paket = $request->no_paket_awal != null && $request->is_no_paket_disabled == false ? $request->no_paket_awal . $request->no_paket_akhir : NULL;
                 $ekatalog->no_urut = $request->no_urut;
                 $ekatalog->deskripsi = $request->deskripsi;
                 $ekatalog->instansi = $request->instansi;
@@ -621,7 +621,7 @@ class PenjualanControllerNew extends Controller
                     'customer_id' => $request->customer_id != '' ?  $request->customer_id : 484,
                     'provinsi_id' => $request->provinsi == 'NULL' ? NULL : $request->provinsi,
                     'pesanan_id' => $pesanan->id,
-                    'no_paket' => $request->no_paket_awal != '' && $request->is_no_paket_disabled == false ? $request->no_paket_awal . $request->no_paket_akhir : NULL,
+                    'no_paket' => $request->no_paket_awal != null && $request->is_no_paket_disabled == false ? $request->no_paket_awal . $request->no_paket_akhir : NULL,
                     'no_urut' => $request->no_urut,
                     'deskripsi' => $request->deskripsi,
                     'instansi' => $request->instansi,
