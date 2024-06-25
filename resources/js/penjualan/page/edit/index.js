@@ -39,7 +39,7 @@ const EditPenjualan = () => {
         };
         setDataEdit(penjualanData);
 
-        const {data} = await getYears();
+        const { data } = await getYears();
         setPeriodePenjualan(data);
     };
 
@@ -50,6 +50,9 @@ const EditPenjualan = () => {
     const disabledValidation = () => {
         // Cek jika jenis form adalah "ekatalog"
         if (dataEdit.jenis === "ekatalog") {
+            if (dataEdit.status == "draft") {
+                return false;
+            }
             // Cek jika no_urut, status, atau produk kosong atau produk tidak ada
             if (
                 dataEdit.no_urut === "" ||
