@@ -664,7 +664,7 @@ class PenjualanControllerNew extends Controller
             DB::commit();
             return response()->json([
                 'message' => 'ok',
-                'pesanan_id' =>  $no_po_nonekat != null ? $x : 'refresh',
+                'pesanan_id' =>  $no_po_nonekat != null ? $x : null,
             ], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
