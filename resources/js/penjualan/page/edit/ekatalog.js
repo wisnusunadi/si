@@ -29,7 +29,7 @@ const Ekatalog = ({ data }) => {
             case "batal":
                 return <span className="red-text">Batal</span>;
             default:
-                return <span className="blue-text">-</span>;
+                return <span className="blue-text text-capitalize">{status}</span>;
         }
     }
 
