@@ -1649,7 +1649,8 @@ class MasterController extends Controller
                 }
             }
         }
-        echo json_encode($data);
+        // echo json_encode($data);
+        return response()->json($data);
     }
     public function select_penjualan_produk_param(Request $request, $value)
     {
@@ -2433,5 +2434,56 @@ class MasterController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
+    }
+
+    public function select_penjualan_produk_param_new(Request $request, $value)
+    {
+        if ($value == 'ekatalog') {
+            $paket = PenjualanProduk::
+                // $paket = PenjualanProduk::addSelect(['stok' => function ($q) {
+                //     $q->selectRaw('count(noseri_barang_jadi.id)')
+                //         ->from('noseri_barang_jadi')
+                //         ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+                //         ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                //         ->leftjoin('detail_penjualan_produk', 'detail_penjualan_produk.produk_id', '=', 'produk.id')
+                //         ->where('is_ready', 0)
+                //         ->whereColumn('detail_penjualan_produk.penjualan_produk_id', 'penjualan_produk.id');
+                // }])
+                where('is_aktif', '1')
+                ->where('status', 'ekat')
+                ->get();
+            foreach ($paket as $key_p => $p) {
+                $item[$key_p] = array(
+                    'id' => $p->id,
+                    'nama' => $p->nama,
+                    'harga' => $p->harga,
+                    'stok' => $p->stok,
+                    'is_kalibrasi' => $p->Produk->whereNotNull('kode_lab_id')->count() > 0 ? true : false,
+                );
+                foreach ($p->Produk as $key_prd => $produk) {
+                    $item[$key_p]['variasi'][] = array(
+                        'id' => $produk->GudangBarangJadi->first()->id,
+                        'produk_id' => $produk->id
+                    );
+                }
+            }
+        } else {
+            $paket = PenjualanProduk::where('is_aktif', '1')
+                ->get();
+            foreach ($paket as $key_p => $p) {
+                $item[$key_p] = array(
+                    'id' => $p->id,
+                    'nama' => $p->nama,
+                    'harga' => $p->harga,
+                );
+                foreach ($p->Produk as $key_prd => $produk) {
+                    $item[$key_p]['variasi'][] = array(
+                        'id' => $produk->GudangBarangJadi->first()->id,
+                        'produk_id' => $produk->id
+                    );
+                }
+            }
+        }
+        return response()->json($item);
     }
 }

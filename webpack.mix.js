@@ -39,4 +39,9 @@ mix.js('resources/js/produksiNew/app.js', 'public/native/js/produksinew.js').vue
 mix.js('resources/js/qc/app.js', 'public/native/js/qc.js').vue();
 mix.js("resources/js/gbmp/app.js", "public/native/js/gbmp.js").vue();
 
+mix.js(
+    "resources/js/penjualan/index.js",
+    "public/native/js/penjualan.js"
+).react();
+
 // mix.browserSync("http://localhost:8000")

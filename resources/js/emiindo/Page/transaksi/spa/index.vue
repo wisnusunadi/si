@@ -4,6 +4,7 @@ import returComponents from "../retur.vue";
 import detailComponents from "../detail/index.vue";
 import doComponents from "../do.vue";
 import pagination from "../../../components/pagination.vue";
+import persentase from "../../../components/persentase.vue";
 export default {
   components: {
     batalComponents,
@@ -11,6 +12,7 @@ export default {
     detailComponents,
     doComponents,
     pagination,
+    persentase,
   },
   props: ["spa"],
   data() {
@@ -85,7 +87,7 @@ export default {
       window.open(`/penjualan/penjualan/cetak_surat_perintah/${id}`, "_blank");
     },
     tambah() {
-      window.location.href = "/penjualan/penjualan/create";
+      window.location.href = "/penjualanv2/create";
     },
     filter(year, status) {
       this.$store.dispatch("setYears", year);
@@ -95,8 +97,8 @@ export default {
         this.$emit("refresh");
       }
     },
-    editSpa(item) {
-      window.location.href = `/penjualan/penjualan/edit_ekatalog/${item}/spa`;
+    editSpa(pesananId) {
+      window.location.href = `/penjualanv2/edit/${pesananId}`;
     },
     batal(item) {
       this.detailSelected = item;
@@ -362,7 +364,7 @@ export default {
                       <button
                         class="dropdown-item"
                         type="button"
-                        @click="editSpa(item.id)"
+                        @click="editSpa(item.pesanan.id)"
                         v-if="item.is_edit == true"
                       >
                         <i class="fas fa-pencil-alt"></i>

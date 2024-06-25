@@ -9649,7 +9649,6 @@ class PenjualanController extends Controller
     }
 
     public function get_data_spa_emindo($po)
-
     {
         $p = Pesanan::where('no_po', $po)->first();
         if ($p) {

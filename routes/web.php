@@ -281,6 +281,8 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     // Route::get('/dep_doc/{id?}', 'digidocu\DocumentsController@dep_doc')->name('dc.dep_doc');
 });
 
+Route::view('penjualanv2/{any?}', 'page.penjualan.penjualanv2')->where('any', '.*');
+
 Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
     Route::group(['middleware' => ['divisi:qc']], function () {
         Route::get('/dashboard', [App\Http\Controllers\QcController::class, 'dashboard'])->name('qc.dashboard');

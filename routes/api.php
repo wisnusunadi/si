@@ -156,7 +156,19 @@ Route::prefix('/penjualan_produk')->group(function () {
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk']);
     Route::get('select/{id}', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk_id']);
     Route::get('select_param/{penjualan}', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk_param']);
+    Route::get('select_param_new/{penjualan}', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk_param_new']);
 });
+
+Route::prefix('/penj')->group(function () {
+    Route::prefix('/detail')->group(function () {
+        Route::get('/edit/{id}', [App\Http\Controllers\PenjualanControllerNew::class, 'penjualanDetailEdit']);
+    });
+    Route::prefix('/action')->group(function () {
+        Route::post('/', [App\Http\Controllers\PenjualanControllerNew::class, 'penjualanStore']);
+        Route::post('/edit', [App\Http\Controllers\PenjualanControllerNew::class, 'penjualanStoreEdit']);
+    });
+});
+
 
 Route::prefix('/penjualan')->group(function () {
     // Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_penjualan']);

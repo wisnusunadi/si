@@ -2,11 +2,13 @@
 import detailComponents from '../detail/index.vue'
 import pagination from '../../../components/pagination.vue'
 import statusComponents from '../../../components/status.vue'
+import persentase from "../../../components/persentase.vue";
 export default {
     components: {
         detailComponents,
         pagination,
-        statusComponents
+        statusComponents,
+        persentase,
     },
     props: ['penjualan'],
     data() {
