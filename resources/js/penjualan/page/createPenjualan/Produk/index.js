@@ -371,9 +371,9 @@ const ProdukComponent = ({ formProduk, setFormProduk }) => {
                                                     Detail Produk
                                                 </p>
                                                 {item?.variasi?.map(
-                                                    (variasi, index) => (
+                                                    (variasi, idxvariasi) => (
                                                         <div
-                                                            key={index}
+                                                            key={idxvariasi}
                                                             className="card-body bg-blue-produk"
                                                         >
                                                             <h6>
@@ -407,20 +407,20 @@ const ProdukComponent = ({ formProduk, setFormProduk }) => {
                                                                                         variasi:
                                                                                             item.variasi.map(
                                                                                                 (
-                                                                                                    variasi,
-                                                                                                    idx
+                                                                                                    variasiItem,
+                                                                                                    varIdx
                                                                                                 ) => {
                                                                                                     if (
-                                                                                                        idx ===
-                                                                                                        index
+                                                                                                        varIdx ===
+                                                                                                        idxvariasi
                                                                                                     ) {
                                                                                                         return {
-                                                                                                            ...variasi,
+                                                                                                            ...variasiItem,
                                                                                                             variasiSelected:
                                                                                                                 e.value,
                                                                                                         };
                                                                                                     }
-                                                                                                    return variasi;
+                                                                                                    return variasiItem;
                                                                                                 }
                                                                                             ),
                                                                                     };

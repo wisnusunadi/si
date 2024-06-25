@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 export default {
     props: ["meeting"],
     data() {
@@ -26,20 +25,12 @@ export default {
                 cancelButtonText: "Kembali",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios
-                        .post(
+                    this.$_post(
                             "/api/hr/meet/jadwal/update/batal",
                             {
                                 id: this.meeting.id,
                                 ket_batal: this.alasan,
                             },
-                            {
-                                headers: {
-                                    Authorization: `Bearer ${localStorage.getItem(
-                                        "lokal_token"
-                                    )}`,
-                                },
-                            }
                         )
                         .then((response) => {
                             swal.fire(

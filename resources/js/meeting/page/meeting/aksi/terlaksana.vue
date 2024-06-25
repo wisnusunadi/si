@@ -1,6 +1,5 @@
 <script>
 import dokumentasi from "./dokumentasi.vue";
-import axios from "axios";
 import VueSelect from "vue-select";
 import uploadFile from "../../../components/uploadFile.vue";
 export default {
@@ -42,8 +41,10 @@ export default {
         },
         async getDataKaryawan() {
             try {
-                const { data: karyawan } = await axios.get("/api/karyawan_all");
-                const { data: lokasi } = await axios.get(
+                const { data: karyawan } = await this.$_get(
+                    "/api/karyawan_all"
+                );
+                const { data: lokasi } = await this.$_get(
                     "/api/hr/meet/lokasi/show"
                 );
                 this.karyawan = karyawan;
@@ -91,7 +92,7 @@ export default {
                 this.hourRangeAkhir = [];
             }
         },
-        save() {
+        async save() {
             // hapus jika di hasil notulensi satu baris pic dan isi kosong
             this.form.notulensi = this.form.notulensi.filter(
                 (item) => item.pic !== "" || item.isi !== ""
@@ -116,37 +117,49 @@ export default {
             }
 
             // check is form not empty is "" and array length is 0
-            const emptyFields = []
-            const isFormEmpty = Object.entries(this.form).some(([key, item]) => {
-                if (Array.isArray(item)) {
-                    if (item.length === 0) {
-                        emptyFields.push(key)
-                        return true
-                    } else {
-                        return item.some((subItem, index) => {
-                            const subEmptyFields = []
-                            const isSubItemEmpty = Object.entries(subItem).some(([subKey, subItem]) => {
-                                if (subItem === "") {
-                                    subEmptyFields.push(subKey)
-                                    return true
+            const emptyFields = [];
+            const isFormEmpty = Object.entries(this.form).some(
+                ([key, item]) => {
+                    if (Array.isArray(item)) {
+                        if (item.length === 0) {
+                            emptyFields.push(key);
+                            return true;
+                        } else {
+                            return item.some((subItem, index) => {
+                                const subEmptyFields = [];
+                                const isSubItemEmpty = Object.entries(
+                                    subItem
+                                ).some(([subKey, subItem]) => {
+                                    if (subItem === "") {
+                                        subEmptyFields.push(subKey);
+                                        return true;
+                                    }
+                                    return false;
+                                });
+                                if (isSubItemEmpty) {
+                                    emptyFields.push(
+                                        `${key} baris ${
+                                            index + 1
+                                        } ${subEmptyFields.join(", ")}`
+                                    );
                                 }
-                                return false
-                            })
-                            if (isSubItemEmpty) {
-                                emptyFields.push(`${key} baris ${index + 1} ${subEmptyFields.join(', ')}`)
-                            }
-                            return isSubItemEmpty   
-                        })
-                    }
-                } else {
-                    if (item === "") {
-                        emptyFields.push(key)
+                                return isSubItemEmpty;
+                            });
+                        }
+                    } else {
+                        if (item === "") {
+                            emptyFields.push(key);
+                        }
                     }
                 }
-           })
+            );
 
             if (isFormEmpty) {
-                this.$swal("Gagal", `Form ${emptyFields.join(', ')} tidak boleh kosong`, "error");
+                this.$swal(
+                    "Gagal",
+                    `Form ${emptyFields.join(", ")} tidak boleh kosong`,
+                    "error"
+                );
                 return;
             }
 
@@ -175,8 +188,6 @@ export default {
                 }),
             };
 
-            console.log(form);
-
             // Iterate over form data and append to formData
             for (let key in form) {
                 // Detect when key is an array
@@ -202,26 +213,24 @@ export default {
 
             this.loading = true;
 
-            axios
-                .post("/api/hr/meet/jadwal/update/terlaksana", formData, {
+            const { success, message } = await this.$_post(
+                "/api/hr/meet/jadwal/update/terlaksana",
+                formData,
+                {
                     headers: {
                         "Content-Type": "multipart/form-data",
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "lokal_token"
-                        )}`,
                     },
-                })
-                .then((response) => {
-                    this.$swal("Berhasil", "Data berhasil disimpan", "success");
-                    this.$emit("refresh");
-                    this.closeModal();
-                })
-                .catch((error) => {
-                    this.$swal("Gagal", `${error.response.data.message}`, "error");
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
+                }
+            );
+            this.loading = false;
+
+            if (!success) {
+                this.$swal("Gagal", message, "error");
+                return;
+            }
+            this.$swal("Berhasil", "Data berhasil disimpan", "success");
+            this.$emit("refresh");
+            this.closeModal();
         },
         uploadDokumen(file) {
             this.form.dokumentasi = file;

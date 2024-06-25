@@ -1,5 +1,4 @@
 <script>
-import axios from 'axios';
 import uploadFile from '../../../../components/uploadFile.vue';
 export default {
     components: {
@@ -32,7 +31,7 @@ export default {
 
             formData.append("id", this.$route.params.id);
 
-            axios.post("/api/hr/meet/hasil/dokumen", formData, {
+            this.$_post("/api/hr/meet/hasil/dokumen", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

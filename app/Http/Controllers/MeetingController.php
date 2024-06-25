@@ -731,7 +731,7 @@ class MeetingController extends Controller
                     DB::rollBack();
                     return response()->json([
                         'status' => 200,
-                        'message' => 'Belum Di isi Sebelumnya',
+                        'message' => 'Anda belum mengisi kehadiran sebelumnya, silahkan isi update kehadiran dengan pilihan Ya'
                     ], 500);
                 }
             } else {

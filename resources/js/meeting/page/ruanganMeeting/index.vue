@@ -1,7 +1,6 @@
 <script>
 import Header from "../../components/header.vue";
 import tambahEdit from "./tambahEdit.vue";
-import axios from "axios";
 export default {
     components: {
         Header,
@@ -53,8 +52,7 @@ export default {
                 cancelButtonText: "Batal",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios
-                        .post("/api/hr/meet/lokasi/delete", {
+                    this.$_post("/api/hr/meet/lokasi/delete", {
                             id: item.id,
                         })
                         .then(() => {
@@ -84,7 +82,7 @@ export default {
         async getData() {
             try {
                 this.$store.dispatch("setLoading", true);
-                const { data } = await axios.get("/api/hr/meet/lokasi/show");
+                const { data } = await this.$_get("/api/hr/meet/lokasi/show");
                 this.ruangan = data.map((item, index) => {
                     return {
                         no: index + 1,

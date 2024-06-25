@@ -1,5 +1,4 @@
 <script>
-import axios from 'axios';
 export default {
     props: ["meeting"],
     data() {
@@ -37,11 +36,7 @@ export default {
                 ...this.meeting,
             }
 
-            axios.post('/api/hr/meet/notulen/verif', form, {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('lokal_token'),
-                },
-            }).then((res) => {
+            this.$_post('/api/hr/meet/notulen/verif', form).then((res) => {
                 swal.fire({
                     title: "Berhasil",
                     text: "Data berhasil disimpan",

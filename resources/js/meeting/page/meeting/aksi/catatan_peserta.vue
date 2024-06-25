@@ -1,5 +1,4 @@
 <script>
-import axios from 'axios'
 import VueSelect from 'vue-select'
 export default {
     props: ['meeting'],
@@ -28,7 +27,7 @@ export default {
         },
         async getDataKaryawan() {
             try {
-                const response = await axios.get('/api/karyawan_all')
+                const response = await this.$_get('/api/karyawan_all')
                 this.karyawan = response.data
             } catch (error) {
                 console.log(error)

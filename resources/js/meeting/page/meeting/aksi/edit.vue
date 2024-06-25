@@ -1,6 +1,5 @@
 <script>
 import VueSelect from "vue-select";
-import axios from "axios";
 export default {
     props: ["meeting"],
     components: {
@@ -40,8 +39,8 @@ export default {
         },
         async getDataKaryawan() {
             try {
-                const { data: karyawan } = await axios.get("/api/karyawan_all");
-                const { data: lokasi } = await axios.get(
+                const { data: karyawan } = await this.$_get("/api/karyawan_all");
+                const { data: lokasi } = await this.$_get(
                     "/api/hr/meet/lokasi/show"
                 );
                 this.karyawan = karyawan;
@@ -129,11 +128,7 @@ export default {
             };
 
             try {
-                axios.put(`/api/hr/meet/jadwal/${this.meeting?.id}`, form, {
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("lokal_token")}`,
-                    }
-                });
+                this.$_put(`/api/hr/meet/jadwal/${this.meeting?.id}`, form);
                 this.closeModal();
                 this.$emit("refresh");
                 this.$swal(

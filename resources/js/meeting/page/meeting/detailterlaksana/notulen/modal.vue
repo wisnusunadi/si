@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 import VueSelect from "vue-select";
 export default {
     components: {
@@ -22,12 +21,7 @@ export default {
                 meeting_id: this.$route.params.id,
                 ...this.formnotulen,
             };
-            axios
-                .post("/api/hr/meet/notulen", form, {
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("lokal_token"),
-                }
-            })
+            this.$_post("/api/hr/meet/notulen", form)
                 .then(() => {
                     this.$emit("refresh");
                     this.closeModal();
@@ -38,7 +32,7 @@ export default {
         },
         async getDataKaryawan() {
             try {
-                const { data } = await axios.get(`/api/hr/meet/jadwal/show_peserta/${this.$route.params.id}`);
+                const { data } = await this.$_get(`/api/hr/meet/jadwal/show_peserta/${this.$route.params.id}`);
                 this.karyawan = data;
             } catch (error) {
                 console.log(error);

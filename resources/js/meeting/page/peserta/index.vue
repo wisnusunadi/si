@@ -4,7 +4,6 @@ import DataTable from "../../components/DataTable.vue";
 import status from "../../components/status.vue";
 import kehadiran from "./aksi/kehadiran.vue";
 import approval from "../meeting/approval.vue";
-import axios from "axios";
 import modalSelectLampiran from "../meeting/detailterlaksana/modalSelectLampiran.vue";
 export default {
     components: {
@@ -114,37 +113,16 @@ export default {
             try {
                 this.tabs = "belum_selesai";
                 this.$store.dispatch("setLoading", true);
-                const { data: belum } = await axios.get(
+                const { data: belum } = await this.$_get(
                     "/api/hr/meet/jadwal_person/show/belum",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                "lokal_token"
-                            )}`,
-                        },
-                    }
                 );
 
-                const { data: selesai } = await axios.get(
+                const { data: selesai } = await this.$_get(
                     "/api/hr/meet/jadwal_person/show/selesai/",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                "lokal_token"
-                            )}`,
-                        },
-                    }
                 );
 
-                const { data: acc } = await axios.get(
+                const { data: acc } = await this.$_get(
                     "/api/hr/meet/jadwal/show/approval",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                "lokal_token"
-                            )}`,
-                        },
-                    }
                 );
 
                 this.dataTable = belum.map((item, index) => {

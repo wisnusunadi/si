@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 import Header from "../../../components/header.vue";
 import HeaderDetail from "./header.vue";
 import Item from "./item.vue";
@@ -49,7 +48,7 @@ export default {
         async getDetail() {
             try {
                 this.$store.dispatch("setLoading", true);
-                const { data } = await axios.get(
+                const { data } = await this.$_get(
                     `/api/hr/meet/jadwal/${this.$route.params.id}`
                 );
                 this.meeting = data.riwayat;
@@ -65,7 +64,7 @@ export default {
         },
         async openEdit() {
             try {
-                const { data } = await axios.get(
+                const { data } = await this.$_get(
                     `/api/hr/meet/jadwal/show_id/${this.$route.params.id}`
                 );
                 this.editData = JSON.parse(JSON.stringify(data));

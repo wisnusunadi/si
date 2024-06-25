@@ -1,5 +1,4 @@
 <script>
-import axios from 'axios';
 import pagination from "../../../../components/pagination.vue";
 import modal from "./modal.vue";
 export default {
@@ -52,7 +51,7 @@ export default {
                 cancelButtonText: "Batal",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.delete(`/api/hr/meet/hasil/${id}`)
+                    this.$_delete(`/api/hr/meet/hasil/${id}`)
                         .then((res) => {
                             this.$emit("refresh");
                         })

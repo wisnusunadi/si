@@ -1,6 +1,5 @@
 <script>
 import Status from "../../../components/status.vue";
-import axios from "axios";
 export default {
     props: ["meeting"],
     components: {
@@ -14,15 +13,8 @@ export default {
     methods: {
         async getApproveMeetingStatus() {
             try {
-                const { data } = await axios.get(
+                const { data } = await this.$_get(
                     `/api/hr/meet/jadwal/checkApproval/${this.$route.params.id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                "lokal_token"
-                            )}`,
-                        },
-                    }
                 );
                 this.showApprove = data;
             } catch (error) {
@@ -41,19 +33,11 @@ export default {
                 cancelButtonText: "Tidak",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios
-                        .post(
+                    this.$_post(
                             "/api/hr/meet/jadwal/update/approve_setuju",
                             {
                                 id,
                                 notulen: this.meeting.hasil_notulen,
-                            },
-                            {
-                                headers: {
-                                    Authorization: `Bearer ${localStorage.getItem(
-                                        "lokal_token"
-                                    )}`,
-                                },
                             }
                         )
                         .then((res) => {
@@ -86,19 +70,11 @@ export default {
                 cancelButtonText: "Tidak",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios
-                        .post(
+                    this.$_post(
                             "/api/hr/meet/jadwal/update/approve_batal",
                             {
                                 id,
                             },
-                            {
-                                headers: {
-                                    Authorization: `Bearer ${localStorage.getItem(
-                                        "lokal_token"
-                                    )}`,
-                                },
-                            }
                         )
                         .then((res) => {
                             swal.fire(

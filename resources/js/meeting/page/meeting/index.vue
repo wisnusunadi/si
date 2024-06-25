@@ -105,35 +105,15 @@ export default {
             try {
                 this.$store.dispatch("setLoading", true);
                 this.tabs = "belum_selesai";
-                const { data: belum_terlaksana } = await axios.get(
+                const { data: belum_terlaksana } = await this.$_get(
                     "/api/hr/meet/jadwal/show/belum",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                "lokal_token"
-                            )}`,
-                        },
-                    }
+
                 );
-                const { data: selesai } = await axios.get(
+                const { data: selesai } = await this.$_get(
                     "/api/hr/meet/jadwal/show/selesai",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                "lokal_token"
-                            )}`,
-                        },
-                    }
                 );
-                const { data: acc } = await axios.get(
+                const { data: acc } = await this.$_get(
                     "/api/hr/meet/jadwal/show/approval",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                "lokal_token"
-                            )}`,
-                        },
-                    }
                 );
                 this.dataTable = belum_terlaksana.map((item, index) => {
                     return {

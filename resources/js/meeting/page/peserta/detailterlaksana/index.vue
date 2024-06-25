@@ -5,7 +5,6 @@ import Kehadiran from "./kehadiran";
 import HasilNotulensi from "./notulen";
 import HasilMeeting from "./hasilmeeting";
 import DokumenPendukung from "./dokumenpendukung";
-import axios from "axios";
 import modalSelectLampiran from "../../meeting/detailterlaksana/modalSelectLampiran.vue";
 export default {
     components: {
@@ -83,15 +82,8 @@ export default {
         async getData() {
             try {
                 this.$store.dispatch("setLoading", true);
-                const { data } = await axios.get(
+                const { data } = await this.$_get(
                     `/api/hr/meet/jadwal_person/detail/${this.$route.params.id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                "lokal_token"
-                            )}`,
-                        },
-                    }
                 );
                 this.meeting = data;
                 this.meeting.headers =

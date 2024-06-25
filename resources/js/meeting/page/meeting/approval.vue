@@ -41,20 +41,12 @@ export default {
                 cancelButtonText: "Tidak",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios
-                        .post(
+                    this.$_post(
                             "/api/hr/meet/jadwal/update/approve_setuju",
                             {
                                 id: item.id,
                                 notulensi: item.hasil_notulen,
                             },
-                            {
-                                headers: {
-                                    Authorization: `Bearer ${localStorage.getItem(
-                                        "lokal_token"
-                                    )}`,
-                                },
-                            }
                         )
                         .then((res) => {
                             swal.fire(

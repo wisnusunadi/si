@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 import uploadFile from "../../../components/uploadFile.vue";
 export default {
     props: ["kehadiran"],
@@ -22,12 +21,12 @@ export default {
     },
     methods: {
         closeModal() {
+            $(".modalKehadiran").modal("hide");
             this.$nextTick(() => {
-                $(".modalKehadiran").modal("hide");
+                this.$emit("closeModal");
             });
-            this.$emit("closeModal");
         },
-        save() {
+        async save() {
             this.loading = true;
             // detected form data is empty or not this.form.file = null
             const isFormEmpty = Object.values(this.form).some((item) => {
@@ -42,7 +41,7 @@ export default {
                         });
                     }
                 } else {
-                    return item == "";
+                    return item == "" || item == null;
                 }
             });
 
@@ -86,25 +85,25 @@ export default {
                 }
             }
 
-            axios
-                .post("/api/hr/meet/jadwal_person/kehadiran", formData, {
+            const { success, message } = await this.$_post(
+                "/api/hr/meet/jadwal_person/kehadiran",
+                formData,
+                {
                     headers: {
                         "Content-Type": "multipart/form-data",
-                        Authorization:
-                            "Bearer " + localStorage.getItem("lokal_token"),
                     },
-                })
-                .then((response) => {
-                    this.$swal("Berhasil", "Data berhasil disimpan", "success");
-                    this.$emit("refresh");
-                    this.closeModal();
-                })
-                .catch((error) => {
-                    this.$swal("Gagal", "Data gagal disimpan", "error");
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
+                }
+            );
+            this.loading = false;
+
+            if (!success) {
+                this.$swal("Gagal", message, "error");
+                return;
+            }
+
+            this.closeModal();
+            this.$emit("refresh");
+            this.$swal("Berhasil", message, "success");
         },
         uploadFileData(file) {
             this.form.dokumentasi = file;
@@ -196,7 +195,12 @@ export default {
                             </div>
                         </div>
                     </div>
-                    <div v-if="form.update_kehadiran == 'status_baru' || !kehadiran.is_perubahan">
+                    <div
+                        v-if="
+                            form.update_kehadiran == 'status_baru' ||
+                            !kehadiran.is_perubahan
+                        "
+                    >
                         <div class="form-group row">
                             <label class="col-4">Kehadiran</label>
                             <div class="col-8">
