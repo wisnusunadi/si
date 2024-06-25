@@ -16,7 +16,9 @@ const CreatePenjualan = () => {
         { name: "Tambah Penjualan", link: "/penjualan/transaksi/create" },
     ]);
 
-    const [periodePenjualan, setPeriodePenjualan] = useState(null)
+    const [pesananId, setPesananId] = useState(null);
+
+    const [periodePenjualan, setPeriodePenjualan] = useState(null);
 
     const [formCustomer, setFormCustomer] = useState({
         jenis: null,
@@ -35,6 +37,9 @@ const CreatePenjualan = () => {
 
         if (formCustomer.jenis === "ekatalog") {
             // Cek jika no_urut, status, atau produk kosong atau produk tidak ada
+            if (formCustomer.status == "draft") {
+                return false;
+            }
             if (
                 formCustomer.no_urut === "" ||
                 formCustomer.status === "" ||
@@ -132,13 +137,17 @@ const CreatePenjualan = () => {
 
     const submitForm = async () => {
         try {
-            const { success, message } = await storePenjualan(formCustomer);
+            const { success, data, message } = await storePenjualan(
+                formCustomer
+            );
             if (!success) {
-                swal.fire('Gagal', 'Data gagal disimpan', 'error')
+                swal.fire("Gagal", message, "error");
                 return;
             }
 
-            swal.fire('Berhasil', 'Data berhasil disimpan', 'success')
+            swal.fire("Berhasil", "Data berhasil disimpan", "success");
+            const { pesanan_id } = data;
+            setPesananId(pesanan_id);
             setFormCustomer({
                 jenis: null,
                 barang: [],
@@ -156,11 +165,15 @@ const CreatePenjualan = () => {
         const fetchYears = async () => {
             const { success, data } = await getYears();
             if (success) {
-                setPeriodePenjualan(data)
+                setPeriodePenjualan(data);
             }
-        }
-        fetchYears()
-    }, [])
+        };
+        fetchYears();
+    }, []);
+
+    const cetakSPPB = (id) => {
+        return `/penjualan/penjualan/cetak_surat_perintah/${id}`;
+    };
 
     return (
         <div>
@@ -170,6 +183,25 @@ const CreatePenjualan = () => {
                 <div className="alert alert-danger" role="alert">
                     <i className="fas fa-exclamation-triangle"></i> Periode yang
                     dibuka saat ini adalah periode {periodePenjualan}
+                </div>
+            )}
+            {pesananId && (
+                <div className="alert alert-success" role="alert">
+                    <div className="d-flex bd-highlight">
+                        <div className="p-2 flex-grow-1 bd-highlight card-title">
+                            Berhasil Menambahkan Data
+                        </div>
+                        <div className="p-2 bd-highlight">
+                            <a
+                                href={cetakSPPB(pesananId)}
+                                target="_blank"
+                                className="btn btn-light"
+                                style={{ color: "#000000" }}
+                            >
+                                <i class="fas fa-print"></i> Cetak SPPB
+                            </a>
+                        </div>
+                    </div>
                 </div>
             )}
 

@@ -112,7 +112,7 @@ const getProduk = async (jenis) => {
 const storePenjualan = async (formData) => {
     try {
         const { data } = await axios.post("/api/penj/action", formData);
-       return { success: true, message: data}
+       return { success: true, data}
     } catch (error) {
         return { success: false, message: error.response.data.message };
     }

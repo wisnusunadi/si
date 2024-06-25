@@ -68,16 +68,10 @@ const Ekatalog = ({ data }) => {
                                         </small>
                                     </div>
                                     <div className="margin">
-                                        <b>
-                                            {checkIsExist(data?.nama)}
-                                        </b>
+                                        <b>{checkIsExist(data?.nama)}</b>
                                     </div>
                                     <div className="margin">
-                                        <b>
-                                            {checkIsExist(
-                                                data?.alamat
-                                            )}
-                                        </b>
+                                        <b>{checkIsExist(data?.alamat)}</b>
                                     </div>
                                     <div className="margin">
                                         <b>
@@ -194,18 +188,20 @@ const Ekatalog = ({ data }) => {
                                         </small>
                                     </div>
                                     <div>
-                                        <a
-                                            target="_blank"
-                                            href={cetakSPPB(data?.id)}
-                                        >
-                                            <button
-                                                className="btn btn-outline-primary btn-sm"
-                                                type="button"
+                                        {data?.no_po && (
+                                            <a
+                                                target="_blank"
+                                                href={cetakSPPB(data?.id)}
                                             >
-                                                <i className="fas fa-print"></i>
-                                                SPPB
-                                            </button>
-                                        </a>
+                                                <button
+                                                    className="btn btn-outline-primary btn-sm"
+                                                    type="button"
+                                                >
+                                                    <i className="fas fa-print"></i>
+                                                    SPPB
+                                                </button>
+                                            </a>
+                                        )}
                                     </div>
                                 </div>
                             </div>

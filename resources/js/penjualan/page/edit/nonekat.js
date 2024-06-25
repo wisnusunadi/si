@@ -125,18 +125,20 @@ const NoneKat = ({ data }) => {
                                             Cetak SPPB
                                         </small>
                                     </div>
-                                    <a
-                                        target="_blank"
-                                        href={cetakSPPB(data?.id)}
-                                    >
-                                        <button
-                                            className="btn btn-sm btn-outline-primary"
-                                            type="button"
+                                    {data?.no_po && (
+                                        <a
+                                            target="_blank"
+                                            href={cetakSPPB(data?.id)}
                                         >
-                                            <i className="fas fa-print"></i>
-                                            SPPB
-                                        </button>
-                                    </a>
+                                            <button
+                                                className="btn btn-outline-primary btn-sm"
+                                                type="button"
+                                            >
+                                                <i className="fas fa-print"></i>
+                                                SPPB
+                                            </button>
+                                        </a>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -146,6 +148,5 @@ const NoneKat = ({ data }) => {
         </div>
     );
 };
-
 
 export default NoneKat;

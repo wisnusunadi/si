@@ -73,6 +73,9 @@ const Customer = ({ formCustomer, setFormCustomer, isEdit = false }) => {
             }
         });
 
+        delete rest.sparepart;
+        delete rest.jasa;
+
         setFormCustomer({
             ...rest,
             jenis: e.target.value,
@@ -92,6 +95,12 @@ const Customer = ({ formCustomer, setFormCustomer, isEdit = false }) => {
 
         if (e.target.value === "spb") {
             restNoNEkatalog.barang = ["sparepart"]
+            delete rest.jasa;
+            delete rest.produk;
+        } else {
+            restNoNEkatalog.barang = ["produk"]
+            delete rest.sparepart;
+            delete rest.jasa;
         }
 
         setFormCustomer({
