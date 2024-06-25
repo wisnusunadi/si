@@ -254,12 +254,16 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
                                 className="custom-control-input"
                                 id="isiProduk"
                                 checked={formAKN.isi_produk}
-                                onChange={(e) =>
-                                    setFormAKN({
-                                        ...formAKN,
-                                        isi_produk: e.target.checked,
-                                    })
-                                }
+                                onChange={(e) => {
+                                    const newFormAKN = { ...formAKN };
+                                    newFormAKN.isi_produk = e.target.checked;
+                                    if (e.target.checked == true && isEdit) {
+                                        newFormAKN.barang = ["produk"]
+                                    } else {
+                                        newFormAKN.barang = []
+                                    }
+                                    setFormAKN(newFormAKN);
+                                }}
                             />
                             <label
                                 className="custom-control-label"
