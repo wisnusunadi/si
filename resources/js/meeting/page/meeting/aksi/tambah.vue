@@ -22,6 +22,7 @@ export default {
             },
             hourRangeAkhir: [0, 23],
             lokasiMeeting: [],
+            selectedParticipants: [],
         };
     },
     methods: {
@@ -43,16 +44,19 @@ export default {
                 const { data: lokasi } = await axios.get(
                     "/api/hr/meet/lokasi/show"
                 );
-                const { data: notulen } = await axios.get("/api/hr/meet/getKaryawan", {
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("lokal_token")}`,
+                const { data: notulen } = await axios.get(
+                    "/api/hr/meet/getKaryawan",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                                "lokal_token"
+                            )}`,
+                        },
                     }
-                });
-
+                );
 
                 this.meeting.notulen = notulen.data.id;
 
-                
                 this.karyawan = karyawan;
                 this.lokasiMeeting = lokasi.map((item) => {
                     return {
@@ -137,8 +141,10 @@ export default {
             try {
                 await axios.post("/api/hr/meet/jadwal", form, {
                     headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("lokal_token")}`,
-                    }
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "lokal_token"
+                        )}`,
+                    },
                 });
                 swal.fire({
                     title: "Berhasil!",
@@ -162,13 +168,14 @@ export default {
         this.getDataKaryawan();
     },
     computed: {
-        // filter karyawan jika sudah menjadi notulen, moderator, pimpinan rapat. tidak usah muncul di peserta
+        // filter karyawan jika sudah menjadi notulen, moderator, pimpinan rapat. tidak usah muncul di peserta dan peserta yang sudah dipilih tidak ada di option
         karyawanFilteredPeserta() {
             return this.karyawan.filter((item) => {
                 return (
                     item.id !== this.meeting.notulen &&
                     item.id !== this.meeting.moderator &&
-                    item.id !== this.meeting.pimpinan
+                    item.id !== this.meeting.pimpinan &&
+                    !this.meeting.peserta.includes(item.id)
                 );
             });
         },
@@ -292,7 +299,6 @@ export default {
                             multiple
                             :options="karyawanFilteredPeserta"
                             label="nama"
-                            :reduce="(karyawan) => karyawan.id"
                             :disabled="
                                 meeting.notulen === '' ||
                                 meeting.moderator === '' ||
@@ -301,7 +307,8 @@ export default {
                                 meeting.moderator == null ||
                                 meeting.pimpinan == null
                             "
-                            v-model="meeting.peserta"
+                            v-model="selectedParticipants"
+                            @input="meeting.peserta = selectedParticipants.map((item) => item.id)"
                         />
                     </div>
                 </div>
