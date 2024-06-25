@@ -7,6 +7,7 @@ export default {
             files: [],
             dropped: 0,
             Imgs: [],
+            progress: [],
         };
     },
     props: {
@@ -53,7 +54,7 @@ export default {
         append() {
             this.$refs.uploadInput.click();
         },
-        readAsDataURL(file) {
+        readAsDataURL(file, index) {
             return new Promise(function (resolve, reject) {
                 let fr = new FileReader();
                 fr.onload = function () {
@@ -62,6 +63,11 @@ export default {
                 fr.onerror = function () {
                     reject(fr);
                 };
+                fr.onprogress = (event) => {
+                    if (event.lengthComputable) {
+                        this.$set(this.progress, index, Math.round((event.loaded / event.total) * 100))
+                    }
+                }
                 fr.readAsDataURL(file);
             });
         },
@@ -72,7 +78,6 @@ export default {
             this.$refs.uploadInput.value = null;
         },
         previewImgs(event) {
-            console.log(event);
             if (
                 this.$props.max &&
                 event &&
@@ -88,6 +93,7 @@ export default {
             this.$emit("changed", this.files);
             let readers = [];
             if (!this.files.length) return;
+            this.progress = new Array(this.files.length).fill(0);
             for (let i = 0; i < this.files.length; i++) {
                 readers.push(this.readAsDataURL(this.files[i]));
             }
@@ -137,6 +143,9 @@ export default {
                         <!-- jika bukan gambar maka tampilkan span -->
                         <span v-if="!files[i].type.includes('image')">{{ files[i].name }}</span>
                         <img v-else :src="img" />
+                        <div class="progress">
+                            <div class="progress-bar" :style="{ width: progress[i] + '%' }"></div>
+                        </div>
                         <span class="delete" style="color: white" @click="deleteImg(i)">
                             <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
