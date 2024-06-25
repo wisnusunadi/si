@@ -25,6 +25,7 @@
             <th>Satuan</th>
             <th>Tanggal Pesan</th>
             <th>Batas Kontrak</th>
+            <th>Jenis</th>
             <th>Produk</th>
             <th>Produk (E-purchasing)</th>
             <th>Detail Produk</th>
@@ -78,6 +79,7 @@
                     <td>
                         {{ $d['tgl_kontrak'] }}
                     </td>
+                    <td>nondsb</td>
                     <td>{{ $p['nama'] }}</td>
                     <td>{{ $p['nama_alias'] }}</td>
                     <td>{{ $p['item'] }}</td>
@@ -139,6 +141,7 @@
                     <td>
                         {{ $d['tgl_kontrak'] }}
                     </td>
+                    <td>dsb</td>
                     <td>{{ $p['nama'] }}</td>
                     <td>{{ $p['nama_alias'] }}</td>
                     <td>{{ $p['item'] }}</td>
@@ -192,6 +195,7 @@
                     <td>
                         {{ $d['tgl_kontrak'] }}
                     </td>
+                    <td>nondsb</td>
                     <td>{{ $p['nama'] }}</td>
                     <td>{{ $p['nama'] }}</td>
                     <td>-</td>
@@ -225,6 +229,7 @@
                     <td>
                         {{ $d['tgl_kontrak'] }}
                     </td>
+                    <td>nondsb</td>
                     <td></td>
                     <td></td>
                     <td></td>
