@@ -61,7 +61,7 @@ class Divisi
             return redirect('/lab/dashboard');
         } else if ($request->user()->hasRole("14")) {
             return redirect('/administrator/dashboard');
-        } else if ($request->user()->hasRole("16") || $request->user()->hasRole("34")) {
+        } else if ($request->user()->hasRole("34")) {
             return redirect('/meeting/ruangan');
         } else if ($request->user()->hasRole("20")) {
             return redirect('/penjualan/lacak/show');

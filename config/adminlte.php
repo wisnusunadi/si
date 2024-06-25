@@ -237,7 +237,7 @@ return [
             'text'        => 'Beranda',
             'url'         => '/qc/dashboard',
             'icon'        => 'nav-icon fa fa-home',
-            'auth'        => [23, 34]
+            'auth'        => [23]
         ],
         // PPIC (24)
         [
@@ -1133,39 +1133,39 @@ return [
         // ],
         [
             'header' => 'DATA',
-            'auth' => [23, 34]
+            'auth' => [23]
         ],
         [
             'text' => 'Customer',
             'icon' => 'fas fa-users',
             'url' => '/penjualan/customer/show',
-            'auth' => [23, 34],
+            'auth' => [23],
         ],
         [
             'header' => 'INPROCESS',
-            'auth' => [23, 34]
+            'auth' => [23]
         ],
         [
             'text' => 'Barang Masuk',
             'icon' => 'fas fa-dolly-flatbed',
             'url' => '/qc/incoming/show',
-            'auth' => [23, 34],
+            'auth' => [23],
         ],
         [
             'text' => 'Riwayat Pengujian',
             'icon' => 'fas fa-history',
             'url' => '/qc/riwayatUji',
-            'auth' => [23, 34]
+            'auth' => [23]
         ],
         [
             'header' => 'OUTGOING',
-            'auth' => [23, 34]
+            'auth' => [23]
         ],
         [
             'text' => 'Sales Order',
             'icon' => 'fas fa-clipboard-check',
             'url' => '/qc/so',
-            'auth' => [23, 34],
+            'auth' => [23],
         ],
         [
             'text' => 'Riwayat Transfer',
@@ -1177,13 +1177,13 @@ return [
             'text' => 'Laporan',
             'icon' => 'fas fa-book-open',
             'url' => '/qc/so/laporan/show',
-            'auth' => [23, 34],
+            'auth' => [23],
         ],
         [
             'text' => 'Lacak',
             'url'  => '/penjualan/lacak/show',
             'icon' => 'fas fa-search',
-            'auth' => [23, 34]
+            'auth' => [23]
         ],
         [
             'text' => 'Monitoring Kalibrasi',
@@ -1197,10 +1197,10 @@ return [
             'icon' => 'fas fa-exchange-alt',
             'auth' => [23]
         ],
-        [
-            'header' => 'ALAT UJI',
-            'auth' => [34]
-        ],
+        // [
+        //     'header' => 'ALAT UJI',
+        //     'auth' => [34]
+        // ],
         // master kalibrasi
         [
             'header' => 'Master',
@@ -1934,13 +1934,6 @@ return [
             'icon' => 'fas fa-cubes',
             'auth' => [31],
         ],
-        // hr
-        [
-            'text' => 'Meeting',
-            'url' => '/meeting/hr/',
-            'icon' => 'fas fa-users',
-            'auth' => [30],
-        ],
         //Manager Penjualan
         [
             'header' => 'TRANSAKSI',
@@ -1960,14 +1953,26 @@ return [
         ],
         [
             'header' => 'Meeting',
-            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2],
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 22, 34],
+        ],
+        [
+            'text' => 'Ruangan Meeting',    
+            'url' => '/meeting/ruangan',
+            'icon' => 'fas fa-door-open',
+            'auth'   => [34],
         ],
         // peserta meet
+        [
+            'text' => 'Meeting',
+            'url' => '/meeting/hr/',
+            'icon' => 'fas fa-users',
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 22, 34],
+        ],
         [
             'text'        => 'Jadwal Meeting',
             'url'         => '/meeting/jadwal_meet',
             'icon'        => 'fa fa-calendar',
-            'auth'        => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2],
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 22, 34],
         ],
         // direksi
         [
@@ -1982,7 +1987,7 @@ return [
         ],
         [
             'header' => 'Setting',
-            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 14, 22]
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 14, 22, 34],
         ],
         [
             'text' => 'Pengajuan Periode',
@@ -1994,13 +1999,13 @@ return [
             'text' => 'Ubah Password',
             'icon' => 'fa-solid fa-gear',
             'url' => '/edit_pwd',
-            'auth' => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 14]
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 14, 22, 34],
         ],
         [
             'text' => 'Monitoring Lap. Teknis',
             'icon' => 'fa-solid fa-chart-line',
             'url' => 'https://docs.google.com/spreadsheets/d/1OxZY8JTqDBrIm89A9cTcTnRndRBOUCtnblY0f0F76p4/edit?usp=sharing',
-            'auth' => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 14, 22]
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 14, 22, 34],
         ],
     ],
 
