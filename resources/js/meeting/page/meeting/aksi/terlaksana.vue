@@ -34,10 +34,10 @@ export default {
     },
     methods: {
         closeModal() {
+            $(".modalterlaksana").modal("hide");
             this.$nextTick(() => {
-                $(".modalterlaksana").modal("hide");
+                this.$emit("closeModal");
             });
-            this.$emit("closeModal");
         },
         async getDataKaryawan() {
             try {
@@ -228,9 +228,10 @@ export default {
                 this.$swal("Gagal", message, "error");
                 return;
             }
-            this.$swal("Berhasil", "Data berhasil disimpan", "success");
-            this.$emit("refresh");
+
             this.closeModal();
+            this.$emit("refresh");
+            this.$swal("Berhasil", "Data berhasil disimpan", "success");
         },
         uploadDokumen(file) {
             this.form.dokumentasi = file;
