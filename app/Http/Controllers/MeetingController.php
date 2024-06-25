@@ -868,8 +868,8 @@ class MeetingController extends Controller
             $userid = auth()->user()->karyawan_id;
             //code...
             if ($status == 'belum') {
-                $data1 = JadwalMeeting::whereIn('status', ['belum', 'menyusun_hasil_meeting'])->get();
-                $data2 = JadwalMeeting::whereIn('status', ['menunggu_approval_pimpinan'])->where('pimpinan', '!=', $userid)->get();
+                $data1 = JadwalMeeting::whereIn('status', ['belum', 'menyusun_hasil_meeting'])->where('notulen', '=', $userid)->get();
+                $data2 = JadwalMeeting::whereIn('status', ['menunggu_approval_pimpinan'])->where('notulen', '=', $userid)->get();
                 $data = $data1->merge($data2);
             } else if ($status == 'selesai') {
                 $data = JadwalMeeting::whereIN('status', ['terlaksana', 'batal'])
@@ -921,6 +921,7 @@ class MeetingController extends Controller
             ], 500);
         }
     }
+
 
     public function show_notulen_meet($id)
     {

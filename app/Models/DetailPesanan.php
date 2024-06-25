@@ -245,4 +245,18 @@ class DetailPesanan extends Model
         }
         return $res;
     }
+
+    public function DetailPesananProdukVariasiSet()
+    {
+        $id = $this->id;
+        $detail_pesanan_produk = DetailPesananProduk::where('detail_pesanan_id', $id)->get();
+        foreach ($detail_pesanan_produk as $dpp) {
+            $x[] = array(
+                'id' => $dpp->gudang_barang_jadi_id,
+                'produk_id' => $dpp->GudangBarangJadi->Produk->id,
+            );
+        }
+
+        return $x;
+    }
 }
