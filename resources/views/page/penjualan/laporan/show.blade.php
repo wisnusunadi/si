@@ -536,7 +536,7 @@
             today = yyyy + '-' + mm + '-' + dd;
             console.log(today);
             $("#tanggal_mulai").attr("max", today);
-            $("#tanggal_akhir").attr("max", today);
+            // $("#tanggal_akhir").attr("max", today);
 
             $('#semuatable').DataTable({
                 destroy: true,
