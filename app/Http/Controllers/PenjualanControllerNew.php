@@ -40,8 +40,28 @@ class PenjualanControllerNew extends Controller
             $jasa = [];
             $barang = [];
             if (count($pesanan->DetailPesanan) > 0) {
+
+
+                $prd = DetailPesanan::addSelect([
+                    'item' => function ($q) {
+                        $q->selectRaw('coalesce(count(detail_pesanan_produk.id),0)')
+                            ->from('detail_pesanan_produk')
+                            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id');
+                    },
+                    'seri_log' => function ($q) {
+                        $q->selectRaw('coalesce(count(t_gbj_noseri.id),0)')
+                            ->from('t_gbj_noseri')
+                            ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                            ->leftJoin('detail_pesanan_produk', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                            ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id');
+                    },
+                ])->havingRaw('seri_log = 0')
+                    ->where('pesanan_id', $id)
+                    ->get();
+
                 $barang[] = "produk";
-                foreach ($pesanan->DetailPesanan as $detail_pesanan) {
+                foreach ($prd as $detail_pesanan) {
                     $produk[] = array(
                         'id' => $detail_pesanan->id,
                         'id_produk' => $detail_pesanan->penjualan_produk_id,
@@ -148,6 +168,7 @@ class PenjualanControllerNew extends Controller
                 $data->provinsi_nama = $pesanan->Ekatalog->provinsi_id != '' ? $pesanan->Ekatalog->Provinsi->nama : '';
                 $data->deskripsi = $pesanan->Ekatalog->deskripsi;
                 $data->keterangan = $pesanan->Ekatalog->ket ?? '';
+                $data->isProses = $pesanan->TFProduksi ? true : false;
             }
             if ($pesanan->Spa) {
                 $alamat_pengiriman = 'lainnya';
@@ -567,7 +588,7 @@ class PenjualanControllerNew extends Controller
                     ]);
                 }
             }
-            if (isset($request->produk)) {
+            if ($request->isi_produk == 'true') {
 
                 foreach ($request->produk as $produk) {
 
