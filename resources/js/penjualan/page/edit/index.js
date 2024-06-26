@@ -214,14 +214,12 @@ const EditPenjualan = () => {
 
                                 <div className="d-flex bd-highlight mb-3">
                                     <div className="p-2 bd-highlight">
-                                        <button
+                                        <a
+                                            href="/penjualan/transaksi"
                                             className="btn btn-danger"
-                                            onClick={() => {
-                                                window.history.back();
-                                            }}
                                         >
                                             Batal
-                                        </button>
+                                        </a>
                                     </div>
                                     <div className="ml-auto p-2 bd-highlight">
                                         <button
