@@ -3613,7 +3613,7 @@ class PenjualanController extends Controller
     }
     public function cekEdit($item)
     {
-        if ((($item->cjumlahprd > 0 && $item->c_tf == 0) || (($item->cujipart + $item->cujijasa) == 0 && $item->cjumlahpart > 0) && $item->Pesanan->log_id != 20)) {
+        if ((($item->cjumlahprd > 0 && $item->c_tf == 0) || (($item->cujipart + $item->cujijasa) == 0 && $item->cjumlahpart > 0) && $item->Pesanan->log_id != 20) && $item->c_batal == 0) {
             return true;
         } else {
             return false;
@@ -3622,7 +3622,8 @@ class PenjualanController extends Controller
 
     public function cekBatalNonEkat($item)
     {
-        if ((($item->cterkirim == 0 && $item->c_tf > 0) || ($item->cterkirimpart == 0 && $item->cjumlahpart > 0)) && $item->Pesanan->log_id != 20 && $item->c_retur == 0) {
+        // if ((($item->cterkirim == 0 && $item->c_tf > 0) || ($item->cterkirimpart == 0 && $item->cjumlahpart > 0)) && $item->Pesanan->log_id != 20 && $item->c_retur == 0) {
+        if ((($item->cterkirim == 0) || ($item->cterkirimpart == 0 && $item->cjumlahpart > 0)) && $item->Pesanan->log_id != 20 && $item->c_retur == 0) {
             return true;
         } else {
             return false;
@@ -11808,7 +11809,7 @@ class PenjualanController extends Controller
                     ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id');
             },
         ])
-            ->havingRaw('seri_log > 0')
+            // ->havingRaw('seri_log > 0')
             ->where('pesanan_id', $id);
 
         $part = DetailPesananPart::addSelect([

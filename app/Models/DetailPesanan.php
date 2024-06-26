@@ -62,12 +62,19 @@ class DetailPesanan extends Model
                     ->whereColumn('gdg_barang_jadi.id', 'detail_pesanan_produk.gudang_barang_jadi_id')
                     ->limit(1);
             },
+            'count_batal' => function ($q) {
+                $q->selectRaw('coalesce(sum(riwayat_batal_po_paket.jumlah),0)')
+                    ->from('riwayat_batal_po_paket')
+                    ->whereColumn('riwayat_batal_po_paket.detail_pesanan_id', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->limit(1);
+            },
             'count_qc' => function ($q) {
                 $q->selectRaw('count(noseri_detail_pesanan.id)')
                     ->from('noseri_detail_pesanan')
                     ->whereColumn('noseri_detail_pesanan.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
                     ->limit(1);
             },
+
         ])->with('GudangBarangJadi.Produk')->get();
 
         return $detail_pesanan_produk;
@@ -276,5 +283,4 @@ class DetailPesanan extends Model
 
         return $result; // Return the final result
     }
-
 }
