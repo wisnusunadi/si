@@ -157,18 +157,18 @@ class GudangController extends Controller
             ])
             ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
             ->leftjoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
-          //  ->havingRaw('c_batal_terima > 0')
+            //  ->havingRaw('c_batal_terima > 0')
             ->where('t_gbj_detail.detail_pesanan_produk_id', $id)
             ->get();
 
-        $posisi = ['QC', 'QC','LOGISTIK','LOGISTIK'];
+        $posisi = ['QC', 'QC', 'LOGISTIK', 'LOGISTIK'];
 
         $o = 0;
         $obj = array();
         foreach ($data as $d) {
-            if($d->c_on_uji > 0){
+            if ($d->c_on_uji > 0) {
                 $o = 1;
-            }else{
+            } else {
                 $o = $d->c_uji;
             }
 
@@ -187,25 +187,25 @@ class GudangController extends Controller
 
     function get_detail_batal_po($id)
     {
-        $data = RiwayatBatalPoPaket::select('riwayat_batal_po_paket.id', 'penjualan_produk.nama','riwayat_batal_po_paket.jumlah')
-        ->addSelect([
-            'cseri' => function ($q) {
-                $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
-                    ->from('riwayat_batal_po_seri')
-                    ->leftjoin('riwayat_batal_po_prd', 'riwayat_batal_po_prd.id', '=', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
-                    ->whereColumn('riwayat_batal_po_prd.detail_riwayat_batal_paket_id', 'riwayat_batal_po_paket.id')
-                    ->limit(1);
-            },
-            'cseri_batal' => function ($q) {
-                $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
-                    ->from('riwayat_batal_po_seri')
-                    ->leftjoin('riwayat_batal_po_prd', 'riwayat_batal_po_prd.id', '=', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
-                    ->where('riwayat_batal_po_seri.status', 1)
-                    ->whereColumn('riwayat_batal_po_prd.detail_riwayat_batal_paket_id', 'riwayat_batal_po_paket.id')
-                    ->limit(1);
-            },
-        ])
-        ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'riwayat_batal_po_paket.detail_pesanan_id')
+        $data = RiwayatBatalPoPaket::select('riwayat_batal_po_paket.id', 'penjualan_produk.nama', 'riwayat_batal_po_paket.jumlah')
+            ->addSelect([
+                'cseri' => function ($q) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                        ->from('riwayat_batal_po_seri')
+                        ->leftjoin('riwayat_batal_po_prd', 'riwayat_batal_po_prd.id', '=', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
+                        ->whereColumn('riwayat_batal_po_prd.detail_riwayat_batal_paket_id', 'riwayat_batal_po_paket.id')
+                        ->limit(1);
+                },
+                'cseri_batal' => function ($q) {
+                    $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                        ->from('riwayat_batal_po_seri')
+                        ->leftjoin('riwayat_batal_po_prd', 'riwayat_batal_po_prd.id', '=', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
+                        ->where('riwayat_batal_po_seri.status', 1)
+                        ->whereColumn('riwayat_batal_po_prd.detail_riwayat_batal_paket_id', 'riwayat_batal_po_paket.id')
+                        ->limit(1);
+                },
+            ])
+            ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'riwayat_batal_po_paket.detail_pesanan_id')
             ->leftJoin('penjualan_produk', 'penjualan_produk.id', '=', 'detail_pesanan.penjualan_produk_id')
             ->havingRaw('cseri = 0 OR (cseri > 0 AND cseri_batal > 0)')
             ->where('riwayat_batal_po_id', $id);
@@ -251,7 +251,7 @@ class GudangController extends Controller
                 if ($d->id == $s['detail_riwayat_batal_paket_id']) {
                     $s['jumlah_sisa'] = $d->jumlah - $s->jumlah_tf;
                     $s['jumlah'] = $d->jumlah;
-                    $s['is_seri'] = $d->jumlah_seri > 0 ? true : false ;
+                    $s['is_seri'] = $d->jumlah_seri > 0 ? true : false;
                     $obj[$key_p]['produk'][] = $s;
                 }
             }
@@ -1519,7 +1519,7 @@ class GudangController extends Controller
                 ->leftjoin('m_state as stt', 'stt.id', '=', 'p.log_id')
                 ->leftjoin('divisi as d', 'd.id', '=', 'h.dari')
                 ->leftjoin('divisi as dd', 'dd.id', '=', 'h.ke')
-                ->select('p.so as so', 'h.batal_pesanan_id', 'h.retur_pesanan_id','t_gbj_noseri.created_at as tgl_keluar', 'h.pesanan_id as p_id', 'h.tgl_masuk', 'h.jenis', 't_gbj_detail.qty', 'dd.nama as ke', 'd.nama as dari', DB::raw('concat(prd.nama, " ", g.nama) as produkk'),   DB::raw('COUNT(t_gbj_noseri.id) as qty'), 't_gbj_detail.id', DB::raw('group_concat(t_gbj_noseri.id) as id_seri'), (DB::raw("DATE_FORMAT(t_gbj_noseri.created_at, '%Y-%m-%d') as tgl_keluar_seri")))
+                ->select('p.so as so', 'h.batal_pesanan_id', 'h.retur_pesanan_id', 't_gbj_noseri.created_at as tgl_keluar', 'h.pesanan_id as p_id', 'h.tgl_masuk', 'h.jenis', 't_gbj_detail.qty', 'dd.nama as ke', 'd.nama as dari', DB::raw('concat(prd.nama, " ", g.nama) as produkk'),   DB::raw('COUNT(t_gbj_noseri.id) as qty'), 't_gbj_detail.id', DB::raw('group_concat(t_gbj_noseri.id) as id_seri'), (DB::raw("DATE_FORMAT(t_gbj_noseri.created_at, '%Y-%m-%d') as tgl_keluar_seri")))
                 ->orderByDesc('t_gbj_noseri.created_at')
                 ->groupBy(DB::raw("DATE_FORMAT(t_gbj_noseri.created_at, '%d-%m-%Y')"), "t_gbj_noseri.t_gbj_detail_id")
                 ->get();
@@ -1563,19 +1563,17 @@ class GudangController extends Controller
                 //     }
                 // })
                 ->addColumn('so', function ($d) {
-                  if($d->batal_pesanan_id != NULL){
-                    $data = Pesanan::join('riwayat_batal_po as rpo','rpo.pesanan_id','=','pesanan.id')
-                    ->where('rpo.id',$d->batal_pesanan_id)
-                    ->first()->no_po;
-                    return $data;
-                  }else if($d->retur_pesanan_id != NULL){
-                    $data = RiwayatReturPo::where('id',$d->retur_pesanan_id)->first()->no_retur;
-                    return $data;
-                  }
-                  else{
-                    return $d->p_id != NULL ? $d->so : '-';
-                  }
-
+                    if ($d->batal_pesanan_id != NULL) {
+                        $data = Pesanan::join('riwayat_batal_po as rpo', 'rpo.pesanan_id', '=', 'pesanan.id')
+                            ->where('rpo.id', $d->batal_pesanan_id)
+                            ->first()->no_po;
+                        return $data;
+                    } else if ($d->retur_pesanan_id != NULL) {
+                        $data = RiwayatReturPo::where('id', $d->retur_pesanan_id)->first()->no_retur;
+                        return $data;
+                    } else {
+                        return $d->p_id != NULL ? $d->so : '-';
+                    }
                 })
                 ->addColumn('date_in', function ($d) {
                     if (isset($d->tgl_masuk)) {
@@ -2660,7 +2658,7 @@ class GudangController extends Controller
                 // $a = 0;
 
                 $data = NoseriTGbj::select('t_gbj_noseri.id', 't_gbj_noseri.noseri_id', 'noseri_barang_jadi.noseri')
-                     ->addSelect(DB::raw('IF(t_gbj_noseri.status_id IS NULL, "true", "false") AS status'))
+                    ->addSelect(DB::raw('IF(t_gbj_noseri.status_id IS NULL, "true", "false") AS status'))
                     ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                     ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
                     ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
@@ -2671,8 +2669,7 @@ class GudangController extends Controller
                     ->whereNull('t_gbj_noseri.status_id')
                     ->where('t_gbj_noseri.jenis', 'masuk')
                     ->get();
-            }
-            else if ($jenis == 'batal') {
+            } else if ($jenis == 'batal') {
                 // $data = NoseriTGbj::whereHas('detail', function ($q) use ($id, $value) {
                 //     $q->where('id', $id);
                 //     $q->whereHas('header', function ($a) use ($value) {
@@ -2683,24 +2680,21 @@ class GudangController extends Controller
                 // $a = 0;
 
                 $data = NoseriTGbj::select('t_gbj_noseri.id', 't_gbj_noseri.noseri_id', 'noseri_barang_jadi.noseri')
-                     ->addSelect(DB::raw('IF(t_gbj_noseri.status_id IS NULL, "true", "false") AS status'))
+                    ->addSelect(DB::raw('IF(t_gbj_noseri.status_id IS NULL, "true", "false") AS status'))
                     ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                     ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
                     ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 't_gbj_noseri.noseri_id')
                     ->where('t_gbj_detail.gdg_brg_jadi_id', $value)
                     ->where('t_gbj_detail.id', $id)
-                    ->where(function($query) {
+                    ->where(function ($query) {
                         $query->where('t_gbj.dari', 23)
-                              ->orWhere('t_gbj.dari', 15);
-
+                            ->orWhere('t_gbj.dari', 15);
                     })
                     ->where('t_gbj.ke', 13)
                     ->whereNull('t_gbj_noseri.status_id')
                     ->where('t_gbj_noseri.jenis', 'masuk')
                     ->get();
-            }
-
-            else if($jenis == 'retur') {
+            } else if ($jenis == 'retur') {
 
                 $data = NoseriTGbj::select('t_gbj_noseri.id', 't_gbj_noseri.noseri_id', 'noseri_barang_jadi.noseri')
                     ->addSelect(DB::raw('IF(t_gbj_noseri.status_id IS NULL, "true", "false") AS status'))
@@ -2711,7 +2705,7 @@ class GudangController extends Controller
                     ->where('t_gbj_detail.id', $id)
                     ->where('t_gbj.dari', 26)
                     ->where('t_gbj.ke', 13)
-                   ->whereNull('t_gbj_noseri.status_id')
+                    ->whereNull('t_gbj_noseri.status_id')
                     ->where('t_gbj_noseri.jenis', 'masuk')
                     ->get();
                 // $data = NoseriTGbj::whereHas('detail', function ($q) use ($id, $value) {
@@ -7014,227 +7008,226 @@ class GudangController extends Controller
         }
     }
 
-    public function pinjaminta_detail($id){
-       $data =  PinjamintaBrg::find($id);
-       $detail = array();
-       foreach($data->PinjamintaBrgDetail as $d){
+    public function pinjaminta_detail($id)
+    {
+        $data =  PinjamintaBrg::find($id);
+        $detail = array();
+        foreach ($data->PinjamintaBrgDetail as $d) {
             $detail[] = array(
                 'id' => $d->id,
                 'nama' => $d->Produk->nama,
                 'jumlah' => $d->jumlah
             );
-       }
-       $obj = array(
-        'id' => $data->id,
-        'no' => $data->no,
-        'no_permintaan' => $data->no_permintaan,
-        'jenis' => $data->jenis,
-        'divisi_id' => $data->divisi_id,
-        'tgl_kebutuhan' => $data->tgl_kebutuhan,
-        'tgl_kembali' => $data->tgl_kembali,
-        'ket' => $data->ket,
-        'created_at' => $data->created_at,
-        'updated_at' => $data->updated_at,
-        'detail'=> $detail
-       );
-       return response()->json($obj);
+        }
+        $obj = array(
+            'id' => $data->id,
+            'no' => $data->no,
+            'no_permintaan' => $data->no_permintaan,
+            'jenis' => $data->jenis,
+            'divisi_id' => $data->divisi_id,
+            'tgl_kebutuhan' => $data->tgl_kebutuhan,
+            'tgl_kembali' => $data->tgl_kembali,
+            'ket' => $data->ket,
+            'created_at' => $data->created_at,
+            'updated_at' => $data->updated_at,
+            'detail' => $detail
+        );
+        return response()->json($obj);
     }
 
-    public function pinjaminta_update_status(Request $request){
-        DB::beginTransaction();
-       try {
-        //code...
-        if (Auth::user()->divisi_id == 13){
-            $data = PinjamintaBrg::find($request->id);
-            $data->status_gdg = $request->status;
-            $data->save();
-        }else{
-
-        $atasan = ['supervisor','manager','direkur'];
-        if(in_array(Auth::user()->Karyawan->jabatan, $atasan) ){
-            if(isset($request->status)){
-                $data = PinjamintaBrg::find($request->id);
-                $data->status_atasan = $request->status;
-                if($request->status == 'setuju'){
-                    $data->status_gdg = 'permintaan';
-                }
-                $data->save();
-            }else{
-                $data = PinjamintaBrg::find($request->id);
-                $data->status = $request->status_permintaan;
-                $data->save();
-            }
-        }else{
-            $jenis = 'staff';
-            $data = PinjamintaBrg::find($request->id);
-            $data->status = $request->status_permintaan;
-            $data->save();
-        }
-    }
-        DB::commit();
-        return response()->json([
-            'status' => 200,
-            'message' => 'Berhasil',
-        ], 200);
-       } catch (\Throwable $th) {
-        //throw $th;
-        DB::rollBack();
-        return response()->json([
-            'status' => 500,
-            'message' => 'Update Gagal'.$th->getMessage(),
-        ], 500);
-       }
-
-        }
-
-    public function pinjaminta_update(Request $request){
+    public function pinjaminta_update_status(Request $request)
+    {
         DB::beginTransaction();
         try {
             //code...
-            if (Auth::user()->divisi_id == 13){
+            if (Auth::user()->divisi_id == 13) {
+                $data = PinjamintaBrg::find($request->id);
+                $data->status_gdg = $request->status;
+                $data->save();
+            } else {
+
+                $atasan = ['supervisor', 'manager', 'direkur'];
+                if (in_array(Auth::user()->Karyawan->jabatan, $atasan)) {
+                    if (isset($request->status)) {
+                        $data = PinjamintaBrg::find($request->id);
+                        $data->status_atasan = $request->status;
+                        if ($request->status == 'setuju') {
+                            $data->status_gdg = 'permintaan';
+                        }
+                        $data->save();
+                    } else {
+                        $data = PinjamintaBrg::find($request->id);
+                        $data->status = $request->status_permintaan;
+                        $data->save();
+                    }
+                } else {
+                    $jenis = 'staff';
+                    $data = PinjamintaBrg::find($request->id);
+                    $data->status = $request->status_permintaan;
+                    $data->save();
+                }
+            }
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 500,
+                'message' => 'Update Gagal' . $th->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function pinjaminta_update(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            if (Auth::user()->divisi_id == 13) {
                 $jenis = 'gudang';
-            }else{
-                $atasan = ['supervisor','manager','direkur'];
-                if(in_array(Auth::user()->Karyawan->jabatan, $atasan) ){
+            } else {
+                $atasan = ['supervisor', 'manager', 'direkur'];
+                if (in_array(Auth::user()->Karyawan->jabatan, $atasan)) {
                     $jenis = 'atasan';
-                }else{
+                } else {
                     $jenis = 'staff';
                 }
             }
 
-                $data = PinjamintaBrg::find($request->id);
-                $data->jenis =  $request->jenis['value'];
-                $data->status_atasan =  $jenis == 'atasan' ? 'setuju' : 'permintaan';
-                $data->status_gdg =  $jenis == 'atasan' ?  'permintaan' : NULL ;
-                $data->tgl_kebutuhan = $request->tgl_kebutuhan;
-                $data->tgl_kembali = $request->tgl_pengembalian;
-                $data->ket = $request->tujuan;
-                $data->save();
+            $data = PinjamintaBrg::find($request->id);
+            $data->jenis =  $request->jenis['value'];
+            $data->status_atasan =  $jenis == 'atasan' ? 'setuju' : 'permintaan';
+            $data->status_gdg =  $jenis == 'atasan' ?  'permintaan' : NULL;
+            $data->tgl_kebutuhan = $request->tgl_kebutuhan;
+            $data->tgl_kembali = $request->tgl_pengembalian;
+            $data->ket = $request->tujuan;
+            $data->save();
 
             DB::commit();
             return response()->json([
                 'status' => 200,
                 'message' => 'Berhasil',
             ], 200);
-
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
             return response()->json([
                 'status' => 500,
-                'message' => 'Update Gagal'.$th->getMessage(),
+                'message' => 'Update Gagal' . $th->getMessage(),
             ], 500);
         }
     }
 
-    public function pinjaminta_show_gbj(Request $request){
+    public function pinjaminta_show_gbj(Request $request)
+    {
         $data = array();
         if ($request->status == "permintaan") {
-            $data = PinjamintaBrg::select('pinjaminta_brg.id',
-        'no',
-        'no_permintaan',
-        'jenis',
-        'divisi.nama',
-        'tgl_kebutuhan',
-        'tgl_kembali',
-        'ket',
-        'status_gdg',
-        'pinjaminta_brg.created_at',
-        'pinjaminta_brg.updated_at'
-            )->leftJoin('divisi','divisi.id','=','pinjaminta_brg.divisi_id')
-            ->where('status_gdg','permintaan')
-            ->whereNull('status')
-            ->get();
-        }
-        else if ($request->status == "proses") {
-            $data = PinjamintaBrg::select('pinjaminta_brg.id',
-        'no',
-        'no_permintaan',
-        'jenis',
-        'divisi.nama',
-        'tgl_kebutuhan',
-        'tgl_kembali',
-        'ket',
-        'status_gdg',
-        'pinjaminta_brg.created_at',
-        'pinjaminta_brg.updated_at'
-            )->leftJoin('divisi','divisi.id','=','pinjaminta_brg.divisi_id')
-            ->where('status_gdg','setuju')
-            ->whereNull('status')
-            ->get();
+            $data = PinjamintaBrg::select(
+                'pinjaminta_brg.id',
+                'no',
+                'no_permintaan',
+                'jenis',
+                'divisi.nama',
+                'tgl_kebutuhan',
+                'tgl_kembali',
+                'ket',
+                'status_gdg',
+                'pinjaminta_brg.created_at',
+                'pinjaminta_brg.updated_at'
+            )->leftJoin('divisi', 'divisi.id', '=', 'pinjaminta_brg.divisi_id')
+                ->where('status_gdg', 'permintaan')
+                ->whereNull('status')
+                ->get();
+        } else if ($request->status == "proses") {
+            $data = PinjamintaBrg::select(
+                'pinjaminta_brg.id',
+                'no',
+                'no_permintaan',
+                'jenis',
+                'divisi.nama',
+                'tgl_kebutuhan',
+                'tgl_kembali',
+                'ket',
+                'status_gdg',
+                'pinjaminta_brg.created_at',
+                'pinjaminta_brg.updated_at'
+            )->leftJoin('divisi', 'divisi.id', '=', 'pinjaminta_brg.divisi_id')
+                ->where('status_gdg', 'setuju')
+                ->whereNull('status')
+                ->get();
         }
         return response()->json($data);
     }
 
-    public function pinjaminta_atasan_show(Request $request){
+    public function pinjaminta_atasan_show(Request $request)
+    {
         $data = array();
         if ($request->status == "permintaan") {
-            $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)
-            ->where('status_atasan','permintaan')
-            ->whereNULL('status')
-            ->get();
+            $data = PinjamintaBrg::where('divisi_id', Auth::user()->divisi_id)
+                ->where('status_atasan', 'permintaan')
+                ->whereNULL('status')
+                ->get();
 
             $data->each(function ($item) {
-                $item->is_edit = $item->status_gdg == 'permintaan' || $item->status_atasan == 'permintaan' ? false : true ;
+                $item->is_edit = $item->status_gdg == 'permintaan' || $item->status_atasan == 'permintaan' ? false : true;
             });
-
-        } else if($request->status == "proses"){
-            $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)
-            ->where('status_atasan','setuju')
-            ->where('status_gdg','setuju')
-            ->whereNULL('status')
-            ->get();
+        } else if ($request->status == "proses") {
+            $data = PinjamintaBrg::where('divisi_id', Auth::user()->divisi_id)
+                ->where('status_atasan', 'setuju')
+                ->where('status_gdg', 'setuju')
+                ->whereNULL('status')
+                ->get();
 
             $data->each(function ($item) {
                 $item->is_edit = false;
             });
-
         }
         return response()->json($data);
     }
-    public function pinjaminta_show(Request $request){
+    public function pinjaminta_show(Request $request)
+    {
         $data = array();
         if ($request->status == "permintaan") {
-            $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)
-            ->where(function ($query) {
-                $query->where('status_atasan', '!=', 'setuju')
-                      ->orWhere('status_gdg', '!=', 'setuju');
-
-            })
-            ->whereNull('status')
-            ->get();
+            $data = PinjamintaBrg::where('divisi_id', Auth::user()->divisi_id)
+                ->where(function ($query) {
+                    $query->where('status_atasan', '!=', 'setuju')
+                        ->orWhere('status_gdg', '!=', 'setuju');
+                })
+                ->whereNull('status')
+                ->get();
 
             $data->each(function ($item) {
-                $item->is_edit = $item->status_gdg == 'permintaan' || $item->status_atasan == 'permintaan' ? false : true ;
+                $item->is_edit = $item->status_gdg == 'permintaan' || $item->status_atasan == 'permintaan' ? false : true;
             });
-
-        } else if($request->status == "proses"){
-            $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)
-            ->where('status_atasan','setuju')
-            ->where('status_gdg','setuju')
-            ->whereNull('status')
-            ->get();
+        } else if ($request->status == "proses") {
+            $data = PinjamintaBrg::where('divisi_id', Auth::user()->divisi_id)
+                ->where('status_atasan', 'setuju')
+                ->where('status_gdg', 'setuju')
+                ->whereNull('status')
+                ->get();
 
             $data->each(function ($item) {
                 $item->is_edit = false;
             });
-
-        }
-         else if($request->status == "selesai"){
-            $data = PinjamintaBrg::where('divisi_id',Auth::user()->divisi_id)
-            ->where('status','batal')
-            ->get();
+        } else if ($request->status == "selesai") {
+            $data = PinjamintaBrg::where('divisi_id', Auth::user()->divisi_id)
+                ->where('status', 'batal')
+                ->get();
 
             $data->each(function ($item) {
                 $item->is_edit = false;
             });
-
         }
 
         return response()->json($data);
     }
 
-    public function pinjaminta_selectitem(){
+    public function pinjaminta_selectitem()
+    {
         $data = Produk::addselect([
             'stok' => function ($q) {
                 $q->selectRaw('coalesce(count(noseri_barang_jadi.id),0)')
@@ -7256,35 +7249,35 @@ class GudangController extends Controller
             );
         }
         return response()->json($obj);
-
     }
 
-    public function pinjaminta_kirim(Request $request){
+    public function pinjaminta_kirim(Request $request)
+    {
 
         $obj =  json_decode(json_encode($request->all()), FALSE);
         DB::beginTransaction();
         try {
             //code...
-            $atasan = ['supervisor','manager','direkur'];
-            if(in_array(Auth::user()->Karyawan->jabatan, $atasan) ){
+            $atasan = ['supervisor', 'manager', 'direkur'];
+            if (in_array(Auth::user()->Karyawan->jabatan, $atasan)) {
                 $status_atasan = 'setuju';
                 $status_gdg = 'permintaan';
-            }else{
+            } else {
                 $status_atasan = 'permintaan';
                 $status_gdg = NULL;
             }
 
-            $no_urut= PinjamintaBrg::whereYear('created_at', now()->year)->max('no')+1;
+            $no_urut = PinjamintaBrg::whereYear('created_at', now()->year)->max('no') + 1;
             $p = PinjamintaBrg::create([
-              'no' => $no_urut,
-              'no_permintaan' => 'NSO-'.now()->year.sprintf("%02d", now()->month).sprintf("%03d", $no_urut),
-              'jenis' => $obj->jenis->value,
-              'divisi_id' => Auth::user()->divisi_id,
-              'tgl_kebutuhan' => $obj->tgl_kebutuhan,
-              'tgl_kembali' => $obj->tgl_pengembalian,
-              'ket' => $obj->tujuan,
-              'status_atasan' => $status_atasan,
-              'status_gdg' => $status_gdg,
+                'no' => $no_urut,
+                'no_permintaan' => 'NSO-' . now()->year . sprintf("%02d", now()->month) . sprintf("%03d", $no_urut),
+                'jenis' => $obj->jenis->value,
+                'divisi_id' => Auth::user()->divisi_id,
+                'tgl_kebutuhan' => $obj->tgl_kebutuhan,
+                'tgl_kembali' => $obj->tgl_pengembalian,
+                'ket' => $obj->tujuan,
+                'status_atasan' => $status_atasan,
+                'status_gdg' => $status_gdg,
             ]);
 
             foreach ($obj->items as $items) {

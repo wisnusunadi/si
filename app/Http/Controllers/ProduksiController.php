@@ -2541,6 +2541,18 @@ class ProduksiController extends Controller
                         ->from('riwayat_batal_po')
                         ->whereColumn('riwayat_batal_po.pesanan_id', 'pesanan.id');
                 },
+                'count_batal' => function ($q) {
+                    $q->selectRaw('coalesce(sum(riwayat_batal_po_paket.jumlah),0)')
+                        ->from('riwayat_batal_po_paket')
+                        ->leftjoin('riwayat_batal_po', 'riwayat_batal_po.id', '=', 'riwayat_batal_po_paket.riwayat_batal_po_id')
+                        ->whereColumn('riwayat_batal_po.pesanan_id', 'pesanan.id')
+                        ->limit(1);
+                },
+                'count_item_paket' => function ($q) {
+                    $q->selectRaw('sum(detail_pesanan.jumlah)')
+                        ->from('detail_pesanan')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                }
                 // 'cjumlahpart' => function ($q) {
                 //     $q->selectRaw('sum(detail_pesanan_part.jumlah)')
                 //         ->from('detail_pesanan_part')
@@ -2549,7 +2561,7 @@ class ProduksiController extends Controller
                 //         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
                 // },
             ])
-                ->havingRaw('cjumlahprd > 0 AND cjumlahprd != cgudang')
+                ->havingRaw('cjumlahprd > 0 AND cjumlahprd != cgudang AND count_item_paket > count_batal')
                 ->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotNull('no_po')
                 ->get();
@@ -2577,6 +2589,7 @@ class ProduksiController extends Controller
                     'jumlah_gdg' => $d->cgudang,
                     'jumlah_siap' => $d->csiap,
                     'jumlah' => $d->cjumlahprd,
+                    'count_batal' => $d->count_batal,
                     'is_batal' => $d->cbatal_po > 0 ? true : false
                 );
             }
@@ -2883,8 +2896,15 @@ class ProduksiController extends Controller
                         ->whereColumn('detail_penjualan_produk.penjualan_produk_id', 'detail_pesanan.penjualan_produk_id')
                         ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
                         ->limit(1);
+                },
+                'count_batal' => function ($q) {
+                    $q->selectRaw('coalesce(sum(riwayat_batal_po_paket.jumlah),0)')
+                        ->from('riwayat_batal_po_paket')
+                        ->whereColumn('riwayat_batal_po_paket.detail_pesanan_id', 'detail_pesanan.id')
+                        ->limit(1);
                 }
             ])
+                ->havingRaw('detail_pesanan.jumlah > count_batal')
                 ->leftJoin('penjualan_produk', 'penjualan_produk.id', '=', 'detail_pesanan.penjualan_produk_id')
                 ->where('pesanan_id', $id)->get();
 
@@ -2898,6 +2918,7 @@ class ProduksiController extends Controller
                         'jumlah' => $p->count_jumlah,
                         'jumlah_sisa' => $p->count_jumlah - $p->count_gudang,
                         'jumlah_gudang' => $p->count_gudang,
+                        'count_batal' => $p->count_batal,
                         'item' => array()
                     );
                     foreach ($p->DetailPesananProdukVariasi() as $key_b => $i) {
@@ -5334,7 +5355,7 @@ class ProduksiController extends Controller
         DB::beginTransaction();
         try {
             foreach ($request->all() as $value) {
-                NoseriBarangJadi::where('id', $value['noseri_id'])->update(['is_aktif' => 1, 'is_ready' => 0, 'used_by' => NULL ,'layout_id' => $value['layout']['id']]);
+                NoseriBarangJadi::where('id', $value['noseri_id'])->update(['is_aktif' => 1, 'is_ready' => 0, 'used_by' => NULL, 'layout_id' => $value['layout']['id']]);
                 NoseriTGbj::where('id', $value['id'])->update(['status_id' => 3, 'state_id' => 16, 'layout_id' => $value['layout']['id']]);
             }
             DB::commit();
@@ -5972,9 +5993,9 @@ class ProduksiController extends Controller
     {
         $getData =  json_decode($request->data, true);
         $seri = JadwalRakitNoseri::select('noseri', 'gdg_barang_jadi.produk_id as id')
-        ->leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-        ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
-        ->whereIn('jadwal_rakit_noseri.id', $getData)->get();
+            ->leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+            ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+            ->whereIn('jadwal_rakit_noseri.id', $getData)->get();
         $data = array();
         foreach ($seri as $s) {
             $data[] = array(
@@ -6035,10 +6056,10 @@ class ProduksiController extends Controller
 
         //SetLogo
         $seri = JadwalRakitNoseri::select('noseri', 'produk.merk as merk')
-        ->leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-        ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
-        ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-        ->whereIn('jadwal_rakit_noseri.id', $getData)->get();
+            ->leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+            ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+            ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+            ->whereIn('jadwal_rakit_noseri.id', $getData)->get();
 
         foreach ($seri as $s) {
             $data[] = (object)[
@@ -6235,7 +6256,7 @@ class ProduksiController extends Controller
         $waktu = Carbon::now();
         return Excel::download(new ExportRework($urutan), 'PerakitanReworks  ' . $waktu->toDateTimeString() . '.xlsx');
     }
-    function cetak_seri_perakitan_custom_a4($alias,$awal,$akhir)
+    function cetak_seri_perakitan_custom_a4($alias, $awal, $akhir)
     {
 
         for ($i = $awal; $i <= $akhir; $i++) {

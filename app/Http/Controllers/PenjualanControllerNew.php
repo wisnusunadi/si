@@ -41,27 +41,8 @@ class PenjualanControllerNew extends Controller
             $barang = [];
             if (count($pesanan->DetailPesanan) > 0) {
 
-
-                $prd = DetailPesanan::addSelect([
-                    'item' => function ($q) {
-                        $q->selectRaw('coalesce(count(detail_pesanan_produk.id),0)')
-                            ->from('detail_pesanan_produk')
-                            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id');
-                    },
-                    'seri_log' => function ($q) {
-                        $q->selectRaw('coalesce(count(t_gbj_noseri.id),0)')
-                            ->from('t_gbj_noseri')
-                            ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-                            ->leftJoin('detail_pesanan_produk', 't_gbj_detail.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-                            ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-                            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id');
-                    },
-                ])->havingRaw('seri_log = 0')
-                    ->where('pesanan_id', $id)
-                    ->get();
-
                 $barang[] = "produk";
-                foreach ($prd as $detail_pesanan) {
+                foreach ($pesanan->DetailPesanan as $detail_pesanan) {
                     $produk[] = array(
                         'id' => $detail_pesanan->id,
                         'id_produk' => $detail_pesanan->penjualan_produk_id,
@@ -168,7 +149,6 @@ class PenjualanControllerNew extends Controller
                 $data->provinsi_nama = $pesanan->Ekatalog->provinsi_id != '' ? $pesanan->Ekatalog->Provinsi->nama : '';
                 $data->deskripsi = $pesanan->Ekatalog->deskripsi;
                 $data->keterangan = $pesanan->Ekatalog->ket ?? '';
-                $data->isProses = $pesanan->TFProduksi ? true : false;
             }
             if ($pesanan->Spa) {
                 $alamat_pengiriman = 'lainnya';
@@ -240,6 +220,7 @@ class PenjualanControllerNew extends Controller
 
     function penjualanStoreEdit(Request $request)
     {
+
         DB::beginTransaction();
         try {
             //code...
@@ -295,6 +276,7 @@ class PenjualanControllerNew extends Controller
             $pesanan->created_at = $randomDate;
             $pesanan->updated_at = $randomDate;
             $pesanan->save();
+
 
             if (count($pesanan->DetailPesanan) > 0) {
                 $dekatp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
@@ -458,7 +440,6 @@ class PenjualanControllerNew extends Controller
 
             if ($request->jenis == 'ekatalog') {
                 $ekatalog = Ekatalog::find($pesanan->Ekatalog->id);
-
                 $ekatalog->customer_id = $request->customer_id != '' ?  $request->customer_id : 484;
                 $ekatalog->provinsi_id = $request->provinsi == 'NULL' ? NULL : $request->provinsi;
                 $ekatalog->no_paket = $request->no_paket != '' && $request->is_no_paket_disabled == true ? $request->no_paket_awal . $request->no_paket : NULL;
@@ -474,7 +455,6 @@ class PenjualanControllerNew extends Controller
                 $ekatalog->ket = $request->keterangan;
                 $ekatalog->save();
             }
-
 
             if ($request->jenis == 'spa') {
                 $spa = Spa::find($pesanan->Spa->id);
