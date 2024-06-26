@@ -355,7 +355,8 @@ export default {
                     <button
                       class="dropdown-item"
                       type="button"
-                      v-if="item.no_po != null && item.tgl_po != null"
+                      @click="cetakSPPB(item.pesanan.id)"
+                      v-if="item.no_po != null"
                     >
                       <i class="fas fa-print"></i>
                       SPPB

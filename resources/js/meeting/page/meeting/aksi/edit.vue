@@ -10,6 +10,7 @@ export default {
             karyawan: [],
             hourRangeAkhir: [0, 23],
             lokasiMeeting: [],
+            selectedParticipants: [],
         };
     },
     methods: {
@@ -59,6 +60,12 @@ export default {
                             peserta !== this.meeting.moderator &&
                             peserta !== this.meeting.pimpinan
                         );
+                    }
+                );
+
+                this.selectedParticipants = this.meeting.peserta.map(
+                    (peserta) => {
+                        return this.karyawan.find((item) => item.id === peserta);
                     }
                 );
             } catch (error) {
@@ -151,7 +158,8 @@ export default {
                 return (
                     item.id !== this.meeting.notulen &&
                     item.id !== this.meeting.moderator &&
-                    item.id !== this.meeting.pimpinan
+                    item.id !== this.meeting.pimpinan &&
+                    !this.meeting.peserta.includes(item.id)
                 );
             });
         },
@@ -258,8 +266,8 @@ export default {
                             multiple
                             :options="karyawanFilteredPeserta"
                             label="nama"
-                            :reduce="(karyawan) => karyawan.id"
-                            v-model="meeting.peserta"
+                            v-model="selectedParticipants"
+                            @input="meeting.peserta = selectedParticipants.map((item) => item.id)"
                             :disabled="
                                 meeting.notulen === '' ||
                                 meeting.moderator === '' ||

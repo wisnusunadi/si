@@ -39,7 +39,7 @@ const EditPenjualan = () => {
         };
         setDataEdit(penjualanData);
 
-        const {data} = await getYears();
+        const { data } = await getYears();
         setPeriodePenjualan(data);
     };
 
@@ -50,6 +50,9 @@ const EditPenjualan = () => {
     const disabledValidation = () => {
         // Cek jika jenis form adalah "ekatalog"
         if (dataEdit.jenis === "ekatalog") {
+            if (dataEdit.status == "draft") {
+                return false;
+            }
             // Cek jika no_urut, status, atau produk kosong atau produk tidak ada
             if (
                 dataEdit.no_urut === "" ||
@@ -211,14 +214,12 @@ const EditPenjualan = () => {
 
                                 <div className="d-flex bd-highlight mb-3">
                                     <div className="p-2 bd-highlight">
-                                        <button
+                                        <a
+                                            href="/penjualan/transaksi"
                                             className="btn btn-danger"
-                                            onClick={() => {
-                                                window.history.back();
-                                            }}
                                         >
                                             Batal
-                                        </button>
+                                        </a>
                                     </div>
                                     <div className="ml-auto p-2 bd-highlight">
                                         <button

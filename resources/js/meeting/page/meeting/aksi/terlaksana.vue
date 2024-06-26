@@ -292,7 +292,7 @@ export default {
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
     >
-        <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">{{ meeting.nama }}</h5>
@@ -401,16 +401,6 @@ export default {
                             >Hasil Notulensi</label
                         >
                         <div class="col-sm-10">
-                            <div class="d-flex flex-row-reverse bd-highlight">
-                                <div class="p-2 bd-highlight">
-                                    <button
-                                        class="btn btn-primary"
-                                        @click="tambahpic"
-                                    >
-                                        Tambah
-                                    </button>
-                                </div>
-                            </div>
                             <div
                                 v-for="(notulen, idx) in form.notulensi"
                                 class="row mb-1"
@@ -438,6 +428,13 @@ export default {
                                     >
                                         x
                                     </button>
+                                    <button
+                                        v-if="idx === form.notulensi.length - 1"
+                                        class="btn btn-primary"
+                                        @click="tambahpic"
+                                    >
+                                        Tambah
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -447,16 +444,6 @@ export default {
                             >Hasil Rapat</label
                         >
                         <div class="col-sm-10">
-                            <div class="d-flex flex-row-reverse bd-highlight">
-                                <div class="p-2 bd-highlight">
-                                    <button
-                                        class="btn btn-primary"
-                                        @click="tambahhasil"
-                                    >
-                                        Tambah
-                                    </button>
-                                </div>
-                            </div>
                             <div v-for="(hasil, idx) in form.hasil" class="row">
                                 <div class="col-10">
                                     <textarea
@@ -470,6 +457,13 @@ export default {
                                         @click="form.hasil.splice(idx, 1)"
                                     >
                                         x
+                                    </button>
+                                    <button
+                                        v-if="idx === form.hasil.length - 1"
+                                        class="btn btn-primary"
+                                        @click="tambahhasil"
+                                    >
+                                        Tambah
                                     </button>
                                 </div>
                             </div>

@@ -221,33 +221,28 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
                                 Batal
                             </label>
                         </div>
-                        {!isEdit && (
-                            <div className="form-check form-check-inline">
-                                <input
-                                    className="form-check-input"
-                                    type="radio"
-                                    name="status"
-                                    id="draft"
-                                    value="draft"
-                                    onChange={(e) => {
-                                        setFormAKN({
-                                            ...formAKN,
-                                            status: e.target.value,
-                                            isi_produk: false,
-                                            is_no_paket_disabled: true,
-                                            tgl_delivery: "",
-                                        });
-                                    }}
-                                    checked={formAKN.status === "draft"}
-                                />
-                                <label
-                                    className="form-check-label"
-                                    htmlFor="draft"
-                                >
-                                    Draft
-                                </label>
-                            </div>
-                        )}
+                        <div className="form-check form-check-inline">
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                name="status"
+                                id="draft"
+                                value="draft"
+                                onChange={(e) => {
+                                    setFormAKN({
+                                        ...formAKN,
+                                        status: e.target.value,
+                                        isi_produk: false,
+                                        is_no_paket_disabled: true,
+                                        tgl_delivery: "",
+                                    });
+                                }}
+                                checked={formAKN.status === "draft"}
+                            />
+                            <label className="form-check-label" htmlFor="draft">
+                                Draft
+                            </label>
+                        </div>
                     </div>
                 </div>
                 {(formAKN.status === "batal" || formAKN.status === "draft") && (
@@ -259,12 +254,16 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
                                 className="custom-control-input"
                                 id="isiProduk"
                                 checked={formAKN.isi_produk}
-                                onChange={(e) =>
-                                    setFormAKN({
-                                        ...formAKN,
-                                        isi_produk: e.target.checked,
-                                    })
-                                }
+                                onChange={(e) => {
+                                    const newFormAKN = { ...formAKN };
+                                    newFormAKN.isi_produk = e.target.checked;
+                                    if (e.target.checked == true && isEdit) {
+                                        newFormAKN.barang = ["produk"]
+                                    } else {
+                                        newFormAKN.barang = []
+                                    }
+                                    setFormAKN(newFormAKN);
+                                }}
                             />
                             <label
                                 className="custom-control-label"

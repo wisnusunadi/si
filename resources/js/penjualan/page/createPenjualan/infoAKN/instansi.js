@@ -57,7 +57,7 @@ const Instansi = ({ formAKN, setFormAKN }) => {
                     <label className="col-5 text-right">Instansi</label>
                     <div className="col-5">
                         <AutoComplete
-                            value={formAKN.instansi}
+                            value={formAKN.instansi ?? ""}
                             onChange={(e) =>
                                 setFormAKN({
                                     ...formAKN,
@@ -72,7 +72,7 @@ const Instansi = ({ formAKN, setFormAKN }) => {
                     <label className="col-5 text-right">Satuan Kerja</label>
                     <div className="col-5">
                         <AutoComplete
-                            value={formAKN.satuan_kerja}
+                            value={formAKN.satuan_kerja ?? ""}
                             onChange={(e) =>
                                 setFormAKN({
                                     ...formAKN,
@@ -88,7 +88,7 @@ const Instansi = ({ formAKN, setFormAKN }) => {
                     <div className="col-5">
                         <AutoComplete
                             type="textarea"
-                            value={formAKN.alamat_instansi}
+                            value={formAKN.alamat_instansi ?? ""}
                             onChange={(e) =>
                                 setFormAKN({
                                     ...formAKN,
@@ -122,7 +122,7 @@ const Instansi = ({ formAKN, setFormAKN }) => {
                     <div className="col-5">
                         <AutoComplete
                             type="textarea"
-                            value={formAKN.deskripsi}
+                            value={formAKN.deskripsi ?? ""}
                             onChange={(e) =>
                                 setFormAKN({
                                     ...formAKN,
@@ -138,7 +138,7 @@ const Instansi = ({ formAKN, setFormAKN }) => {
                     <div className="col-5">
                         <textarea
                             className="form-control"
-                            value={formAKN.keterangan}
+                            value={formAKN.keterangan ?? ""}
                             onChange={(e) =>
                                 setFormAKN({
                                     ...formAKN,
