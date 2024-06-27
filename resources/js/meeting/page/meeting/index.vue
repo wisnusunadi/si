@@ -7,10 +7,10 @@ import terlaksana from "./aksi/terlaksana.vue";
 import Edit from "./aksi/edit";
 import Batal from "./aksi/batal";
 import catatan from "./aksi/catatan_peserta";
-import axios from "axios";
 import uploadTest from "./uploadTest.vue";
 import approval from "./approval.vue";
 import modalSelectLampiran from "./detailterlaksana/modalSelectLampiran.vue";
+import kehadiran from "../peserta/aksi/kehadiran.vue";
 export default {
     components: {
         Header,
