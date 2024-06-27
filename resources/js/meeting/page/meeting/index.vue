@@ -400,10 +400,7 @@ export default {
                                         v-for="(peran, index) in item.peran"
                                         :key="index"
                                     >
-                                        {{ peran }}
-                                        <span
-                                            v-if="index != item.peran.length - 1"
-                                            >,</span
+                                        {{ peran }}<span v-if="index != item.peran.length - 1">,</span
                                         >
                                     </span>
                                 </div>
