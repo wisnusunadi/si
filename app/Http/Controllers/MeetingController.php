@@ -865,12 +865,36 @@ class MeetingController extends Controller
     public function show_jadwal_meet($status)
     {
         try {
+            $userid = "";
+
             $userid = auth()->user()->karyawan_id;
             //code...
             if ($status == 'belum') {
-                $data1 = JadwalMeeting::whereIn('status', ['belum', 'menyusun_hasil_meeting'])->where('notulen', '=', $userid)->get();
-                $data2 = JadwalMeeting::whereIn('status', ['menunggu_approval_pimpinan'])->where('notulen', '=', $userid)->get();
-                $data = $data1->merge($data2);
+                $data = JadwalMeeting::addSelect([
+                    'cpeserta' => function ($q) use ($userid) {
+                        $q->selectRaw('coalesce(count(peserta_meeting.id),0)')
+                            ->from('peserta_meeting')
+                            ->where('peserta_meeting.karyawan_id', $userid)
+                            ->whereColumn('peserta_meeting.meeting_id', 'jadwal_meeting.id')
+                            ->limit(1);
+                    },
+                    'cnotulen' => function ($q) use ($userid) {
+                        $q->selectRaw('coalesce(count(jm.id),0)')
+                            ->from('jadwal_meeting as jm')
+                            ->where('jm.notulen', $userid)
+                            ->whereColumn('jm.id', 'jadwal_meeting.id')
+                            ->limit(1);
+                    },
+                ])
+                    ->whereIn('status', ['belum', 'menyusun_hasil_meeting', 'menunggu_approval_pimpinan'])
+                    ->havingRaw('cpeserta >0 or cnotulen > 0')
+                    // ->where(function ($query) use ($userid) {
+                    //     $query->HavingRaw('cpeserta > 0')
+                    //         ->orwhere('notulen', '=', $userid);
+                    // })
+                    ->get();
+                // $data2 = JadwalMeeting::whereIn('status', ['menunggu_approval_pimpinan'])->where('notulen', '=', $userid)->get();
+                // $data = $data1->merge($data2);
             } else if ($status == 'selesai') {
                 $data = JadwalMeeting::whereIN('status', ['terlaksana', 'batal'])
                     ->with('DokumenMeeting')
@@ -883,11 +907,31 @@ class MeetingController extends Controller
             } else {
                 $data = array();
             }
-
+            // return response()->json($data);
             if ($data->isEmpty()) {
                 $obj = array();
             } else {
                 foreach ($data as $d) {
+                    $peran = array();
+
+                    if ($userid != '') {
+                        if ($d->moderator == $userid) {
+                            $peran[] = 'moderator';
+                        }
+                        if ($d->notulen == $userid) {
+                            $peran[] = 'notulen';
+                        }
+                        if ($d->pimpinan == $userid) {
+                            $peran[] = 'pimpinan';
+                        }
+
+                        if (count($peran) > 0) {
+                            $peran[] = 'peserta';
+                        } else {
+                            $peran[] = 'peserta';
+                        }
+                    }
+
                     $obj[] = (object)[
                         "id" => $d->id,
                         "urutan" => 'Meet-' . $d->urutan,
@@ -907,7 +951,8 @@ class MeetingController extends Controller
                         "hasil_notulen" => $d->HasilNotulen->count() > 0 ? $d->HasilNotulen : [],
                         "dokumen_meet" => $d->DokumenMeeting->count() > 0 ? $d->DokumenMeeting : [],
                         "pimpinan" =>  $d->pimpinan,
-                        "is_kehadiran" => $d->status == 'belum' ? true : false,
+                        "peran" =>  $peran,
+                        "status_kehadiran" => $userid != '' ? PesertaMeeting::where(['meeting_id' => $d->id, 'karyawan_id' => $userid])->first()->status : null,
                     ];
                 }
             }
