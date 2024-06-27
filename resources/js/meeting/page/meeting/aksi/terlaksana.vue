@@ -164,6 +164,8 @@ export default {
                 }
             );
 
+            console.log("error")
+
             if (isFormEmpty) {
                 this.$swal(
                     "Gagal",
