@@ -53,6 +53,15 @@ class DetailPesanan extends Model
                     ->whereColumn('t_gbj_detail.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
                     ->limit(1);
             },
+            'count_gudang_tidak_batal' => function ($q) {
+                $q->selectRaw('count(t_gbj_noseri.id)')
+                    ->from('t_gbj_noseri')
+                    ->leftjoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                    ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->whereColumn('t_gbj_detail.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
+                    ->whereNull('riwayat_batal_po_seri.id')
+                    ->limit(1);
+            },
             'count_jumlah' => function ($q) {
                 $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
                     ->from('detail_pesanan')

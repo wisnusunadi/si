@@ -2590,6 +2590,16 @@ class ProduksiController extends Controller
                         ->whereColumn('t_gbj.pesanan_id', 'pesanan.id')
                         ->limit(1);
                 },
+                'count_gudang_tidak_batal' => function ($q) {
+                    $q->selectRaw('coalesce(count(t_gbj_noseri.id),0)')
+                        ->from('t_gbj_noseri')
+                        ->leftjoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                        ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                        ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                        ->whereColumn('t_gbj.pesanan_id', 'pesanan.id')
+                        ->whereNull('riwayat_batal_po_seri.id')
+                        ->limit(1);
+                },
                 'cjumlahprd' => function ($q) {
                     $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
                         ->from('detail_pesanan')
@@ -2618,6 +2628,7 @@ class ProduksiController extends Controller
                 'count_batal' => function ($q) {
                     $q->selectRaw('coalesce(sum(riwayat_batal_po_paket.jumlah),0)')
                         ->from('riwayat_batal_po_paket')
+                        ->leftjoin('riwayat_batal_po_prd', 'riwayat_batal_po_prd.detail_riwayat_batal_paket_id', '=', 'riwayat_batal_po_paket.id')
                         ->leftjoin('riwayat_batal_po', 'riwayat_batal_po.id', '=', 'riwayat_batal_po_paket.riwayat_batal_po_id')
                         ->whereColumn('riwayat_batal_po.pesanan_id', 'pesanan.id')
                         ->limit(1);
@@ -2635,7 +2646,7 @@ class ProduksiController extends Controller
                 //         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
                 // },
             ])
-                ->havingRaw('cjumlahprd > 0 AND cjumlahprd != cgudang AND count_item_paket > count_batal')
+                ->havingRaw('cjumlahprd - count_batal > 0 AND cjumlahprd - count_batal != count_gudang_tidak_batal ')
                 ->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotNull('no_po')
                 ->whereNotIn('pesanan.log_id', [20])
@@ -2654,19 +2665,6 @@ class ProduksiController extends Controller
                     $c = $d->Spb->Customer->nama;
                 }
 
-                $sisa = 0;
-                $sisagdg = 0;
-                if (($d->count_batal * $d->citem) > $d->cgudang) {
-                    $sisa = $d->cjumlahprd - ($d->count_batal * $d->citem);
-                } else {
-                    $sisa = $d->cjumlahprd - $d->cgudang;
-                }
-                if (($d->count_batal * $d->citem) > $d->cgudang) {
-                    $sisagdg = 0;
-                } else {
-                    $sisagdg = $d->cgudang - ($d->count_batal * $d->citem);
-                }
-
                 $obj[] = array(
                     'id' => $d->id,
                     'so' => $d->so,
@@ -2674,9 +2672,9 @@ class ProduksiController extends Controller
                     'no_po' => $d->no_po,
                     'tgl_po' => $d->tgl_po,
                     'tgl_kontrak' => $batas,
-                    'jumlah_gdg' => $d->cgudang,
+                    'jumlah_gdg' => $d->count_gudang_tidak_batal,
                     'jumlah_siap' => $d->csiap,
-                    'jumlah' => $d->cjumlahprd,
+                    'jumlah' => $d->cjumlahprd - $d->count_batal,
                     'count_batal' => $d->count_batal,
                     'is_batal' => $d->cbatal_po > 0 ? true : false
                 );
@@ -2990,6 +2988,16 @@ class ProduksiController extends Controller
                         ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
                         ->limit(1);
                 },
+                'count_gudang_tidak_batal' => function ($q) {
+                    $q->selectRaw('count(t_gbj_noseri.id)')
+                        ->from('t_gbj_noseri')
+                        ->leftjoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                        ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 't_gbj_detail.detail_pesanan_produk_id')
+                        ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                        ->whereNull('riwayat_batal_po_seri.id')
+                        ->limit(1);
+                },
                 'count_jumlah' => function ($q) {
                     $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
                         ->from('detail_pesanan_produk')
@@ -3020,50 +3028,26 @@ class ProduksiController extends Controller
                 $obj = array();
             } else {
                 foreach ($paket as $key_a => $p) {
-                    $sisa = 0;
-                    $sisagdg = 0;
-                    if (($p->count_batal * $p->count_item) > $p->count_gudang) {
-                        $sisa = $p->count_jumlah - ($p->count_batal * $p->count_item);
-                    } else {
-                        $sisa = $p->count_jumlah - $p->count_gudang;
-                    }
-                    if (($p->count_batal * $p->count_item) > $p->count_gudang) {
-                        $sisagdg = 0;
-                    } else {
-                        $sisagdg = $p->count_gudang - ($p->count_batal * $p->count_item);
-                    }
                     $obj[$key_a] = array(
                         'id' => $p->id,
                         'nama' => $p->PenjualanProduk->nama,
                         'jumlah' => $p->count_jumlah - ($p->count_batal * $p->count_item),
-                        'jumlah_sisa' => $sisagdg,
-                        'jumlah_gudang' => $sisa,
+                        'jumlah_sisa' => $p->count_jumlah - ($p->count_batal * $p->count_item) -  $p->count_gudang_tidak_batal,
+                        'jumlah_gudang' => $p->count_gudang_tidak_batal,
                         'count_batal' => $p->count_batal,
                         'item' => array()
                     );
                     foreach ($p->DetailPesananProdukVariasi() as $key_b => $i) {
-                        $sisa = 0;
-                        $sisagdg = 0;
-                        if ($i->count_batal > $i->count_gudang) {
-                            $sisa = $i->count_jumlah - $i->count_batal;
-                        } else {
-                            $sisa = $i->count_jumlah - $i->count_gudang;
-                        }
-                        if ($i->count_batal > $i->count_gudang) {
-                            $sisagdg = 0;
-                        } else {
-                            $sisagdg = $i->count_gudang - $i->count_batal;
-                        }
                         $obj[$key_a]['item'][$key_b] = array(
                             'id' => $i->id,
                             'gudang_id' => $i->gudang_barang_jadi_id,
                             'nama' => $i->GudangBarangJadi->Produk->nama . ' ' . $i->GudangBarangJadi->nama,
                             'merk' => $i->GudangBarangJadi->Produk->merk,
                             'jumlah' => $i->count_jumlah  - $i->count_batal,
-                            'jumlah_gudang' => $sisagdg,
-                            'jumlah_sisa' => $sisa,
+                            'jumlah_gudang' =>  $i->count_gudang_tidak_batal,
+                            'jumlah_sisa' => $i->count_jumlah  - $i->count_batal - $i->count_gudang_tidak_batal,
                             /// 'status' => $i->status_cek == NULL || $i->checked_by == NULL ||  $sisa == $i->count_batal ? false : true,
-                            'status' => $i->status_cek == NULL || $i->checked_by == NULL || $i->count_jumlah == $i->count_gudang ? false : true,
+                            'status' => $i->status_cek == NULL || $i->checked_by == NULL || $i->count_jumlah  - $i->count_batal ==  $i->count_gudang_tidak_batal ? false : true,
                         );
                         // $obj[$key_a]['item'][$key_b] = array(
                         //     'id' => $i->id,
@@ -3116,6 +3100,16 @@ class ProduksiController extends Controller
                         ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
                         ->limit(1);
                 },
+                'count_gudang_tidak_batal' => function ($q) {
+                    $q->selectRaw('count(t_gbj_noseri.id)')
+                        ->from('t_gbj_noseri')
+                        ->leftjoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                        ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 't_gbj_detail.detail_pesanan_produk_id')
+                        ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                        ->whereNull('riwayat_batal_po_seri.id')
+                        ->limit(1);
+                },
                 'count_jumlah' => function ($q) {
                     $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
                         ->from('detail_pesanan_produk')
@@ -3147,39 +3141,16 @@ class ProduksiController extends Controller
                 $obj = array();
             } else {
                 foreach ($paket as $key_a => $p) {
-                    $sisa = 0;
-                    $sisagdg = 0;
-                    if (($p->count_batal * $p->count_item) > $p->count_gudang) {
-                        $sisa = $p->count_jumlah - ($p->count_batal * $p->count_item);
-                    } else {
-                        $sisa = $p->count_jumlah - $p->count_gudang;
-                    }
-                    if (($p->count_batal * $p->count_item) > $p->count_gudang) {
-                        $sisagdg = 0;
-                    } else {
-                        $sisagdg = $p->count_gudang - ($p->count_batal * $p->count_item);
-                    }
                     $obj[$key_a] = array(
                         'id' => $p->id,
                         'nama' => $p->PenjualanProduk->nama,
                         'jumlah' => $p->count_jumlah - ($p->count_batal * $p->count_item),
-                        'jumlah_sisa' => $sisagdg,
-                        'jumlah_gudang' => $sisa,
+                        'jumlah_sisa' => $p->count_jumlah - ($p->count_batal * $p->count_item) -  $p->count_gudang_tidak_batal,
+                        'jumlah_gudang' => $p->count_gudang_tidak_batal,
                         'item' => array()
                     );
                     foreach ($p->DetailPesananProdukVariasi() as $key_b => $i) {
-                        $sisa = 0;
-                        $sisagdg = 0;
-                        if ($i->count_batal > $i->count_gudang) {
-                            $sisa = $i->count_jumlah - $i->count_batal;
-                        } else {
-                            $sisa = $i->count_jumlah - $i->count_gudang;
-                        }
-                        if ($i->count_batal > $i->count_gudang) {
-                            $sisagdg = 0;
-                        } else {
-                            $sisagdg = $i->count_gudang - $i->count_batal;
-                        }
+
                         $obj[$key_a]['item'][$key_b] = array(
                             'id' => $i->id,
                             'gudang_id' => $i->gudang_barang_jadi_id,
@@ -3192,8 +3163,8 @@ class ProduksiController extends Controller
                             'variasi' => $this->select_variasi($i->GudangBarangJadi->Produk->id),
                             'merk' => $i->GudangBarangJadi->Produk->merk,
                             'jumlah' => $i->count_jumlah  - $i->count_batal,
-                            'jumlah_gudang' => $sisagdg,
-                            'jumlah_sisa' => $sisa,
+                            'jumlah_gudang' =>  $i->count_gudang_tidak_batal,
+                            'jumlah_sisa' => $i->count_jumlah  - $i->count_batal - $i->count_gudang_tidak_batal,
                             'status' => $i->status_cek != NULL || $i->checked_by != NULL || (float)$i->count_jumlah == (float)$i->count_gudang ? true : false,
                         );
                     }
