@@ -24,6 +24,7 @@ export default {
         uploadTest,
         approval,
         modalSelectLampiran,
+        kehadiran,
     },
     data() {
         return {
@@ -54,9 +55,9 @@ export default {
                     ],
                 },
                 { text: "Lokasi", value: "lokasi_nama" },
-                { text: "Peran", value: "peran"},
+                { text: "Peran", value: "peran" },
                 { text: "Status", value: "status" },
-                { text: "Kehadiran", value: "kehadiran"},
+                { text: "Kehadiran", value: "kehadiran" },
                 { text: "Aksi", value: "aksi", sortable: false },
             ],
             // modal tambah
@@ -75,6 +76,8 @@ export default {
             modalCatatan: false,
             tabs: "belum_selesai",
             showModalCetak: false,
+            dataKehadiran: null,
+            modalKehadiran: false,
         };
     },
     methods: {
@@ -83,14 +86,13 @@ export default {
                 this.$store.dispatch("setLoading", true);
                 this.tabs = "belum_selesai";
                 const { data: belum_terlaksana } = await this.$_get(
-                    "/api/hr/meet/jadwal/show/belum",
-
+                    "/api/hr/meet/jadwal/show/belum"
                 );
                 const { data: selesai } = await this.$_get(
-                    "/api/hr/meet/jadwal/show/selesai",
+                    "/api/hr/meet/jadwal/show/selesai"
                 );
                 const { data: acc } = await this.$_get(
-                    "/api/hr/meet/jadwal/show/approval",
+                    "/api/hr/meet/jadwal/show/approval"
                 );
                 this.dataTable = belum_terlaksana.map((item, index) => {
                     return {
@@ -99,6 +101,10 @@ export default {
                         tanggal_meet: this.dateFormat(item.tanggal),
                         mulai: this.timeFormat(item.mulai),
                         selesai: this.timeFormat(item.selesai),
+                        status_kehadiran:
+                            item.status_kehadiran == "belum"
+                                ? "belum_mengisi_daftar_hadir"
+                                : item.status_kehadiran,
                     };
                 });
                 this.dataTableSelesai = selesai.map((item, index) => {
@@ -111,7 +117,8 @@ export default {
                         dokumen_meet: [
                             {
                                 jenis: "foto",
-                                dokumen: this.groupDocuments(item.dokumen_meet).foto,
+                                dokumen: this.groupDocuments(item.dokumen_meet)
+                                    .foto,
                             },
                             {
                                 jenis: "video",
@@ -261,6 +268,14 @@ export default {
                 $(".modalSelectLampiran").modal("show");
             });
         },
+        openModalKehadiran(data) {
+            console.log(data);
+            this.dataKehadiran = JSON.parse(JSON.stringify(data));
+            this.modalKehadiran = true;
+            this.$nextTick(() => {
+                $(".modalKehadiran").modal("show");
+            });
+        },
     },
     created() {
         this.getData();
@@ -270,6 +285,12 @@ export default {
 <template>
     <div>
         <Header :title="title" :breadcumbs="breadcumbs" />
+        <kehadiran
+            v-if="modalKehadiran"
+            @closeModal="modalKehadiran = false"
+            :kehadiran="dataKehadiran"
+            @refresh="getData"
+        />
         <modalSelectLampiran
             v-if="showModalCetak"
             :dokumen="dataTerlaksana.dokumen_meet"
@@ -400,10 +421,18 @@ export default {
                                         v-for="(peran, index) in item.peran"
                                         :key="index"
                                     >
-                                        {{ peran }}<span v-if="index != item.peran.length - 1">,</span
+                                        {{ peran
+                                        }}<span
+                                            v-if="
+                                                index != item.peran.length - 1
+                                            "
+                                            >,</span
                                         >
                                     </span>
                                 </div>
+                            </template>
+                            <template #item.kehadiran="{ item }">
+                                <status :status="item.status_kehadiran" />
                             </template>
                             <template #item.aksi="{ item }">
                                 <div class="dropdown">
@@ -417,6 +446,23 @@ export default {
                                     <div class="dropdown-menu">
                                         <button
                                             class="dropdown-item"
+                                            @click="openModalKehadiran(item)"
+                                            v-if="
+                                                item.status_kehadiran ==
+    'belum_mengisi_daftar_hadir'
+                                                && item.status == 'belum'
+                                                && !item.peran.includes('notulen')
+                                            "
+                                        >
+                                            <i class="fas fa-check-circle"></i>
+                                            {{
+                                                item.is_perubahan
+                                                    ? "Update Kehadiran"
+                                                    : "Kehadiran"
+                                            }}
+                                        </button>
+                                        <button
+                                            class="dropdown-item"
                                             type="button"
                                             @click="cetakUndangan(item.id)"
                                             v-if="item.status == 'belum'"
@@ -428,7 +474,10 @@ export default {
                                             class="dropdown-item"
                                             type="button"
                                             @click="showTerlaksana(item)"
-                                            v-if="item.status == 'belum'"
+                                            v-if="
+                                                item.status == 'belum' &&
+                                                !item.peran.includes('peserta')
+                                            "
                                         >
                                             <i class="fas fa-check"></i>
                                             Terlaksana
@@ -447,7 +496,10 @@ export default {
                                             class="dropdown-item"
                                             type="button"
                                             @click="editMeeting(item)"
-                                            v-if="item.status == 'belum'"
+                                            v-if="
+                                                item.status == 'belum' &&
+                                                !item.peran.includes('peserta')
+                                            "
                                         >
                                             <i class="fas fa-edit"></i>
                                             Edit
@@ -456,7 +508,10 @@ export default {
                                             class="dropdown-item"
                                             type="button"
                                             @click="batalMeeting(item)"
-                                            v-if="item.status == 'belum'"
+                                            v-if="
+                                                item.status == 'belum' &&
+                                                !item.peran.includes('peserta')
+                                            "
                                         >
                                             <i class="fas fa-times"></i>
                                             Batal

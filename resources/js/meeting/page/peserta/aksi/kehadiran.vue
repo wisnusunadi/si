@@ -9,11 +9,11 @@ export default {
         return {
             form: {
                 kehadiran:
-                    JSON.parse(JSON.stringify(this.kehadiran.status_peserta)) ==
+                    JSON.parse(JSON.stringify(this.kehadiran.status_kehadiran)) ==
                     "belum_mengisi_daftar_hadir"
                         ? ""
                         : JSON.parse(
-                              JSON.stringify(this.kehadiran.status_peserta)
+                              JSON.stringify(this.kehadiran.status_kehadiran)
                           ),
             },
             loading: false,

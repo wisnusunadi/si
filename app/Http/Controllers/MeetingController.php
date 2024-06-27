@@ -924,9 +924,18 @@ class MeetingController extends Controller
                             $peran[] = 'pimpinan';
                         }
 
-                        if (count($peran) > 0) {
+                        // Tambahkan 'peserta' jika peran adalah moderator atau pimpinan
+                        if (in_array('moderator', $peran) || in_array('pimpinan', $peran)) {
                             $peran[] = 'peserta';
-                        } else {
+                        }
+
+                        // Jika pengguna adalah notulen, hapus 'peserta' dari array
+                        if (in_array('notulen', $peran)) {
+                            $peran = array_diff($peran, ['peserta']);
+                        }
+
+                        // jika tidak ada semua maka tambahkan peserta
+                        if (count($peran) == 0) {
                             $peran[] = 'peserta';
                         }
                     }
