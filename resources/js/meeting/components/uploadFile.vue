@@ -17,8 +17,15 @@ export default {
         fileError: String,
         clearAll: String,
     },
+    computed: {
+        // check progress when not 100 return 
+        checkProgress() {
+            return this.progress.some((prog) => prog < 100);
+        }
+    },
     methods: {
         dragOver() {
+            if (this.checkProgress) return
             this.dropped = 2;
         },
         dragLeave() {},
@@ -112,10 +119,11 @@ export default {
         },
         reset() {
             this.$refs.uploadInput.value = null;
+            this.progress = [];
             this.Imgs = [];
             this.files = [];
-            this.progress = [];
             this.$emit("changed", this.files, this.Imgs);
+            console.log("reset");
         },
     },
     watch: {
@@ -171,15 +179,15 @@ export default {
         </div>
 
         <div class="imgsPreview" v-show="progress.length > 0">
-            <button type="button" class="clearButton" @click="reset">
+            <button type="button" class="clearButton" @click="reset" v-if="!checkProgress">
                 {{ clearAll ? clearAll : "clear All" }}
             </button>
             <div class="row">
                 <div class="col-3" v-for="(prog, i) in progress" :key="i">
                     <div class="imageHolder">
                         <!-- jika bukan gambar maka tampilkan span -->
-                        <span v-if="!files[i].type.includes('image')">{{
-                            files[i].name
+                        <span v-if="!files[i]?.type?.includes('image')">{{
+                            files[i]?.name
                         }}</span>
                         <img v-else :src="Imgs[i]" />
                         <div v-if="prog < 100" class="progress">

@@ -99,7 +99,6 @@ export default {
                         tanggal_meet: this.dateFormat(item.tanggal),
                         mulai: this.timeFormat(item.mulai),
                         selesai: this.timeFormat(item.selesai),
-                        peran: ['Notulen', 'Pimpinan', 'Peserta'],
                     };
                 });
                 this.dataTableSelesai = selesai.map((item, index) => {
