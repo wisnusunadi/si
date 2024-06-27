@@ -26,10 +26,12 @@ export default {
                     },
                 ],
             },
+            imgs: [],
             karyawan: [],
             hourRangeAkhir: [],
             loading: false,
             lokasiMeeting: [],
+            selectedParticipants: [],
         };
     },
     methods: {
@@ -62,6 +64,14 @@ export default {
                             peserta !== this.meeting.notulen &&
                             peserta !== this.meeting.moderator &&
                             peserta !== this.meeting.pimpinan
+                        );
+                    }
+                );
+
+                this.selectedParticipants = this.meeting.peserta.map(
+                    (peserta) => {
+                        return this.karyawan.find(
+                            (item) => item.id === peserta
                         );
                     }
                 );
@@ -163,6 +173,15 @@ export default {
                 return;
             }
 
+            if (this.imgs == 0) {
+                this.$swal(
+                    "Gagal",
+                    "Silahkan tunggu proses upload hingga selesai",
+                    "error"
+                );
+                return;
+            }
+
             let formData = new FormData();
 
             let peserta = [
@@ -233,8 +252,10 @@ export default {
             this.$emit("refresh");
             this.$swal("Berhasil", "Data berhasil disimpan", "success");
         },
-        uploadDokumen(file) {
+        uploadDokumen(file, imgs) {
             this.form.dokumentasi = file;
+            this.imgs = imgs;
+            console.log("file", file, "imgs", imgs)
         },
     },
     mounted() {
@@ -259,7 +280,8 @@ export default {
                 return (
                     item.id !== this.meeting.notulen &&
                     item.id !== this.meeting.moderator &&
-                    item.id !== this.meeting.pimpinan
+                    item.id !== this.meeting.pimpinan &&
+                    !this.meeting.peserta.includes(item.id)
                 );
             });
         },
@@ -292,7 +314,10 @@ export default {
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
     >
-        <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+        <div
+            class="modal-dialog modal-xl modal-dialog-scrollable"
+            role="document"
+        >
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">{{ meeting.nama }}</h5>
@@ -300,7 +325,7 @@ export default {
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" v-if="!loading">
                     <div class="form-group row">
                         <div class="col-sm-6">
                             <label for="tanggal" class="col-form-label"
@@ -392,8 +417,12 @@ export default {
                             multiple
                             :options="karyawanFilteredPeserta"
                             label="nama"
-                            :reduce="(karyawan) => karyawan.id"
-                            v-model="meeting.peserta"
+                            v-model="selectedParticipants"
+                            @input="
+                                meeting.peserta = selectedParticipants.map(
+                                    (item) => item.id
+                                )
+                            "
                         />
                     </div>
                     <div class="form-group row">
@@ -474,6 +503,12 @@ export default {
                             >Dokumentasi</label
                         >
                         <uploadFile @changed="uploadDokumen" />
+                    </div>
+                </div>
+                <div class="modal-body text-center" v-else>
+                    <div class="d-flex justify-content-center">
+                    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+                    <dotlottie-player src="https://lottie.host/19bf105b-8bab-4166-a398-5737953bf1e0/YXTnQ5N482.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></dotlottie-player>
                     </div>
                 </div>
                 <div class="modal-footer">
