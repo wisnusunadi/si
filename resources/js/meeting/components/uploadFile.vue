@@ -79,7 +79,8 @@ export default {
         deleteImg(index) {
             this.Imgs.splice(index, 1);
             this.files.splice(index, 1);
-            this.$emit("changed", this.files);
+            this.progress.splice(index, 1);
+            this.$emit("changed", this.files, this.Imgs);
             this.$refs.uploadInput.value = null;
         },
         previewImgs(event) {
@@ -98,7 +99,7 @@ export default {
             if (this.dropped == 0)
                 this.files.push(...event.currentTarget.files);
             this.error = "";
-            this.$emit("changed", this.files);
+            this.$emit("changed", this.files, this.Imgs);
             let readers = [];
             if (!this.files.length) return;
             this.progress = new Array(this.files.length).fill(0);
@@ -113,10 +114,15 @@ export default {
             this.$refs.uploadInput.value = null;
             this.Imgs = [];
             this.files = [];
-            this.$emit("changed", this.files);
-            this.$store.dispatch("resetFiles");
+            this.progress = [];
+            this.$emit("changed", this.files, this.Imgs);
         },
     },
+    watch: {
+        Imgs() {
+            this.$emit("changed", this.files, this.Imgs);
+        },
+    }
 };
 </script>
 
@@ -176,10 +182,7 @@ export default {
                             files[i].name
                         }}</span>
                         <img v-else :src="Imgs[i]" />
-                        <div
-                        v-if="prog < 100"
-                            class="progress"
-                        >
+                        <div v-if="prog < 100" class="progress">
                             <div
                                 class="progress-bar"
                                 role="progressbar"

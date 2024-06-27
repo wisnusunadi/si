@@ -54,7 +54,9 @@ export default {
                     ],
                 },
                 { text: "Lokasi", value: "lokasi_nama" },
+                { text: "Peran", value: "peran"},
                 { text: "Status", value: "status" },
+                { text: "Kehadiran", value: "kehadiran"},
                 { text: "Aksi", value: "aksi", sortable: false },
             ],
             // modal tambah
@@ -97,6 +99,7 @@ export default {
                         tanggal_meet: this.dateFormat(item.tanggal),
                         mulai: this.timeFormat(item.mulai),
                         selesai: this.timeFormat(item.selesai),
+                        peran: ['Notulen', 'Pimpinan', 'Peserta'],
                     };
                 });
                 this.dataTableSelesai = selesai.map((item, index) => {
@@ -390,6 +393,20 @@ export default {
                             <template #item.status="{ item }">
                                 <div>
                                     <status :status="item.status" />
+                                </div>
+                            </template>
+                            <template #item.peran="{ item }">
+                                <div>
+                                    <span
+                                        v-for="(peran, index) in item.peran"
+                                        :key="index"
+                                    >
+                                        {{ peran }}
+                                        <span
+                                            v-if="index != item.peran.length - 1"
+                                            >,</span
+                                        >
+                                    </span>
                                 </div>
                             </template>
                             <template #item.aksi="{ item }">
