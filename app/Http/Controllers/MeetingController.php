@@ -590,7 +590,7 @@ class MeetingController extends Controller
             //throw $th;
             DB::rollback();
             return response()->json([
-                'status' => 'error',
+                'status' => 'errors',
                 'message' => $th->getMessage()
             ], 500);
         }
