@@ -7,6 +7,7 @@
         .text-center {
             margin-left: 0.8cm;
         }
+
         .font-size-elitech {
             font-size: 13pt;
         }
@@ -29,7 +30,7 @@
         }
 
         .image-container-logo-13 {
-            margin-left: -0.85cm;
+            margin-left: -1.1cm;
         }
 
         .image-container-logo-14 {
@@ -45,7 +46,7 @@
         }
 
         .image-container-13 {
-            margin-left: -0.85cm;
+            margin-left: -1.1cm;
         }
 
         .image-container-14 {
@@ -63,81 +64,80 @@
 </head>
 
 <body>
-@foreach ($data as $item)
-@php
-$generator = new Picqer\Barcode\BarcodeGeneratorSVG();
-$merkLogo = '';
+    @foreach ($data as $item)
+        @php
+            $generator = new Picqer\Barcode\BarcodeGeneratorSVG();
+            $merkLogo = '';
 
-switch ($isLogo) {
-    case 'elitech':
-        $merkLogo = 'Elitech';
-        break;
-    case 'vanward':
-        $merkLogo = 'Vanward';
-        break;
-    case 'rgb':
-        $merkLogo = 'RGB';
-        break;
-    case 'mentor':
-        $merkLogo = 'Mentor';
-        break;
-    default:
-        $merkLogo = '';
-        break;
-}
+            switch ($isLogo) {
+                case 'elitech':
+                    $merkLogo = 'Elitech';
+                    break;
+                case 'vanward':
+                    $merkLogo = 'Vanward';
+                    break;
+                case 'rgb':
+                    $merkLogo = 'RGB';
+                    break;
+                case 'mentor':
+                    $merkLogo = 'Mentor';
+                    break;
+                default:
+                    $merkLogo = '';
+                    break;
+            }
 
-$sizeHeight = $merkLogo != '' ? 29 : 33;
+            $sizeHeight = $merkLogo != '' ? 29 : 33;
 
+            $classLogo = '';
 
-$classLogo = '';
+            switch (strlen($item->noseri)) {
+                case 11:
+                    $classLogo = 'image-container-logo-11';
+                    $sizeWidth = $merkLogo != '' ? 0.97 : 0.91;
+                    break;
+                case 12:
+                    $classLogo = 'image-container-logo-12';
+                    $sizeWidth = $merkLogo != '' ? 0.96 : 0.91;
+                    break;
+                case 13:
+                    $classLogo = 'image-container-logo-13';
+                    $sizeWidth = $merkLogo != '' ? 0.96 : 0.91;
+                    break;
+                default:
+                    $classLogo = 'image-container-logo-14';
+                    $sizeWidth = $merkLogo != '' ? 0.96 : 0.91;
+                    break;
+            }
 
-switch (strlen($item->noseri)) {
-    case 11:
-        $classLogo = 'image-container-logo-11';
-        $sizeWidth =  $merkLogo != '' ? 0.97 : 0.91;
-        break;
-    case 12:
-        $classLogo = 'image-container-logo-12';
-        $sizeWidth =  $merkLogo != '' ? 0.96 : 0.91;
-        break;
-    case 13:
-        $classLogo = 'image-container-logo-13';
-        $sizeWidth =  $merkLogo != '' ? 0.96 : 0.91;
-        break;
-    default:
-        $classLogo = 'image-container-logo-14';
-        $sizeWidth =  $merkLogo != '' ? 0.96 : 0.91;
-        break;
-}
+            $classNotLogo = '';
 
-$classNotLogo = '';
+            switch (strlen($item->noseri)) {
+                case 11:
+                    $classNotLogo = 'image-container-11';
+                    break;
+                case 12:
+                    $classNotLogo = 'image-container-12';
+                    break;
+                case 13:
+                    $classNotLogo = 'image-container-13';
+                    break;
+                default:
+                    $classNotLogo = 'image-container-14';
+                    break;
+            }
 
-switch (strlen($item->noseri)) {
-    case 11:
-        $classNotLogo = 'image-container-11';
-        break;
-    case 12:
-        $classNotLogo = 'image-container-12';
-        break;
-    case 13:
-        $classNotLogo = 'image-container-13';
-        break;
-    default:
-        $classNotLogo = 'image-container-14';
-        break;
-}
+        @endphp
 
-@endphp
-
-<div class="{{ $loop->last ? '' : 'page-break' }}">
-    <div class="{{  $merkLogo != '' ? $classLogo : $classNotLogo }}">
-        <span class="{{ $merkLogo != '' ? 'font-size-elitech' : 'logo' }}">{{ $merkLogo }}</span>
-        <img
-            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item->noseri, $generator::TYPE_CODE_128_B, $sizeWidth, $sizeHeight)) }}" />
-        <div class="text-center">{{ $item->noseri }}</div>
-    </div>
-</div>
-@endforeach
+        <div class="{{ $loop->last ? '' : 'page-break' }}">
+            <div class="{{ $merkLogo != '' ? $classLogo : $classNotLogo }}">
+                <span class="{{ $merkLogo != '' ? 'font-size-elitech' : 'logo' }}">{{ $merkLogo }}</span>
+                <img
+                    src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item->noseri, $generator::TYPE_CODE_128_B, $sizeWidth, $sizeHeight)) }}" />
+                <div class="text-center">{{ $item->noseri }}</div>
+            </div>
+        </div>
+    @endforeach
 </body>
 
 </html>
