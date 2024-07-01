@@ -1,5 +1,5 @@
 <script>
-import uploadFile from "../../../components/uploadFile.vue";
+import uploadFile from '../../../components/uploadFile.vue';
 export default {
     props: ["kehadiran"],
     components: {
@@ -8,25 +8,19 @@ export default {
     data() {
         return {
             form: {
-                kehadiran:
-                    JSON.parse(JSON.stringify(this.kehadiran.status_kehadiran)) ==
-                    "belum_mengisi_daftar_hadir"
-                        ? ""
-                        : JSON.parse(
-                              JSON.stringify(this.kehadiran.status_kehadiran)
-                          ),
+                kehadiran: JSON.parse(JSON.stringify(this.kehadiran.status_peserta)) == 'belum_mengisi_daftar_hadir' ? "" : JSON.parse(JSON.stringify(this.kehadiran.status_peserta)),
             },
             loading: false,
-        };
+        }
     },
     methods: {
         closeModal() {
-            $(".modalKehadiran").modal("hide");
             this.$nextTick(() => {
-                this.$emit("closeModal");
+                $(".modalKehadiran").modal("hide");
             });
+            this.$emit("closeModal");
         },
-        async save() {
+        save() {
             this.loading = true;
             // detected form data is empty or not this.form.file = null
             const isFormEmpty = Object.values(this.form).some((item) => {
@@ -41,10 +35,11 @@ export default {
                         });
                     }
                 } else {
-                    return item == "" || item == null;
+                    return item == "";
                 }
             });
 
+          
             if (isFormEmpty) {
                 this.$swal("Gagal", "Form tidak boleh kosong", "error");
                 this.loading = false;
@@ -56,17 +51,17 @@ export default {
             let form = {
                 ...this.kehadiran,
                 ...this.form,
-            };
+            }
 
             if (this.form?.dokumentasi) {
                 form = {
                     ...form,
                     dokumentasi: this.form.dokumentasi.map((file) => {
                         return {
-                            file,
-                        };
+                            file
+                        }
                     }),
-                };
+                }
             }
 
             for (let key in form) {
@@ -74,10 +69,7 @@ export default {
                 if (Array.isArray(form[key])) {
                     form[key].forEach((item, index) => {
                         for (let keyItem in item) {
-                            formData.append(
-                                `${key}[${index}][${keyItem}]`,
-                                item[keyItem]
-                            );
+                            formData.append(`${key}[${index}][${keyItem}]`, item[keyItem]);
                         }
                     });
                 } else {
@@ -85,204 +77,89 @@ export default {
                 }
             }
 
-            const { success, message } = await this.$_post(
-                "/api/hr/meet/jadwal_person/kehadiran",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
+            this.$_post('/api/hr/meet/jadwal_person/kehadiran', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
                 }
-            );
-            this.loading = false;
-
-            if (!success) {
-                this.$swal("Gagal", message, "error");
-                return;
-            }
-
-            this.closeModal();
-            this.$emit("refresh");
-            this.$swal("Berhasil", message, "success");
+            }).then((response) => {
+                this.$swal("Berhasil", "Data berhasil disimpan", "success");
+                this.$emit("refresh");
+                this.closeModal();
+            }).catch((error) => {
+                this.$swal("Gagal", "Data gagal disimpan", "error");
+            }).finally(() => {
+                this.loading = false;
+            });
         },
         uploadFileData(file) {
             this.form.dokumentasi = file;
         },
     },
     watch: {
-        "form.kehadiran": {
+        'form.kehadiran': {
             handler: function (val) {
-                if (val == "hadir") {
+                if (val == 'hadir') {
                     delete this.form.dokumentasi;
                     delete this.form.alasan;
-                } else if (val == "tidak_hadir") {
-                    this.$set(this.form, "dokumentasi", []);
-                    this.$set(this.form, "alasan", null);
+                } else {
+                    this.$set(this.form, 'dokumentasi', []);
+                    this.$set(this.form, 'alasan', null);
                 }
             },
             deep: true,
         },
-        "form.update_kehadiran": {
-            handler: function (val) {
-                if (val == "status_baru") {
-                    this.form.update_kehadiran = "status_baru";
-                    this.$set(this.form, "kehadiran", null);
-                } else {
-                    this.form.update_kehadiran = "status_lalu";
-                    delete this.form.kehadiran;
-                }
-            },
-        },
-    },
+    }
 };
 </script>
 <template>
-    <div
-        class="modal fade modalKehadiran"
-        id="modelId"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="modelTitleId"
-        aria-hidden="true"
-    >
-        <div
-            class="modal-dialog"
-            :class="form.kehadiran == 'tidak_hadir' ? 'modal-xl' : 'modal-lg'"
-            role="document"
-        >
+    <div class="modal fade modalKehadiran" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
+        <div class="modal-dialog" :class="form.kehadiran == 'tidak_hadir' ? 'modal-xl' : 'modal-lg'" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Kehadiran</h5>
+                    <h5 class="modal-title">Kehadirans</h5>
                     <button type="button" class="close" @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group row" v-if="kehadiran.is_perubahan">
-                        <label class="col-4"> Update Kehadiran </label>
+                    <div class="form-group row">
+                        <label class="col-4">Kehadiran</label>
                         <div class="col-8">
                             <div class="form-check form-check-inline">
-                                <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    v-model="form.update_kehadiran"
-                                    id="baruKehadiran"
-                                    name="update_kehadiran"
-                                    value="status_baru"
-                                />
-                                <label
-                                    class="form-check-label"
-                                    for="baruKehadiran"
-                                >
-                                    Ya
-                                </label>
+                                <input class="form-check-input" type="radio" v-model="form.kehadiran"
+                                    id="inlineCheckbox1" value="hadir" />
+                                <label class="form-check-label" for="inlineCheckbox1">Hadir</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    v-model="form.update_kehadiran"
-                                    id="laluKehadiran"
-                                    name="update_kehadiran"
-                                    value="status_lalu"
-                                />
-                                <label
-                                    class="form-check-label"
-                                    for="laluKehadiran"
-                                >
-                                    Tidak
-                                </label>
+                                <input class="form-check-input" type="radio" v-model="form.kehadiran"
+                                    id="inlineCheckbox2" value="tidak_hadir" />
+                                <label class="form-check-label" for="inlineCheckbox2">Tidak Hadir</label>
                             </div>
                         </div>
                     </div>
-                    <div
-                        v-if="
-                            form.update_kehadiran == 'status_baru' ||
-                            !kehadiran.is_perubahan
-                        "
-                    >
-                        <div class="form-group row">
-                            <label class="col-4">Kehadiran</label>
-                            <div class="col-8">
-                                <div class="form-check form-check-inline">
-                                    <input
-                                        class="form-check-input"
-                                        type="radio"
-                                        v-model="form.kehadiran"
-                                        id="inlineCheckbox1"
-                                        name="kehadiran"
-                                        value="hadir"
-                                    />
-                                    <label
-                                        class="form-check-label"
-                                        for="inlineCheckbox1"
-                                        >Hadir</label
-                                    >
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input
-                                        class="form-check-input"
-                                        type="radio"
-                                        v-model="form.kehadiran"
-                                        id="inlineCheckbox2"
-                                        name="kehadiran"
-                                        value="tidak_hadir"
-                                    />
-                                    <label
-                                        class="form-check-label"
-                                        for="inlineCheckbox2"
-                                        >Tidak Hadir</label
-                                    >
-                                </div>
-                            </div>
+                    <div class="form-group row" v-if="form.kehadiran == 'tidak_hadir'">
+                        <label for="" class="col-4">Alasan</label>
+                        <div class="col-8">
+                            <textarea class="form-control" v-model="form.alasan"></textarea>
                         </div>
-                        <div
-                            class="form-group row"
-                            v-if="form.kehadiran == 'tidak_hadir'"
-                        >
-                            <label for="" class="col-4">Alasan</label>
-                            <div class="col-8">
-                                <textarea
-                                    class="form-control"
-                                    v-model="form.alasan"
-                                ></textarea>
-                            </div>
-                        </div>
-                        <div
-                            class="form-group row"
-                            v-if="form.kehadiran == 'tidak_hadir'"
-                        >
-                            <label for="" class="col-4"
-                                >Dokumen Pendukung</label
-                            >
-                            <div class="col-8">
-                                <uploadFile @changed="uploadFileData" />
-                            </div>
+                    </div>
+                    <div class="form-group row" v-if="form.kehadiran == 'tidak_hadir'">
+                        <label for="" class="col-4">Dokumen Pendukung</label>
+                        <div class="col-8">
+                            <uploadFile @changed="uploadFileData" />
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        @click="closeModal"
-                    >
+                    <button type="button" class="btn btn-secondary" @click="closeModal">
                         Keluar
                     </button>
-                    <button
-                        type="button"
-                        class="btn btn-primary"
-                        @click="save"
-                        :disabled="loading"
-                    >
-                        <div
-                            class="spinner-border spinner-border-sm"
-                            role="status"
-                            v-if="loading"
-                        >
+                    <button type="button" class="btn btn-primary" @click="save" :disabled="loading">
+                        <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
                             <span class="sr-only">Loading...</span>
                         </div>
-                        {{ loading ? "Menyimpan..." : "Simpan" }}
+                        {{ loading ? 'Menyimpan...' : 'Simpan' }}
                     </button>
                 </div>
             </div>
