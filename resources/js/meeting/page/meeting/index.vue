@@ -410,6 +410,17 @@ export default {
                             :items="dataTable"
                             :search="search"
                         >
+                            <template #item.urutan="{ item }">
+                                <div>
+                                    {{ item.urutan }} <br>
+                                    <span
+                                        class="badge badge-light"
+                                        v-if="item.is_perubahan"
+                                    >
+                                        Mengalami Perubahan Jadwal
+                                    </span>
+                                </div>
+                            </template>
                             <template #item.status="{ item }">
                                 <div>
                                     <status :status="item.status" />
@@ -449,9 +460,9 @@ export default {
                                             @click="openModalKehadiran(item)"
                                             v-if="
                                                 item.status_kehadiran ==
-    'belum_mengisi_daftar_hadir'
-                                                && item.status == 'belum'
-                                                && !item.peran.includes('notulen')
+                                                    'belum_mengisi_daftar_hadir' &&
+                                                item.status == 'belum' &&
+                                                !item.peran.includes('notulen')
                                             "
                                         >
                                             <i class="fas fa-check-circle"></i>

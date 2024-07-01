@@ -884,6 +884,12 @@ class MeetingController extends Controller
                             ->whereColumn('jm.id', 'jadwal_meeting.id')
                             ->limit(1);
                     },
+                    'riwayat_count' =>  function ($q) use ($userid) {
+                        $q->selectRaw('coalesce(count(riwayat_meeting.id),0)')
+                            ->from('riwayat_meeting')
+                            ->whereColumn('riwayat_meeting.meeting_id', 'jadwal_meeting.id')
+                            ->limit(1);
+                    },
                 ])
                     ->whereIn('status', ['belum', 'menyusun_hasil_meeting', 'menunggu_approval_pimpinan'])
                     ->havingRaw('cpeserta >0 or cnotulen > 0')
@@ -960,6 +966,7 @@ class MeetingController extends Controller
                         "dokumen_meet" => $d->DokumenMeeting->count() > 0 ? $d->DokumenMeeting : [],
                         "pimpinan" =>  $d->pimpinan,
                         "peran" =>  $peran,
+                        "is_perubahan" => $d->riwayat_count > 0 ? true : false,
                         "status_kehadiran" => $userid != '' ? PesertaMeeting::where(['meeting_id' => $d->id, 'karyawan_id' => $userid])->first()->status : null,
                     ];
                 }
