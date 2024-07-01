@@ -748,7 +748,7 @@ export default {
                                             class="dropdown-item"
                                             type="button"
                                             @click="
-                                                detail(item.id, item.status)
+                                                detail(item)
                                             "
                                         >
                                             <i class="fas fa-eye"></i>
