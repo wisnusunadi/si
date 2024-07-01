@@ -241,21 +241,39 @@ export default {
             this.catatanData = null;
             this.modalCatatan = false;
         },
-        detail(id, status) {
-            if (
-                status == "terlaksana" ||
-                status == "menyusun_hasil_meeting" ||
-                status == "menunggu_approval_pimpinan"
-            ) {
-                this.$router.push({
-                    name: "detail-meeting-terlaksana",
-                    params: { id: id },
-                });
+        detail({ id, status, peran }) {
+            if (peran.includes("notulen")) {
+                if (
+                    status == "terlaksana" ||
+                    status == "menyusun_hasil_meeting" ||
+                    status == "menunggu_approval_pimpinan"
+                ) {
+                    this.$router.push({
+                        name: "detail-meeting-terlaksana",
+                        params: { id: id },
+                    });
+                } else {
+                    this.$router.push({
+                        name: "detail-meeting-nonterlaksana",
+                        params: { id: id },
+                    });
+                }
             } else {
-                this.$router.push({
-                    name: "detail-meeting-nonterlaksana",
-                    params: { id: id },
-                });
+                if (
+                    status == "terlaksana" ||
+                    status == "menyusun_hasil_meeting" ||
+                    status == "menunggu_approval_pimpinan"
+                ) {
+                    this.$router.push({
+                        name: "jadwal-meeting-peserta-detail-terlaksana",
+                        params: { id: id },
+                    });
+                } else {
+                    this.$router.push({
+                        name: "jadwal-meeting-peserta-detail-nonterlaksana",
+                        params: { id: id },
+                    });
+                }
             }
         },
         cetakUndangan(id) {
@@ -412,7 +430,7 @@ export default {
                         >
                             <template #item.urutan="{ item }">
                                 <div>
-                                    {{ item.urutan }} <br>
+                                    {{ item.urutan }} <br />
                                     <span
                                         class="badge badge-light"
                                         v-if="item.is_perubahan"
@@ -496,9 +514,7 @@ export default {
                                         <button
                                             class="dropdown-item"
                                             type="button"
-                                            @click="
-                                                detail(item.id, item.status)
-                                            "
+                                            @click="detail(item)"
                                         >
                                             <i class="fas fa-eye"></i>
                                             Detail

@@ -164,7 +164,7 @@ export default {
                 }
             );
 
-            console.log("error")
+            console.log("error");
 
             if (isFormEmpty) {
                 this.$swal(
@@ -257,7 +257,7 @@ export default {
         uploadDokumen(file, imgs) {
             this.form.dokumentasi = file;
             this.imgs = imgs;
-            console.log("file", file, "imgs", imgs)
+            console.log("file", file, "imgs", imgs);
         },
     },
     mounted() {
@@ -323,7 +323,12 @@ export default {
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">{{ meeting.nama }}</h5>
-                    <button type="button" class="close" @click="closeModal">
+                    <button
+                        :disabled="loading"
+                        type="button"
+                        class="close"
+                        @click="closeModal"
+                    >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -509,14 +514,25 @@ export default {
                 </div>
                 <div class="modal-body text-center" v-else>
                     <div class="d-flex justify-content-center">
-                    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
-                    <dotlottie-player src="https://lottie.host/19bf105b-8bab-4166-a398-5737953bf1e0/YXTnQ5N482.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></dotlottie-player>
+                        <script
+                            src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"
+                            type="module"
+                        ></script>
+                        <dotlottie-player
+                            src="https://lottie.host/19bf105b-8bab-4166-a398-5737953bf1e0/YXTnQ5N482.json"
+                            background="transparent"
+                            speed="1"
+                            style="width: 300px; height: 300px"
+                            loop
+                            autoplay
+                        ></dotlottie-player>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button
                         type="button"
                         class="btn btn-secondary"
+                        :disabled="loading"
                         @click="closeModal"
                     >
                         Keluar
