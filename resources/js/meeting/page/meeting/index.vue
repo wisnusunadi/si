@@ -11,6 +11,7 @@ import uploadTest from "./uploadTest.vue";
 import approval from "./approval.vue";
 import modalSelectLampiran from "./detailterlaksana/modalSelectLampiran.vue";
 import kehadiran from "../peserta/aksi/kehadiran.vue";
+
 export default {
     components: {
         Header,
@@ -136,6 +137,10 @@ export default {
                                     .dokumen,
                             },
                         ],
+                        status_kehadiran:
+                            item.status_kehadiran == "belum"
+                                ? "belum_mengisi_daftar_hadir"
+                                : item.status_kehadiran,
                     };
                 });
                 this.approvalData = acc.map((item, index) => {
@@ -292,6 +297,70 @@ export default {
             this.modalKehadiran = true;
             this.$nextTick(() => {
                 $(".modalKehadiran").modal("show");
+            });
+        },
+        approve({ id, hasil_notulen }) {
+            swal.fire({
+                title: "Setujui?",
+                text: "Apakah anda yakin ingin menyetujui data ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya",
+                cancelButtonText: "Tidak",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$_post("/api/hr/meet/jadwal/update/approve_setuju", {
+                        id,
+                        notulensi: hasil_notulen,
+                    })
+                        .then((res) => {
+                            swal.fire(
+                                "Berhasil!",
+                                "Data telah disetujui.",
+                                "success"
+                            );
+                            this.getData();
+                        })
+                        .catch((err) => {
+                            swal.fire(
+                                "Gagal!",
+                                "Data gagal disetujui.",
+                                "error"
+                            );
+                        });
+                }
+            });
+        },
+        reject(id) {
+            swal.fire({
+                title: "Tolak?",
+                text: "Apakah anda yakin ingin menolak data ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya",
+                cancelButtonText: "Tidak",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .$_post("/api/hr/meet/jadwal/update/approve_batal", {
+                            id,
+                        })
+                        .then((res) => {
+                            swal.fire(
+                                "Berhasil!",
+                                "Data telah ditolak.",
+                                "success"
+                            );
+                            this.getData();
+                        })
+                        .catch((err) => {
+                            swal.fire("Gagal!", "Data gagal ditolak.", "error");
+                        });
+                }
             });
         },
     },
@@ -556,6 +625,32 @@ export default {
                                             <i class="fas fa-print"></i>
                                             Cetak Hasil Meeting
                                         </button>
+                                        <button
+                                            class="dropdown-item"
+                                            type="button"
+                                            v-if="
+                                                item.status ==
+                                                    'menunggu_approval_pimpinan' &&
+                                                item.peran.includes('pimpinan')
+                                            "
+                                            @click="approve(item)"
+                                        >
+                                            <i class="fas fa-check"></i>
+                                            Setujui
+                                        </button>
+                                        <button
+                                            class="dropdown-item"
+                                            type="button"
+                                            v-if="
+                                                item.status ==
+                                                    'menunggu_approval_pimpinan' &&
+                                                item.peran.includes('pimpinan')
+                                            "
+                                            @click="reject(item.id)"
+                                        >
+                                            <i class="fas fa-times"></i>
+                                            Tolak
+                                        </button>
                                     </div>
                                 </div>
                             </template>
@@ -599,6 +694,25 @@ export default {
                                 <div>
                                     <status :status="item.status" />
                                 </div>
+                            </template>
+                            <template #item.peran="{ item }">
+                                <div>
+                                    <span
+                                        v-for="(peran, index) in item.peran"
+                                        :key="index"
+                                    >
+                                        {{ peran
+                                        }}<span
+                                            v-if="
+                                                index != item.peran.length - 1
+                                            "
+                                            >,</span
+                                        >
+                                    </span>
+                                </div>
+                            </template>
+                            <template #item.kehadiran="{ item }">
+                                <status :status="item.status_kehadiran" />
                             </template>
                             <template #item.aksi="{ item }">
                                 <div>
