@@ -9,8 +9,9 @@ export default {
         return {
             form: {
                 kehadiran:
-                    JSON.parse(JSON.stringify(this.kehadiran.status_kehadiran)) ==
-                    "belum_mengisi_daftar_hadir"
+                    JSON.parse(
+                        JSON.stringify(this.kehadiran.status_kehadiran)
+                    ) == "belum_mengisi_daftar_hadir"
                         ? ""
                         : JSON.parse(
                               JSON.stringify(this.kehadiran.status_kehadiran)
@@ -21,12 +22,12 @@ export default {
     },
     methods: {
         closeModal() {
-            $(".modalKehadiran").modal("hide");
             this.$nextTick(() => {
-                this.$emit("closeModal");
+                $(".modalKehadiran").modal("hide");
             });
+            this.$emit("closeModal");
         },
-        async save() {
+        save() {
             this.loading = true;
             // detected form data is empty or not this.form.file = null
             const isFormEmpty = Object.values(this.form).some((item) => {
@@ -41,7 +42,7 @@ export default {
                         });
                     }
                 } else {
-                    return item == "" || item == null;
+                    return item == "";
                 }
             });
 
@@ -85,25 +86,22 @@ export default {
                 }
             }
 
-            const { success, message } = await this.$_post(
-                "/api/hr/meet/jadwal_person/kehadiran",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
-            );
-            this.loading = false;
-
-            if (!success) {
-                this.$swal("Gagal", message, "error");
-                return;
-            }
-
-            this.closeModal();
-            this.$emit("refresh");
-            this.$swal("Berhasil", message, "success");
+            this.$_post("/api/hr/meet/jadwal_person/kehadiran", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+                .then((response) => {
+                    this.$swal("Berhasil", "Data berhasil disimpan", "success");
+                    this.$emit("refresh");
+                    this.closeModal();
+                })
+                .catch((error) => {
+                    this.$swal("Gagal", "Data gagal disimpan", "error");
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         uploadFileData(file) {
             this.form.dokumentasi = file;
@@ -115,23 +113,12 @@ export default {
                 if (val == "hadir") {
                     delete this.form.dokumentasi;
                     delete this.form.alasan;
-                } else if (val == "tidak_hadir") {
+                } else {
                     this.$set(this.form, "dokumentasi", []);
                     this.$set(this.form, "alasan", null);
                 }
             },
             deep: true,
-        },
-        "form.update_kehadiran": {
-            handler: function (val) {
-                if (val == "status_baru") {
-                    this.form.update_kehadiran = "status_baru";
-                    this.$set(this.form, "kehadiran", null);
-                } else {
-                    this.form.update_kehadiran = "status_lalu";
-                    delete this.form.kehadiran;
-                }
-            },
         },
     },
 };
@@ -152,112 +139,64 @@ export default {
         >
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Kehadiran</h5>
+                    <h5 class="modal-title">Kehadirans</h5>
                     <button type="button" class="close" @click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group row" v-if="kehadiran.is_perubahan">
-                        <label class="col-4"> Update Kehadiran </label>
+                    <div class="form-group row">
+                        <label class="col-4">Kehadiran</label>
                         <div class="col-8">
                             <div class="form-check form-check-inline">
                                 <input
                                     class="form-check-input"
                                     type="radio"
-                                    v-model="form.update_kehadiran"
-                                    id="baruKehadiran"
-                                    name="update_kehadiran"
-                                    value="status_baru"
+                                    v-model="form.kehadiran"
+                                    id="inlineCheckbox1"
+                                    value="hadir"
                                 />
                                 <label
                                     class="form-check-label"
-                                    for="baruKehadiran"
+                                    for="inlineCheckbox1"
+                                    >Hadir</label
                                 >
-                                    Ya
-                                </label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input
                                     class="form-check-input"
                                     type="radio"
-                                    v-model="form.update_kehadiran"
-                                    id="laluKehadiran"
-                                    name="update_kehadiran"
-                                    value="status_lalu"
+                                    v-model="form.kehadiran"
+                                    id="inlineCheckbox2"
+                                    value="tidak_hadir"
                                 />
                                 <label
                                     class="form-check-label"
-                                    for="laluKehadiran"
+                                    for="inlineCheckbox2"
+                                    >Tidak Hadir</label
                                 >
-                                    Tidak
-                                </label>
                             </div>
                         </div>
                     </div>
                     <div
-                        v-if="
-                            form.update_kehadiran == 'status_baru' ||
-                            !kehadiran.is_perubahan
-                        "
+                        class="form-group row"
+                        v-if="form.kehadiran == 'tidak_hadir'"
                     >
-                        <div class="form-group row">
-                            <label class="col-4">Kehadiran</label>
-                            <div class="col-8">
-                                <div class="form-check form-check-inline">
-                                    <input
-                                        class="form-check-input"
-                                        type="radio"
-                                        v-model="form.kehadiran"
-                                        id="inlineCheckbox1"
-                                        name="kehadiran"
-                                        value="hadir"
-                                    />
-                                    <label
-                                        class="form-check-label"
-                                        for="inlineCheckbox1"
-                                        >Hadir</label
-                                    >
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input
-                                        class="form-check-input"
-                                        type="radio"
-                                        v-model="form.kehadiran"
-                                        id="inlineCheckbox2"
-                                        name="kehadiran"
-                                        value="tidak_hadir"
-                                    />
-                                    <label
-                                        class="form-check-label"
-                                        for="inlineCheckbox2"
-                                        >Tidak Hadir</label
-                                    >
-                                </div>
-                            </div>
+                        <label for="" class="col-4">Alasan</label>
+                        <div class="col-8">
+                            <textarea
+                                class="form-control"
+                                v-model="form.alasan"
+                            ></textarea>
                         </div>
-                        <div
-                            class="form-group row"
-                            v-if="form.kehadiran == 'tidak_hadir'"
-                        >
-                            <label for="" class="col-4">Alasan</label>
-                            <div class="col-8">
-                                <textarea
-                                    class="form-control"
-                                    v-model="form.alasan"
-                                ></textarea>
-                            </div>
-                        </div>
-                        <div
-                            class="form-group row"
-                            v-if="form.kehadiran == 'tidak_hadir'"
-                        >
-                            <label for="" class="col-4"
-                                >Dokumen Pendukung</label
-                            >
-                            <div class="col-8">
-                                <uploadFile @changed="uploadFileData" />
-                            </div>
+                    </div>
+                    <div
+                        class="form-group row"
+                        v-if="form.kehadiran == 'tidak_hadir'"
+                    >
+                        <label for="" class="col-4">Dokumen Pendukung</label>
+                        <div class="col-8">
+                            <uploadFile @changed="uploadFileData" />
                         </div>
                     </div>
                 </div>
