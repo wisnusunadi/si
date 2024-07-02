@@ -387,6 +387,14 @@ const Customer = ({ formCustomer, setFormCustomer, isEdit = false }) => {
                                                     newForm.jasa !== undefined
                                                 ) {
                                                     delete newForm.jasa;
+                                                } else {
+                                                    newForm.jasa = [
+                                                        {
+                                                            jasa_id: null,
+                                                            harga: 0,
+                                                            pajak: true,
+                                                        }
+                                                    ]
                                                 }
                                                 setFormCustomer({
                                                     ...newForm,
