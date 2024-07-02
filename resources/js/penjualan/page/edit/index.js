@@ -200,7 +200,7 @@ const EditPenjualan = () => {
                                     dataEdit?.barang?.includes("sparepart") && (
                                         <PartComponent
                                             formPart={dataEdit}
-                                            setFormPart={setdataEdit}
+                                            setFormPart={setDataEdit}
                                         />
                                     )}
 
@@ -208,7 +208,7 @@ const EditPenjualan = () => {
                                     dataEdit?.barang?.includes("jasa") && (
                                         <JasaComponent
                                             formJasa={dataEdit}
-                                            setFormJasa={setdataEdit}
+                                            setFormJasa={setDataEdit}
                                         />
                                     )}
 

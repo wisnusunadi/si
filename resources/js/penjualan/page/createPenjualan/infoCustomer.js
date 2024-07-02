@@ -318,6 +318,15 @@ const Customer = ({ formCustomer, setFormCustomer, isEdit = false }) => {
                                                         undefined
                                                 ) {
                                                     delete newForm.sparepart;
+                                                } else {
+                                                    newForm.sparepart = [
+                                                        {
+                                                            sparepart_id: null,
+                                                            harga: 0,
+                                                            jumlah: 0,
+                                                            pajak: true,
+                                                        },
+                                                    ];
                                                 }
 
                                                 setFormCustomer({
