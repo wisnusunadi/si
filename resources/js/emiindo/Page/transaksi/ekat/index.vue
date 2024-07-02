@@ -205,9 +205,13 @@ export default {
             return years;
         },
         filteredDalamProses() {
+            const searchKeys = this.header.map(
+                (headerItem) => headerItem.value
+            );
+
             const includesSearch = (obj, search) => {
                 if (obj && typeof obj === "object") {
-                    return Object.keys(obj).some((key) => {
+                    return searchKeys.some((key) => {
                         if (typeof obj[key] === "object") {
                             return includesSearch(obj[key], search);
                         }
@@ -219,9 +223,11 @@ export default {
                 return false;
             };
 
-            return this.ekat.filter((data) =>
-                includesSearch(data, this.search)
-            );
+            return this.ekat
+                .filter((data) => includesSearch(data, this.search))
+                .sort(
+                    (a, b) => new Date(b.created_at) - new Date(a.created_at)
+                );
         },
     },
 };
