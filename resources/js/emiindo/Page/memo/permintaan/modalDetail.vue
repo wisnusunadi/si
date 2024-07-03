@@ -34,12 +34,14 @@ export default {
         };
     },
     methods: {
+        // Close modal
         closeModal() {
             $(".modalDetail").modal("hide");
             this.$nextTick(() => {
                 this.$emit("close");
             });
         },
+        // fungsi untuk menyimpan data
         simpan() {
             if (this.noMemo == "" || this.noMemo == null) {
                 swal.fire('Peringatan', 'No. Memo tidak boleh kosong', 'warning')

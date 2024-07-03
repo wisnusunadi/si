@@ -33,6 +33,7 @@ export default {
         }
     },
     methods: {
+        // kirim data
         kirim(data) {
             this.dataSelected = JSON.parse(JSON.stringify(data));
             this.dataSelected.item = this.dataSelected.item.map(item => {

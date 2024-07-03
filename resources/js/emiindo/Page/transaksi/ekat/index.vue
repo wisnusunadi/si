@@ -75,9 +75,11 @@ export default {
         };
     },
     methods: {
+        // tambah data
         tambah() {
             window.location.href = "/penjualanv2/create";
         },
+        // fungsi untuk menampilkan modal batal
         batal(item) {
             this.detailSelected = item;
             this.showModal = true;
@@ -85,6 +87,7 @@ export default {
                 $(".modalBatal").modal("show");
             });
         },
+        // fungsi untuk menampilkan modal retur
         retur(item) {
             this.detailSelected = item;
             this.showModal = true;
@@ -92,6 +95,7 @@ export default {
                 $(".modalRetur").modal("show");
             });
         },
+        // fungsi untuk menampilkan modal detail
         openDO(item) {
             this.detailSelected = item;
             this.showModal = true;
@@ -99,6 +103,7 @@ export default {
                 $(".modalDO").modal("show");
             });
         },
+        // fungsi untuk menampilkan modal detail
         detail(item) {
             this.detailSelected = item;
             this.showModal = true;
@@ -106,12 +111,14 @@ export default {
                 $(".modalDetail").modal("show");
             });
         },
+        // fungsi untuk mencetak SPPB
         cetakSPPB(id) {
             window.open(
                 `/penjualan/penjualan/cetak_surat_perintah/${id}`,
                 "_blank"
             );
         },
+        // fungsi untuk menghitung tanggal dari sekarang
         calculateDateFromNow(date) {
             // kalkulasi tanggal dari sekarang
             const tglSekarang = new Date();
@@ -142,6 +149,7 @@ export default {
                 };
             }
         },
+        // fungsi untuk mengubah format tanggal
         filter(year, status) {
             this.$store.dispatch("setYears", year);
             if (status != "") {
@@ -150,12 +158,15 @@ export default {
                 this.$emit("refresh");
             }
         },
+        // fungsi untuk mengubah format tanggal
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
+        // fungsi untuk mengubah format tanggal
         editEkat(pesananId) {
             window.location.href = `/penjualanv2/edit/${pesananId}`;
         },
+        // fungsi untuk mengecek apakah value adalah string
         cekIsString(value) {
             if (typeof value === "string") {
                 return true;
@@ -163,6 +174,7 @@ export default {
                 return false;
             }
         },
+        // fungsi untuk menghapus data
         hapus(item) {
             this.$swal({
                 title: "Apakah Anda Yakin?",
@@ -197,6 +209,7 @@ export default {
         },
     },
     computed: {
+        // fungsionalitas untuk menampilkan data per halaman
         yearsComputed() {
             let years = [];
             for (let i = 0; i < 5; i++) {
@@ -204,6 +217,7 @@ export default {
             }
             return years;
         },
+        // fungsionalitas untuk menampilkan data per halaman
         filteredDalamProses() {
             const searchKeys = this.header.map(
                 (headerItem) => headerItem.value

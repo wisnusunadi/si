@@ -101,6 +101,7 @@ export default {
         }
     },
     methods: {
+        // setuju data
         setuju(id) {
             this.$swal({
                 title: 'Apakah anda yakin?',
@@ -125,6 +126,7 @@ export default {
                 }
             })
         },
+        // tolak data
         tolak(id) {
             this.showModalTolak = true
             this.$nextTick(() => {
@@ -138,6 +140,7 @@ export default {
                 }
             })
         },
+        // close modal tolak
         closeModalTolak() {
             $('.modalTolak').modal('hide');
             if (this.showModal) {
@@ -151,6 +154,7 @@ export default {
                 });
             }
         },
+        // detail data
         detail(item) {
             this.detailSelected = item
             this.showModal = true

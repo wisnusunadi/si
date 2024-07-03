@@ -12,6 +12,7 @@ export default {
         }
     },
     methods: {
+        // fungsi untuk menyimpan data
         simpan() {
             const ceknotnull = Object.values(this.form).every(x => x !== null && x !== '');
             if (ceknotnull) {
@@ -61,6 +62,7 @@ export default {
                 })
             }
         },
+        // Close modal
         closeModal() {
             $('.modalPeriode').modal('hide');
             this.$nextTick(() => {
@@ -71,6 +73,7 @@ export default {
         }
     },
     computed: {
+        // get 5 years before now
         get5YearsBeforeNow() {
             let years = [];
             let currentYear = new Date().getFullYear() - 1;
@@ -79,6 +82,7 @@ export default {
             }
             return years;
         },
+        // calculate days years selected
         calculateDaysYearsSelected() {
             let years = this.years;
             let days = 0;

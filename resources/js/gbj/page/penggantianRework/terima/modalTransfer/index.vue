@@ -58,12 +58,14 @@ export default {
         }
     },
     methods: {
+        // close modal
         closeModal() {
             $('.modalDetailTransfer').modal('hide');
             this.$nextTick(() => {
                 this.$emit('closeModal');
             });
         },
+        // date time format
         checkAll() {
             this.checkedAll = !this.checkedAll;
             if (this.checkedAll) {
@@ -72,6 +74,7 @@ export default {
                 this.noSeriSelected = [];
             }
         },
+        // select noseri
         selectNoSeri(item) {
             if (this.noSeriSelected.find(noseri => noseri === item)) {
                 this.noSeriSelected = this.noSeriSelected.filter(noseri => noseri !== item);
@@ -86,6 +89,7 @@ export default {
                 this.checkedAll = false;
             }
         },
+        // show modal via text
         showSeriText() {
             this.showmodalviatext = true
             $('.modalDetailTransfer').modal('hide')
@@ -93,12 +97,14 @@ export default {
                 $('.modalChecked').modal('show')
             })
         },
+        // close modal via text
         closeModalSeriviatext() {
             this.showmodalviatext = false
             this.$nextTick(() => {
                 $('.modalDetailTransfer').modal('show')
             })
         },
+        // submit
         submit(noseri) {
             let noserinotfound = []
 
@@ -138,6 +144,7 @@ export default {
                 this.$swal('Peringatan', `Nomor Seri ${noserinotfound.join(', ')} tidx1ak ditemukan`, 'warning')
             }
         },
+        // auto select
         autoSelect() {
             if (this.isScan) {
                 let noserinotfound = []
@@ -173,6 +180,7 @@ export default {
                 }
             }
         },
+        // scan noseri
         scanSeri() {
             this.isScan = !this.isScan
             this.search = ""
@@ -180,6 +188,7 @@ export default {
                 this.$refs.search.focus()
             })
         },
+        // change layout
         changeLayout(event) {
             console.log(event);
             // change all layout noseriSelected
@@ -189,6 +198,7 @@ export default {
             this.search = "t"
             this.search = ""
         },
+        // transfer
         transfer() {
             this.$swal({
                 title: 'Apakah anda yakin?',

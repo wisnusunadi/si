@@ -64,6 +64,7 @@ export default {
         };
     },
     methods: {
+        // getdata dari api
         async getData() {
             try {
                 this.$store.dispatch("setLoading", true);
@@ -83,6 +84,7 @@ export default {
                 this.$store.dispatch("setLoading", false);
             }
         },
+        // show modal detail
         showDetailModal(item) {
             this.detailSelected = item;
             this.showModal = true;
@@ -90,6 +92,7 @@ export default {
                 $(".modalDetail").modal("show");
             });
         },
+        // show status badge
         statusBadge(status) {
             switch (status) {
                 case "produksi":
@@ -129,6 +132,7 @@ export default {
         this.getData();
     },
     computed: {
+        // get years 5 years ago
         yearsComputed() {
             let years = [];
             for (let i = 0; i < 5; i++) {
@@ -136,9 +140,11 @@ export default {
             }
             return years;
         },
+        // get bagian
         getBagian() {
             return [...new Set(this.items.map((item) => item.bagian))];
         },
+        // get status
         getStatus() {
             const status = [...new Set(this.items.map((item) => item.status))];
             // change to capitalize

@@ -554,7 +554,8 @@ export default {
                                         >
                                             <i class="fas fa-check-circle"></i>
                                             {{
-                                                item.is_perubahan
+                                                item.is_perubahan && item.status_kehadiran !=
+                                                    'belum_mengisi_daftar_hadir'
                                                     ? "Update Kehadiran"
                                                     : "Kehadiran"
                                             }}

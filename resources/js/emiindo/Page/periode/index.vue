@@ -64,6 +64,7 @@ export default {
         }
     },
     methods: {
+        // Close modal
         tutup(item) {
             this.$swal({
                 title: 'Apakah anda yakin?',
@@ -98,12 +99,14 @@ export default {
                 }
             })
         },
+        // Open modal create
         showModalCreate() {
             this.showModal = true;
             this.$nextTick(() => {
                 $('.modalPeriode').modal('show');
             })
         },
+        // create badge status
         statusBadge(status) {
             if (status == 'pengajuan') {
                 return 'badge badge-primary';
@@ -115,6 +118,7 @@ export default {
                 return 'badge badge-secondary';
             }
         },
+        // get data from api
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true);
@@ -139,9 +143,11 @@ export default {
         this.getData();
     },
     computed: {
+        // get unique years
         getUniqueTahun() {
             return [...new Set(this.items.map(item => item.periode))];
         },
+        // filter data by year
         filterData() {
             if (this.filterTahun.length > 0) {
                 return this.items.filter(item => this.filterTahun.includes(item.periode));

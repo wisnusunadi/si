@@ -36,6 +36,7 @@ export default {
         }
     },
     methods: {
+        // detail data
         detail(item) {
             this.selectDetail = item;
             this.$nextTick(() => {

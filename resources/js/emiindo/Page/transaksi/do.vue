@@ -17,12 +17,14 @@ export default {
         }
     },
     methods: {
+        // Close modal
         closeModal() {
             $('.modalDO').modal('hide')
             this.$nextTick(() => {
                 this.$emit('close')
             })
         },
+        // Save the changes
         simpan() {
             const cekNotNull = Object.keys(this.form).filter(key => this.form[key] === '')
             if (cekNotNull.length > 0) {

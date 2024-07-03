@@ -39,6 +39,7 @@ export default {
         }
     },
     methods: {
+        // transfer rework
         kirim(id) {
             this.$swal({
                 title: 'Apakah anda yakin?',
@@ -64,6 +65,7 @@ export default {
 
             });
         },
+        // transfer rework
         transferRework(data) {
             this.headerTransfer = JSON.parse(JSON.stringify(data))
             // delete item on headerTransfert

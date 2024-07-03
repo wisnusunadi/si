@@ -8,6 +8,7 @@ export default {
         }
     },
     methods: {
+        // Function to save the cancellation reason
         simpan() {
             if (this.alasan == '') {
                 this.$swal('Peringatan', 'Alasan batal tidak boleh kosong', 'warning')
@@ -40,6 +41,7 @@ export default {
                 }
             })
         },
+        // Close modal
         closeModal() {
             $('.modalAlasanBatal').modal('hide')
             this.$nextTick(() => {

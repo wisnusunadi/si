@@ -27,37 +27,21 @@ export default {
                     value: 'jumlah'
                 }
             ],
-            items: [
-                // {
-                //     no: 1,
-                //     nama: 'Produk 1',
-                //     qty: 10,
-                //     jumlah: 0
-                // },
-                // {
-                //     no: 2,
-                //     nama: 'Produk 2',
-                //     qty: 20,
-                //     jumlah: 0
-                // },
-                // {
-                //     no: 3,
-                //     nama: 'Produk 3',
-                //     qty: 30,
-                //     jumlah: 0
-                // }
-            ],
+            items: [],
             showModalAlasan: false
         }
     },
     methods: {
+        // digunakan untuk keluar dari modal
         closeModal() {
             $('.modalBatal').modal('hide');
             this.$nextTick(() => {
                 this.$emit('close');
             })
         },
+        // digunakan untuk menyimpan data batal
         simpan() {
+            // cek apakah jumlah batal ada yang lebih dari 0
             let dataJumlahNotZero = this.items.filter(item => item.jumlah > 0)
             if (dataJumlahNotZero.length > 0) {
                 this.showModalAlasan = true
@@ -69,16 +53,19 @@ export default {
                 this.$swal('Peringatan', 'Jumlah batal tidak boleh kosong', 'warning')
             }
         },
+        // digunakan untuk menampilkan modal alasan
         closeModalAlasan() {
             this.showModalAlasan = false
             this.$nextTick(() => {
                 $('.modalBatal').modal('show')
             })
         },
+        // digunakan untuk menutup semua modal
         closeAllModal() {
             this.closeModal()
             this.$emit('refresh')
         },
+        // digunakan untuk membatasi inputan hanya angka
         cekIsString(value) {
             if (typeof value === 'string') {
                 return true
@@ -86,6 +73,7 @@ export default {
                 return false
             }
         },
+        // digunakan untuk mengambil data detail paket
         async getData() {
             try {
                 const { data } = await axios.get(`/api/penjualan/batal_po/detail_paket/${this.batal.pesanan_id}`)
@@ -116,6 +104,7 @@ export default {
             deep: true
         }
     },
+    // digunakan untuk mengambil data detail paket
     created() {
         this.getData()
     }

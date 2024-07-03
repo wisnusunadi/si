@@ -62,6 +62,7 @@ export default {
         };
     },
     methods: {
+        // Open Modal Detail
         openModalDetail(item) {
             this.detailSelected = item;
             this.modalSelected = true;

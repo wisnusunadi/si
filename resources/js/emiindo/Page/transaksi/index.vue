@@ -41,6 +41,7 @@ export default {
         }
     },
     methods: {
+        // function to get the years of the transaction
         async getYears() {
             const { data: tahun } = await axios.get('/api/penjualan/getYearsPeriode')
 
@@ -50,6 +51,7 @@ export default {
                 this.getData()
             })
         },
+        // Function to get the data
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true)
@@ -133,6 +135,7 @@ export default {
                 this.$store.dispatch('setLoading', false)
             }
         },
+        // Function to filter data based on the status of the transaction
         filterDataStatusEkat(status) {
             if (this.jenisEkatStatus.includes(status)) {
                 // If data exists in jenisEkatStatus, remove it
@@ -150,6 +153,7 @@ export default {
                 this.getData()
             })
         },
+        // Function to filter data based on the status of the transaction
         filterDataStatusSpa(status) {
             if (this.jenisSpaStatus.includes(status)) {
                 this.jenisSpaStatus = this.jenisSpaStatus.filter(item => item !== status);
@@ -165,6 +169,7 @@ export default {
                 this.getData()
             })
         },
+        // Function to filter data based on the status of the transaction
         filterDataStatusSpb(status) {
             if (this.jenisSpbStatus.includes(status)) {
                 this.jenisSpbStatus = this.jenisSpbStatus.filter(item => item !== status);
@@ -180,6 +185,7 @@ export default {
                 this.getData()
             })
         },
+        // Function to filter data based on the status of the transaction
         filterDataStatusPenjualan(status) {
             if (this.jenisPenjualanStatus.includes(status)) {
                 this.jenisPenjualanStatus = this.jenisPenjualanStatus.filter(item => item !== status);
@@ -195,6 +201,7 @@ export default {
                 this.getData()
             })
         },
+        // Function to filter data based on the status of the transaction
         filterTransaksiPenjualan(status) {
             if (this.jenisPenjualanTransaksiStatus.includes(status)) {
                 this.jenisPenjualanTransaksiStatus = this.jenisPenjualanTransaksiStatus.filter(item => item !== status);

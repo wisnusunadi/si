@@ -120,9 +120,11 @@ export default {
                 };
             }
         },
+        // tambah data
         tambah() {
             window.location.href = "/penjualan/penjualan/create";
         },
+        // filter data
         filter(year, status) {
             this.$store.dispatch("setYears", year);
             if (status != "") {
@@ -131,9 +133,11 @@ export default {
                 this.$emit("refresh");
             }
         },
+        // update filter data
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
+        // detail data
         cekIsString(value) {
             if (typeof value === "string") {
                 return true;
@@ -141,6 +145,7 @@ export default {
                 return false;
             }
         },
+        // detail data
         detail(item) {
             this.detailSelected = item;
             this.showModal = true;
@@ -150,6 +155,7 @@ export default {
         },
     },
     computed: {
+        // penghitungan tahun
         yearsComputed() {
             let years = [];
             for (let i = 0; i < 5; i++) {
@@ -157,6 +163,7 @@ export default {
             }
             return years;
         },
+        // filter data
         filteredDalamProses() {
             const searchKeys = this.header.map(
                 (headerItem) => headerItem.value

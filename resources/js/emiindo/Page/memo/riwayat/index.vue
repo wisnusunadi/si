@@ -1,6 +1,7 @@
 <script>
 import modalDetail from "./modalDetail.vue";
 export default {
+    // define component modalDetail
     components: {
         modalDetail,
     },
@@ -69,6 +70,7 @@ export default {
         };
     },
     methods: {
+        // open modal detail
         openModalDetail(item) {
             this.detailSelected = item;
             this.modalSelected = true;

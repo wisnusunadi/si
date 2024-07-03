@@ -76,6 +76,7 @@ export default {
         };
     },
     methods: {
+        // Function to show the detail of the selected item
         detail(item) {
             this.detailSelected = item;
             this.showModal = true;
@@ -83,15 +84,18 @@ export default {
                 $(".modalDetail").modal("show");
             });
         },
+        // Function to print the SPPB
         cetakSPPB(id) {
             window.open(
                 `/penjualan/penjualan/cetak_surat_perintah/${id}`,
                 "_blank"
             );
         },
+        // Function to add new data
         tambah() {
             window.location.href = "/penjualanv2/create";
         },
+        // Function to filter the data
         filter(year, status) {
             this.$store.dispatch("setYears", year);
             if (status != "") {
@@ -100,9 +104,11 @@ export default {
                 this.$emit("refresh");
             }
         },
+        // Function to edit the SPB
         editSpb(pesananId) {
             window.location.href = `/penjualanv2/edit/${pesananId}`;
         },
+        // Function to open the cancellation modal
         batal(item) {
             this.detailSelected = item;
             this.showModal = true;
@@ -110,6 +116,7 @@ export default {
                 $(".modalBatal").modal("show");
             });
         },
+        // Function to open the return modal
         retur(item) {
             this.detailSelected = item;
             this.showModal = true;
@@ -117,6 +124,7 @@ export default {
                 $(".modalRetur").modal("show");
             });
         },
+        // Function to check if the value is a string
         cekIsString(value) {
             if (typeof value === "string") {
                 return true;
@@ -124,6 +132,7 @@ export default {
                 return false;
             }
         },
+        // Function to delete the data
         hapus(item) {
             this.$swal({
                 title: "Apakah Anda Yakin?",
@@ -156,6 +165,7 @@ export default {
                 }
             });
         },
+        // Function to open the DO modal
         openDO(item) {
             this.detailSelected = item;
             this.showModal = true;
@@ -163,6 +173,7 @@ export default {
                 $(".modalDO").modal("show");
             });
         },
+        // Function to update the filtered data
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },

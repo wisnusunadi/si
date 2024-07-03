@@ -22,6 +22,7 @@ export default {
     },
     props: ['dataTable'],
     methods: {
+        // detail data
         detail(data) {
             this.dataSelected = JSON.parse(JSON.stringify(data))
 
@@ -38,6 +39,7 @@ export default {
                 $('.modalProduk').modal('show')
             })
         },
+        // cetak surat penyerahan
         cetak(id) {
             window.open(`/produksiReworks/surat_penyerahan/${id}/gbj`, '_blank')
         },

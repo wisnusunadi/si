@@ -17,6 +17,7 @@ export default {
         }
     },
     methods: {
+        // Function to get the package
         async getPaket() {
             try {
                 this.loadingPaket = true
@@ -37,6 +38,7 @@ export default {
                 this.loadingPaket = false
             }
         },
+        // Close modal
         closeModal() {
             $('.modalRetur').modal('hide');
             this.$nextTick(() => {

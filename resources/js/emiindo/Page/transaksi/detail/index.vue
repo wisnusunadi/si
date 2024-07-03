@@ -20,12 +20,14 @@ export default {
         }
     },
     methods: {
+        // Close modal
         closeModal() {
             $('.modalDetail').modal('hide');
             this.$nextTick(() => {
                 this.$emit('close');
             })
         },
+        // calculate date from now
         calculateDateFromNow(date) {
             // kalkulasi tanggal dari sekarang
             const tglSekarang = new Date();
@@ -50,6 +52,7 @@ export default {
                 }
             }
         },
+        // format date
         cekIsString(value) {
             if (typeof value === 'string') {
                 return true
@@ -57,6 +60,7 @@ export default {
                 return false
             }
         },
+        // get data product
         async getDataProduct() {
             try {
                 const { data } = await axios.get(`/api/penjualan/items/${this.detail.pesanan_id}`);
@@ -65,14 +69,17 @@ export default {
                 console.error(error);
             }
         },
+        // subtotal
         subtotal(harga, ongkir, jumlah) {
             return (harga * jumlah) + ongkir;
         },
+        // total harga
         totalHarga() {
             return this.paket.reduce((acc, item) => {
                 return acc + this.subtotal(item.harga, item.ongkir, item.jumlah);
             }, 0);
         },
+        // dapatkan chart pengiriman
         async getChartPengiriman(id, jenis) {
             try {
                 const { data } = await axios.get(`/api/get_stok_pesanan?id=${id}&jenis=${jenis}`)

@@ -30,16 +30,19 @@ export default {
         };
     },
     methods: {
+        // close modal produk
         closeModal() {
             $(".modalProduk").modal("hide");
             this.$nextTick(() => {
                 this.$emit("closeModal");
             });
         },
+        // close modal seri
         closeModalSeri() {
             this.modalSeri = false;
             $(".modalProduk").modal("show");
         },
+        // detail seri
         detailSeri(data) {
             this.dataSeriSelected = JSON.parse(JSON.stringify(data));
             this.modalSeri = true;
@@ -48,9 +51,11 @@ export default {
                 $(".modalSeri").modal("show");
             });
         },
+        // detail produk seri
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
+        // detail produk seri
         detailProdukSeri(data) {
             this.dataModalDetail = JSON.parse(JSON.stringify(data));
             this.showModalDetail = true;
@@ -60,15 +65,18 @@ export default {
                 $(".modalDetailSeri").modal("show");
             });
         },
+        // close modal detail
         closeModalDetail() {
             this.showModalDetail = false;
             this.$nextTick(() => {
                 $(".modalProduk").modal("show");
             });
         },
+        // lihat packing list
         lihatPackingList(id) {
             window.open(`/produksiReworks/viewpackinglist/${id}`, "_blank");
         },
+        // cetak packing list
         cetakPackingList(id) {
             window.open(
                 `/produksiReworks/cetakpackinglist?data=[${id}]`,
@@ -77,6 +85,7 @@ export default {
         },
     },
     computed: {
+        // filter data
         filteredDalamProses() {
             return this.dataSelected.item.filter((data) => {
                 return Object.keys(data).some((key) => {

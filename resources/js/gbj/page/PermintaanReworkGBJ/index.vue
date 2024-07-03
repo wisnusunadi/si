@@ -30,6 +30,7 @@ export default {
         }
     },
     methods: {
+        // function get data
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true);

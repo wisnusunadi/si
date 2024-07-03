@@ -57,12 +57,14 @@ export default {
         }
     },
     methods: {
+        // function close modal
         closeModal() {
             $('.modalDetail').modal('hide')
             this.$nextTick(() => {
                 this.$emit('close')
             })
         },
+        // function check all
         checkedAll() {
             this.checkAll = !this.checkAll
             if (this.checkAll) {
@@ -71,6 +73,7 @@ export default {
                 this.noSeriSelected = []
             }
         },
+        // function check one
         checkOne(item) {
             if (this.noSeriSelected.find(id => id.id === item.id)) {
                 this.noSeriSelected = this.noSeriSelected.filter(id => id.id !== item.id)
@@ -78,6 +81,7 @@ export default {
                 this.noSeriSelected.push(item)
             }
         },
+        // function submit
         submit(noseri) {
             let noserinotfound = []
 
@@ -102,13 +106,14 @@ export default {
                 this.$swal('Peringatan', 'Nomor Seri ' + noserinotfound.join(', ') + ' tidak ditemukan', 'warning')
             }
         },
+        // function change layout
         changeLayout(layout) {
             // change all layout on noseriselected
             this.noSeriSelected.forEach(item => {
                 item.layout = layout
             })
-
         },
+        // function open change layout
         openChangeLayout() {
             if (this.noSeriSelected.length === 0) {
                 this.$swal('Peringatan', 'Pilih nomor seri terlebih dahulu', 'warning')
@@ -120,6 +125,7 @@ export default {
                 $('.modalLayout').modal('show')
             })
         },
+        
         closeChangeLayout() {
             this.showModal = false
             this.$nextTick(() => {

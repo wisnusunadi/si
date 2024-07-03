@@ -49,6 +49,7 @@ export default {
                 this.$emit('closeModal');
             });
         },
+        // select no seri
         selectNoSeri(noseri) {
             if (this.noSeriSelected.find((data) => data === noseri)) {
                 this.noSeriSelected = this.noSeriSelected.filter((data) => data !== noseri)
@@ -61,6 +62,7 @@ export default {
                 this.checkAll = true
             }
         },
+        // check all noseri
         checkAllSeri() {
             this.checkAll = !this.checkAll
             if (this.checkAll) {
@@ -69,6 +71,7 @@ export default {
                 this.noSeriSelected = []
             }
         },
+        // submit noseri
         submit(noseri) {
             let noserinotfound = []
 
@@ -108,6 +111,7 @@ export default {
                 this.$swal('Peringatan', `Nomor Seri ${noserinotfound.join(', ')} tidx1ak ditemukan`, 'warning')
             }
         },
+        // auto select noseri
         autoSelect() {
             if (this.isScan) {
                 let noserinotfound = []
@@ -143,6 +147,7 @@ export default {
                 }
             }
         },
+        // show noseri via text
         showSeriText() {
             this.showmodalviatext = true
             $('.modalTransfer').modal('hide')
@@ -150,12 +155,14 @@ export default {
                 $('.modalChecked').modal('show')
             })
         },
+        // close modal seriviatext
         closeModalSeriviatext() {
             this.showmodalviatext = false
             this.$nextTick(() => {
                 $('.modalTransfer').modal('show')
             })
         },
+        // detail produk seri
         detailProdukSeri(data) {
             this.dataModalDetail = JSON.parse(JSON.stringify(data))
             this.showModalDetail = true
@@ -165,18 +172,22 @@ export default {
                 $('.modalDetailSeri').modal('show')
             })
         },
+        // close modal detail
         closeModalDetail() {
             this.showModalDetail = false
             this.$nextTick(() => {
                 $('.modalTransfer').modal('show')
             })
         },
+        // lihat packing list
         lihatPackingList(id) {
             window.open(`/produksiReworks/viewpackinglist/${id}`, '_blank');
         },
+        // cetak packing list
         cetakPackingList(id) {
             window.open(`/produksiReworks/cetakpackinglist?data=[${id}]`, '_blank');
         },
+        // simpan data
         async simpan() {
             try {
                 const kirim = {
@@ -201,6 +212,7 @@ export default {
                 })
             }
         },
+        // scan noseri
         scanSeri() {
             this.isScan = !this.isScan
             this.search = ""
@@ -208,6 +220,7 @@ export default {
                 this.$refs.search.focus()
             })
         },
+        // change layout
         changeLayout(event) {
             console.log(event);
             // change all layout noseriSelected

@@ -6,10 +6,12 @@ export default {
         }
     },
     methods: {
+        // submit
         submit() {
             this.$emit('submit', this.noseri)
             this.close()
         },
+        // close modal
         close() {
             this.$emit('close')
             $('.modalChecked').modal('hide')

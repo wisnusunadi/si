@@ -28,12 +28,14 @@ export default {
         }
     },
     methods: {
+        // close modal
         closeModal() {
             $('.modalLayout').modal('hide')
             this.$nextTick(() => {
                 this.$emit('close')
             })
         },
+        // simpan
         simpan() {
             this.$emit('submit', this.selectedLayout)
             this.closeModal()

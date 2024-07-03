@@ -12,17 +12,20 @@ export default {
         }
     },
     methods: {
+        // close modal 
         closeModal() {
             $('.modalDetailSeri').modal('hide');
             this.$nextTick(() => {
                 this.$emit('closeModal');
             });
         },
+        // update filtered dalam proses
         updateFilteredDalamProses(data) {
             this.renderPaginate = data;
         },
     },
     computed: {
+        // filtered dalam proses
         filteredDalamProses() {
             return this.dataModalDetailSeri.seri.filter((data) => {
                 return Object.keys(data).some((key) => {
