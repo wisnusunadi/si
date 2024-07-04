@@ -159,9 +159,9 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
                                     newFormAKN.is_no_paket_disabled = isEdit
                                         ? true
                                         : false;
-                                    
+
                                     if (isEdit) {
-                                        newFormAKN.barang = ["produk"]
+                                        newFormAKN.barang = ["produk"];
                                     }
 
                                     setFormAKN(newFormAKN);
@@ -215,15 +215,22 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
                                 id="batal"
                                 value="batal"
                                 onChange={(e) => {
-                                    setFormAKN({
-                                        ...formAKN,
-                                        status: e.target.value,
-                                        isi_produk: false,
-                                        is_no_paket_disabled: isEdit
-                                            ? true
-                                            : false,
-                                        tgl_delivery: "",
-                                    });
+                                    const newFormAKN = { ...formAKN };
+
+                                    newFormAKN.status = e.target.value;
+                                    newFormAKN.isi_produk = false;
+                                    newFormAKN.is_no_paket_disabled = isEdit
+                                        ? true
+                                        : false;
+                                    newFormAKN.tgl_delivery = "";
+
+                                    if (newFormAKN.produk !== undefined) {
+                                        delete newFormAKN.produk;
+                                    }
+
+                                    setFormAKN(newFormAKN);
+
+                                    // setFormAKN(newFormAKN);
                                 }}
                                 checked={formAKN.status === "batal"}
                             />
@@ -239,13 +246,17 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
                                 id="draft"
                                 value="draft"
                                 onChange={(e) => {
-                                    setFormAKN({
-                                        ...formAKN,
-                                        status: e.target.value,
-                                        isi_produk: false,
-                                        is_no_paket_disabled: true,
-                                        tgl_delivery: "",
-                                    });
+                                    const newFormAKN = { ...formAKN };
+                                    newFormAKN.status = e.target.value;
+                                    newFormAKN.isi_produk = false;
+                                    newFormAKN.is_no_paket_disabled = true;
+                                    newFormAKN.tgl_delivery = "";
+
+                                    if (newFormAKN?.produk !== undefined) {
+                                        delete newFormAKN?.produk;
+                                    }
+
+                                    setFormAKN(newFormAKN);
                                 }}
                                 checked={formAKN.status === "draft"}
                             />
@@ -268,11 +279,14 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
                                     const newFormAKN = { ...formAKN };
                                     newFormAKN.isi_produk = e.target.checked;
                                     if (e.target.checked == true && isEdit) {
-                                        newFormAKN.barang = ["produk"]
-                                    } else if (e.target.checked == true && !isEdit){
-                                        newFormAKN.barang = ["produk"]
+                                        newFormAKN.barang = ["produk"];
+                                    } else if (
+                                        e.target.checked == true &&
+                                        !isEdit
+                                    ) {
+                                        newFormAKN.barang = ["produk"];
                                     } else {
-                                        newFormAKN.barang = []
+                                        newFormAKN.barang = [];
                                     }
                                     setFormAKN(newFormAKN);
                                 }}

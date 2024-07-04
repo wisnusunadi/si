@@ -57,7 +57,7 @@ const EditPenjualan = () => {
             if (
                 dataEdit.no_urut === "" ||
                 dataEdit.status === "" ||
-                dataEdit.produk.length === 0
+                dataEdit?.produk?.length === 0
             ) {
                 return true;
             }
@@ -75,7 +75,7 @@ const EditPenjualan = () => {
                 }
             }
 
-            if (dataEdit.produk !== undefined && dataEdit.produk.length > 0) {
+            if (dataEdit.produk !== undefined && dataEdit?.produk?.length > 0) {
                 // Cek jika produk memiliki nama, jumlah, dan harga yang tidak kosong
                 if (
                     Object.values(dataEdit.produk).some(
