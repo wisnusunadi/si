@@ -21,6 +21,7 @@ use App\Models\TblSiswa;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -157,6 +158,9 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
         $seri = $this->seri;
         $distributor = $this->distributor;
         $x = explode(',', $this->jenis_penjualan);
+
+        $tanggal_awal = $tanggal_awal . ' 00:00:01';
+        $tanggal_akhir = $tanggal_akhir . ' 23:59:00';
 
         if ($distributor == 'semua') {
             if ($x == ['ekatalog', 'spa', 'spb']) {
@@ -862,7 +866,7 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                 }
             }
         }
-
+        $pesanan = array();
         //SET PESANAN
         foreach ($data->get() as $d) {
             $pesanan[] = array(

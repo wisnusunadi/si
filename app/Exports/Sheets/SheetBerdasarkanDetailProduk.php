@@ -157,6 +157,10 @@ class SheetBerdasarkanDetailProduk implements WithTitle, FromView, ShouldAutoSiz
         $tanggal_awal = $this->tgl_awal;
         $tanggal_akhir = $this->tgl_akhir;
         $x = explode(',', $this->jenis_penjualan);
+
+        $tanggal_awal = $tanggal_awal . ' 00:00:01';
+        $tanggal_akhir = $tanggal_akhir . ' 23:59:00';
+
         $data = "";
         if ($dsb == 'semua') {
             if ($x == ['ekatalog', 'spa', 'spb']) {

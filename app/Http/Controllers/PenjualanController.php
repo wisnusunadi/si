@@ -8195,23 +8195,25 @@ class PenjualanController extends Controller
     // Laporan
     public function  get_data_laporan_penjualan($penjualan, $distributor, $tanggal_awal, $tanggal_akhir)
     {
+        $tanggal_awal = $tanggal_awal . ' 00:00:01';
+        $tanggal_akhir = $tanggal_akhir . ' 23:59:00';
         $x = explode(',', $penjualan);
         if ($distributor == 'semua') {
             if ($x == ['ekatalog', 'spa', 'spb']) {
                 $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $Part_Spa  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $Part_Spb  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
 
                 $prd = $Ekatalog->merge($Spa)->merge($Spb);
@@ -8219,26 +8221,26 @@ class PenjualanController extends Controller
                 $data = $prd->merge($part);
             } else if ($x == ['ekatalog', 'spa']) {
                 $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $Spb  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $Part  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
 
                 $prd = $Ekatalog->merge($Spb);
                 $data = $prd->merge($Part);
             } else if ($x == ['ekatalog', 'spb']) {
                 $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $Spb  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $Part  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
 
                 $prd = $Ekatalog->merge($Spb);
@@ -8246,16 +8248,16 @@ class PenjualanController extends Controller
             } else if ($x == ['spa', 'spb']) {
 
                 $Spa  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $Spb  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $Part_Spa  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $Part_Spb  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
 
                 $prd = $Spa->merge($Spb);
@@ -8263,45 +8265,45 @@ class PenjualanController extends Controller
                 $data = $prd->merge($part);
             } else if ($penjualan == 'ekatalog') {
                 $data  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
             } else if ($penjualan == 'spa') {
                 $prd  = collect(DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get());
                 $part =  collect(DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get());
                 $data = $prd->merge($part);
             } else if ($penjualan == 'spb') {
                 $prd  = collect(DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get());
                 $part =  collect(DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir]);
                 })->get());
                 $data = $prd->merge($part);
             }
         } else {
             if ($x == ['ekatalog', 'spa', 'spb']) {
                 $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $Part_Spa  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $Part_Spb  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
 
@@ -8310,49 +8312,49 @@ class PenjualanController extends Controller
                 $data = $prd->merge($part);
             } else if ($x == ['ekatalog', 'spa']) {
                 $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $Part  = DetailPesananPart::whereHas('Pesanan.SPA', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $prd = $Ekatalog->merge($Spa);
                 $data = $prd->merge($Part);
             } else if ($x == ['ekatalog', 'spb']) {
                 $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $Part  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $prd = $Ekatalog->merge($Spb);
                 $data = $prd->merge($Part);
             } else if ($x == ['spa', 'spb']) {
                 $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $Part_Spa  = DetailPesananPart::whereHas('Pesanan.SPA', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $Part_Spb  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $part = $Part_Spa->merge($Part_Spb);
@@ -8360,26 +8362,26 @@ class PenjualanController extends Controller
                 $data = $part->merge($prd);
             } else if ($penjualan == 'ekatalog') {
                 $data = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
             } else if ($penjualan == 'spa') {
                 $Spa  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $Part  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $data = $Spa->merge($Part);
             } else if ($penjualan == 'spb') {
                 $Spb  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $Part  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    $q->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
                 $data = $Spb->merge($Part);
@@ -8391,38 +8393,50 @@ class PenjualanController extends Controller
                 return $data->Pesanan->so;
             })
             ->addColumn('no_paket', function ($data) {
-                $name = explode('/', $data->pesanan->so);
-                if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->no_paket;
+                if ($data->pesanan->so != NULL) {
+                    $name = explode('/', $data->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        return $data->Pesanan->Ekatalog->no_paket;
+                    } else {
+                        return '';
+                    }
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('no_so', function ($data) {
-                return $data->Pesanan->so;
+                return $data->Pesanan->so != NULL ?  $data->Pesanan->so : '-';
             })
             ->addColumn('no_po', function ($data) {
-                return $data->Pesanan->no_po;
+                return $data->Pesanan->no_po != NULL ?  $data->Pesanan->no_po : '-';
             })
             ->addColumn('no_sj', function () {
                 return '-';
             })
             ->addColumn('nama_customer', function ($data) {
-                $name = explode('/', $data->pesanan->so);
-                if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->Customer->nama;
-                } elseif ($name[1] == 'SPA') {
-                    return $data->Pesanan->Spa->Customer->nama;
+                if ($data->pesanan->so != NULL) {
+                    $name = explode('/', $data->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        return $data->Pesanan->Ekatalog->Customer->nama;
+                    } elseif ($name[1] == 'SPA') {
+                        return $data->Pesanan->Spa->Customer->nama;
+                    } else {
+                        return $data->Pesanan->Spb->Customer->nama;
+                    }
                 } else {
-                    return $data->Pesanan->Spb->Customer->nama;
+                    return '-';
                 }
             })
             ->addColumn('tgl_kontrak', function ($data) {
-                $name = explode('/', $data->pesanan->so);
-                if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->tgl_kontrak;
+                if ($data->pesanan->so != NULL) {
+                    $name = explode('/', $data->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        return $data->Pesanan->Ekatalog->tgl_kontrak;
+                    } else {
+                        return '';
+                    }
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('tgl_kirim', function () {
@@ -8432,17 +8446,25 @@ class PenjualanController extends Controller
                 return $data->Pesanan->tgl_po;
             })
             ->addColumn('instansi', function ($data) {
-                $name = explode('/', $data->pesanan->so);
-                if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->instansi;
+                if ($data->pesanan->so != NULL) {
+                    $name = explode('/', $data->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        return $data->Pesanan->Ekatalog->instansi;
+                    } else {
+                        return '-';
+                    }
                 } else {
                     return '-';
                 }
             })
             ->addColumn('satuan', function ($data) {
-                $name = explode('/', $data->pesanan->so);
-                if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->satuan;
+                if ($data->pesanan->so != NULL) {
+                    $name = explode('/', $data->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        return $data->Pesanan->Ekatalog->satuan;
+                    } else {
+                        return '-';
+                    }
                 } else {
                     return '-';
                 }
@@ -8473,13 +8495,17 @@ class PenjualanController extends Controller
                 return '-';
             })
             ->addColumn('ket', function ($data) {
-                $name = explode('/', $data->pesanan->so);
-                if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->ket;
-                } elseif ($name[1] == 'SPA') {
-                    return $data->Pesanan->Spa->ket;
+                if ($data->pesanan->so != NULL) {
+                    $name = explode('/', $data->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        return $data->Pesanan->Ekatalog->ket;
+                    } elseif ($name[1] == 'SPA') {
+                        return $data->Pesanan->Spa->ket;
+                    } else {
+                        return $data->Pesanan->Spb->ket;
+                    }
                 } else {
-                    return $data->Pesanan->Spb->ket;
+                    return '-';
                 }
             })
             ->addColumn('kosong', function () {
