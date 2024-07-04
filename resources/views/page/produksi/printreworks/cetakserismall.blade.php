@@ -40,6 +40,7 @@
 
         .small-text-custom {
             margin-left: 0.1cm;
+            font-size: 6pt;
         }
 
         .page-break {
