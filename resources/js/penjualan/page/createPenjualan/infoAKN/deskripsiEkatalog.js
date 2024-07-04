@@ -152,14 +152,19 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
                                 id="sepakat"
                                 value="sepakat"
                                 onChange={(e) => {
-                                    setFormAKN({
-                                        ...formAKN,
-                                        status: e.target.value,
-                                        isi_produk: true,
-                                        is_no_paket_disabled: isEdit
-                                            ? true
-                                            : false,
-                                    });
+                                    const newFormAKN = { ...formAKN };
+
+                                    newFormAKN.status = e.target.value;
+                                    newFormAKN.isi_produk = true;
+                                    newFormAKN.is_no_paket_disabled = isEdit
+                                        ? true
+                                        : false;
+                                    
+                                    if (isEdit) {
+                                        newFormAKN.barang = ["produk"]
+                                    }
+
+                                    setFormAKN(newFormAKN);
                                 }}
                                 checked={formAKN.status === "sepakat"}
                             />
@@ -178,15 +183,20 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
                                 id="negosiasi"
                                 value="negosiasi"
                                 onChange={(e) => {
-                                    setFormAKN({
-                                        ...formAKN,
-                                        status: e.target.value,
-                                        isi_produk: true,
-                                        is_no_paket_disabled: isEdit
-                                            ? true
-                                            : false,
-                                        tgl_delivery: "",
-                                    });
+                                    const newFormAKN = { ...formAKN };
+
+                                    newFormAKN.status = e.target.value;
+                                    newFormAKN.isi_produk = true;
+                                    newFormAKN.is_no_paket_disabled = isEdit
+                                        ? true
+                                        : false;
+                                    newFormAKN.tgl_delivery = "";
+
+                                    if (isEdit) {
+                                        newFormAKN.barang = ["produk"];
+                                    }
+
+                                    setFormAKN(newFormAKN);
                                 }}
                                 checked={formAKN.status === "negosiasi"}
                             />
