@@ -1,5 +1,5 @@
 <script>
-import DataTable from '../../../../components/DataTable.vue';
+import DataTable from "../../../../components/DataTable.vue";
 export default {
     props: ["meeting", "status"],
     components: {
@@ -15,7 +15,7 @@ export default {
             headers: [
                 { text: "No", value: "no" },
                 { text: "Hasil Rapat", value: "isi", align: "text-justify" },
-            ]
+            ],
         };
     },
     methods: {
@@ -51,13 +51,15 @@ export default {
                     />
                 </div>
             </div>
-           <DataTable :headers="headers" :items="meeting">
-            <template #item.no="{item, index}">
-                <div>
-                    {{ index + 1 }}
-                </div>
-            </template>
-            </DataTable>
+            <div class="table-responsive">
+                <DataTable :headers="headers" :items="meeting">
+                    <template #item.no="{ item, index }">
+                        <div>
+                            {{ index + 1 }}
+                        </div>
+                    </template>
+                </DataTable>
+            </div>
         </div>
     </div>
 </template>

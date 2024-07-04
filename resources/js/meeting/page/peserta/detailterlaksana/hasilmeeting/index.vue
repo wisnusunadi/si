@@ -69,70 +69,72 @@ export default {
                     />
                 </div>
             </div>
-            <table class="table">
-                <thead class="text-center">
-                    <tr>
-                        <th rowspan="2">No</th>
-                        <th rowspan="2">Penanggung Jawab</th>
-                        <th rowspan="2" style="width: 600px">Uraian</th>
-                        <th colspan="2">Kesesuian</th>
-                        <th rowspan="2" style="width: 500px">Catatan</th>
-                        <th
-                            rowspan="2"
-                            v-if="status == 'menyusun_hasil_meeting'"
-                        >
-                            Aksi
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>Hasil</th>
-                        <th>Dicek Oleh</th>
-                    </tr>
-                </thead>
-                <tbody v-if="renderPaginate.length > 0">
-                    <tr
-                        v-for="(item, idx) in renderPaginate"
-                        :key="item.idx"
-                        class="text-center"
-                    >
-                        <td>{{ idx + 1 }}</td>
-                        <td>{{ item.pic }} - {{ item.divisi }}</td>
-                        <td class="text-justify">{{ item.isi }}</td>
-                        <td>
-                            <kehadiran :kehadiran="item.hasil" />
-                        </td>
-                        <td>
-                            <div v-if="item.dicek">
-                                <span class="text-capitalize">{{
-                                    changeUnderscoreToSpace(item.hasil)
-                                }}</span
-                                >, Oleh {{ item.dicek }},
-                                {{ item.checked_at }}
-                            </div>
-                            <div v-else>-</div>
-                        </td>
-                        <td class="text-justify">
-                            {{ item.catatan ?? "-" }}
-                        </td>
-                        <td v-if="status != 'terlaksana'">
-                            <button
-                                class="btn btn-outline-primary"
-                                @click="kesesuaian(item)"
-                                v-if="item.is_edit"
+            <div class="table-responsive">
+                <table class="table">
+                    <thead class="text-center">
+                        <tr>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">Penanggung Jawab</th>
+                            <th rowspan="2" style="width: 600px">Uraian</th>
+                            <th colspan="2">Kesesuian</th>
+                            <th rowspan="2" style="width: 500px">Catatan</th>
+                            <th
+                                rowspan="2"
+                                v-if="status == 'menyusun_hasil_meeting'"
                             >
-                                <i class="fas fa-check-circle"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-                <tbody v-else>
-                    <tr>
-                        <td colspan="7" class="text-center">
-                            Data tidak ditemukan
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                Aksi
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Hasil</th>
+                            <th>Dicek Oleh</th>
+                        </tr>
+                    </thead>
+                    <tbody v-if="renderPaginate.length > 0">
+                        <tr
+                            v-for="(item, idx) in renderPaginate"
+                            :key="item.idx"
+                            class="text-center"
+                        >
+                            <td>{{ idx + 1 }}</td>
+                            <td>{{ item.pic }} - {{ item.divisi }}</td>
+                            <td class="text-justify">{{ item.isi }}</td>
+                            <td>
+                                <kehadiran :kehadiran="item.hasil" />
+                            </td>
+                            <td>
+                                <div v-if="item.dicek">
+                                    <span class="text-capitalize">{{
+                                        changeUnderscoreToSpace(item.hasil)
+                                    }}</span
+                                    >, Oleh {{ item.dicek }},
+                                    {{ item.checked_at }}
+                                </div>
+                                <div v-else>-</div>
+                            </td>
+                            <td class="text-justify">
+                                {{ item.catatan ?? "-" }}
+                            </td>
+                            <td v-if="status != 'terlaksana'">
+                                <button
+                                    class="btn btn-outline-primary"
+                                    @click="kesesuaian(item)"
+                                    v-if="item.is_edit"
+                                >
+                                    <i class="fas fa-check-circle"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                Data tidak ditemukan
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <pagination
                 :filteredDalamProses="paginateData"
                 @updateFilteredDalamProses="updatePage"
