@@ -60,6 +60,7 @@ export default {
 </script>
 <template>
     <div>
+        <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
@@ -105,6 +106,7 @@ export default {
                 </tr>
             </tbody>
         </table>
+        </div>
         <pagination :filteredDalamProses="filteredDalamProses" @updateFilteredDalamProses="updateFilteredDalamProses" />
     </div>
 </template>

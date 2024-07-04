@@ -105,41 +105,47 @@ export default {
                     />
                 </div>
             </div>
-            <table class="table text-center">
-                <thead class="text-center">
-                    <tr>
-                        <th>No</th>
-                        <th class="text-justify" style="width: 1200px;">Hasil Rapat</th>
-                        <th v-if="status == 'menyusun_hasil_meeting'">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody v-if="status == 'menyusun_hasil_meeting'">
-                    <tr v-for="(item, idx) in meeting" :key="idx" >
-                        <td class="text-center">{{ idx + 1 }}</td>
-                        <td class="text-justify">{{ item.isi }}</td>
-                        <td>
-                            <button
-                                class="btn btn-outline-warning"
-                                @click="editHasilMeeting(item, idx)"
-                            >
-                                <i class="fa fa-edit"></i>
-                            </button>
-                            <button
-                                class="btn btn-outline-danger"
-                                @click="deleteHasilMeeting(item.id)"
-                            >
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-                <tbody v-if="status != 'menyusun_hasil_meeting'">
-                    <tr v-for="(item, idx) in renderPaginate" :key="idx">
-                        <td class="text-center">{{ idx + 1 }}</td>
-                        <td class="text-justify">{{ item.isi }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table text-center">
+                    <thead class="text-center">
+                        <tr>
+                            <th>No</th>
+                            <th class="text-justify" style="width: 1200px">
+                                Hasil Rapat
+                            </th>
+                            <th v-if="status == 'menyusun_hasil_meeting'">
+                                Aksi
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody v-if="status == 'menyusun_hasil_meeting'">
+                        <tr v-for="(item, idx) in meeting" :key="idx">
+                            <td class="text-center">{{ idx + 1 }}</td>
+                            <td class="text-justify text-wrap">{{ item.isi }}</td>
+                            <td>
+                                <button
+                                    class="btn btn-outline-warning"
+                                    @click="editHasilMeeting(item, idx)"
+                                >
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button
+                                    class="btn btn-outline-danger"
+                                    @click="deleteHasilMeeting(item.id)"
+                                >
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody v-if="status != 'menyusun_hasil_meeting'">
+                        <tr v-for="(item, idx) in renderPaginate" :key="idx">
+                            <td class="text-center">{{ idx + 1 }}</td>
+                            <td class="text-justify">{{ item.isi }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <pagination
                 :filteredDalamProses="paginateData"
                 @updateFilteredDalamProses="updatePage"

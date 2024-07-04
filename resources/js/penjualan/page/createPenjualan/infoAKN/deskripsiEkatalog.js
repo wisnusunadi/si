@@ -259,6 +259,8 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
                                     newFormAKN.isi_produk = e.target.checked;
                                     if (e.target.checked == true && isEdit) {
                                         newFormAKN.barang = ["produk"]
+                                    } else if (e.target.checked == true && !isEdit){
+                                        newFormAKN.barang = ["produk"]
                                     } else {
                                         newFormAKN.barang = []
                                     }
