@@ -1760,7 +1760,11 @@ class GudangController extends Controller
                     if (isset($d->header->pesanan_id)) {
                         return $d->header->pesanan->so;
                     } else {
-                        return '-';
+                        if ($d->header->retur_pesanan_id != '' || $d->header->batal_pesanan_id) {
+                            return $d->header->deskripsi;
+                        } else {
+                            return '-';
+                        }
                     }
                 })
                 ->addColumn('logs', function ($d) {
@@ -1806,7 +1810,24 @@ class GudangController extends Controller
                     }
                 })
                 ->addColumn('tujuan', function ($d) {
-                    return $d->header->deskripsi;
+
+                    if ($d->header->retur_pesanan_id != '' || $d->header->batal_pesanan_id) {
+                        return '-';
+                    } else {
+                        return $d->header->deskripsi;
+                    }
+
+                    // if ($d->header->retur_pesanan_id) {
+                    //     // return $d->header->deskripsi;
+                    //     // $r = RiwayatReturPo::find($d->header->retur_pesanan_id);
+                    //     return 'Retur';
+                    // } elseif ($d->header->batal_pesanan_id) {
+                    //     // $b = RiwayatBatalPo::find($d->header->batal_pesanan_id);
+                    //     // return Pesanan::find($b->pesanan_id)->no_po;
+                    //     return 'Batal';
+                    // } else {
+                    //     return $d->header->deskripsi;
+                    // }
                 })
                 ->addColumn('jumlah', function ($d) {
                     return $d->qty . ' ' . $d->produk->satuan->nama;
