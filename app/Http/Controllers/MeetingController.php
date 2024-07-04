@@ -146,7 +146,6 @@ class MeetingController extends Controller
     }
     public function store_jadwal_meet(Request $request)
     {
-
         DB::beginTransaction();
         try {
             //code...

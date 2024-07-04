@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 import VueSelect from "vue-select";
 export default {
     components: {
@@ -40,20 +39,11 @@ export default {
         },
         async getDataKaryawan() {
             try {
-                const { data: karyawan } = await axios.get("/api/karyawan_all");
-                const { data: lokasi } = await axios.get(
+                const { data: karyawan } = await this.$_get("/api/karyawan_all");
+                const { data: lokasi } = await this.$_get(
                     "/api/hr/meet/lokasi/show"
                 );
-                const { data: notulen } = await axios.get(
-                    "/api/hr/meet/getKaryawan",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                "lokal_token"
-                            )}`,
-                        },
-                    }
-                );
+                const { data: notulen } = await this.$_get("/api/hr/meet/getKaryawan");
 
                 this.meeting.notulen = notulen.data.id;
 
@@ -138,30 +128,26 @@ export default {
                 peserta,
             };
 
-            try {
-                await axios.post("/api/hr/meet/jadwal", form, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "lokal_token"
-                        )}`,
-                    },
-                });
+
+            const { success, message } = await this.$_post("/api/hr/meet/jadwal", form);
                 swal.fire({
                     title: "Berhasil!",
                     text: "Berhasil menyimpan data",
                     icon: "success",
                     confirmButtonText: "OK",
                 });
-                this.$emit("refresh");
-                this.closeModal();
-            } catch {
+
+            if (!success) {
                 swal.fire({
                     title: "Gagal!",
-                    text: "Gagal menyimpan data",
+                    text: message,
                     icon: "error",
                     confirmButtonText: "OK",
                 });
+                return;
             }
+            this.$emit("refresh");
+            this.closeModal();
         },
     },
     mounted() {
