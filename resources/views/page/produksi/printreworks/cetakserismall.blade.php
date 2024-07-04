@@ -40,7 +40,7 @@
 
         .small-text-custom {
             margin-left: 0.1cm;
-            font-size: 4pt;
+            font-size: 6pt;
         }
 
         .page-break {
@@ -77,7 +77,7 @@
             @if ($item['id'] == 11)
                 <div class="{{ $classPage }}">
                     <img
-                        src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_93, 0.35, 16)) }}" />
+                        src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_93, 0.45, 16)) }}" />
                     <div class="small-text-custom">{{ $item['noseri'] }}</div>
                 </div>
             @else
