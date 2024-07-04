@@ -184,6 +184,11 @@ export default {
                 return;
             }
 
+            if (this.meeting.peserta.length === 0) {
+                this.$swal("Gagal", "Peserta tidak boleh kosong", "error");
+                return;
+            }
+
             let formData = new FormData();
 
             let peserta = [
