@@ -747,6 +747,7 @@ class SheetBerdasarkanDetailProduk implements WithTitle, FromView, ShouldAutoSiz
             }
         }
 
+        $pesanan = array();
         //SET PESANAN
         foreach ($data->get() as $d) {
             $pesanan[] = array(

@@ -84,7 +84,7 @@
                     <td>
                         @if ($seri == 'seri')
                             @foreach ($p['seri'] as $s)
-                                {{ $s['noseri'] }}
+                                {{ $s }}
                                 @if (!$loop->last)
                                     ,
                                 @endif
