@@ -40,7 +40,9 @@ export default {
         },
         async getDataKaryawan() {
             try {
-                const { data: karyawan } = await this.$_get("/api/karyawan_all");
+                const { data: karyawan } = await this.$_get(
+                    "/api/karyawan_all"
+                );
                 const { data: lokasi } = await this.$_get(
                     "/api/hr/meet/lokasi/show"
                 );
@@ -50,6 +52,9 @@ export default {
                         id: item.id,
                         label: item.nama,
                     };
+                });
+                this.meeting.peserta = this.meeting.peserta.map((peserta) => {
+                    return peserta.id;
                 });
 
                 // remove peserta jika sudah ada di notulen, moderator, pimpinan
@@ -65,7 +70,9 @@ export default {
 
                 this.selectedParticipants = this.meeting.peserta.map(
                     (peserta) => {
-                        return this.karyawan.find((item) => item.id === peserta);
+                        return this.karyawan.find(
+                            (item) => item.id === peserta
+                        );
                     }
                 );
             } catch (error) {
@@ -169,7 +176,7 @@ export default {
                 return !this.meeting.peserta.includes(item.id);
             });
         },
-    }
+    },
 };
 </script>
 <template>
@@ -267,7 +274,11 @@ export default {
                             :options="karyawanFilteredPeserta"
                             label="nama"
                             v-model="selectedParticipants"
-                            @input="meeting.peserta = selectedParticipants.map((item) => item.id)"
+                            @input="
+                                meeting.peserta = selectedParticipants.map(
+                                    (item) => item.id
+                                )
+                            "
                             :disabled="
                                 meeting.notulen === '' ||
                                 meeting.moderator === '' ||

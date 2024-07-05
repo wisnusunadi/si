@@ -958,8 +958,11 @@ class MeetingController extends Controller
                         "notulen" =>  $d->notulen,
                         "moderator" =>  $d->moderator,
                         "deskripsi" => $d->deskripsi,
-                        "peserta" => PesertaMeeting::select('karyawan_id')->where('status', 'hadir')->where('meeting_id', $d->id)->get()->map(function ($item) {
-                            return $item->karyawan_id;
+                        "peserta" => PesertaMeeting::select('karyawan_id', 'status')->where('meeting_id', $d->id)->get()->map(function ($item) {
+                            return [
+                                'id' => $item->karyawan_id,
+                                'kehadiran' => $item->status,
+                            ];
                         }),
                         "hasil_notulen" => $d->HasilNotulen->count() > 0 ? $d->HasilNotulen : [],
                         "dokumen_meet" => $d->DokumenMeeting->count() > 0 ? $d->DokumenMeeting : [],

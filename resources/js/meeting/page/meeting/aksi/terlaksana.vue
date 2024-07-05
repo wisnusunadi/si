@@ -57,6 +57,15 @@ export default {
                     };
                 });
 
+                this.meeting.peserta = this.meeting.peserta.map((peserta) => {
+                    if (peserta.kehadiran == "hadir") {
+                        return peserta.id;
+                    } else {
+                        // jika peserta tidak hadir, hapus dari peserta
+                        return null;
+                    }
+                }).filter((item) => item !== null);
+
                 // remove peserta jika sudah ada di notulen, moderator, pimpinan
                 this.meeting.peserta = this.meeting.peserta.filter(
                     (peserta) => {
