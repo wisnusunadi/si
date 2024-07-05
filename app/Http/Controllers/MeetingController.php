@@ -853,8 +853,11 @@ class MeetingController extends Controller
         $data = JadwalMeeting::find($id);
         if ($data) {
             $data->tanggal = $data->tgl_meeting;
-            $data->peserta =  PesertaMeeting::select('karyawan_id')->where('meeting_id', $id)->get()->map(function ($item) {
-                return $item->karyawan_id;
+            $data->peserta =  PesertaMeeting::select('karyawan_id', 'status')->where('meeting_id', $id)->get()->map(function ($item) {
+                return [
+                    'id' => $item->karyawan_id,
+                    'kehadiran' => $item->status,
+                ];
             });
         }
         return response()->json($data);
