@@ -1,27 +1,30 @@
 <script>
-import axios from 'axios';
-import seriviatext from '../../../gbj/page/penerimaanRework/transfer/modalTransfer/seriviatext.vue';
+import axios from "axios";
+import seriviatext from "../../../gbj/page/penerimaanRework/transfer/modalTransfer/seriviatext.vue";
 export default {
-    props: ['retur'],
+    props: ["retur"],
     components: {
-        seriviatext
+        seriviatext,
     },
     data() {
         return {
             items: [],
             showModal: false,
             itemSelected: {},
-            no_retur: '',
+            no_retur: "",
             loadingPaket: false,
-            errorMessage: '',
-        }
+            errorMessage: "",
+            loadingSubmit: false,
+        };
     },
     methods: {
         // Function to get the package
         async getPaket() {
             try {
-                this.loadingPaket = true
-                const { data } = await axios.get(`/api/penjualan/retur_po/detail_paket/${this.retur.pesanan_id}`)
+                this.loadingPaket = true;
+                const { data } = await axios.get(
+                    `/api/penjualan/retur_po/detail_paket/${this.retur.pesanan_id}`
+                );
                 this.items = data.map((item, idx) => {
                     return {
                         ...item,
@@ -30,27 +33,33 @@ export default {
                         qty: item.jumlah_kirim,
                         jml_retur: 0,
                         noSeriSelected: [],
-                    }
-                })
+                    };
+                });
             } catch (error) {
-                console.error(error)
+                console.error(error);
             } finally {
-                this.loadingPaket = false
+                this.loadingPaket = false;
             }
         },
         // Close modal
         closeModal() {
-            $('.modalRetur').modal('hide');
+            $(".modalRetur").modal("hide");
             this.$nextTick(() => {
-                this.$emit('close')
-            })
+                this.$emit("close");
+            });
         },
         async toggleItem(idx) {
             // if jml_retur not 0 or null or undefined, then expanded = true
-            if (this.items[idx].jml_retur !== 0 && this.items[idx].jml_retur !== null && this.items[idx].jml_retur !== '') {
+            if (
+                this.items[idx].jml_retur !== 0 &&
+                this.items[idx].jml_retur !== null &&
+                this.items[idx].jml_retur !== ""
+            ) {
                 try {
-                    this.items[idx].loadingProduk = true
-                    const { data } = await axios.get(`/api/penjualan/retur_po/detail_prd/${this.items[idx].id}`)
+                    this.items[idx].loadingProduk = true;
+                    const { data } = await axios.get(
+                        `/api/penjualan/retur_po/detail_prd/${this.items[idx].id}`
+                    );
                     this.items = this.items.map((item, i) => {
                         if (i === idx) {
                             return {
@@ -67,49 +76,54 @@ export default {
                                         noseri: prd.seri.map((n, idx) => {
                                             return {
                                                 ...n,
-                                            }
+                                            };
                                         }),
-                                    }
+                                    };
                                 }),
                                 expanded: true,
-                                jumlah_max_parents: data.length * item.jml_retur,
-                            }
+                                jumlah_max_parents:
+                                    data.length * item.jml_retur,
+                            };
                         }
-                        return item
-                    })
+                        return item;
+                    });
                 } catch (error) {
-                    console.error(error)
+                    console.error(error);
                 }
             } else {
-                this.items[idx].expanded = false
+                this.items[idx].expanded = false;
             }
         },
         groupedNoSeri(noseri) {
             // if more than 5, then group by 5, else return noseri
             if (noseri?.length > 5) {
                 return noseri.reduce((acc, curr, idx) => {
-                    const group = Math.floor(idx / 5)
+                    const group = Math.floor(idx / 5);
                     if (!acc[group]) {
-                        acc[group] = []
+                        acc[group] = [];
                     }
-                    acc[group].push(curr)
-                    return acc
-                }, [])
+                    acc[group].push(curr);
+                    return acc;
+                }, []);
             } else {
-                return [noseri]
+                return [noseri];
             }
         },
         noseriterpakai(noseri, idxItem) {
-            let found = false
+            let found = false;
             for (let i = 0; i < this.items?.length; i++) {
-                if (this.items[i]?.noSeriSelected?.find((n) => n.id === noseri.id)) {
+                if (
+                    this.items[i]?.noSeriSelected?.find(
+                        (n) => n.id === noseri.id
+                    )
+                ) {
                     if (i !== idxItem) {
-                        found = true
-                        break
+                        found = true;
+                        break;
                     }
                 }
             }
-            return found
+            return found;
         },
         toggleNoSeri(item, idxProduk, noseri) {
             // mapping data and cek if noseri already selected, then remove, else add
@@ -117,105 +131,130 @@ export default {
                 if (i.no === item.no) {
                     return {
                         ...i,
-                        noSeriSelected: i.noSeriSelected.find((n) => n.id === noseri.id) ?
-                            i.noSeriSelected.filter((n) => n.id !== noseri.id) :
-                            [...i.noSeriSelected, noseri],
+                        noSeriSelected: i.noSeriSelected.find(
+                            (n) => n.id === noseri.id
+                        )
+                            ? i.noSeriSelected.filter((n) => n.id !== noseri.id)
+                            : [...i.noSeriSelected, noseri],
                         produk: i.produk.map((p) => {
                             if (p.no === item.produk[idxProduk].no) {
                                 return {
                                     ...p,
-                                    noSeriSelected: p.noSeriSelected.find((n) => n.id === noseri.id) ?
-                                        p.noSeriSelected.filter((n) => n.id !== noseri.id) :
-                                        [...p.noSeriSelected, noseri]
-                                }
+                                    noSeriSelected: p.noSeriSelected.find(
+                                        (n) => n.id === noseri.id
+                                    )
+                                        ? p.noSeriSelected.filter(
+                                              (n) => n.id !== noseri.id
+                                          )
+                                        : [...p.noSeriSelected, noseri],
+                                };
                             }
-                            return p
-                        })
-                    }
+                            return p;
+                        }),
+                    };
                 }
-                return i
-            })
+                return i;
+            });
 
             // check if noSeriSelected more than max, then remove last and show alert
             this.items = this.items.map((i) => {
                 if (i.no === item.no) {
                     return {
                         ...i,
-                        noSeriSelected: i.noSeriSelected.length > i.jumlah_max_parents ?
-                            i.noSeriSelected.slice(0, -1) :
-                            i.noSeriSelected,
+                        noSeriSelected:
+                            i.noSeriSelected.length > i.jumlah_max_parents
+                                ? i.noSeriSelected.slice(0, -1)
+                                : i.noSeriSelected,
                         produk: i.produk.map((p) => {
                             if (p.no === item.produk[idxProduk].no) {
                                 if (p.noSeriSelected.length > p.max) {
-                                    this.$swal('Error', 'Nomor Seri melebihi jumlah retur', 'error')
-                                    this.$refs[`noseri-${noseri.id}`][0].checked = false
+                                    this.$swal(
+                                        "Error",
+                                        "Nomor Seri melebihi jumlah retur",
+                                        "error"
+                                    );
+                                    this.$refs[
+                                        `noseri-${noseri.id}`
+                                    ][0].checked = false;
                                     return {
                                         ...p,
-                                        noSeriSelected: p.noSeriSelected.slice(0, -1)
-                                    }
+                                        noSeriSelected: p.noSeriSelected.slice(
+                                            0,
+                                            -1
+                                        ),
+                                    };
                                 }
                             }
-                            return p
-                        })
-                    }
+                            return p;
+                        }),
+                    };
                 }
-                return i
-            })
-
+                return i;
+            });
         },
         simpan() {
-            let paket = []
-            let error = false
+            let paket = [];
+            let error = false;
 
             // push paket when on paket produk has noSeriSelected more than 0
             this.items.forEach((item) => {
-                if (item.jml_retur > 0 && item.jml_retur !== null && item.jml_retur !== '') {
+                if (
+                    item.jml_retur > 0 &&
+                    item.jml_retur !== null &&
+                    item.jml_retur !== ""
+                ) {
                     // cek produk
                     item.produk.forEach((produk) => {
                         if (produk.noSeriSelected.length > 0) {
-                            paket.push(item)
-                            error = false
+                            paket.push(item);
+                            error = false;
                         } else {
-                            error = true
+                            error = true;
                         }
-                    })
+                    });
                 }
-            })
+            });
 
             paket.forEach((item) => {
                 item.produk.forEach((produk) => {
                     if (produk.noSeriSelected.length !== produk.max) {
-                        error = true
+                        error = true;
                     }
-                })
-            })
+                });
+            });
 
             // remove array yang sama dari paket berdasarkan no
 
-            paket = [...new Map(paket.map(item => [item['no'], item])).values()]
+            paket = [
+                ...new Map(paket.map((item) => [item["no"], item])).values(),
+            ];
 
-            if (this.no_retur === '') {
-                this.$swal('Error', 'No Retur tidak boleh kosong', 'error')
-                return
+            if (this.no_retur === "") {
+                this.$swal("Error", "No Retur tidak boleh kosong", "error");
+                return;
             }
 
-            if (this.errorMessage !== '') {
-                this.$swal('Error', 'No Retur sudah digunakan', 'error')
-                return
+            if (this.errorMessage !== "") {
+                this.$swal("Error", "No Retur sudah digunakan", "error");
+                return;
             }
 
             if (paket.length > 0 && !error) {
-                this.$swal('Success', 'Berhasil menyimpan', 'success')
+                this.$swal("Success", "Berhasil menyimpan", "success");
             } else {
-                this.$swal('Error', 'Silahkan cek kembali data yang anda masukkan', 'error')
-                return
+                this.$swal(
+                    "Error",
+                    "Silahkan cek kembali data yang anda masukkan",
+                    "error"
+                );
+                return;
             }
 
             const form = {
                 pesanan_id: this.retur.pesanan_id,
                 no_retur: this.no_retur,
-                item: paket
-            }
+                item: paket,
+            };
 
             // ya atau tidak
             this.$swal({
@@ -229,104 +268,146 @@ export default {
                 cancelButtonText: "Tidak",
             }).then((result) => {
                 if (result.value) {
-                    axios.post('/api/penjualan/retur_po/kirim', form)
+                    this.loadingSubmit = true;
+                    axios
+                        .post("/api/penjualan/retur_po/kirim", form)
                         .then((res) => {
-                            this.$swal('Success', 'Berhasil menyimpan', 'success')
-                            this.closeModal()
-                            this.$emit('refresh')
+                            this.$swal(
+                                "Success",
+                                "Berhasil menyimpan",
+                                "success"
+                            );
+                            this.closeModal();
+                            this.$emit("refresh");
                         })
                         .catch((err) => {
-                            console.error(err)
-                            this.$swal('Error', 'Gagal menyimpan', 'error')
+                            console.error(err);
+                            this.$swal("Error", "Gagal menyimpan", "error");
                         })
+                        .finally(() => {
+                            this.loadingSubmit = false;
+                        });
                 }
-            })
+            });
         },
         showModalNoSeri(idx) {
-            this.showModal = true
-            this.itemSelected = idx
+            this.showModal = true;
+            this.itemSelected = idx;
             this.$nextTick(() => {
-                $('.modalRetur').modal('hide')
-                $('.modalChecked').modal('show')
-            })
+                $(".modalRetur").modal("hide");
+                $(".modalChecked").modal("show");
+            });
         },
         closeModalNoSeri() {
-            this.showModal = false
+            this.showModal = false;
             this.$nextTick(() => {
-                $('.modalChecked').modal('hide')
-                $('.modalRetur').modal('show')
-            })
+                $(".modalChecked").modal("hide");
+                $(".modalRetur").modal("show");
+            });
         },
         submit(noseri) {
-            let noserinotfound = []
+            let noserinotfound = [];
 
-            let noseriarray = noseri.split(/[\n, \t]/)
-            noseriarray = noseriarray.filter((n) => n !== '')
-            noseriarray = [...new Set(noseriarray)]
+            let noseriarray = noseri.split(/[\n, \t]/);
+            noseriarray = noseriarray.filter((n) => n !== "");
+            noseriarray = [...new Set(noseriarray)];
 
             for (let i = 0; i < noseriarray.length; i++) {
-                let found = false
-                for (let j = 0; j < this.items[this.itemSelected].produk.length; j++) {
-                    if (this.items[this.itemSelected].produk[j].noseri.find((n) => n.noseri === noseriarray[i])) {
-                        this.toggleNoSeri(this.items[this.itemSelected], j, this.items[this.itemSelected].produk[j].noseri.find((n) => n.noseri === noseriarray[i]))
-                        found = true
-                        break
+                let found = false;
+                for (
+                    let j = 0;
+                    j < this.items[this.itemSelected].produk.length;
+                    j++
+                ) {
+                    if (
+                        this.items[this.itemSelected].produk[j].noseri.find(
+                            (n) => n.noseri === noseriarray[i]
+                        )
+                    ) {
+                        this.toggleNoSeri(
+                            this.items[this.itemSelected],
+                            j,
+                            this.items[this.itemSelected].produk[j].noseri.find(
+                                (n) => n.noseri === noseriarray[i]
+                            )
+                        );
+                        found = true;
+                        break;
                     }
                 }
                 if (!found) {
-                    noserinotfound.push(noseriarray[i])
+                    noserinotfound.push(noseriarray[i]);
                 }
             }
 
             if (noserinotfound.length > 0) {
-                this.$swal('Error', `Nomor Seri ${noserinotfound.join(', ')} tidak ditemukan`, 'error')
+                this.$swal(
+                    "Error",
+                    `Nomor Seri ${noserinotfound.join(", ")} tidak ditemukan`,
+                    "error"
+                );
             }
         },
         cekIsString(value) {
-            if (typeof value === 'string') {
-                return true
+            if (typeof value === "string") {
+                return true;
             } else {
-                return false
+                return false;
             }
         },
         cekErrorRetur() {
-            axios.post('/api/penjualan/retur_po/cek_noretur', {
-                no_retur: this.no_retur
-            })
+            axios
+                .post("/api/penjualan/retur_po/cek_noretur", {
+                    no_retur: this.no_retur,
+                })
                 .then((res) => {
-                    this.errorMessage = ''
+                    this.errorMessage = "";
                 })
                 .catch((err) => {
-                    this.errorMessage = err.response.data.message
-                })
+                    this.errorMessage = err.response.data.message;
+                });
         },
     },
     created() {
-        this.getPaket()
+        this.getPaket();
     },
     watch: {
         // check jml_retur not more than qty
-        'items': {
+        items: {
             handler: function (val) {
                 val.forEach((item, idx) => {
                     if (item.jml_retur > item.qty) {
-                        item.jml_retur = item.qty
+                        item.jml_retur = item.qty;
                     } else if (item.jml_retur < 0) {
-                        item.jml_retur = 0
+                        item.jml_retur = 0;
                     }
-                })
+                });
             },
-            deep: true
+            deep: true,
         },
-    }
-}
+    },
+};
 </script>
 <template>
     <div>
-        <seriviatext v-if="showModal" @close="closeModalNoSeri" @submit="submit"></seriviatext>
-        <div class="modal fade modalRetur" id="staticBackdrop" data-backdrop="static" data-keyboard="false"
-            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+        <seriviatext
+            v-if="showModal"
+            @close="closeModalNoSeri"
+            @submit="submit"
+        ></seriviatext>
+        <div
+            class="modal fade modalRetur"
+            id="staticBackdrop"
+            data-backdrop="static"
+            data-keyboard="false"
+            tabindex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+        >
+            <div
+                class="modal-dialog modal-xl modal-dialog-scrollable"
+                role="document"
+            >
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Form Retur PO</h5>
@@ -343,16 +424,32 @@ export default {
                                 <ul class="fa-ul card-text">
                                     <li class="py-2">
                                         <span class="fa-li">
-                                            <i class="fas fa-address-card fa-fw"></i>
+                                            <i
+                                                class="fas fa-address-card fa-fw"
+                                            ></i>
                                         </span>
-                                        {{ retur.jenis == 'ekatalog' ? retur?.alamat : retur?.customer?.alamat }}
+                                        {{
+                                            retur.jenis == "ekatalog"
+                                                ? retur?.alamat
+                                                : retur?.customer?.alamat
+                                        }}
                                     </li>
                                     <li class="py-2">
                                         <span class="fa-li">
-                                            <div class="fas fa-map-marker-alt fa-fw"></div>
+                                            <div
+                                                class="fas fa-map-marker-alt fa-fw"
+                                            ></div>
                                         </span>
-                                        <em class="text-muted" v-if="!retur?.provinsi">Belum Tersedia</em>
-                                        {{ retur.jenis == 'ekatalog' ? retur?.provinsi?.nama : retur?.provinsi }}
+                                        <em
+                                            class="text-muted"
+                                            v-if="!retur?.provinsi"
+                                            >Belum Tersedia</em
+                                        >
+                                        {{
+                                            retur.jenis == "ekatalog"
+                                                ? retur?.provinsi?.nama
+                                                : retur?.provinsi
+                                        }}
                                     </li>
                                 </ul>
                             </div>
@@ -360,179 +457,429 @@ export default {
 
                         <div class="card card-outline card-tabs">
                             <div class="card-header p-0 pt-1 border-bottom-0">
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <ul
+                                    class="nav nav-tabs"
+                                    id="myTab"
+                                    role="tablist"
+                                >
                                     <li class="nav-item" role="presentation">
-                                        <a href="#" class="nav-link active" id="informasiretur-tab" data-toggle="tab"
-                                            data-target="#informasiretur" role="tab" aria-controls="informasiretur"
-                                            aria-selected="true">Informasi</a>
+                                        <a
+                                            href="#"
+                                            class="nav-link active"
+                                            id="informasiretur-tab"
+                                            data-toggle="tab"
+                                            data-target="#informasiretur"
+                                            role="tab"
+                                            aria-controls="informasiretur"
+                                            aria-selected="true"
+                                            >Informasi</a
+                                        >
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a href="#" class="nav-link" id="produkretur-tab" data-toggle="tab"
-                                            data-target="#produkretur" role="tab" aria-controls="produkretur"
-                                            aria-selected="false">Produk</a>
+                                        <a
+                                            href="#"
+                                            class="nav-link"
+                                            id="produkretur-tab"
+                                            data-toggle="tab"
+                                            data-target="#produkretur"
+                                            role="tab"
+                                            aria-controls="produkretur"
+                                            aria-selected="false"
+                                            >Produk</a
+                                        >
                                     </li>
                                 </ul>
                             </div>
                             <div class="card-body">
                                 <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="informasiretur" role="tabpanel"
-                                        aria-labelledby="informasiretur-tab">
-                                        <div class="row d-flex justify-content-between">
+                                    <div
+                                        class="tab-pane fade show active"
+                                        id="informasiretur"
+                                        role="tabpanel"
+                                        aria-labelledby="informasiretur-tab"
+                                    >
+                                        <div
+                                            class="row d-flex justify-content-between"
+                                        >
                                             <div class="p-2">
                                                 <div class="margin">
                                                     <div>
-                                                        <small class="text-muted">No SO</small>
+                                                        <small
+                                                            class="text-muted"
+                                                            >No SO</small
+                                                        >
                                                     </div>
                                                     <div>
                                                         <b> {{ retur?.so }}</b>
                                                     </div>
                                                 </div>
                                                 <div class="margin">
-                                                    <div><small class="text-muted">Status</small></div>
-                                                    <persentase :persentase="retur.persentase"
-                                                        v-if="!cekIsString(retur.persentase)" />
-                                                    <span class="red-text badge" v-else>{{ retur.persentase }}</span>
+                                                    <div>
+                                                        <small
+                                                            class="text-muted"
+                                                            >Status</small
+                                                        >
+                                                    </div>
+                                                    <persentase
+                                                        :persentase="
+                                                            retur.persentase
+                                                        "
+                                                        v-if="
+                                                            !cekIsString(
+                                                                retur.persentase
+                                                            )
+                                                        "
+                                                    />
+                                                    <span
+                                                        class="red-text badge"
+                                                        v-else
+                                                        >{{
+                                                            retur.persentase
+                                                        }}</span
+                                                    >
                                                 </div>
                                             </div>
                                             <div class="p-2">
                                                 <div class="margin">
-                                                    <div><small class="text-muted">No PO</small></div>
-                                                    <div><b>
+                                                    <div>
+                                                        <small
+                                                            class="text-muted"
+                                                            >No PO</small
+                                                        >
+                                                    </div>
+                                                    <div>
+                                                        <b>
                                                             {{ retur?.no_po }}
                                                         </b>
                                                     </div>
                                                 </div>
                                                 <div class="margin">
-                                                    <div><small class="text-muted">Tanggal PO</small></div>
-                                                    <div><b>
-                                                            {{ dateFormat(retur?.pesanan?.tgl_po) }}
+                                                    <div>
+                                                        <small
+                                                            class="text-muted"
+                                                            >Tanggal PO</small
+                                                        >
+                                                    </div>
+                                                    <div>
+                                                        <b>
+                                                            {{
+                                                                dateFormat(
+                                                                    retur
+                                                                        ?.pesanan
+                                                                        ?.tgl_po
+                                                                )
+                                                            }}
                                                         </b>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="p-2">
                                                 <div class="margin">
-                                                    <div><small class="text-muted">No DO</small></div>
-                                                    <div><b v-if="retur?.no_do">
+                                                    <div>
+                                                        <small
+                                                            class="text-muted"
+                                                            >No DO</small
+                                                        >
+                                                    </div>
+                                                    <div>
+                                                        <b v-if="retur?.no_do">
                                                             {{ retur?.no_do }}
                                                         </b>
-                                                        <em v-else>Belum ada</em>
+                                                        <em v-else
+                                                            >Belum ada</em
+                                                        >
                                                     </div>
                                                 </div>
                                                 <div class="margin">
-                                                    <div><small class="text-muted">Tanggal DO</small></div>
-                                                    <div><b v-if="retur?.pesanan?.tgl_do">
-                                                            {{ dateFormat(retur?.pesanan?.tgl_do) }}
+                                                    <div>
+                                                        <small
+                                                            class="text-muted"
+                                                            >Tanggal DO</small
+                                                        >
+                                                    </div>
+                                                    <div>
+                                                        <b
+                                                            v-if="
+                                                                retur?.pesanan
+                                                                    ?.tgl_do
+                                                            "
+                                                        >
+                                                            {{
+                                                                dateFormat(
+                                                                    retur
+                                                                        ?.pesanan
+                                                                        ?.tgl_do
+                                                                )
+                                                            }}
                                                         </b>
-                                                        <em v-else>Belum ada</em>
+                                                        <em v-else
+                                                            >Belum ada</em
+                                                        >
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="produkretur" role="tabpanel"
-                                        aria-labelledby="produkretur-tab">
+                                    <div
+                                        class="tab-pane fade"
+                                        id="produkretur"
+                                        role="tabpanel"
+                                        aria-labelledby="produkretur-tab"
+                                    >
                                         <div class="row">
                                             <div class="col">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <div class="d-flex flex-row-reverse bd-highlight">
-                                                            <div class="p-2 bd-highlight">
-                                                                <div class="form-group">
-                                                                    <label for="">No. Retur</label>
-                                                                    <input type="text" class="form-control"
-                                                                        @input="cekErrorRetur"
-                                                                        :class="{ 'is-invalid': errorMessage !== '' }"
-                                                                        v-model="no_retur">
-                                                                    <div class="invalid-feedback">
-                                                                        {{ errorMessage }}
+                                                        <div
+                                                            class="d-flex flex-row-reverse bd-highlight"
+                                                        >
+                                                            <div
+                                                                class="p-2 bd-highlight"
+                                                            >
+                                                                <div
+                                                                    class="form-group"
+                                                                >
+                                                                    <label
+                                                                        for=""
+                                                                        >No.
+                                                                        Retur</label
+                                                                    >
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        @input="
+                                                                            cekErrorRetur
+                                                                        "
+                                                                        :class="{
+                                                                            'is-invalid':
+                                                                                errorMessage !==
+                                                                                '',
+                                                                        }"
+                                                                        v-model="
+                                                                            no_retur
+                                                                        "
+                                                                    />
+                                                                    <div
+                                                                        class="invalid-feedback"
+                                                                    >
+                                                                        {{
+                                                                            errorMessage
+                                                                        }}
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
 
-                                                        <table class="table" v-if="!loadingPaket">
+                                                        <table
+                                                            class="table"
+                                                            v-if="!loadingPaket"
+                                                        >
                                                             <thead>
                                                                 <tr>
                                                                     <th>No</th>
-                                                                    <th>Nama Produk</th>
+                                                                    <th>
+                                                                        Nama
+                                                                        Produk
+                                                                    </th>
                                                                     <th>Qty</th>
-                                                                    <th>Jumlah Retur</th>
+                                                                    <th>
+                                                                        Jumlah
+                                                                        Retur
+                                                                    </th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <template v-for="(item, idx) in items">
+                                                                <template
+                                                                    v-for="(
+                                                                        item,
+                                                                        idx
+                                                                    ) in items"
+                                                                >
                                                                     <tr>
-                                                                        <td>{{ item.no }}</td>
-                                                                        <td>{{ item.nama }}</td>
-                                                                        <td>{{ item.qty }}
+                                                                        <td>
+                                                                            {{
+                                                                                item.no
+                                                                            }}
                                                                         </td>
-                                                                        <td><input type="number" class="form-control"
-                                                                                @input="toggleItem(idx)"
-                                                                                v-model.number="item.jml_retur"
-                                                                                @keypress="numberOnly">
-
+                                                                        <td>
+                                                                            {{
+                                                                                item.nama
+                                                                            }}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{
+                                                                                item.qty
+                                                                            }}
+                                                                        </td>
+                                                                        <td>
+                                                                            <input
+                                                                                type="number"
+                                                                                class="form-control"
+                                                                                @input="
+                                                                                    toggleItem(
+                                                                                        idx
+                                                                                    )
+                                                                                "
+                                                                                v-model.number="
+                                                                                    item.jml_retur
+                                                                                "
+                                                                                @keypress="
+                                                                                    numberOnly
+                                                                                "
+                                                                            />
                                                                         </td>
                                                                     </tr>
-                                                                    <tr v-if="item?.loadingProduk">
-                                                                        <td colspan="100%">
-                                                                            <div class="text-center">
-                                                                                <div class="spinner-border spinner-border-sm"
-                                                                                    role="status">
+                                                                    <tr
+                                                                        v-if="
+                                                                            item?.loadingProduk
+                                                                        "
+                                                                    >
+                                                                        <td
+                                                                            colspan="100%"
+                                                                        >
+                                                                            <div
+                                                                                class="text-center"
+                                                                            >
+                                                                                <div
+                                                                                    class="spinner-border spinner-border-sm"
+                                                                                    role="status"
+                                                                                >
                                                                                     <span
-                                                                                        class="sr-only">Loading...</span>
+                                                                                        class="sr-only"
+                                                                                        >Loading...</span
+                                                                                    >
                                                                                 </div>
                                                                             </div>
                                                                         </td>
                                                                     </tr>
                                                                     <tr
-                                                                        v-if="item.produk !== undefined && item.expanded">
-                                                                        <td colspan="100%">
+                                                                        v-if="
+                                                                            item.produk !==
+                                                                                undefined &&
+                                                                            item.expanded
+                                                                        "
+                                                                    >
+                                                                        <td
+                                                                            colspan="100%"
+                                                                        >
                                                                             <div
-                                                                                class="d-flex flex-row-reverse bd-highlight">
-                                                                                <div class="p-2 bd-highlight">
-                                                                                    <button class="btn btn-primary"
-                                                                                        @click="showModalNoSeri(idx)">Pilih
-                                                                                        Nomor Seri Via Text</button>
+                                                                                class="d-flex flex-row-reverse bd-highlight"
+                                                                            >
+                                                                                <div
+                                                                                    class="p-2 bd-highlight"
+                                                                                >
+                                                                                    <button
+                                                                                        class="btn btn-primary"
+                                                                                        @click="
+                                                                                            showModalNoSeri(
+                                                                                                idx
+                                                                                            )
+                                                                                        "
+                                                                                    >
+                                                                                        Pilih
+                                                                                        Nomor
+                                                                                        Seri
+                                                                                        Via
+                                                                                        Text
+                                                                                    </button>
                                                                                 </div>
                                                                             </div>
-                                                                            <table class="table">
+                                                                            <table
+                                                                                class="table"
+                                                                            >
                                                                                 <thead>
                                                                                     <tr>
-                                                                                        <th>No</th>
-                                                                                        <th>Nama Produk</th>
-                                                                                        <th>Nomor Seri
+                                                                                        <th>
+                                                                                            No
+                                                                                        </th>
+                                                                                        <th>
+                                                                                            Nama
+                                                                                            Produk
+                                                                                        </th>
+                                                                                        <th>
+                                                                                            Nomor
+                                                                                            Seri
                                                                                         </th>
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
                                                                                     <tr
-                                                                                        v-for="(produk, idx2) in item.produk">
-                                                                                        <td>{{ produk.no }}</td>
-                                                                                        <td>{{ produk.nama }}
+                                                                                        v-for="(
+                                                                                            produk,
+                                                                                            idx2
+                                                                                        ) in item.produk"
+                                                                                    >
+                                                                                        <td>
+                                                                                            {{
+                                                                                                produk.no
+                                                                                            }}
                                                                                         </td>
                                                                                         <td>
-                                                                                            <div class="row">
-                                                                                                <div class="col"
-                                                                                                    v-for="(group, idx3) in groupedNoSeri(produk.noseri)">
+                                                                                            {{
+                                                                                                produk.nama
+                                                                                            }}
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <div
+                                                                                                class="row"
+                                                                                            >
+                                                                                                <div
+                                                                                                    class="col"
+                                                                                                    v-for="(
+                                                                                                        group,
+                                                                                                        idx3
+                                                                                                    ) in groupedNoSeri(
+                                                                                                        produk.noseri
+                                                                                                    )"
+                                                                                                >
                                                                                                     <div
-                                                                                                        v-for="(noseri, idx4) in group">
+                                                                                                        v-for="(
+                                                                                                            noseri,
+                                                                                                            idx4
+                                                                                                        ) in group"
+                                                                                                    >
                                                                                                         <div
-                                                                                                            v-if="!noseriterpakai(noseri, idx)">
+                                                                                                            v-if="
+                                                                                                                !noseriterpakai(
+                                                                                                                    noseri,
+                                                                                                                    idx
+                                                                                                                )
+                                                                                                            "
+                                                                                                        >
                                                                                                             <input
-                                                                                                                @click="toggleNoSeri(item, idx2, noseri)"
-                                                                                                                :checked="produk.noSeriSelected && produk.noSeriSelected.find((n) => n.id === noseri.id)"
+                                                                                                                @click="
+                                                                                                                    toggleNoSeri(
+                                                                                                                        item,
+                                                                                                                        idx2,
+                                                                                                                        noseri
+                                                                                                                    )
+                                                                                                                "
+                                                                                                                :checked="
+                                                                                                                    produk.noSeriSelected &&
+                                                                                                                    produk.noSeriSelected.find(
+                                                                                                                        (
+                                                                                                                            n
+                                                                                                                        ) =>
+                                                                                                                            n.id ===
+                                                                                                                            noseri.id
+                                                                                                                    )
+                                                                                                                "
                                                                                                                 :ref="`noseri-${noseri.id}`"
-                                                                                                                type="checkbox">
+                                                                                                                type="checkbox"
+                                                                                                            />
                                                                                                             {{
-                                                                                                            noseri.noseri
+                                                                                                                noseri.noseri
                                                                                                             }}
                                                                                                         </div>
-                                                                                                        <div v-else>
+                                                                                                        <div
+                                                                                                            v-else
+                                                                                                        >
                                                                                                             <span
-                                                                                                                class="badge badge-info">No
+                                                                                                                class="badge badge-info"
+                                                                                                                >No
                                                                                                                 Seri
-                                                                                                                Terpakai</span>
+                                                                                                                Terpakai</span
+                                                                                                            >
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
@@ -547,9 +894,17 @@ export default {
                                                             </tbody>
                                                         </table>
                                                         <div v-else>
-                                                            <div class="d-flex justify-content-center">
-                                                                <div class="spinner-border" role="status">
-                                                                    <span class="sr-only">Loading...</span>
+                                                            <div
+                                                                class="d-flex justify-content-center"
+                                                            >
+                                                                <div
+                                                                    class="spinner-border"
+                                                                    role="status"
+                                                                >
+                                                                    <span
+                                                                        class="sr-only"
+                                                                        >Loading...</span
+                                                                    >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -563,8 +918,21 @@ export default {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="closeModal">Keluar</button>
-                        <button type="button" class="btn btn-primary" @click="simpan">Simpan</button>
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            @click="closeModal"
+                        >
+                            Keluar
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            :disabled="loadingSubmit"
+                            @click="simpan"
+                        >
+                            {{ loadingSubmit ? "Menyimpan..." : "Simpan" }}
+                        </button>
                     </div>
                 </div>
             </div>
