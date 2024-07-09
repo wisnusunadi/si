@@ -80,6 +80,12 @@
                         src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_93, 0.5, 16)) }}" />
                     <div class="small-text-custom">{{ $item['noseri'] }}</div>
                 </div>
+            @elseif ($item['id'] == 12)
+                <div class="{{ $classPage }}">
+                    <img
+                        src="data:image/png;base64,{{ base64_encode($generator->getBarcode($item['noseri'], $generator::TYPE_CODE_93, 0.45, 16)) }}" />
+                    <div class="small-text-custom">{{ $item['noseri'] }}</div>
+                </div>
             @else
                 <div class="{{ $classPage }}">
                     <img
