@@ -3623,7 +3623,7 @@ class PenjualanController extends Controller
     public function cekBatalNonEkat($item)
     {
         // if ((($item->cterkirim == 0 && $item->c_tf > 0) || ($item->cterkirimpart == 0 && $item->cjumlahpart > 0)) && $item->Pesanan->log_id != 20 && $item->c_retur == 0) {
-        if ((($item->cterkirim == 0) || ($item->cterkirimpart == 0 && $item->cjumlahpart > 0)) && $item->Pesanan->log_id != 20 && $item->c_retur == 0) {
+        if ((($item->cterkirim == 0 && $item->cjumlahprd > 0) || ($item->cterkirimpart == 0 && $item->cjumlahpart > 0)) && $item->Pesanan->log_id != 20 && $item->c_retur == 0) {
             return true;
         } else {
             return false;
@@ -11881,6 +11881,7 @@ class PenjualanController extends Controller
                 foreach ($d->DetailPesananProduk as $key_e => $e) {
                     $obj[$key_d]['produk'][$key_e] = array(
                         'id' => $e->id,
+                        'nama' => $e->GudangBarangjadi->nama,
                         'gudang_barang_jadi_id' => $e->gudang_barang_jadi_id
                     );
                 }
