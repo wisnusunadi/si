@@ -556,18 +556,32 @@ class LogistikController extends Controller
         //     $q->where('status', 'ok');
         // })->whereIN('detail_pesanan_id', $x)->get();
         if ($jenis == "EKAT") {
-            $datas = DetailPesananProduk::WhereHas('NoSeriDetailPesanan', function ($q) {
+            $datas = DetailPesananProduk::addSelect([
+                'jumlah_siap' => function ($q) {
+                    $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
+                        ->from('t_gbj_noseri')
+                        ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                        ->leftJoin('detail_pesanan_produk as dp', 'dp.id', '=', 't_gbj_detail.detail_pesanan_produk_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                        ->whereNull('riwayat_batal_po_seri.id')
+                        ->whereColumn('dp.id', 'detail_pesanan_produk.id');
+                },
+            ])->WhereHas('NoSeriDetailPesanan', function ($q) {
                 $q->whereIN('status', ['ok']);
             })->whereHas('DetailPesanan', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
-            })->get();
+            })->havingRaw('jumlah_siap > 0')->get();
 
             $array_id = array();
             foreach ($datas as $i) {
                 $id = $i->id;
-                $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($id) {
-                    $q->where('detail_pesanan_produk_id', $id);
-                })->count();
+                $jumlahterkirim = NoseriDetailLogistik::leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                    ->whereHas('DetailLogistik', function ($q) use ($id) {
+                        $q->where('detail_pesanan_produk_id', $id);
+                    })
+                    ->whereNull('riwayat_batal_po_seri.id')
+                    ->count();
                 $jumlahsudahuji = NoseriDetailPesanan::leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                     ->where(['noseri_detail_pesanan.status' => 'ok', 'noseri_detail_pesanan.detail_pesanan_produk_id' => $id, 'noseri_detail_pesanan.is_ready' => 0])
                     ->whereNull('riwayat_batal_po_seri.id')
@@ -658,18 +672,32 @@ class LogistikController extends Controller
                 ->make(true);
         } else {
             $pesanan_id = $id;
-            $datas = DetailPesananProduk::WhereHas('NoSeriDetailPesanan', function ($q) {
+            $datas = DetailPesananProduk::addSelect([
+                'jumlah_siap' => function ($q) {
+                    $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
+                        ->from('t_gbj_noseri')
+                        ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                        ->leftJoin('detail_pesanan_produk as dp', 'dp.id', '=', 't_gbj_detail.detail_pesanan_produk_id')
+                        ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                        ->whereNull('riwayat_batal_po_seri.id')
+                        ->whereColumn('dp.id', 'detail_pesanan_produk.id');
+                },
+            ])->WhereHas('NoSeriDetailPesanan', function ($q) {
                 $q->whereIN('status', ['ok']);
             })->whereHas('DetailPesanan', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
-            })->get();
+            })->havingRaw('jumlah_siap > 0')->get();
 
             $array_id = array();
             foreach ($datas as $i) {
                 $id = $i->id;
-                $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($id) {
-                    $q->where('detail_pesanan_produk_id', $id);
-                })->count();
+                $jumlahterkirim = NoseriDetailLogistik::leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
+                    ->whereHas('DetailLogistik', function ($q) use ($id) {
+                        $q->where('detail_pesanan_produk_id', $id);
+                    })
+                    ->whereNull('riwayat_batal_po_seri.id')
+                    ->count();
 
                 $jumlahsudahuji = NoseriDetailPesanan::leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 'noseri_detail_pesanan.t_tfbj_noseri_id')
                     ->where(['noseri_detail_pesanan.status' => 'ok', 'noseri_detail_pesanan.detail_pesanan_produk_id' => $id, 'noseri_detail_pesanan.is_ready' => 0])
