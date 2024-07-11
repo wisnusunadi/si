@@ -12,6 +12,21 @@ export default {
     },
     methods: {
         save() {
+            // kalkulasi limit upload file total 800mb
+            let totalSize = 0;
+            for (let i = 0; i < this.file.length; i++) {
+                totalSize += this.file[i].size;
+            }
+
+            if (totalSize > 800000000) {
+                this.$swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Total ukuran file tidak boleh melebihi 800MB",
+                });
+                return;
+            }
+
             this.loading = true;
             // detected form data is empty or not this.form.file = null
             if (this.file == null) {
@@ -89,7 +104,7 @@ export default {
                 <div class="modal-body">
                     <div class="form-group row">
                         <label for="" class="col-sm-2 col-form-label">Dokumentasi</label>
-                        <uploadFile @changed="file = $event" />
+                        <uploadFile :maxTotalSize="838860800" @changed="file = $event" />
                     </div>
                 </div>
                 <div class="modal-footer">
