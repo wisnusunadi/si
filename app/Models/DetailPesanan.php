@@ -76,6 +76,7 @@ class DetailPesanan extends Model
                     ->from('riwayat_batal_po_seri')
                     ->leftjoin('riwayat_batal_po_prd', 'riwayat_batal_po_prd.id', '=', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
                     ->leftjoin('riwayat_batal_po_paket', 'riwayat_batal_po_paket.id', '=', 'riwayat_batal_po_prd.detail_riwayat_batal_paket_id')
+                    ->whereColumn('riwayat_batal_po_prd.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
                     ->whereColumn('riwayat_batal_po_paket.detail_pesanan_id', 'detail_pesanan_produk.detail_pesanan_id')
                     ->limit(1);
             },
