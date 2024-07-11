@@ -57,14 +57,16 @@ export default {
                     };
                 });
 
-                this.meeting.peserta = this.meeting.peserta.map((peserta) => {
-                    if (peserta.kehadiran == "hadir") {
-                        return peserta.id;
-                    } else {
-                        // jika peserta tidak hadir, hapus dari peserta
-                        return null;
-                    }
-                }).filter((item) => item !== null);
+                this.meeting.peserta = this.meeting.peserta
+                    .map((peserta) => {
+                        if (peserta.kehadiran == "hadir") {
+                            return peserta.id;
+                        } else {
+                            // jika peserta tidak hadir, hapus dari peserta
+                            return null;
+                        }
+                    })
+                    .filter((item) => item !== null);
 
                 // remove peserta jika sudah ada di notulen, moderator, pimpinan
                 this.meeting.peserta = this.meeting.peserta.filter(
@@ -112,6 +114,20 @@ export default {
             }
         },
         async save() {
+            // kalkulasi limit upload file total 800mb
+            let totalSize = 0;
+            for (let i = 0; i < this.file.length; i++) {
+                totalSize += this.file[i].size;
+            }
+
+            if (totalSize > 800000000) { // satuan byte
+                this.$swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Total ukuran file tidak boleh melebihi 800MB",
+                });
+                return;
+            }
             // hapus jika di hasil notulensi satu baris pic dan isi kosong
             this.form.notulensi = this.form.notulensi.filter(
                 (item) => item.pic !== "" || item.isi !== ""
@@ -523,7 +539,7 @@ export default {
                         <label for="" class="col-sm-2 col-form-label"
                             >Dokumentasi</label
                         >
-                        <uploadFile @changed="uploadDokumen" />
+                        <uploadFile :maxTotalSize="838860800" @changed="uploadDokumen" />
                     </div>
                 </div>
                 <div class="modal-body text-center" v-else>

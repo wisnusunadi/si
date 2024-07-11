@@ -16,16 +16,20 @@ export default {
         maxError: String,
         fileError: String,
         clearAll: String,
+        maxTotalSize: Number, // satuan byte
     },
     computed: {
-        // check progress when not 100 return 
+        // check progress when not 100 return
         checkProgress() {
             return this.progress.some((prog) => prog < 100);
-        }
+        },
+        totalFileSize() {
+            return this.files.reduce((acc, file) => acc + file.size, 0);
+        },
     },
     methods: {
         dragOver() {
-            if (this.checkProgress) return
+            if (this.checkProgress) return;
             this.dropped = 2;
         },
         dragLeave() {},
@@ -45,7 +49,18 @@ export default {
                     ) {
                         this.error = this.$props.maxError
                             ? this.$props.maxError
-                            : `Maximum files is` + this.$props.max;
+                            : `Maximum files is ${this.$props.max}`;
+                    } else if (
+                        this.totalFileSize +
+                            files.reduce(
+                                (total, file) => total + file.size,
+                                0
+                            ) >
+                        this.$props.maxTotalSize
+                    ) {
+                        this.error = `Total file size exceeds the limit of ${
+                            this.$props.maxTotalSize / 1024 / 1024
+                        } MB`;
                     } else {
                         this.files.push(...files);
                         this.previewImgs();
@@ -100,12 +115,17 @@ export default {
             ) {
                 this.error = this.$props.maxError
                     ? this.$props.maxError
-                    : `Maximum files is` + this.$props.max;
+                    : `Maximum files is ${this.$props.max}`;
                 return;
             }
             if (this.dropped == 0)
                 this.files.push(...event.currentTarget.files);
             this.error = "";
+            if (this.totalFileSize > this.$props.maxTotalSize) {
+                this.error = `Total file size exceeds the limit of ${this.$props.maxTotalSize / 1024 / 1024} MB`;
+                this.files = this.files.slice(0, -event.currentTarget.files.length); // Remove newly added files
+                return;
+            }
             this.$emit("changed", this.files, this.Imgs);
             let readers = [];
             if (!this.files.length) return;
@@ -130,7 +150,7 @@ export default {
         Imgs() {
             this.$emit("changed", this.files, this.Imgs);
         },
-    }
+    },
 };
 </script>
 
@@ -179,7 +199,12 @@ export default {
         </div>
 
         <div class="imgsPreview" v-show="progress.length > 0">
-            <button type="button" class="clearButton" @click="reset" v-if="!checkProgress">
+            <button
+                type="button"
+                class="clearButton"
+                @click="reset"
+                v-if="!checkProgress"
+            >
                 {{ clearAll ? clearAll : "clear All" }}
             </button>
             <div class="row">
