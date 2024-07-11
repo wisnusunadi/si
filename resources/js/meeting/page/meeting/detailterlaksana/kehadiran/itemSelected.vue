@@ -1,5 +1,5 @@
 <script>
-import DataTable from "../../../../components/DataTable.vue";
+import DataTable from "../../../../components/Datatable.vue";
 import kehadiran from "../../../../components/kehadiran.vue";
 export default {
     components: {

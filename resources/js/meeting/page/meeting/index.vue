@@ -1,7 +1,7 @@
 <script>
 import Header from "../../components/header.vue";
 import Tambah from "./aksi/tambah";
-import DataTable from "../../components/DataTable.vue";
+import DataTable from "../../components/Datatable.vue";
 import status from "../../components/status.vue";
 import terlaksana from "./aksi/terlaksana.vue";
 import Edit from "./aksi/edit";
