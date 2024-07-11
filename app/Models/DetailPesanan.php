@@ -71,6 +71,14 @@ class DetailPesanan extends Model
                     ->whereColumn('gdg_barang_jadi.id', 'detail_pesanan_produk.gudang_barang_jadi_id')
                     ->limit(1);
             },
+            'count_batal_sudah_tf' => function ($q) {
+                $q->selectRaw('coalesce(count(riwayat_batal_po_seri.id),0)')
+                    ->from('riwayat_batal_po_seri')
+                    ->leftjoin('riwayat_batal_po_prd', 'riwayat_batal_po_prd.id', '=', 'riwayat_batal_po_seri.detail_riwayat_batal_prd_id')
+                    ->leftjoin('riwayat_batal_po_paket', 'riwayat_batal_po_paket.id', '=', 'riwayat_batal_po_prd.detail_riwayat_batal_paket_id')
+                    ->whereColumn('riwayat_batal_po_paket.detail_pesanan_id', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->limit(1);
+            },
             'count_batal' => function ($q) {
                 $q->selectRaw('coalesce(sum(riwayat_batal_po_paket.jumlah),0)')
                     ->from('riwayat_batal_po_paket')

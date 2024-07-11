@@ -18,6 +18,8 @@ use App\Models\OutgoingPesananPart;
 use App\Models\PenjualanProduk;
 use App\Models\Pesanan;
 use App\Models\Produk;
+use App\Models\RiwayatBatalPo;
+use App\Models\RiwayatBatalPoPrd;
 use App\Models\RiwayatTf;
 use App\Models\SeriGanti;
 use App\Models\Spa;
@@ -973,9 +975,23 @@ class QcController extends Controller
     public function get_data_detail_so($id)
     {
         // $x = explode(',', $id);
-        $dataprd = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($id) {
+        $dataprd = DetailPesananProduk::addSelect([
+            'jumlah_siap' => function ($q) {
+                $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
+                    ->from('t_gbj_noseri')
+                    ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->leftJoin('detail_pesanan_produk as dp', 'dp.id', '=', 't_gbj_detail.detail_pesanan_produk_id')
+                    ->leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                    ->whereNull('riwayat_batal_po_seri.id')
+                    ->whereColumn('dp.id', 'detail_pesanan_produk.id');
+            },
+        ])->whereHas('DetailPesanan', function ($q) use ($id) {
             $q->where('pesanan_id', $id);
-        })->groupby('gudang_barang_jadi_id')->get();
+        })->havingRaw('jumlah_siap > 0')->get();
+
+        // $dataprd = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($id) {
+        //     $q->where('pesanan_id', $id);
+        // })->groupby('gudang_barang_jadi_id')->get();
         $datapart = DetailPesananPart::where('pesanan_id', $id)->whereHas('Sparepart', function ($q) {
             $q->where('kode', 'NOT LIKE', '%JASA%');
         })->whereDoesntHave('RiwayatBatalPoPart')->get();
@@ -1002,11 +1018,15 @@ class QcController extends Controller
                 if (isset($data->gudang_barang_jadi_id)) {
                     $id = $data->gudang_barang_jadi_id;
                     $pesanan_id = $data->DetailPesanan->pesanan_id;
-                    $jumlah = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
-                        $q->where('gdg_brg_jadi_id', $id);
-                    })->whereHas('detail.header', function ($q) use ($pesanan_id) {
-                        $q->where('pesanan_id', $pesanan_id);
-                    })->count();
+
+                    $jumlah = NoseriTGbj::leftJoin('riwayat_batal_po_seri', 'riwayat_batal_po_seri.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+                        ->whereHas('detail', function ($q) use ($id) {
+                            $q->where('gdg_brg_jadi_id', $id);
+                        })->whereHas('detail.header', function ($q) use ($pesanan_id) {
+                            $q->where('pesanan_id', $pesanan_id);
+                        })
+                        ->whereNull('riwayat_batal_po_seri.id')
+                        ->count();
                 } else {
                     $jumlah = $data->jumlah;
                 }
