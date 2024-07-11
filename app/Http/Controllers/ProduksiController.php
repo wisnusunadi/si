@@ -3056,7 +3056,7 @@ class ProduksiController extends Controller
                         'item' => array()
                     );
                     foreach ($p->DetailPesananProdukVariasi() as $key_b => $i) {
-                        $sisaBatalVariasi = ($i->count_batal * $i->count_item) - $i->count_batal_sudah_tf;
+                        $sisaBatalVariasi = $i->count_batal - $i->count_batal_sudah_tf;
                         if ($sisaBatalVariasi  <= $i->count_gudang_tidak_batal) {
                             $sisaVariasi =  $i->count_jumlah - $i->count_gudang_tidak_batal;
                         } else {
@@ -3070,7 +3070,7 @@ class ProduksiController extends Controller
                             'nama' => $i->GudangBarangJadi->Produk->nama . ' ' . $i->GudangBarangJadi->nama,
                             'merk' => $i->GudangBarangJadi->Produk->merk,
                             // 'jumlah' => $i->count_jumlah  - $i->count_batal,
-                            'jumlah' => $i->count_jumlah  - $i->count_batal,
+                            'jumlah' => $i->count_jumlah,
                             'jumlah_gudang' =>  $i->count_gudang_tidak_batal,
                             'jumlah_sisa' =>  $sisaVariasi,
                             /// 'status' => $i->status_cek == NULL || $i->checked_by == NULL ||  $sisa == $i->count_batal ? false : true,

@@ -533,7 +533,7 @@ class PenjualanControllerNew extends Controller
             ]);
 
 
-            if (isset($request->sparepart)) {
+            if (isset($request->sparepart) && in_array('sparepart', $request->barang)) {
                 foreach ($request->sparepart as $sparepart) {
 
                     $dspb = DetailPesananPart::create([
@@ -547,7 +547,7 @@ class PenjualanControllerNew extends Controller
                 }
             }
 
-            if (isset($request->jasa)) {
+            if (isset($request->jasa) && in_array('jasa', $request->barang)) {
                 foreach ($request->jasa as $jasa) {
 
                     $dppt = DetailPesananPart::create([
@@ -568,7 +568,7 @@ class PenjualanControllerNew extends Controller
                     ]);
                 }
             }
-            if ($request->isi_produk == 'true') {
+            if ($request->isi_produk == 'true' && in_array('produk', $request->barang)) {
 
                 foreach ($request->produk as $produk) {
 
