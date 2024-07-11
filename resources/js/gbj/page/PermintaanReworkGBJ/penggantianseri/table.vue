@@ -1,5 +1,5 @@
 <script>
-import formPenggantian from './formPenggantian'
+import formPenggantian from './formpenggantian/index.vue'
 import status from '../../../components/status.vue';
 export default {
     props: ['dataTable'],

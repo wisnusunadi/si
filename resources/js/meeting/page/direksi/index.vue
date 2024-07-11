@@ -1,6 +1,6 @@
 <script>
 import Header from "../../components/header.vue";
-import DataTable from "../../components/DataTable.vue";
+import DataTable from "../../components/Datatable.vue";
 import status from "../../components/status.vue";
 export default {
     components: {
