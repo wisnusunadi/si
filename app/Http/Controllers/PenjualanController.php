@@ -3991,6 +3991,10 @@ class PenjualanController extends Controller
                 }
             }
 
+            if ($request->status == 'batal') {
+                $log_id = "20";
+            }
+
             $pesanan = Pesanan::create([
                 'so' => $so,
                 'no_po' => $no_po,
@@ -4966,6 +4970,8 @@ class PenjualanController extends Controller
 
         if ($request->status_akn == "sepakat" && $request->no_po_ekat != NULL) {
             $p->log_id = "9";
+        } elseif ($request->status_akn == "batal") {
+            $p->log_id = "20";
         }
         $p->save();
 

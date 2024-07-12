@@ -2328,7 +2328,13 @@ class ProduksiController extends Controller
             when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
             when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
             when p.so is null then c_ekat.nama
-            end as divisi")
+            end as divisi"),
+                    DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then '-'
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then '-'
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then e.no_paket
+            when p.so is null then c_ekat.nama
+            end as akn")
                 )
                 ->leftJoin(DB::raw('detail_pesanan dp'), 'dpp.detail_pesanan_id', '=', 'dp.id')
                 ->leftJoin(DB::raw('pesanan p'), 'dp.pesanan_id', '=', 'p.id')
@@ -2548,6 +2554,7 @@ class ProduksiController extends Controller
                 ->havingRaw('cjumlahprd > 0 AND cjumlahprd != cgudang')
                 ->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
                 ->whereNotNull('no_po')
+                ->whereNotIn('pesanan.log_id', [20])
                 ->get();
 
             foreach ($datas as $d) {
