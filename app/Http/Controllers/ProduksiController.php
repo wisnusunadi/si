@@ -3031,7 +3031,8 @@ class ProduksiController extends Controller
                         ->limit(1);
                 }
             ])
-                // ->havingRaw('detail_pesanan.jumlah > count_batal')
+                //->havingRaw('detail_pesanan.jumlah > count_batal')
+
                 ->leftJoin('penjualan_produk', 'penjualan_produk.id', '=', 'detail_pesanan.penjualan_produk_id')
                 ->where('pesanan_id', $id)->get();
 
@@ -3051,7 +3052,7 @@ class ProduksiController extends Controller
                         'nama' => $p->PenjualanProduk->nama,
                         'jumlah' => $p->count_jumlah,
                         // 'jumlah' => $p->count_jumlah - ($p->count_batal * $p->count_item),
-                        'jumlah_sisa' =>   $sisa,
+                        'jumlah_sisa' =>   $sisaBatal,
                         // 'jumlah_sisa' => $p->count_jumlah - ($p->count_batal * $p->count_item) -  $p->count_gudang_tidak_batal,
                         'jumlah_gudang' => $p->count_gudang_tidak_batal,
                         'count_batal' => $p->count_batal,
