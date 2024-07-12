@@ -2553,10 +2553,12 @@ class ProduksiController extends Controller
             foreach ($datas as $d) {
                 $c = '';
                 $batas = NULL;
+                $no_paket = '-';
 
                 if ($d->Ekatalog) {
                     $c = $d->Ekatalog->Customer->nama;
                     $batas = $d->Ekatalog->tgl_kontrak;
+                    $no_paket = $d->Ekatalog->no_paket;
                 } else if ($d->Spa) {
                     $c = $d->Spa->Customer->nama;
                 } else {
@@ -2566,6 +2568,7 @@ class ProduksiController extends Controller
                 $obj[] = array(
                     'id' => $d->id,
                     'so' => $d->so,
+                    'akn' => $no_paket,
                     'customer' => $c,
                     'no_po' => $d->no_po,
                     'tgl_po' => $d->tgl_po,
@@ -5964,9 +5967,9 @@ class ProduksiController extends Controller
     {
         $getData =  json_decode($request->data, true);
         $seri = JadwalRakitNoseri::select('noseri', 'gdg_barang_jadi.produk_id as id')
-        ->leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-        ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
-        ->whereIn('jadwal_rakit_noseri.id', $getData)->get();
+            ->leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+            ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+            ->whereIn('jadwal_rakit_noseri.id', $getData)->get();
         $data = array();
         foreach ($seri as $s) {
             $data[] = array(
@@ -6027,10 +6030,10 @@ class ProduksiController extends Controller
 
         //SetLogo
         $seri = JadwalRakitNoseri::select('noseri', 'produk.merk as merk')
-        ->leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-        ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
-        ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-        ->whereIn('jadwal_rakit_noseri.id', $getData)->get();
+            ->leftJoin('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+            ->leftJoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'jadwal_perakitan.produk_id')
+            ->leftJoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+            ->whereIn('jadwal_rakit_noseri.id', $getData)->get();
 
         foreach ($seri as $s) {
             $data[] = (object)[
@@ -6227,7 +6230,7 @@ class ProduksiController extends Controller
         $waktu = Carbon::now();
         return Excel::download(new ExportRework($urutan), 'PerakitanReworks  ' . $waktu->toDateTimeString() . '.xlsx');
     }
-    function cetak_seri_perakitan_custom_a4($alias,$awal,$akhir)
+    function cetak_seri_perakitan_custom_a4($alias, $awal, $akhir)
     {
 
         for ($i = $awal; $i <= $akhir; $i++) {
