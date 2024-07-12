@@ -204,7 +204,7 @@ class LogistikController extends Controller
         // // $pdf = PDF::loadView('page.logistik.pengiriman.print_sj', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
 
     }
-    public function cetak_surat_jalan($id) 
+    public function cetak_surat_jalan($id)
     {
         $data = LogistikDraft::find($id);
 
@@ -1514,7 +1514,7 @@ class LogistikController extends Controller
                 'cekatbatal' => function ($q) {
                     $q->selectRaw('coalesce(count(ekatalog.id), 0)')
                         ->from('ekatalog')
-                        ->where('ekatalog.status','batal')
+                        ->where('ekatalog.status', 'batal')
                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
                 },
                 'cqcpart' => function ($q) {
@@ -1570,7 +1570,7 @@ class LogistikController extends Controller
                 'cekatbatal' => function ($q) {
                     $q->selectRaw('coalesce(count(ekatalog.id), 0)')
                         ->from('ekatalog')
-                        ->where('ekatalog.status','batal')
+                        ->where('ekatalog.status', 'batal')
                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
                 },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
@@ -1641,7 +1641,7 @@ class LogistikController extends Controller
                 'cekatbatal' => function ($q) {
                     $q->selectRaw('coalesce(count(ekatalog.id), 0)')
                         ->from('ekatalog')
-                        ->where('ekatalog.status','batal')
+                        ->where('ekatalog.status', 'batal')
                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
                 },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
@@ -1731,7 +1731,7 @@ class LogistikController extends Controller
                 'cekatbatal' => function ($q) {
                     $q->selectRaw('coalesce(count(ekatalog.id), 0)')
                         ->from('ekatalog')
-                        ->where('ekatalog.status','batal')
+                        ->where('ekatalog.status', 'batal')
                         ->whereColumn('ekatalog.pesanan_id', 'pesanan.id');
                 },
             ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
@@ -1982,26 +1982,27 @@ class LogistikController extends Controller
             left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
             where detail_pesanan.pesanan_id = pesanan.id
             having count(noseri_logistik.id) > 0)');
-        })->addSelect(['tgl_kirim_min' => function ($q) {
-            $q->selectRaw('MIN(logistik.tgl_kirim)')
-                ->from('logistik')
-                ->leftjoin('detail_logistik', 'detail_logistik.logistik_id', '=', 'logistik.id')
-                ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
-                ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-                ->limit(1);
-        }, 'tgl_kirim_max' => function ($q) {
-            $q->selectRaw('MAX(logistik.tgl_kirim)')
-                ->from('logistik')
-                ->leftjoin('detail_logistik', 'detail_logistik.logistik_id', '=', 'logistik.id')
-                ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
-                ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-                ->limit(1);
-        },
+        })->addSelect([
+            'tgl_kirim_min' => function ($q) {
+                $q->selectRaw('MIN(logistik.tgl_kirim)')
+                    ->from('logistik')
+                    ->leftjoin('detail_logistik', 'detail_logistik.logistik_id', '=', 'logistik.id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+                    ->limit(1);
+            }, 'tgl_kirim_max' => function ($q) {
+                $q->selectRaw('MAX(logistik.tgl_kirim)')
+                    ->from('logistik')
+                    ->leftjoin('detail_logistik', 'detail_logistik.logistik_id', '=', 'logistik.id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+                    ->limit(1);
+            },
         ])
-        ->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])
-        ->whereYear('created_at',  $years)->whereNotIn('log_id', [7,20])->orderByDesc('created_at');
+            ->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])
+            ->whereYear('created_at',  $years)->whereNotIn('log_id', [7, 20])->orderByDesc('created_at');
 
         $part = Pesanan::whereIn('id', function ($q) {
             $q->select('pesanan.id')
@@ -2030,7 +2031,7 @@ class LogistikController extends Controller
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                 ->limit(1);
         }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)
-        ->whereNotIn('log_id', [7,20])->orderByDesc('created_at');
+            ->whereNotIn('log_id', [7, 20])->orderByDesc('created_at');
 
 
         $partjasa = Pesanan::whereIn('id', function ($q) {
@@ -2061,7 +2062,7 @@ class LogistikController extends Controller
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                 ->limit(1);
         }])->with(['Spa.Customer', 'Spb.Customer', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereYear('created_at',  $years)
-        ->whereNotIn('log_id', [7,20])->orderByDesc('created_at')->union($prd)->union($part)->get();
+            ->whereNotIn('log_id', [7, 20])->orderByDesc('created_at')->union($prd)->union($part)->get();
 
         $data = $partjasa;
         return datatables()->of($data)
@@ -4949,11 +4950,11 @@ class LogistikController extends Controller
     {
         $nopo = str_replace("!", "/", $po);
         $dataprd = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($nopo) {
-            $q->where('Pesanan.no_po', $nopo);
+            $q->where('pesanan.no_po', $nopo);
         })->get();
 
         $datapart = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistikPart.DetailPesananPart.Pesanan', function ($q) use ($nopo) {
-            $q->where('Pesanan.no_po', $nopo);
+            $q->where('pesanan.no_po', $nopo);
         })->get();
 
         $data = $dataprd->merge($datapart);
@@ -5267,7 +5268,6 @@ class LogistikController extends Controller
                     if ($item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363 || $item["penjualan_produk_id"] == 446) {
                         $tas = true;
                     }
-
                 }
 
                 $produk[$id]["detail"][] = array(
