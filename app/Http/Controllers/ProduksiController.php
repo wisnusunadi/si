@@ -2656,10 +2656,11 @@ class ProduksiController extends Controller
             foreach ($datas as $d) {
                 $c = '';
                 $batas = NULL;
-
+                $no_paket = '-';
                 if ($d->Ekatalog) {
                     $c = $d->Ekatalog->Customer->nama;
                     $batas = $d->Ekatalog->tgl_kontrak;
+                    $no_paket = $d->Ekatalog->no_paket;
                 } else if ($d->Spa) {
                     $c = $d->Spa->Customer->nama;
                 } else {
@@ -2669,6 +2670,7 @@ class ProduksiController extends Controller
                 $obj[] = array(
                     'id' => $d->id,
                     'so' => $d->so,
+                    'akn' => $no_paket,
                     'customer' => $c,
                     'no_po' => $d->no_po,
                     'tgl_po' => $d->tgl_po,
