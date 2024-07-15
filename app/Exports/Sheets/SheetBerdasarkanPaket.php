@@ -665,9 +665,15 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
         FROM detail_pesanan_part AS dp
         WHERE dp.pesanan_id = detail_pesanan_part.pesanan_id
         AND dp.m_sparepart_id = detail_pesanan_part.m_sparepart_id) AS ongkir'),
+            DB::raw('(SELECT COALESCE(SUM(riwayat_batal_po_part.jumlah), 0)
+        FROM riwayat_batal_po_part
+        WHERE riwayat_batal_po_part.detail_pesanan_part_id = detail_pesanan_part.id) AS jumlah_batal'),
+            DB::raw('(SELECT COALESCE(SUM(riwayat_batal_po_retur.jumlah), 0)
+        FROM riwayat_batal_po_retur
+        WHERE riwayat_batal_po_part.detail_pesanan_part_id = detail_pesanan_part.id) AS jumlah_retur'),
         )
-            ->selectRaw('"0" AS jumlah_batal')
-            ->selectRaw('"0" AS jumlah_retur')
+            // ->selectRaw('"0" AS jumlah_batal')
+            //   ->selectRaw('"0" AS jumlah_retur')
             ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
             ->whereIN('detail_pesanan_part.pesanan_id', $data->pluck('id')->toArray())->get();
 
