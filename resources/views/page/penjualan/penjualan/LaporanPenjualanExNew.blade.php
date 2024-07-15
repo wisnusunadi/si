@@ -249,9 +249,9 @@
                     <td>0</td>
                     <td>{{ $p['jumlah'] * $p['harga'] }}</td>
                     <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
-                    <td>0</td>
+                    <td>{{ $p['jumlah_batal'] }}</td>
                     <td>-</td>
-                    <td>0</td>
+                    <td>{{ $p['jumlah_retur'] }}</td>
                     <td>-</td>
                     <td>{{ $d['ket'] }}</td>
                 </tr>
