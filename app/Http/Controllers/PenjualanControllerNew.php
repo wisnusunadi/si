@@ -251,6 +251,12 @@ class PenjualanControllerNew extends Controller
             }
 
 
+            $logId = 7;
+            if ($jnis == 'EKAT') {
+                if ($request->status == 'batal') {
+                    $logId = 20;
+                }
+            }
 
             $poid = $request->id;
             $pesanan = Pesanan::find($request->id);
@@ -267,7 +273,7 @@ class PenjualanControllerNew extends Controller
             $pesanan->no_do = $request->nomor_do ??= null;
             $pesanan->tgl_do = $request->tgl_do ??= null;
             $pesanan->ket =  $request->ket_do;
-            $pesanan->log_id = 7;
+            $pesanan->log_id = $logId;
             $pesanan->tujuan_kirim = $request->nama_perusahaan;
             $pesanan->alamat_kirim = $request->alamat_perusahaan;
             $pesanan->kemasan = $request->kemasan;
@@ -515,6 +521,15 @@ class PenjualanControllerNew extends Controller
                 default:
                     $jnis;
             }
+
+            $logId = 7;
+            if ($jnis == 'EKAT') {
+                if ($request->status == 'batal') {
+                    $logId = 20;
+                }
+            }
+
+
             $pesanan =    Pesanan::create([
                 'so' =>  $request->no_po != '' ? $this->penjualanController->createSObyPeriod($jnis, $periode) : NULL,
                 'no_po' => $request->no_po,
@@ -522,7 +537,7 @@ class PenjualanControllerNew extends Controller
                 'no_do' => $request->nomor_do ??= null,
                 'tgl_do' => $request->tgl_do ??= null,
                 'ket' =>  $request->ket_do,
-                'log_id' => 7,
+                'log_id' =>  $logId,
                 'tujuan_kirim' => $request->nama_perusahaan,
                 'alamat_kirim' => $request->alamat_perusahaan,
                 'kemasan' => $request->kemasan,
