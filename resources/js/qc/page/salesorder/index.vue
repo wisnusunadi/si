@@ -82,11 +82,6 @@ export default {
                     };
                 });
 
-                if (this.batalPoData.length > 0) {
-                    this.isBatalPo = true;
-                } else {
-                    this.isBatalPo = false;
-                }
             } catch (error) {
                 console.log(error);
             } finally {
@@ -141,6 +136,15 @@ export default {
     created() {
         this.getData();
     },
+    watch: {
+        'batalPoData': function (val) {
+            if (val.length > 0) {
+                this.isBatalPo = true;
+            } else {
+                this.isBatalPo = false;
+            }
+        },
+    }
 };
 </script>
 <template>

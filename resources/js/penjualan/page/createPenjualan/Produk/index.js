@@ -292,7 +292,7 @@ const ProdukComponent = ({ formProduk, setFormProduk }) => {
                                 <th>Ongkir</th>
                                 <th>Subtotal</th>
                                 <th>Pajak</th>
-                                <th>Kalibrasi</th>
+                                {/* <th>Kalibrasi</th> */}
                                 <th>
                                     Stok Distributor <br />{" "}
                                     <input
@@ -515,7 +515,7 @@ const ProdukComponent = ({ formProduk, setFormProduk }) => {
                                             </label>
                                         </div>
                                     </td>
-                                    <td>
+                                    {/* <td>
                                         <div className="custom-control custom-switch">
                                             <input
                                                 type="checkbox"
@@ -542,7 +542,7 @@ const ProdukComponent = ({ formProduk, setFormProduk }) => {
                                                     : "Tidak"}
                                             </label>
                                         </div>
-                                    </td>
+                                    </td> */}
                                     <td>
                                         <input
                                             type="checkbox"
