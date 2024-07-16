@@ -2307,7 +2307,7 @@ class ProduksiController extends Controller
         }
     }
 
-    function getSOCekBelum()
+    function getSOCekBelum($filter)
     {
         try {
 
@@ -2383,7 +2383,7 @@ class ProduksiController extends Controller
             //         ->havingRaw('sum(case when detail_pesanan_produk.status_cek is null then 1 else 0 end) != ?', ['sum(case when dpp.status_cek = 4 then 1 else 0 end)'])
             //         ->get();
             //     return response()->json($data);
-            $filter = 'semua';
+
             if ($filter == 'proses') {
                 $datax = DB::table(DB::raw('detail_pesanan_produk dpp'))
                     ->select(

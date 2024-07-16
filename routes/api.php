@@ -395,7 +395,7 @@ Route::prefix('/tfp')->group(function () {
     Route::post('noseri', [ProduksiController::class, 'getNoseri']);
     Route::get('data-so', [ProduksiController::class, 'getOutSO']);
     Route::get('sudah-dicek', [ProduksiController::class, 'getSOCek']);
-    Route::get('belum-dicek', [ProduksiController::class, 'getSOCekBelum']);
+    Route::get('belum-dicek/{value}', [ProduksiController::class, 'getSOCekBelum']);
     Route::get('detail-transfer-so/{id}', [ProduksiController::class, 'getDetailTransferSO']);
     Route::get('detail-so/{id}', [ProduksiController::class, 'getDetailSO']);
     Route::get('edit-so/{id}/{value}', [ProduksiController::class, 'getEditSO']);
