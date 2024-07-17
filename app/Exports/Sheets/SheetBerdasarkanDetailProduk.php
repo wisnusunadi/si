@@ -1143,7 +1143,8 @@ class SheetBerdasarkanDetailProduk implements WithTitle, FromView, ShouldAutoSiz
         // }
         // return view('page.penjualan.penjualan.LaporanPenjualanEx', ['data' => $data, 'header' => $header, 'seri' => $seri, 'tampilan' => $tampilan]);
 
-        return view('page.penjualan.penjualan.LaporanPenjualanExNew', ['data' => $pesanan, 'seri' => $seri]);
+        $auth = Auth::user()->Divisi->nama;
+        return view('page.penjualan.penjualan.LaporanPenjualanExNew', ['data' => $pesanan, 'seri' => $seri, 'divisi' => $auth]);
     }
     public function title(): string
     {

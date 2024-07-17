@@ -82,20 +82,12 @@
                     <td>
                         {{ $d['tgl_kontrak'] }}
                     </td>
-<<<<<<< HEAD
-=======
-                    <td>nondsb</td>
->>>>>>> 212d470ec77f171548be6c0172a200270d977985
                     <td>{{ $p['nama'] }}</td>
                     <td>{{ $p['nama_alias'] }}</td>
                     <td>
                         @if ($seri == 'seri')
                             @foreach ($p['seri'] as $s)
-<<<<<<< HEAD
                                 {{ $s['noseri'] }}
-=======
-                                {{ $s }}
->>>>>>> 212d470ec77f171548be6c0172a200270d977985
                                 @if (!$loop->last)
                                     ,
                                 @endif
@@ -103,12 +95,13 @@
                         @else
                             -
                         @endif
-<<<<<<< HEAD
                     </td>
                     <td>{{ $p['jumlah'] }}</td>
-                    <td>{{ $p['harga'] }}</td>
-                    <td>{{ $p['ongkir'] }}</td>
-                    <td>{{ $p['jumlah'] * $p['harga'] + $p['ongkir'] }}</td>
+                    @if ($divisi == 'Penjualan')
+                        <td>{{ $p['harga'] }}</td>
+                        <td>{{ $p['ongkir'] }}</td>
+                        <td>{{ $p['jumlah'] * $p['harga'] + $p['ongkir'] }}</td>
+                    @endif
                     <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
                     <td>{{ $p['jumlah_batal'] }}</td>
                     <td>
@@ -136,17 +129,6 @@
                             -
                         @endif
                     </td>
-=======
-
-                    </td>
-                    <td>{{ $p['jumlah'] }}</td>
-                    @if ($divisi == 'Penjualan')
-                        <td>{{ $p['harga'] }}</td>
-                        <td>{{ $p['ongkir'] }}</td>
-                        <td>{{ $p['jumlah'] * $p['harga'] + $p['ongkir'] }}</td>
-                    @endif
-                    <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
->>>>>>> 212d470ec77f171548be6c0172a200270d977985
                     <td>{{ $d['ket'] }}</td>
                 </tr>
             @endforeach
@@ -186,10 +168,6 @@
                     <td>
                         {{ $d['tgl_kontrak'] }}
                     </td>
-<<<<<<< HEAD
-=======
-                    <td>dsb</td>
->>>>>>> 212d470ec77f171548be6c0172a200270d977985
                     <td>{{ $p['nama'] }}</td>
                     <td>{{ $p['nama_alias'] }}</td>
                     <td>
@@ -205,23 +183,16 @@
                         @endif
                     </td>
                     <td>{{ $p['jumlah'] }}</td>
-<<<<<<< HEAD
-                    <td>{{ $p['harga'] }}</td>
-                    <td>{{ $p['ongkir'] }}</td>
-                    <td>{{ $p['jumlah'] * $p['harga'] + $p['ongkir'] }}</td>
-                    <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
-                    <td>0</td>
-                    <td>-</td>
-                    <td>0</td>
-                    <td>-</td>
-=======
                     @if ($divisi == 'Penjualan')
                         <td>{{ $p['harga'] }}</td>
                         <td>{{ $p['ongkir'] }}</td>
                         <td>{{ $p['jumlah'] * $p['harga'] + $p['ongkir'] }}</td>
                     @endif
                     <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
->>>>>>> 212d470ec77f171548be6c0172a200270d977985
+                    <td>0</td>
+                    <td>-</td>
+                    <td>0</td>
+                    <td>-</td>
                     <td>{{ $d['ket'] }}</td>
                 </tr>
             @endforeach
@@ -261,31 +232,21 @@
                     <td>
                         {{ $d['tgl_kontrak'] }}
                     </td>
-<<<<<<< HEAD
-=======
-                    <td>nondsb</td>
->>>>>>> 212d470ec77f171548be6c0172a200270d977985
                     <td>{{ $p['nama'] }}</td>
                     <td>{{ $p['nama'] }}</td>
                     <td>-</td>
                     <td>{{ $p['jumlah'] }}</td>
-<<<<<<< HEAD
-                    <td>{{ $p['harga'] }}</td>
-                    <td>0</td>
-                    <td>{{ $p['jumlah'] * $p['harga'] }}</td>
-                    <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
-                    <td>{{ $p['jumlah_batal'] }}</td>
-                    <td>-</td>
-                    <td>{{ $p['jumlah_retur'] }}</td>
-                    <td>-</td>
-=======
+
                     @if ($divisi == 'Penjualan')
                         <td>{{ $p['harga'] }}</td>
                         <td>0</td>
                         <td>{{ $p['jumlah'] * $p['harga'] }}</td>
                     @endif
                     <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
->>>>>>> 212d470ec77f171548be6c0172a200270d977985
+                    <td>{{ $p['jumlah_batal'] }}</td>
+                    <td>-</td>
+                    <td>{{ $p['jumlah_retur'] }}</td>
+                    <td>-</td>
                     <td>{{ $d['ket'] }}</td>
                 </tr>
             @endforeach
@@ -308,29 +269,20 @@
                     <td>
                         {{ $d['tgl_kontrak'] }}
                     </td>
-<<<<<<< HEAD
-=======
-                    <td>nondsb</td>
->>>>>>> 212d470ec77f171548be6c0172a200270d977985
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-<<<<<<< HEAD
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-=======
+
                     @if ($divisi == 'Penjualan')
                         <td></td>
                         <td></td>
                         <td></td>
                     @endif
->>>>>>> 212d470ec77f171548be6c0172a200270d977985
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
                     <td></td>
                 </tr>
