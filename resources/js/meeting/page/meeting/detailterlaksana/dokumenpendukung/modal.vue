@@ -101,10 +101,26 @@ export default {
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" v-if="!loading">
                     <div class="form-group row">
                         <label for="" class="col-sm-2 col-form-label">Dokumentasi</label>
                         <uploadFile :maxTotalSize="838860800" @changed="file = $event" />
+                    </div>
+                </div>
+                <div class="modal-body text-center" v-else>
+                    <div class="d-flex justify-content-center">
+                        <script
+                            src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"
+                            type="module"
+                        ></script>
+                        <dotlottie-player
+                            src="https://lottie.host/19bf105b-8bab-4166-a398-5737953bf1e0/YXTnQ5N482.json"
+                            background="transparent"
+                            speed="1"
+                            style="width: 300px; height: 300px"
+                            loop
+                            autoplay
+                        ></dotlottie-player>
                     </div>
                 </div>
                 <div class="modal-footer">
