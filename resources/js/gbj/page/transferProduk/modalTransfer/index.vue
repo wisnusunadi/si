@@ -183,7 +183,7 @@ export default {
                                         <label for="">Nomor AKN</label>
                                         <div class="card text-white" style="background-color: #DF7458;">
                                             <div class="card-body">
-                                                <span id="akn">{{ data.ekatalog?.no_paket ?? '-' }}</span>
+                                                <span id="akn">{{ data.akn ?? '-' }}</span>
                                             </div>
                                         </div>
                                     </div>

@@ -37,19 +37,20 @@ class DcController extends Controller
 
     public function pdf_coo_semua_rework(Request $request)
     {
-        $rw_produk = $request->produk;
+        //  dd($request->all());
+        //  $rw_produk = $request->produk;
         $jenis = $request->jenis;
         $stamp = $request->stamp;
         $penjualan = $request->penjualan;
 
-        // $rw_produk = 1;
+        $rw_produk = 2;
         // $penjualan = 'ekatalog';
         // $jenis = 'kosong';
         // $stamp = 1;
 
 
         $series = explode(',', $request->id);
-        if ($rw_produk > 0) {
+        if ($rw_produk == 1) {
             $pesanan = Pesanan::select('pesanan.id')
                 ->leftJoin('detail_pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
                 ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
@@ -953,7 +954,7 @@ class DcController extends Controller
                     ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
             }])->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
-            ->whereYear('created_at',$years)
+            ->whereYear('created_at', $years)
             ->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->get();
 
         return datatables()->of($data)

@@ -5096,11 +5096,11 @@ class LogistikController extends Controller
     {
         $nopo = str_replace("!", "/", $po);
         $dataprd = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($nopo) {
-            $q->where('Pesanan.no_po', $nopo);
+            $q->where('pesanan.no_po', $nopo);
         })->get();
 
         $datapart = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistikPart.DetailPesananPart.Pesanan', function ($q) use ($nopo) {
-            $q->where('Pesanan.no_po', $nopo);
+            $q->where('pesanan.no_po', $nopo);
         })->get();
 
         $data = $dataprd->merge($datapart);
@@ -5346,7 +5346,6 @@ class LogistikController extends Controller
 
     public function create_logistik_draft(Request $request)
     {
-
         $items = array();
 
         if (isset($request->part)) {
@@ -5412,7 +5411,7 @@ class LogistikController extends Controller
                     if ($item["penjualan_produk_id"] == 183) {
                         $adaptor = true;
                     }
-                    if ($item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363) {
+                    if ($item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363 || $item["penjualan_produk_id"] == 446) {
                         $tas = true;
                     }
                 }
@@ -5450,7 +5449,7 @@ class LogistikController extends Controller
             if ($tas) {
                 $itemIndex = array();
                 foreach ($produk as $index => $item) {
-                    if ($item['penjualan_produk_id'] === "5" || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363) {
+                    if ($item['penjualan_produk_id'] === "5" || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363 || $item["penjualan_produk_id"] == 446) {
                         $itemIndex[] = $index;
                         // break;
                     }

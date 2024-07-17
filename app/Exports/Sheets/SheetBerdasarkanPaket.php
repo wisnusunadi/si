@@ -21,7 +21,11 @@ use App\Models\TblSiswa;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Illuminate\Contracts\View\View;
+<<<<<<< HEAD
 use Illuminate\Support\Carbon;
+=======
+use Illuminate\Support\Facades\Auth;
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -159,9 +163,12 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
         $distributor = $this->distributor;
         $x = explode(',', $this->jenis_penjualan);
 
+<<<<<<< HEAD
         $tanggal_awal = $tanggal_awal . ' 00:00:01';
         $tanggal_akhir = $tanggal_akhir . ' 23:59:00';
 
+=======
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
         if ($distributor == 'semua') {
             if ($x == ['ekatalog', 'spa', 'spb']) {
                 //GET PESANAN
@@ -620,7 +627,11 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
             ->get();
 
         //GET NOSERI
+<<<<<<< HEAD
         $noseri = NoseriBarangJadi::select('detail_pesanan.id as id', 'detail_pesanan.penjualan_produk_id', 'noseri')
+=======
+        $noseri = NoseriBarangJadi::select('detail_pesanan.id as id', 'detail_pesanan.penjualan_produk_id', 'noseri', 'detail_pesanan.pesanan_id as p_id')
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
             ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
             ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
             ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 't_gbj_detail.detail_pesanan_produk_id')
@@ -630,6 +641,7 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
         $noseriDsb = NoseriDsb::select('detail_pesanan_dsb.id as id', 'detail_pesanan_dsb.penjualan_produk_id', 'noseri')
             ->leftJoin('detail_pesanan_dsb', 'detail_pesanan_dsb.id', '=', 'noseri_dsb.detail_pesanan_dsb')
             ->whereIN('detail_pesanan_dsb.pesanan_id', $data->pluck('id')->toArray())->get();
+<<<<<<< HEAD
 
         $noseriBatal = RiwayatBatalPoSeri::select('detail_pesanan.id as id', 'detail_pesanan.penjualan_produk_id', 'noseri_barang_jadi.noseri')
             ->leftJoin('noseri_barang_jadi', 'noseri_barang_jadi.id', '=', 'riwayat_batal_po_seri.noseri_id')
@@ -645,6 +657,8 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
             ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'riwayat_retur_po_paket.detail_pesanan_id')
             ->whereIN('detail_pesanan.pesanan_id', $data->pluck('id')->toArray())->get();
 
+=======
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
 
         //GET SPAREPART
         $detail_pesanan_part = DetailPesananPart::select(
@@ -669,11 +683,18 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
             FROM riwayat_batal_po_part
             WHERE riwayat_batal_po_part.detail_pesanan_part_id = detail_pesanan_part.id) AS jumlah_batal'),
         )
+<<<<<<< HEAD
             //   ->selectRaw('"0" AS jumlah_batal')
             ->selectRaw('"0" AS jumlah_retur')
             ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
             ->whereIN('detail_pesanan_part.pesanan_id', $data->pluck('id')->toArray())->get();
 
+=======
+            ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+            ->whereIN('detail_pesanan_part.pesanan_id', $data->pluck('id')->toArray())->get();
+
+
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
         //GET DETAIL PESANAN DSB
         $detail_pesanan_dsb = DetailPesananDsb::select(
             'detail_pesanan_dsb.id',
@@ -695,8 +716,11 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
         WHERE dp.pesanan_id = detail_pesanan_dsb.pesanan_id
         AND dp.penjualan_produk_id = detail_pesanan_dsb.penjualan_produk_id) AS ongkir')
         )
+<<<<<<< HEAD
             ->selectRaw('"0" AS jumlah_batal')
             ->selectRaw('"0" AS jumlah_retur')
+=======
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
             ->leftJoin('penjualan_produk', 'penjualan_produk.id', '=', 'detail_pesanan_dsb.penjualan_produk_id')
             ->whereIN('detail_pesanan_dsb.pesanan_id', $data->pluck('id')->toArray())->get();
 
@@ -730,14 +754,44 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
         WHERE riwayat_retur_po_paket.detail_pesanan_id = detail_pesanan.id
         ) AS jumlah_retur')
         )
+<<<<<<< HEAD
+=======
+            ->selectRaw("CONCAT(detail_pesanan.pesanan_id, '-', detail_pesanan.penjualan_produk_id) AS combined_value")
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
             ->leftJoin('penjualan_produk', 'penjualan_produk.id', '=', 'detail_pesanan.penjualan_produk_id')
             ->whereIN('detail_pesanan.pesanan_id', $data->pluck('id')->toArray())->get();
 
         //GROUP DATA
+<<<<<<< HEAD
         $groupedDataSeri = collect($noseri)->groupBy('id');
         $groupedDataSeriDsb = collect($noseriDsb)->groupBy('id');
         $groupedDataSeriBatal = collect($noseriBatal)->groupBy('id');
         $groupedDataSeriRetur = collect($noseriRetur)->groupBy('id');
+=======
+
+        foreach ($noseri as $item) {
+            $key = $item['p_id'] . '-' . $item['penjualan_produk_id'];
+
+            if (!isset($groupedDataSeri[$key])) {
+                $groupedDataSeri[$key] = [
+                    'id' => $item['id'],
+                    'p_id' => $key,
+                    'data' => []
+                ];
+            }
+
+            $groupedDataSeri[$key]['data'][] = $item['noseri'];
+        }
+
+        foreach ($groupedDataSeri as $g) {
+            $noseri_group[] = array(
+                "p_id" => $g['p_id'],
+                "data" => $g['data']
+            );
+        }
+        // $groupedDataSeri = collect($noseri)->groupBy('id');
+        $groupedDataSeriDsb = collect($noseriDsb)->groupBy('id');
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
         $groupedDataPrd = collect($detail_pesanan)->groupBy('pesanan_id');
         $groupedDataPrdDsb = collect($detail_pesanan_dsb)->groupBy('pesanan_id');
         $groupedDataPart = collect($detail_pesanan_part)->groupBy('pesanan_id');
@@ -749,7 +803,15 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
         }
 
         //GROUP BY REF ID
-        $noseri_group = $groupedDataSeri->map(function ($items, $key) {
+        // $noseri_group = $groupedDataSeri->map(function ($items, $key) {
+        //     $uniqueItems = $items->unique('noseri')->values()->all();
+        //     return [
+        //         'id' => $key,
+        //         'data' => $uniqueItems,
+        //     ];
+        // })->values()->all();
+
+        $noseri_groupDsb = $groupedDataSeriDsb->map(function ($items, $key) {
             $uniqueItems = $items->unique('noseri')->values()->all();
             return [
                 'id' => $key,
@@ -812,9 +874,15 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
 
 
         //SET NOSERI TO INDEX
-        $seriByID = [];
-        foreach ($noseri_group as $seriItem) {
-            $seriByID[$seriItem['id']] = $seriItem['data'];
+        // $seriByID = [];
+        // foreach ($noseri_group as $seriItem) {
+        //     $seriByID[$seriItem['id']] = $seriItem['data'];
+        // }
+
+        //SET NOSERI TO INDEX
+        $seriDsbByID = [];
+        foreach ($noseri_groupDsb as $seriItem) {
+            $seriDsbByID[$seriItem['id']] = $seriItem['data'];
         }
 
         $seriDsbByID = [];
@@ -837,6 +905,7 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
         //SET INDEX NOSERI TO DETAIL PESANAN
         foreach ($detail_pesanan_group as $key => $pesananItem) {
             foreach ($pesananItem['data'] as $keys => $p) {
+<<<<<<< HEAD
                 $pesananID = $p['id'];
                 if (isset($seriByID[$pesananID])) {
                     $detail_pesanan_group[$key]['data'][$keys]['seri'] = $seriByID[$pesananID];
@@ -855,6 +924,15 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
                 } else {
                     $detail_pesanan_group[$key]['data'][$keys]['seri_retur'] = [];
                 }
+=======
+                $pesananID = $p['combined_value'];
+                $find = collect($noseri_group)->where('p_id', $pesananID)->first();
+                if ($find) {
+                    $detail_pesanan_group[$key]['data'][$keys]['seri'] = $find['data'];
+                } else {
+                    $detail_pesanan_group[$key]['data'][$keys]['seri'] = [];
+                }
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
             }
         }
 
@@ -1003,9 +1081,14 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
         }
 
 
+        $auth = Auth::user()->Divisi->nama;
 
+<<<<<<< HEAD
 
         return view('page.penjualan.penjualan.LaporanPenjualanPaketExNew', ['data' => $pesanan, 'seri' => $seri]);
+=======
+        return view('page.penjualan.penjualan.LaporanPenjualanPaketExNew', ['data' => $pesanan, 'seri' => $seri, 'divisi' => $auth]);
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
     }
 
 

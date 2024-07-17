@@ -41,13 +41,14 @@
     {{-- ulangi 5 kali --}}
     {{-- large --}}
     @foreach ($seri as $s)
-    <div class="image-container">
-        <span>Elitech</span><br>
-        <img
-            src="data:image/png;base64,{{ base64_encode($generator->getBarcode($s, $generator::TYPE_CODE_128_B, 2, 29)) }}" />
-        <div class="text-center">{{ $s }}</div>
-    </div>
+        <div class="image-container">
+            <span>Elitechs</span><br>
+            <img
+                src="data:image/png;base64,{{ base64_encode($generator->getBarcode($s, $generator::TYPE_CODE_128_B, 2, 29)) }}" />
+            <div class="text-center">{{ $s }}</div>
+        </div>
     @endforeach
 
 </body>
+
 </html>

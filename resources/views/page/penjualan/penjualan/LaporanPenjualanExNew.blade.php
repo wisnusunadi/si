@@ -8,7 +8,11 @@
     <thead>
         <tr>
             <th colspan="22" style="text-align:center">
+<<<<<<< HEAD
 
+=======
+                Laporan Penjualan {{ $divisi }}
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
             </th>
         </tr>
         <tr>
@@ -25,11 +29,16 @@
             <th>Satuan</th>
             <th>Tanggal Pesan</th>
             <th>Batas Kontrak</th>
+<<<<<<< HEAD
+=======
+            <th>Jenis</th>
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
             <th>Produk</th>
             <th>Produk (E-purchasing)</th>
             <th>Detail Produk</th>
             <th>No Seri</th>
             <th>Jumlah</th>
+<<<<<<< HEAD
             <th>Harga</th>
             <th>Ongkir</th>
             <th>Subtotal</th>
@@ -38,6 +47,14 @@
             <th>No Seri (Batal)</th>
             <th>Jumlah Retur</th>
             <th>No Seri (Retur)</th>
+=======
+            @if ($divisi == 'Penjualan')
+                <th>Harga</th>
+                <th>Ongkir</th>
+                <th>Subtotal</th>
+            @endif
+            <th>Status AKN</th>
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
             <th>Keterangan</th>
         </tr>
     </thead>
@@ -75,6 +92,7 @@
                     <td>{{ $d['alamat_instansi'] }}</td>
                     <td>{{ $d['satuan'] }}</td>
                     <td>
+<<<<<<< HEAD
                         @if ($d['tgl_buat'] != '-')
                             {{ date('d-m-Y', strtotime($d['tgl_buat'])) }}
                         @endif
@@ -84,6 +102,14 @@
                             {{ date('d-m-Y', strtotime($d['tgl_kontrak'])) }}
                         @endif
                     </td>
+=======
+                        {{ $d['tgl_buat'] }}
+                    </td>
+                    <td>
+                        {{ $d['tgl_kontrak'] }}
+                    </td>
+                    <td>nondsb</td>
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
                     <td>{{ $p['nama'] }}</td>
                     <td>{{ $p['nama_alias'] }}</td>
                     <td>{{ $p['item'] }}</td>
@@ -100,6 +126,7 @@
                         @endif
                     </td>
                     <td>{{ $p['jumlah'] }}</td>
+<<<<<<< HEAD
                     <td>{{ $p['harga'] }}</td>
                     <td>{{ $p['ongkir'] }}</td>
                     <td>{{ $p['jumlah'] * $p['harga'] + $p['ongkir'] }}</td>
@@ -130,6 +157,14 @@
                             -
                         @endif
                     </td>
+=======
+                    @if ($divisi == 'Penjualan')
+                        <td>{{ $p['harga'] }}</td>
+                        <td>{{ $p['ongkir'] }}</td>
+                        <td>{{ $p['jumlah'] * $p['harga'] + $p['ongkir'] }}</td>
+                    @endif
+                    <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
                     <td>{{ $d['ket'] }}</td>
                 </tr>
             @endforeach
@@ -164,6 +199,7 @@
                     <td>{{ $d['alamat_instansi'] }}</td>
                     <td>{{ $d['satuan'] }}</td>
                     <td>
+<<<<<<< HEAD
                         @if ($d['tgl_buat'] != '-')
                             {{ date('d-m-Y', strtotime($d['tgl_buat'])) }}
                         @endif
@@ -173,10 +209,19 @@
                             {{ date('d-m-Y', strtotime($d['tgl_kontrak'])) }}
                         @endif
                     </td>
+=======
+                        {{ $d['tgl_buat'] }}
+                    </td>
+                    <td>
+                        {{ $d['tgl_kontrak'] }}
+                    </td>
+                    <td>dsb</td>
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
                     <td>{{ $p['nama'] }}</td>
                     <td>{{ $p['nama_alias'] }}</td>
                     <td>{{ $p['item'] }}</td>
                     <td>
+<<<<<<< HEAD
                         @if ($seri == 'seri')
                             @foreach ($p['seri'] as $s)
                                 {{ $s['noseri'] }}
@@ -197,6 +242,18 @@
                     <td>-</td>
                     <td>0</td>
                     <td>-</td>
+=======
+
+                        -
+                    </td>
+                    <td>{{ $p['jumlah'] }}</td>
+                    @if ($divisi == 'Penjualan')
+                        <td>{{ $p['harga'] }}</td>
+                        <td>{{ $p['ongkir'] }}</td>
+                        <td>{{ $p['jumlah'] * $p['harga'] + $p['ongkir'] }}</td>
+                    @endif
+                    <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
                     <td>{{ $d['ket'] }}</td>
                 </tr>
             @endforeach
@@ -231,6 +288,7 @@
                     <td>{{ $d['alamat_instansi'] }}</td>
                     <td>{{ $d['satuan'] }}</td>
                     <td>
+<<<<<<< HEAD
                         @if ($d['tgl_buat'] != '-')
                             {{ date('d-m-Y', strtotime($d['tgl_buat'])) }}
                         @endif
@@ -253,6 +311,25 @@
                     <td>-</td>
                     <td>{{ $p['jumlah_retur'] }}</td>
                     <td>-</td>
+=======
+                        {{ $d['tgl_buat'] }}
+                    </td>
+                    <td>
+                        {{ $d['tgl_kontrak'] }}
+                    </td>
+                    <td>nondsb</td>
+                    <td>{{ $p['nama'] }}</td>
+                    <td>{{ $p['nama'] }}</td>
+                    <td>-</td>
+                    <td>{{ $p['item'] }}</td>
+                    <td>{{ $p['jumlah'] }}</td>
+                    @if ($divisi == 'Penjualan')
+                        <td>{{ $p['harga'] }}</td>
+                        <td>0</td>
+                        <td>{{ $p['jumlah'] * $p['harga'] }}</td>
+                    @endif
+                    <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
                     <td>{{ $d['ket'] }}</td>
                 </tr>
             @endforeach
@@ -270,6 +347,7 @@
                     <td>{{ $d['alamat_instansi'] }}</td>
                     <td>{{ $d['satuan'] }}</td>
                     <td>
+<<<<<<< HEAD
                         @if ($d['tgl_buat'] != '-' || $d['tgl_buat'] != null || $d['tgl_buat'] != '')
                             {{ date('d-m-Y', strtotime($d['tgl_buat'])) }}
                         @endif
@@ -279,6 +357,19 @@
                             {{ date('d-m-Y', strtotime($d['tgl_kontrak'])) }}
                         @endif
                     </td>
+=======
+                        {{ $d['tgl_buat'] }}
+                    </td>
+                    <td>
+                        {{ $d['tgl_kontrak'] }}
+                    </td>
+                    <td>nondsb</td>
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+<<<<<<< HEAD
                     <td></td>
                     <td></td>
                     <td></td>
@@ -286,10 +377,13 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+=======
+                    @if ($divisi == 'Penjualan')
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    @endif
+>>>>>>> 212d470ec77f171548be6c0172a200270d977985
                     <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
                     <td></td>
                 </tr>
