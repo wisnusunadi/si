@@ -116,8 +116,8 @@ export default {
         async save() {
             // kalkulasi limit upload file total 800mb
             let totalSize = 0;
-            for (let i = 0; i < this.file.length; i++) {
-                totalSize += this.file[i].size;
+            for (let i = 0; i < this.form.hasil.length; i++) {
+                totalSize += this.form.hasil[i].size;
             }
 
             if (totalSize > 800000000) { // satuan byte
