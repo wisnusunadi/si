@@ -186,7 +186,8 @@ export default {
                 );
                 return;
             } else {
-                this.detailSelected.noseri = noseriarray;
+                this.detailSelected.noseri_selected = noseriarray;
+                this.detailSelected.jumlah_noseri = noseriarray.length;
 
                 this.searchProduk = "&";
                 this.$nextTick(() => {
@@ -323,7 +324,13 @@ export default {
                     this.$set(this.form, "pengiriman_surat_jalan", "nonekspedisi");
                     this.$delete(this.form, "ekspedisi");
                 }
-                this.produk = this.pesanan.item.produk;
+                this.produk = this.pesanan.item.produk.map((item) => {
+                    return {
+                        ...item,
+                        jumlah_noseri: item.noseri?.length ?? 0,
+                        noseri_selected: [],
+                    };
+                });
                 this.partJasa = this.pesanan.item.part;
             },
             deep: true,
@@ -351,16 +358,20 @@ export default {
         "form.pengiriman_surat_jalan": {
             handler(val) {
                 if (val === "ekspedisi") {
-                    delete this.form.nama_pengirim;
+                    this.$delete(this.form, "nama_pengirim");
                     if (this.pesanan?.header?.ekspedisi) {
-                        this.form.ekspedisi = {
-                            id: this.pesanan?.header?.ekspedisi?.id,
-                            label: this.pesanan?.header?.ekspedisi?.nama,
-                        };
+                        this.$set(
+                            this.form,
+                            "ekspedisi",
+                            {
+                                id: this.pesanan?.header?.ekspedisi?.id,
+                                label: this.pesanan?.header?.ekspedisi?.nama,
+                            }
+                        );
                     }
                 } else {
-                    delete this.form.ekspedisi;
-                    this.form.nama_pengirim = "";
+                    this.$delete(this.form, "ekspedisi");
+                    this.$set(this.form, "nama_pengirim", "");
                 }
             },
             deep: true,
