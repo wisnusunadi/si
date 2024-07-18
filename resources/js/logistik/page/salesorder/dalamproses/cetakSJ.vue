@@ -276,31 +276,13 @@ export default {
                             `/logistik/pengiriman/prints/${res.data.id}`,
                             "_blank"
                         );
-                        this.getPesanan();
-                        // reset form
-                        this.form = {
-                            nama_pic: "",
-                            telp_pic: "",
-                            jenis_sj: "SPA-",
-                            no_invoice: "",
-                            tgl_kirim: "",
-                            pengiriman_surat_jalan: "ekspedisi",
-                            ekspedisi_terusan: "",
-                            pilihan_pengiriman: "penjualan",
-                            perusahaan_pengiriman: "",
-                            alamat_pengiriman: "",
-                            kemasan: "nonpeti",
-                            dimensi: "",
-                            keterangan_pengiriman: "",
-                        };
+                    }).catch((err) => {
+                        this.$swal(
+                            "Error",
+                            "Draft Surat Jalan gagal dibuat",
+                            "error"
+                        );
                     });
-                })
-                .catch((err) => {
-                    this.$swal(
-                        "Error",
-                        "Draft Surat Jalan gagal dibuat",
-                        "error"
-                    );
                 });
         },
         async editCetak(item) {

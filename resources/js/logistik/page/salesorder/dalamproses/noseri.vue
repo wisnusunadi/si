@@ -19,24 +19,24 @@ export default {
             });
         },
     },
-    // watch: {
-    //     noseriInput: {
-    //         handler(val) {
-    //             if (Array.isArray(val) && val.length > 0) {
-    //                 this.noseri = val.join("\n");
-    //             } else {
-    //                 this.noseri = "";
-    //             }
-    //         },
-    //         immediate: true,
-    //     },
-    //     noseri: {
-    //         handler(val) {
-    //             this.noseri = val.toUpperCase();
-    //         },
-    //         immediate: true,
-    //     },
-    // },
+    watch: {
+        noseriInput: {
+            handler(val) {
+                if (Array.isArray(val) && val.length > 0) {
+                    this.noseri = val.join("\n");
+                } else {
+                    this.noseri = "";
+                }
+            },
+            immediate: true,
+        },
+        noseri: {
+            handler(val) {
+                this.noseri = val.toUpperCase();
+            },
+            immediate: true,
+        },
+    },
 };
 </script>
 
