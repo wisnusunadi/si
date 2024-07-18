@@ -52,6 +52,14 @@ const EditPenjualan = () => {
     const disabledValidation = () => {
         // Cek jika jenis form adalah "ekatalog"
         if (dataEdit.jenis === "ekatalog") {
+            if (dataEdit.no_paket_awal !== null && dataEdit.no_paket_awal !== "" &&
+                (dataEdit.no_paket_akhir === null || dataEdit.no_paket_akhir === "") ||
+                dataEdit.no_paket_akhir !== null && dataEdit.no_paket_akhir !== "" &&
+                (dataEdit.no_paket_awal === null || dataEdit.no_paket_awal === "")) {
+                return true;
+            }
+                
+
             if (dataEdit.status == "draft") {
                 return false;
             }

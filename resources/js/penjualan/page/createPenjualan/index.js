@@ -36,6 +36,18 @@ const CreatePenjualan = () => {
         }
 
         if (formCustomer.jenis === "ekatalog") {
+            if (
+                (formCustomer.no_paket_awal !== null &&
+                    formCustomer.no_paket_awal !== "" &&
+                    (formCustomer.no_paket_akhir === null ||
+                        formCustomer.no_paket_akhir === "")) ||
+                (formCustomer.no_paket_akhir !== null &&
+                    formCustomer.no_paket_akhir !== "" &&
+                    (formCustomer.no_paket_awal === null ||
+                        formCustomer.no_paket_awal === ""))
+            ) {
+                return true;
+            }
             // Cek jika no_urut, status, atau produk kosong atau produk tidak ada
             if (formCustomer.status == "draft") {
                 return false;
