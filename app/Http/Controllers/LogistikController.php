@@ -365,7 +365,9 @@ class LogistikController extends Controller
     {
         $data = LogistikDraft::find($id);
 
-        return view('page.logistik.so.editsj', ['data' => $data]);
+        return response()->json($data);
+
+        // return view('page.logistik.so.editsj', ['data' => $data]);
     }
 
     public function get_data_select_produk(Request $r, $jenis)

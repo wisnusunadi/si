@@ -76,6 +76,7 @@ export default {
             checkAllPart: false,
             checkedPartSelected: [],
             showModalSeri: false,
+            showModalEditSJ: false,
             detailSelected: {},
             riwayatCetak: [],
             loading: false,
@@ -197,9 +198,11 @@ export default {
         },
         cetak() {
             // cek form apakah ada yang kosong
-            const cekFormisNotEmpty = Object.values(this.form).every(
-                (data) => data !== "" && data !== null
-            );
+            let ObjectCannotEmpty = ["no_invoice", "keterangan_pengiriman"];
+
+            let cekFormisNotEmpty = ObjectCannotEmpty.every((item) => {
+                return this.form[item];
+            });
             if (!cekFormisNotEmpty) {
                 this.$swal("Error", "Form tidak boleh kosong", "error");
                 return;
@@ -268,11 +271,29 @@ export default {
                         "Draft Surat Jalan berhasil dibuat",
                         "success"
                     );
-                    window.open(
-                        `/logistik/pengiriman/prints/${res.data.id}`,
-                        "_blank"
-                    );
-                    this.getPesanan();
+                    this.$nextTick(() => {
+                        window.open(
+                            `/logistik/pengiriman/prints/${res.data.id}`,
+                            "_blank"
+                        );
+                        this.getPesanan();
+                        // reset form
+                        this.form = {
+                            nama_pic: "",
+                            telp_pic: "",
+                            jenis_sj: "SPA-",
+                            no_invoice: "",
+                            tgl_kirim: "",
+                            pengiriman_surat_jalan: "ekspedisi",
+                            ekspedisi_terusan: "",
+                            pilihan_pengiriman: "penjualan",
+                            perusahaan_pengiriman: "",
+                            alamat_pengiriman: "",
+                            kemasan: "nonpeti",
+                            dimensi: "",
+                            keterangan_pengiriman: "",
+                        };
+                    });
                 })
                 .catch((err) => {
                     this.$swal(
@@ -288,7 +309,7 @@ export default {
                     `/api/logistik/so/sj_draft/edit/${item.id}`
                 );
                 this.detailSelected = data;
-                this.showModalSeri = true;
+                this.showModalEditSJ = true;
                 this.$nextTick(() => {
                     $(".modalCetak").modal("hide");
                     $(".modalEditSJ").modal("show");
@@ -298,7 +319,7 @@ export default {
             }
         },
         closeEditSJ() {
-            this.showModalSeri = false;
+            this.showModalEditSJ = false;
             this.$nextTick(() => {
                 $(".modalCetak").modal("show");
             });
@@ -383,7 +404,7 @@ export default {
             handler(val) {
                 this.form.keterangan_pengiriman = val.toUpperCase();
             },
-        }
+        },
     },
 };
 </script>
@@ -396,7 +417,7 @@ export default {
             @submit="submit"
         />
         <editSJ
-            v-if="showModalSeri"
+            v-if="showModalEditSJ"
             :form="detailSelected"
             @close="closeEditSJ"
             @refresh="getPesanan"
@@ -415,12 +436,12 @@ export default {
             >
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Cetak Surat Jalans</h5>
+                        <h5 class="modal-title">Cetak Surat Jalan</h5>
                         <button type="button" class="close" @click="closeModal">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" v-if="!loading">
                         <ul
                             class="nav nav-pills mb-3"
                             id="pills-tab"
@@ -453,11 +474,7 @@ export default {
                                 >
                             </li>
                         </ul>
-                        <div
-                            class="tab-content"
-                            id="pills-tabContent"
-                            v-if="!loading"
-                        >
+                        <div class="tab-content" id="pills-tabContent">
                             <div
                                 class="tab-pane fade show active"
                                 id="pills-cetak"
@@ -507,8 +524,8 @@ export default {
                                                 <label
                                                     class="col-form-label col-lg-5 col-md-12 text-right"
                                                     for="no_invoice"
-                                                    >No Surat Jalan</label
-                                                >
+                                                    >No Surat Jalan
+                                                </label>
                                                 <div class="col-lg-6 col-md-12">
                                                     <div
                                                         class="input-group mb-3 sj_baru"
@@ -841,7 +858,13 @@ export default {
                                                     Pengiriman</label
                                                 >
                                                 <div class="col-lg-7 col-md-12">
-                                                    <input type="text" class="form-control" v-model="form.keterangan_pengiriman">
+                                                    <input
+                                                        type="text"
+                                                        class="form-control"
+                                                        v-model="
+                                                            form.keterangan_pengiriman
+                                                        "
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -1048,7 +1071,9 @@ export default {
                                 />
                             </div>
                         </div>
-                        <div v-else class="d-flex justify-content-center">
+                    </div>
+                    <div class="modal-body" v-else>
+                        <div class="d-flex justify-content-center">
                             <div class="spinner-border" role="status">
                                 <span class="sr-only">Loading...</span>
                             </div>
