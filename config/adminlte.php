@@ -1141,22 +1141,22 @@ return [
             'url' => '/penjualan/customer/show',
             'auth' => [23],
         ],
-        [
-            'header' => 'INPROCESS',
-            'auth' => [23]
-        ],
-        [
-            'text' => 'Barang Masuk',
-            'icon' => 'fas fa-dolly-flatbed',
-            'url' => '/qc/incoming/show',
-            'auth' => [23],
-        ],
-        [
-            'text' => 'Riwayat Pengujian',
-            'icon' => 'fas fa-history',
-            'url' => '/qc/riwayatUji',
-            'auth' => [23]
-        ],
+        // [
+        //     'header' => 'INPROCESS',
+        //     'auth' => [23]
+        // ],
+        // [
+        //     'text' => 'Barang Masuk',
+        //     'icon' => 'fas fa-dolly-flatbed',
+        //     'url' => '/qc/incoming/show',
+        //     'auth' => [23],
+        // ],
+        // [
+        //     'text' => 'Riwayat Pengujian',
+        //     'icon' => 'fas fa-history',
+        //     'url' => '/qc/riwayatUji',
+        //     'auth' => [23]
+        // ],
         [
             'header' => 'OUTGOING',
             'auth' => [23]
@@ -1425,12 +1425,12 @@ return [
             'icon' => 'fas fa-book-open',
             'auth' => [13, 31],
         ],
-        [
-            'text' => 'Penggantian Unit',
-            'url' => '/gbj/changeunit',
-            'icon' => 'fas fa-retweet',
-            'auth' => [13, 31],
-        ],
+        // [
+        //     'text' => 'Penggantian Unit',
+        //     'url' => '/gbj/changeunit',
+        //     'icon' => 'fas fa-retweet',
+        //     'auth' => [13, 31],
+        // ],
         [
             'text' => 'Sales Order',
             'url' => '/produksi/so',
