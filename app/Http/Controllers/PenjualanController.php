@@ -2666,36 +2666,36 @@ class PenjualanController extends Controller
 
             'tgl_kontrak_custom' => function ($q) {
                 $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
-                    ->from('ekatalog as e')
-                    ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
-                    ->whereColumn('e.id', 'ekatalog.id')
-                    ->limit(1);
+                ->from('ekatalog as e')
+                ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+                ->whereColumn('e.id', 'ekatalog.id')
+                ->limit(1);
             },
             'ckirimprd' => function ($q) {
                 $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
-                    ->from('noseri_logistik')
-                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                ->from('noseri_logistik')
+                ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
             },
             'cjumlahprd' => function ($q) {
                 $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
-                    ->from('detail_pesanan')
-                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
-                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
-                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                ->from('detail_pesanan')
+                ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
             },
             'ckirimpart' => function ($q) {
                 $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
-                    ->from('detail_logistik_part')
-                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
-                    ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
+                ->from('detail_logistik_part')
+                ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
             },
             'cjumlahpart' => function ($q) {
                 $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
-                    ->from('detail_pesanan_part')
-                    ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
+                ->from('detail_pesanan_part')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
             }
 
         ])->where('id', $value)->first();
@@ -2746,33 +2746,7 @@ class PenjualanController extends Controller
                 $tgl_kontrak = Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
             }
         }
-
-        $produk = array();
-
-
-        if ($data->Pesanan->detailpesanandsb) {
-            $produk = $data->Pesanan->detailpesanandsb->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'nama_produk' => $item->PenjualanProduk->nama,
-                    'is_stok_distributor' => $item->is_stok_distributor,
-                    'jumlah' => $item->jumlah,
-                    'harga' => $item->harga,
-                    'ongkir' => $item->ongkir,
-                    'jenis' => 'paket',
-                    'detail_produk' => $item->detailproduk->map(function ($detail) {
-                        return [
-                            'id' => $detail->id,
-                            'nama_produk' => $detail->GudangBarangJadi->nama,
-                            'jenis' => 'variasi',
-                            'jumlah' => $detail->getJumlahPesanan(),
-                        ];
-                    })
-                ];
-            });
-        } else {
-            $produk = '-';
-        }
+        return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data, 'status' => $status, 'tgl_kontrak' => $tgl_kontrak]);
     }
 
     public function get_data_detail_ekatalog_ppic($id)
