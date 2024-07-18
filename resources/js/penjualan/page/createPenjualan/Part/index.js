@@ -8,7 +8,7 @@ import { getPart } from "../../../service/create";
 import MenuList from "./menuList";
 import Option from "./option";
 
-const PartComponent = ({ formPart, setFormPart }) => {
+const PartComponent = ({ formPart, setFormPart, dataCopy }) => {
     const [part, setPart] = useState([]);
 
     const fetchData = async () => {
@@ -60,18 +60,25 @@ const PartComponent = ({ formPart, setFormPart }) => {
 
     useEffect(() => {
         if (formPart.barang.includes("sparepart")) {
-            const sparepart = formPart.sparepart ?? [
-                {
-                    sparepart_id: null,
-                    harga: 0,
-                    jumlah: 0,
-                    pajak: true,
-                },
-            ];
-            setFormPart({
-                ...formPart,
-                sparepart,
-            });
+            if (dataCopy?.sparepart !== undefined) {
+                setFormPart({
+                    ...formPart,
+                    sparepart: dataCopy.sparepart,
+                });
+            } else {
+                const sparepart = formPart.sparepart ?? [
+                    {
+                        sparepart_id: null,
+                        harga: 0,
+                        jumlah: 0,
+                        pajak: true,
+                    },
+                ];
+                setFormPart({
+                    ...formPart,
+                    sparepart,
+                });
+            }
         } else {
             setFormPart((prevFormPart) => {
                 const { part, ...newFormPart } = prevFormPart;

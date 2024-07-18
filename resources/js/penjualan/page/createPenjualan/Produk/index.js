@@ -7,7 +7,7 @@ import { getProduk, getVariasi } from "../../../service/create";
 import "./style.css";
 import Editor from "react-simple-wysiwyg";
 
-const ProdukComponent = ({ formProduk, setFormProduk }) => {
+const ProdukComponent = ({ formProduk, setFormProduk, dataCopy }) => {
     const [dataProduk, setDataProduk] = useState([]);
     const [isCheckedAll, setIsCheckedAll] = useState(false);
     const [detailProduk, setDetailProduk] = useState(null);
@@ -230,20 +230,27 @@ const ProdukComponent = ({ formProduk, setFormProduk }) => {
 
     useEffect(() => {
         if (formProduk.isi_produk && formProduk.barang.includes("produk")) {
-            const produk = formProduk.produk ?? [
-                {
-                    jumlah: 0,
-                    harga: 0,
-                    ongkir: 0,
-                    pajak: true,
-                    kalibrasi: false,
-                    stok_distributor: "nondsb",
-                },
-            ];
-            setFormProduk({
-                ...formProduk,
-                produk,
-            });
+            if (dataCopy?.produk !== undefined) {
+                setFormProduk({
+                    ...formProduk,
+                    produk: dataCopy.produk,
+                });
+            } else {
+                const produk = formProduk.produk ?? [
+                    {
+                        jumlah: 0,
+                        harga: 0,
+                        ongkir: 0,
+                        pajak: true,
+                        kalibrasi: false,
+                        stok_distributor: "nondsb",
+                    },
+                ];
+                setFormProduk({
+                    ...formProduk,
+                    produk,
+                });
+            }
         } else {
             setFormProduk((prevFormProduk) => {
                 const { produk, ...newFormProduk } = prevFormProduk;

@@ -73,12 +73,15 @@ const Instansi = ({ formAKN, setFormAKN }) => {
                     <div className="col-5">
                         <AutoComplete
                             value={formAKN.satuan_kerja ?? ""}
-                            onChange={(e) =>
-                                setFormAKN({
-                                    ...formAKN,
-                                    satuan_kerja: e.target.value,
-                                })
-                            }
+                            onChange={(e) => {
+                                const newFormAKN = { ...formAKN };
+                                newFormAKN.satuan_kerja = e.target.value;
+
+                                if (formAKN.alamat_pengiriman == "instansi") {
+                                    newFormAKN.nama_perusahaan = e.target.value;
+                                }
+                                setFormAKN(newFormAKN);
+                            }}
                             data={satuanKerja}
                         />
                     </div>
@@ -89,12 +92,16 @@ const Instansi = ({ formAKN, setFormAKN }) => {
                         <AutoComplete
                             type="textarea"
                             value={formAKN.alamat_instansi ?? ""}
-                            onChange={(e) =>
-                                setFormAKN({
-                                    ...formAKN,
-                                    alamat_instansi: e.target.value,
-                                })
-                            }
+                            onChange={(e) => {
+                                const newFormAKN = { ...formAKN };
+                                newFormAKN.alamat_instansi = e.target.value;
+
+                                if (formAKN.alamat_pengiriman == "instansi") {
+                                    newFormAKN.alamat_perusahaan =
+                                        e.target.value;
+                                }
+                                setFormAKN(newFormAKN);
+                            }}
                             data={alamatInstansi}
                         />
                     </div>

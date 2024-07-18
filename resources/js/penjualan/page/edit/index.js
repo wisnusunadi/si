@@ -21,6 +21,7 @@ const EditPenjualan = () => {
     const [periodePenjualan, setPeriodePenjualan] = useState(null);
     const { id } = useParams();
     const [dataEdit, setDataEdit] = useState(null);
+    const [dataCopy, setDataCopy] = useState(null);
 
     const getData = async () => {
         const response = await getPenjualanById(id);
@@ -38,6 +39,7 @@ const EditPenjualan = () => {
                     : false,
         };
         setDataEdit(penjualanData);
+        setDataCopy(penjualanData);
 
         const { data } = await getYears();
         setPeriodePenjualan(data);
@@ -194,13 +196,15 @@ const EditPenjualan = () => {
                                         <ProdukComponent
                                             formProduk={dataEdit}
                                             setFormProduk={setDataEdit}
+                                            dataCopy={dataCopy}
                                         />
                                     )}
                                 {dataEdit &&
                                     dataEdit?.barang?.includes("sparepart") && (
                                         <PartComponent
                                             formPart={dataEdit}
-                                            setFormPart={setDataEdit}
+                                        setFormPart={setDataEdit}
+                                        dataCopy={dataCopy}
                                         />
                                     )}
 
@@ -208,7 +212,8 @@ const EditPenjualan = () => {
                                     dataEdit?.barang?.includes("jasa") && (
                                         <JasaComponent
                                             formJasa={dataEdit}
-                                            setFormJasa={setDataEdit}
+                                        setFormJasa={setDataEdit}
+                                        dataCopy={dataCopy}
                                         />
                                     )}
 
