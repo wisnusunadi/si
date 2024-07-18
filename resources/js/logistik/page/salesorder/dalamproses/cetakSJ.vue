@@ -28,7 +28,7 @@ export default {
                 alamat_pengiriman: "",
                 kemasan: "nonpeti",
                 dimensi: "",
-                keterangan_pengiriman: "bayar_tujuan",
+                keterangan_pengiriman: "",
             },
             ekspedisi: [],
             headersProduk: [
@@ -378,6 +378,12 @@ export default {
             },
             deep: true,
         },
+        "form.keterangan_pengiriman": {
+            // change to uppercase
+            handler(val) {
+                this.form.keterangan_pengiriman = val.toUpperCase();
+            },
+        }
     },
 };
 </script>
@@ -385,7 +391,7 @@ export default {
     <div>
         <seriviatext
             v-if="showModalSeri"
-            :noseriInput="detailSelected?.noseri"
+            :noseriInput="detailSelected?.noseri_selected"
             @close="closeNoSeri"
             @submit="submit"
         />
@@ -835,28 +841,7 @@ export default {
                                                     Pengiriman</label
                                                 >
                                                 <div class="col-lg-7 col-md-12">
-                                                    <select
-                                                        v-model="
-                                                            form.keterangan_pengiriman
-                                                        "
-                                                        class="form-control"
-                                                    >
-                                                        <option
-                                                            value="bayar_tujuan"
-                                                        >
-                                                            BAYAR TUJUAN
-                                                        </option>
-                                                        <option
-                                                            value="bayar_sinko"
-                                                        >
-                                                            BAYAR SINKO
-                                                        </option>
-                                                        <option
-                                                            value="non_bayar"
-                                                        >
-                                                            NON BAYAR
-                                                        </option>
-                                                    </select>
+                                                    <input type="text" class="form-control" v-model="form.keterangan_pengiriman">
                                                 </div>
                                             </div>
                                         </div>
@@ -969,7 +954,7 @@ export default {
                                                         #item.noseri="{ item }"
                                                     >
                                                         {{
-                                                            item.noseri
+                                                            item.noseri_selected
                                                                 ?.length ?? 0
                                                         }}
                                                     </template>
