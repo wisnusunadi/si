@@ -5346,6 +5346,7 @@ class LogistikController extends Controller
 
     public function create_logistik_draft(Request $request)
     {
+
         $items = array();
 
         if (isset($request->part)) {
@@ -5372,6 +5373,7 @@ class LogistikController extends Controller
 
         // $items = $parts;
         if (isset($request->produk)) {
+
             // dd($request->produk);
             // foreach($request->produk as $key_pr => $i){
             //     $produk[$key_pr]= array(
@@ -5388,6 +5390,7 @@ class LogistikController extends Controller
             $tas = false;
             $adaptor = false;
             foreach ($request->produk as $item) {
+
                 $id = $item["detail_pesanan_id"];
                 $nama_paket = $item["nama_alias"];
                 if ($item["jumlah_noseri"] == 0) {
@@ -5517,7 +5520,7 @@ class LogistikController extends Controller
             "no_po" => $request->dataform['no_po'],
             "so" => $request->dataform['so'],
             "tgl_po" => $request->dataform['tgl_po'],
-            "ekspedisi" => $request->dataform['pengiriman_surat_jalan'] == 'ekspedisi' ? $request->dataform['ekspedisi']['nama'] : $request->dataform['nama_pengirim'],
+            "ekspedisi" => $request->dataform['pengiriman_surat_jalan'] == 'ekspedisi' ? $request->dataform['ekspedisi']['label'] : $request->dataform['nama_pengirim'],
             "keterangan_pengiriman" => $request->dataform['keterangan_pengiriman'],
             "up" => (isset($request->dataform['nama_pic']) ? $request->dataform['nama_pic'] : ""
             ) . (isset($request->dataform['telp_pic']) ? (isset($request->dataform['nama_pic']) ? " - telp. " : "telp. "
