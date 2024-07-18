@@ -156,9 +156,7 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
 
                                     newFormAKN.status = e.target.value;
                                     newFormAKN.isi_produk = true;
-                                    newFormAKN.is_no_paket_disabled = isEdit
-                                        ? true
-                                        : false;
+                                    newFormAKN.is_no_paket_disabled = false;
 
                                     if (isEdit) {
                                         newFormAKN.barang = ["produk"];
@@ -187,9 +185,7 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
 
                                     newFormAKN.status = e.target.value;
                                     newFormAKN.isi_produk = true;
-                                    newFormAKN.is_no_paket_disabled = isEdit
-                                        ? true
-                                        : false;
+                                    newFormAKN.is_no_paket_disabled = false;
                                     newFormAKN.tgl_delivery = "";
 
                                     if (isEdit) {
@@ -219,9 +215,7 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
 
                                     newFormAKN.status = e.target.value;
                                     newFormAKN.isi_produk = false;
-                                    newFormAKN.is_no_paket_disabled = isEdit
-                                        ? true
-                                        : false;
+                                    newFormAKN.is_no_paket_disabled = false;
                                     newFormAKN.tgl_delivery = "";
 
                                     if (newFormAKN.produk !== undefined) {

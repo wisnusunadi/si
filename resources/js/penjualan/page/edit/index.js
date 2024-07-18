@@ -31,7 +31,7 @@ const EditPenjualan = () => {
             id: id,
             is_customer_diketahui: response.customer_id ? true : false,
             delivery_order: response.tgl_do ? true : false,
-            is_no_paket_disabled: response.jenis == "ekatalog" ? true : false,
+            is_no_paket_disabled: false,
             telepon: response.telepon ? response.telepon : "",
             isi_produk:
                 response.produk !== undefined && response.produk.length > 0
