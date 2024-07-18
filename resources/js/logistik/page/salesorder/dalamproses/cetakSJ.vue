@@ -321,7 +321,11 @@ export default {
                         label: this.pesanan?.header?.ekspedisi.nama,
                     });
                 } else {
-                    this.$set(this.form, "pengiriman_surat_jalan", "nonekspedisi");
+                    this.$set(
+                        this.form,
+                        "pengiriman_surat_jalan",
+                        "nonekspedisi"
+                    );
                     this.$delete(this.form, "ekspedisi");
                 }
                 this.produk = this.pesanan.item.produk.map((item) => {
@@ -357,17 +361,15 @@ export default {
         },
         "form.pengiriman_surat_jalan": {
             handler(val) {
-                if (val === "ekspedisi") {
+                if (val == "ekspedisi") {
                     this.$delete(this.form, "nama_pengirim");
                     if (this.pesanan?.header?.ekspedisi) {
-                        this.$set(
-                            this.form,
-                            "ekspedisi",
-                            {
-                                id: this.pesanan?.header?.ekspedisi?.id,
-                                label: this.pesanan?.header?.ekspedisi?.nama,
-                            }
-                        );
+                        this.$set(this.form, "ekspedisi", {
+                            id: this.pesanan?.header?.ekspedisi?.id,
+                            label: this.pesanan?.header?.ekspedisi?.nama,
+                        });
+                    } else {
+                        this.$set(this.form, "ekspedisi", "");
                     }
                 } else {
                     this.$delete(this.form, "ekspedisi");
@@ -407,7 +409,7 @@ export default {
             >
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Cetak Surat Jalan</h5>
+                        <h5 class="modal-title">Cetak Surat Jalans</h5>
                         <button type="button" class="close" @click="closeModal">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -620,7 +622,7 @@ export default {
                                                 class="form-group row"
                                                 v-if="
                                                     form.pengiriman_surat_jalan ==
-                                                    'ekspedisi' && form.ekspedisi !== undefined
+                                                    'ekspedisi'
                                                 "
                                                 id="ekspedisi"
                                             >
