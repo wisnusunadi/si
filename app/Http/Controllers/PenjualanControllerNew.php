@@ -220,7 +220,7 @@ class PenjualanControllerNew extends Controller
 
     function penjualanStoreEdit(Request $request)
     {
-
+        // dd($request->all());
         DB::beginTransaction();
         try {
             //code...
