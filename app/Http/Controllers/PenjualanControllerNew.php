@@ -92,7 +92,7 @@ class PenjualanControllerNew extends Controller
                 }
             }
             if (count($pesanan->DetailPesananPartNonJasa()) > 0) {
-                $barang[] = "part";
+                $barang[] = "sparepart";
                 foreach ($pesanan->DetailPesananPartNonJasa() as $part_nonjasa) {
                     $part[] = array(
                         'id' => $part_nonjasa->id,
