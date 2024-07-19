@@ -5348,7 +5348,6 @@ class LogistikController extends Controller
 
     public function create_logistik_draft(Request $request)
     {
-
         $items = array();
 
         if (isset($request->part)) {

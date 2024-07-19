@@ -151,7 +151,7 @@
                         <tr>
                             <td class="td-width-header">Ket. Pengiriman</td>
                             <td>:
-                               {{ $data->keterangan_pengiriman }}
+                                {{ $data->keterangan_pengiriman }}
                             </td>
                         </tr>
                         <tr>
