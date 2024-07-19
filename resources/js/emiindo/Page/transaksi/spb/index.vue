@@ -413,14 +413,7 @@ export default {
                                     aria-labelledby="dropdownMenuButton"
                                     style=""
                                 >
-                                    <a
-                                        data-toggle="modal"
-                                        data-target="ekatalog"
-                                        class="detailmodal"
-                                        data-attr="#"
-                                        data-id="5092"
-                                    >
-                                        <button
+                                    <button
                                             class="dropdown-item"
                                             type="button"
                                             @click="detail(item)"
@@ -428,23 +421,16 @@ export default {
                                             <i class="fas fa-eye"></i>
                                             Detail
                                         </button>
-                                    </a>
-                                    <a
-                                        target="_blank"
-                                        href="#"
-                                        @click="cetakSPPB(item.pesanan.id)"
-                                        v-if="item.no_po != null"
-                                    >
-                                        <button
+                                    <button
                                             class="dropdown-item"
                                             type="button"
+                                                                                    @click="cetakSPPB(item.pesanan.id)"
+                                        v-if="item.no_po != null"
                                         >
                                             <i class="fas fa-print"></i>
                                             SPPB
                                         </button>
-                                    </a>
                                     <div v-if="item.status != 'batal'">
-                                        <a target="_blank" href="#">
                                             <button
                                                 class="dropdown-item"
                                                 type="button"
@@ -458,14 +444,7 @@ export default {
                                                 ></i>
                                                 Edit
                                             </button>
-                                        </a>
-                                        <a
-                                            data-toggle="modal"
-                                            data-jenis="ekatalog"
-                                            class="editmodal"
-                                            data-id="5092"
-                                        >
-                                            <button
+                                        <button
                                                 class="dropdown-item"
                                                 type="button"
                                                 @click="openDO(item)"
@@ -476,7 +455,6 @@ export default {
                                                 ></i>
                                                 Edit DO
                                             </button>
-                                        </a>
                                         <!-- <a href="#"
                       ><button
                         class="dropdown-item openModalBatalRetur"
@@ -486,8 +464,7 @@ export default {
                         <i class="fas fa-trash"></i> Hapus
                       </button></a
                     > -->
-                                        <a href="#"
-                                            ><button
+                                        <button
                                                 class="dropdown-item openModalBatalRetur"
                                                 @click="batal(item)"
                                                 v-if="
@@ -498,10 +475,8 @@ export default {
                                             >
                                                 <i class="fas fa-times"></i>
                                                 Batal
-                                            </button></a
-                                        >
-                                        <a href="#"
-                                            ><button
+                                            </button>
+                                       <button
                                                 class="dropdown-item openModalBatalRetur"
                                                 @click="retur(item)"
                                                 v-if="item.is_retur"
@@ -511,8 +486,7 @@ export default {
                                                     class="fa-solid fa-arrow-rotate-left"
                                                 ></i>
                                                 Retur
-                                            </button></a
-                                        >
+                                            </button>
                                     </div>
                                 </div>
                             </div>
