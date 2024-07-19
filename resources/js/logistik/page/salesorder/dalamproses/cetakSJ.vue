@@ -488,7 +488,7 @@ export default {
                                             >
                                             <div class="col-lg-6 col-md-12">
                                                 <input
-                                                    type="number"
+                                                    type="text"
                                                     class="form-control"
                                                     v-model="form.telp_pic"
                                                 />

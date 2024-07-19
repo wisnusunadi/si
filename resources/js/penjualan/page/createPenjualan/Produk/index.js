@@ -146,6 +146,14 @@ const ProdukComponent = ({ formProduk, setFormProduk, dataCopy }) => {
         // change to array
         noseriArray = noseriArray.map((item) => item.trim());
 
+        let jumlahProduk = formProduk.produk[detailProduk.index].jumlah;
+        let jmlVariasi = formProduk.produk[detailProduk.index].variasi.length;
+
+        if (noseriArray.length !== jumlahProduk * jmlVariasi) {
+            swal.fire('Error', 'No Seri tidak sesuai dengan jumlah produk', 'error');
+            return;
+        }
+
         const newProduk = formProduk.produk.map((item, index) => {
             if (index === detailProduk.index) {
                 return {
