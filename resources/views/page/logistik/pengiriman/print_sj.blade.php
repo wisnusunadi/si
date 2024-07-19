@@ -69,7 +69,7 @@
 
 
     .back {
-        background-image: url("{{public_path('assets/image/spa_long.jpg') }}");
+        background-image: url("{{ public_path('assets/image/spa_long.jpg') }}");
         background-size: 100%;
         background-repeat: no-repeat;
     }
@@ -97,10 +97,10 @@
                         <tr>
                             <td style="width:10%;" class="vera">Nomor SJ</td>
                             <td style="width:2% ;" class="vera">:</td>
-                            <td class="wb">SJ.{{$data->nosurat}}</td>
+                            <td class="wb">SJ.{{ $data->nosurat }}</td>
                             <td class="align-right">
                                 {{-- Tanggal : {{App\Http\Controllers\LogistikController::tgl_footer($data->tgl_kirim)}} --}}
-                                {{$data->tgl_kirim}}
+                                {{ $data->tgl_kirim }}
                             </td>
                         </tr>
                     </tbody>
@@ -127,18 +127,17 @@
                                 if (isset($data->DetailLogistik[0])) {
                                     $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                                     if ($name[1] == 'EKAT') {
-                                        echo    $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
-                                    } else if ($name[1] == 'SPA') {
-                                        echo   $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
-                                    } else if ($name[1] == 'SPB') {
-                                        echo   $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                                        echo $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
+                                    } elseif ($name[1] == 'SPA') {
+                                        echo $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                                    } elseif ($name[1] == 'SPB') {
+                                        echo $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
                                     }
                                 } else {
-
                                     $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
                                     if ($name[1] == 'SPA') {
                                         echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->Customer->nama;
-                                    } else if ($name[1] == 'SPB') {
+                                    } elseif ($name[1] == 'SPB') {
                                         echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->nama;
                                     }
                                 }
@@ -154,17 +153,17 @@
                                 if (isset($data->DetailLogistik[0])) {
                                     $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                                     if ($name[1] == 'EKAT') {
-                                        echo    $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat;
-                                    } else if ($name[1] == 'SPA') {
-                                        echo   $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
-                                    } else if ($name[1] == 'SPB') {
-                                        echo   $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat;
+                                        echo $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat;
+                                    } elseif ($name[1] == 'SPA') {
+                                        echo $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
+                                    } elseif ($name[1] == 'SPB') {
+                                        echo $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat;
                                     }
                                 } else {
                                     $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
                                     if ($name[1] == 'SPA') {
                                         echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->Customer->alamat;
-                                    } else if ($name[1] == 'SPB') {
+                                    } elseif ($name[1] == 'SPB') {
                                         echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->alamat;
                                     }
                                 }
@@ -188,7 +187,8 @@
 
         <div class="row mdtxt">
             <div class="col-12">
-                <table class="table" border="1" style="border-collapse: collapse; text-align:center;" width="100%">
+                <table class="table" border="1" style="border-collapse: collapse; text-align:center;"
+                    width="100%">
                     <thead class="align-center" style="border-top: 1px solid black; border-bottom: 1px solid black;">
                         <tr>
                             <th>Nama Barang</th>
@@ -198,39 +198,40 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($data_produk as $e)
-                        @if(isset($e->DetailPesananProduk))
-                        <tr>
-                            <td class="wb align-left">
-                                @if($e->DetailPesananProduk->GudangBarangJadi->nama == '' || $e->DetailPesananProduk->GudangBarangJadi->nama == NULL)
-                                {{$e->DetailPesananProduk->GudangBarangJadi->produk->nama}}
-                                @else
-                                {{$e->DetailPesananProduk->GudangBarangJadi->produk->nama}} - {{$e->DetailPesananProduk->GudangBarangJadi->nama}}
-                                @endif
-                            </td>
-                            <td class="nospace align-right">{{$e->NoseriDetailLogistik->count()}} pcs</td>
-                            <td class="wb">
-                                @foreach($e->NoseriDetailLogistik as $x)
-                                {{$x->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}
-                                @if( !$loop->last)
-                                ,
-                                @endif
-                                @endforeach
-                            </td>
-                            <td class="wb">-</td>
-                        </tr>
-                        @else
-                        <tr>
-                            <td class="wb align-left">
-                                {{$e->DetailPesananPart->Sparepart->nama}}
-                            </td>
-                            <td class="nospace align-right">{{$e->DetailPesananPart->jumlah}} pcs</td>
-                            <td class="wb">
-                                -
-                            </td>
-                            <td class="wb">-</td>
-                        </tr>
-                        @endif
+                        @foreach ($data_produk as $e)
+                            @if (isset($e->DetailPesananProduk))
+                                <tr>
+                                    <td class="wb align-left">
+                                        @if ($e->DetailPesananProduk->GudangBarangJadi->nama == '' || $e->DetailPesananProduk->GudangBarangJadi->nama == null)
+                                            {{ $e->DetailPesananProduk->GudangBarangJadi->produk->nama }}
+                                        @else
+                                            {{ $e->DetailPesananProduk->GudangBarangJadi->produk->nama }} -
+                                            {{ $e->DetailPesananProduk->GudangBarangJadi->nama }}
+                                        @endif
+                                    </td>
+                                    <td class="nospace align-right">{{ $e->NoseriDetailLogistik->count() }} pcs</td>
+                                    <td class="wb">
+                                        @foreach ($e->NoseriDetailLogistik as $x)
+                                            {{ $x->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri }}
+                                            @if (!$loop->last)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td class="wb">-</td>
+                                </tr>
+                            @else
+                                <tr>
+                                    <td class="wb align-left">
+                                        {{ $e->DetailPesananPart->Sparepart->nama }}
+                                    </td>
+                                    <td class="nospace align-right">{{ $e->DetailPesananPart->jumlah }} pcs</td>
+                                    <td class="wb">
+                                        -
+                                    </td>
+                                    <td class="wb">-</td>
+                                </tr>
+                            @endif
                         @endforeach
 
 
@@ -249,9 +250,9 @@
                             <td class="nospace"> : </td>
                             <td class="wb align-left">
                                 @if ($data->nama_pengirim == '')
-                                {{$data->Ekspedisi->nama}}
+                                    {{ $data->Ekspedisi->nama }}
                                 @else
-                                {{$data->nama_pengirim}}
+                                    {{ $data->nama_pengirim }}
                                 @endif
                             </td>
                         </tr>
@@ -291,10 +292,11 @@
                     </tr>
                     <tr>
                         <td></td>
-                        <td>@if ($data->nama_pengirim == '')
-                            {{$data->Ekspedisi->nama}}
+                        <td>
+                            @if ($data->nama_pengirim == '')
+                                {{ $data->Ekspedisi->nama }}
                             @else
-                            {{$data->nama_pengirim}}
+                                {{ $data->nama_pengirim }}
                             @endif
                         </td>
                         <td>Erna Cantika A</td>
@@ -315,4 +317,3 @@
         </div>
     </div>
 </div>
-
