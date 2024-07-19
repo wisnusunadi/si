@@ -95,7 +95,7 @@ const PartComponent = ({ formPart, setFormPart, dataCopy }) => {
         <>
             <h4>Data Part</h4>
             <div className="card">
-                <div className="card-body">
+                <div className="card-body overflow-auto">
                     <div className="d-flex flex-row-reverse bd-highlight">
                         <div className="p-2 bd-highlight">
                             <button
@@ -106,149 +106,161 @@ const PartComponent = ({ formPart, setFormPart, dataCopy }) => {
                             </button>
                         </div>
                     </div>
+                        <table className="table text-center">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th
+                                        style={{
+                                            width: "40%",
+                                        }}
+                                    >
+                                        Nama Part
+                                    </th>
+                                    <th>Jumlah</th>
+                                    <th>Harga</th>
+                                    <th>Subtotal</th>
+                                    <th>Pajak</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {(formPart.sparepart ?? []).map(
+                                    (item, index) => (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>
+                                                <Select
+                                                    value={part.find(
+                                                        (part) =>
+                                                            part.value ===
+                                                            item.sparepart_id
+                                                    )}
+                                                    options={part}
+                                                    placeholder="Pilih Part"
+                                                    onChange={(e) =>
+                                                        handleInputPart(
+                                                            e.value,
+                                                            index,
+                                                            "sparepart_id"
+                                                        )
+                                                    }
+                                                    styles={{
+                                                        option: (
+                                                            provided,
+                                                            state
+                                                        ) => ({
+                                                            ...provided,
+                                                            textAlign: "left",
+                                                        }),
+                                                    }}
+                                                    components={{ Option }}
+                                                />
+                                            </td>
+                                            <td>
+                                                <AmountInput
+                                                    value={item.jumlah}
+                                                    onChange={(e) =>
+                                                        handleInputPart(
+                                                            e.target.value,
+                                                            index,
+                                                            "jumlah"
+                                                        )
+                                                    }
+                                                />
+                                            </td>
+                                            <td>
+                                                <CurrencyInput
+                                                    value={item.harga}
+                                                    onChange={(e) =>
+                                                        handleInputPart(
+                                                            e,
+                                                            index,
+                                                            "harga"
+                                                        )
+                                                    }
+                                                />
+                                            </td>
+                                            <td>
+                                                <CurrencyInput
+                                                    disabled={true}
+                                                    value={
+                                                        item.jumlah * item.harga
+                                                    }
+                                                />
+                                            </td>
+                                            <td>
+                                                <div className="custom-control custom-switch">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="custom-control-input"
+                                                        id={`pajakPart-${index}`}
+                                                        checked={item.pajak}
+                                                        onChange={(e) =>
+                                                            handleInputPart(
+                                                                e.target
+                                                                    .checked,
+                                                                index,
+                                                                "pajak"
+                                                            )
+                                                        }
+                                                    />
+                                                    <label
+                                                        className="custom-control-label"
+                                                        htmlFor={`pajakPart-${index}`}
+                                                    >
+                                                        {item.pajak === true
+                                                            ? "PPN"
+                                                            : "Non PPN"}
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <i
+                                                    className="fas fa-minus text-danger"
+                                                    onClick={() => {
+                                                        const newFormPart =
+                                                            formPart.sparepart.filter(
+                                                                (item, i) =>
+                                                                    i !== index
+                                                            );
 
-                    <table className="table text-center">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th
-                                    style={{
-                                        width: "30%",
-                                    }}
-                                >
-                                    Nama Part
-                                </th>
-                                <th>Jumlah</th>
-                                <th>Harga</th>
-                                <th>Subtotal</th>
-                                <th>Pajak</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {(formPart.sparepart ?? []).map((item, index) => (
-                                <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>
-                                        <Select
-                                            value={part.find(
-                                                (part) =>
-                                                    part.value ===
-                                                    item.sparepart_id
+                                                        setFormPart({
+                                                            ...formPart,
+                                                            sparepart:
+                                                                newFormPart,
+                                                        });
+                                                    }}
+                                                ></i>
+                                            </td>
+                                        </tr>
+                                    )
+                                )}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colSpan={100} className="text-right">
+                                        <b>
+                                            Total Harga{" "}
+                                            {new Intl.NumberFormat("id-ID", {
+                                                style: "currency",
+                                                currency: "IDR",
+                                            }).format(
+                                                (
+                                                    formPart.sparepart ?? []
+                                                ).reduce(
+                                                    (acc, item) =>
+                                                        acc +
+                                                        item.jumlah *
+                                                            item.harga,
+                                                    0
+                                                )
                                             )}
-                                            options={part}
-                                            placeholder="Pilih Part"
-                                            onChange={(e) =>
-                                                handleInputPart(
-                                                    e.value,
-                                                    index,
-                                                    "sparepart_id"
-                                                )
-                                            }
-                                            styles={{
-                                                option: (provided, state) => ({
-                                                    ...provided,
-                                                    textAlign: "left",
-                                                }),
-                                            }}
-                                            components={{ MenuList, Option }}
-                                        />
-                                    </td>
-                                    <td>
-                                        <AmountInput
-                                            value={item.jumlah}
-                                            onChange={(e) =>
-                                                handleInputPart(
-                                                    e.target.value,
-                                                    index,
-                                                    "jumlah"
-                                                )
-                                            }
-                                        />
-                                    </td>
-                                    <td>
-                                        <CurrencyInput
-                                            value={item.harga}
-                                            onChange={(e) =>
-                                                handleInputPart(
-                                                    e,
-                                                    index,
-                                                    "harga"
-                                                )
-                                            }
-                                        />
-                                    </td>
-                                    <td>
-                                        <CurrencyInput
-                                            disabled={true}
-                                            value={item.jumlah * item.harga}
-                                        />
-                                    </td>
-                                    <td>
-                                        <div className="custom-control custom-switch">
-                                            <input
-                                                type="checkbox"
-                                                className="custom-control-input"
-                                                id={`pajakPart-${index}`}
-                                                checked={item.pajak}
-                                                onChange={(e) =>
-                                                    handleInputPart(
-                                                        e.target.checked,
-                                                        index,
-                                                        "pajak"
-                                                    )
-                                                }
-                                            />
-                                            <label
-                                                className="custom-control-label"
-                                                htmlFor={`pajakPart-${index}`}
-                                            >
-                                                {item.pajak === true
-                                                    ? "PPN"
-                                                    : "Non PPN"}
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <i
-                                            className="fas fa-minus text-danger"
-                                            onClick={() => {
-                                                const newFormPart =
-                                                    formPart.sparepart.filter(
-                                                        (item, i) => i !== index
-                                                    );
-
-                                                setFormPart({
-                                                    ...formPart,
-                                                    sparepart: newFormPart,
-                                                });
-                                            }}
-                                        ></i>
+                                        </b>
                                     </td>
                                 </tr>
-                            ))}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colSpan={100} className="text-right">
-                                    <b>
-                                        Total Harga{" "}
-                                        {new Intl.NumberFormat("id-ID", {
-                                            style: "currency",
-                                            currency: "IDR",
-                                        }).format(
-                                            (formPart.sparepart ?? []).reduce(
-                                                (acc, item) =>
-                                                    acc +
-                                                    item.jumlah * item.harga,
-                                                0
-                                            )
-                                        )}
-                                    </b>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                            </tfoot>
+                        </table>
                 </div>
             </div>
         </>

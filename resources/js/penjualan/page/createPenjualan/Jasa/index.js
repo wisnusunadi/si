@@ -84,7 +84,7 @@ const JasaComponent = ({ formJasa, setFormJasa, dataCopy }) => {
         <>
             <h4>Data Jasa</h4>
             <div className="card">
-                <div className="card-body">
+                <div className="card-body overflow-auto">
                     <div className="d-flex flex-row-reverse bd-highlight">
                         <div className="p-2 bd-highlight">
                             <button
