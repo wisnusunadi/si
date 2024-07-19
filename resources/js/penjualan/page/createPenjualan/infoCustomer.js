@@ -94,11 +94,11 @@ const Customer = ({ formCustomer, setFormCustomer, isEdit = false }) => {
         });
 
         if (e.target.value === "spb") {
-            restNoNEkatalog.barang = ["sparepart"]
+            restNoNEkatalog.barang = ["sparepart"];
             delete rest.jasa;
             delete rest.produk;
         } else {
-            restNoNEkatalog.barang = ["produk"]
+            restNoNEkatalog.barang = ["produk"];
             delete rest.sparepart;
             delete rest.jasa;
         }
@@ -393,8 +393,8 @@ const Customer = ({ formCustomer, setFormCustomer, isEdit = false }) => {
                                                             jasa_id: null,
                                                             harga: 0,
                                                             pajak: true,
-                                                        }
-                                                    ]
+                                                        },
+                                                    ];
                                                 }
                                                 setFormCustomer({
                                                     ...newForm,
@@ -434,15 +434,24 @@ const Customer = ({ formCustomer, setFormCustomer, isEdit = false }) => {
                                         formCustomer.is_customer_diketahui ===
                                         true
                                     }
-                                    onChange={(e) =>
-                                        setFormCustomer({
-                                            ...formCustomer,
-                                            is_customer_diketahui: true,
-                                            customer_id: 213,
-                                            nama: "PT. EMIINDO Jaya Bersama",
-                                            alamat: "Komplek Perkantoran Pulomas Jalan Perintis Kemerdekaan 10 No. 8, pulo Gadung, Jakarta Timur, DKI Jak",
-                                        })
-                                    }
+                                    onChange={(e) => {
+                                        const newFormCustomer = { ...formCustomer };
+                                        newFormCustomer.is_customer_diketahui = true;
+                                        newFormCustomer.customer_id = 213;
+                                        newFormCustomer.nama = "PT. EMIINDO Jaya Bersama";
+                                        newFormCustomer.alamat = "Komplek Perkantoran Pulomas Jalan Perintis Kemerdekaan 10 No. 8, pulo Gadung, Jakarta Timur, DKI Jak";
+                                        if (
+                                            formCustomer.alamat_pengiriman ==
+                                            "distributor"
+                                        ) {
+                                            newFormCustomer.alamat_perusahaan =
+                                                "Komplek Perkantoran Pulomas Jalan Perintis Kemerdekaan 10 No. 8, pulo Gadung, Jakarta Timur, DKI Jak";
+                                            newFormCustomer.nama_perusahaan =
+                                                "PT. EMIINDO Jaya Bersama";
+                                        }
+
+                                        setFormCustomer({ ...newFormCustomer });
+                                    }}
                                 />
                                 <label
                                     className="form-check-label"
