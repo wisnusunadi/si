@@ -5184,6 +5184,7 @@ class PenjualanController extends Controller
     {
         try {
             //code...
+
             $pesanan = Pesanan::find($id);
             $data = (object) [];
             $produk = [];
@@ -5323,6 +5324,7 @@ class PenjualanController extends Controller
                 $data->ket = $pesanan->Spa->ket;
             }
             if ($pesanan->Spb) {
+
                 $alamat_pengiriman = 'lainnya';
 
                 if ($pesanan->tujuan_kirim != '') {

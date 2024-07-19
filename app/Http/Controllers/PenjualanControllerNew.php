@@ -33,6 +33,7 @@ class PenjualanControllerNew extends Controller
     {
         try {
             //code...
+
             $pesanan = Pesanan::find($id);
             $data = (object) [];
             $produk = [];
@@ -173,6 +174,7 @@ class PenjualanControllerNew extends Controller
                 $data->ket = $pesanan->Spa->ket;
             }
             if ($pesanan->Spb) {
+
                 $alamat_pengiriman = 'lainnya';
 
                 if ($pesanan->tujuan_kirim != '') {
@@ -182,11 +184,14 @@ class PenjualanControllerNew extends Controller
                         $alamat_pengiriman = 'distributor';
                     }
                 }
+
                 $data->jenis = 'spb';
-                $data->nama = $pesanan->Spb->customer_id != 484 ?  $pesanan->Spa->Customer->nama : '';
+                $data->nama = $pesanan->Spb->customer_id != 484 ?  $pesanan->Spb->Customer->nama : '';
                 $data->alamat =  $pesanan->Spb->customer_id != 484 ? $pesanan->Spb->Customer->alamat : '';
                 $data->telepon = $pesanan->Spb->customer_id != 484 ?  $pesanan->Spb->Customer->telepon : '';
+
                 $data->customer_provinsi  = $pesanan->Spb->customer_id != 484 ?  $pesanan->Spb->Customer->Provinsi->nama : '';
+
                 $data->alamat_pengiriman = $alamat_pengiriman;
                 $data->is_customer_diketahui = $pesanan->Spb->customer_id == 484 ? false : true;
                 $data->customer_id = $pesanan->Spb->customer_id;
