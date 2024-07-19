@@ -93,6 +93,7 @@ class PenjualanController extends Controller
                     'ongkir' => $d->ongkir,
                     'harga' => $d->harga,
                     'jenis' => 'paket',
+                    'stok' => 'non_dsb',
                     'produk' => array()
                 );
                 foreach ($d->DetailPesananProduk as $key_e => $e) {
@@ -101,6 +102,34 @@ class PenjualanController extends Controller
                         'nama' => $e->GudangBarangjadi->Produk->nama . ' ' . $e->GudangBarangjadi->nama,
                         'jenis' => 'variasi',
                         'gudang_barang_jadi_id' => $e->gudang_barang_jadi_id
+                    );
+                }
+            }
+        }
+        if ($data->DetailPesananDsb) {
+            foreach ($data->DetailPesananDsb as $key_d => $d) {
+                $item[$key_d] = array(
+                    'id' => $d->id,
+                    'nama' => $d->PenjualanProduk->nama,
+                    'jumlah' => $d->jumlah,
+                    'jumlah_batal' =>   0,
+                    'jumlah_retur' =>   0,
+                    'ongkir' => $d->ongkir,
+                    'harga' => $d->harga,
+                    'jenis' => 'paket',
+                    'stok' => 'dsb',
+                    'produk' => array(),
+                    'noseri' => $d->NoseriDsb ? $d->NoseriDsb->pluck('noseri')->toArray() : array()
+                );
+
+
+                foreach ($d->DetailPesananProdukDsb as $key_e => $e) {
+                    $item[$key_d]['produk'][$key_e] = array(
+                        'id' => $e->id,
+                        'nama' => $e->GudangBarangjadi->Produk->nama . ' ' . $e->GudangBarangjadi->nama,
+                        'jenis' => 'variasi',
+                        'gudang_barang_jadi_id' => $e->gudang_barang_jadi_id,
+                        'noseri' => array()
                     );
                 }
             }
@@ -2666,36 +2695,36 @@ class PenjualanController extends Controller
 
             'tgl_kontrak_custom' => function ($q) {
                 $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
-                ->from('ekatalog as e')
-                ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
-                ->whereColumn('e.id', 'ekatalog.id')
-                ->limit(1);
+                    ->from('ekatalog as e')
+                    ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+                    ->whereColumn('e.id', 'ekatalog.id')
+                    ->limit(1);
             },
             'ckirimprd' => function ($q) {
                 $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
-                ->from('noseri_logistik')
-                ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-                ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
             },
             'cjumlahprd' => function ($q) {
                 $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
-                ->from('detail_pesanan')
-                ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
-                ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
-                ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
             },
             'ckirimpart' => function ($q) {
                 $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
-                ->from('detail_logistik_part')
-                ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
-                ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
             },
             'cjumlahpart' => function ($q) {
                 $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
-                ->from('detail_pesanan_part')
-                ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
             }
 
         ])->where('id', $value)->first();
@@ -3258,6 +3287,13 @@ class PenjualanController extends Controller
                         ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
                         ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 },
+                'cjumlahdsb' => function ($q) {
+                    $q->selectRaw('sum(detail_pesanan_dsb.jumlah * detail_penjualan_produk.jumlah)')
+                        ->from('detail_pesanan_dsb')
+                        ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan_dsb.penjualan_produk_id')
+                        ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                        ->whereColumn('detail_pesanan_dsb.pesanan_id', 'ekatalog.pesanan_id');
+                },
                 'cgudang' => function ($q) {
                     $q->selectRaw('count(detail_pesanan_produk.id)')
                         ->from('detail_pesanan_produk')
@@ -3279,10 +3315,14 @@ class PenjualanController extends Controller
                     $datas .= 'Batal';
                 } else {
                     $hitung = floor((($data->cseri / ($data->cjumlah + $data->cjumlahdsb)) * 100));
-                    if ($hitung > 0) {
-                        $datas = $hitung;
+                    if ($data->cjumlah == 0 &&  $data->cjumlahdsb > 0) {
+                        $datas .= 'Stok Distributor';
                     } else {
-                        $datas = $hitung;
+                        if ($hitung > 0) {
+                            $datas = $hitung;
+                        } else {
+                            $datas = $hitung;
+                        }
                     }
                 }
             }
