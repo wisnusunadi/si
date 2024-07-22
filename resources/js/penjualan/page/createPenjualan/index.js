@@ -61,17 +61,17 @@ const CreatePenjualan = () => {
             }
 
             // Cek jika status adalah "ekatalog" dan validasi tambahan
-            if (formCustomer.status === "sepakat") {
-                if (
-                    formCustomer.tgl_buat === "" ||
-                    formCustomer.tgl_edit === "" ||
-                    formCustomer.tgl_delivery === "" ||
-                    formCustomer.tgl_po === "" ||
-                    formCustomer.no_po === ""
-                ) {
-                    return true;
-                }
-            }
+            // if (formCustomer.status === "sepakat") {
+            //     if (
+            //         formCustomer.tgl_buat === "" ||
+            //         formCustomer.tgl_edit === "" ||
+            //         formCustomer.tgl_delivery === "" ||
+            //         formCustomer.tgl_po === "" ||
+            //         formCustomer.no_po === ""
+            //     ) {
+            //         return true;
+            //     }
+            // }
 
             if (
                 formCustomer.produk !== undefined &&

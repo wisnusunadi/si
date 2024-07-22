@@ -73,17 +73,17 @@ const EditPenjualan = () => {
             }
 
             // Cek jika status adalah "ekatalog" dan validasi tambahan
-            if (dataEdit.status === "sepakat") {
-                if (
-                    dataEdit.tgl_buat === "" ||
-                    dataEdit.tgl_edit === "" ||
-                    dataEdit.tgl_delivery === "" ||
-                    dataEdit.tgl_po === "" ||
-                    dataEdit.no_po === ""
-                ) {
-                    return true;
-                }
-            }
+            // if (dataEdit.status === "sepakat") {
+            //     if (
+            //         dataEdit.tgl_buat === "" ||
+            //         dataEdit.tgl_edit === "" ||
+            //         dataEdit.tgl_delivery === "" ||
+            //         dataEdit.tgl_po === "" ||
+            //         dataEdit.no_po === ""
+            //     ) {
+            //         return true;
+            //     }
+            // }
 
             if (dataEdit.produk !== undefined && dataEdit?.produk?.length > 0) {
                 // Cek jika produk memiliki nama, jumlah, dan harga yang tidak kosong
