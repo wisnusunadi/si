@@ -3612,7 +3612,8 @@ class PenjualanController extends Controller
     }
     public function cekEditDoEkat($item)
     {
-        if ($item->cterkirim == 0 && $item->status == 'sepakat') {
+        if ($item->status == 'sepakat') {
+            // if ($item->cterkirim == 0 && $item->status == 'sepakat') {
             return true;
         } else {
             return false;
@@ -3620,11 +3621,8 @@ class PenjualanController extends Controller
     }
     public function cekEditDo($item)
     {
-        if ($item->cterkirim == 0 || $item->terkirimpart) {
-            return true;
-        } else {
-            return false;
-        }
+        // if ($item->cterkirim == 0 || $item->terkirimpart) {
+        return true;
     }
     public function cekEdit($item)
     {
