@@ -40,7 +40,7 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit, dataCopy }) => {
                 <div className="form-group row">
                     <label className="col-5 text-right">No Urut</label>
                     <div className="col-2">
-                        <InputNumber
+                        <input type="text"
                             className={`form-control ${
                                 noUrutError ? "is-invalid" : ""
                             }`}
