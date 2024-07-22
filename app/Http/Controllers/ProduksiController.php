@@ -2190,7 +2190,7 @@ class ProduksiController extends Controller
                     return $d->id;
                 })
                 ->addColumn('layout', function ($d) {
-                    return $d->layout->nama;
+                    return $d->Layout->nama ?? '-';
                 })
                 ->rawColumns(['checkbox'])
                 ->make(true);
