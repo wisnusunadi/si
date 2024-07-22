@@ -6867,9 +6867,9 @@ class PenjualanController extends Controller
         }
 
         if ($bool == true) {
-            return response()->json(['data' => 'success']);
+            return response()->json(['data' => 'success'], 200);
         } else if ($bool == false) {
-            return response()->json(['data' => 'error']);
+            return response()->json(['data' => 'error'], 500);
         }
     }
 

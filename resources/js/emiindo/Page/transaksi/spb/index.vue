@@ -237,6 +237,7 @@ export default {
             v-if="showModal"
             @close="showModal = false"
             :doData="detailSelected"
+            @refresh="$emit('refresh')"
         />
 
         <div class="card-body">

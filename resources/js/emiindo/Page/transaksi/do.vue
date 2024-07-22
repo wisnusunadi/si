@@ -26,7 +26,12 @@ export default {
         },
         // Save the changes
         simpan() {
-            const cekNotNull = Object.keys(this.form).filter(key => this.form[key] === '')
+            const dataNotNull = {
+                no_do, tgl_do
+            }
+            const cekNotNull = Object.keys(this.form).filter(key => {
+                return dataNotNull[key] && !this.form[key]
+            })
             if (cekNotNull.length > 0) {
                 this.$swal('Peringatan', 'Data tidak boleh kosong', 'warning')
                 return
