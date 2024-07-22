@@ -240,7 +240,7 @@ export default {
             return this.ekat
                 .filter((data) => includesSearch(data, this.search))
                 .sort(
-                    (a, b) => new Date(b.created_at) - new Date(a.created_at)
+                    (a, b) => new Date(b.urutan) - new Date(a.urutan)
                 );
         },
     },
