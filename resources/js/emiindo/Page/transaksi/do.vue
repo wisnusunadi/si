@@ -36,8 +36,10 @@ export default {
                 .then(res => {
                     this.closeModal()
                     this.$emit('refresh')
+                    this.$swal('Berhasil', 'Data berhasil diubah', 'success')
                 }).catch(err => {
                     console.log(err)
+                    this.$swal('Gagal', 'Data gagal diubah', 'error')
                 })
         }
     },
