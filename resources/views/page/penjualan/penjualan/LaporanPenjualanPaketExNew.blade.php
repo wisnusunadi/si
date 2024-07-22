@@ -82,12 +82,13 @@
                     <td>
                         {{ $d['tgl_kontrak'] }}
                     </td>
+                    <td>nondsb</td>
                     <td>{{ $p['nama'] }}</td>
                     <td>{{ $p['nama_alias'] }}</td>
                     <td>
                         @if ($seri == 'seri')
                             @foreach ($p['seri'] as $s)
-                                {{ $s['noseri'] }}
+                                {{ $s }}
                                 @if (!$loop->last)
                                     ,
                                 @endif
@@ -168,6 +169,7 @@
                     <td>
                         {{ $d['tgl_kontrak'] }}
                     </td>
+                    <td>dsb</td>
                     <td>{{ $p['nama'] }}</td>
                     <td>{{ $p['nama_alias'] }}</td>
                     <td>
@@ -232,6 +234,7 @@
                     <td>
                         {{ $d['tgl_kontrak'] }}
                     </td>
+                    <td>nondsb</td>
                     <td>{{ $p['nama'] }}</td>
                     <td>{{ $p['nama'] }}</td>
                     <td>-</td>
@@ -269,6 +272,7 @@
                     <td>
                         {{ $d['tgl_kontrak'] }}
                     </td>
+                    <td>nondsb</td>
                     <td></td>
                     <td></td>
                     <td></td>

@@ -221,8 +221,6 @@ class PenjualanControllerNew extends Controller
 
         return response()->json($data);
     }
-
-
     function penjualanStoreEdit(Request $request)
     {
         // dd($request->all());

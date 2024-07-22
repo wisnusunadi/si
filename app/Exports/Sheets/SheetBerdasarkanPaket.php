@@ -621,7 +621,7 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
             ->get();
 
         //GET NOSERI
-        $noseri = NoseriBarangJadi::select('detail_pesanan.id as id', 'detail_pesanan.penjualan_produk_id', 'noseri')
+        $noseri = NoseriBarangJadi::select('detail_pesanan.id as id', 'detail_pesanan.penjualan_produk_id', 'noseri', 'detail_pesanan.pesanan_id as p_id')
             ->leftJoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
             ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
             ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 't_gbj_detail.detail_pesanan_produk_id')
@@ -731,11 +731,39 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
         WHERE riwayat_retur_po_paket.detail_pesanan_id = detail_pesanan.id
         ) AS jumlah_retur')
         )
+            ->selectRaw("CONCAT(detail_pesanan.pesanan_id, '-', detail_pesanan.penjualan_produk_id) AS combined_value")
             ->leftJoin('penjualan_produk', 'penjualan_produk.id', '=', 'detail_pesanan.penjualan_produk_id')
             ->whereIN('detail_pesanan.pesanan_id', $data->pluck('id')->toArray())->get();
 
         //GROUP DATA
-        $groupedDataSeri = collect($noseri)->groupBy('id');
+
+
+        foreach ($noseri as $item) {
+            $key = $item['p_id'] . '-' . $item['penjualan_produk_id'];
+
+            if (!isset($groupedDataSeri[$key])) {
+                $groupedDataSeri[$key] = [
+                    'id' => $item['id'],
+                    'p_id' => $key,
+                    'data' => []
+                ];
+            }
+
+            $groupedDataSeri[$key]['data'][] = $item['noseri'];
+        }
+
+        foreach ($groupedDataSeri as $g) {
+            $noseri_group[] = array(
+                "p_id" => $g['p_id'],
+                "data" => $g['data']
+            );
+        }
+
+
+
+
+
+        //   $groupedDataSeri = collect($noseri)->groupBy('id');
         $groupedDataSeriDsb = collect($noseriDsb)->groupBy('id');
         $groupedDataSeriBatal = collect($noseriBatal)->groupBy('id');
         $groupedDataSeriRetur = collect($noseriRetur)->groupBy('id');
@@ -853,8 +881,10 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
         foreach ($detail_pesanan_group as $key => $pesananItem) {
             foreach ($pesananItem['data'] as $keys => $p) {
                 $pesananID = $p['id'];
-                if (isset($seriByID[$pesananID])) {
-                    $detail_pesanan_group[$key]['data'][$keys]['seri'] = $seriByID[$pesananID];
+                $pesananIDNew = $p['combined_value'];
+                $find = collect($noseri_group)->where('p_id', $pesananIDNew)->first();
+                if ($find) {
+                    $detail_pesanan_group[$key]['data'][$keys]['seri'] = $find['data'];
                 } else {
                     $detail_pesanan_group[$key]['data'][$keys]['seri'] = [];
                 }
