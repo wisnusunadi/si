@@ -196,6 +196,7 @@ const EditPenjualan = () => {
                                     isEdit={true}
                                     formAKN={dataEdit}
                                     setFormAKN={setDataEdit}
+                                    dataCopy={dataCopy}
                                 />
 
                                 {dataEdit &&

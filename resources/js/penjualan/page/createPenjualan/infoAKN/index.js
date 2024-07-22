@@ -4,7 +4,7 @@ import PurchaseOrder from "./purchaseOrder";
 import Instansi from "./instansi";
 import Pengiriman from "./pengiriman";
 
-const InfoAKN = ({ formAKN, setFormAKN, isEdit = false }) => {
+const InfoAKN = ({ formAKN, setFormAKN, isEdit = false, dataCopy }) => {
     const [tabs, setTabs] = useState("deskripsiEkatalog");
 
     useEffect(() => {
@@ -116,6 +116,7 @@ const InfoAKN = ({ formAKN, setFormAKN, isEdit = false }) => {
                                 formAKN={formAKN}
                                 setFormAKN={setFormAKN}
                                 isEdit={isEdit}
+                                dataCopy={dataCopy}
                             />
                         </div>
                         <div
