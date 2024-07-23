@@ -32,6 +32,7 @@ export default {
             loading: false,
             lokasiMeeting: [],
             selectedParticipants: [],
+            maxTotalSize: 838860800, // 800MB
         };
     },
     methods: {
@@ -289,6 +290,27 @@ export default {
             this.imgs = imgs;
             console.log("file", file, "imgs", imgs);
         },
+        changeByteToMegaByte(byte) {
+            return byte / 1024 / 1024;
+        },
+        clearCache() {
+            if ('caches' in window) {
+                caches.keys().then(function (names) {
+                    for (let name of names) caches.delete(name);
+                });
+            }
+
+            sessionStorage.clear();
+
+            document.cookie.split(";").forEach(function (c) {
+                document.cookie = c
+                    .replace(/^ +/, "")
+                    .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+            });
+        },
+    },
+    created() {
+        this.clearCache();
     },
     mounted() {
         this.getDataKaryawan();
@@ -333,6 +355,13 @@ export default {
                     this.meeting.peserta.includes(item.id)
                 );
             });
+        },
+        checkSize() {
+            let totalSize = 0;
+            for (let i = 0; i < this.form.dokumentasi.length; i++) {
+                totalSize += this.form.dokumentasi[i].size;
+            }
+            return this.maxTotalSize - totalSize;
         },
     },
 };
@@ -539,7 +568,10 @@ export default {
                         <label for="" class="col-sm-2 col-form-label"
                             >Dokumentasi</label
                         >
-                        <uploadFile :maxTotalSize="838860800" @changed="uploadDokumen" />
+                        <uploadFile :maxTotalSize="maxTotalSize" @changed="uploadDokumen" />
+                        <p class="text-muted">
+                          <span class="text-danger">*</span>  Total ukuran file tidak boleh melebihi {{ changeByteToMegaByte(checkSize) }} MB
+                        </p>
                     </div>
                 </div>
                 <div class="modal-body text-center" v-else>

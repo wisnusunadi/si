@@ -29,6 +29,9 @@ export default {
         openEdit() {
             this.$emit("openEdit");
         },
+        openTerlaksana() {
+            this.$emit("openTerlaksana");
+        },
     },
     computed: {
         showImageFail() {
@@ -155,7 +158,7 @@ export default {
                                     </div>
                                     <div v-if="!showImageFail">
                                         <small class="text-muted"
-                                            >Edit Meeting</small
+                                            >Aksi</small
                                         >
                                     </div>
                                     <div v-if="!showImageFail">
@@ -166,6 +169,17 @@ export default {
                                             >
                                                 <i class="fas fa-edit"></i>
                                                 Edit Meeting
+                                            </button>
+                                        </b>
+                                    </div>
+                                    <div v-if="!showImageFail">
+                                        <b id="no_so">
+                                            <button
+                                                class="btn btn-success btn-sm mr-2 mb-2"
+                                                @click="openTerlaksana"
+                                            >
+                                                <i class="fas fa-check"></i>
+                                                Terlaksana
                                             </button>
                                         </b>
                                     </div>
