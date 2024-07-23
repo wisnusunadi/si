@@ -1953,10 +1953,10 @@ return [
         ],
         [
             'header' => 'Meeting',
-            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 22, 34],
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 22, 34, 14],
         ],
         [
-            'text' => 'Ruangan Meeting',    
+            'text' => 'Ruangan Meeting',
             'url' => '/meeting/ruangan',
             'icon' => 'fas fa-door-open',
             'auth'   => [34],
@@ -1966,7 +1966,7 @@ return [
             'text' => 'Meeting',
             'url' => '/meeting/hr/',
             'icon' => 'fas fa-users',
-            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 22, 34],
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 22, 34, 14],
         ],
         // [
         //     'text'        => 'Jadwal Meeting',
@@ -1975,16 +1975,16 @@ return [
         //     'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 22, 34],
         // ],
         // direksi
-        [
-            'header' => 'Meeting',
-            'auth' => [14],
-        ],
-        [
-            'text' => 'Meeting',
-            'url' => '/meeting/jadwalmeeting',
-            'icon' => 'fas fa-users',
-            'auth' => [14],
-        ],
+        // [
+        //     'header' => 'Meeting',
+        //     'auth' => [14],
+        // ],
+        // [
+        //     'text' => 'Meeting',
+        //     'url' => '/meeting/jadwalmeeting',
+        //     'icon' => 'fas fa-users',
+        //     'auth' => [14],
+        // ],
         [
             'header' => 'Setting',
             'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 14, 22, 34],
