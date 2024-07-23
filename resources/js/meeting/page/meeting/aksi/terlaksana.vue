@@ -115,17 +115,11 @@ export default {
             }
         },
         async save() {
-            // kalkulasi limit upload file total 800mb
-            let totalSize = 0;
-            for (let i = 0; i < this.form.hasil.length; i++) {
-                totalSize += this.form.hasil[i].size;
-            }
-
-            if (totalSize > 800000000) { // satuan byte
+            if (this.checkSize > this.maxTotalSize) { // satuan byte
                 this.$swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "Total ukuran file tidak boleh melebihi 800MB",
+                    text: `Total ukuran file didalam form tidak boleh melebihi ${this.changeByteToMegaByte(this.maxTotalSize)} MB`,
                 });
                 return;
             }
@@ -374,7 +368,7 @@ export default {
             for (let i = 0; i < this.form.hasil.length; i++) {
                 totalSize += this.calculateTextSize(this.form.hasil[i].isi);
             }
-            
+
             return this.maxTotalSize - totalSize;
         },
     },
