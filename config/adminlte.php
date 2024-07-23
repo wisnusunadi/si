@@ -1961,7 +1961,6 @@ return [
             'icon' => 'fas fa-door-open',
             'auth'   => [34],
         ],
-        // peserta meet
         [
             'text' => 'Meeting',
             'url' => '/meeting/hr/',
@@ -1973,17 +1972,6 @@ return [
         //     'url'         => '/meeting/jadwal_meet',
         //     'icon'        => 'fa fa-calendar',
         //     'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 22, 34],
-        // ],
-        // direksi
-        // [
-        //     'header' => 'Meeting',
-        //     'auth' => [14],
-        // ],
-        // [
-        //     'text' => 'Meeting',
-        //     'url' => '/meeting/jadwalmeeting',
-        //     'icon' => 'fas fa-users',
-        //     'auth' => [14],
         // ],
         // [
         //     'header' => 'Meeting',

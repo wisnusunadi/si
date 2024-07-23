@@ -413,7 +413,7 @@ export default {
             @closeModal="resetCatatan"
         />
         <div class="card">
-            <div class="card-body">
+            <div class="card-body overflow-auto">
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a
