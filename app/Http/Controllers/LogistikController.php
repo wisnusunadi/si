@@ -5453,7 +5453,7 @@ class LogistikController extends Controller
             if ($tas) {
                 $itemIndex = array();
                 foreach ($produk as $index => $item) {
-                    if ($item['penjualan_produk_id'] === "5" || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363 || $item["penjualan_produk_id"] == 446) {
+                    if ($item['penjualan_produk_id'] === "5" || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363 || $item["penjualan_produk_id"] == 446 || $item["penjualan_produk_id"] == 358) {
                         $itemIndex[] = $index;
                         // break;
                     }
