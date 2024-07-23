@@ -308,6 +308,9 @@ export default {
                     .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
             });
         },
+        calculateTextSize(text) {
+            return new Blob([text]).size;
+        },
     },
     created() {
         this.clearCache();
@@ -361,6 +364,17 @@ export default {
             for (let i = 0; i < this.form.dokumentasi.length; i++) {
                 totalSize += this.form.dokumentasi[i].size;
             }
+
+            // calculate notulensi size
+            for (let i = 0; i < this.form.notulensi.length; i++) {
+                totalSize += this.calculateTextSize(this.form.notulensi[i].isi);
+            }
+
+            // calculate hasil size
+            for (let i = 0; i < this.form.hasil.length; i++) {
+                totalSize += this.calculateTextSize(this.form.hasil[i].isi);
+            }
+            
             return this.maxTotalSize - totalSize;
         },
     },
