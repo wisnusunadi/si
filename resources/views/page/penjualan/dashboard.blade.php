@@ -275,7 +275,7 @@
     </style>
 @stop
 @section('content')
-{{-- <div class="content">
+    {{-- <div class="content">
     <div class="row">
         <div class="col-12">
             <div class="row">
@@ -393,43 +393,47 @@
                                             <table class="table table-hover" id="pengirimantable" style="width:100%;">
                                                 <thead>
                                                     <tr>
-                                                        <th>No</th>
-                                                        <th>No SO</th>
-                                                        <th>No PO</th>
-                                                        <th>Tanggal PO</th>
-                                                        <th>Distibutor</th>
-                                                        <th>Status</th>
-                                                        <th>Tanggal Delivery</th>
-                                                        <th>Aksi</th>
+                                                        <th rowspan="2">No</th>
+                                                        <th rowspan="2">No SO</th>
+                                                        <th rowspan="2">No PO</th>
+                                                        <th rowspan="2">Tanggal PO</th>
+                                                        <th rowspan="2">Distibutor</th>
+                                                        <th rowspan="2">Status</th>
+                                                        <th colspan="2">Tanggal Delivery</th>
+                                                        <th rowspan="2">Aksi</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Saat Ini</th>
+                                                        <th>Perhitungan</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <!-- <tr>
-                                                            <td>1</td>
-                                                            <td>SOSPA102100001</td>
-                                                            <td>PO/ON/SPA/10/21/001</td>
-                                                            <td><span class="badge yellow-text">Logistik</span></td>
-                                                            <td>
-                                                                <hgroup>
-                                                                    <p>30-10-2021</p>
-                                                                    <small id="urgent">3 Hari Lagi</small>
-                                                                </hgroup>
-                                                            </td>
-                                                            <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>2</td>
-                                                            <td>SOSPA102100001</td>
-                                                            <td>PO/ON/SPA/10/21/001</td>
-                                                            <td><span class="badge orange-text">QC</span></td>
-                                                            <td>
-                                                                <hgroup>
-                                                                    <p>04-11-2021</p>
-                                                                    <small id="warning">7 Hari Lagi</small>
-                                                                </hgroup>
-                                                            </td>
-                                                            <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
-                                                        </tr> -->
+                                                                <td>1</td>
+                                                                <td>SOSPA102100001</td>
+                                                                <td>PO/ON/SPA/10/21/001</td>
+                                                                <td><span class="badge yellow-text">Logistik</span></td>
+                                                                <td>
+                                                                    <hgroup>
+                                                                        <p>30-10-2021</p>
+                                                                        <small id="urgent">3 Hari Lagi</small>
+                                                                    </hgroup>
+                                                                </td>
+                                                                <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>2</td>
+                                                                <td>SOSPA102100001</td>
+                                                                <td>PO/ON/SPA/10/21/001</td>
+                                                                <td><span class="badge orange-text">QC</span></td>
+                                                                <td>
+                                                                    <hgroup>
+                                                                        <p>04-11-2021</p>
+                                                                        <small id="warning">7 Hari Lagi</small>
+                                                                    </hgroup>
+                                                                </td>
+                                                                <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
+                                                            </tr> -->
                                                 </tbody>
                                             </table>
                                         </div>
@@ -439,55 +443,55 @@
                         </div>
                     </div>
                     <!-- <div class="col-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <h4>Lewat Batas Penyelesaian Per Divisi</h4>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4>Lewat Batas Penyelesaian Per Divisi</h4>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="table-responsive">
-                                                <table class="table table-hover" id="divisitable" style="width:100%;">
-                                                    <thead class="align-center">
-                                                        <tr>
-                                                            <th>No</th>
-                                                            <th>No SO</th>
-                                                            <th>Divisi</th>
-                                                            <th>Batas Selesai</th>
-                                                            <th>Aksi</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="nowrap align-center">1</td>
-                                                            <td class="nowrap align-center">SOSPA102100001</td>
-                                                            <td class="align-center"><span class="badge yellow-text">Logistik</span></td>
-                                                            <td class="align-center">
-                                                                <div>06-11-2021</div>
-                                                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 5 Hari</div>
-                                                            </td>
-                                                            <td class="align-center"><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="nowrap align-center">2</td>
-                                                            <td class="nowrap align-center">SOSPA102100001</td>
-                                                            <td class="align-center"><span class="badge orange-text">QC</span></td>
-                                                            <td class="align-center">
-                                                                <div>04-11-2021</div>
-                                                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 7 Hari</div>
-                                                            </td>
-                                                            <td class="align-center"><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover" id="divisitable" style="width:100%;">
+                                                        <thead class="align-center">
+                                                            <tr>
+                                                                <th>No</th>
+                                                                <th>No SO</th>
+                                                                <th>Divisi</th>
+                                                                <th>Batas Selesai</th>
+                                                                <th>Aksi</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="nowrap align-center">1</td>
+                                                                <td class="nowrap align-center">SOSPA102100001</td>
+                                                                <td class="align-center"><span class="badge yellow-text">Logistik</span></td>
+                                                                <td class="align-center">
+                                                                    <div>06-11-2021</div>
+                                                                    <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 5 Hari</div>
+                                                                </td>
+                                                                <td class="align-center"><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="nowrap align-center">2</td>
+                                                                <td class="nowrap align-center">SOSPA102100001</td>
+                                                                <td class="align-center"><span class="badge orange-text">QC</span></td>
+                                                                <td class="align-center">
+                                                                    <div>04-11-2021</div>
+                                                                    <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 7 Hari</div>
+                                                                </td>
+                                                                <td class="align-center"><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div> -->
+                            </div> -->
                 </div>
             </div>
         </div>
@@ -512,6 +516,22 @@
 @section('adminlte_js')
     <script>
         $(function() {
+            function formatDateDaysMonthYears(date) {
+                if (date == null) {
+                    return '';
+                }
+
+                var d = new Date(date);
+                var month = '' + (d.getMonth() + 1);
+                var day = '' + d.getDate();
+                var year = d.getFullYear();
+
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+
+                return [day, month, year].join('-');
+            }
+
             $('#divisitable').DataTable({});
             var pengirimantable = $('#pengirimantable').DataTable({
                 processing: true,
@@ -553,6 +573,13 @@
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'tgl_kontrak',
+                        className: 'nowrap-text align-center',
+                        render: function(data, type, row) {
+                            return formatDateDaysMonthYears(data);
+                        }
                     },
                     {
                         data: 'batas_kontrak',

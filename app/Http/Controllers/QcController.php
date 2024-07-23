@@ -1907,7 +1907,7 @@ class QcController extends Controller
         $arrayid = array();
         $x = explode(',', $value);
         if ($value == 'semua') {
-            $data = Pesanan::whereNotIn('log_id', ['7', '10', '20'])->addSelect([
+            $data = Pesanan::whereNotIn('log_id', ['10', '20'])->addSelect([
                 'tgl_kontrak' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY))')
                         ->from('ekatalog')
@@ -2015,7 +2015,7 @@ class QcController extends Controller
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
         } else if ($x == ['ekatalog', 'spa']) {
-            $data = Pesanan::whereNotIn('log_id', ['7', '10', '20'])->addSelect([
+            $data = Pesanan::whereNotIn('log_id', ['10', '20'])->addSelect([
                 'tgl_kontrak' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY))')
                         ->from('ekatalog')
@@ -2120,7 +2120,7 @@ class QcController extends Controller
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
         } else if ($x == ['ekatalog', 'spb']) {
-            $data = Pesanan::whereNotIn('log_id', ['7', '10', '20'])->addSelect([
+            $data = Pesanan::whereNotIn('log_id', ['10', '20'])->addSelect([
                 'tgl_kontrak' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY))')
                         ->from('ekatalog')
@@ -2223,7 +2223,7 @@ class QcController extends Controller
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
         } else if ($x == ['spa', 'spb']) {
-            $data = Pesanan::whereNotIn('log_id', ['7', '10', '20'])->addSelect([
+            $data = Pesanan::whereNotIn('log_id', ['10', '20'])->addSelect([
                 'tgl_kontrak' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY))')
                         ->from('ekatalog')
@@ -2326,7 +2326,7 @@ class QcController extends Controller
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
         } else if ($value == 'ekatalog') {
-            $data = Pesanan::whereNotIn('log_id', ['7', '10', '20'])->addSelect([
+            $data = Pesanan::whereNotIn('log_id', ['10', '20'])->addSelect([
                 'tgl_kontrak' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY))')
                         ->from('ekatalog')
@@ -2432,7 +2432,7 @@ class QcController extends Controller
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
         } else if ($value == 'spa') {
-            $data = Pesanan::whereNotIn('log_id', ['7', '10', '20'])->addSelect([
+            $data = Pesanan::whereNotIn('log_id', ['10', '20'])->addSelect([
                 'tgl_kontrak' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY))')
                         ->from('ekatalog')
@@ -2536,7 +2536,7 @@ class QcController extends Controller
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
         } else if ($value == 'spb') {
-            $data = Pesanan::whereNotIn('log_id', ['7', '10', '20'])->addSelect([
+            $data = Pesanan::whereNotIn('log_id', ['10', '20'])->addSelect([
                 'tgl_kontrak' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY))')
                         ->from('ekatalog')
@@ -2640,7 +2640,7 @@ class QcController extends Controller
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
         } else {
-            $data = Pesanan::whereNotIn('log_id', ['7', '10', '20'])->addSelect([
+            $data = Pesanan::whereNotIn('log_id', ['10', '20'])->addSelect([
                 'tgl_kontrak' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY))')
                         ->from('ekatalog')

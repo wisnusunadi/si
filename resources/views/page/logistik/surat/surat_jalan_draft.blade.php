@@ -151,21 +151,7 @@
                         <tr>
                             <td class="td-width-header">Ket. Pengiriman</td>
                             <td>:
-                                @switch($data->keterangan_pengiriman)
-                                    @case('bayar_tujuan')
-                                        <span>BAYAR TUJUAN <span>
-                                            @break
-
-                                            @case('bayar_sinko')
-                                                <span>BAYAR SINKO </span>
-                                            @break
-                                            @case('bayar_transfer')
-                                            <span>BAYAR TRANSFER </span>
-                                            @break
-                                            @default
-                                                <span>NON BAYAR<span>
-                                                    @break
-                                                @endswitch
+                                {{ $data->keterangan_pengiriman }}
                             </td>
                         </tr>
                         <tr>

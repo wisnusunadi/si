@@ -2460,6 +2460,7 @@ class MasterController extends Controller
                     'stok' => $p->stok,
                     'is_kalibrasi' => $p->Produk->whereNotNull('kode_lab_id')->count() > 0 ? true : false,
                 );
+
                 foreach ($p->Produk as $key_prd => $produk) {
                     $item[$key_p]['variasi'][] = array(
                         'id' => $produk->GudangBarangJadi->first()->id,

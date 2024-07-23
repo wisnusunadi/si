@@ -1,40 +1,55 @@
 <script>
 export default {
-    props: ['noseriInput'],
+    props: ["noseriInput"],
     data() {
         return {
-            noseri: ''
-        }
+            noseri: "",
+        };
     },
     methods: {
         submit() {
-            this.$emit('submit', this.noseri)
-            this.close()
+            this.$emit("submit", this.noseri);
+            this.close();
         },
         close() {
-            this.$emit('close')
-            $('.modalChecked').modal('hide')
+            this.$emit("close");
+            $(".modalChecked").modal("hide");
             this.$nextTick(() => {
-                this.noseri = ''
-            })
-        }
+                this.noseri = "";
+            });
+        },
     },
     watch: {
         noseriInput: {
             handler(val) {
-                // change array to string with enter
-                if (val?.length > 0) {
-                    this.noseri = val.join('\n')
+                if (Array.isArray(val) && val.length > 0) {
+                    this.noseri = val.join("\n");
+                } else {
+                    this.noseri = "";
                 }
             },
-            immediate: true
-        }
-    }
-}
+            immediate: true,
+        },
+        noseri: {
+            handler(val) {
+                this.noseri = val.toUpperCase();
+            },
+            immediate: true,
+        },
+    },
+};
 </script>
+
 <template>
-    <div class="modal fade modalChecked" id="exampleModal" data-backdrop="static" tabindex="-1" role="dialog"
-        aria-labelledby="modelTitleId" aria-hidden="true">
+    <div
+        class="modal fade modalChecked"
+        id="exampleModal"
+        data-backdrop="static"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modelTitleId"
+        aria-hidden="true"
+    >
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -44,19 +59,39 @@ export default {
                 </div>
                 <div class="modal-body">
                     <label for="">Masukkan Nomor Seri</label>
-                    <textarea class="form-control" v-model="noseri" cols="30" rows="10"></textarea>
+                    <textarea
+                        class="form-control"
+                        v-model="noseri"
+                        cols="30"
+                        rows="10"
+                    ></textarea>
                     <div class="text-muted">
                         <small>
                             <ul>
-                                <li>Gunakan koma (,) atau enter untuk memisahkan nomor seri</li>
+                                <li>
+                                    Gunakan koma (,) atau enter untuk memisahkan
+                                    nomor seri
+                                </li>
                                 <li>Contoh: 123456, 123457, 123458</li>
                             </ul>
                         </small>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="close">Keluar</button>
-                    <button type="button" class="btn btn-primary" @click="submit">Simpan</button>
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        @click="close"
+                    >
+                        Keluar
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        @click="submit"
+                    >
+                        Simpan
+                    </button>
                 </div>
             </div>
         </div>

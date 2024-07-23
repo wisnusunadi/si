@@ -21,6 +21,7 @@ const EditPenjualan = () => {
     const [periodePenjualan, setPeriodePenjualan] = useState(null);
     const { id } = useParams();
     const [dataEdit, setDataEdit] = useState(null);
+    const [dataCopy, setDataCopy] = useState(null);
 
     const getData = async () => {
         const response = await getPenjualanById(id);
@@ -30,7 +31,7 @@ const EditPenjualan = () => {
             id: id,
             is_customer_diketahui: response.customer_id ? true : false,
             delivery_order: response.tgl_do ? true : false,
-            is_no_paket_disabled: response.jenis == "ekatalog" ? true : false,
+            is_no_paket_disabled: response.no_paket_akhir != "" ? false : true,
             telepon: response.telepon ? response.telepon : "",
             isi_produk:
                 response.produk !== undefined && response.produk.length > 0
@@ -38,6 +39,7 @@ const EditPenjualan = () => {
                     : false,
         };
         setDataEdit(penjualanData);
+        setDataCopy(penjualanData);
 
         const { data } = await getYears();
         setPeriodePenjualan(data);
@@ -50,6 +52,14 @@ const EditPenjualan = () => {
     const disabledValidation = () => {
         // Cek jika jenis form adalah "ekatalog"
         if (dataEdit.jenis === "ekatalog") {
+            if (dataEdit.no_paket_awal !== null && dataEdit.no_paket_awal !== "" &&
+                (dataEdit.no_paket_akhir === null || dataEdit.no_paket_akhir === "") ||
+                dataEdit.no_paket_akhir !== null && dataEdit.no_paket_akhir !== "" &&
+                (dataEdit.no_paket_awal === null || dataEdit.no_paket_awal === "")) {
+                return true;
+            }
+                
+
             if (dataEdit.status == "draft") {
                 return false;
             }
@@ -63,17 +73,17 @@ const EditPenjualan = () => {
             }
 
             // Cek jika status adalah "ekatalog" dan validasi tambahan
-            if (dataEdit.status === "sepakat") {
-                if (
-                    dataEdit.tgl_buat === "" ||
-                    dataEdit.tgl_edit === "" ||
-                    dataEdit.tgl_delivery === "" ||
-                    dataEdit.tgl_po === "" ||
-                    dataEdit.no_po === ""
-                ) {
-                    return true;
-                }
-            }
+            // if (dataEdit.status === "sepakat") {
+            //     if (
+            //         dataEdit.tgl_buat === "" ||
+            //         dataEdit.tgl_edit === "" ||
+            //         dataEdit.tgl_delivery === "" ||
+            //         dataEdit.tgl_po === "" ||
+            //         dataEdit.no_po === ""
+            //     ) {
+            //         return true;
+            //     }
+            // }
 
             if (dataEdit.produk !== undefined && dataEdit?.produk?.length > 0) {
                 // Cek jika produk memiliki nama, jumlah, dan harga yang tidak kosong
@@ -186,6 +196,7 @@ const EditPenjualan = () => {
                                     isEdit={true}
                                     formAKN={dataEdit}
                                     setFormAKN={setDataEdit}
+                                    dataCopy={dataCopy}
                                 />
 
                                 {dataEdit &&
@@ -194,13 +205,15 @@ const EditPenjualan = () => {
                                         <ProdukComponent
                                             formProduk={dataEdit}
                                             setFormProduk={setDataEdit}
+                                            dataCopy={dataCopy}
                                         />
                                     )}
                                 {dataEdit &&
                                     dataEdit?.barang?.includes("sparepart") && (
                                         <PartComponent
                                             formPart={dataEdit}
-                                            setFormPart={setDataEdit}
+                                        setFormPart={setDataEdit}
+                                        dataCopy={dataCopy}
                                         />
                                     )}
 
@@ -208,7 +221,8 @@ const EditPenjualan = () => {
                                     dataEdit?.barang?.includes("jasa") && (
                                         <JasaComponent
                                             formJasa={dataEdit}
-                                            setFormJasa={setDataEdit}
+                                        setFormJasa={setDataEdit}
+                                        dataCopy={dataCopy}
                                         />
                                     )}
 

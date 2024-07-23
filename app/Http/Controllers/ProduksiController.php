@@ -2190,7 +2190,7 @@ class ProduksiController extends Controller
                     return $d->id;
                 })
                 ->addColumn('layout', function ($d) {
-                    return $d->layout->nama;
+                    return $d->Layout->nama ?? '-';
                 })
                 ->rawColumns(['checkbox'])
                 ->make(true);
@@ -2307,7 +2307,7 @@ class ProduksiController extends Controller
         }
     }
 
-    function getSOCekBelum()
+    function getSOCekBelum($filter)
     {
         try {
 
@@ -2384,43 +2384,130 @@ class ProduksiController extends Controller
             //         ->get();
             //     return response()->json($data);
 
-            $datax = DB::table(DB::raw('detail_pesanan_produk dpp'))
-                ->select(
-                    'p.id',
-                    'p.so',
-                    'p.no_po',
-                    'p.no_do',
-                    'p.tgl_po',
-                    'p.tgl_do',
-                    'p.log_id',
-                    DB::raw('count(dpp.gudang_barang_jadi_id)'),
-                    DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
-                    DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
-                    DB::raw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end as batas'),
-                    'ms.nama as log_nama',
-                    DB::raw("case
+            if ($filter == 'proses') {
+                $datax = DB::table(DB::raw('detail_pesanan_produk dpp'))
+                    ->select(
+                        'p.id',
+                        'p.so',
+                        'p.no_po',
+                        'p.no_do',
+                        'p.tgl_po',
+                        'p.tgl_do',
+                        'p.log_id',
+                        DB::raw('count(dpp.gudang_barang_jadi_id)'),
+                        DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+                        DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+                        DB::raw('case when p.log_id = 20  then "true" else "false" end as is_batal'),
+                        DB::raw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end as batas'),
+                        'ms.nama as log_nama',
+                        DB::raw("case
             when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
             when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
             when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
             when p.so is null then c_ekat.nama
             end as divisi")
-                )
-                ->leftJoin(DB::raw('detail_pesanan dp'), 'dpp.detail_pesanan_id', '=', 'dp.id')
-                ->leftJoin(DB::raw('pesanan p'), 'dp.pesanan_id', '=', 'p.id')
-                ->leftJoin(DB::raw('ekatalog e'), 'e.pesanan_id', '=', 'p.id')
-                ->leftJoin(DB::raw('provinsi p2'), 'p2.id', '=', 'e.provinsi_id')
-                ->leftJoin(DB::raw('m_state ms'), 'ms.id', '=', 'p.log_id')
-                ->leftJoin(DB::raw('spa s'), 's.pesanan_id', '=', 'p.id')
-                ->leftJoin(DB::raw('spb s2'), 's2.pesanan_id', '=', 'p.id')
-                ->leftJoin(DB::raw('customer c_ekat'), 'c_ekat.id', '=', 'e.customer_id')
-                ->leftJoin(DB::raw('customer c_spa'), 'c_spa.id', '=', 's.customer_id')
-                ->leftJoin(DB::raw('customer c_spb'), 'c_spb.id', '=', 's2.customer_id')
-                ->whereNotIn('p.log_id', [10, 20])
-                ->whereNotNull('p.no_po')
-                ->groupBy('p.id')
-                ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) != ?', [0])
-                ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) != ?', ['sum(case when dpp.status_cek = 4 then 1 else 0 end)'])
-                ->get();
+                    )
+                    ->leftJoin(DB::raw('detail_pesanan dp'), 'dpp.detail_pesanan_id', '=', 'dp.id')
+                    ->leftJoin(DB::raw('pesanan p'), 'dp.pesanan_id', '=', 'p.id')
+                    ->leftJoin(DB::raw('ekatalog e'), 'e.pesanan_id', '=', 'p.id')
+                    ->leftJoin(DB::raw('provinsi p2'), 'p2.id', '=', 'e.provinsi_id')
+                    ->leftJoin(DB::raw('m_state ms'), 'ms.id', '=', 'p.log_id')
+                    ->leftJoin(DB::raw('spa s'), 's.pesanan_id', '=', 'p.id')
+                    ->leftJoin(DB::raw('spb s2'), 's2.pesanan_id', '=', 'p.id')
+                    ->leftJoin(DB::raw('customer c_ekat'), 'c_ekat.id', '=', 'e.customer_id')
+                    ->leftJoin(DB::raw('customer c_spa'), 'c_spa.id', '=', 's.customer_id')
+                    ->leftJoin(DB::raw('customer c_spb'), 'c_spb.id', '=', 's2.customer_id')
+                    ->whereNotIn('p.log_id', [10, 20])
+                    ->whereNotNull('p.no_po')
+                    ->groupBy('p.id')
+                    ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) != ?', [0])
+                    ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) != ?', ['sum(case when dpp.status_cek = 4 then 1 else 0 end)'])
+                    ->get();
+            } elseif ($filter == 'batal') {
+                $datax = DB::table(DB::raw('detail_pesanan_produk dpp'))
+                    ->select(
+                        'p.id',
+                        'p.so',
+                        'p.no_po',
+                        'p.no_do',
+                        'p.tgl_po',
+                        'p.tgl_do',
+                        'p.log_id',
+                        DB::raw('count(dpp.gudang_barang_jadi_id)'),
+                        DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+                        DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+                        DB::raw('case when p.log_id = 20  then "true" else "false" end as is_batal'),
+                        DB::raw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end as batas'),
+                        'ms.nama as log_nama',
+                        DB::raw("case
+    when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+    when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+    when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+    when p.so is null then c_ekat.nama
+    end as divisi")
+                    )
+                    ->leftJoin(DB::raw('detail_pesanan dp'), 'dpp.detail_pesanan_id', '=', 'dp.id')
+                    ->leftJoin(DB::raw('pesanan p'), 'dp.pesanan_id', '=', 'p.id')
+                    ->leftJoin(DB::raw('ekatalog e'), 'e.pesanan_id', '=', 'p.id')
+                    ->leftJoin(DB::raw('provinsi p2'), 'p2.id', '=', 'e.provinsi_id')
+                    ->leftJoin(DB::raw('m_state ms'), 'ms.id', '=', 'p.log_id')
+                    ->leftJoin(DB::raw('spa s'), 's.pesanan_id', '=', 'p.id')
+                    ->leftJoin(DB::raw('spb s2'), 's2.pesanan_id', '=', 'p.id')
+                    ->leftJoin(DB::raw('customer c_ekat'), 'c_ekat.id', '=', 'e.customer_id')
+                    ->leftJoin(DB::raw('customer c_spa'), 'c_spa.id', '=', 's.customer_id')
+                    ->leftJoin(DB::raw('customer c_spb'), 'c_spb.id', '=', 's2.customer_id')
+                    ->whereIn('p.log_id', [20])
+                    ->whereNotNull('p.no_po')
+                    ->groupBy('p.id')
+                    ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) != ?', [0])
+                    ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) != ?', ['sum(case when dpp.status_cek = 4 then 1 else 0 end)'])
+                    ->get();
+            } elseif ($filter == 'semua') {
+                $datax = DB::table(DB::raw('detail_pesanan_produk dpp'))
+                    ->select(
+                        'p.id',
+                        'p.so',
+                        'p.no_po',
+                        'p.no_do',
+                        'p.tgl_po',
+                        'p.tgl_do',
+                        'p.log_id',
+                        DB::raw('count(dpp.gudang_barang_jadi_id)'),
+                        DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+                        DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+                        DB::raw('case when p.log_id = 20  then "true" else "false" end as is_batal'),
+                        DB::raw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end as batas'),
+                        'ms.nama as log_nama',
+                        DB::raw("case
+        when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+        when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+        when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+        when p.so is null then c_ekat.nama
+        end as divisi")
+                    )
+                    ->leftJoin(DB::raw('detail_pesanan dp'), 'dpp.detail_pesanan_id', '=', 'dp.id')
+                    ->leftJoin(DB::raw('pesanan p'), 'dp.pesanan_id', '=', 'p.id')
+                    ->leftJoin(DB::raw('ekatalog e'), 'e.pesanan_id', '=', 'p.id')
+                    ->leftJoin(DB::raw('provinsi p2'), 'p2.id', '=', 'e.provinsi_id')
+                    ->leftJoin(DB::raw('m_state ms'), 'ms.id', '=', 'p.log_id')
+                    ->leftJoin(DB::raw('spa s'), 's.pesanan_id', '=', 'p.id')
+                    ->leftJoin(DB::raw('spb s2'), 's2.pesanan_id', '=', 'p.id')
+                    ->leftJoin(DB::raw('customer c_ekat'), 'c_ekat.id', '=', 'e.customer_id')
+                    ->leftJoin(DB::raw('customer c_spa'), 'c_spa.id', '=', 's.customer_id')
+                    ->leftJoin(DB::raw('customer c_spb'), 'c_spb.id', '=', 's2.customer_id')
+                    ->whereNotIn('p.log_id', [10])
+                    ->whereNotNull('p.no_po')
+                    ->groupBy('p.id')
+                    ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) != ?', [0])
+                    ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) != ?', ['sum(case when dpp.status_cek = 4 then 1 else 0 end)'])
+                    ->get();
+            } else {
+                $datax = array();
+            }
+
+
+
+
             return response()->json($datax);
             // return datatables()->of($datax)
             //     ->addIndexColumn()

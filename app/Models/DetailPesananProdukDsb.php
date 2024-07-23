@@ -16,6 +16,10 @@ class DetailPesananProdukDsb extends Model
     {
         return $this->belongsTo(GudangBarangJadi::class, 'gudang_barang_jadi_id');
     }
+    public function NoseriDsb()
+    {
+        return $this->hasMany(NoseriDsb::class);
+    }
     public function DetailPesananDsb()
     {
         return $this->belongsTo(DetailPesananDsb::class, 'detail_pesanan_dsb_id');

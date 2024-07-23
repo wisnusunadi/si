@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import CurrencyInput from "../../../components/inputPrice";
 import { getJasa } from "../../../service/create";
+import { data } from "jquery";
 
-const JasaComponent = ({ formJasa, setFormJasa }) => {
+const JasaComponent = ({ formJasa, setFormJasa, dataCopy }) => {
     const [jasa, setJasa] = useState([]);
 
     const addJasa = () => {
@@ -54,16 +55,23 @@ const JasaComponent = ({ formJasa, setFormJasa }) => {
 
     useEffect(() => {
         if (formJasa.barang.includes("jasa")) {
-            setFormJasa({
-                ...formJasa,
-                jasa: [
-                    {
-                        jasa_id: null,
-                        harga: 0,
-                        pajak: true,
-                    },
-                ],
-            });
+            if (dataCopy?.jasa) {
+                setFormJasa({
+                    ...formJasa,
+                    jasa: dataCopy.jasa
+                });
+            } else {
+                setFormJasa({
+                    ...formJasa,
+                    jasa: [
+                        {
+                            jasa_id: null,
+                            harga: 0,
+                            pajak: true,
+                        },
+                    ],
+                });
+            }
         } else {
             setFormJasa((prevFormJasa) => {
                 const { jasa, ...newFormJasa } = prevFormJasa;
@@ -76,7 +84,7 @@ const JasaComponent = ({ formJasa, setFormJasa }) => {
         <>
             <h4>Data Jasa</h4>
             <div className="card">
-                <div className="card-body">
+                <div className="card-body overflow-auto">
                     <div className="d-flex flex-row-reverse bd-highlight">
                         <div className="p-2 bd-highlight">
                             <button

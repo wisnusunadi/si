@@ -33,6 +33,7 @@ class PenjualanControllerNew extends Controller
     {
         try {
             //code...
+
             $pesanan = Pesanan::find($id);
             $data = (object) [];
             $produk = [];
@@ -91,7 +92,7 @@ class PenjualanControllerNew extends Controller
                 }
             }
             if (count($pesanan->DetailPesananPartNonJasa()) > 0) {
-                $barang[] = "part";
+                $barang[] = "sparepart";
                 foreach ($pesanan->DetailPesananPartNonJasa() as $part_nonjasa) {
                     $part[] = array(
                         'id' => $part_nonjasa->id,
@@ -173,6 +174,7 @@ class PenjualanControllerNew extends Controller
                 $data->ket = $pesanan->Spa->ket;
             }
             if ($pesanan->Spb) {
+
                 $alamat_pengiriman = 'lainnya';
 
                 if ($pesanan->tujuan_kirim != '') {
@@ -182,11 +184,14 @@ class PenjualanControllerNew extends Controller
                         $alamat_pengiriman = 'distributor';
                     }
                 }
+
                 $data->jenis = 'spb';
-                $data->nama = $pesanan->Spb->customer_id != 484 ?  $pesanan->Spa->Customer->nama : '';
+                $data->nama = $pesanan->Spb->customer_id != 484 ?  $pesanan->Spb->Customer->nama : '';
                 $data->alamat =  $pesanan->Spb->customer_id != 484 ? $pesanan->Spb->Customer->alamat : '';
                 $data->telepon = $pesanan->Spb->customer_id != 484 ?  $pesanan->Spb->Customer->telepon : '';
+
                 $data->customer_provinsi  = $pesanan->Spb->customer_id != 484 ?  $pesanan->Spb->Customer->Provinsi->nama : '';
+
                 $data->alamat_pengiriman = $alamat_pengiriman;
                 $data->is_customer_diketahui = $pesanan->Spb->customer_id == 484 ? false : true;
                 $data->customer_id = $pesanan->Spb->customer_id;
@@ -216,11 +221,9 @@ class PenjualanControllerNew extends Controller
 
         return response()->json($data);
     }
-
-
     function penjualanStoreEdit(Request $request)
     {
-
+        // dd($request->all());
         DB::beginTransaction();
         try {
             //code...
@@ -251,6 +254,12 @@ class PenjualanControllerNew extends Controller
             }
 
 
+            $logId = 7;
+            if ($jnis == 'EKAT') {
+                if ($request->status == 'batal') {
+                    $logId = 20;
+                }
+            }
 
             $poid = $request->id;
             $pesanan = Pesanan::find($request->id);
@@ -267,7 +276,7 @@ class PenjualanControllerNew extends Controller
             $pesanan->no_do = $request->nomor_do ??= null;
             $pesanan->tgl_do = $request->tgl_do ??= null;
             $pesanan->ket =  $request->ket_do;
-            $pesanan->log_id = 7;
+            $pesanan->log_id = $logId;
             $pesanan->tujuan_kirim = $request->nama_perusahaan;
             $pesanan->alamat_kirim = $request->alamat_perusahaan;
             $pesanan->kemasan = $request->kemasan;
@@ -515,6 +524,15 @@ class PenjualanControllerNew extends Controller
                 default:
                     $jnis;
             }
+
+            $logId = 7;
+            if ($jnis == 'EKAT') {
+                if ($request->status == 'batal') {
+                    $logId = 20;
+                }
+            }
+
+
             $pesanan =    Pesanan::create([
                 'so' =>  $request->no_po != '' ? $this->penjualanController->createSObyPeriod($jnis, $periode) : NULL,
                 'no_po' => $request->no_po,
@@ -522,7 +540,7 @@ class PenjualanControllerNew extends Controller
                 'no_do' => $request->nomor_do ??= null,
                 'tgl_do' => $request->tgl_do ??= null,
                 'ket' =>  $request->ket_do,
-                'log_id' => 7,
+                'log_id' =>  $logId,
                 'tujuan_kirim' => $request->nama_perusahaan,
                 'alamat_kirim' => $request->alamat_perusahaan,
                 'kemasan' => $request->kemasan,

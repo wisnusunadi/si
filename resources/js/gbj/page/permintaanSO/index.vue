@@ -24,14 +24,18 @@ export default {
             dataSudahProses: [],
             dataPermintaanBarang: [],
             dataBatal: [],
-            tabs: 'dalam-proses'
+            tabs: 'dalam-proses',
+            dalamProsesSelected: {
+                label: 'Semua',
+                value: 'semua'
+            },
         }
     },
     methods: {
         async getData() {
             try {
                 this.$store.dispatch('setLoading', true)
-                const { data: dataDalamProses } = await axios.get('/api/tfp/belum-dicek', {
+                const { data: dataDalamProses } = await axios.get(`/api/tfp/belum-dicek/${this.dalamProsesSelected.value}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('lokal_token')}`
                     }
@@ -84,7 +88,12 @@ export default {
     },
     created() {
         this.getData()
-    }
+    },
+    watch: {
+        dalamProsesSelected() {
+            this.getData()
+        }
+    },
 }
 </script>
 <template>
@@ -119,7 +128,9 @@ export default {
         <div class="tab-content" id="pills-tabContent" v-if="!$store.state.loading">
             <div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
                 :class="{ 'show active': tabs == 'dalam-proses' }">
-                <dalamProses @refresh="getData" :items="dataDalamProses" v-if="tabs == 'dalam-proses'" />
+                <dalamProses
+                @filter="dalamProsesSelected = $event"
+                @refresh="getData" :items="dataDalamProses" :prosesSelected="dalamProsesSelected" v-if="tabs == 'dalam-proses'" />
             </div>
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
                 :class="{ 'show active': tabs == 'sudah-proses' }">

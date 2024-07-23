@@ -8,7 +8,6 @@
     <thead>
         <tr>
             <th colspan="22" style="text-align:center">
-
             </th>
         </tr>
         <tr>
@@ -30,9 +29,11 @@
             <th>Detail Produk</th>
             <th>No Seri</th>
             <th>Jumlah</th>
-            <th>Harga</th>
-            <th>Ongkir</th>
-            <th>Subtotal</th>
+            @if ($divisi == 'Penjualan')
+                <th>Harga</th>
+                <th>Ongkir</th>
+                <th>Subtotal</th>
+            @endif
             <th>Status AKN</th>
             <th>Jumlah Batal</th>
             <th>No Seri (Batal)</th>
@@ -100,9 +101,12 @@
                         @endif
                     </td>
                     <td>{{ $p['jumlah'] }}</td>
-                    <td>{{ $p['harga'] }}</td>
-                    <td>{{ $p['ongkir'] }}</td>
-                    <td>{{ $p['jumlah'] * $p['harga'] + $p['ongkir'] }}</td>
+                    @if ($divisi == 'Penjualan')
+                        <td>{{ $p['harga'] }}</td>
+                        <td>{{ $p['ongkir'] }}</td>
+                        <td>{{ $p['jumlah'] * $p['harga'] + $p['ongkir'] }}</td>
+                    @endif
+
                     <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
                     <td>{{ $p['jumlah_batal'] }}</td>
                     <td>
@@ -189,9 +193,11 @@
                         @endif
                     </td>
                     <td>{{ $p['jumlah'] }}</td>
-                    <td>{{ $p['harga'] }}</td>
-                    <td>{{ $p['ongkir'] }}</td>
-                    <td>{{ $p['jumlah'] * $p['harga'] + $p['ongkir'] }}</td>
+                    @if ($divisi == 'Penjualan')
+                        <td>{{ $p['harga'] }}</td>
+                        <td>{{ $p['ongkir'] }}</td>
+                        <td>{{ $p['jumlah'] * $p['harga'] + $p['ongkir'] }}</td>
+                    @endif
                     <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
                     <td>0</td>
                     <td>-</td>
@@ -245,9 +251,11 @@
                     <td>{{ $p['item'] }}</td>
                     <td></td>
                     <td>{{ $p['jumlah'] }}</td>
-                    <td>{{ $p['harga'] }}</td>
-                    <td>0</td>
-                    <td>{{ $p['jumlah'] * $p['harga'] }}</td>
+                    @if ($divisi == 'Penjualan')
+                        <td>{{ $p['harga'] }}</td>
+                        <td>0</td>
+                        <td>{{ $p['jumlah'] * $p['harga'] }}</td>
+                    @endif
                     <td>{{ $d['log_id'] == 20 ? 'batal' : $d['status'] }}</td>
                     <td>{{ $p['jumlah_batal'] }}</td>
                     <td>-</td>
@@ -283,9 +291,11 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    @if ($divisi == 'Penjualan')
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    @endif
                     <td></td>
                     <td></td>
                     <td></td>

@@ -176,7 +176,7 @@ Route::prefix('/penjualan')->group(function () {
     Route::get('/items/{id}', [App\Http\Controllers\PenjualanController::class, 'get_items_penjualan']);
     Route::post('/penjualan/data/{jenis}/{status}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::get('/ekatalog_data/{akn}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog_emindo']);
-    Route::get('/laporan', [App\Http\Controllers\PenjualanController::class, 'get_laporans']);
+    Route::get('/laporan/{x}/{y}', [App\Http\Controllers\PenjualanController::class, 'get_laporans']);
     Route::get('/spa_data/{po}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa_emindo']);
     Route::get('check_ekatalog/{akn}', [App\Http\Controllers\PenjualanController::class, 'cek_paket']);
     Route::get('penjualan_emindo', [App\Http\Controllers\PenjualanController::class, 'penjualan_data_emindo']);
@@ -395,7 +395,7 @@ Route::prefix('/tfp')->group(function () {
     Route::post('noseri', [ProduksiController::class, 'getNoseri']);
     Route::get('data-so', [ProduksiController::class, 'getOutSO']);
     Route::get('sudah-dicek', [ProduksiController::class, 'getSOCek']);
-    Route::get('belum-dicek', [ProduksiController::class, 'getSOCekBelum']);
+    Route::get('belum-dicek/{value}', [ProduksiController::class, 'getSOCekBelum']);
     Route::get('detail-transfer-so/{id}', [ProduksiController::class, 'getDetailTransferSO']);
     Route::get('detail-so/{id}', [ProduksiController::class, 'getDetailSO']);
     Route::get('edit-so/{id}/{value}', [ProduksiController::class, 'getEditSO']);

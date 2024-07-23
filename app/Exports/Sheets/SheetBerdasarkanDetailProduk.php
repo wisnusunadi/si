@@ -21,6 +21,7 @@ use App\Models\TblSiswa;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -627,12 +628,12 @@ class SheetBerdasarkanDetailProduk implements WithTitle, FromView, ShouldAutoSiz
             DB::raw('(SELECT COALESCE(SUM(riwayat_batal_po_part.jumlah), 0)
             FROM riwayat_batal_po_part
             WHERE riwayat_batal_po_part.detail_pesanan_part_id = detail_pesanan_part.id) AS jumlah_batal'),
-            DB::raw('(SELECT COALESCE(SUM(riwayat_batal_po_retur.jumlah), 0)
-            FROM riwayat_batal_po_retur
-            WHERE riwayat_batal_po_part.detail_pesanan_part_id = detail_pesanan_part.id) AS jumlah_retur'),
+            // DB::raw('(SELECT COALESCE(SUM(riwayat_batal_po_retur.jumlah), 0)
+            // FROM riwayat_batal_po_retur
+            // WHERE riwayat_batal_po_part.detail_pesanan_part_id = detail_pesanan_part.id) AS jumlah_retur'),
         )
             // ->selectRaw('"0" AS jumlah_batal')
-            // ->selectRaw('"0" AS jumlah_retur')
+            ->selectRaw('"0" AS jumlah_retur')
             ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
             ->whereIN('detail_pesanan_part.pesanan_id', $data->pluck('id')->toArray())->get();
 
@@ -1142,7 +1143,8 @@ class SheetBerdasarkanDetailProduk implements WithTitle, FromView, ShouldAutoSiz
         // }
         // return view('page.penjualan.penjualan.LaporanPenjualanEx', ['data' => $data, 'header' => $header, 'seri' => $seri, 'tampilan' => $tampilan]);
 
-        return view('page.penjualan.penjualan.LaporanPenjualanExNew', ['data' => $pesanan, 'seri' => $seri]);
+        $auth = Auth::user()->Divisi->nama;
+        return view('page.penjualan.penjualan.LaporanPenjualanExNew', ['data' => $pesanan, 'seri' => $seri, 'divisi' => $auth]);
     }
     public function title(): string
     {

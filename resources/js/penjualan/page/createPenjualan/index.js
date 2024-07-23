@@ -36,6 +36,18 @@ const CreatePenjualan = () => {
         }
 
         if (formCustomer.jenis === "ekatalog") {
+            if (
+                (formCustomer.no_paket_awal !== null &&
+                    formCustomer.no_paket_awal !== "" &&
+                    (formCustomer.no_paket_akhir === null ||
+                        formCustomer.no_paket_akhir === "")) ||
+                (formCustomer.no_paket_akhir !== null &&
+                    formCustomer.no_paket_akhir !== "" &&
+                    (formCustomer.no_paket_awal === null ||
+                        formCustomer.no_paket_awal === ""))
+            ) {
+                return true;
+            }
             // Cek jika no_urut, status, atau produk kosong atau produk tidak ada
             if (formCustomer.status == "draft") {
                 return false;
@@ -49,17 +61,17 @@ const CreatePenjualan = () => {
             }
 
             // Cek jika status adalah "ekatalog" dan validasi tambahan
-            if (formCustomer.status === "sepakat") {
-                if (
-                    formCustomer.tgl_buat === "" ||
-                    formCustomer.tgl_edit === "" ||
-                    formCustomer.tgl_delivery === "" ||
-                    formCustomer.tgl_po === "" ||
-                    formCustomer.no_po === ""
-                ) {
-                    return true;
-                }
-            }
+            // if (formCustomer.status === "sepakat") {
+            //     if (
+            //         formCustomer.tgl_buat === "" ||
+            //         formCustomer.tgl_edit === "" ||
+            //         formCustomer.tgl_delivery === "" ||
+            //         formCustomer.tgl_po === "" ||
+            //         formCustomer.no_po === ""
+            //     ) {
+            //         return true;
+            //     }
+            // }
 
             if (
                 formCustomer.produk !== undefined &&

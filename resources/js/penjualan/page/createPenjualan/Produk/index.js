@@ -7,7 +7,7 @@ import { getProduk, getVariasi } from "../../../service/create";
 import "./style.css";
 import Editor from "react-simple-wysiwyg";
 
-const ProdukComponent = ({ formProduk, setFormProduk }) => {
+const ProdukComponent = ({ formProduk, setFormProduk, dataCopy }) => {
     const [dataProduk, setDataProduk] = useState([]);
     const [isCheckedAll, setIsCheckedAll] = useState(false);
     const [detailProduk, setDetailProduk] = useState(null);
@@ -146,6 +146,14 @@ const ProdukComponent = ({ formProduk, setFormProduk }) => {
         // change to array
         noseriArray = noseriArray.map((item) => item.trim());
 
+        let jumlahProduk = formProduk.produk[detailProduk.index].jumlah;
+        let jmlVariasi = formProduk.produk[detailProduk.index].variasi.length;
+
+        if (noseriArray.length !== jumlahProduk * jmlVariasi) {
+            swal.fire('Error', 'No Seri tidak sesuai dengan jumlah produk', 'error');
+            return;
+        }
+
         const newProduk = formProduk.produk.map((item, index) => {
             if (index === detailProduk.index) {
                 return {
@@ -230,20 +238,27 @@ const ProdukComponent = ({ formProduk, setFormProduk }) => {
 
     useEffect(() => {
         if (formProduk.isi_produk && formProduk.barang.includes("produk")) {
-            const produk = formProduk.produk ?? [
-                {
-                    jumlah: 0,
-                    harga: 0,
-                    ongkir: 0,
-                    pajak: true,
-                    kalibrasi: false,
-                    stok_distributor: "nondsb",
-                },
-            ];
-            setFormProduk({
-                ...formProduk,
-                produk,
-            });
+            if (dataCopy?.produk !== undefined) {
+                setFormProduk({
+                    ...formProduk,
+                    produk: dataCopy.produk,
+                });
+            } else {
+                const produk = formProduk.produk ?? [
+                    {
+                        jumlah: 0,
+                        harga: 0,
+                        ongkir: 0,
+                        pajak: true,
+                        kalibrasi: false,
+                        stok_distributor: "nondsb",
+                    },
+                ];
+                setFormProduk({
+                    ...formProduk,
+                    produk,
+                });
+            }
         } else {
             setFormProduk((prevFormProduk) => {
                 const { produk, ...newFormProduk } = prevFormProduk;
@@ -263,7 +278,7 @@ const ProdukComponent = ({ formProduk, setFormProduk }) => {
             )}
             <h4>Data Produk</h4>
             <div className="card">
-                <div className="card-body">
+                <div className="card-body overflow-auto">
                     <div className="d-flex flex-row-reverse bd-highlight">
                         <div className="p-2 bd-highlight">
                             <button
@@ -292,7 +307,7 @@ const ProdukComponent = ({ formProduk, setFormProduk }) => {
                                 <th>Ongkir</th>
                                 <th>Subtotal</th>
                                 <th>Pajak</th>
-                                <th>Kalibrasi</th>
+                                {/* <th>Kalibrasi</th> */}
                                 <th>
                                     Stok Distributor <br />{" "}
                                     <input
@@ -515,7 +530,7 @@ const ProdukComponent = ({ formProduk, setFormProduk }) => {
                                             </label>
                                         </div>
                                     </td>
-                                    <td>
+                                    {/* <td>
                                         <div className="custom-control custom-switch">
                                             <input
                                                 type="checkbox"
@@ -542,7 +557,7 @@ const ProdukComponent = ({ formProduk, setFormProduk }) => {
                                                     : "Tidak"}
                                             </label>
                                         </div>
-                                    </td>
+                                    </td> */}
                                     <td>
                                         <input
                                             type="checkbox"

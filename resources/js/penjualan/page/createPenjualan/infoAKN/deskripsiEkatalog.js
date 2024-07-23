@@ -4,7 +4,7 @@ import InputText from "../../../components/inputText";
 import InputNumber from "../../../components/inputNumber";
 import { noUrutCheck } from "../../../service/create";
 
-const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
+const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit, dataCopy }) => {
     const [noUrutError, setNoUrutError] = useState(null);
     const pilihanPaket = [
         {
@@ -40,7 +40,7 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
                 <div className="form-group row">
                     <label className="col-5 text-right">No Urut</label>
                     <div className="col-2">
-                        <InputNumber
+                        <input type="text"
                             className={`form-control ${
                                 noUrutError ? "is-invalid" : ""
                             }`}
@@ -156,9 +156,7 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
 
                                     newFormAKN.status = e.target.value;
                                     newFormAKN.isi_produk = true;
-                                    newFormAKN.is_no_paket_disabled = isEdit
-                                        ? true
-                                        : false;
+                                    newFormAKN.is_no_paket_disabled = false;
 
                                     if (isEdit) {
                                         newFormAKN.barang = ["produk"];
@@ -187,9 +185,7 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
 
                                     newFormAKN.status = e.target.value;
                                     newFormAKN.isi_produk = true;
-                                    newFormAKN.is_no_paket_disabled = isEdit
-                                        ? true
-                                        : false;
+                                    newFormAKN.is_no_paket_disabled = false;
                                     newFormAKN.tgl_delivery = "";
 
                                     if (isEdit) {
@@ -218,19 +214,26 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
                                     const newFormAKN = { ...formAKN };
 
                                     newFormAKN.status = e.target.value;
-                                    newFormAKN.isi_produk = false;
-                                    newFormAKN.is_no_paket_disabled = isEdit
-                                        ? true
-                                        : false;
+                                    newFormAKN.is_no_paket_disabled = false;
                                     newFormAKN.tgl_delivery = "";
 
-                                    if (newFormAKN.produk !== undefined) {
+                                    if (
+                                        newFormAKN.produk !== undefined &&
+                                        !isEdit
+                                    ) {
+                                        newFormAKN.isi_produk = false;
+                                        delete newFormAKN.produk;
+                                    }
+
+                                    if (isEdit && dataCopy?.produk !== undefined) {
+                                        newFormAKN.isi_produk = true;
+                                        newFormAKN.produk = dataCopy.produk;
+                                    } else if (isEdit && formAKN.produk !== undefined) {
+                                        newFormAKN.isi_produk = false;
                                         delete newFormAKN.produk;
                                     }
 
                                     setFormAKN(newFormAKN);
-
-                                    // setFormAKN(newFormAKN);
                                 }}
                                 checked={formAKN.status === "batal"}
                             />
@@ -252,8 +255,26 @@ const DeskripsiEkatalog = ({ formAKN, setFormAKN, isEdit }) => {
                                     newFormAKN.is_no_paket_disabled = true;
                                     newFormAKN.tgl_delivery = "";
 
-                                    if (newFormAKN?.produk !== undefined) {
-                                        delete newFormAKN?.produk;
+                                    if (
+                                        newFormAKN.produk !== undefined &&
+                                        !isEdit
+                                    ) {
+                                        newFormAKN.isi_produk = false;
+                                        delete newFormAKN.produk;
+                                    }
+
+                                    if (
+                                        isEdit &&
+                                        dataCopy?.produk !== undefined
+                                    ) {
+                                        newFormAKN.isi_produk = true;
+                                        newFormAKN.produk = dataCopy.produk;
+                                    } else if (
+                                        isEdit &&
+                                        formAKN.produk !== undefined
+                                    ) {
+                                        newFormAKN.isi_produk = false;
+                                        delete newFormAKN.produk;
                                     }
 
                                     setFormAKN(newFormAKN);
