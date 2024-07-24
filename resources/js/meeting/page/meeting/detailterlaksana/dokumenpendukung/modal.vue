@@ -1,5 +1,5 @@
 <script>
-import uploadFile from '../../../../components/uploadFile.vue';
+import uploadFile from "../../../../components/uploadFile.vue";
 export default {
     components: {
         uploadFile,
@@ -8,9 +8,31 @@ export default {
         return {
             file: [],
             loading: false,
+            maxTotalSize: 838860800,
         };
     },
     methods: {
+        changeByteToMegaByte(byte) {
+            return byte / 1024 / 1024;
+        },
+        clearCache() {
+            if ("caches" in window) {
+                caches.keys().then(function (names) {
+                    for (let name of names) caches.delete(name);
+                });
+            }
+
+            sessionStorage.clear();
+
+            document.cookie.split(";").forEach(function (c) {
+                document.cookie = c
+                    .replace(/^ +/, "")
+                    .replace(
+                        /=.*/,
+                        "=;expires=" + new Date().toUTCString() + ";path=/"
+                    );
+            });
+        },
         save() {
             // kalkulasi limit upload file total 800mb
             let totalSize = 0;
@@ -18,11 +40,13 @@ export default {
                 totalSize += this.file[i].size;
             }
 
-            if (totalSize > 800000000) {
+            if (totalSize > this.maxTotalSize) {
                 this.$swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "Total ukuran file tidak boleh melebihi 800MB",
+                    text: `Total ukuran file melebihi batas maksimal ${this.changeByteToMegaByte(
+                        this.maxTotalSize
+                    )} MB`,
                 });
                 return;
             }
@@ -67,11 +91,10 @@ export default {
                         title: "Oops...",
                         text: "Gagal menyimpan Dokumen Pendukung",
                     });
-                }).finally(() => {
+                })
+                .finally(() => {
                     this.loading = false;
                 });
-
-
         },
         closeModal() {
             $(".modalDokumenPendukung").modal("hide");
@@ -83,28 +106,57 @@ export default {
             this.file = [];
         },
     },
+    created() {
+        clearCache();
+    },
     mounted() {
         this.resetForm();
     },
+    computed: {
+         checkSize() {
+            let totalSize = 0;
+            for (let i = 0; i < this.file.length; i++) {
+                totalSize += this.file[i].size;
+            }
+            return this.maxTotalSize - totalSize;
+        },
+    }
 };
 </script>
 <template>
-    <div class="modal fade modalDokumenPendukung" data-backdrop="static" data-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div
+        class="modal fade modalDokumenPendukung"
+        data-backdrop="static"
+        data-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+    >
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Dokumen Pendukung</h5>
-                    <button type="button"
-                    :disabled="loading"
-                    class="close" @click="closeModal">
+                    <button
+                        type="button"
+                        :disabled="loading"
+                        class="close"
+                        @click="closeModal"
+                    >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body" v-if="!loading">
                     <div class="form-group row">
-                        <label for="" class="col-sm-2 col-form-label">Dokumentasi</label>
-                        <uploadFile :maxTotalSize="838860800" @changed="file = $event" />
+                        <label for="" class="col-sm-2 col-form-label"
+                            >Dokumentasi</label
+                        >
+                        <uploadFile
+                            :maxTotalSize="838860800"
+                            @changed="file = $event"
+                        />
+                         <p class="text-muted">
+                          <span class="text-danger">*</span>  Total ukuran file tidak boleh melebihi {{ changeByteToMegaByte(checkSize) }} MB
+                        </p>
                     </div>
                 </div>
                 <div class="modal-body text-center" v-else>
@@ -124,16 +176,28 @@ export default {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                    :disabled="loading"
-                    @click="closeModal">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        :disabled="loading"
+                        @click="closeModal"
+                    >
                         Keluar
                     </button>
-                    <button type="button" class="btn btn-primary" @click="save" :disabled="loading">
-                        <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        @click="save"
+                        :disabled="loading"
+                    >
+                        <div
+                            class="spinner-border spinner-border-sm"
+                            role="status"
+                            v-if="loading"
+                        >
                             <span class="sr-only">Loading...</span>
                         </div>
-                        {{ loading ? 'Menyimpan...' : 'Simpan' }}
+                        {{ loading ? "Menyimpan..." : "Simpan" }}
                     </button>
                 </div>
             </div>

@@ -2,8 +2,8 @@
 import Header from "../../../components/header.vue";
 import HeaderDetail from "./header.vue";
 import Item from "./item.vue";
-import Edit from '../../meeting/aksi/edit.vue'
-import Terlaksana from '../../meeting/aksi/terlaksana.vue'
+import Edit from "../../meeting/aksi/edit.vue";
+import Terlaksana from "../../meeting/aksi/terlaksana.vue";
 export default {
     components: {
         Header,
@@ -33,7 +33,7 @@ export default {
             itemMeetingSelected: [],
             selectedData: 0,
             showModalEdit: false,
-            editData: {},   
+            editData: {},
             showModalTerlaksana: false,
         };
     },
@@ -88,6 +88,8 @@ export default {
                     `/api/hr/meet/jadwal/show_id/${this.$route.params.id}`
                 );
                 this.editData = JSON.parse(JSON.stringify(data));
+                this.editData.mulai = this.timeFormat(this.editData.mulai);
+                this.editData.selesai = this.timeFormat(this.editData.selesai);
                 this.showModalTerlaksana = true;
                 this.$nextTick(() => {
                     $(".modalterlaksana").modal("show");
@@ -98,8 +100,11 @@ export default {
         },
         returnToTerlaksana() {
             const id = this.$route.params.id;
-            this.$router.push({ name: "detail-meeting-terlaksana", params: { id }})
-        }
+            this.$router.push({
+                name: "detail-meeting-terlaksana",
+                params: { id },
+            });
+        },
     },
     created() {
         this.getDetail();
@@ -113,8 +118,18 @@ export default {
 </script>
 <template>
     <div>
-        <Terlaksana :meeting="editData" v-if="showModalTerlaksana" @closeModal="showModalTerlaksana = false" @refresh="returnToTerlaksana" />
-        <Edit :meeting="editData" v-if="showModalEdit" @closeModal="showModalEdit = false" @refresh="getDetail" />
+        <Terlaksana
+            :meeting="editData"
+            v-if="showModalTerlaksana"
+            @closeModal="showModalTerlaksana = false"
+            @refresh="returnToTerlaksana"
+        />
+        <Edit
+            :meeting="editData"
+            v-if="showModalEdit"
+            @closeModal="showModalEdit = false"
+            @refresh="getDetail"
+        />
         <Header :title="title" :breadcumbs="breadcumbs" />
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li
