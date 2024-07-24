@@ -416,6 +416,16 @@ class AfterSalesController extends Controller
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
         }])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->orderBy('tgl_po', 'desc')->havingRaw('cjumlahpart > 0 AND cjumlahkirim <= 0')->get();
 
+        $data = $data->map(function ($item) {
+            $item->jenis = isset($item->Spa) ? 'spa' : 'spb';
+            $item->nama_customer = isset($item->Spa) ? $item->Spa->Customer->nama : $item->Spb->Customer->nama;
+            $item->status = floor((($item->cjumlahkirim / $item->cjumlahpart) * 100));
+            $item->id = isset($item->Spa) ? $item->Spa->id : $item->Spb->id;
+            return $item;
+        });
+
+        return response()->json($data);
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('jenis', function ($data) {

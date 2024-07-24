@@ -876,7 +876,7 @@ Route::prefix('/as')->group(function () {
     Route::post('/barang_siap_kirim_retur', [App\Http\Controllers\AfterSalesController::class, 'barang_siap_kirim_retur']);
 
     Route::prefix('/penjualan')->group(function () {
-        Route::post('/belum_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_belum_kirim']);
+        Route::get('/belum_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_belum_kirim']);
         Route::post('/selesai_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_selesai_kirim']);
     });
 
