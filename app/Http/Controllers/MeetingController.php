@@ -618,8 +618,9 @@ class MeetingController extends Controller
     public function update_jadwal_meet(Request $request, $id)
     {
         //dd($request->all());
-        DB::beginTransaction();
+        // DB::beginTransaction();
         try {
+            $is_major = false;
             $data = JadwalMeeting::find($id);
             if ($data) {
 
@@ -635,6 +636,12 @@ class MeetingController extends Controller
                 $obj->moderator =   $data->moderator;
                 $obj->pimpinan =   $data->pimpinan;
                 $obj->deskripsi =  $data->deskripsi;
+
+                if ($data->tgl_meeting !=  $request->tanggal ||  $data->mulai != $request->mulai . ':00'  || $data->selesai !=  $request->selesai . ':00') {
+                    $is_major = true;
+                }
+
+
 
                 if (count($data->PesertaMeeting) > 0) {
                     foreach ($data->PesertaMeeting as $p) {
@@ -680,7 +687,7 @@ class MeetingController extends Controller
                     foreach ($request->peserta as $p) {
                         $peserta_status =  auth()->user()->karyawan_id == $p ? 'hadir' : 'belum';
                         $peserta_ket =  NULL;
-                        if (count($peserta) > 0) {
+                        if (count($peserta) > 0 && !$is_major) {
                             if (collect($peserta)->where('karyawan_id', $p)->count() > 0) {
                                 $peserta_status = collect($peserta)->where('karyawan_id', $p)->first()->status;
                                 $peserta_ket =   collect($peserta)->where('karyawan_id', $p)->first()->ket;
