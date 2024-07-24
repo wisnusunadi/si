@@ -13,6 +13,13 @@ const ProdukComponent = ({ formProduk, setFormProduk, dataCopy }) => {
     const [detailProduk, setDetailProduk] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
+    const customFilterOption = (option, rawInput) => {
+        const words = rawInput.toLowerCase();
+        return Object.values(option.data).some((value) =>
+            String(value).toLowerCase().includes(words)
+        );
+    };
+
     const fetchData = async () => {
         try {
             if (formProduk.jenis == "ekatalog") {
@@ -336,6 +343,7 @@ const ProdukComponent = ({ formProduk, setFormProduk, dataCopy }) => {
                                                     : null
                                             }
                                             placeholder="Pilih Produk"
+                                            filterOption={customFilterOption}
                                             options={dataProduk}
                                             onChange={(e) => {
                                                 handleInputProduk(
