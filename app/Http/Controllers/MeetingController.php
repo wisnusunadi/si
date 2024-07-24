@@ -617,7 +617,7 @@ class MeetingController extends Controller
 
     public function update_jadwal_meet(Request $request, $id)
     {
-        dd($request->all());
+        //dd($request->all());
         DB::beginTransaction();
         try {
             $data = JadwalMeeting::find($id);
@@ -657,6 +657,8 @@ class MeetingController extends Controller
                     $obj->peserta = array();
                 }
 
+                //dd(collect($peserta)->where('karyawan_id', 92)->first()->status);
+
                 RiwayatJadwalMeeting::create([
                     'meeting_id' => $id,
                     'isi' => json_encode($obj),
@@ -676,11 +678,19 @@ class MeetingController extends Controller
 
                 if (count($request->peserta) > 0) {
                     foreach ($request->peserta as $p) {
+                        $peserta_status =  auth()->user()->karyawan_id == $p ? 'hadir' : 'belum';
+                        $peserta_ket =  NULL;
+                        if (count($peserta) > 0) {
+                            if (collect($peserta)->where('karyawan_id', $p)->count() > 0) {
+                                $peserta_status = collect($peserta)->where('karyawan_id', $p)->first()->status;
+                                $peserta_ket =   collect($peserta)->where('karyawan_id', $p)->first()->ket;
+                            }
+                        }
                         PesertaMeeting::create([
                             'meeting_id' => $id,
                             'karyawan_id' => $p,
-                            'status' => auth()->user()->karyawan_id == $p ? 'hadir' : 'belum',
-                            'ket' => NULL,
+                            'status' => $peserta_status,
+                            'ket' => $peserta_ket,
                         ]);
                     }
                 }
