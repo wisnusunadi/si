@@ -1,5 +1,6 @@
 <script>
 import uploadFile from "../../../../components/uploadFile.vue";
+import uploadFile from "../../../../components/uploadFile.vue";
 export default {
     components: {
         uploadFile,
@@ -51,24 +52,24 @@ export default {
                 return;
             }
 
-            this.loading = true;
-            // detected form data is empty or not this.form.file = null
-            if (this.file == null) {
-                this.$swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Dokumen Pendukung tidak boleh kosong!",
-                });
-                return;
-            }
+      this.loading = true;
+      // detected form data is empty or not this.form.file = null
+      if (this.file == null) {
+        this.$swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Dokumen Pendukung tidak boleh kosong!",
+        });
+        return;
+      }
 
-            let formData = new FormData();
+      let formData = new FormData();
 
-            for (let i = 0; i < this.file.length; i++) {
-                formData.append("dokumentasi[]", this.file[i]);
-            }
+      for (let i = 0; i < this.file.length; i++) {
+        formData.append("dokumentasi[]", this.file[i]);
+      }
 
-            formData.append("id", this.$route.params.id);
+      formData.append("id", this.$route.params.id);
 
             this.$_post("/api/hr/meet/hasil/dokumen", formData, {
                 headers: {
@@ -204,3 +205,4 @@ export default {
         </div>
     </div>
 </template>
+
