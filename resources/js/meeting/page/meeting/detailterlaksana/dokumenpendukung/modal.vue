@@ -1,6 +1,5 @@
 <script>
 import uploadFile from "../../../../components/uploadFile.vue";
-import uploadFile from "../../../../components/uploadFile.vue";
 export default {
     components: {
         uploadFile,

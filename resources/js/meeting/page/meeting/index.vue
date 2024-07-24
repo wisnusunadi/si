@@ -292,7 +292,6 @@ export default {
             });
         },
         openModalKehadiran(data) {
-            console.log(data);
             this.dataKehadiran = JSON.parse(JSON.stringify(data));
             this.modalKehadiran = true;
             this.$nextTick(() => {
@@ -546,16 +545,13 @@ export default {
                                             class="dropdown-item"
                                             @click="openModalKehadiran(item)"
                                             v-if="
-                                                item.status_kehadiran ==
-                                                    'belum_mengisi_daftar_hadir' &&
                                                 item.status == 'belum' &&
                                                 !item.peran.includes('notulen')
                                             "
                                         >
                                             <i class="fas fa-check-circle"></i>
                                             {{
-                                                item.is_perubahan && item.status_kehadiran !=
-                                                    'belum_mengisi_daftar_hadir'
+                                                item.is_perubahan
                                                     ? "Update Kehadiran"
                                                     : "Kehadiran"
                                             }}
@@ -748,9 +744,7 @@ export default {
                                         <button
                                             class="dropdown-item"
                                             type="button"
-                                            @click="
-                                                detail(item)
-                                            "
+                                            @click="detail(item)"
                                         >
                                             <i class="fas fa-eye"></i>
                                             Detail

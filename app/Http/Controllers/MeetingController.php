@@ -755,6 +755,11 @@ class MeetingController extends Controller
                 $alasan = isset($request->alasan) ? $request->alasan : NULL;
                 $p = PesertaMeeting::where(['karyawan_id' => auth()->user()->karyawan_id, 'meeting_id' => $request->id]);
                 $p->update(['status' => $kehadiran, 'ket' => $alasan]);
+                $dokumenPeserta = DokumenPeserta::where('peserta_meeting_id', $p->first()->id);
+                if ($dokumenPeserta->count() > 0) {
+                    Storage::disk('ftp')->delete($dokumenPeserta->first()->nama);
+                    $dokumenPeserta->delete();
+                }
                 if ($request->kehadiran == 'tidak_hadir') {
                     for ($j = 0; $j < count($request->dokumentasi); $j++) {
                         $randomCollectionName = Str::uuid()->toString();
