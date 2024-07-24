@@ -10,7 +10,7 @@ class PenjualanProduk extends Model
 {
     protected $connection = 'erp';
     protected $table = 'penjualan_produk';
-    protected $fillable = ['nama_alias', 'nama', 'harga', 'jenis', 'status', 'is_aktif'];
+    protected $fillable = ['nama_alias', 'nama', 'harga', 'jenis', 'status', 'is_aktif', 'keterangan'];
 
     public function DetailPesanan()
     {

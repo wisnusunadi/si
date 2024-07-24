@@ -2459,6 +2459,7 @@ class MasterController extends Controller
                     'harga' => $p->harga,
                     'stok' => $p->stok,
                     'is_kalibrasi' => $p->Produk->whereNotNull('kode_lab_id')->count() > 0 ? true : false,
+                    'keterangan' => $p->keterangan,
                 );
 
                 foreach ($p->Produk as $key_prd => $produk) {
