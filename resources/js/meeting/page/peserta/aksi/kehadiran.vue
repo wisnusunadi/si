@@ -18,7 +18,8 @@ export default {
                           ),
             },
             loading: false,
-            maxTotalSize: 629145600, // 800MB
+            maxTotalSize: 629145600, // 800MB'
+            imgs: [],
         };
     },
     methods: {
@@ -42,6 +43,15 @@ export default {
                         this.maxTotalSize
                     )} MB`,
                 });
+                return;
+            }
+
+            if (this.imgs == 0) {
+                this.$swal(
+                    "Gagal",
+                    "Silahkan tunggu proses upload hingga selesai",
+                    "error"
+                );
                 return;
             }
             // detected form data is empty or not this.form.file = null
@@ -118,8 +128,9 @@ export default {
                     this.loading = false;
                 });
         },
-        uploadFileData(file) {
+        uploadFileData(file, imgs) {
             this.form.dokumentasi = file;
+            this.imgs = imgs;
         },
     },
     computed: {
