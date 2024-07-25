@@ -512,6 +512,17 @@ class AfterSalesController extends Controller
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
         }])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->havingRaw('cjumlahkirim > 0')->orderBy('tgl_po', 'desc')->get();
 
+        $data = $data->map(function ($item) {
+            $item->jenis = isset($item->Spa) ? 'spa' : 'spb';
+            $item->status = floor((($item->cjumlahkirim / $item->cjumlahpart) * 100));
+            $item->tglpo = Carbon::createFromFormat('Y-m-d', $item->tgl_po)->format('d-m-Y');
+            $item->nama_customer = isset($item->Spa) ? $item->Spa->Customer->nama : $item->Spb->Customer->nama;
+            $item->id = isset($item->Spa) ? $item->Spa->id : $item->Spb->id;
+            return $item;
+        });
+
+        return response()->json($data);
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('jenis', function ($data) {

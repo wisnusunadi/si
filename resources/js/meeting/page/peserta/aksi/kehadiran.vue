@@ -124,13 +124,12 @@ export default {
     },
     computed: {
         checkSize() {
-            if (this.form.dokumentasi) {
-                return this.form.dokumentasi.reduce((acc, file) => {
-                    return acc + file.size;
-                }, 0);
-            } else {
-                return 0;
+            let totalSize = 0;
+            for (let i = 0; i < this.form.dokumentasi.length; i++) {
+                totalSize += this.form.dokumentasi[i].size;
             }
+
+            return this.maxTotalSize - totalSize;
         },
     },
     watch: {
@@ -152,10 +151,11 @@ export default {
 <template>
     <div
         class="modal fade modalKehadiran"
-        id="modelId"
+        id="staticBackdrop"
+        data-backdrop="static"
+        data-keyboard="false"
         tabindex="-1"
-        role="dialog"
-        aria-labelledby="modelTitleId"
+        aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
     >
         <div
@@ -231,7 +231,10 @@ export default {
                         </div>
                     </div>
                 </div>
-                <div class="modal-body text-center" v-if="loading && checkSize > 0">
+                <div
+                    class="modal-body text-center"
+                    v-if="loading && checkSize > 0"
+                >
                     <div class="d-flex justify-content-center">
                         <script
                             src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"
