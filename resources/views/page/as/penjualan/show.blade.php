@@ -583,111 +583,115 @@
             $.ajax({
                 url: '/api/as/penjualan/belum_proses',
                 success: function(data) {
-                    var spatable = $('#spatable').DataTable({
-                        processing: true,
-                        data: data,
-                        language: {
-                            processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                        },
-                        columns: [{
-                                data: 'DT_RowIndex',
-                                className: 'nowrap-text align-center',
-                                orderable: false,
-                                searchable: false,
-                                render: function(data, type, row, meta) {
-                                    return meta.row + meta.settings._iDisplayStart + 1;
-                                }
-                            },
-                            {
-                                data: 'jenis',
-                                render: function(data, type, row) {
-                                    if (data == 'spa') {
-                                        return '<span class="orange-text badge">SPA</span>';
-                                    } else {
-                                        return '<span class="blue-text badge">SPB</span>';
-                                    }
-                                }
-                            },
-                            {
-                                data: 'so',
-                                render: function(data, type, row) {
-                                    if (data == null) {
-                                        return '-';
-                                    } else {
-                                        return data;
-                                    }
-                                }
-                            },
-                            {
-                                data: 'no_po',
-                                render: function(data, type, row) {
-                                    if (data == null) {
-                                        return '-';
-                                    } else {
-                                        return data;
-                                    }
-                                }
-                            },
-                            {
-                                data: 'tgl_po',
-                                orderable: false,
-                                searchable: false,
-                                render: function(data, type, row) {
-                                    if (data == null) {
-                                        return '-';
-                                    } else {
-                                        return changeFormatDate(data);
-                                    }
-                                }
-                            },
-                            {
-                                data: 'nama_customer'
-                            },
-                            {
-                                data: 'status',
-                                render: function(data, type, row) {
-                                    if (data > 0) {
-                                        return `<div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="${data}"  style="width: ${data}%" aria-valuemin="0" aria-valuemax="100">${data}%</div>
-                                </div>
-                                <small class="text-muted">Selesai</small>`;
-                                    } else {
-                                        return `<div class="progress">
-                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">${data}%</div>
-                                </div>
-                                <small class="text-muted">Selesai</small>`;
-                                    }
-                                }
-                            },
-                            {
-                                data: 'id',
-                                orderable: false,
-                                searchable: false,
-                                render: function(data, type, row) {
-                                    if (row.jenis == 'spa') {
-                                        return `<a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="/penjualan/penjualan/detail/spa/${data}"
-                                         data-id="${data}" >
-                                    <button class="btn btn-outline-primary btn-sm" type="button">
-                                    <i class="fas fa-eye"></i>
-                                    Detail
-                                </button>`;
-                                    } else {
-                                        return `<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="/penjualan/penjualan/detail/spb/${data}"  data-id="'${data}'" >
-                                <button class="btn btn-outline-primary btn-sm" type="button">
-                                    <i class="fas fa-eye"></i>
-                                    Detail
-                                    </button>
-                                </a>`;
-                                    }
-                                }
-                            }
-                        ]
-                    });
+                    spatable(data);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR, textStatus, errorThrown);
                 }
             })
+
+            const spatable = (data) => {
+                $('#spatable').DataTable({
+                    processing: true,
+                    data,
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false,
+                            render: function(data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
+                        },
+                        {
+                            data: 'jenis',
+                            render: function(data, type, row) {
+                                if (data == 'spa') {
+                                    return '<span class="orange-text badge">SPA</span>';
+                                } else {
+                                    return '<span class="blue-text badge">SPB</span>';
+                                }
+                            }
+                        },
+                        {
+                            data: 'so',
+                            render: function(data, type, row) {
+                                if (data == null) {
+                                    return '-';
+                                } else {
+                                    return data;
+                                }
+                            }
+                        },
+                        {
+                            data: 'no_po',
+                            render: function(data, type, row) {
+                                if (data == null) {
+                                    return '-';
+                                } else {
+                                    return data;
+                                }
+                            }
+                        },
+                        {
+                            data: 'tgl_po',
+                            orderable: false,
+                            searchable: false,
+                            render: function(data, type, row) {
+                                if (data == null) {
+                                    return '-';
+                                } else {
+                                    return changeFormatDate(data);
+                                }
+                            }
+                        },
+                        {
+                            data: 'nama_customer'
+                        },
+                        {
+                            data: 'status',
+                            render: function(data, type, row) {
+                                if (data > 0) {
+                                    return `<div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="${data}"  style="width: ${data}%" aria-valuemin="0" aria-valuemax="100">${data}%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>`;
+                                } else {
+                                    return `<div class="progress">
+                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">${data}%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>`;
+                                }
+                            }
+                        },
+                        {
+                            data: 'id',
+                            orderable: false,
+                            searchable: false,
+                            render: function(data, type, row) {
+                                if (row.jenis == 'spa') {
+                                    return `<a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="/penjualan/penjualan/detail/spa/${data}"
+                                         data-id="${data}" >
+                                    <button class="btn btn-outline-primary btn-sm" type="button">
+                                    <i class="fas fa-eye"></i>
+                                    Detail
+                                </button>`;
+                                } else {
+                                    return `<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="/penjualan/penjualan/detail/spb/${data}"  data-id="'${data}'" >
+                                <button class="btn btn-outline-primary btn-sm" type="button">
+                                    <i class="fas fa-eye"></i>
+                                    Detail
+                                    </button>
+                                </a>`;
+                                }
+                            }
+                        }
+                    ]
+                });
+            }
 
             function detailtabel_spa(id) {
                 $('#detailtabel_spa').DataTable({
@@ -771,50 +775,104 @@
                 })
             }
 
-            var spbtable = $('#spbtable').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/api/as/penjualan/selesai_proses',
-                    "dataType": "json",
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
+            $.ajax({
+                type: "POST",
+                url: "/api/as/penjualan/selesai_proses",
+
+                success: function(data) {
+                    spbtable(data)
                 },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'jenis'
-                    },
-                    {
-                        data: 'so',
-                    },
-                    {
-                        data: 'nopo'
-                    },
-                    {
-                        data: 'tglpo'
-                    },
-                    {
-                        data: 'nama_customer'
-                    },
-                    {
-                        data: 'status'
-                    },
-                    {
-                        data: 'button'
-                    }
-                ]
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR, textStatus, errorThrown);
+                }
             });
+
+            const spbtable = (data) => {
+                var spbtable = $('#spbtable').DataTable({
+                    data,
+                    processing: true,
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false,
+                            render: function(data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
+                        },
+                        {
+                            data: 'jenis',
+                            render: function(data, type, row) {
+                                if (data == 'spa') {
+                                    return '<span class="orange-text badge">SPA</span>';
+                                } else {
+                                    return '<span class="blue-text badge">SPB</span>';
+                                }
+                            }
+                        },
+                        {
+                            data: 'so',
+                        },
+                        {
+                            data: 'no_po',
+                            render: function(data, type, row) {
+                                if (data == null) {
+                                    return '-'
+                                } else {
+                                    return data
+                                }
+                            }
+                        },
+                        {
+                            data: 'tglpo'
+                        },
+                        {
+                            data: 'nama_customer'
+                        },
+                        {
+                            data: 'status',
+                            render: function(data, type, row) {
+                                if (data > 0) {
+                                    return `<div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="${data}"  style="width: ${data}%" aria-valuemin="0" aria-valuemax="100">${data}%</div>
+                                    </div>
+                                    <small class="text-muted">Selesai</small>`
+                                } else {
+                                    return `<div class="progress">
+                                        <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">${data}%</div>
+                                    </div>
+                                    <small class="text-muted">Selesai</small>`
+                                }
+                            }
+                        },
+                        {
+                            data: 'id',
+                            render: function(data, type, row) {
+                                if (row.jenis == 'spa') {
+                                    return `<a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="/penjualan/penjualan/detail/spa/${data}"
+                                         data-id="${data}" >
+                                    <button class="btn btn-outline-primary btn-sm" type="button">
+                                    <i class="fas fa-eye"></i>
+                                    Detail
+                                </button>`;
+                                } else {
+                                    return `<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="/penjualan/penjualan/detail/spb/${data}"  data-id="'${data}'" >
+                                <button class="btn btn-outline-primary btn-sm" type="button">
+                                    <i class="fas fa-eye"></i>
+                                    Detail
+                                    </button>
+                                </a>`;
+                                }
+                            }
+                        }
+                    ]
+                });
+            }
+
+
 
             function detailtabel_spb(id) {
                 $('#detailtabel_spb').DataTable({
@@ -897,6 +955,29 @@
                 })
             }
 
+            $('#filter_spa').submit(function() {
+                var values_spa = [];
+                $('input[name="status_spa[]"]:checked').each(function() {
+                    values_spa.push($(this).val());
+                });
+
+                if (values_spa != 0) {
+                    var x = values_spa;
+                } else {
+                    var x = ['semua'];
+                }
+                $.ajax({
+                    type: "method",
+                    url: "url",
+                    data: "data",
+                    dataType: "dataType",
+                    success: function (response) {
+                        
+                    }
+                });
+                return false;
+            })
+
             $('#filter_spb').submit(function() {
                 var values_spb = [];
                 $('input[name="status_spb[]"]:checked').each(function() {
@@ -910,7 +991,7 @@
                     var x = ['semua'];
                 }
                 console.log(x);
-                $('#spbtable').DataTable().ajax.url('/penjualan/penjualan/spb/data/' + x).load();
+                $('#spbtable').DataTable().ajax.url(`/penjualan/penjualan/spb/data/${x}`).load();
                 return false;
 
             });
