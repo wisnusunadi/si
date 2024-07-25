@@ -124,12 +124,16 @@ export default {
     },
     computed: {
         checkSize() {
-            let totalSize = 0;
-            for (let i = 0; i < this.form.dokumentasi.length; i++) {
-                totalSize += this.form.dokumentasi[i].size;
-            }
+            if (this.form.dokumentasi) {
+                let totalSize = 0;
+                for (let i = 0; i < this.form.dokumentasi.length; i++) {
+                    totalSize += this.form.dokumentasi[i].size;
+                }
 
-            return this.maxTotalSize - totalSize;
+                return this.maxTotalSize - totalSize;
+            } else {
+                return this.maxTotalSize;
+            }
         },
     },
     watch: {
