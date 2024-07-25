@@ -664,7 +664,7 @@ class MeetingController extends Controller
                     $obj->peserta = array();
                 }
 
-                //dd(collect($peserta)->where('karyawan_id', 92)->first()->status);
+
 
                 RiwayatJadwalMeeting::create([
                     'meeting_id' => $id,
@@ -685,20 +685,32 @@ class MeetingController extends Controller
 
                 if (count($request->peserta) > 0) {
                     foreach ($request->peserta as $p) {
+                        $dok = array();
                         $peserta_status =  auth()->user()->karyawan_id == $p ? 'hadir' : 'belum';
                         $peserta_ket =  NULL;
                         if (count($peserta) > 0 && !$is_major) {
                             if (collect($peserta)->where('karyawan_id', $p)->count() > 0) {
                                 $peserta_status = collect($peserta)->where('karyawan_id', $p)->first()->status;
                                 $peserta_ket =   collect($peserta)->where('karyawan_id', $p)->first()->ket;
+                                if (count(collect($peserta)->where('karyawan_id', $p)->first()->dokumen) > 0) {
+                                    $dok =   collect($peserta)->where('karyawan_id', $p)->first()->dokumen;
+                                }
                             }
                         }
-                        PesertaMeeting::create([
+                        $pm =  PesertaMeeting::create([
                             'meeting_id' => $id,
                             'karyawan_id' => $p,
                             'status' => $peserta_status,
                             'ket' => $peserta_ket,
                         ]);
+                        if (isset($dok) && count($dok) > 0) {
+                            foreach ($dok as $d) {
+                                DokumenPeserta::create([
+                                    'peserta_meeting_id' => $pm->id,
+                                    'nama' => $d->nama,
+                                ]);
+                            }
+                        }
                     }
                 }
                 DB::commit();

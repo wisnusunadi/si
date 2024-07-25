@@ -1951,22 +1951,22 @@ return [
             'url' => '/manager/logistik/show',
             'auth' => [32],
         ],
-        // [
-        //     'header' => 'Meeting',
-        //     'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 22, 34, 14],
-        // ],
-        // [
-        //     'text' => 'Ruangan Meeting',
-        //     'url' => '/meeting/ruangan',
-        //     'icon' => 'fas fa-door-open',
-        //     'auth'   => [34],
-        // ],
-        // [
-        //     'text' => 'Meeting',
-        //     'url' => '/meeting/hr/',
-        //     'icon' => 'fas fa-users',
-        //     'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 22, 34, 14],
-        // ],
+        [
+            'header' => 'Meeting',
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 22, 34, 14],
+        ],
+        [
+            'text' => 'Ruangan Meeting',
+            'url' => '/meeting/ruangan',
+            'icon' => 'fas fa-door-open',
+            'auth'   => [34],
+        ],
+        [
+            'text' => 'Meeting',
+            'url' => '/meeting/hr/',
+            'icon' => 'fas fa-users',
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 22, 34, 14],
+        ],
         // [
         //     'text'        => 'Jadwal Meeting',
         //     'url'         => '/meeting/jadwal_meet',
