@@ -271,7 +271,7 @@ export default {
       console.log("file", file, "imgs", imgs);
     },
     changeByteToMegaByte(byte) {
-      return byte / 1024 / 1024;
+      return (byte / 1024 / 1024).toFixed(2);
     },
     clearCache() {
       if ("caches" in window) {

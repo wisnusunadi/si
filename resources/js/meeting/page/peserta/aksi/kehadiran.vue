@@ -29,7 +29,7 @@ export default {
             this.$emit("closeModal");
         },
         changeByteToMegaByte(byte) {
-            return byte / 1024 / 1024;
+            return (byte / 1024 / 1024).toFixed(2);
         },
         save() {
             this.loading = true;

@@ -966,13 +966,14 @@
                 } else {
                     var x = ['semua'];
                 }
+                const years = new Date().getFullYear();
+
                 $.ajax({
-                    type: "method",
-                    url: "url",
+                    type: "POST",
+                    url: "/penjualan/penjualan/spa/data/" + x + "/" + years,
                     data: "data",
-                    dataType: "dataType",
                     success: function (response) {
-                        
+                        console.log(response);                        
                     }
                 });
                 return false;
