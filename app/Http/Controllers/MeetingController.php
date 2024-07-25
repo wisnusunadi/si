@@ -388,7 +388,6 @@ class MeetingController extends Controller
 
     public function update_status_meet($status, Request $request)
     {
-        //dd($request->all());
         $obj =  json_decode(json_encode($request->all()), FALSE);
         DB::beginTransaction();
         try {

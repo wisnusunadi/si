@@ -18,7 +18,7 @@ export default {
                           ),
             },
             loading: false,
-            maxTotalSize: 838860800, // 800MB
+            maxTotalSize: 629145600, // 800MB
         };
     },
     methods: {
