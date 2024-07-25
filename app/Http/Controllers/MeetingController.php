@@ -618,7 +618,7 @@ class MeetingController extends Controller
     public function update_jadwal_meet(Request $request, $id)
     {
         //dd($request->all());
-        // DB::beginTransaction();
+        DB::beginTransaction();
         try {
             $is_major = false;
             $data = JadwalMeeting::find($id);
