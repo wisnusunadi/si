@@ -81,10 +81,12 @@ class PenjualanController extends Controller
     {
         $data = Pesanan::find($id);
         $item = array();
+        $item_dsb = array();
+        $item_nondsb = array();
 
         if ($data->DetailPesanan) {
             foreach ($data->DetailPesanan as $key_d => $d) {
-                $item[$key_d] = array(
+                $item_nondsb[$key_d] = array(
                     'id' => $d->id,
                     'nama' => $d->PenjualanProduk->nama,
                     'jumlah' => $d->jumlah,
@@ -97,7 +99,7 @@ class PenjualanController extends Controller
                     'produk' => array()
                 );
                 foreach ($d->DetailPesananProduk as $key_e => $e) {
-                    $item[$key_d]['produk'][$key_e] = array(
+                    $item_nondsb[$key_d]['produk'][$key_e] = array(
                         'id' => $e->id,
                         'nama' => $e->GudangBarangjadi->Produk->nama . ' ' . $e->GudangBarangjadi->nama,
                         'jenis' => 'variasi',
@@ -108,7 +110,7 @@ class PenjualanController extends Controller
         }
         if ($data->DetailPesananDsb) {
             foreach ($data->DetailPesananDsb as $key_d => $d) {
-                $item[$key_d] = array(
+                $item_dsb[$key_d] = array(
                     'id' => $d->id,
                     'nama' => $d->PenjualanProduk->nama,
                     'jumlah' => $d->jumlah,
@@ -124,7 +126,7 @@ class PenjualanController extends Controller
 
 
                 foreach ($d->DetailPesananProdukDsb as $key_e => $e) {
-                    $item[$key_d]['produk'][$key_e] = array(
+                    $item_dsb[$key_d]['produk'][$key_e] = array(
                         'id' => $e->id,
                         'nama' => $e->GudangBarangjadi->Produk->nama . ' ' . $e->GudangBarangjadi->nama,
                         'jenis' => 'variasi',
@@ -134,6 +136,8 @@ class PenjualanController extends Controller
                 }
             }
         }
+
+        $item[] = array_merge($item_nondsb, $item_dsb);
 
         if ($data->DetailPesananPart) {
             foreach ($data->DetailPesananPart as $d) {
