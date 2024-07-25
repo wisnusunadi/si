@@ -137,7 +137,7 @@ class PenjualanController extends Controller
             }
         }
 
-        $item[] = array_merge($item_nondsb, $item_dsb);
+        $item = array_merge($item_nondsb, $item_dsb);
 
         if ($data->DetailPesananPart) {
             foreach ($data->DetailPesananPart as $d) {
