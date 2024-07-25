@@ -5389,6 +5389,7 @@ class LogistikController extends Controller
             // }
             $maxJumlah = 0;
             $tas = false;
+            $tas4 = false;
             $adaptor = false;
             foreach ($request->produk as $item) {
 
@@ -5417,6 +5418,10 @@ class LogistikController extends Controller
                     }
                     if ($item["penjualan_produk_id"] == 5 || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363 || $item["penjualan_produk_id"] == 446) {
                         $tas = true;
+                    }
+
+                    if ($item["penjualan_produk_id"] == 358) {
+                        $tas4 = true;
                     }
                 }
 
@@ -5450,6 +5455,30 @@ class LogistikController extends Controller
                 // }
             }
 
+
+            if ($tas4) {
+                $itemIndex = array();
+                foreach ($produk as $index => $item) {
+                    if ($item['penjualan_produk_id'] === "5" || $item["penjualan_produk_id"] == 29 || $item["penjualan_produk_id"] == 114 || $item["penjualan_produk_id"] == 284 || $item["penjualan_produk_id"] == 376 || $item["penjualan_produk_id"] == 363 || $item["penjualan_produk_id"] == 446 || $item["penjualan_produk_id"] == 358) {
+                        $itemIndex[] = $index;
+                        // break;
+                    }
+                }
+
+                if (count($itemIndex) > 0) {
+                    for ($i = 0; $i < count($itemIndex); $i++) {
+                        $newDetail = [
+                            "kode" => "-",
+                            "nama" =>  "TAS TYPE 4",
+                            "jumlah" =>   $produk[$itemIndex[$i]]['jumlah'],
+                            "jumlah_noseri" =>  0,
+                            "satuan" => 'Unit',
+                            "noseri" => array('-')
+                        ];
+                        $produk[$itemIndex[$i]]["detail"][] = $newDetail;
+                    }
+                }
+            }
             if ($tas) {
                 $itemIndex = array();
                 foreach ($produk as $index => $item) {
