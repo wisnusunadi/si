@@ -210,8 +210,8 @@
                     <small>Quality Manager</small>
                 </p>
             </div>
-            <small class="custom">Sertifikat ini dilarang digandakan kecuali sepenuhnya tanpa persetujuan tertulis oleh Laboratorium Kalibrasi PT. Sinko Prima Alloy</small> <br>
-            <small class="text-italic custom">This Certificate shall not reproduce except in full without written approval of PT. Sinko Prima Alloy Calibration Laboratory</small>
+            <small class="custom">Sertifikat ini dilarang digandakan kecuali sepenuhnya tanpa persetujuan tertulis oleh Laboratorium Kalibrasi Dummy Lorem Ipsum</small> <br>
+            <small class="text-italic custom">This Certificate shall not reproduce except in full without written approval of Dummy Lorem Ipsum Calibration Laboratory</small>
         </footer>
     </body>
 </html>

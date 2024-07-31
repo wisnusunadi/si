@@ -112,7 +112,7 @@
                     <b>PERINTAH PENGIRIMAN BARANG</b>
                   </td>
                   <th style="text-align: right; padding-right:10px; font-size: 18px;">
-                    PT. Sinko Prima Alloy
+                    Dummy Lorem Ipsum
                   </td>
                 </tr>
             </table>

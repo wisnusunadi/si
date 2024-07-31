@@ -701,18 +701,7 @@ return [
                     'url' => 'produksi/jadwal_perakitan',
                     'auth' => [17],
                 ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Permintaan Reworks',
-                    'url' => '/produksi/permintaanreworks',
-                    'auth' => [17],
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Set Produk Reworks',
-                    'url' => '/produksi/prosesSetReworks',
-                    'auth' => [17],
-                ],
+             
                 [
                     'icon' => 'far fa-circle',
                     'text' => 'Riwayat Perakitan',
@@ -1210,12 +1199,7 @@ return [
         //     'icon' => 'fas fa-exchange-alt',
         //     'auth' => [13],
         // ],
-        [
-            'text' => 'Penerimaan Rework',
-            'url' => '/gbj/rework/penerimaan-rework',
-            'icon' => 'fas fa-check-circle',
-            'auth' => [13],
-        ],
+    
         [
             'header' => 'Penjualan',
             'auth' => [17]
@@ -1258,12 +1242,7 @@ return [
             'icon' => 'fas fa-swatchbook',
             'auth' => [13],
         ],
-        [
-            'text' => 'Permintaan Rework',
-            'url' => '/gbj/rework/permintaan-rework',
-            'icon' => 'fas fa-wrench',
-            'auth' => [13],
-        ],
+  
         [
             'text' => 'Tanpa SO',
             'url' => '/gbj/tso',

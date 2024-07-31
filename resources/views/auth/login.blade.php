@@ -28,11 +28,10 @@
                                 style="max-width: 90%" />
                         </div>
                     </div>
-                    <div class="col-6 d-flex align-items-center">
+                    <div class="col-7 d-flex align-items-center">
                         <div class="ps-5">
                             <div class="d-flex justify-content-center">
-                                <img src="{{ asset('assets/image/logo/sinko.png') }}" alt="sinko"
-                                    style="width: 30%" />
+                              
                             </div>
                             <div>
                                 <div>

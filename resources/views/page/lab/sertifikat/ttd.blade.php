@@ -395,9 +395,9 @@
                 <hr>
                 <div class="text-center" style="margin-right: -30px">
                     <span class="footer-text">Sertifikat ini dilarang digandakan kecuali sepenuhnya secara tidak lengkap
-                        tanpa persetujuan Laboratorium Kalibrasi PT. Sinko Prima Alloy</span> <br>
+                        tanpa persetujuan Laboratorium Kalibrasi Dummy Lorem Ipsum</span> <br>
                     <span class="text-italic footer-text">This Certificate shall not be uncomplete reproduce, without
-                        written approval of PT. Sinko Prima Alloy Calibration Laboratory</span>
+                        written approval of Dummy Lorem Ipsum Calibration Laboratory</span>
                 </div>
             </main>
         </div>

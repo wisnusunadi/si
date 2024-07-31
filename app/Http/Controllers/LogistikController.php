@@ -5850,7 +5850,7 @@ class LogistikController extends Controller
             GROUP BY no_urut, updated_at
         ) AS subquery ON pr.no_urut = subquery.no_urut
         left join users on users.id = pr.packer
-        left join erp_kesehatan.karyawans as k on users.karyawan_id = k.id
+        left join erp_kesehatan_poc.karyawans as k on users.karyawan_id = k.id
         GROUP BY pr.no_urut');
 
         if (count($data) <= 0) {

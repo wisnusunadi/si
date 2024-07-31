@@ -269,7 +269,7 @@ $len = count($data);
                     </tr>
                     <tr>
                         <td width="50%"></td>
-                        <td class="align-center">PT. Sinko Prima Alloy</td>
+                        <td class="align-center">Dummy Lorem Ipsum</td>
                     </tr>
                     <tr>
                         <td width="50%"></td>

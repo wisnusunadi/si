@@ -8,7 +8,7 @@
             <img src="assets/image/logo/spa.png" alt="Girl in a jacket" width="60" height="60">
           </th>
           <th style="width: 80%">
-            <h1>PT. SINKO PRIMA ALLOY</h1>
+            <h1>Dummy Lorem Ipsum</h1>
           </th>
           <th style="width: 50%">
             <h6>Jl. Tambak Osowilangon No 61<br>

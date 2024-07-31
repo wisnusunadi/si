@@ -98,7 +98,7 @@
                     <b>SURAT JALAN</b>
                 </td>
                 <th style="text-align: right;">
-                    PT. Sinko Prima Alloy
+                    Dummy Lorem Ipsum
                     </td>
             </tr>
         </table>

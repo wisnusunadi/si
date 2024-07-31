@@ -1028,8 +1028,8 @@ class MeetingController extends Controller
             //code...
             $data = DB::table('erp_meetings.hasil_notulen')
                 ->select('hasil_notulen.id', 'pic.nama as pic', 'verif.nama as verif', 'hasil_notulen.checked_at', 'hasil_notulen.hasil', 'hasil_notulen.uraian', 'hasil_notulen.ket')
-                ->leftjoin('erp_kesehatan.karyawans as pic', 'pic.id', '=', 'hasil_notulen.pic_id')
-                ->leftjoin('erp_kesehatan.karyawans as verif', 'verif.id', '=', 'hasil_notulen.verif_id')
+                ->leftjoin('erp_kesehatan_poc.karyawans as pic', 'pic.id', '=', 'hasil_notulen.pic_id')
+                ->leftjoin('erp_kesehatan_poc.karyawans as verif', 'verif.id', '=', 'hasil_notulen.verif_id')
                 ->where('hasil_notulen.meeting_id', $id)
                 ->get();
             if ($data->isEmpty()) {

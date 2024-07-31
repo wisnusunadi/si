@@ -98,7 +98,7 @@
 
 @section('body')
 <nav class="navbar navbar-light bg-light">
-    <span class="navbar-brand mb-0 h1">PT. Sinko Prima Alloy</span>
+    <span class="navbar-brand mb-0 h1">Dummy Lorem Ipsum</span>
     <span class="navbar-brand mb-0 float-right"><a type="button" class="btn btn-outline-danger" href="">Logout</a></span>
 </nav>
 <div class="login-page">

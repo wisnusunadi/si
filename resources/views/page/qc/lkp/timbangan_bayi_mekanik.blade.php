@@ -92,7 +92,7 @@
                         <tr>
                             <td class="nospace">Tempat Pengujian</td>
                             <td>:</td>
-                            <td>PT. Sinko Prima Alloy</td>
+                            <td>Dummy Lorem Ipsum</td>
                         </tr>
                         <tr>
                             <td class="nospace">Ruangan Pengujian</td>
