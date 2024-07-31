@@ -45,12 +45,12 @@ return [
     |
     */
 
-    'logo' => '<b>Sinko Prima</b> Alloy',
-    'logo_img' => 'assets/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => 'ERP',
+    'logo_img' => '',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'AdminLTE',
+    'logo_img_alt' => '',
 
     /*
     |--------------------------------------------------------------------------
@@ -439,12 +439,7 @@ return [
             'icon' => 'fas fa-users',
             'auth' => [26]
         ],
-        // [
-        //     'text' => 'Rencana Order',
-        //     'url'  => '/penjualan/rencana/show',
-        //     'icon' => 'fas fa-archive',
-        //     'auth' => [26]
-        // ],
+
         [
             'text' => 'Laporan',
             'url'  => '/penjualan/laporan/show',
@@ -457,25 +452,7 @@ return [
             'icon' => 'fas fa-search',
             'auth' => [26, 20]
         ],
-        [
-            'text' => 'Periode Penjualan',
-            'url'  => '/penjualan/periode',
-            'icon' => 'fas fa-calendar-alt',
-            'auth' => [26]
-        ],
 
-        // [
-        //     'text' => 'Nama & Alamat',
-        //     'url'  => '/nama_alamat',
-        //     'icon' => 'fas fa-table',
-        //     'auth' => [26]
-        // ],
-        // [
-        //     'text' => 'Jasa Ekspedisi',
-        //     'url'  => '/jasa_eks',
-        //     'icon' => 'fas fa-table',
-        //     'auth' => [26]
-        // ],
         [
             'header' => 'TRANSAKSI',
             'auth'   => [26]
@@ -486,138 +463,9 @@ return [
             'auth' => [26],
             'url'  => '/penjualan/transaksi',
         ],
-        [
-            'text' => 'Memo Permintaan',
-            'icon' => 'fas fa-file-signature',
-            'auth' => [26],
-            'url'  => '/penjualan/memo',
-        ],
-        [
-            'text' => 'Request Emiindo',
-            'icon' => 'fas fa-mail-bulk',
-            'auth' => [26],
-            'submenu' => [
-                [
-                    'text' => 'Ekatalog - SPA',
-                    'url'  => '/penjualan/request_emiindo/akn_po',
-                ],
-                [
-                    'text' => 'Terima E-Katalog',
-                    'url'  => '/penjualan/request_emiindo/daftar_penerimaan',
-                ]
-            ]
-        ],
-        // [
-        //     'text' => 'Sales Order',
-        //     'url'  => '/penjualan/so/show',
-        //     'icon' => 'fas fa-file-invoice-dollar',
-        //     'auth' => [26]
-        // ],
-        // [
-        //     'text'    => 'Daftar Pesanan',
-        //     'icon'    => 'fas fa-table',
-        //     'auth' => [26],
-        //     'submenu' => [
-        //         [
-        //             'text' => 'E-Katalog',
-        //             'url'  => '/penjualan_online',
-        //         ],
-        //         [
-        //             'text' => 'E-Commerce',
-        //             'url'  => '/penjualan_online_ecom',
-        //         ],
-        //         [
-        //             'text' => 'Offline',
-        //             'url'  => '/penjualan_offline',
-        //         ]
-        //     ],
-        // ],
-        // [
-        //     'text'    => 'Surat Penawaran',
-        //     'icon'    => 'fas fa-table',
-        //     'auth' => [26],
-        //     'submenu' => [
-        //         [
-        //             'text' => 'E-Commerce',
-        //             'url'  => '/penawaran_ecom',
-        //         ],
-        //         [
-        //             'text' => 'Offline',
-        //             'url'  => '/penawaran_offline',
-        //         ]
-        //     ],
-        // ],
-        // [
-        //     'text'    => 'PO / DO',
-        //     'icon'    => 'fas fa-table',
-        //     'auth' => [26],
-        //     'submenu' => [
-        //         [
-        //             'text' => 'E-Katalog',
-        //             'url'  => '/podo_online',
-        //         ],
-        //         [
-        //             'text' => 'Offline',
-        //             'url'  => '/podo_offline',
-        //         ]
-        //     ],
-        // ],
-        // // penjualan (26) & produksi (17)
-        // [
-        //     'text' => 'Produk',
-        //     'url'  => '/produk',
-        //     'icon' => 'fas fa-table',
-        //     'auth' => [14, 17, 26]
-        // ],
-        // produksi (17) & QC(23)
-        // [
-        //     'text' => 'Data Karyawan',
-        //     'icon' => 'fas fa-users',
-        //     'auth' => [14, 17, 23, 28],
-        //     'submenu' => [
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Jadwal Kerja Operator',
-        //             'url'  => '/karyawan',
-        //             'auth' => [],
-        //         ],
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Daftar Karyawan',
-        //             'url'  => '/daftar_karyawan',
-        //             'auth' => [28],
-        //         ],
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Permohonan Penugasan',
-        //             'url'  => '/karyawan/peminjaman',
-        //             'auth' => [],
-        //         ],
-        //     ],
-        // ],
-        // [
-        //     'text'    => 'Inventory',
-        //     'icon'    => 'fas fa-boxes',
-        //     'auth' => [14],
-        //     'submenu' => [
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Master Inventory',
-        //             'auth' => [14],
-        //             'url'  => '/inventory/divisi',
-        //         ],
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Inventory',
-        //             'url'  => '/inventory',
-        //         ],
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Permintaan Peminjaman',
-        //             'url'  => '/inventory/peminjaman',
-        //         ],
-        //     ],
-        // ],
+
+
+
         [
             'text'    => 'User',
             'icon'    => 'fas fa-boxes',
@@ -640,44 +488,7 @@ return [
             'icon' => 'fas fa-table',
             'auth' => [14]
         ],
-        [
-            'text' => 'Sparepart',
-            'url'  => '/administrator/sparepart',
-            'icon' => 'fas fa-table',
-            'auth' => [14]
-        ],
-        [
-            'text' => 'Produk Rework',
-            'url'  => '/administrator/produk_rework',
-            'icon' => 'fas fa-table',
-            'auth' => [14]
-        ],
-        // [
-        //     'text'    => 'Part',
-        //     'icon'    => 'fas fa-boxes',
-        //     'auth' => [14],
-        //     'url'  => '/administrator/part',
-        // ],
-        // [
-        //     'text'    => 'Peminjaman',
-        //     'icon'    => 'fas fa-boxes',
-        //     'auth' => [14],
-        //     'submenu' => [
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Alat',
-        //             'url'  => '/peminjaman/alat',
-        //         ],
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Karyawan',
-        //             'url'  => '/peminjaman/karyawan',
-        //         ],
 
-        //     ],
-        // ],
-        // kesehatan (28)
-        //Kesehatan
         [
             'text' => 'Beranda',
             'url'  => '/kesehatan/dashboard',
@@ -1987,24 +1798,14 @@ return [
             'header' => 'Setting',
             'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 14, 22, 34],
         ],
-        [
-            'text' => 'Pengajuan Periode',
-            'icon' => 'fas fa-calendar-alt',
-            'url' => '/administrator/periode',
-            'auth' => [14]
-        ],
+
         [
             'text' => 'Ubah Password',
             'icon' => 'fa-solid fa-gear',
             'url' => '/edit_pwd',
             'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 14, 22, 34],
         ],
-        [
-            'text' => 'Monitoring Lap. Teknis',
-            'icon' => 'fa-solid fa-chart-line',
-            'url' => 'https://docs.google.com/spreadsheets/d/1OxZY8JTqDBrIm89A9cTcTnRndRBOUCtnblY0f0F76p4/edit?usp=sharing',
-            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 30, 14, 22, 34],
-        ],
+
     ],
 
     /*
